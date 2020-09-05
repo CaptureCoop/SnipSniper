@@ -51,7 +51,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		this.addWindowListener(this);
 		this.setSize(512,512);
 		this.setTitle("Config");
-		this.setIconImage(Icons.icon);
+		this.setIconImage(Icons.icon_taskbar);
 		
 		sniperInstance = _sniperInstance;
 		

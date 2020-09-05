@@ -12,6 +12,8 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.TrayIcon.MessageType;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.geom.Rectangle2D;
@@ -31,8 +33,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	private static final long serialVersionUID = 3129624729137795417L;
 	Point startPoint;
 	Point cPoint;
-	BufferedImage screenshot;
-	BufferedImage screenshotTinted;
+	BufferedImage screenshot = null;
+	BufferedImage screenshotTinted = null;
 	
 	boolean startedCapture = false;
 	boolean finishedCapture = false;
@@ -51,7 +53,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				e.printStackTrace();
 			}
 		}
-		
 		bounds = getTotalBounds();
 		this.setUndecorated(true);
 
@@ -62,15 +63,34 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		this.addMouseMotionListener(new MouseMotion(this));
 		this.addKeyListener(new Keyboard(this));
 	
-		this.setIconImage(Icons.icon_highres);
+		this.setIconImage(Icons.icon_taskbar);
 	
 		this.setVisible(true);
 		
+		setSize();
+		
+		this.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				setSize();
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				setSize();
+			}
+			
+		});
+	}
+	
+	public void setSize() {
 		this.setLocation((int)bounds.getX(),(int)bounds.getY());
 		this.setSize(bounds.width, bounds.height);
 		
 		this.requestFocus();
-		this.setAlwaysOnTop(true);		
+		this.setAlwaysOnTop(true);	
+		this.repaint();
 	}
 	
 	Rectangle calcRectangle() {
@@ -148,32 +168,36 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	Rectangle area;
 	Point lastPoint = null;
 	public void paint(Graphics g) {
-		
 		if(screenshot == null) {
 			try {
-				System.out.println("Taking Screenshot");
-				screenshot = new Robot().createScreenCapture(new Rectangle((int)bounds.getX(),(int)bounds.getY(), bounds.width, bounds.height));
+				Rectangle screenshotRect = new Rectangle((int)bounds.getX(),(int)bounds.getY(), bounds.width, bounds.height);
+				screenshot = new Robot().createScreenCapture(screenshotRect);
+				//System.out.println("Taking Screenshot " + screenshotRect);
+				//System.out.println("Image Info: " + screenshot.getWidth() + " " + screenshot.getHeight());
 				screenshotTinted = Utils.copyImage(screenshot);
-				Graphics stG = screenshotTinted.getGraphics();
-				stG.setColor(new Color(100,100,100,100));
-				stG.fillRect(0, 0, bounds.width, bounds.height);;
-				stG.dispose();
-				g.drawImage(screenshotTinted, 0,0, bounds.width, bounds.height, this);
+				Graphics g2 = screenshotTinted.getGraphics();
+				g2.setColor(new Color(100,100,100,100));
+				g2.fillRect(0, 0, screenshotTinted.getTileWidth(), screenshotTinted.getHeight());
+			    g2.dispose();
 			} catch (AWTException e) {
 				e.printStackTrace();
 			}
 		}
-		
+	
+		if(screenshotTinted != null)
+			g.drawImage(screenshotTinted, 0,0,bounds.width,bounds.height, this);
+			
 		if(area != null && startedCapture) {
-			g.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
+			//We took this out for the temporary fix up there^^^^^^^
+			//g.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
 			//Optional way of drawing the tint, doesnt feel very efficient though.
 			//g.drawImage(screenshotTinted, (int)lastPoint.getX(), (int)lastPoint.getY(), (int)startPoint.getX(),(int)startPoint.getY(),(int)lastPoint.getX(), (int)lastPoint.getY(), (int)startPoint.getX(),(int)startPoint.getY(),  this);
 			g.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
 		}
 
-		if(cPoint != null)
+		if(cPoint != null && startPoint != null)
 			area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
-		
+
 		lastPoint = cPoint;
     }
 
