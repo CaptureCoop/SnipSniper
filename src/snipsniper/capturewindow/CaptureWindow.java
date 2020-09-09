@@ -29,8 +29,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	private static final long serialVersionUID = 3129624729137795417L;
 	Point startPoint;
 	Point cPoint;
+	Point startPointTotal;
 	BufferedImage screenshot = null;
 	BufferedImage screenshotTinted = null;
+	
+	
 	
 	boolean startedCapture = false;
 	boolean finishedCapture = false;
@@ -148,11 +151,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				int posX = (int)cPoint.getX();
 				int posY = (int)cPoint.getY();
 				
-				if(startPoint.getX() < cPoint.getX())
-					posX = (int)startPoint.getX();
+				if(startPointTotal.getX() < cPoint.getX())
+					posX = (int)startPointTotal.getX();
 				
-				if(startPoint.getY() < cPoint.getY())
-					posY = (int)startPoint.getY();
+				if(startPointTotal.getY() < cPoint.getY())
+					posY = (int)startPointTotal.getY();
 				
 				if(sniperInstance.cfg.openEditor)
 					new EditorWindow(finalImg, posX - sniperInstance.cfg.borderSize, posY,finalImg.getWidth() - sniperInstance.cfg.borderSize,finalImg.getHeight(), "SnipSniper Editor", sniperInstance);
