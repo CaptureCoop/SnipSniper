@@ -5,6 +5,7 @@ import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
+import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,7 @@ import snipsniper.Icons;
 import snipsniper.Main;
 import snipsniper.settings;
 import snipsniper.capturewindow.CaptureWindow;
+import snipsniper.capturewindow.ImageSelection;
 import snipsniper.config.ConfigWindow;
 import snipsniper.systray.buttons.btnAbout;
 import snipsniper.systray.buttons.btnConfig;
@@ -166,6 +168,8 @@ public class Sniper implements NativeKeyListener{
 		if(e.getKeyCode() == cfg.hotkey) {
 			if(cWnd == null)
 				cWnd = new CaptureWindow(instance);
+		} else if(e.getKeyCode() == Main.KILLSWITCH && Main.isDebug) {
+			System.exit(0);
 		}
 	}
 
@@ -175,6 +179,11 @@ public class Sniper implements NativeKeyListener{
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent arg0) { }
 
+	public void copyToClipboard(BufferedImage _img) {
+		ImageSelection imgSel = new ImageSelection(_img);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
+	}
+	
 	public boolean saveImage(BufferedImage finalImg, String _modifier) {
 		File file;
 		LocalDateTime now = LocalDateTime.now();  

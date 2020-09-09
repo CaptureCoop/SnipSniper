@@ -6,11 +6,13 @@ import java.io.IOException;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.jnativehook.keyboard.NativeKeyEvent;
+
 import snipsniper.systray.Sniper;
 
 public class Main {
 	
-	public final static String VERSION = "20200909_7";
+	public final static String VERSION = "20200909_8";
 	
 	public static String jarFolder = new File("").getAbsolutePath() + "\\";;
 	public static String mainFolder = jarFolder + "SnipSniper";
@@ -19,6 +21,10 @@ public class Main {
 	public final static int profileCount = 7;
 	
 	public static Sniper profiles[] = new Sniper[profileCount];
+	
+	public static boolean isDebug = true;
+	
+	public static final int KILLSWITCH = NativeKeyEvent.VC_F2;
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

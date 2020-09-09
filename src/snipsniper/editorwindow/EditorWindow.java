@@ -52,6 +52,7 @@ public class EditorWindow extends JFrame{
 		g.drawImage(overdraw, 0, 0, img.getWidth(), img.getHeight(), this);
 		g.dispose();
 		sniperInstance.saveImage(finalImg, "_edited");
+		sniperInstance.copyToClipboard(finalImg);
 	}
 	
 	public void kill() {

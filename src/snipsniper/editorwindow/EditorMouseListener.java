@@ -19,9 +19,9 @@ public class EditorMouseListener implements MouseListener, MouseMotionListener, 
 	
 	Vector2Int mousePos = null;
 	
-	Vector2Int brushSize = new Vector2Int(50,20);
+	Vector2Int brushSize = new Vector2Int(75,20);
 	
-	int stampChangeSpeed = 10;
+	int stampChangeSpeed = 20;
 	
 	public EditorMouseListener(EditorWindow _editWnd) {
 		editorInstance = _editWnd;

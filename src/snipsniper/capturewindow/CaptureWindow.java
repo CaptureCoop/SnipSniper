@@ -10,7 +10,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Robot;
-import java.awt.Toolkit;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -28,12 +27,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 	private static final long serialVersionUID = 3129624729137795417L;
 	Point startPoint;
-	Point cPoint;
 	Point startPointTotal;
+	Point cPoint;
 	BufferedImage screenshot = null;
 	BufferedImage screenshotTinted = null;
-	
-	
 	
 	boolean startedCapture = false;
 	boolean finishedCapture = false;
@@ -140,10 +137,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 					this.dispose();
 				
 				//Copy cropped image to clipboard
-				if(sniperInstance.cfg.copyToClipboard) {
-				    ImageSelection imgSel = new ImageSelection(finalImg);
-					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
-				}
+				if(sniperInstance.cfg.copyToClipboard)
+				    sniperInstance.copyToClipboard(finalImg);
 				
 			}
 			//sniperInstance.trayIcon.displayMessage("Image saved!", "Image saved under: " + file.toString(), MessageType.NONE);
