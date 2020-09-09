@@ -10,8 +10,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -166,6 +174,29 @@ public class Sniper implements NativeKeyListener{
 
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent arg0) { }
+
+	public boolean saveImage(BufferedImage finalImg, String _modifier) {
+		File file;
+		LocalDateTime now = LocalDateTime.now();  
+		String filename = now.toString().replace(".", "_").replace(":", "_");
+		filename += _modifier + ".png";
+		File path = new File(cfg.pictureFolder);
+		file = new File(cfg.pictureFolder + filename);
+		try {
+			if(cfg.savePictures) {
+				if(!path.exists()) path.mkdirs();
+				if(file.createNewFile()) {
+					ImageIO.write(finalImg, "png", file);
+					return true;
+				}
+			}
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Could not save image to \"" + file.toString()  + "\"!" , "Error", 1);
+			e.printStackTrace();
+			return false;
+		}
+		return false;
+	}
 	
 	
 }

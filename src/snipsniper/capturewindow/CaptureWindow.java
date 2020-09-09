@@ -26,6 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import snipsniper.Icons;
 import snipsniper.Utils;
+import snipsniper.editorwindow.EditorWindow;
 import snipsniper.systray.Sniper;
 
 public class CaptureWindow extends JFrame implements WindowListener{
@@ -118,6 +119,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	void capture() {
 		if(!imageSaved) {
+			BufferedImage finalImg = null;
+			
 			this.dispose();
 			finishedCapture = true;
 
@@ -128,31 +131,16 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				sniperInstance.trayIcon.displayMessage("Error: Screenshot width or height is 0!", "ERROR", MessageType.ERROR);
 			} else {
 				BufferedImage croppedBuffer = screenshot.getSubimage(captureArea.x, captureArea.y, captureArea.width, captureArea.height);			
-				BufferedImage finalImg = new BufferedImage(croppedBuffer.getWidth() + borderSize *2, croppedBuffer.getHeight() + borderSize *2, BufferedImage.TYPE_INT_RGB);
+				finalImg = new BufferedImage(croppedBuffer.getWidth() + borderSize *2, croppedBuffer.getHeight() + borderSize *2, BufferedImage.TYPE_INT_RGB);
 				Graphics g = (Graphics2D) finalImg.getGraphics();
 				g.setColor(sniperInstance.cfg.borderColor);
 				g.fillRect(0, 0, finalImg.getWidth(),finalImg.getHeight());
 				g.drawImage(croppedBuffer, borderSize, borderSize, croppedBuffer.getWidth(), croppedBuffer.getHeight(), this);
 				g.dispose();
 				
-				LocalDateTime now = LocalDateTime.now();  
-				String filename = now.toString().replace(".", "_").replace(":", "_");
-				filename += ".png";
-				File path = new File(sniperInstance.cfg.pictureFolder);
-				File file = new File(sniperInstance.cfg.pictureFolder + filename);
-				try {
-					if(sniperInstance.cfg.savePictures) {
-						if(!path.exists()) path.mkdirs();
-						if(file.createNewFile()) {
-							ImageIO.write(finalImg, "png", file);
-							imageSaved = true;
-						}
-					}
-				} catch (IOException e) {
+				if(!sniperInstance.saveImage(finalImg, ""));
 					this.dispose();
-					JOptionPane.showMessageDialog(null, "Could not save image to \"" + file.toString()  + "\"!" , "Error", 1);
-					e.printStackTrace();
-				}
+				
 				//Copy cropped image to clipboard
 				if(sniperInstance.cfg.copyToClipboard) {
 				    ImageSelection imgSel = new ImageSelection(finalImg);
@@ -161,45 +149,59 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				
 			}
 			//sniperInstance.trayIcon.displayMessage("Image saved!", "Image saved under: " + file.toString(), MessageType.NONE);
+			if(finalImg != null) {
+				int posX = (int)cPoint.getX();
+				int posY = (int)cPoint.getY();
+				
+				if(startPoint.getX() < cPoint.getX())
+					posX = (int)startPoint.getX();
+				
+				if(startPoint.getY() < cPoint.getY())
+					posY = (int)startPoint.getY();
+				
+				new EditorWindow(finalImg, posX - sniperInstance.cfg.borderSize, posY,finalImg.getWidth() - sniperInstance.cfg.borderSize,finalImg.getHeight(), "SnipSniper Editor", sniperInstance);
+			}
 			sniperInstance.killCaptureWindow();
 		}
 	}
 	
 	Rectangle area;
 	Point lastPoint = null;
+	boolean hasSaved = false;
 	public void paint(Graphics g) {
 		if(screenshot == null) {
 			try {
 				Rectangle screenshotRect = new Rectangle((int)bounds.getX(),(int)bounds.getY(), bounds.width, bounds.height);
 				screenshot = new Robot().createScreenCapture(screenshotRect);
-				//System.out.println("Taking Screenshot " + screenshotRect);
-				//System.out.println("Image Info: " + screenshot.getWidth() + " " + screenshot.getHeight());
 				screenshotTinted = Utils.copyImage(screenshot);
 				Graphics g2 = screenshotTinted.getGraphics();
 				g2.setColor(new Color(100,100,100,100));
 				g2.fillRect(0, 0, screenshotTinted.getTileWidth(), screenshotTinted.getHeight());
 			    g2.dispose();
+			    return;
 			} catch (AWTException e) {
 				e.printStackTrace();
 			}
 		}
 	
-		if(screenshotTinted != null)
+		if(screenshotTinted != null && !hasSaved) {
 			g.drawImage(screenshotTinted, 0,0,bounds.width,bounds.height, this);
+			hasSaved = true;
+		}
 			
 		if(area != null && startedCapture) {
-			//We took this out for the temporary fix up there^^^^^^^
-			//g.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
+			g.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
 			//Optional way of drawing the tint, doesnt feel very efficient though.
 			//g.drawImage(screenshotTinted, (int)lastPoint.getX(), (int)lastPoint.getY(), (int)startPoint.getX(),(int)startPoint.getY(),(int)lastPoint.getX(), (int)lastPoint.getY(), (int)startPoint.getX(),(int)startPoint.getY(),  this);
 			g.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
 		}
-
+	
 		if(cPoint != null && startPoint != null)
 			area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
 
 		lastPoint = cPoint;
-    }
+
+	}
 
 	@Override
 	public void windowActivated(WindowEvent arg0) { }
