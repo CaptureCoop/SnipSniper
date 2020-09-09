@@ -18,12 +18,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import snipsniper.Icons;
 import snipsniper.Utils;
 import snipsniper.editorwindow.EditorWindow;
@@ -159,7 +154,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				if(startPoint.getY() < cPoint.getY())
 					posY = (int)startPoint.getY();
 				
-				new EditorWindow(finalImg, posX - sniperInstance.cfg.borderSize, posY,finalImg.getWidth() - sniperInstance.cfg.borderSize,finalImg.getHeight(), "SnipSniper Editor", sniperInstance);
+				if(sniperInstance.cfg.openEditor)
+					new EditorWindow(finalImg, posX - sniperInstance.cfg.borderSize, posY,finalImg.getWidth() - sniperInstance.cfg.borderSize,finalImg.getHeight(), "SnipSniper Editor", sniperInstance);
 			}
 			sniperInstance.killCaptureWindow();
 		}
@@ -191,8 +187,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			
 		if(area != null && startedCapture) {
 			g.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
-			//Optional way of drawing the tint, doesnt feel very efficient though.
-			//g.drawImage(screenshotTinted, (int)lastPoint.getX(), (int)lastPoint.getY(), (int)startPoint.getX(),(int)startPoint.getY(),(int)lastPoint.getX(), (int)lastPoint.getY(), (int)startPoint.getX(),(int)startPoint.getY(),  this);
 			g.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
 		}
 	

@@ -21,6 +21,7 @@ public class settings {
 	public int borderSize;
 	public Color borderColor;
 	public int snipeDelay;
+	public boolean openEditor;
 	
 	Sniper sniperInstance;
 	
@@ -47,6 +48,7 @@ public class settings {
 		borderSize = 0;
 		borderColor = Color.BLACK;
 		snipeDelay = 0;
+		openEditor = false;
 	}
 	
 	String getFilename(int _profileID) {
@@ -74,7 +76,8 @@ public class settings {
 			writer.write(borderSize + "\n");
 			writer.write(Utils.rgb2hex(borderColor) + "\n");
 			writer.write(pictureFolder + "\n");
-			writer.write(snipeDelay + "");
+			writer.write(snipeDelay + "\n");
+			writer.write(String.valueOf(openEditor) + "");
 			writer.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -101,6 +104,8 @@ public class settings {
 					pictureFolder = line;
 				else if(lineNr == 6)
 					snipeDelay = Integer.parseInt(line);
+				else if(lineNr == 7)
+					openEditor = Boolean.parseBoolean(line);
 				lineNr++;
 				line = reader.readLine();
 			}

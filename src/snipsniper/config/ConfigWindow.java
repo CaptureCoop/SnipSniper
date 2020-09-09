@@ -33,6 +33,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	JTextField pictureLocation = new JTextField();
 	Color borderColor = Color.black;
 	JTextField snipeDelay = new JTextField();
+	JCheckBox openEditor = new JCheckBox();
 	
 	int maxBorder = 999;
 	
@@ -63,6 +64,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		pictureLocation.setText(_sniperInstance.cfg.pictureFolder + "");
 		borderColor = _sniperInstance.cfg.borderColor;
 		snipeDelay.setText(_sniperInstance.cfg.snipeDelay + "");
+		openEditor.setSelected(_sniperInstance.cfg.openEditor);
 		
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new ConfigSaveButton(this));
@@ -114,11 +116,16 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		row5.add(row5_2);
 		options.add(row5);
 		
-		JPanel row6 = new JPanel(new GridLayout(0,5));
-		row6.add(new JPanel());
-		row6.add(new JPanel());
-		row6.add(saveButton);
+		JPanel row6 = new JPanel(new GridLayout(0,2));
+		row6.add(createJLabel("Open Editor after Capture", JLabel.CENTER, JLabel.CENTER));
+		row6.add(openEditor);
 		options.add(row6);
+		
+		JPanel row7 = new JPanel(new GridLayout(0,5));
+		row7.add(new JPanel());
+		row7.add(new JPanel());
+		row7.add(saveButton);
+		options.add(row7);
 		
 		this.setMinimumSize(new Dimension(512,256));
 		this.add(options);
@@ -137,6 +144,8 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		//TODO: Rework sanitazion
 		boolean _savePictures = savePictures.isSelected();
 		boolean _copyToClipboard = copyToClipboard.isSelected();
+		boolean _openEditor = openEditor.isSelected();
+		
 		String _saveLocation = pictureLocation.getText();
 		int _borderSize = 0;
 		int _snipeDelay = 0;
@@ -183,6 +192,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		sniperInstance.cfg.copyToClipboard = _copyToClipboard;
 		sniperInstance.cfg.borderColor = borderColor;
 		sniperInstance.cfg.snipeDelay = _snipeDelay;
+		sniperInstance.cfg.openEditor = _openEditor;
 		sniperInstance.cfg.saveFile();
 		
 		close();

@@ -2,8 +2,6 @@ package snipsniper.editorwindow;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -19,7 +17,7 @@ public class EditorWindow extends JFrame{
 	EditorWindowRender renderer;
 	EditorMouseListener mouseListener;
 	
-	Color currentColor = new Color(255,255,0,100);
+	Color currentColor = new Color(255,255,0,150);
 	
 	final int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
 	
@@ -56,5 +54,8 @@ public class EditorWindow extends JFrame{
 		sniperInstance.saveImage(finalImg, "_edited");
 	}
 	
+	public void kill() {
+		this.dispose();
+	}
 	
 }

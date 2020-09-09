@@ -10,7 +10,7 @@ import snipsniper.systray.Sniper;
 
 public class Main {
 	
-	public final static String VERSION = "20200905_19";
+	public final static String VERSION = "20200909_2";
 	
 	public static String jarFolder = new File("").getAbsolutePath() + "\\";;
 	public static String mainFolder = jarFolder + "SnipSniper";
@@ -18,7 +18,7 @@ public class Main {
 	
 	public final static int profileCount = 7;
 	
-	public static Sniper profiles[] = new Sniper[7];
+	public static Sniper profiles[] = new Sniper[profileCount];
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

@@ -19,7 +19,9 @@ public class EditorMouseListener implements MouseListener, MouseMotionListener, 
 	
 	Vector2Int mousePos = null;
 	
-	Vector2Int brushSize = new Vector2Int(20,20);
+	Vector2Int brushSize = new Vector2Int(50,20);
+	
+	int stampChangeSpeed = 10;
 	
 	public EditorMouseListener(EditorWindow _editWnd) {
 		editorInstance = _editWnd;
@@ -38,9 +40,11 @@ public class EditorMouseListener implements MouseListener, MouseMotionListener, 
 	public void mousePressed(MouseEvent arg0) {
 		//startPoint = new Vector2Int(arg0.getPoint());
 		
-		if(arg0.getButton() == 3)
+		if(arg0.getButton() == 3) {
 			editorInstance.saveImage();
-		
+			editorInstance.kill();
+		}
+			
 		startPoint = new Vector2Int(arg0.getPoint().getX() - brushSize.x/2,arg0.getPoint().getY() - brushSize.y/2);
 		lastPoint = new Vector2Int(arg0.getPoint().getX() + brushSize.x/2,arg0.getPoint().getY() + brushSize.y/2);
 		
@@ -92,11 +96,11 @@ public class EditorMouseListener implements MouseListener, MouseMotionListener, 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
 		switch(arg0.getWheelRotation()) {
-		case -1:
-			brushSize.x--;
-			break;
 		case 1:
-			brushSize.x++;
+			brushSize.x -= stampChangeSpeed;
+			break;
+		case -1:
+			brushSize.x += stampChangeSpeed;
 			break;
 		}
 		editorInstance.repaint();
