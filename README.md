@@ -5,6 +5,7 @@ The Screenshot Tool
   - Up to 7 profiles!
   - Multi Monitor!
   - Customize each profile for its usecase!
+  - Screenshot Editor!
 
 ### Installation
 
