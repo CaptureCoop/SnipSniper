@@ -5,21 +5,36 @@ import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
+import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
+
+import snipsniper.Config;
+import snipsniper.DebugType;
 import snipsniper.Icons;
 import snipsniper.Main;
-import snipsniper.settings;
 import snipsniper.capturewindow.CaptureWindow;
+import snipsniper.capturewindow.ImageSelection;
 import snipsniper.config.ConfigWindow;
 import snipsniper.systray.buttons.btnAbout;
 import snipsniper.systray.buttons.btnConfig;
@@ -31,7 +46,7 @@ public class Sniper implements NativeKeyListener{
 	
 	CaptureWindow cWnd;
 	public ConfigWindow cfgWnd;
-	public settings cfg;
+	public Config cfg;
 	public TrayIcon trayIcon;
 	
 	Sniper instance;
@@ -39,10 +54,14 @@ public class Sniper implements NativeKeyListener{
 	Menu createProfilesMenu;
 	Menu removeProfilesMenu;
 	
+	File logFile = null;
+	
 	public Sniper(int _profileID) {
+		cfg = new Config(this);
 		profileID = _profileID;
 		instance = this;
-		cfg = new settings(profileID, this);
+		
+		debug("Loading profile " + profileID, DebugType.INFO);
 		
 	    SystemTray tray = SystemTray.getSystemTray();
 	    
@@ -107,10 +126,11 @@ public class Sniper implements NativeKeyListener{
 	
 	//This refreshes the buttons so that they only show profiles that exist/dont exist respectively.
 	void refreshProfiles() {
+		debug("Refreshing profiles in task tray", DebugType.INFO);
 		createProfilesMenu.removeAll();
 		removeProfilesMenu.removeAll();
 		
-		for(int i = 0; i < Main.profileCount; i++) {
+		for(int i = 0; i < Main.PROFILE_COUNT; i++) {
 			int index = i;
 			
 			if(Main.profiles[index] == null) {
@@ -120,7 +140,7 @@ public class Sniper implements NativeKeyListener{
 					public void actionPerformed(ActionEvent arg0) {
 						if(Main.profiles[index] == null) {
 							Main.profiles[index] = new Sniper(index + 1);
-							Main.profiles[index].cfg.saveFile();
+							Main.profiles[index].cfg.save();
 						}
 					}
 				});
@@ -155,9 +175,12 @@ public class Sniper implements NativeKeyListener{
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent e) {
-		if(e.getKeyCode() == cfg.hotkey) {
+		if(e.getKeyCode() == cfg.getInt("hotkey")) {
 			if(cWnd == null)
 				cWnd = new CaptureWindow(instance);
+		} else if(e.getKeyCode() == cfg.getInt("killSwitch") && cfg.getBool("debug")) {
+			debug("KillSwitch detected. Goodbye!", DebugType.INFO);
+			System.exit(0);
 		}
 	}
 
@@ -166,6 +189,88 @@ public class Sniper implements NativeKeyListener{
 
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent arg0) { }
+
+	public void copyToClipboard(BufferedImage _img) {
+		ImageSelection imgSel = new ImageSelection(_img);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
+		debug("Copied Image to clipboard", DebugType.INFO);
+	}
 	
+	public boolean saveImage(BufferedImage finalImg, String _modifier) {
+		File file;
+		LocalDateTime now = LocalDateTime.now();  
+		String filename = now.toString().replace(".", "_").replace(":", "_");
+		filename += _modifier + ".png";
+		File path = new File(cfg.getString("pictureFolder"));
+		file = new File(cfg.getString("pictureFolder") + filename);
+		try {
+			if(cfg.getBool("savePictures")) {
+				if(!path.exists()) path.mkdirs();
+				if(file.createNewFile()) {
+					ImageIO.write(finalImg, "png", file);
+					debug("Saved image on disk. Location: " + file, DebugType.INFO);
+					return true;
+				}
+			}
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Could not save image to \"" + file.toString()  + "\"!" , "Error", 1);
+			debug("Failed Saving. Wanted Location: " + file, DebugType.WARNING);
+			debug("Detailed Error: " + e.getMessage(), DebugType.WARNING);
+			
+			e.printStackTrace();
+			return false;
+		}
+		return false;
+	}
+	
+	private void debugPrint(String _p, String _t, String _m) {
+		String msg = "[%PROFILE%] [%TYPE%]: %MESSAGE%";
+		msg = msg.replace("%PROFILE%", _p);
+		msg = msg.replace("%TYPE%", _t);
+		msg = msg.replace("%MESSAGE%", _m);
+		System.out.println(msg);		
+		
+		if(cfg.getBool("logTextfile")) {
+			if(logFile == null) {
+				LocalDateTime now = LocalDateTime.now();  
+				String filename = now.toString().replace(".", "_").replace(":", "_");
+				filename += ".txt";
+				
+				logFile = new File(Main.logFolder + filename);
+				try {
+					if (logFile.createNewFile()) debug("Created new logfile at: " + logFile.getAbsolutePath(), DebugType.INFO);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			msg += "\n";
+			
+			try {
+				Files.write(Paths.get(logFile.getAbsolutePath()), msg.getBytes(), StandardOpenOption.APPEND);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void debug(String message, DebugType type) {
+		int logLvl = cfg.getInt("logLevel");
+		if(!cfg.getBool("debug") || logLvl == 0) return;
+		
+		switch (type) {
+			case INFO:
+				if(logLvl >= 3) debugPrint("Profile " + profileID, "INFO", message);
+				break;
+			case WARNING:
+				if(logLvl >= 2) debugPrint("Profile " + profileID, "WARNING", message);
+				break;
+			case ERROR:
+				if(logLvl >= 1) debugPrint("Profile " + profileID, "ERROR", message);
+				System.exit(0);
+		}
+	}
 	
 }

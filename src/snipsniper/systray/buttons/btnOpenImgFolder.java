@@ -17,7 +17,7 @@ public class btnOpenImgFolder extends MenuItem{
 		this.addActionListener(new ActionListener() {
 			@Override public void actionPerformed(ActionEvent e) {
 				try {
-					String path = _sniperInstance.cfg.pictureFolder;
+					String path = _sniperInstance.cfg.getString("pictureFolder");
 					Desktop.getDesktop().open(new File(path));
 				} catch (IOException e1) {
 					e1.printStackTrace();

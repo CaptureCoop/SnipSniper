@@ -1,4 +1,5 @@
 package snipsniper.capturewindow;
+import java.awt.MouseInfo;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -23,6 +24,7 @@ public class Mouse implements MouseListener{
 	public void mousePressed(MouseEvent arg0) {
 		if(arg0.getButton() == 1) {
 			wndInstance.startPoint = arg0.getPoint();
+			wndInstance.startPointTotal = MouseInfo.getPointerInfo().getLocation();
 			wndInstance.startedCapture = true;
 		}
 	}
