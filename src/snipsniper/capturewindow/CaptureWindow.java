@@ -42,9 +42,9 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	public CaptureWindow(Sniper _sniperInstance) {
 		sniperInstance = _sniperInstance;
-		if(sniperInstance.cfg.snipeDelay != 0) {
+		if(sniperInstance.cfg.getInt("snipeDelay") != 0) {
 			try {
-				Thread.sleep(sniperInstance.cfg.snipeDelay * 1000);
+				Thread.sleep(sniperInstance.cfg.getInt("snipeDelay") * 1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -119,7 +119,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			this.dispose();
 			finishedCapture = true;
 
-			int borderSize = sniperInstance.cfg.borderSize;
+			int borderSize = sniperInstance.cfg.getInt("borderSize");
 			Rectangle captureArea = calcRectangle();
 
 			if(captureArea.width == 0 || captureArea.height == 0) {
@@ -128,7 +128,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				BufferedImage croppedBuffer = screenshot.getSubimage(captureArea.x, captureArea.y, captureArea.width, captureArea.height);			
 				finalImg = new BufferedImage(croppedBuffer.getWidth() + borderSize *2, croppedBuffer.getHeight() + borderSize *2, BufferedImage.TYPE_INT_RGB);
 				Graphics g = (Graphics2D) finalImg.getGraphics();
-				g.setColor(sniperInstance.cfg.borderColor);
+				g.setColor(sniperInstance.cfg.getColor("borderColor"));
 				g.fillRect(0, 0, finalImg.getWidth(),finalImg.getHeight());
 				g.drawImage(croppedBuffer, borderSize, borderSize, croppedBuffer.getWidth(), croppedBuffer.getHeight(), this);
 				g.dispose();
@@ -137,7 +137,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 					this.dispose();
 				
 				//Copy cropped image to clipboard
-				if(sniperInstance.cfg.copyToClipboard)
+				if(sniperInstance.cfg.getBool("copyToClipboard"))
 				    sniperInstance.copyToClipboard(finalImg);
 				
 			}
@@ -152,8 +152,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				if(startPointTotal.getY() < cPoint.getY())
 					posY = (int)startPointTotal.getY();
 				
-				if(sniperInstance.cfg.openEditor)
-					new EditorWindow(finalImg, posX - sniperInstance.cfg.borderSize, posY,finalImg.getWidth() - sniperInstance.cfg.borderSize,finalImg.getHeight(), "SnipSniper Editor", sniperInstance);
+				if(sniperInstance.cfg.getBool("openEditor"))
+					new EditorWindow(finalImg, posX - sniperInstance.cfg.getInt("borderSize"), posY,finalImg.getWidth() - sniperInstance.cfg.getInt("borderSize"),finalImg.getHeight(), "SnipSniper Editor", sniperInstance);
 			}
 			sniperInstance.killCaptureWindow();
 		}

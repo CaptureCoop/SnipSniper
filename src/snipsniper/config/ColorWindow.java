@@ -57,7 +57,7 @@ public class ColorWindow extends JFrame implements WindowListener{
 		
 		JPanel row1 = new JPanel(new GridLayout(0,3));
 		colorPreview = new JPanel();
-		colorPreview.setBackground(cfgWnd.sniperInstance.cfg.borderColor);
+		colorPreview.setBackground(cfgWnd.sniperInstance.cfg.getColor("borderColor"));
 		colorPreview.setOpaque(true);
 		row1.add(new JPanel());
 		row1.add(colorPreview);

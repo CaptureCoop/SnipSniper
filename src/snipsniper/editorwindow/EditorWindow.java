@@ -15,7 +15,7 @@ public class EditorWindow extends JFrame{
 	BufferedImage overdraw;
 	Sniper sniperInstance;
 	EditorWindowRender renderer;
-	EditorMouseListener mouseListener;
+	EditorListener listener;
 	
 	Color currentColor = new Color(255,255,0,150);
 	
@@ -32,17 +32,18 @@ public class EditorWindow extends JFrame{
 		this.setVisible(true);
 		int barSize = this.getHeight() - this.getInsets().bottom;
 
-		mouseListener= new EditorMouseListener(this);
+		listener = new EditorListener(this);
 		
 		renderer = new EditorWindowRender(this);
 		
-		renderer.addMouseListener(mouseListener);
-		renderer.addMouseMotionListener(mouseListener);
-		renderer.addMouseWheelListener(mouseListener);
+		renderer.addMouseListener(listener);
+		renderer.addMouseMotionListener(listener);
+		renderer.addMouseWheelListener(listener);
+		this.addKeyListener(listener);
 		
 		this.add(renderer);
 		this.pack();
-		this.setLocation(_x - X_OFFSET, _y - barSize - sniperInstance.cfg.borderSize);
+		this.setLocation(_x - X_OFFSET, _y - barSize - sniperInstance.cfg.getInt("borderSize"));
 	}
 	
 	public void saveImage() {
@@ -52,7 +53,7 @@ public class EditorWindow extends JFrame{
 		g.drawImage(overdraw, 0, 0, img.getWidth(), img.getHeight(), this);
 		g.dispose();
 		sniperInstance.saveImage(finalImg, "_edited");
-		if(sniperInstance.cfg.copyToClipboard)
+		if(sniperInstance.cfg.getBool("copyToClipboard"))
 			sniperInstance.copyToClipboard(finalImg);
 	}
 	

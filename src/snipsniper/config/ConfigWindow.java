@@ -56,15 +56,15 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		
 		sniperInstance = _sniperInstance;
 		
-		hotKeyButton.setText(NativeKeyEvent.getKeyText(_sniperInstance.cfg.hotkey));
-		hotKeyButton.hotkey = sniperInstance.cfg.hotkey;
-		savePictures.setSelected(_sniperInstance.cfg.savePictures);
-		copyToClipboard.setSelected(_sniperInstance.cfg.copyToClipboard);
-		borderSize.setText(_sniperInstance.cfg.borderSize + "");
-		pictureLocation.setText(_sniperInstance.cfg.pictureFolder + "");
-		borderColor = _sniperInstance.cfg.borderColor;
-		snipeDelay.setText(_sniperInstance.cfg.snipeDelay + "");
-		openEditor.setSelected(_sniperInstance.cfg.openEditor);
+		hotKeyButton.setText(NativeKeyEvent.getKeyText(_sniperInstance.cfg.getInt("hotkey")));
+		hotKeyButton.hotkey = sniperInstance.cfg.getInt("hotkey");
+		savePictures.setSelected(_sniperInstance.cfg.getBool("savePictures"));
+		copyToClipboard.setSelected(_sniperInstance.cfg.getBool("copyToClipboard"));
+		borderSize.setText(_sniperInstance.cfg.getInt("borderSize") + "");
+		pictureLocation.setText(_sniperInstance.cfg.getString("pictureFolder") + "");
+		borderColor = _sniperInstance.cfg.getColor("borderColor");
+		snipeDelay.setText(_sniperInstance.cfg.getInt("snipeDelay") + "");
+		openEditor.setSelected(_sniperInstance.cfg.getBool("openEditor"));
 		
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new ConfigSaveButton(this));
@@ -185,15 +185,15 @@ public class ConfigWindow extends JFrame implements WindowListener{
 			return;
 		}
 		
-		sniperInstance.cfg.hotkey = hotKeyButton.hotkey;
-		sniperInstance.cfg.pictureFolder = _saveLocation;
-		sniperInstance.cfg.savePictures = _savePictures;
-		sniperInstance.cfg.borderSize = _borderSize;
-		sniperInstance.cfg.copyToClipboard = _copyToClipboard;
-		sniperInstance.cfg.borderColor = borderColor;
-		sniperInstance.cfg.snipeDelay = _snipeDelay;
-		sniperInstance.cfg.openEditor = _openEditor;
-		sniperInstance.cfg.saveFile();
+		sniperInstance.cfg.set("hotkey", hotKeyButton.hotkey + "");
+		sniperInstance.cfg.set("pictureFolder", _saveLocation);
+		sniperInstance.cfg.set("savePictures", _savePictures + "");
+		sniperInstance.cfg.set("borderSize", _borderSize + "");
+		sniperInstance.cfg.set("copyToClipboard", _copyToClipboard + "");
+		sniperInstance.cfg.set("borderColor", Utils.rgb2hex(borderColor));
+		sniperInstance.cfg.set("snipeDelay", _snipeDelay + "");
+		sniperInstance.cfg.set("openEditor", _openEditor + "");
+		sniperInstance.cfg.save();
 		
 		close();
 	}

@@ -24,9 +24,10 @@ public class ColorSlider extends JSlider{
 		instance = this;
 		
 		this.setMaximum(255);
-		if(color == 1) this.setValue(cWnd.cfgWnd.sniperInstance.cfg.borderColor.getRed());
-		if(color == 2) this.setValue(cWnd.cfgWnd.sniperInstance.cfg.borderColor.getGreen());
-		if(color == 3) this.setValue(cWnd.cfgWnd.sniperInstance.cfg.borderColor.getBlue());
+		Color cColor = cWnd.cfgWnd.sniperInstance.cfg.getColor("borderColor");
+		if(color == 1) this.setValue(cColor.getRed());
+		if(color == 2) this.setValue(cColor.getGreen());
+		if(color == 3) this.setValue(cColor.getBlue());
 		
 		this.addChangeListener(new ChangeListener() {
 			@Override

@@ -1,0 +1,24 @@
+<--- Normal Config Settings --->
+hotkey=67
+pictureFolder=C:\Users\public\pictures\SnipSniper\
+savePictures=true
+borderSize=0
+copyToClipboard=true
+borderColor=#000000
+snipeDelay=0
+openEditor=false
+
+<--- SnipSniper Main --->
+debug=false
+logLevel=0
+logTextfile=false
+killSwitch=60
+
+<--- Editor Settings --->
+editorStampWidth=75
+editorStampHeight=20
+editorStampWidthMinimum=10
+editorStampHeightMinimum=20
+editorStampWidthSpeed=20
+editorStampHeightSpeed=20
+
