@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import snipsniper.Icons;
 import snipsniper.systray.Sniper;
 
 public class EditorWindow extends JFrame{
@@ -29,6 +30,7 @@ public class EditorWindow extends JFrame{
 		this.setTitle(_title);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setResizable(false);
+		this.setIconImage(Icons.icon_taskbar);
 		this.setVisible(true);
 		int barSize = this.getHeight() - this.getInsets().bottom;
 
