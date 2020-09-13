@@ -19,8 +19,8 @@ public class Icons {
 			icons = new BufferedImage[8];
 			for(int i = 0; i < 8; i++)
 				icons[i] = ImageIO.read(Main.class.getResource("/res/icon" + i + ".png"));
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

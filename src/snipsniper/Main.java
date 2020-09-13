@@ -10,7 +10,7 @@ import snipsniper.systray.Sniper;
 
 public class Main {
 	
-	public final static String VERSION = "20200911_4";
+	public final static String VERSION = "20200913_4";
 	
 	public static String jarFolder = new File("").getAbsolutePath() + "\\";;
 	public static String mainFolder = jarFolder + "SnipSniper";
@@ -36,6 +36,7 @@ public class Main {
 				profiles[i] = new Sniper(i + 1);
 			}
 		}
+
 	}
 
 }

@@ -1,6 +1,6 @@
 <--- Normal Config Settings --->
 hotkey=67
-pictureFolder=C:\Users\public\pictures\SnipSniper\
+pictureFolder=%userprofile%\pictures\SnipSniper\
 savePictures=true
 borderSize=0
 copyToClipboard=true
@@ -13,6 +13,7 @@ debug=false
 logLevel=0
 logTextfile=false
 killSwitch=60
+maxFPS=60
 
 <--- Editor Settings --->
 editorStampWidth=75

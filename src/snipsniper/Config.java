@@ -29,10 +29,9 @@ public class Config {
 			
 			loadFile("/defaults.txt", defaults, true);
 		} catch (NumberFormatException | IOException e) {
+			sniperInstance.debug("There was an error loading the config. Message: " + e.getMessage(), DebugType.ERROR);
 			e.printStackTrace();
 		}
-		
-		
 	}
 	
 	void loadFile(String filename, HashMap<String, String> _map, boolean inJar) throws IOException, NumberFormatException {
@@ -55,14 +54,24 @@ public class Config {
 
 	}
 	
-	public String getString(String _key) {
+	public String getRawString(String _key) {
+		String returnVal = null;
 		if(settings.containsKey(_key))
-			return settings.get(_key);
+			returnVal = settings.get(_key);
 		else if(defaults.containsKey(_key))
-			return defaults.get(_key);
+			returnVal = defaults.get(_key);
 		else
 			sniperInstance.debug("No value found for <" + _key + ">.", DebugType.ERROR);
-		return null;
+		return returnVal;
+	}
+	
+	public String getString(String _key) {
+		String str = getRawString(_key);
+		if(str != null) {
+			if(str.contains("%username%")) str = str.replace("%username%", System.getProperty("user.name"));
+			if(str.contains("%userprofile%")) str = str.replace("%userprofile%", System.getenv("USERPROFILE"));	
+		}
+		return str;
 	}
 	
 	public int getInt(String _key) {
@@ -114,8 +123,9 @@ public class Config {
 				writer.write(key + "=" + value + "\n");
 			}
 			writer.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} catch (IOException e) {
+			sniperInstance.debug("There was an error saving the config! Message: " + e.getMessage(), DebugType.ERROR);
+			e.printStackTrace();
 		}
 	}
 	

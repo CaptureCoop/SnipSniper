@@ -60,6 +60,7 @@ public class EditorWindow extends JFrame{
 	}
 	
 	public void kill() {
+		img = null;
 		this.dispose();
 	}
 	

@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -106,22 +107,24 @@ public class Sniper implements NativeKeyListener{
 
 				@Override
 				public void mouseReleased(MouseEvent arg0) {
-					refreshProfiles();
+					if(arg0.getButton() == MouseEvent.BUTTON3)
+						refreshProfiles();
 				}
 				
 			});
 			
 			tray.add(trayIcon);
-		} catch (AWTException e1) {
-			e1.printStackTrace();
+		} catch (AWTException e) {
+			debug("There was an issue setting up the trayicon! Message: " + e.getMessage(), DebugType.ERROR);
+			e.printStackTrace();
 		}
 		try {
 			GlobalScreen.registerNativeHook();
-		} catch (NativeHookException e1) {
-			e1.printStackTrace();
+		} catch (NativeHookException e) {
+			debug("There was an issue setting up NativeHook! Message: " + e.getMessage(), DebugType.ERROR);
+			e.printStackTrace();
 		}
 		GlobalScreen.addNativeKeyListener(this);
-		
 	}
 	
 	//This refreshes the buttons so that they only show profiles that exist/dont exist respectively.
@@ -168,6 +171,9 @@ public class Sniper implements NativeKeyListener{
 
 	public void killCaptureWindow() {
 		if(cWnd != null) {
+			cWnd.screenshot = null;
+			cWnd.screenshotTinted = null;
+			cWnd.isRunning = false;
 			cWnd.dispose();
 			cWnd = null;
 		}
@@ -201,8 +207,9 @@ public class Sniper implements NativeKeyListener{
 		LocalDateTime now = LocalDateTime.now();  
 		String filename = now.toString().replace(".", "_").replace(":", "_");
 		filename += _modifier + ".png";
-		File path = new File(cfg.getString("pictureFolder"));
-		file = new File(cfg.getString("pictureFolder") + filename);
+		String savePath = cfg.getString("pictureFolder");
+		File path = new File(savePath);
+		file = new File(savePath + filename);
 		try {
 			if(cfg.getBool("savePictures")) {
 				if(!path.exists()) path.mkdirs();
@@ -216,7 +223,6 @@ public class Sniper implements NativeKeyListener{
 			JOptionPane.showMessageDialog(null, "Could not save image to \"" + file.toString()  + "\"!" , "Error", 1);
 			debug("Failed Saving. Wanted Location: " + file, DebugType.WARNING);
 			debug("Detailed Error: " + e.getMessage(), DebugType.WARNING);
-			
 			e.printStackTrace();
 			return false;
 		}
@@ -224,10 +230,14 @@ public class Sniper implements NativeKeyListener{
 	}
 	
 	private void debugPrint(String _p, String _t, String _m) {
-		String msg = "[%PROFILE%] [%TYPE%]: %MESSAGE%";
+		String msg = "%DATE% %TIME%[%PROFILE%] [%TYPE%]: %MESSAGE%";
 		msg = msg.replace("%PROFILE%", _p);
 		msg = msg.replace("%TYPE%", _t);
 		msg = msg.replace("%MESSAGE%", _m);
+		final LocalDateTime time = LocalDateTime.now();
+		msg = msg.replace("%DATE%", "" + DateTimeFormatter.ISO_DATE.format(time));
+		msg = msg.replace("%TIME%", "" + DateTimeFormatter.ISO_TIME.format(time));
+		
 		System.out.println(msg);		
 		
 		if(cfg.getBool("logTextfile")) {
@@ -240,7 +250,6 @@ public class Sniper implements NativeKeyListener{
 				try {
 					if (logFile.createNewFile()) debug("Created new logfile at: " + logFile.getAbsolutePath(), DebugType.INFO);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -250,7 +259,6 @@ public class Sniper implements NativeKeyListener{
 			try {
 				Files.write(Paths.get(logFile.getAbsolutePath()), msg.getBytes(), StandardOpenOption.APPEND);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

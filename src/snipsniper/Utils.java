@@ -18,8 +18,7 @@ public class Utils {
 	}
 	
 	public static String rgb2hex(Color _color) {
-		String hex = String.format("#%02x%02x%02x", _color.getRed(), _color.getGreen(), _color.getBlue()); 
-		return hex;
+		return String.format("#%02x%02x%02x", _color.getRed(), _color.getGreen(), _color.getBlue()); 
 	}
 	
 	public static BufferedImage resizeImage(BufferedImage _original, int _width, int _height) {
@@ -32,7 +31,7 @@ public class Utils {
 	}
 	
 	public static Color hex2rgb(String colorStr) {
-	    return new Color(Integer.valueOf( colorStr.substring( 1, 3 ), 16 ), Integer.valueOf( colorStr.substring( 3, 5 ), 16 ), Integer.valueOf( colorStr.substring( 5, 7 ), 16 ) );
+	    return new Color(Integer.valueOf(colorStr.substring(1, 3), 16), Integer.valueOf( colorStr.substring(3, 5), 16), Integer.valueOf(colorStr.substring(5, 7), 16));
 	}
 
 	public static BufferedImage copyImage(BufferedImage source){

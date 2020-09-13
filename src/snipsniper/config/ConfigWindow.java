@@ -61,7 +61,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		savePictures.setSelected(_sniperInstance.cfg.getBool("savePictures"));
 		copyToClipboard.setSelected(_sniperInstance.cfg.getBool("copyToClipboard"));
 		borderSize.setText(_sniperInstance.cfg.getInt("borderSize") + "");
-		pictureLocation.setText(_sniperInstance.cfg.getString("pictureFolder") + "");
+		pictureLocation.setText(_sniperInstance.cfg.getRawString("pictureFolder") + "");
 		borderColor = _sniperInstance.cfg.getColor("borderColor");
 		snipeDelay.setText(_sniperInstance.cfg.getInt("snipeDelay") + "");
 		openEditor.setSelected(_sniperInstance.cfg.getBool("openEditor"));
@@ -172,18 +172,25 @@ public class ConfigWindow extends JFrame implements WindowListener{
 			msgError("Border size can not be more then 999!");
 			return;
 		}
-		File saveLocationCheck = new File(_saveLocation);
+		
+		String saveLocationFinal = _saveLocation;
+		if(saveLocationFinal.contains("%userprofile%")) saveLocationFinal = saveLocationFinal.replace("%userprofile%", System.getenv("USERPROFILE"));
+		if(saveLocationFinal.contains("%username%")) saveLocationFinal = saveLocationFinal.replace("%username%", System.getProperty("user.name"));
+		
+		File saveLocationCheck = new File(saveLocationFinal);
 		if(!saveLocationCheck.exists()) {
 			Object[] options = {"Okay" , "Create Directory" };
 			int msgBox = JOptionPane.showOptionDialog(null,"Directory does not exist!", "Error", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 			if(msgBox == 1) {
-				File f = new File(_saveLocation);
+				File f = new File(saveLocationFinal);
 				if(!f.mkdirs()) {
 					msgError("Directory could not be created!");
 				}
 			}
 			return;
 		}
+		
+		System.out.println(saveLocationFinal);
 		
 		sniperInstance.cfg.set("hotkey", hotKeyButton.hotkey + "");
 		sniperInstance.cfg.set("pictureFolder", _saveLocation);
