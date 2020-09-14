@@ -22,7 +22,7 @@ public class EditorWindow extends JFrame{
 	
 	final int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
 	
-	public EditorWindow(BufferedImage _img, int _x, int _y, int _w, int _h, String _title, Sniper _sInstance) {
+	public EditorWindow(BufferedImage _img, int _x, int _y, int _w, int _h, String _title, Sniper _sInstance, boolean _leftToRight) {
 		img = _img;
 		sniperInstance = _sInstance;
 		overdraw = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -45,7 +45,11 @@ public class EditorWindow extends JFrame{
 		
 		this.add(renderer);
 		this.pack();
-		this.setLocation(_x - X_OFFSET, _y - barSize - sniperInstance.cfg.getInt("borderSize"));
+		
+		int borderSize = sniperInstance.cfg.getInt("borderSize");
+		if(!_leftToRight) borderSize = -borderSize;
+		
+		this.setLocation((_x - X_OFFSET) + borderSize, (_y - barSize) + borderSize);
 	}
 	
 	public void saveImage() {

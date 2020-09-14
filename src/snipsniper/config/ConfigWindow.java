@@ -18,7 +18,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
+
+import snipsniper.ColorChooser;
 import snipsniper.Icons;
+import snipsniper.PBRColor;
 import snipsniper.Utils;
 import snipsniper.systray.Sniper;
 
@@ -31,14 +34,15 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	JCheckBox copyToClipboard = new JCheckBox();
 	JTextField borderSize = new JTextField();
 	JTextField pictureLocation = new JTextField();
-	Color borderColor = Color.black;
+	PBRColor borderColor = new PBRColor(Color.black);
 	JTextField snipeDelay = new JTextField();
 	JCheckBox openEditor = new JCheckBox();
 	
 	int maxBorder = 999;
 	
 	ConfigWindow instance = this;
-	ColorWindow cWnd = null;
+	
+	ColorChooser colorChooser = null;
 	Sniper sniperInstance;
 	
 	public JLabel createJLabel(String _title, int _horizontalAlignment, int _verticalAlignment) {
@@ -62,7 +66,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		copyToClipboard.setSelected(_sniperInstance.cfg.getBool("copyToClipboard"));
 		borderSize.setText(_sniperInstance.cfg.getInt("borderSize") + "");
 		pictureLocation.setText(_sniperInstance.cfg.getRawString("pictureFolder") + "");
-		borderColor = _sniperInstance.cfg.getColor("borderColor");
+		borderColor = new PBRColor(_sniperInstance.cfg.getColor("borderColor"));
 		snipeDelay.setText(_sniperInstance.cfg.getInt("snipeDelay") + "");
 		openEditor.setSelected(_sniperInstance.cfg.getBool("openEditor"));
 		
@@ -94,10 +98,8 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		colorBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(cWnd == null)
-					cWnd = new ColorWindow(instance);
-				else
-					cWnd.requestFocus();
+				if(colorChooser == null || !colorChooser.isDisplayable())
+					colorChooser = new ColorChooser("Border color", borderColor);
 			}
 		});
 		row3_2.add(colorBtn);
@@ -190,14 +192,12 @@ public class ConfigWindow extends JFrame implements WindowListener{
 			return;
 		}
 		
-		System.out.println(saveLocationFinal);
-		
 		sniperInstance.cfg.set("hotkey", hotKeyButton.hotkey + "");
 		sniperInstance.cfg.set("pictureFolder", _saveLocation);
 		sniperInstance.cfg.set("savePictures", _savePictures + "");
 		sniperInstance.cfg.set("borderSize", _borderSize + "");
 		sniperInstance.cfg.set("copyToClipboard", _copyToClipboard + "");
-		sniperInstance.cfg.set("borderColor", Utils.rgb2hex(borderColor));
+		sniperInstance.cfg.set("borderColor", Utils.rgb2hex(borderColor.c));
 		sniperInstance.cfg.set("snipeDelay", _snipeDelay + "");
 		sniperInstance.cfg.set("openEditor", _openEditor + "");
 		sniperInstance.cfg.save();
@@ -210,9 +210,9 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		if(!closed) {
 			GlobalScreen.removeNativeKeyListener(hotKeyButton);
 			closed = true;
-			if(cWnd != null) {
-				cWnd.dispose();
-				cWnd = null;
+			if(colorChooser != null) {
+				colorChooser.dispose();
+				colorChooser = null;
 			}
 			this.dispose();
 			sniperInstance.cfgWnd = null;

@@ -96,21 +96,23 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		long lastTime = System.nanoTime();
 		long lastTimer = System.currentTimeMillis();
 		double delta = 0;
-		boolean hasShown = false;
+		boolean screenshotDone = false;
 		
 		while (isRunning) {
-			if(screenshot != null && screenshotTinted != null && !hasShown) {
+			if(screenshotDone) {
 				setVisible(true);
-				hasShown = true;
 				setSize();
+				specialRepaint();
 			}
+			if(screenshot != null && screenshotTinted != null && !screenshotDone) screenshotDone = true;
+				
 			long now = System.nanoTime();
 			delta += (now - lastTime) / nsPerTick;
 			lastTime = now;
 
 			while (delta >= 1) {
 				delta -= 1;
-				specialRepaint();
+				if(screenshotDone) specialRepaint();
 			}
 
 			if (System.currentTimeMillis() - lastTimer >= 1000)
@@ -214,14 +216,18 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			if(finalImg != null) {
 				int posX = (int)cPoint.getX();
 				int posY = (int)cPoint.getY();
+				boolean leftToRight = false;
 				
-				if(!(startPointTotal.getX() > cPoint.getX()))
+				if(!(startPointTotal.getX() > cPoint.getX())) {
 					posX -= finalImg.getWidth();
-				if(!(startPointTotal.getY() > cPoint.getY()))
+					leftToRight = true;
+				}
+				if(!(startPointTotal.getY() > cPoint.getY())) {
 					posY -= finalImg.getHeight();
-				
+					leftToRight = true;
+				}
 				if(sniperInstance.cfg.getBool("openEditor"))
-					new EditorWindow(finalImg, posX - sniperInstance.cfg.getInt("borderSize"), posY,finalImg.getWidth() - sniperInstance.cfg.getInt("borderSize"),finalImg.getHeight(), "SnipSniper Editor", sniperInstance);
+					new EditorWindow(finalImg, posX, posY,finalImg.getWidth(),finalImg.getHeight(), "SnipSniper Editor", sniperInstance, leftToRight);
 			}
 			sniperInstance.killCaptureWindow();
 		}
