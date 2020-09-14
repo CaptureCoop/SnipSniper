@@ -11,7 +11,7 @@ import snipsniper.utils.Icons;
 
 public class Main {
 	
-	public final static String VERSION = "20200914_1";
+	public final static String VERSION = "20200914_2";
 	
 	public static String jarFolder = new File("").getAbsolutePath() + "\\";;
 	public static String mainFolder = jarFolder + "SnipSniper";
