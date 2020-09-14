@@ -18,11 +18,12 @@ import java.awt.event.WindowListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
-import snipsniper.DebugType;
-import snipsniper.Icons;
-import snipsniper.Utils;
+
 import snipsniper.editorwindow.EditorWindow;
 import snipsniper.systray.Sniper;
+import snipsniper.utils.DebugType;
+import snipsniper.utils.Icons;
+import snipsniper.utils.Utils;
 
 public class CaptureWindow extends JFrame implements WindowListener{
 	private static final long serialVersionUID = 3129624729137795417L;

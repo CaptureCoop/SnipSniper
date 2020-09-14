@@ -1,4 +1,4 @@
-package snipsniper.config;
+package snipsniper.configwindow;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,11 +19,11 @@ import javax.swing.JTextField;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
-import snipsniper.ColorChooser;
-import snipsniper.Icons;
-import snipsniper.PBRColor;
-import snipsniper.Utils;
 import snipsniper.systray.Sniper;
+import snipsniper.utils.ColorChooser;
+import snipsniper.utils.Icons;
+import snipsniper.utils.PBRColor;
+import snipsniper.utils.Utils;
 
 public class ConfigWindow extends JFrame implements WindowListener{
 

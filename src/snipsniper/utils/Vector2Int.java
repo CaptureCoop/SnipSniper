@@ -1,4 +1,4 @@
-package snipsniper;
+package snipsniper.utils;
 
 import java.awt.Point;
 

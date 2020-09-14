@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import snipsniper.systray.Sniper;
+import snipsniper.utils.DebugType;
+import snipsniper.utils.Utils;
 
 public class Config {
 

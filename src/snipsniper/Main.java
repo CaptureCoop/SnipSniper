@@ -7,6 +7,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import snipsniper.systray.Sniper;
+import snipsniper.utils.Icons;
 
 public class Main {
 	

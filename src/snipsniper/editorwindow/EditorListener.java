@@ -10,7 +10,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import snipsniper.Config;
-import snipsniper.Vector2Int;
+import snipsniper.utils.Vector2Int;
 
 public class EditorListener implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
 	

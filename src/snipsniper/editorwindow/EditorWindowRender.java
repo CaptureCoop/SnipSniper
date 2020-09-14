@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import snipsniper.Vector2Int;
+import snipsniper.utils.Vector2Int;
 
 public class EditorWindowRender extends JPanel{
 	private static final long serialVersionUID = 4283800435207434147L;

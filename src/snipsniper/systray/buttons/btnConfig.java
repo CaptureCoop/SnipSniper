@@ -3,7 +3,8 @@ package snipsniper.systray.buttons;
 import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import snipsniper.config.ConfigWindow;
+
+import snipsniper.configwindow.ConfigWindow;
 import snipsniper.systray.Sniper;
 
 public class btnConfig extends MenuItem{

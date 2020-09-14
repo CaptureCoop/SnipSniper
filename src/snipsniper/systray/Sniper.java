@@ -31,16 +31,16 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 import snipsniper.Config;
-import snipsniper.DebugType;
-import snipsniper.Icons;
 import snipsniper.Main;
 import snipsniper.capturewindow.CaptureWindow;
 import snipsniper.capturewindow.ImageSelection;
-import snipsniper.config.ConfigWindow;
+import snipsniper.configwindow.ConfigWindow;
 import snipsniper.systray.buttons.btnAbout;
 import snipsniper.systray.buttons.btnConfig;
 import snipsniper.systray.buttons.btnExit;
 import snipsniper.systray.buttons.btnOpenImgFolder;
+import snipsniper.utils.DebugType;
+import snipsniper.utils.Icons;
 
 public class Sniper implements NativeKeyListener{
 	public int profileID = 0; //0 = default

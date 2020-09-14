@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-import snipsniper.Icons;
 import snipsniper.systray.Sniper;
+import snipsniper.utils.Icons;
 
 public class EditorWindow extends JFrame{
 	private static final long serialVersionUID = -7363672331227971815L;
