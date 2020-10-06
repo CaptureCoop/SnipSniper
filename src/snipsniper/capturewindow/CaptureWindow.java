@@ -82,43 +82,43 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				setSize();
 			}
 		});
-		
-		thread = new Thread() {
-		    public void run() {
-		       loop();
-		    }  
-		};
-		thread.start();
+     
+	   loop(); 
 	}
 	
 	
 	public void loop() {
-		final double nsPerTick = 1000000000D / sniperInstance.cfg.getInt("maxFPS");
-		long lastTime = System.nanoTime();
-		long lastTimer = System.currentTimeMillis();
-		double delta = 0;
-		boolean screenshotDone = false;
-		
-		while (isRunning) {
-			if(screenshotDone) {
-				setVisible(true);
-				setSize();
-				specialRepaint();
-			}
-			if(screenshot != null && screenshotTinted != null && !screenshotDone) screenshotDone = true;
+		thread = new Thread() {
+		    public void run() {
+				final double nsPerTick = 1000000000D / sniperInstance.cfg.getInt("maxFPS");
+				long lastTime = System.nanoTime();
+				long lastTimer = System.currentTimeMillis();
+				double delta = 0;
+				boolean screenshotDone = false;
 				
-			long now = System.nanoTime();
-			delta += (now - lastTime) / nsPerTick;
-			lastTime = now;
-
-			while (delta >= 1) {
-				delta -= 1;
-				if(screenshotDone) specialRepaint();
-			}
-
-			if (System.currentTimeMillis() - lastTimer >= 1000)
-				lastTimer += 1000;
-		}
+				while (isRunning) {
+					if(screenshotDone) {
+						setVisible(true);
+						setSize();
+						specialRepaint();
+					}
+					if(screenshot != null && screenshotTinted != null && !screenshotDone) screenshotDone = true;
+						
+					long now = System.nanoTime();
+					delta += (now - lastTime) / nsPerTick;
+					lastTime = now;
+		
+					while (delta >= 1) {
+						delta -= 1;
+						if(screenshotDone) specialRepaint();
+					}
+		
+					if (System.currentTimeMillis() - lastTimer >= 1000)
+						lastTimer += 1000;
+				}
+		    }  
+		};
+		thread.start();
 		
 	}
 	
