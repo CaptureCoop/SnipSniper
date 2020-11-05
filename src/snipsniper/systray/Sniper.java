@@ -58,8 +58,9 @@ public class Sniper implements NativeKeyListener{
 	File logFile = null;
 	
 	public Sniper(int _profileID) {
-		cfg = new Config(this);
 		profileID = _profileID;
+		
+		cfg = new Config(this);
 		instance = this;
 		
 		debug("Loading profile " + profileID, DebugType.INFO);
