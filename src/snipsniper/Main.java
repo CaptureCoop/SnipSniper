@@ -11,7 +11,7 @@ import snipsniper.utils.Icons;
 
 public class Main {
 	
-	public final static String VERSION = "20201105_1";
+	public final static String VERSION = "20201105_2";
 	
 	public static String jarFolder = new File("").getAbsolutePath() + "\\";;
 	public static String mainFolder = jarFolder + "SnipSniper";
@@ -23,7 +23,7 @@ public class Main {
 	public static Sniper profiles[] = new Sniper[PROFILE_COUNT];
 	
 	//TODO: Bug happens when other monitor is main one
-	//TODO: Options dont work properly
+	//TODO: Copy config file 1 to 1 instead of values
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{		
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

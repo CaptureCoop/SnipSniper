@@ -17,6 +17,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+
 import javax.swing.JFrame;
 
 import snipsniper.editorwindow.EditorWindow;
@@ -35,6 +36,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	Point startPoint;
 	Point startPointTotal;
 	Point cPoint;
+	Point cPointAlt;
 	Rectangle bounds = null;
 	
 	public BufferedImage screenshot = null;
@@ -56,7 +58,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				Thread.sleep(sniperInstance.cfg.getInt("snipeDelay") * 1000);
 			} catch (InterruptedException e) {
 				sniperInstance.debug("There was an error with the delay! Message: " + e.getMessage(), DebugType.ERROR);
-				e.printStackTrace();
+				sniperInstance.debug("More info: " + e.getStackTrace(), DebugType.ERROR);
 			}
 		}
 		
@@ -215,21 +217,26 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			}
 			//sniperInstance.trayIcon.displayMessage("Image saved!", "Image saved under: " + file.toString(), MessageType.NONE);
 			if(finalImg != null) {
-				int posX = (int)cPoint.getX();
-				int posY = (int)cPoint.getY();
+				int posX = (int)cPointAlt.getX();
+				int posY = (int)cPointAlt.getY();
 				boolean leftToRight = false;
 				
-				if(!(startPointTotal.getX() > cPoint.getX())) {
+				if(!(startPointTotal.getX() > cPointAlt.getX())) {
 					posX -= finalImg.getWidth();
 					leftToRight = true;
 				}
-				if(!(startPointTotal.getY() > cPoint.getY())) {
+				if(!(startPointTotal.getY() > cPointAlt.getY())) {
 					posY -= finalImg.getHeight();
 					leftToRight = true;
 				}
-				if(sniperInstance.cfg.getBool("openEditor"))
+				if(sniperInstance.cfg.getBool("openEditor")) {
+					sniperInstance.debug("Taking screenshot. Position info:", DebugType.INFO);
+					sniperInstance.debug("Captured area: " + captureArea.toString(), DebugType.INFO);
+					sniperInstance.debug("Area requested by jframe.setLocation(): " + "X: " + cPointAlt.getX() + " Y: " + cPointAlt.getY(), DebugType.INFO);
 					new EditorWindow(finalImg, posX, posY,finalImg.getWidth(),finalImg.getHeight(), "SnipSniper Editor", sniperInstance, leftToRight);
+				}
 			}
+				
 			sniperInstance.killCaptureWindow();
 		}
 	}
