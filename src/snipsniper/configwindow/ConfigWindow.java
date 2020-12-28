@@ -39,9 +39,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	JCheckBox openEditor = new JCheckBox();
 	
 	int maxBorder = 999;
-	
-	ConfigWindow instance = this;
-	
+
 	ColorChooser colorChooser = null;
 	Sniper sniperInstance;
 	
@@ -83,12 +81,9 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		JPanel row0_1 = new JPanel(new GridLayout(0,2));
 		row0_1.add(hotKeyButton);
 		JButton deleteHotKey = new JButton("Delete");
-		deleteHotKey.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				hotKeyButton.setText("None");
-				hotKeyButton.hotkey = -1;
-			}
+		deleteHotKey.addActionListener(e -> {
+			hotKeyButton.setText("None");
+			hotKeyButton.hotkey = -1;
 		});
 		row0_1.add(deleteHotKey);
 		row0.add(row0_1);
@@ -109,12 +104,9 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		JPanel row3_2 = new JPanel(new GridLayout(0,2));
 		row3_2.add(borderSize);
 		JButton colorBtn = new JButton("Color");
-		colorBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(colorChooser == null || !colorChooser.isDisplayable())
-					colorChooser = new ColorChooser("Border color", borderColor);
-			}
+		colorBtn.addActionListener(e -> {
+			if(colorChooser == null || !colorChooser.isDisplayable())
+				colorChooser = new ColorChooser("Border color", borderColor);
 		});
 		row3_2.add(colorBtn);
 		row3.add(row3_2);
