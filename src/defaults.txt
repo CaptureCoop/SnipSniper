@@ -1,5 +1,5 @@
 <--- Normal Config Settings --->
-hotkey=67
+hotkey=-1
 pictureFolder=%userprofile%\pictures\SnipSniper\
 savePictures=true
 borderSize=0

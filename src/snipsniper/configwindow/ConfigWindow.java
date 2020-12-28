@@ -59,8 +59,11 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		this.setIconImage(Icons.icon_taskbar);
 		
 		sniperInstance = _sniperInstance;
-		
-		hotKeyButton.setText(NativeKeyEvent.getKeyText(_sniperInstance.cfg.getInt("hotkey")));
+
+		if(_sniperInstance.cfg.getInt("hotkey") == -1)
+			hotKeyButton.setText("None");
+		else
+			hotKeyButton.setText(NativeKeyEvent.getKeyText(_sniperInstance.cfg.getInt("hotkey")));
 		hotKeyButton.hotkey = sniperInstance.cfg.getInt("hotkey");
 		savePictures.setSelected(_sniperInstance.cfg.getBool("savePictures"));
 		copyToClipboard.setSelected(_sniperInstance.cfg.getBool("copyToClipboard"));
@@ -77,7 +80,18 @@ public class ConfigWindow extends JFrame implements WindowListener{
 
 		JPanel row0 = new JPanel(new GridLayout(0,2));
 		row0.add(createJLabel("Capture Hotkey", JLabel.CENTER, JLabel.CENTER));
-		row0.add(hotKeyButton);
+		JPanel row0_1 = new JPanel(new GridLayout(0,2));
+		row0_1.add(hotKeyButton);
+		JButton deleteHotKey = new JButton("Delete");
+		deleteHotKey.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				hotKeyButton.setText("None");
+				hotKeyButton.hotkey = -1;
+			}
+		});
+		row0_1.add(deleteHotKey);
+		row0.add(row0_1);
 		options.add(row0);
 		
 		JPanel row1 = new JPanel(new GridLayout(0,2));

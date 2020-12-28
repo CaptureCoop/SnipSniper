@@ -182,12 +182,14 @@ public class Sniper implements NativeKeyListener{
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent e) {
-		if(e.getKeyCode() == cfg.getInt("hotkey")) {
-			if(cWnd == null)
-				cWnd = new CaptureWindow(instance);
-		} else if(e.getKeyCode() == cfg.getInt("killSwitch") && cfg.getBool("debug")) {
-			debug("KillSwitch detected. Goodbye!", DebugType.INFO);
-			System.exit(0);
+		if(cfg.getInt("hotkey") != -1) {
+			if (e.getKeyCode() == cfg.getInt("hotkey")) {
+				if (cWnd == null)
+					cWnd = new CaptureWindow(instance);
+			} else if (e.getKeyCode() == cfg.getInt("killSwitch") && cfg.getBool("debug")) {
+				debug("KillSwitch detected. Goodbye!", DebugType.INFO);
+				System.exit(0);
+			}
 		}
 	}
 
