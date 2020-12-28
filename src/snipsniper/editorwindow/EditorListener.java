@@ -52,8 +52,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	@Override
 	public void mouseReleased(MouseEvent arg0) {	
 		Vector2Int brushSize = new Vector2Int(editorInstance.sniperInstance.cfg.getInt("editorStampWidth"), editorInstance.sniperInstance.cfg.getInt("editorStampHeight"));
-		startPoint = new Vector2Int(arg0.getPoint().getX() - brushSize.x/2,arg0.getPoint().getY() - brushSize.y/2);
-		lastPoint = new Vector2Int(arg0.getPoint().getX() + brushSize.x/2,arg0.getPoint().getY() + brushSize.y/2);
+		startPoint = new Vector2Int(arg0.getPoint().getX() - (float)brushSize.x/2,arg0.getPoint().getY() - (float)brushSize.y/2);
+		lastPoint = new Vector2Int(arg0.getPoint().getX() + (float)brushSize.x/2,arg0.getPoint().getY() + (float)brushSize.y/2);
 		save();
 		
 		startPoint = null;
