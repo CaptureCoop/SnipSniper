@@ -22,4 +22,4 @@ editorStampWidthMinimum=10
 editorStampHeightMinimum=20
 editorStampWidthSpeed=20
 editorStampHeightSpeed=20
-
+smartPixel=true

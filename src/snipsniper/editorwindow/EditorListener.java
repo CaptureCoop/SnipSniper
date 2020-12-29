@@ -1,6 +1,6 @@
 package snipsniper.editorwindow;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -77,20 +77,41 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	public void save() {
 		Vector2Int pos = new Vector2Int(lastPoint);
 		Vector2Int size = new Vector2Int(startPoint.x - lastPoint.x, startPoint.y - lastPoint.y);
-		
-		if(startPoint.x < lastPoint.x) {
-			pos.x = startPoint.x;
-			size.x = lastPoint.x - startPoint.x;
-		}
-			
-		if(startPoint.y < lastPoint.y) {
-			pos.y = startPoint.y;
-			size.y = lastPoint.y - startPoint.y;
-		}
-		
+
 		Graphics g = editorInstance.overdraw.getGraphics();
 		g.setColor(editorInstance.currentColor);
-		g.fillRect(pos.x, pos.y, size.x, size.y);
+
+		if(!editorInstance.sniperInstance.cfg.getBool("smartPixel")) {
+			if(startPoint.x < lastPoint.x) {
+				pos.x = startPoint.x;
+				size.x = lastPoint.x - startPoint.x;
+			}
+
+			if(startPoint.y < lastPoint.y) {
+				pos.y = startPoint.y;
+				size.y = lastPoint.y - startPoint.y;
+			}
+
+			g.fillRect(pos.x, pos.y, size.x, size.y);
+		} else {
+			for (int y = 0; y < -size.y; y++) {
+				for (int x = 0; x < -size.x; x++) {
+					int posX = pos.x - x;
+					int posY = pos.y - y;
+
+					if(posX >= 0 && posY >= 0 && posX < editorInstance.img.getWidth() && posY < editorInstance.img.getHeight()) {
+						Color c = new Color(editorInstance.img.getRGB(posX, posY));
+						int total = c.getRed() + c.getGreen() + c.getBlue();
+						int alpha = (int)((205F/765F) * total + 25);
+						Color oC = editorInstance.currentColor;
+						g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
+						g.drawLine(posX, posY, posX, posY);
+					}
+				}
+			}
+		}
+
+		editorInstance.repaint();
 		g.dispose();
 	}
 
