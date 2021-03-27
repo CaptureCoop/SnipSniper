@@ -2,11 +2,9 @@ package snipsniper.editorwindow;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 import snipsniper.systray.Sniper;
 import snipsniper.utils.Icons;
@@ -23,14 +21,12 @@ public class EditorWindow extends JFrame{
 	Color currentColor = new Color(255,255,0,150);
 	
 	final int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
-
-
-
+	
 	public EditorWindow(BufferedImage _img, int _x, int _y, int _w, int _h, String _title, Sniper _sInstance, boolean _leftToRight) {
 		img = _img;
 		sniperInstance = _sInstance;
 		overdraw = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
+		
 		this.setTitle(_title);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setResizable(false);
@@ -54,19 +50,6 @@ public class EditorWindow extends JFrame{
 		if(!_leftToRight) borderSize = -borderSize;
 		
 		this.setLocation((_x - X_OFFSET) + borderSize, (_y - barSize) + borderSize);
-
-		/*JMenuBar menuBar = new JMenuBar();
-		JMenu file = new JMenu("File");
-		JMenuItem save = new JMenuItem("Save");
-		JMenuItem saveAs = new JMenuItem("Save as");
-		file.add(save);
-		file.add(saveAs);
-
-		JMenu color = new JMenu("Color");
-		/coming soon/
-		menuBar.add(file);
-		menuBar.add(color);
-		this.setJMenuBar(menuBar);*/
 	}
 	
 	public void saveImage() {
