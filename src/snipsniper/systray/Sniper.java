@@ -93,8 +93,10 @@ public class Sniper implements NativeKeyListener{
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					if (arg0.getButton() == 1)
-		            	if(cWnd == null)
-		            		cWnd = new CaptureWindow(instance);	
+		            	if(cWnd == null && Main.isIdle) {
+							cWnd = new CaptureWindow(instance);
+							Main.isIdle = false;
+		            	}
 				}
 
 				@Override
@@ -172,6 +174,7 @@ public class Sniper implements NativeKeyListener{
 
 	public void killCaptureWindow() {
 		if(cWnd != null) {
+			Main.isIdle = true;
 			cWnd.screenshot = null;
 			cWnd.screenshotTinted = null;
 			cWnd.isRunning = false;

@@ -217,26 +217,26 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			}
 			//sniperInstance.trayIcon.displayMessage("Image saved!", "Image saved under: " + file.toString(), MessageType.NONE);
 			if(finalImg != null) {
-				int posX = (int)cPointAlt.getX();
-				int posY = (int)cPointAlt.getY();
+				int posX = (int) cPointAlt.getX();
+				int posY = (int) cPointAlt.getY();
 				boolean leftToRight = false;
-				
-				if(!(startPointTotal.getX() > cPointAlt.getX())) {
+
+				if (!(startPointTotal.getX() > cPointAlt.getX())) {
 					posX -= finalImg.getWidth();
 					leftToRight = true;
 				}
-				if(!(startPointTotal.getY() > cPointAlt.getY())) {
+				if (!(startPointTotal.getY() > cPointAlt.getY())) {
 					posY -= finalImg.getHeight();
 					leftToRight = true;
 				}
-				if(sniperInstance.cfg.getBool("openEditor")) {
+				if (sniperInstance.cfg.getBool("openEditor")) {
 					sniperInstance.debug("Taking screenshot. Position info:", DebugType.INFO);
 					sniperInstance.debug("Captured area: " + captureArea.toString(), DebugType.INFO);
 					sniperInstance.debug("Area requested by jframe.setLocation(): " + "X: " + cPointAlt.getX() + " Y: " + cPointAlt.getY(), DebugType.INFO);
-					new EditorWindow(finalImg, posX, posY,finalImg.getWidth(),finalImg.getHeight(), "SnipSniper Editor", sniperInstance, leftToRight);
+					new EditorWindow(finalImg, posX, posY, finalImg.getWidth(), finalImg.getHeight(), "SnipSniper Editor", sniperInstance, leftToRight);
 				}
 			}
-				
+
 			sniperInstance.killCaptureWindow();
 		}
 	}
