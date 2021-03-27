@@ -21,9 +21,12 @@ public class Main {
 	public final static int PROFILE_COUNT = 7;
 	
 	public static Sniper profiles[] = new Sniper[PROFILE_COUNT];
-	
+
+	public static boolean isIdle = true;
+
 	//TODO: Bug happens when other monitor is main one
 	//TODO: Copy config file 1 to 1 instead of values
+	//TODO: Check if logging works as intended and log every profile the same file with [Profile 1] prefixes
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{		
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
