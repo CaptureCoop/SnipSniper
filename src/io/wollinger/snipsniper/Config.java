@@ -1,4 +1,4 @@
-package snipsniper;
+package io.wollinger.snipsniper;
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-import snipsniper.systray.Sniper;
-import snipsniper.utils.DebugType;
-import snipsniper.utils.Utils;
+import io.wollinger.snipsniper.systray.Sniper;
+import io.wollinger.snipsniper.utils.DebugType;
+import io.wollinger.snipsniper.utils.Utils;
 
 public class Config {
 

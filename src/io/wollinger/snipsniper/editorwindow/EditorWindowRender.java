@@ -1,11 +1,11 @@
-package snipsniper.editorwindow;
+package io.wollinger.snipsniper.editorwindow;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import snipsniper.utils.Vector2Int;
+import io.wollinger.snipsniper.utils.Vector2Int;
 
 public class EditorWindowRender extends JPanel{
 	private static final long serialVersionUID = 4283800435207434147L;

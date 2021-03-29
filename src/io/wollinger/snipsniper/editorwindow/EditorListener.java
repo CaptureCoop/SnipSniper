@@ -1,4 +1,4 @@
-package snipsniper.editorwindow;
+package io.wollinger.snipsniper.editorwindow;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -9,8 +9,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import snipsniper.Config;
-import snipsniper.utils.Vector2Int;
+import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.utils.Vector2Int;
 
 public class EditorListener implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
 	

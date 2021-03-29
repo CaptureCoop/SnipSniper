@@ -1,11 +1,11 @@
-package snipsniper.systray.buttons;
+package io.wollinger.snipsniper.systray.buttons;
 
 import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import snipsniper.configwindow.ConfigWindow;
-import snipsniper.systray.Sniper;
+import io.wollinger.snipsniper.systray.Sniper;
+import io.wollinger.snipsniper.configwindow.ConfigWindow;
 
 public class btnConfig extends MenuItem{
 	

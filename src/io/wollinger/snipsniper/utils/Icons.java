@@ -1,10 +1,10 @@
-package snipsniper.utils;
+package io.wollinger.snipsniper.utils;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-import snipsniper.Main;
+import io.wollinger.snipsniper.Main;
 
 public class Icons {
 	

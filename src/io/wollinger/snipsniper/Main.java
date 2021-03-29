@@ -1,4 +1,4 @@
-package snipsniper;
+package io.wollinger.snipsniper;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,8 +6,8 @@ import java.io.IOException;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import snipsniper.systray.Sniper;
-import snipsniper.utils.Icons;
+import io.wollinger.snipsniper.systray.Sniper;
+import io.wollinger.snipsniper.utils.Icons;
 
 public class Main {
 	

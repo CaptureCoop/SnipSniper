@@ -1,15 +1,13 @@
-package snipsniper.editorwindow;
+package io.wollinger.snipsniper.editorwindow;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
-import snipsniper.systray.Sniper;
-import snipsniper.utils.Icons;
+import io.wollinger.snipsniper.systray.Sniper;
+import io.wollinger.snipsniper.utils.Icons;
 
 public class EditorWindow extends JFrame{
 	private static final long serialVersionUID = -7363672331227971815L;

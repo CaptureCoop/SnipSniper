@@ -1,11 +1,9 @@
-package snipsniper.configwindow;
+package io.wollinger.snipsniper.configwindow;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -16,14 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import io.wollinger.snipsniper.systray.Sniper;
+import io.wollinger.snipsniper.utils.ColorChooser;
+import io.wollinger.snipsniper.utils.Icons;
+import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.Utils;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
-
-import snipsniper.systray.Sniper;
-import snipsniper.utils.ColorChooser;
-import snipsniper.utils.Icons;
-import snipsniper.utils.PBRColor;
-import snipsniper.utils.Utils;
 
 public class ConfigWindow extends JFrame implements WindowListener{
 

@@ -1,4 +1,4 @@
-package snipsniper.configwindow;
+package io.wollinger.snipsniper.configwindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

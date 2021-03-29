@@ -1,4 +1,4 @@
-package snipsniper.capturewindow;
+package io.wollinger.snipsniper.capturewindow;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -20,11 +20,11 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-import snipsniper.editorwindow.EditorWindow;
-import snipsniper.systray.Sniper;
-import snipsniper.utils.DebugType;
-import snipsniper.utils.Icons;
-import snipsniper.utils.Utils;
+import io.wollinger.snipsniper.systray.Sniper;
+import io.wollinger.snipsniper.utils.DebugType;
+import io.wollinger.snipsniper.utils.Icons;
+import io.wollinger.snipsniper.utils.Utils;
+import io.wollinger.snipsniper.editorwindow.EditorWindow;
 
 public class CaptureWindow extends JFrame implements WindowListener{
 	private static final long serialVersionUID = 3129624729137795417L;
@@ -32,7 +32,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	Sniper sniperInstance;
 	CaptureWindow instance;
 	CaptureWindowListener listener;
-	
+
 	Point startPoint;
 	Point startPointTotal;
 	Point cPoint;

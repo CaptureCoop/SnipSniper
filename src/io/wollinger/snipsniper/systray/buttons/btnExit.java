@@ -1,4 +1,4 @@
-package snipsniper.systray.buttons;
+package io.wollinger.snipsniper.systray.buttons;
 
 import java.awt.MenuItem;
 import java.awt.event.ActionEvent;

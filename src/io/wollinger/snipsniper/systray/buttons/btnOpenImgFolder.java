@@ -1,4 +1,4 @@
-package snipsniper.systray.buttons;
+package io.wollinger.snipsniper.systray.buttons;
 
 import java.awt.Desktop;
 import java.awt.MenuItem;
@@ -6,7 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import snipsniper.systray.Sniper;
+
+import io.wollinger.snipsniper.systray.Sniper;
 
 public class btnOpenImgFolder extends MenuItem{
 

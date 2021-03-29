@@ -1,4 +1,4 @@
-package snipsniper.utils;
+package io.wollinger.snipsniper.utils;
 
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;

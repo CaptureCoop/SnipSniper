@@ -1,4 +1,4 @@
-package snipsniper.systray;
+package io.wollinger.snipsniper.systray;
 
 import java.awt.AWTException;
 import java.awt.Menu;
@@ -30,17 +30,17 @@ import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-import snipsniper.Config;
-import snipsniper.Main;
-import snipsniper.capturewindow.CaptureWindow;
-import snipsniper.capturewindow.ImageSelection;
-import snipsniper.configwindow.ConfigWindow;
-import snipsniper.systray.buttons.btnAbout;
-import snipsniper.systray.buttons.btnConfig;
-import snipsniper.systray.buttons.btnExit;
-import snipsniper.systray.buttons.btnOpenImgFolder;
-import snipsniper.utils.DebugType;
-import snipsniper.utils.Icons;
+import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.Main;
+import io.wollinger.snipsniper.capturewindow.CaptureWindow;
+import io.wollinger.snipsniper.capturewindow.ImageSelection;
+import io.wollinger.snipsniper.configwindow.ConfigWindow;
+import io.wollinger.snipsniper.systray.buttons.btnAbout;
+import io.wollinger.snipsniper.systray.buttons.btnConfig;
+import io.wollinger.snipsniper.systray.buttons.btnExit;
+import io.wollinger.snipsniper.systray.buttons.btnOpenImgFolder;
+import io.wollinger.snipsniper.utils.DebugType;
+import io.wollinger.snipsniper.utils.Icons;
 
 public class Sniper implements NativeKeyListener{
 	public int profileID = 0; //0 = default
