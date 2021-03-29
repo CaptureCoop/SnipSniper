@@ -4,4 +4,9 @@
 /.project
 /.idea/
 /out/
+/.gradle/
+/build/
+/gradle/
+gradlew
+gradlew.bat
 SnipSniper.iml
