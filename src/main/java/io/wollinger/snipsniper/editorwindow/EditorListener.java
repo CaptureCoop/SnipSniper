@@ -50,14 +50,22 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {	
-		Vector2Int brushSize = new Vector2Int(editorInstance.sniperInstance.cfg.getInt("editorStampWidth"), editorInstance.sniperInstance.cfg.getInt("editorStampHeight"));
-		startPoint = new Vector2Int(arg0.getPoint().getX() - (float)brushSize.x/2,arg0.getPoint().getY() - (float)brushSize.y/2);
-		lastPoint = new Vector2Int(arg0.getPoint().getX() + (float)brushSize.x/2,arg0.getPoint().getY() + (float)brushSize.y/2);
-		save();
+	public void mouseReleased(MouseEvent arg0) {
+		if(arg0.getButton() == 1 || arg0.getButton() == 2) {
+			Vector2Int brushSize = new Vector2Int(editorInstance.sniperInstance.cfg.getInt("editorStampWidth"), editorInstance.sniperInstance.cfg.getInt("editorStampHeight"));
+			startPoint = new Vector2Int(arg0.getPoint().getX() - (float) brushSize.x / 2, arg0.getPoint().getY() - (float) brushSize.y / 2);
+			lastPoint = new Vector2Int(arg0.getPoint().getX() + (float) brushSize.x / 2, arg0.getPoint().getY() + (float) brushSize.y / 2);
+
+			if(arg0.getButton() == 1)
+				save(false);
+			else if(arg0.getButton() == 2)
+				save(true);
+
+			startPoint = null;
+			lastPoint = null;
+		}
 		
-		startPoint = null;
-		lastPoint = null;
+
 		editorInstance.repaint();
 	}
 
@@ -74,14 +82,19 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.repaint();
 	}
 	
-	public void save() {
+	public void save(boolean censor) {
 		Vector2Int pos = new Vector2Int(lastPoint);
 		Vector2Int size = new Vector2Int(startPoint.x - lastPoint.x, startPoint.y - lastPoint.y);
 
 		Graphics g = editorInstance.overdraw.getGraphics();
-		g.setColor(editorInstance.currentColor);
 
-		if(!editorInstance.sniperInstance.cfg.getBool("smartPixel")) {
+		if (!censor) {
+			g.setColor(editorInstance.currentColor);
+		} else {
+			g.setColor(Color.BLACK);
+		}
+
+		if(!editorInstance.sniperInstance.cfg.getBool("smartPixel") || censor) {
 			if(startPoint.x < lastPoint.x) {
 				pos.x = startPoint.x;
 				size.x = lastPoint.x - startPoint.x;
@@ -99,8 +112,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 					int posX = pos.x - x;
 					int posY = pos.y - y;
 
-					if(posX >= 0 && posY >= 0 && posX < editorInstance.img.getWidth() && posY < editorInstance.img.getHeight()) {
-						Color c = new Color(editorInstance.img.getRGB(posX, posY));
+					if(posX >= 0 && posY >= 0 && posX < editorInstance.overdraw.getWidth() && posY < editorInstance.overdraw.getHeight()) {
+						Color c = new Color(editorInstance.overdraw.getRGB(posX, posY));
 						int total = c.getRed() + c.getGreen() + c.getBlue();
 						int alpha = (int)((205F/765F) * total + 25);
 						Color oC = editorInstance.currentColor;
