@@ -147,7 +147,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	}
 	
 	public void save() {
-		//TODO: Rework sanitazion
+		//TODO: Rework sanitation
 		boolean _savePictures = savePictures.isSelected();
 		boolean _copyToClipboard = copyToClipboard.isSelected();
 		boolean _openEditor = openEditor.isSelected();
