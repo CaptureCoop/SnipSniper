@@ -24,10 +24,23 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
-
     compile 'com.1stleg:jnativehook:2.1.0'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'io.wollinger.snipsniper.Main'
+        )
+    }
+    //https://stackoverflow.com/questions/52816630/unable-to-create-a-jar-of-my-jda-project-because-of-pom-dependency
+    from {
+        configurations
+                .compile
+                .findAll { !it.name.endsWith('pom') }
+                .collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
 
 test {
     useJUnitPlatform()
