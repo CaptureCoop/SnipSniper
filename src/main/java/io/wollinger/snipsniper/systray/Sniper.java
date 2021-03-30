@@ -7,8 +7,6 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -43,7 +41,7 @@ import io.wollinger.snipsniper.utils.DebugType;
 import io.wollinger.snipsniper.utils.Icons;
 
 public class Sniper implements NativeKeyListener{
-	public int profileID = 0; //0 = default
+	public int profileID; //0 = default
 	
 	CaptureWindow cWnd;
 	public ConfigWindow cfgWnd;
@@ -118,7 +116,7 @@ public class Sniper implements NativeKeyListener{
 			
 			tray.add(trayIcon);
 		} catch (AWTException e) {
-			debug("There was an issue setting up the trayicon! Message: " + e.getMessage(), DebugType.ERROR);
+			debug("There was an issue setting up the Tray Icon! Message: " + e.getMessage(), DebugType.ERROR);
 			e.printStackTrace();
 		}
 		try {
@@ -130,7 +128,7 @@ public class Sniper implements NativeKeyListener{
 		GlobalScreen.addNativeKeyListener(this);
 	}
 	
-	//This refreshes the buttons so that they only show profiles that exist/dont exist respectively.
+	//This refreshes the buttons so that they only show profiles that exist/don't exist respectively.
 	void refreshProfiles() {
 		debug("Refreshing profiles in task tray", DebugType.INFO);
 		createProfilesMenu.removeAll();
@@ -141,29 +139,23 @@ public class Sniper implements NativeKeyListener{
 			
 			if(Main.profiles[index] == null) {
 				MenuItem mi = new MenuItem("Profile " + (i + 1));
-				mi.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						if(Main.profiles[index] == null) {
-							Main.profiles[index] = new Sniper(index + 1);
-							Main.profiles[index].cfg.save();
-						}
+				mi.addActionListener(listener -> {
+					if(Main.profiles[index] == null) {
+						Main.profiles[index] = new Sniper(index + 1);
+						Main.profiles[index].cfg.save();
 					}
 				});
 				createProfilesMenu.add(mi);
 			} else if(Main.profiles[index] != null) {
 				MenuItem mi = new MenuItem("Profile " + (i + 1));
-				mi.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						if(Main.profiles[index] != null) {
-							cfg.deleteFile();
-							SystemTray.getSystemTray().remove(Main.profiles[index].trayIcon);
-							GlobalScreen.removeNativeKeyListener(instance);
-							Main.profiles[index].trayIcon = null;
-							Main.profiles[index] = null;
-							instance = null;
-						}
+				mi.addActionListener(listener -> {
+					if(Main.profiles[index] != null) {
+						cfg.deleteFile();
+						SystemTray.getSystemTray().remove(Main.profiles[index].trayIcon);
+						GlobalScreen.removeNativeKeyListener(instance);
+						Main.profiles[index].trayIcon = null;
+						Main.profiles[index] = null;
+						instance = null;
 					}
 				});
 				removeProfilesMenu.add(mi);
@@ -180,6 +172,7 @@ public class Sniper implements NativeKeyListener{
 			cWnd.isRunning = false;
 			cWnd.dispose();
 			cWnd = null;
+			System.gc();
 		}
 	}
 
@@ -220,7 +213,12 @@ public class Sniper implements NativeKeyListener{
 		file = new File(savePath + filename);
 		try {
 			if(cfg.getBool("savePictures")) {
-				if(!path.exists()) path.mkdirs();
+				if(!path.exists()) {
+					if(!path.mkdirs()) {
+						debug("Failed saving, directory missing & could not create it!", DebugType.WARNING);
+						return false;
+					}
+				}
 				if(file.createNewFile()) {
 					ImageIO.write(finalImg, "png", file);
 					debug("Saved image on disk. Location: " + file, DebugType.INFO);
@@ -228,7 +226,7 @@ public class Sniper implements NativeKeyListener{
 				}
 			}
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Could not save image to \"" + file.toString()  + "\"!" , "Error", 1);
+			JOptionPane.showMessageDialog(null, "Could not save image to \"" + file.toString()  + "\"!" , "Error", JOptionPane.INFORMATION_MESSAGE);
 			debug("Failed Saving. Wanted Location: " + file, DebugType.WARNING);
 			debug("Detailed Error: " + e.getMessage(), DebugType.WARNING);
 			e.printStackTrace();

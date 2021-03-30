@@ -16,9 +16,9 @@ import io.wollinger.snipsniper.utils.Utils;
 
 public class Config {
 
-	private HashMap <String, String> settings = new HashMap<String, String>();
-	private HashMap <String, String> defaults = new HashMap<String, String>();
-	
+	private HashMap <String, String> settings = new HashMap<>();
+	private HashMap <String, String> defaults = new HashMap<>();
+
 	Sniper sniperInstance;
 	
 	public Config (Sniper _sniperInstance) {
@@ -102,7 +102,7 @@ public class Config {
 	}
 	
 	String getFilename(int _profileID) {
-		String filename = "";
+		String filename;
 		if(_profileID == 0)
 			filename = "default.txt";
 		else
@@ -113,7 +113,8 @@ public class Config {
 	public void deleteFile() {
 		String filename = getFilename(sniperInstance.profileID);
 		File file = new File(Main.profilesFolder + "\\" + filename);
-		file.delete();
+		if(!file.delete())
+			sniperInstance.debug("Could not delete profile config!", DebugType.WARNING);
 	}
 	
 	private void saveFile(HashMap<String, String> _map) {

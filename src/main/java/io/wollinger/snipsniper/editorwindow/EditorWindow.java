@@ -24,7 +24,7 @@ public class EditorWindow extends JFrame{
 
 
 
-	public EditorWindow(BufferedImage _img, int _x, int _y, int _w, int _h, String _title, Sniper _sInstance, boolean _leftToRight) {
+	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight) {
 		img = _img;
 		sniperInstance = _sInstance;
 		overdraw = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);

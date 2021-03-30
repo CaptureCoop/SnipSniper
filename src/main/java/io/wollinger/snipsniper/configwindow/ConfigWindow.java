@@ -1,6 +1,5 @@
 package io.wollinger.snipsniper.configwindow;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -32,7 +31,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	JCheckBox copyToClipboard = new JCheckBox();
 	JTextField borderSize = new JTextField();
 	JTextField pictureLocation = new JTextField();
-	PBRColor borderColor = new PBRColor(Color.black);
+	PBRColor borderColor;
 	JTextField snipeDelay = new JTextField();
 	JCheckBox openEditor = new JCheckBox();
 	
@@ -143,7 +142,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	}
 	
 	void msgError(String _msg) {
-		JOptionPane.showMessageDialog(null, _msg,"Error",1);
+		JOptionPane.showMessageDialog(null, _msg,"Error", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public void save() {
@@ -153,7 +152,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		boolean _openEditor = openEditor.isSelected();
 		
 		String _saveLocation = pictureLocation.getText();
-		int _borderSize = 0;
+		int _borderSize;
 		int _snipeDelay = 0;
 		if(Utils.isInteger(borderSize.getText())) {
 			_borderSize = Integer.parseInt(borderSize.getText());

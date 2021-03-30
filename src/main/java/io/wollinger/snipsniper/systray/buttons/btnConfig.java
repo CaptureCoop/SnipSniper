@@ -1,8 +1,6 @@
 package io.wollinger.snipsniper.systray.buttons;
 
 import java.awt.MenuItem;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.configwindow.ConfigWindow;
@@ -13,13 +11,11 @@ public class btnConfig extends MenuItem{
 
 	public btnConfig(Sniper _sniperInstance) {
 		this.setLabel("Config");
-		this.addActionListener(new ActionListener() {
-			@Override public void actionPerformed(ActionEvent e) {
-				if(_sniperInstance.cfgWnd == null)
-					_sniperInstance.cfgWnd = new ConfigWindow(_sniperInstance);
-				else
-					_sniperInstance.cfgWnd.requestFocus();
-			}
+		this.addActionListener(listener -> {
+			if(_sniperInstance.cfgWnd == null)
+				_sniperInstance.cfgWnd = new ConfigWindow(_sniperInstance);
+			else
+				_sniperInstance.cfgWnd.requestFocus();
 		});
 		
 	}

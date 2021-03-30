@@ -204,7 +204,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				g.drawImage(croppedBuffer, borderSize, borderSize, croppedBuffer.getWidth(), croppedBuffer.getHeight(), this);
 				g.dispose();
 
-				sniperInstance.saveImage(finalImg, "");
+				boolean result = sniperInstance.saveImage(finalImg, "");
+				//TODO: Show proper error.
+				if(!result)
+					sniperInstance.trayIcon.displayMessage("Error saving picture! Check/Enable logs for more info!", "ERROR", MessageType.ERROR);
 				this.dispose();
 				
 				//Copy cropped image to clipboard
@@ -212,7 +215,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				    sniperInstance.copyToClipboard(finalImg);
 				
 			}
-			//sniperInstance.trayIcon.displayMessage("Image saved!", "Image saved under: " + file.toString(), MessageType.NONE);
 			if(finalImg != null) {
 				int posX = (int) cPointAlt.getX();
 				int posY = (int) cPointAlt.getY();
@@ -230,7 +232,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 					sniperInstance.debug("Taking screenshot. Position info:", DebugType.INFO);
 					sniperInstance.debug("Captured area: " + captureArea.toString(), DebugType.INFO);
 					sniperInstance.debug("Area requested by JFrame.setLocation(): " + "X: " + cPointAlt.getX() + " Y: " + cPointAlt.getY(), DebugType.INFO);
-					new EditorWindow(finalImg, posX, posY, finalImg.getWidth(), finalImg.getHeight(), "SnipSniper Editor", sniperInstance, leftToRight);
+					new EditorWindow(finalImg, posX, posY, "SnipSniper Editor", sniperInstance, leftToRight);
 				}
 			}
 
