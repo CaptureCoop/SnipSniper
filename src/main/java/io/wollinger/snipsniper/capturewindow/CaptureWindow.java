@@ -3,7 +3,6 @@ package io.wollinger.snipsniper.capturewindow;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -17,6 +16,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
 
@@ -55,10 +55,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		
 		if(sniperInstance.cfg.getInt("snipeDelay") != 0) {
 			try {
-				Thread.sleep(sniperInstance.cfg.getInt("snipeDelay") * 1000);
+				Thread.sleep(sniperInstance.cfg.getInt("snipeDelay") * 1000L);
 			} catch (InterruptedException e) {
 				sniperInstance.debug("There was an error with the delay! Message: " + e.getMessage(), DebugType.ERROR);
-				sniperInstance.debug("More info: " + e.getStackTrace(), DebugType.ERROR);
+				sniperInstance.debug("More info: " + Arrays.toString(e.getStackTrace()), DebugType.ERROR);
 			}
 		}
 		
@@ -89,36 +89,34 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	
 	public void loop() {
-		thread = new Thread() {
-		    public void run() {
-				final double nsPerTick = 1000000000D / sniperInstance.cfg.getInt("maxFPS");
-				long lastTime = System.nanoTime();
-				long lastTimer = System.currentTimeMillis();
-				double delta = 0;
-				boolean screenshotDone = false;
-				
-				while (isRunning) {
-					if(screenshotDone) {
-						setVisible(true);
-						setSize();
-						specialRepaint();
-					}
-					if(screenshot != null && screenshotTinted != null && !screenshotDone) screenshotDone = true;
-						
-					long now = System.nanoTime();
-					delta += (now - lastTime) / nsPerTick;
-					lastTime = now;
-		
-					while (delta >= 1) {
-						delta -= 1;
-						if(screenshotDone) specialRepaint();
-					}
-		
-					if (System.currentTimeMillis() - lastTimer >= 1000)
-						lastTimer += 1000;
+		thread = new Thread(() -> {
+			final double nsPerTick = 1000000000D / sniperInstance.cfg.getInt("maxFPS");
+			long lastTime = System.nanoTime();
+			long lastTimer = System.currentTimeMillis();
+			double delta = 0;
+			boolean screenshotDone = false;
+
+			while (isRunning) {
+				if(screenshotDone) {
+					setVisible(true);
+					setSize();
+					specialRepaint();
 				}
-		    }  
-		};
+				if(screenshot != null && screenshotTinted != null && !screenshotDone) screenshotDone = true;
+
+				long now = System.nanoTime();
+				delta += (now - lastTime) / nsPerTick;
+				lastTime = now;
+
+				while (delta >= 1) {
+					delta -= 1;
+					if(screenshotDone) specialRepaint();
+				}
+
+				if (System.currentTimeMillis() - lastTimer >= 1000)
+					lastTimer += 1000;
+			}
+		});
 		thread.start();
 		
 	}
@@ -145,7 +143,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		try {
 			screenshot = new Robot().createScreenCapture(screenshotRect);
 		} catch (AWTException e) {
-			sniperInstance.debug("Couldnt take screenshot. Message: " + e.getMessage(), DebugType.ERROR);
+			sniperInstance.debug("Couldn't take screenshot. Message: " + e.getMessage(), DebugType.ERROR);
 			e.printStackTrace();
 		}
 		screenshotTinted = Utils.copyImage(screenshot);
@@ -200,14 +198,14 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			} else {
 				BufferedImage croppedBuffer = screenshot.getSubimage(captureArea.x, captureArea.y, captureArea.width, captureArea.height);			
 				finalImg = new BufferedImage(croppedBuffer.getWidth() + borderSize *2, croppedBuffer.getHeight() + borderSize *2, BufferedImage.TYPE_INT_RGB);
-				Graphics g = (Graphics2D) finalImg.getGraphics();
+				Graphics g = finalImg.getGraphics();
 				g.setColor(sniperInstance.cfg.getColor("borderColor"));
 				g.fillRect(0, 0, finalImg.getWidth(),finalImg.getHeight());
 				g.drawImage(croppedBuffer, borderSize, borderSize, croppedBuffer.getWidth(), croppedBuffer.getHeight(), this);
 				g.dispose();
-				
-				if(!sniperInstance.saveImage(finalImg, ""));
-					this.dispose();
+
+				sniperInstance.saveImage(finalImg, "");
+				this.dispose();
 				
 				//Copy cropped image to clipboard
 				if(sniperInstance.cfg.getBool("copyToClipboard"))
@@ -231,7 +229,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				if (sniperInstance.cfg.getBool("openEditor")) {
 					sniperInstance.debug("Taking screenshot. Position info:", DebugType.INFO);
 					sniperInstance.debug("Captured area: " + captureArea.toString(), DebugType.INFO);
-					sniperInstance.debug("Area requested by jframe.setLocation(): " + "X: " + cPointAlt.getX() + " Y: " + cPointAlt.getY(), DebugType.INFO);
+					sniperInstance.debug("Area requested by JFrame.setLocation(): " + "X: " + cPointAlt.getX() + " Y: " + cPointAlt.getY(), DebugType.INFO);
 					new EditorWindow(finalImg, posX, posY, finalImg.getWidth(), finalImg.getHeight(), "SnipSniper Editor", sniperInstance, leftToRight);
 				}
 			}
@@ -252,11 +250,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		}
 
 		if(screenshot != null && bufferImage != null) {
-			if(screenshotTinted != null && !hasSaved) {
+			if(screenshotTinted != null && !hasSaved && bounds != null) {
 				g.drawImage(screenshotTinted, 0,0, bounds.width, bounds.height, this);
 				hasSaved = true;
 			}
-
 
 			if(area != null && startedCapture) {
 				Graphics use = gBuffer;
@@ -291,7 +288,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		//User somehow is attempting to close the capturewindow, delete reference in Sniper instance
 		this.sniperInstance.killCaptureWindow();
 	}
 
