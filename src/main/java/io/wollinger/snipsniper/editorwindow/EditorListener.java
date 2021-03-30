@@ -113,9 +113,10 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 					int posY = pos.y - y;
 
 					if(posX >= 0 && posY >= 0 && posX < editorInstance.overdraw.getWidth() && posY < editorInstance.overdraw.getHeight()) {
-						Color c = new Color(editorInstance.overdraw.getRGB(posX, posY));
+						Color c = new Color(editorInstance.img.getRGB(posX, posY));
 						int total = c.getRed() + c.getGreen() + c.getBlue();
 						int alpha = (int)((205F/765F) * total + 25);
+						System.out.println(total);
 						Color oC = editorInstance.currentColor;
 						g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
 						g.drawLine(posX, posY, posX, posY);
