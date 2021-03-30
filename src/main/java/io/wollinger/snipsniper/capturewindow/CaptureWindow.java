@@ -65,7 +65,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		screenshot();
 		
 		this.setUndecorated(true);		
-		//this.setBackground(new Color(0,0,0,0));
 		this.setIconImage(Icons.icon_taskbar);
 		
 		listener = new CaptureWindowListener(this);
@@ -132,7 +131,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			int y = Math.min( rect.y, rect.height);
 			int width = Math.max(rect.x, rect.width);
 			int height = Math.max(rect.y, rect.height);
-			
+
 			repaint(x,y,width,height);
 		} else {
 			repaint();
