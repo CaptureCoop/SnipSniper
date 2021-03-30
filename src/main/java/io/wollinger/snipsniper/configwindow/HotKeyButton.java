@@ -8,23 +8,18 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 public class HotKeyButton extends JButton implements NativeKeyListener{
-
 	private static final long serialVersionUID = 8834166293141062833L;
 	
 	private boolean listening = false;
 	public int hotkey;
-	private HotKeyButton instance;
+	private final HotKeyButton instance;
 	
 	public HotKeyButton() {
 		instance = this;
 		GlobalScreen.addNativeKeyListener(this);
-		this.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				listening = true;
-				instance.setText("...listening");
-			}
-			
+		this.addActionListener(listener -> {
+			listening = true;
+			instance.setText("...listening");
 		});
 	}
 	
