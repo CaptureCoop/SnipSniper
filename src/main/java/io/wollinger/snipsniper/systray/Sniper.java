@@ -248,7 +248,7 @@ public class Sniper implements NativeKeyListener{
 		
 		System.out.println(msg);		
 		
-		if(cfg.getBool("logTextfile")) {
+		if(cfg.getBool("logTextFile")) {
 			if(logFile == null) {
 				LocalDateTime now = LocalDateTime.now();  
 				String filename = now.toString().replace(".", "_").replace(":", "_");

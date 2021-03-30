@@ -12,7 +12,7 @@ directDraw=false
 <--- SnipSniper Main --->
 debug=false
 logLevel=0
-logTextfile=false
+logTextFile=false
 killSwitch=60
 maxFPS=60
 
