@@ -65,7 +65,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		screenshot();
 		
 		this.setUndecorated(true);		
-		this.setBackground(new Color(0,0,0,0));
+		//this.setBackground(new Color(0,0,0,0));
 		this.setIconImage(Icons.icon_taskbar);
 		
 		listener = new CaptureWindowListener(this);
