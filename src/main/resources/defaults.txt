@@ -7,6 +7,7 @@ copyToClipboard=true
 borderColor=#000000
 snipeDelay=0
 openEditor=false
+directDraw=false
 
 <--- SnipSniper Main --->
 debug=false

@@ -243,18 +243,36 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	public Rectangle area;
 	Point lastPoint = null;
 	boolean hasSaved = false;
+	BufferedImage bufferImage;
+	Graphics gBuffer;
 	public void paint(Graphics g) {
-		if(screenshot != null) {
+		if(bounds != null) {
+			bufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
+			gBuffer = bufferImage.getGraphics();
+		}
+
+		if(screenshot != null && bufferImage != null) {
 			if(screenshotTinted != null && !hasSaved) {
 				g.drawImage(screenshotTinted, 0,0, bounds.width, bounds.height, this);
 				hasSaved = true;
 			}
-			
+
+
 			if(area != null && startedCapture) {
-				g.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
-				g.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
+				Graphics use = gBuffer;
+
+				boolean directDraw = sniperInstance.cfg.getBool("directDraw");
+				if(directDraw)
+					use = g;
+
+				use.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
+				use.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
+
+				if(!directDraw)
+					g.drawImage(bufferImage, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
 			}
-		
+
+
 			if(cPoint != null && startPoint != null)
 				area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
 	
