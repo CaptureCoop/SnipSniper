@@ -19,6 +19,7 @@ public class EditorWindow extends JFrame{
 	EditorListener listener;
 	
 	Color currentColor = new Color(255,255,0,150);
+	Color censorColor = Color.BLACK;
 	
 	final int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
 

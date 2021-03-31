@@ -57,9 +57,11 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			lastPoint = new Vector2Int(arg0.getPoint().getX() + (float) brushSize.x / 2, arg0.getPoint().getY() + (float) brushSize.y / 2);
 
 			if(arg0.getButton() == 1)
-				save(false);
-			else if(arg0.getButton() == 2)
-				save(true);
+				save(editorInstance.currentColor, editorInstance.overdraw.getGraphics(), false);
+			else if(arg0.getButton() == 2) {
+				save(editorInstance.censorColor, editorInstance.img.getGraphics(), true);
+				save(editorInstance.censorColor, editorInstance.overdraw.getGraphics(), true);
+			}
 
 			startPoint = null;
 			lastPoint = null;
@@ -82,19 +84,13 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.repaint();
 	}
 	
-	public void save(boolean censor) {
+	public void save(Color color, Graphics g, boolean fast) {
 		Vector2Int pos = new Vector2Int(lastPoint);
 		Vector2Int size = new Vector2Int(startPoint.x - lastPoint.x, startPoint.y - lastPoint.y);
 
-		Graphics g = editorInstance.overdraw.getGraphics();
+		g.setColor(color);
 
-		if (!censor) {
-			g.setColor(editorInstance.currentColor);
-		} else {
-			g.setColor(Color.BLACK);
-		}
-
-		if(!editorInstance.sniperInstance.cfg.getBool("smartPixel") || censor) {
+		if(!editorInstance.sniperInstance.cfg.getBool("smartPixel") || fast) {
 			if(startPoint.x < lastPoint.x) {
 				pos.x = startPoint.x;
 				size.x = lastPoint.x - startPoint.x;
@@ -114,9 +110,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 					if(posX >= 0 && posY >= 0 && posX < editorInstance.overdraw.getWidth() && posY < editorInstance.overdraw.getHeight()) {
 						Color c = new Color(editorInstance.img.getRGB(posX, posY));
+
 						int total = c.getRed() + c.getGreen() + c.getBlue();
 						int alpha = (int)((205F/765F) * total + 25);
-						System.out.println(total);
 						Color oC = editorInstance.currentColor;
 						g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
 						g.drawLine(posX, posY, posX, posY);
