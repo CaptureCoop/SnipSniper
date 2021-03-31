@@ -23,6 +23,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	Vector2Int mousePos = null;
 	
 	boolean isCTRL = false;
+	boolean isShift = false;
 	
 	public EditorListener(EditorWindow _editWnd) {
 		editorInstance = _editWnd;
@@ -52,7 +53,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		if(arg0.getButton() == 1 || arg0.getButton() == 2) {
-			Vector2Int brushSize = new Vector2Int(editorInstance.sniperInstance.cfg.getInt("editorStampWidth"), editorInstance.sniperInstance.cfg.getInt("editorStampHeight"));
+			String type = editorInstance.modeToString(editorInstance.getMode());
+
+			Vector2Int brushSize = new Vector2Int(editorInstance.sniperInstance.cfg.getInt("editorStamp" + type + "Width"), editorInstance.sniperInstance.cfg.getInt("editorStamp" + type + "Height"));
 			startPoint = new Vector2Int(arg0.getPoint().getX() - (float) brushSize.x / 2, arg0.getPoint().getY() - (float) brushSize.y / 2);
 			lastPoint = new Vector2Int(arg0.getPoint().getX() + (float) brushSize.x / 2, arg0.getPoint().getY() + (float) brushSize.y / 2);
 
@@ -87,7 +90,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	public void save(Color color, Graphics g, boolean fast) {
 		Vector2Int pos = new Vector2Int(lastPoint);
 		Vector2Int size = new Vector2Int(startPoint.x - lastPoint.x, startPoint.y - lastPoint.y);
-
 		g.setColor(color);
 
 		if(!editorInstance.sniperInstance.cfg.getBool("smartPixel") || fast) {
@@ -107,8 +109,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 				for (int x = 0; x < -size.x; x++) {
 					int posX = pos.x - x;
 					int posY = pos.y - y;
-
 					if(posX >= 0 && posY >= 0 && posX < editorInstance.overdraw.getWidth() && posY < editorInstance.overdraw.getHeight()) {
+
 						Color c = new Color(editorInstance.img.getRGB(posX, posY));
 
 						int total = c.getRed() + c.getGreen() + c.getBlue();
@@ -128,27 +130,73 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
 		Config cfg = editorInstance.sniperInstance.cfg;
-		
-		String dir = "Width";
-		if(isCTRL) dir = "Height";
-		
-		String idSize = "editorStamp" + dir;
-		String idSpeed = "editorStamp" + dir + "Speed";
-		String idMinimum = "editorStamp" + dir + "Minimum";
-		
-		int size = cfg.getInt(idSize);
-		
-		switch(arg0.getWheelRotation()) {
-			case 1:
-				size -= cfg.getInt(idSpeed);
-				break;
-			case -1:
-				size += cfg.getInt(idSpeed);
-				break;
+
+		if(editorInstance.getMode() == EditorWindow.MODE.CUBE) {
+			String dir = "Width";
+			if (isShift) dir = "Height";
+
+			String idSize = "editorStampCube" + dir;
+			String idSpeed = "editorStampCube" + dir + "Speed";
+			String idMinimum = "editorStampCube" + dir + "Minimum";
+
+			int size = cfg.getInt(idSize);
+
+			switch (arg0.getWheelRotation()) {
+				case 1:
+					size -= cfg.getInt(idSpeed);
+					break;
+				case -1:
+					size += cfg.getInt(idSpeed);
+					break;
+			}
+
+			if (size <= cfg.getInt(idMinimum)) size = cfg.getInt(idMinimum);
+			cfg.set(idSize, size + "");
+		} else if (editorInstance.getMode() == EditorWindow.MODE.CIRCLE) {
+				final String idSizeWidth = "editorStampCircleWidth";
+				final String idSizeHeight = "editorStampCircleHeight";
+
+				String idSpeed = "editorStampCircleSpeed";
+				final String idSpeedWidth = "editorStampCircleWidthSpeed";
+				final String idSpeedHeight = "editorStampCircleHeightSpeed";
+
+				final String idWidthMin = "editorStampCircleWidthMinimum";
+				final String idHeightMin = "editorStampCircleHeightMinimum";
+
+				int sizeWidth = cfg.getInt(idSizeWidth);
+				int sizeHeight = cfg.getInt(idSizeHeight);
+
+				boolean doWidth = true;
+				boolean doHeight = true;
+
+				if(isCTRL) {
+					doWidth = false;
+					idSpeed = idSpeedHeight;
+				} else if(isShift) {
+					doHeight = false;
+					idSpeed = idSpeedWidth;
+				}
+
+				switch (arg0.getWheelRotation()) {
+					case 1:
+						if(doWidth) sizeWidth -= cfg.getInt(idSpeed);
+						if(doHeight) sizeHeight -= cfg.getInt(idSpeed);
+						break;
+					case -1:
+						if(doWidth) sizeWidth += cfg.getInt(idSpeed);
+						if(doHeight) sizeHeight += cfg.getInt(idSpeed);
+						break;
+				}
+
+				if (sizeWidth <= cfg.getInt(idWidthMin))
+					sizeWidth = cfg.getInt(idWidthMin);
+
+				if (sizeHeight <= cfg.getInt(idHeightMin))
+					sizeHeight = cfg.getInt(idHeightMin);
+
+				cfg.set(idSizeWidth, sizeWidth + "");
+				cfg.set(idSizeHeight, sizeHeight + "");
 		}
-		
-		if(size <= cfg.getInt(idMinimum)) size = cfg.getInt(idMinimum);
-		cfg.set(idSize, size + "");
 		
 		editorInstance.repaint();
 	}
@@ -157,7 +205,10 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	public void keyPressed(KeyEvent arg0) {
 		if(arg0.getKeyCode() == KeyEvent.VK_CONTROL)
 			isCTRL = true;
-		
+
+		if(arg0.getKeyCode() == KeyEvent.VK_SHIFT)
+			isShift = true;
+
 		if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();
 		
@@ -171,6 +222,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	public void keyReleased(KeyEvent arg0) {
 		if(arg0.getKeyCode() == KeyEvent.VK_CONTROL)
 			isCTRL = false;
+
+		if(arg0.getKeyCode() == KeyEvent.VK_SHIFT)
+			isShift = false;
 	}
 
 	@Override

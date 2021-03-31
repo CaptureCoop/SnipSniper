@@ -21,10 +21,19 @@ public class EditorWindowRender extends JPanel{
 		g.drawImage(editorWnd.img, 0,0,this.getWidth(),this.getHeight(),this);
 		g.drawImage(editorWnd.overdraw, 0,0,this.getWidth(),this.getHeight(),this);
 		g.setColor(editorWnd.currentColor);
-		
+
 		Vector2Int mousePos = editorWnd.listener.mousePos;
-		Vector2Int brushSize = new Vector2Int(editorWnd.sniperInstance.cfg.getInt("editorStampWidth"), editorWnd.sniperInstance.cfg.getInt("editorStampHeight"));
-		if(mousePos != null) g.fillRect(mousePos.x - brushSize.x/2, mousePos.y - brushSize.y/2, brushSize.x, brushSize.y);
+
+		if(mousePos != null) {
+			String type = editorWnd.modeToString(editorWnd.getMode());
+			Vector2Int brushSize = new Vector2Int(editorWnd.sniperInstance.cfg.getInt("editorStamp" + type + "Width"), editorWnd.sniperInstance.cfg.getInt("editorStamp" + type + "Height"));
+
+			if(editorWnd.getMode() == EditorWindow.MODE.CUBE) {
+				g.fillRect(mousePos.x - brushSize.x / 2, mousePos.y - brushSize.y / 2, brushSize.x, brushSize.y);
+			} else if(editorWnd.getMode() == EditorWindow.MODE.CIRCLE) {
+				g.drawOval(mousePos.x - brushSize.x / 2, mousePos.y - brushSize.y / 2, brushSize.x, brushSize.y);
+			}
+		}
 	}
 	
 }

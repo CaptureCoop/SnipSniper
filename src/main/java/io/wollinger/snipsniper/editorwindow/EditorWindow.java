@@ -27,7 +27,7 @@ public class EditorWindow extends JFrame{
 	private String saveLocation;
 	private boolean inClipboard;
 
-	private MODE mode = MODE.CIRCLE;
+	private MODE mode = MODE.CUBE;
 	public static enum MODE {CUBE, CIRCLE}
 
 	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight, String saveLocation, boolean inClipboard) {
