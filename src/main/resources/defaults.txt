@@ -1,7 +1,7 @@
 <--- Normal Config Settings --->
 hotkey=-1
 pictureFolder=%userprofile%\pictures\SnipSniper\
-savePictures=true
+saveToDisk=true
 borderSize=0
 copyToClipboard=true
 borderColor=#000000

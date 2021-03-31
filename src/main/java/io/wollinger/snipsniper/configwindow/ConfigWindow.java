@@ -27,7 +27,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	private static final long serialVersionUID = -1627369445259468935L;
 	
 	HotKeyButton hotKeyButton = new HotKeyButton();
-	JCheckBox savePictures = new JCheckBox();
+	JCheckBox saveToDisk = new JCheckBox();
 	JCheckBox copyToClipboard = new JCheckBox();
 	JTextField borderSize = new JTextField();
 	JTextField pictureLocation = new JTextField();
@@ -60,7 +60,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		else
 			hotKeyButton.setText(NativeKeyEvent.getKeyText(_sniperInstance.cfg.getInt("hotkey")));
 		hotKeyButton.hotkey = sniperInstance.cfg.getInt("hotkey");
-		savePictures.setSelected(_sniperInstance.cfg.getBool("savePictures"));
+		saveToDisk.setSelected(_sniperInstance.cfg.getBool("saveToDisk"));
 		copyToClipboard.setSelected(_sniperInstance.cfg.getBool("copyToClipboard"));
 		borderSize.setText(_sniperInstance.cfg.getInt("borderSize") + "");
 		pictureLocation.setText(_sniperInstance.cfg.getRawString("pictureFolder") + "");
@@ -88,7 +88,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		
 		JPanel row1 = new JPanel(new GridLayout(0,2));
 		row1.add(createJLabel("Save Images on Capture", JLabel.CENTER, JLabel.CENTER));
-		row1.add(savePictures);
+		row1.add(saveToDisk);
 		options.add(row1);
 		
 		JPanel row2 = new JPanel(new GridLayout(0,2));
@@ -147,7 +147,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	
 	public void save() {
 		//TODO: Rework sanitation
-		boolean _savePictures = savePictures.isSelected();
+		boolean _saveToDisk = saveToDisk.isSelected();
 		boolean _copyToClipboard = copyToClipboard.isSelected();
 		boolean _openEditor = openEditor.isSelected();
 		
@@ -197,7 +197,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		
 		sniperInstance.cfg.set("hotkey", hotKeyButton.hotkey + "");
 		sniperInstance.cfg.set("pictureFolder", _saveLocation);
-		sniperInstance.cfg.set("savePictures", _savePictures + "");
+		sniperInstance.cfg.set("saveToDisk", _saveToDisk + "");
 		sniperInstance.cfg.set("borderSize", _borderSize + "");
 		sniperInstance.cfg.set("copyToClipboard", _copyToClipboard + "");
 		sniperInstance.cfg.set("borderColor", Utils.rgb2hex(borderColor.c));
