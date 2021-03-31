@@ -28,6 +28,7 @@ public class EditorWindow extends JFrame{
 	private String saveLocation;
 	private boolean inClipboard;
 
+	//TODO: Fix modes & make them modular
 	private MODE mode = MODE.CUBE;
 	public static enum MODE {CUBE, CIRCLE}
 

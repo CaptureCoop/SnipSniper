@@ -16,7 +16,8 @@ public class EditorWindowRender extends JPanel{
 		editorWnd = _wnd;
 		this.setPreferredSize(new Dimension(_wnd.img.getWidth(), _wnd.img.getHeight()));
 	}
-	
+
+	//TODO: Fix modes & make them modular
 	public void paint(Graphics g) {
 		g.drawImage(editorWnd.img, 0,0,this.getWidth(),this.getHeight(),this);
 		g.drawImage(editorWnd.overdraw, 0,0,this.getWidth(),this.getHeight(),this);

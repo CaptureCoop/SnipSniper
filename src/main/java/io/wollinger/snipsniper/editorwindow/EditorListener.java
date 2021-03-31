@@ -88,7 +88,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		mousePos = new Vector2Int(arg0.getPoint());
 		editorInstance.repaint();
 	}
-	
+
+	//TODO: Fix modes & make them modular
 	public void save(Color color, Graphics g, boolean fast) {
 		Vector2Int pos = new Vector2Int(lastPoint);
 		Vector2Int size = new Vector2Int(startPoint.x - lastPoint.x, startPoint.y - lastPoint.y);
