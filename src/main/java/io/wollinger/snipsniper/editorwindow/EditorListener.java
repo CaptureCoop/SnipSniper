@@ -10,6 +10,8 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.utils.ColorChooser;
+import io.wollinger.snipsniper.utils.PBRColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 public class EditorListener implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
@@ -60,7 +62,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			lastPoint = new Vector2Int(arg0.getPoint().getX() + (float) brushSize.x / 2, arg0.getPoint().getY() + (float) brushSize.y / 2);
 
 			if(arg0.getButton() == 1)
-				save(editorInstance.currentColor, editorInstance.overdraw.getGraphics(), false);
+				save(editorInstance.currentColor.c, editorInstance.overdraw.getGraphics(), false);
 			else if(arg0.getButton() == 2) {
 				save(editorInstance.censorColor, editorInstance.img.getGraphics(), true);
 				save(editorInstance.censorColor, editorInstance.overdraw.getGraphics(), true);
@@ -115,7 +117,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 						int total = c.getRed() + c.getGreen() + c.getBlue();
 						int alpha = (int)((205F/765F) * total + 25);
-						Color oC = editorInstance.currentColor;
+						Color oC = editorInstance.currentColor.c;
 						g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
 						g.drawLine(posX, posY, posX, posY);
 					}
@@ -208,6 +210,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 		if(arg0.getKeyCode() == KeyEvent.VK_SHIFT)
 			isShift = true;
+
+		if(arg0.getKeyCode() == KeyEvent.VK_C)
+			new ColorChooser("Marker Color", editorInstance.currentColor);
 
 		if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();

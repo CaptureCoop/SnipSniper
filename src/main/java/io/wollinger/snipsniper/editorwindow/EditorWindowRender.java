@@ -20,7 +20,7 @@ public class EditorWindowRender extends JPanel{
 	public void paint(Graphics g) {
 		g.drawImage(editorWnd.img, 0,0,this.getWidth(),this.getHeight(),this);
 		g.drawImage(editorWnd.overdraw, 0,0,this.getWidth(),this.getHeight(),this);
-		g.setColor(editorWnd.currentColor);
+		g.setColor(editorWnd.currentColor.c);
 
 		Vector2Int mousePos = editorWnd.listener.mousePos;
 

@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
+import io.wollinger.snipsniper.utils.PBRColor;
 
 public class EditorWindow extends JFrame{
 	private static final long serialVersionUID = -7363672331227971815L;
@@ -18,7 +19,7 @@ public class EditorWindow extends JFrame{
 	EditorWindowRender renderer;
 	EditorListener listener;
 	
-	Color currentColor = new Color(255,255,0,150);
+	PBRColor currentColor = new PBRColor(255,255,0,150);
 	Color censorColor = Color.BLACK;
 	
 	final static int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
