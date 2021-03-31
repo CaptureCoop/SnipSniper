@@ -21,16 +21,23 @@ public class EditorWindow extends JFrame{
 	Color currentColor = new Color(255,255,0,150);
 	Color censorColor = Color.BLACK;
 	
-	final int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
+	final static int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
 
+	private String title;
+	private String saveLocation;
+	private boolean inClipboard;
 
-
-	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight) {
+	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight, String saveLocation, boolean inClipboard) {
 		img = _img;
 		sniperInstance = _sInstance;
 		overdraw = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-		this.setTitle(_title);
+		this.saveLocation = saveLocation;
+		this.inClipboard = inClipboard;
+		this.title = _title;
+
+		refreshTitle();
+
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setResizable(false);
 		this.setIconImage(Icons.icon_taskbar);
@@ -53,7 +60,16 @@ public class EditorWindow extends JFrame{
 		if(!_leftToRight) borderSize = -borderSize;
 		
 		this.setLocation((_x - X_OFFSET) + borderSize, (_y - barSize) + borderSize);
+	}
 
+	public void refreshTitle() {
+		String newTitle = title;
+		if(saveLocation != null && !saveLocation.isEmpty())
+			newTitle += " (" + saveLocation + ")";
+		if(inClipboard) {
+			newTitle += " (Clipboard)";
+		}
+		setTitle(newTitle);
 	}
 	
 	public void saveImage() {
