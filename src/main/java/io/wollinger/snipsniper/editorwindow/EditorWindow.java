@@ -54,18 +54,6 @@ public class EditorWindow extends JFrame{
 		
 		this.setLocation((_x - X_OFFSET) + borderSize, (_y - barSize) + borderSize);
 
-		/*JMenuBar menuBar = new JMenuBar();
-		JMenu file = new JMenu("File");
-		JMenuItem save = new JMenuItem("Save");
-		JMenuItem saveAs = new JMenuItem("Save as");
-		file.add(save);
-		file.add(saveAs);
-
-		JMenu color = new JMenu("Color");
-		/coming soon/
-		menuBar.add(file);
-		menuBar.add(color);
-		this.setJMenuBar(menuBar);*/
 	}
 	
 	public void saveImage() {
