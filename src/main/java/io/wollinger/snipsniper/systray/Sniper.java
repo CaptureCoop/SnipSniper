@@ -203,7 +203,7 @@ public class Sniper implements NativeKeyListener{
 		debug("Copied Image to clipboard", DebugType.INFO);
 	}
 	
-	public boolean saveImage(BufferedImage finalImg, String _modifier) {
+	public String saveImage(BufferedImage finalImg, String _modifier) {
 		File file;
 		LocalDateTime now = LocalDateTime.now();  
 		String filename = now.toString().replace(".", "_").replace(":", "_");
@@ -216,13 +216,13 @@ public class Sniper implements NativeKeyListener{
 				if(!path.exists()) {
 					if(!path.mkdirs()) {
 						debug("Failed saving, directory missing & could not create it!", DebugType.WARNING);
-						return false;
+						return null;
 					}
 				}
 				if(file.createNewFile()) {
 					ImageIO.write(finalImg, "png", file);
 					debug("Saved image on disk. Location: " + file, DebugType.INFO);
-					return true;
+					return file.getAbsolutePath();
 				}
 			}
 		} catch (IOException e) {
@@ -230,9 +230,9 @@ public class Sniper implements NativeKeyListener{
 			debug("Failed Saving. Wanted Location: " + file, DebugType.WARNING);
 			debug("Detailed Error: " + e.getMessage(), DebugType.WARNING);
 			e.printStackTrace();
-			return false;
+			return null;
 		}
-		return false;
+		return null;
 	}
 	
 	private void debugPrint(String _p, String _t, String _m) {
