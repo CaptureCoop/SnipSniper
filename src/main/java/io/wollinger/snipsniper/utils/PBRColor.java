@@ -7,5 +7,9 @@ public class PBRColor {
 	public PBRColor(Color _c) {
 		c = _c;
 	}
-	//Pass by reference color class. Nothing more.
+
+    public PBRColor(int r, int g, int b, int a) {
+    	c = new Color(r, g, b, a);
+	}
+    //Pass by reference color class. Nothing more.
 }
