@@ -31,4 +31,8 @@ public class Vector2Int {
 		x = (int) _x;
 		y = (int) _y;
 	}
+
+	public String toString() {
+		return "Vector2Int(" + x + "/" + y + ")";
+	}
 }
