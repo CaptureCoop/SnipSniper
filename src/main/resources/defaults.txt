@@ -17,10 +17,19 @@ killSwitch=60
 maxFPS=60
 
 <--- Editor Settings --->
-editorStampWidth=75
-editorStampHeight=20
-editorStampWidthMinimum=10
-editorStampHeightMinimum=20
-editorStampWidthSpeed=20
-editorStampHeightSpeed=20
+editorStampCubeWidth=75
+editorStampCubeHeight=20
+editorStampCubeWidthMinimum=10
+editorStampCubeHeightMinimum=20
+editorStampCubeWidthSpeed=20
+editorStampCubeHeightSpeed=20
+
+editorStampCircleWidth=40
+editorStampCircleHeight=40
+editorStampCircleWidthMinimum=10
+editorStampCircleHeightMinimum=10
+editorStampCircleSpeed=20
+editorStampCircleWidthSpeed=20
+editorStampCircleHeightSpeed=20
+
 smartPixel=true
