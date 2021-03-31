@@ -12,6 +12,7 @@ import java.awt.event.MouseWheelListener;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.ColorChooser;
 import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.Utils;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 public class EditorListener implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
@@ -26,6 +27,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	
 	boolean isCTRL = false;
 	boolean isShift = false;
+	boolean isV = false;
 	
 	public EditorListener(EditorWindow _editWnd) {
 		editorInstance = _editWnd;
@@ -130,9 +132,44 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		g.dispose();
 	}
 
+	int r = 0;
+	int g = 251;
+	int b = 255;
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
 		Config cfg = editorInstance.sniperInstance.cfg;
+		if(isV) {
+			/*int r = editorInstance.currentColor.c.getRed();
+			int g = editorInstance.currentColor.c.getGreen();
+			int b = editorInstance.currentColor.c.getBlue();*/
+
+			final int STEP_PER_SPIN = 20;
+			final int MAX = 255;
+			//TODO: Delete all of this and then switch it out with HSV; going from 0 to 360 and back.
+			if(arg0.getWheelRotation() == 1) {
+				//DOWN
+				if(g >= MAX && b <= 0) {
+					r -= STEP_PER_SPIN;
+				} else if(g >= MAX && r <= 0) {
+					b += STEP_PER_SPIN;
+				} else if(b >= MAX && r <= 0) {
+					g -= STEP_PER_SPIN;
+				} else if(b >= MAX && g <= 0) {
+					r += STEP_PER_SPIN;
+				} else if(r >= MAX && g <= 0) {
+					b -= STEP_PER_SPIN;
+				} else if(r >= MAX && b <= 0) {
+					g += STEP_PER_SPIN;
+				}
+			} else if(arg0.getWheelRotation() == -1) {
+
+			}
+			System.out.println(r + "" + g + " " + b);
+
+			editorInstance.currentColor = new PBRColor(Utils.hex2rgb(Utils.hsvToRgb(0.360F,1F,1F)));
+			editorInstance.repaint();
+			return;
+		}
 
 		if(editorInstance.getMode() == EditorWindow.MODE.CUBE) {
 			String dir = "Width";
@@ -204,6 +241,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.repaint();
 	}
 
+	//TODO: Add all keys into an array to make it easier to check what is pressed
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		if(arg0.getKeyCode() == KeyEvent.VK_CONTROL)
@@ -211,6 +249,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 		if(arg0.getKeyCode() == KeyEvent.VK_SHIFT)
 			isShift = true;
+
+		if(arg0.getKeyCode() == KeyEvent.VK_V)
+			isV = true;
 
 		if(arg0.getKeyCode() == KeyEvent.VK_C)
 			new ColorChooser("Marker Color", editorInstance.currentColor);
@@ -231,6 +272,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 		if(arg0.getKeyCode() == KeyEvent.VK_SHIFT)
 			isShift = false;
+
+		if(arg0.getKeyCode() == KeyEvent.VK_V)
+			isV = false;
 	}
 
 	@Override
