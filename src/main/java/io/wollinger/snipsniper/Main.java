@@ -11,7 +11,7 @@ import io.wollinger.snipsniper.utils.Icons;
 
 public class Main {
 	
-	public final static String VERSION = "20210331_1";
+	public final static String VERSION = "20210401_1";
 	
 	public static String jarFolder = new File("").getAbsolutePath() + "\\";;
 	public static String mainFolder = jarFolder + "SnipSniper";
