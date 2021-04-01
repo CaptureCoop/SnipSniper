@@ -73,6 +73,10 @@ public class btnAbout extends MenuItem{
 			panel.add(rightSide);
 
 			frame.add(panel);
+
+			Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+			frame.setLocation((int)((size.getWidth()/2) - frame.getWidth()/2), (int)((size.getHeight()/2) - frame.getHeight()/2));
+
 			frame.setVisible(true);
 		});
 	}
