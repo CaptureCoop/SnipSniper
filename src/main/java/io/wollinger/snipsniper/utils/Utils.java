@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 public class Utils {
 	
@@ -16,6 +18,17 @@ public class Utils {
 	        return false;
 	    }
 	}
+
+	public static void printArgs(PrintStream out, final String message, final Object... args) {
+		final int size = args.length;
+		String newMessage = message;
+		for(int i = 0; i < size; i++) {
+			final String id = "\\{" + i + "\\}";
+			newMessage = newMessage.replaceAll(id, args[i].toString());
+		}
+		out.println(newMessage);
+	}
+
 	public static String hsvToRgb(float hue, float saturation, float value) {
 
 		int h = (int)(hue * 6);
