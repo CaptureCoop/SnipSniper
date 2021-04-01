@@ -212,7 +212,7 @@ public class Sniper implements NativeKeyListener{
 		File path = new File(savePath);
 		file = new File(savePath + filename);
 		try {
-			if(cfg.getBool("savePictures")) {
+			if(cfg.getBool("saveToDisk")) {
 				if(!path.exists()) {
 					if(!path.mkdirs()) {
 						debug("Failed saving, directory missing & could not create it!", DebugType.WARNING);
