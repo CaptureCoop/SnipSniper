@@ -7,7 +7,7 @@ public class PBRColor {
 	public PBRColor(Color _c) {
 		c = _c;
 	}
-
+	//TODO: Support HSV
     public PBRColor(int r, int g, int b, int a) {
     	c = new Color(r, g, b, a);
 	}

@@ -26,6 +26,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	
 	boolean isCTRL = false;
 	boolean isShift = false;
+	boolean isV = false;
 	
 	public EditorListener(EditorWindow _editWnd) {
 		editorInstance = _editWnd;
@@ -130,9 +131,17 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		g.dispose();
 	}
 
+	int currentHSV;
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
 		Config cfg = editorInstance.sniperInstance.cfg;
+		if(isV) {
+			//TODO: Look into HSV
+			editorInstance.currentColor = new PBRColor(Color.getHSBColor(currentHSV,currentHSV,currentHSV));
+			currentHSV++;
+			editorInstance.repaint();
+			return;
+		}
 
 		if(editorInstance.getMode() == EditorWindow.MODE.CUBE) {
 			String dir = "Width";
@@ -204,6 +213,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.repaint();
 	}
 
+	//TODO: Add all keys into an array to make it easier to check what is pressed
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		if(arg0.getKeyCode() == KeyEvent.VK_CONTROL)
@@ -211,6 +221,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 		if(arg0.getKeyCode() == KeyEvent.VK_SHIFT)
 			isShift = true;
+
+		if(arg0.getKeyCode() == KeyEvent.VK_V)
+			isV = true;
 
 		if(arg0.getKeyCode() == KeyEvent.VK_C)
 			new ColorChooser("Marker Color", editorInstance.currentColor);
@@ -231,6 +244,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 		if(arg0.getKeyCode() == KeyEvent.VK_SHIFT)
 			isShift = false;
+
+		if(arg0.getKeyCode() == KeyEvent.VK_V)
+			isV = false;
 	}
 
 	@Override

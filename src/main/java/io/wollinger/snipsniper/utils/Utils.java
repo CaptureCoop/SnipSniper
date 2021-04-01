@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 public class Utils {
 	
@@ -16,7 +18,42 @@ public class Utils {
 	        return false;
 	    }
 	}
-	
+
+	public static void printArgs(PrintStream out, final String message, final Object... args) {
+		final int size = args.length;
+		String newMessage = message;
+		for(int i = 0; i < size; i++) {
+			final String id = "\\{" + i + "\\}";
+			newMessage = newMessage.replaceAll(id, args[i].toString());
+		}
+		out.println(newMessage);
+	}
+
+	public static String hsvToRgb(float hue, float saturation, float value) {
+
+		int h = (int)(hue * 6);
+		float f = hue * 6 - h;
+		float p = value * (1 - saturation);
+		float q = value * (1 - f * saturation);
+		float t = value * (1 - (1 - f) * saturation);
+
+		switch (h) {
+			case 0: return rgbToString(value, t, p);
+			case 1: return rgbToString(q, value, p);
+			case 2: return rgbToString(p, value, t);
+			case 3: return rgbToString(p, q, value);
+			case 4: return rgbToString(t, p, value);
+			case 5: return rgbToString(value, p, q);
+			default: throw new RuntimeException("Something went wrong when converting from HSV to RGB. Input was " + hue + ", " + saturation + ", " + value);
+		}
+	}
+
+	public static String rgbToString(float r, float g, float b) {
+		String rs = Integer.toHexString((int)(r * 256));
+		String gs = Integer.toHexString((int)(g * 256));
+		String bs = Integer.toHexString((int)(b * 256));
+		return rs + gs + bs;
+	}
 	public static String rgb2hex(Color _color) {
 		return String.format("#%02x%02x%02x", _color.getRed(), _color.getGreen(), _color.getBlue()); 
 	}
