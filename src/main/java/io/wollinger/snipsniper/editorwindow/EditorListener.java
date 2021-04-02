@@ -136,7 +136,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
 		Config cfg = editorInstance.sniperInstance.cfg;
 		if(isV) {
-			//TODO: Look into HSV
 			editorInstance.currentColor = new PBRColor(Color.getHSBColor(currentHSV,1,1));
 			currentHSV += 0.01F;
 			editorInstance.repaint();
