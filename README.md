@@ -10,14 +10,17 @@ The Screenshot Tool
 ### Installation
 
 Simply download SnipSniper.jar and place it in a suitable location.
-It will create a Profilers folder next to it containing the profiles config.
+It will create a profiles folder next to it containing the profiles config.
 Everything else can be configured within SnipSnipers tray icon.
 
 ### Libraries
 
-SnipSniper uses one librarie in order to function properly
+SnipSniper uses these libraries in order to function properly
 
 * [jnativehook](https://github.com/kwhat/jnativehook) - Global keyboard and mouse hooking for Java.
+
+* [Apache Commons lang3](http://commons.apache.org/proper/commons-lang/) - Provides highly reusable static utility methods.
+
 
 License
 ----

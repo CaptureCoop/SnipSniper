@@ -25,6 +25,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
     compile 'com.1stleg:jnativehook:2.1.0'
+    compile 'org.apache.commons:commons-lang3:3.5'
 }
 
 jar {
