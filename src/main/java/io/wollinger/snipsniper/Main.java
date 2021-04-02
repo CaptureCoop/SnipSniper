@@ -14,10 +14,10 @@ public class Main {
 	
 	public final static String VERSION = "20210402_1";
 	
-	public static String jarFolder = new File("").getAbsolutePath() + "\\";;
+	public static String jarFolder = new File("").getAbsolutePath() + "/";
 	public static String mainFolder = jarFolder + "SnipSniper";
-	public static String profilesFolder = mainFolder + "\\Profiles\\";
-	public static String logFolder = mainFolder + "\\logs\\";
+	public static String profilesFolder = mainFolder + "/Profiles/";
+	public static String logFolder = mainFolder + "/logs/";
 	
 	public final static int PROFILE_COUNT = 7;
 	

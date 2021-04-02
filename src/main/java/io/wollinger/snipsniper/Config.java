@@ -112,7 +112,7 @@ public class Config {
 	
 	public void deleteFile() {
 		String filename = getFilename(sniperInstance.profileID);
-		File file = new File(Main.profilesFolder + "\\" + filename);
+		File file = new File(Main.profilesFolder + "/" + filename);
 		if(!file.delete())
 			sniperInstance.debug("Could not delete profile config!", DebugType.WARNING);
 	}
@@ -120,7 +120,7 @@ public class Config {
 	private void saveFile(HashMap<String, String> _map) {
 		String filename = getFilename(sniperInstance.profileID);
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(Main.profilesFolder + "\\" + filename));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(Main.profilesFolder + "/" + filename));
 			for (String key : _map.keySet()) {
 				String value = _map.get(key);
 				writer.write(key + "=" + value + "\n");
