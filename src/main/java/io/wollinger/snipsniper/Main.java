@@ -8,6 +8,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
+import org.apache.commons.lang3.SystemUtils;
 
 public class Main {
 	
@@ -29,19 +30,22 @@ public class Main {
 	//TODO: Check if logging works as intended and log every profile the same file with [Profile 1] prefixes
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{		
-		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		if(SystemUtils.IS_OS_WINDOWS)
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		System.setProperty("sun.java2d.uiScale", "1.0");
 		new File(profilesFolder).mkdirs();
 		new File(logFolder).mkdirs();
 		Icons.loadResources();
-		
-		new Sniper(0).cfg.save();
-		
-		for(int i = 0; i < PROFILE_COUNT; i++) {
-			if(new File(profilesFolder + "profile" + (i + 1) + ".txt").exists()) {
-				profiles[i] = new Sniper(i + 1);
-				
+
+		if(SystemUtils.IS_OS_WINDOWS) {
+			new Sniper(0).cfg.save();
+
+			for (int i = 0; i < PROFILE_COUNT; i++) {
+				if (new File(profilesFolder + "profile" + (i + 1) + ".txt").exists()) {
+					profiles[i] = new Sniper(i + 1);
+
+				}
 			}
 		}
 
