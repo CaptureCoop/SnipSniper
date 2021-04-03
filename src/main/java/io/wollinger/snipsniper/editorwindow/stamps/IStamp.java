@@ -1,6 +1,13 @@
 package io.wollinger.snipsniper.editorwindow.stamps;
 
+import io.wollinger.snipsniper.utils.InputContainer;
+
+import java.awt.*;
+
 public interface IStamp {
+    public void updateSize(InputContainer input, int mouseWheelDirection);
+    public void render(Graphics g, InputContainer input);
+
     public int getWidth();
     public int getHeight();
 
