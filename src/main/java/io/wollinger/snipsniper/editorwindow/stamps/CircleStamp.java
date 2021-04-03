@@ -1,6 +1,9 @@
 package io.wollinger.snipsniper.editorwindow.stamps;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.utils.InputContainer;
+
+import java.awt.*;
 
 public class CircleStamp implements IStamp{
     private int width;
@@ -25,6 +28,15 @@ public class CircleStamp implements IStamp{
         speedWidth = cfg.getInt("editorStampCircleWidthSpeed");
         speedHeight = cfg.getInt("editorStampCircleHeightSpeed");
         speed = cfg.getInt("editorStampCircleSpeed");
+    }
+
+    @Override
+    public void updateSize(InputContainer input, int mouseWheelDirection) {
+
+    }
+
+    public void render(Graphics g, InputContainer input) {
+
     }
 
     @Override
