@@ -1,6 +1,11 @@
 package io.wollinger.snipsniper.editorwindow.stamps;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.utils.InputContainer;
+import io.wollinger.snipsniper.utils.Vector2Int;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class CubeStamp implements IStamp{
     private int width;
@@ -25,6 +30,45 @@ public class CubeStamp implements IStamp{
         speedWidth = cfg.getInt("editorStampCubeWidthSpeed");
         speedHeight = cfg.getInt("editorStampCubeHeightSpeed");
         speed = 0;
+    }
+
+    @Override
+    public void updateSize(InputContainer input, int mouseWheelDirection) {
+        String dir = "Width";
+        if (input.isKeyPressed(KeyEvent.VK_SHIFT))
+            dir = "Height";
+
+        int idSpeed = speedWidth;
+        int idMinimum = minimumWidth;
+        if(dir.equals("Height")) {
+            idSpeed = speedHeight;
+            idMinimum = minimumHeight;
+        }
+
+        switch (mouseWheelDirection) {
+            case 1:
+                if(dir.equals("Height")) {
+                    height -= idSpeed;
+                    if(height <= idMinimum)
+                        height = idMinimum;
+                } else if(dir.equals("Width")) {
+                    width -= idSpeed;
+                    if(width <= idMinimum)
+                        width = idMinimum;
+                }
+                break;
+            case -1:
+                if(dir.equals("Height")) {
+                    height += idSpeed;
+                } else if(dir.equals("Width")) {
+                    width += idSpeed;
+                }
+                break;
+        }
+    }
+
+    public void render(Graphics g, InputContainer input) {
+        g.fillRect(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
     }
 
     @Override
