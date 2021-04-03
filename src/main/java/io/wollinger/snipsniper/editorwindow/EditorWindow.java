@@ -6,8 +6,12 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
+import io.wollinger.snipsniper.editorwindow.stamps.CircleStamp;
+import io.wollinger.snipsniper.editorwindow.stamps.CubeStamp;
+import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
+import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 
 public class EditorWindow extends JFrame{
@@ -32,6 +36,11 @@ public class EditorWindow extends JFrame{
 	private MODE mode = MODE.CUBE;
 	public static enum MODE {CUBE, CIRCLE}
 
+	public IStamp[] stamps = new IStamp[2];
+	public int selectedStamp = 0;
+
+	InputContainer input = new InputContainer();
+
 	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight, String saveLocation, boolean inClipboard) {
 		img = _img;
 		sniperInstance = _sInstance;
@@ -40,6 +49,9 @@ public class EditorWindow extends JFrame{
 		this.saveLocation = saveLocation;
 		this.inClipboard = inClipboard;
 		this.title = _title;
+
+		stamps[0] = new CubeStamp(_sInstance.cfg);
+		stamps[1] = new CircleStamp(_sInstance.cfg);
 
 		refreshTitle();
 
