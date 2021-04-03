@@ -11,6 +11,7 @@ import java.awt.event.MouseWheelListener;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.ColorChooser;
+import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
@@ -23,11 +24,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	Vector2Int lastPoint = null;
 	
 	Vector2Int mousePos = null;
-	
-	boolean isCTRL = false;
-	boolean isShift = false;
-	boolean isV = false;
-	
+
 	public EditorListener(EditorWindow _editWnd) {
 		editorInstance = _editWnd;
 	}
@@ -79,18 +76,16 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		//lastPoint = new Vector2Int(arg0.getPoint()); Disabled because dragging is currently not finalized
-		mousePos = new Vector2Int(arg0.getPoint());
+		editorInstance.input.setMousePosition((int)arg0.getPoint().getX(), (int)arg0.getPoint().getY());
 		editorInstance.repaint();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		mousePos = new Vector2Int(arg0.getPoint());
+		editorInstance.input.setMousePosition((int)arg0.getPoint().getX(), (int)arg0.getPoint().getY());
 		editorInstance.repaint();
 	}
 
-	//TODO: Fix modes & make them modular
 	public void save(Color color, Graphics g, boolean fast) {
 		Vector2Int pos = new Vector2Int(lastPoint);
 		Vector2Int size = new Vector2Int(startPoint.x - lastPoint.x, startPoint.y - lastPoint.y);
@@ -134,8 +129,10 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	float currentHSV;
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
-		Config cfg = editorInstance.sniperInstance.cfg;
-		if(isV) {
+		InputContainer input = editorInstance.input;
+		editorInstance.stamps[editorInstance.selectedStamp].updateSize(input, arg0.getWheelRotation());
+
+		if(input.isKeyPressed(KeyEvent.VK_V)) {
 			final Color hsvColor = Color.getHSBColor(currentHSV, 1, 1);
 
 			editorInstance.currentColor = new PBRColor(hsvColor.getRed(), hsvColor.getGreen(), hsvColor.getBlue(), editorInstance.currentColor.c.getAlpha());
@@ -148,87 +145,12 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			return;
 		}
 
-		if(editorInstance.getMode() == EditorWindow.MODE.CUBE) {
-			String dir = "Width";
-			if (isShift) dir = "Height";
-
-			String idSize = "editorStampCube" + dir;
-			String idSpeed = "editorStampCube" + dir + "Speed";
-			String idMinimum = "editorStampCube" + dir + "Minimum";
-
-			int size = cfg.getInt(idSize);
-
-			switch (arg0.getWheelRotation()) {
-				case 1:
-					size -= cfg.getInt(idSpeed);
-					break;
-				case -1:
-					size += cfg.getInt(idSpeed);
-					break;
-			}
-
-			if (size <= cfg.getInt(idMinimum)) size = cfg.getInt(idMinimum);
-			cfg.set(idSize, size + "");
-		} else if (editorInstance.getMode() == EditorWindow.MODE.CIRCLE) {
-				final String idSizeWidth = "editorStampCircleWidth";
-				final String idSizeHeight = "editorStampCircleHeight";
-
-				String idSpeed = "editorStampCircleSpeed";
-				final String idSpeedWidth = "editorStampCircleWidthSpeed";
-				final String idSpeedHeight = "editorStampCircleHeightSpeed";
-
-				final String idWidthMin = "editorStampCircleWidthMinimum";
-				final String idHeightMin = "editorStampCircleHeightMinimum";
-
-				int sizeWidth = cfg.getInt(idSizeWidth);
-				int sizeHeight = cfg.getInt(idSizeHeight);
-
-				boolean doWidth = true;
-				boolean doHeight = true;
-
-				if(isCTRL) {
-					doWidth = false;
-					idSpeed = idSpeedHeight;
-				} else if(isShift) {
-					doHeight = false;
-					idSpeed = idSpeedWidth;
-				}
-
-				switch (arg0.getWheelRotation()) {
-					case 1:
-						if(doWidth) sizeWidth -= cfg.getInt(idSpeed);
-						if(doHeight) sizeHeight -= cfg.getInt(idSpeed);
-						break;
-					case -1:
-						if(doWidth) sizeWidth += cfg.getInt(idSpeed);
-						if(doHeight) sizeHeight += cfg.getInt(idSpeed);
-						break;
-				}
-
-				if (sizeWidth <= cfg.getInt(idWidthMin))
-					sizeWidth = cfg.getInt(idWidthMin);
-
-				if (sizeHeight <= cfg.getInt(idHeightMin))
-					sizeHeight = cfg.getInt(idHeightMin);
-
-				cfg.set(idSizeWidth, sizeWidth + "");
-				cfg.set(idSizeHeight, sizeHeight + "");
-		}
-		
 		editorInstance.repaint();
 	}
 
-	//TODO: Add all keys into an array to make it easier to check what is pressed
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if(arg0.getKeyCode() == KeyEvent.VK_CONTROL)
-			isCTRL = true;
-
-		if(arg0.getKeyCode() == KeyEvent.VK_SHIFT)
-			isShift = true;
-
-		if(arg0.getKeyCode() == KeyEvent.VK_V)
-			isV = true;
+		editorInstance.input.setKey(arg0.getKeyCode(), true);
 
 		if(arg0.getKeyCode() == KeyEvent.VK_C)
 			new ColorChooser("Marker Color", editorInstance.currentColor);
@@ -244,14 +166,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		if(arg0.getKeyCode() == KeyEvent.VK_CONTROL)
-			isCTRL = false;
-
-		if(arg0.getKeyCode() == KeyEvent.VK_SHIFT)
-			isShift = false;
-
-		if(arg0.getKeyCode() == KeyEvent.VK_V)
-			isV = false;
+		editorInstance.input.setKey(arg0.getKeyCode(), false);
 	}
 
 	@Override
