@@ -35,4 +35,13 @@ editorStampCounterHeightSpeed=20
 editorStampCounterSolidColor=true
 editorStampCounterFontSizeModifier=1.25
 
+editorStampCircleWidth=40
+editorStampCircleHeight=40
+editorStampCircleWidthMinimum=10
+editorStampCircleHeightMinimum=10
+editorStampCircleSpeed=20
+editorStampCircleWidthSpeed=20
+editorStampCircleHeightSpeed=20
+editorStampCircleThickness=4
+
 smartPixel=true

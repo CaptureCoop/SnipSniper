@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
+import io.wollinger.snipsniper.editorwindow.stamps.CircleStamp;
 import io.wollinger.snipsniper.editorwindow.stamps.CounterStamp;
 import io.wollinger.snipsniper.editorwindow.stamps.CubeStamp;
 import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
@@ -12,6 +13,7 @@ import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
+import javafx.scene.shape.Circle;
 
 public class EditorWindow extends JFrame{
 	private static final long serialVersionUID = -7363672331227971815L;
@@ -29,7 +31,7 @@ public class EditorWindow extends JFrame{
 	private final String saveLocation;
 	private final boolean inClipboard;
 
-	public IStamp[] stamps = new IStamp[2];
+	public IStamp[] stamps = new IStamp[3];
 	public int selectedStamp = 0;
 
 	InputContainer input = new InputContainer();
@@ -47,6 +49,7 @@ public class EditorWindow extends JFrame{
 
 		stamps[0] = new CubeStamp(this);
 		stamps[1] = new CounterStamp(_sInstance.cfg);
+		stamps[2] = new CircleStamp(_sInstance.cfg);
 
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 		qualityHints.put( RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY );

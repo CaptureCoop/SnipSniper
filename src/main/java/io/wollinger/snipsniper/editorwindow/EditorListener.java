@@ -108,6 +108,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			editorInstance.selectedStamp = 0;
 		if(arg0.getKeyCode() == KeyEvent.VK_2)
 			editorInstance.selectedStamp = 1;
+		if(arg0.getKeyCode() == KeyEvent.VK_3)
+			editorInstance.selectedStamp = 2;
 
 		if(arg0.getKeyCode() == KeyEvent.VK_S) {
 			editorInstance.saveImage();
