@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import io.wollinger.snipsniper.utils.LangManager;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -73,15 +74,15 @@ public class Sniper implements NativeKeyListener{
 		popup.add(new btnOpenImgFolder(this));
 		popup.add(new btnConfig(this));
 
-		createProfilesMenu = new Menu("Create profile");
+		createProfilesMenu = new Menu(LangManager.getItem("menu_create_profile", cfg.getString("language")));
 		popup.add(createProfilesMenu);
 		
-		removeProfilesMenu = new Menu("Remove profile");
+		removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile", cfg.getString("language")));
 		popup.add(removeProfilesMenu);
 
-		popup.add(new btnAbout());
+		popup.add(new btnAbout(this));
 
-		popup.add(new btnExit());
+		popup.add(new btnExit(this));
 		
 		try {
 			trayIcon = new TrayIcon(Icons.icons[profileID], "SnipSniper ", popup );
