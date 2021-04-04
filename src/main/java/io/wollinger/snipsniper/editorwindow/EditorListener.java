@@ -78,7 +78,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
 		InputContainer input = editorInstance.input;
 
-		if(input.isKeyPressed(KeyEvent.VK_V)) {
+		if(input.isKeyPressed(KeyEvent.VK_ALT)) {
 			final Color hsvColor = Color.getHSBColor(currentHSV, 1, 1);
 			editorInstance.setColor(new PBRColor(hsvColor.getRed(), hsvColor.getGreen(), hsvColor.getBlue(), editorInstance.getColor().c.getAlpha()));
 			if(arg0.getWheelRotation() == 1)
