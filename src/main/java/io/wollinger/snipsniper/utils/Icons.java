@@ -12,6 +12,7 @@ public class Icons {
 	public static BufferedImage icon_highres;
 	public static BufferedImage icon_taskbar;
 	public static BufferedImage[] icons;
+	public static BufferedImage[] alt_icons;
 	
 	public static void loadResources() {
 		try {
@@ -19,8 +20,11 @@ public class Icons {
 			icon_taskbar = ImageIO.read(Main.class.getResource("/res/SnSn.png"));
 			icon_highres = ImageIO.read(Main.class.getResource("/res/icon_highres.png"));
 			icons = new BufferedImage[8];
-			for(int i = 0; i < 8; i++)
+			alt_icons = new BufferedImage[8];
+			for(int i = 0; i < 8; i++) {
 				icons[i] = ImageIO.read(Main.class.getResource("/res/icon" + i + ".png"));
+				alt_icons[i] = ImageIO.read(Main.class.getResource("/res/alt_icon" + i + ".png"));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

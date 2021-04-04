@@ -168,6 +168,7 @@ public class Sniper implements NativeKeyListener{
 
 	public void killCaptureWindow() {
 		if(cWnd != null) {
+			trayIcon.setImage(Icons.icons[profileID]);
 			Main.isIdle = true;
 			cWnd.screenshot = null;
 			cWnd.screenshotTinted = null;

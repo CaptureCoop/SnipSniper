@@ -52,7 +52,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	public CaptureWindow(Sniper _sniperInstance) {	
 		instance = this;
 		sniperInstance = _sniperInstance;
-		
+		sniperInstance.trayIcon.setImage(Icons.alt_icons[_sniperInstance.profileID]);
 		if(sniperInstance.cfg.getInt("snipeDelay") != 0) {
 			try {
 				Thread.sleep(sniperInstance.cfg.getInt("snipeDelay") * 1000L);
