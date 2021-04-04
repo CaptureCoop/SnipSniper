@@ -9,7 +9,6 @@ import io.wollinger.snipsniper.Main;
 public class Icons {
 	
 	public static BufferedImage icon;
-	public static BufferedImage icon_highres;
 	public static BufferedImage icon_taskbar;
 	public static BufferedImage[] icons;
 	public static BufferedImage[] alt_icons;
@@ -18,7 +17,6 @@ public class Icons {
 		try {
 			icon = ImageIO.read(Main.class.getResource("/res/icon.png"));
 			icon_taskbar = ImageIO.read(Main.class.getResource("/res/SnSn.png"));
-			icon_highres = ImageIO.read(Main.class.getResource("/res/icon_highres.png"));
 			icons = new BufferedImage[8];
 			alt_icons = new BufferedImage[8];
 			for(int i = 0; i < 8; i++) {
