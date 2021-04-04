@@ -10,6 +10,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
 import io.wollinger.snipsniper.utils.ColorChooser;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
@@ -22,8 +23,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	Vector2Int startPoint = null;
 	
 	Vector2Int lastPoint = null;
-	
-	Vector2Int mousePos = null;
 
 	public EditorListener(EditorWindow _editWnd) {
 		editorInstance = _editWnd;
@@ -55,7 +54,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		if(arg0.getButton() == 1 || arg0.getButton() == 2) {
 			String type = editorInstance.modeToString(editorInstance.getMode());
 
-			Vector2Int brushSize = new Vector2Int(editorInstance.sniperInstance.cfg.getInt("editorStamp" + type + "Width"), editorInstance.sniperInstance.cfg.getInt("editorStamp" + type + "Height"));
+			IStamp stamp = editorInstance.stamps[editorInstance.selectedStamp];
+			Vector2Int brushSize = new Vector2Int(stamp.getWidth(), stamp.getHeight());
 			startPoint = new Vector2Int(arg0.getPoint().getX() - (float) brushSize.x / 2, arg0.getPoint().getY() - (float) brushSize.y / 2);
 			lastPoint = new Vector2Int(arg0.getPoint().getX() + (float) brushSize.x / 2, arg0.getPoint().getY() + (float) brushSize.y / 2);
 
@@ -163,6 +163,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			editorInstance.saveImage();
 			editorInstance.kill();
 		}
+
+		editorInstance.stamps[editorInstance.selectedStamp].updateSize(editorInstance.input, 0);
+		editorInstance.repaint();
 	}
 
 	@Override
