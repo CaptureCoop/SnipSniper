@@ -18,10 +18,6 @@ import io.wollinger.snipsniper.utils.Vector2Int;
 public class EditorListener implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
 	
 	EditorWindow editorInstance;
-	
-	Vector2Int startPoint = null;
-	
-	Vector2Int lastPoint = null;
 
 	public EditorListener(EditorWindow _editWnd) {
 		editorInstance = _editWnd;
@@ -38,8 +34,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		//startPoint = new Vector2Int(arg0.getPoint()); Disabled because dragging is currently not finalized
-		
 		if(arg0.getButton() == 3) {
 			editorInstance.saveImage();
 			editorInstance.kill();
@@ -53,8 +47,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		if(arg0.getButton() == 1 || arg0.getButton() == 2) {
 			IStamp stamp = editorInstance.stamps[editorInstance.selectedStamp];
 			Vector2Int brushSize = new Vector2Int(stamp.getWidth(), stamp.getHeight());
-			startPoint = new Vector2Int(arg0.getPoint().getX() - (float) brushSize.x / 2, arg0.getPoint().getY() - (float) brushSize.y / 2);
-			lastPoint = new Vector2Int(arg0.getPoint().getX() + (float) brushSize.x / 2, arg0.getPoint().getY() + (float) brushSize.y / 2);
 
 			if(arg0.getButton() == 1)
 				save(editorInstance.getColor().c, editorInstance.getOverdraw().getGraphics(), false);
@@ -62,9 +54,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 				save(editorInstance.getCensorColor(), editorInstance.getImage().getGraphics(), true);
 				save(editorInstance.getCensorColor(), editorInstance.getOverdraw().getGraphics(), true);
 			}
-
-			startPoint = null;
-			lastPoint = null;
 		}
 		
 
