@@ -69,17 +69,18 @@ public class Sniper implements NativeKeyListener{
 		logger.setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
 	    
 		PopupMenu popup = new PopupMenu();
-	    
+
 		popup.add(new btnOpenImgFolder(this));
 		popup.add(new btnConfig(this));
-		popup.add(new btnAbout());
 
 		createProfilesMenu = new Menu("Create profile");
 		popup.add(createProfilesMenu);
 		
 		removeProfilesMenu = new Menu("Remove profile");
 		popup.add(removeProfilesMenu);
-		
+
+		popup.add(new btnAbout());
+
 		popup.add(new btnExit());
 		
 		try {
