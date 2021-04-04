@@ -185,7 +185,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	void capture() {
 		if(!imageSaved) {
-			BufferedImage finalImg = null;
+			BufferedImage finalImg;
 			isRunning = false;
 			this.dispose();
 			finishedCapture = true;
