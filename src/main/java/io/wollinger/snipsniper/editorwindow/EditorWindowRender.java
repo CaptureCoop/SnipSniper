@@ -1,7 +1,6 @@
 package io.wollinger.snipsniper.editorwindow;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 
 import javax.swing.JPanel;
 
@@ -16,10 +15,13 @@ public class EditorWindowRender extends JPanel{
 	}
 
 	public void paint(Graphics g) {
-		g.drawImage(editorWnd.getImage(), 0,0,this.getWidth(),this.getHeight(),this);
-		g.drawImage(editorWnd.getOverdraw(), 0,0,this.getWidth(),this.getHeight(),this);
-		g.setColor(editorWnd.getColor().c);
-		editorWnd.stamps[editorWnd.selectedStamp].render(g, editorWnd.input, false, false);
+		Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHints(editorWnd.getQualityHints());
+		g2.drawImage(editorWnd.getImage(), 0,0,this.getWidth(),this.getHeight(),this);
+		g2.drawImage(editorWnd.getOverdraw(), 0,0,this.getWidth(),this.getHeight(),this);
+		g2.setColor(editorWnd.getColor().c);
+		editorWnd.stamps[editorWnd.selectedStamp].render(g2, editorWnd.input, false, false);
+		g2.dispose();
 	}
 	
 }

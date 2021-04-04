@@ -1,7 +1,6 @@
 package io.wollinger.snipsniper.editorwindow;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
@@ -35,6 +34,8 @@ public class EditorWindow extends JFrame{
 
 	InputContainer input = new InputContainer();
 
+	private RenderingHints qualityHints;
+
 	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight, String saveLocation, boolean inClipboard) {
 		img = _img;
 		sniperInstance = _sInstance;
@@ -46,6 +47,9 @@ public class EditorWindow extends JFrame{
 
 		stamps[0] = new CubeStamp(this);
 		stamps[1] = new CircleStamp(_sInstance.cfg);
+
+		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+		qualityHints.put( RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY );
 
 		refreshTitle();
 
@@ -121,6 +125,10 @@ public class EditorWindow extends JFrame{
 
 	public Color getCensorColor() {
 		return censorColor;
+	}
+
+	public RenderingHints getQualityHints() {
+		return qualityHints;
 	}
 
 }
