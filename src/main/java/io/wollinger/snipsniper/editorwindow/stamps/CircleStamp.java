@@ -4,6 +4,7 @@ import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.InputContainer;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class CircleStamp implements IStamp{
     private int width;
@@ -32,11 +33,54 @@ public class CircleStamp implements IStamp{
 
     @Override
     public void updateSize(InputContainer input, int mouseWheelDirection) {
+        if(mouseWheelDirection != 0) {
+            boolean doWidth = true;
+            boolean doHeight = true;
+
+            int speedToUse = speed;
+
+            if (input.isKeyPressed(KeyEvent.VK_CONTROL)) {
+                doWidth = false;
+                speedToUse = speedHeight;
+            } else if (input.isKeyPressed(KeyEvent.VK_SHIFT)) {
+                doHeight = false;
+                speedToUse = speedWidth;
+            }
+
+            switch (mouseWheelDirection) {
+                case 1:
+                    if (doWidth) width -= speedToUse;
+                    if (doHeight) height -= speedToUse;
+                    break;
+                case -1:
+                    if (doWidth) width += speedToUse;
+                    if (doHeight) height += speedToUse;
+                    break;
+            }
+
+            if (width <= minimumWidth)
+                width = minimumWidth;
+
+            if (height <= minimumHeight)
+                height = minimumHeight;
+        }
+
+        if(input.isKeyPressed(KeyEvent.VK_PLUS))
+            thickness += 1;
+        else if(input.isKeyPressed(KeyEvent.VK_MINUS))
+            thickness -= 1;
+
+        if(thickness <= 0)
+            thickness = 1;
 
     }
 
     public void render(Graphics g, InputContainer input) {
-
+        Graphics2D g2 = (Graphics2D) g;
+        Stroke oldStroke = g2.getStroke();
+        g2.setStroke(new BasicStroke(thickness));
+        g.drawOval(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
+        g2.setStroke(oldStroke);
     }
 
     @Override
