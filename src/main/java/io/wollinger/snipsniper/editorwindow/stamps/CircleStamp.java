@@ -18,12 +18,12 @@ public class CircleStamp implements IStamp{
     private int speedHeight;
     private int speed;
 
+    private float fontSizeModifier;
     private int count = 1;
 
     public CircleStamp(Config cfg) {
         width = cfg.getInt("editorStampCircleWidth");
         height = cfg.getInt("editorStampCircleHeight");
-        thickness = cfg.getInt("editorStampCircleThickness");
 
         minimumWidth = cfg.getInt("editorStampCircleWidthMinimum");
         minimumHeight = cfg.getInt("editorStampCircleHeightMinimum");
@@ -31,6 +31,7 @@ public class CircleStamp implements IStamp{
         speedWidth = cfg.getInt("editorStampCircleWidthSpeed");
         speedHeight = cfg.getInt("editorStampCircleHeightSpeed");
         speed = cfg.getInt("editorStampCircleSpeed");
+        fontSizeModifier = cfg.getFloat("editorStampCircleFontSizeModifier");
     }
 
     @Override
@@ -66,23 +67,22 @@ public class CircleStamp implements IStamp{
             if (height <= minimumHeight)
                 height = minimumHeight;
         }
-
-        if(input.isKeyPressed(KeyEvent.VK_PLUS))
-            thickness += 1;
-        else if(input.isKeyPressed(KeyEvent.VK_MINUS))
-            thickness -= 1;
-
-        if(thickness <= 0)
-            thickness = 1;
-
     }
 
     public void render(Graphics g, InputContainer input, boolean isSaveRender) {
-        Graphics2D g2 = (Graphics2D) g;
-        Stroke oldStroke = g2.getStroke();
-        g2.setStroke(new BasicStroke(thickness));
-        g.drawOval(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
-        g2.setStroke(oldStroke);
+        g.fillOval(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
+
+        Color oldColor = g.getColor();
+        g.setColor(Color.BLACK);
+
+        int h = (int)(height/fontSizeModifier);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, h));
+        int w = g.getFontMetrics().stringWidth(""+count);
+        g.drawString("" + count, input.getMouseX()-w/2, input.getMouseY()+h/3);
+        g.setColor(oldColor);
+
+        if(isSaveRender)
+            count++;
     }
 
     @Override
