@@ -1,14 +1,6 @@
 package io.wollinger.snipsniper.capturewindow;
 
-import java.awt.AWTException;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Robot;
+import java.awt.*;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -28,7 +20,8 @@ import io.wollinger.snipsniper.editorwindow.EditorWindow;
 
 public class CaptureWindow extends JFrame implements WindowListener{
 	private static final long serialVersionUID = 3129624729137795417L;
-	
+	private RenderingHints qualityHints;
+
 	Sniper sniperInstance;
 	CaptureWindow instance;
 	CaptureWindowListener listener;
@@ -49,7 +42,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	public Thread thread = null;
 	
-	public CaptureWindow(Sniper _sniperInstance) {	
+	public CaptureWindow(Sniper _sniperInstance) {
+		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
 		instance = this;
 		sniperInstance = _sniperInstance;
 		sniperInstance.trayIcon.setImage(Icons.alt_icons[_sniperInstance.profileID]);
@@ -248,16 +244,20 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	Point lastPoint = null;
 	boolean hasSaved = false;
 	BufferedImage bufferImage;
-	Graphics gBuffer;
+
 	public void paint(Graphics g) {
 		if(bounds != null) {
 			bufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
-			gBuffer = bufferImage.getGraphics();
 		}
+		Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHints(qualityHints);
+
+		Graphics2D gBuffer = (Graphics2D)bufferImage.getGraphics();
+		gBuffer.setRenderingHints(qualityHints);
 
 		if(screenshot != null && bufferImage != null) {
 			if(screenshotTinted != null && !hasSaved && bounds != null) {
-				g.drawImage(screenshotTinted, 0,0, bounds.width, bounds.height, this);
+				g2.drawImage(screenshotTinted, 0,0, bounds.width, bounds.height, this);
 				hasSaved = true;
 			}
 
@@ -266,13 +266,13 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 				boolean directDraw = sniperInstance.cfg.getBool("directDraw");
 				if(directDraw)
-					use = g;
+					use = g2;
 
 				use.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
 				use.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
 
 				if(!directDraw)
-					g.drawImage(bufferImage, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
+					g2.drawImage(bufferImage, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
 			}
 
 
@@ -284,6 +284,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			sniperInstance.debug("WARNING: Screenshot is null when trying to render. Trying again.", DebugType.WARNING);
 			this.repaint();
 		}
+		g2.dispose();
+		gBuffer.dispose();
 	}
 
 	@Override
