@@ -51,8 +51,8 @@ public class EditorWindow extends JFrame{
 		stamps[1] = new CounterStamp(_sInstance.cfg);
 		stamps[2] = new CircleStamp(_sInstance.cfg);
 
-		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-		qualityHints.put( RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY );
+		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
 		refreshTitle();
 
