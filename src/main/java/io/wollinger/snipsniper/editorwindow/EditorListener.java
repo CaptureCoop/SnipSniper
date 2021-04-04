@@ -57,10 +57,10 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			lastPoint = new Vector2Int(arg0.getPoint().getX() + (float) brushSize.x / 2, arg0.getPoint().getY() + (float) brushSize.y / 2);
 
 			if(arg0.getButton() == 1)
-				save(editorInstance.getColor().c, editorInstance.getOverdraw().getGraphics());
+				save(editorInstance.getColor().c, editorInstance.getOverdraw().getGraphics(), false);
 			else if(arg0.getButton() == 2) {
-				save(editorInstance.getCensorColor(), editorInstance.getImage().getGraphics());
-				save(editorInstance.getCensorColor(), editorInstance.getOverdraw().getGraphics());
+				save(editorInstance.getCensorColor(), editorInstance.getImage().getGraphics(), true);
+				save(editorInstance.getCensorColor(), editorInstance.getOverdraw().getGraphics(), true);
 			}
 
 			startPoint = null;
@@ -83,9 +83,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.repaint();
 	}
 
-	public void save(Color color, Graphics g) {
+	public void save(Color color, Graphics g, boolean isCensor) {
 		g.setColor(color);
-		editorInstance.stamps[editorInstance.selectedStamp].render(g, editorInstance.input, true);
+		editorInstance.stamps[editorInstance.selectedStamp].render(g, editorInstance.input, true, isCensor);
 		editorInstance.repaint();
 		g.dispose();
 	}
