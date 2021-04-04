@@ -10,6 +10,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.editorwindow.stamps.CubeStamp;
 import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
 import io.wollinger.snipsniper.utils.ColorChooser;
 import io.wollinger.snipsniper.utils.InputContainer;
@@ -91,19 +92,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		Vector2Int size = new Vector2Int(startPoint.x - lastPoint.x, startPoint.y - lastPoint.y);
 		g.setColor(color);
 
-		if(!editorInstance.sniperInstance.cfg.getBool("smartPixel") || fast) {
-			if(startPoint.x < lastPoint.x) {
-				pos.x = startPoint.x;
-				size.x = lastPoint.x - startPoint.x;
-			}
+		IStamp stamp = editorInstance.stamps[editorInstance.selectedStamp];
 
-			if(startPoint.y < lastPoint.y) {
-				pos.y = startPoint.y;
-				size.y = lastPoint.y - startPoint.y;
-			}
-
-			g.fillRect(pos.x, pos.y, size.x, size.y);
-		} else {
+		if(editorInstance.sniperInstance.cfg.getBool("smartPixel") && stamp instanceof CubeStamp) {
 			for (int y = 0; y < -size.y; y++) {
 				for (int x = 0; x < -size.x; x++) {
 					int posX = pos.x - x;
@@ -120,6 +111,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 					}
 				}
 			}
+		} else {
+			editorInstance.stamps[editorInstance.selectedStamp].render(g, editorInstance.input);
 		}
 
 		editorInstance.repaint();
@@ -158,7 +151,12 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 		if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();
-		
+
+		if(arg0.getKeyCode() == KeyEvent.VK_1)
+			editorInstance.selectedStamp = 0;
+		if(arg0.getKeyCode() == KeyEvent.VK_2)
+			editorInstance.selectedStamp = 1;
+
 		if(arg0.getKeyCode() == KeyEvent.VK_S) {
 			editorInstance.saveImage();
 			editorInstance.kill();
