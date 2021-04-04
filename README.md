@@ -21,6 +21,7 @@ SnipSniper uses these libraries in order to function properly
 
 * [Apache Commons lang3](http://commons.apache.org/proper/commons-lang/) - Provides highly reusable static utility methods.
 
+* [org.json](https://www.json.org/) - JSON is a light-weight, language independent, data interchange format.
 
 License
 ----
