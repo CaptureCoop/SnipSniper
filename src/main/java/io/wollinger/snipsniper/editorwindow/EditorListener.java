@@ -86,12 +86,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	}
 
 	public void save(Color color, Graphics g, boolean fast) {
-		Vector2Int pos = new Vector2Int(lastPoint);
-		Vector2Int size = new Vector2Int(startPoint.x - lastPoint.x, startPoint.y - lastPoint.y);
 		g.setColor(color);
-
 		editorInstance.stamps[editorInstance.selectedStamp].render(g, editorInstance.input, true);
-
 		editorInstance.repaint();
 		g.dispose();
 	}
