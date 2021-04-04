@@ -20,9 +20,7 @@ public class EditorWindow extends JFrame{
 	private BufferedImage img;
 	private BufferedImage overdraw;
 	private Sniper sniperInstance;
-	private EditorWindowRender renderer;
-	private EditorListener listener;
-	
+
 	private PBRColor currentColor = new PBRColor(255,255,0,150);
 	private Color censorColor = Color.BLACK;
 	
@@ -57,10 +55,9 @@ public class EditorWindow extends JFrame{
 		this.setVisible(true);
 		int barSize = this.getHeight() - this.getInsets().bottom;
 
-		listener = new EditorListener(this);
-		
-		renderer = new EditorWindowRender(this);
-		
+		EditorListener listener = new EditorListener(this);
+
+		EditorWindowRender renderer = new EditorWindowRender(this);
 		renderer.addMouseListener(listener);
 		renderer.addMouseMotionListener(listener);
 		renderer.addMouseWheelListener(listener);
@@ -98,6 +95,7 @@ public class EditorWindow extends JFrame{
 	
 	public void kill() {
 		img = null;
+		overdraw = null;
 		this.dispose();
 	}
 

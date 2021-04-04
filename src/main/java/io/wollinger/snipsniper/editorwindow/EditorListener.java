@@ -9,11 +9,9 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
 import io.wollinger.snipsniper.utils.ColorChooser;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
-import io.wollinger.snipsniper.utils.Vector2Int;
 
 public class EditorListener implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
 	
@@ -44,19 +42,12 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		if(arg0.getButton() == 1 || arg0.getButton() == 2) {
-			IStamp stamp = editorInstance.stamps[editorInstance.selectedStamp];
-			Vector2Int brushSize = new Vector2Int(stamp.getWidth(), stamp.getHeight());
-
-			if(arg0.getButton() == 1)
-				save(editorInstance.getColor().c, editorInstance.getOverdraw().getGraphics(), false);
-			else if(arg0.getButton() == 2) {
-				save(editorInstance.getCensorColor(), editorInstance.getImage().getGraphics(), true);
-				save(editorInstance.getCensorColor(), editorInstance.getOverdraw().getGraphics(), true);
-			}
+		if(arg0.getButton() == 1)
+			save(editorInstance.getColor().c, editorInstance.getOverdraw().getGraphics(), false);
+		else if(arg0.getButton() == 2) {
+			save(editorInstance.getCensorColor(), editorInstance.getImage().getGraphics(), true);
+			save(editorInstance.getCensorColor(), editorInstance.getOverdraw().getGraphics(), true);
 		}
-		
-
 		editorInstance.repaint();
 	}
 
@@ -86,7 +77,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 		if(input.isKeyPressed(KeyEvent.VK_V)) {
 			final Color hsvColor = Color.getHSBColor(currentHSV, 1, 1);
-
 			editorInstance.setColor(new PBRColor(hsvColor.getRed(), hsvColor.getGreen(), hsvColor.getBlue(), editorInstance.getColor().c.getAlpha()));
 			if(arg0.getWheelRotation() == 1)
 				currentHSV += 0.01F;
@@ -98,7 +88,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		}
 
 		editorInstance.stamps[editorInstance.selectedStamp].updateSize(input, arg0.getWheelRotation());
-
 		editorInstance.repaint();
 	}
 
