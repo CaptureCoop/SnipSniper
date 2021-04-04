@@ -53,8 +53,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		if(arg0.getButton() == 1 || arg0.getButton() == 2) {
-			String type = editorInstance.modeToString(editorInstance.getMode());
-
 			IStamp stamp = editorInstance.stamps[editorInstance.selectedStamp];
 			Vector2Int brushSize = new Vector2Int(stamp.getWidth(), stamp.getHeight());
 			startPoint = new Vector2Int(arg0.getPoint().getX() - (float) brushSize.x / 2, arg0.getPoint().getY() - (float) brushSize.y / 2);

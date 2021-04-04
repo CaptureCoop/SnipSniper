@@ -32,10 +32,6 @@ public class EditorWindow extends JFrame{
 	private String saveLocation;
 	private boolean inClipboard;
 
-	//TODO: Fix modes & make them modular
-	private MODE mode = MODE.CUBE;
-	public static enum MODE {CUBE, CIRCLE}
-
 	public IStamp[] stamps = new IStamp[2];
 	public int selectedStamp = 0;
 
@@ -105,24 +101,8 @@ public class EditorWindow extends JFrame{
 		this.dispose();
 	}
 
-	public String modeToString(EditorWindow.MODE mode) {
-		if(mode == EditorWindow.MODE.CUBE)
-			return "Cube";
-		else if(mode == EditorWindow.MODE.CIRCLE)
-			return "Circle";
-		return null;
-	}
-
 	public void setColor(PBRColor color) {
 		currentColor = color;
-	}
-
-	public void setMode(EditorWindow.MODE mode) {
-		this.mode = mode;
-	}
-
-	public EditorWindow.MODE getMode() {
-		return mode;
 	}
 
 	public Sniper getSniperInstance() {
