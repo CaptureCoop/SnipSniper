@@ -69,7 +69,8 @@ public class EditorWindow extends JFrame{
 		renderer.addMouseMotionListener(listener);
 		renderer.addMouseWheelListener(listener);
 		this.addKeyListener(listener);
-		
+		this.setFocusTraversalKeysEnabled(false);
+
 		this.add(renderer);
 		this.pack();
 		

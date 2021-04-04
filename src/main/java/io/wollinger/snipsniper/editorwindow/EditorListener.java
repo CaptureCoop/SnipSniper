@@ -96,6 +96,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
+		arg0.consume();
 		editorInstance.input.setKey(arg0.getKeyCode(), true);
 
 		if(arg0.getKeyCode() == KeyEvent.VK_C)
