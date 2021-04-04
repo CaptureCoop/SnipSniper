@@ -8,6 +8,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
+import io.wollinger.snipsniper.utils.LangManager;
 import org.apache.commons.lang3.SystemUtils;
 
 public class Main {
@@ -32,6 +33,8 @@ public class Main {
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
 		if(SystemUtils.IS_OS_WINDOWS)
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+		LangManager.load();
 
 		System.setProperty("sun.java2d.uiScale", "1.0");
 		new File(profilesFolder).mkdirs();
