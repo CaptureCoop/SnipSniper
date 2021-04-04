@@ -1,6 +1,7 @@
 package io.wollinger.snipsniper.editorwindow.stamps;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.editorwindow.EditorWindow;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
@@ -8,6 +9,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class CubeStamp implements IStamp{
+    private EditorWindow editor;
     private int width;
     private int height;
     private int thickness;
@@ -19,7 +21,9 @@ public class CubeStamp implements IStamp{
     private int speedHeight;
     private int speed;
 
-    public CubeStamp(Config cfg) {
+    public CubeStamp(EditorWindow editor) {
+        this.editor = editor;
+        Config cfg = editor.getSniperInstance().cfg;
         width = cfg.getInt("editorStampCubeWidth");
         height = cfg.getInt("editorStampCubeHeight");
         thickness = 0;
@@ -40,27 +44,27 @@ public class CubeStamp implements IStamp{
 
         int idSpeed = speedWidth;
         int idMinimum = minimumWidth;
-        if(dir.equals("Height")) {
+        if (dir.equals("Height")) {
             idSpeed = speedHeight;
             idMinimum = minimumHeight;
         }
 
         switch (mouseWheelDirection) {
             case 1:
-                if(dir.equals("Height")) {
+                if (dir.equals("Height")) {
                     height -= idSpeed;
-                    if(height <= idMinimum)
+                    if (height <= idMinimum)
                         height = idMinimum;
-                } else if(dir.equals("Width")) {
+                } else if (dir.equals("Width")) {
                     width -= idSpeed;
-                    if(width <= idMinimum)
+                    if (width <= idMinimum)
                         width = idMinimum;
                 }
                 break;
             case -1:
-                if(dir.equals("Height")) {
+                if (dir.equals("Height")) {
                     height += idSpeed;
-                } else if(dir.equals("Width")) {
+                } else if (dir.equals("Width")) {
                     width += idSpeed;
                 }
                 break;
@@ -68,7 +72,27 @@ public class CubeStamp implements IStamp{
     }
 
     public void render(Graphics g, InputContainer input, boolean isSaveRender) {
-        g.fillRect(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
+        if(editor.getSniperInstance().cfg.getBool("smartPixel") && isSaveRender) {
+            Vector2Int pos = new Vector2Int(input.getMouseX()+width/2, input.getMouseY()+height/2);
+            Vector2Int size = new Vector2Int(-width, -height);
+
+            for (int y = 0; y < -size.y; y++) {
+                for (int x = 0; x < -size.x; x++) {
+                    int posX = pos.x - x;
+                    int posY = pos.y - y;
+                    if(posX >= 0 && posY >= 0 && posX < editor.getOverdraw().getWidth() && posY < editor.getOverdraw().getHeight()) {
+                        Color c = new Color(editor.getImage().getRGB(posX, posY));
+                        int total = c.getRed() + c.getGreen() + c.getBlue();
+                        int alpha = (int)((205F/765F) * total + 25);
+                        Color oC = editor.getColor().c;
+                        g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
+                        g.drawLine(posX, posY, posX, posY);
+                    }
+                }
+            }
+        } else {
+            g.fillRect(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
+        }
     }
 
     @Override

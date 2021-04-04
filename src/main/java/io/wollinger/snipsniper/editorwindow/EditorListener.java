@@ -92,28 +92,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		Vector2Int size = new Vector2Int(startPoint.x - lastPoint.x, startPoint.y - lastPoint.y);
 		g.setColor(color);
 
-		IStamp stamp = editorInstance.stamps[editorInstance.selectedStamp];
-
-		if(editorInstance.sniperInstance.cfg.getBool("smartPixel") && stamp instanceof CubeStamp) {
-			for (int y = 0; y < -size.y; y++) {
-				for (int x = 0; x < -size.x; x++) {
-					int posX = pos.x - x;
-					int posY = pos.y - y;
-					if(posX >= 0 && posY >= 0 && posX < editorInstance.overdraw.getWidth() && posY < editorInstance.overdraw.getHeight()) {
-
-						Color c = new Color(editorInstance.img.getRGB(posX, posY));
-
-						int total = c.getRed() + c.getGreen() + c.getBlue();
-						int alpha = (int)((205F/765F) * total + 25);
-						Color oC = editorInstance.currentColor.c;
-						g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
-						g.drawLine(posX, posY, posX, posY);
-					}
-				}
-			}
-		} else {
-			editorInstance.stamps[editorInstance.selectedStamp].render(g, editorInstance.input, true);
-		}
+		editorInstance.stamps[editorInstance.selectedStamp].render(g, editorInstance.input, true);
 
 		editorInstance.repaint();
 		g.dispose();
