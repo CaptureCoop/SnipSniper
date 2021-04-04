@@ -5,18 +5,18 @@ import io.wollinger.snipsniper.utils.InputContainer;
 import java.awt.*;
 
 public interface IStamp {
-    public void updateSize(InputContainer input, int mouseWheelDirection);
-    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor);
+    void updateSize(InputContainer input, int mouseWheelDirection);
+    void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor);
 
-    public int getWidth();
-    public int getHeight();
+    int getWidth();
+    int getHeight();
 
-    public int getMinWidth();
-    public int getMinHeight();
+    int getMinWidth();
+    int getMinHeight();
 
-    public int getSpeedWidth();
-    public int getSpeedHeight();
-    public int getSpeed();
+    int getSpeedWidth();
+    int getSpeedHeight();
+    int getSpeed();
 
-    public int getThickness();
+    int getThickness();
 }

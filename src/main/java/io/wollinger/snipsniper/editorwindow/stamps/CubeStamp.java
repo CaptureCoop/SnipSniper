@@ -9,17 +9,17 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class CubeStamp implements IStamp{
-    private EditorWindow editor;
+    private final EditorWindow editor;
     private int width;
     private int height;
-    private int thickness;
+    private final int thickness;
 
-    private int minimumWidth;
-    private int minimumHeight;
+    private final int minimumWidth;
+    private final int minimumHeight;
 
-    private int speedWidth;
-    private int speedHeight;
-    private int speed;
+    private final int speedWidth;
+    private final int speedHeight;
+    private final int speed;
 
     public CubeStamp(EditorWindow editor) {
         this.editor = editor;

@@ -16,8 +16,8 @@ import io.wollinger.snipsniper.utils.Utils;
 
 public class Config {
 
-	private HashMap <String, String> settings = new HashMap<>();
-	private HashMap <String, String> defaults = new HashMap<>();
+	private final HashMap <String, String> settings = new HashMap<>();
+	private final HashMap <String, String> defaults = new HashMap<>();
 
 	Sniper sniperInstance;
 	

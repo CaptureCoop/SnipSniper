@@ -19,16 +19,16 @@ public class EditorWindow extends JFrame{
 
 	private BufferedImage img;
 	private BufferedImage overdraw;
-	private Sniper sniperInstance;
+	private final Sniper sniperInstance;
 
 	private PBRColor currentColor = new PBRColor(255,255,0,150);
-	private Color censorColor = Color.BLACK;
+	private final Color censorColor = Color.BLACK;
 	
 	final static int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
 
-	private String title;
-	private String saveLocation;
-	private boolean inClipboard;
+	private final String title;
+	private final String saveLocation;
+	private final boolean inClipboard;
 
 	public IStamp[] stamps = new IStamp[2];
 	public int selectedStamp = 0;

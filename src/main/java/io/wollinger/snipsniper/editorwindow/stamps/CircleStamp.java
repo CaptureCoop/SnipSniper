@@ -11,16 +11,16 @@ public class CircleStamp implements IStamp{
     private int height;
     private int thickness;
 
-    private int minimumWidth;
-    private int minimumHeight;
+    private final int minimumWidth;
+    private final int minimumHeight;
 
-    private int speedWidth;
-    private int speedHeight;
-    private int speed;
+    private final int speedWidth;
+    private final int speedHeight;
+    private final int speed;
 
-    private float fontSizeModifier;
+    private final float fontSizeModifier;
     private int count = 1;
-    private boolean solidColor;
+    private final boolean solidColor;
 
     public CircleStamp(Config cfg) {
         width = cfg.getInt("editorStampCircleWidth");
