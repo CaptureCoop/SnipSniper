@@ -1,6 +1,8 @@
 package io.wollinger.snipsniper.systray.buttons;
 
 import io.wollinger.snipsniper.Main;
+import io.wollinger.snipsniper.systray.Sniper;
+import io.wollinger.snipsniper.utils.LangManager;
 
 import java.awt.*;
 import java.io.*;
@@ -13,12 +15,14 @@ import javax.swing.event.HyperlinkEvent;
 
 public class btnAbout extends MenuItem{
 	private static final long serialVersionUID = 8081581034217628950L;
+	private final Sniper sniper;
 
 	private static String html;
 
 	//LOGO USES AGENCY FB BOLD
-	public btnAbout() {
-		setLabel("About");
+	public btnAbout(Sniper sniper) {
+		this.sniper = sniper;
+		setLabel(LangManager.getItem("menu_about", sniper.cfg.getString("language")));
 
 		if(html == null) {
 			try {
@@ -92,7 +96,11 @@ public class btnAbout extends MenuItem{
 
 		inputStream.close();
 		streamReader.close();
+		String language = sniper.cfg.getString("language");
 		html = html.replace("%VERSION%", Main.VERSION);
+		html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming", language));
+		html = html.replace("%ABOUT_CD%", LangManager.getItem("about_cd", language));
+		html = html.replace("%ABOUT_MATH%", LangManager.getItem("about_math", language));
 	}
 	
 }
