@@ -112,7 +112,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 				}
 			}
 		} else {
-			editorInstance.stamps[editorInstance.selectedStamp].render(g, editorInstance.input);
+			editorInstance.stamps[editorInstance.selectedStamp].render(g, editorInstance.input, true);
 		}
 
 		editorInstance.repaint();

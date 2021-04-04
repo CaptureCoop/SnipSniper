@@ -18,6 +18,8 @@ public class CircleStamp implements IStamp{
     private int speedHeight;
     private int speed;
 
+    private int count = 1;
+
     public CircleStamp(Config cfg) {
         width = cfg.getInt("editorStampCircleWidth");
         height = cfg.getInt("editorStampCircleHeight");
@@ -75,7 +77,7 @@ public class CircleStamp implements IStamp{
 
     }
 
-    public void render(Graphics g, InputContainer input) {
+    public void render(Graphics g, InputContainer input, boolean isSaveRender) {
         Graphics2D g2 = (Graphics2D) g;
         Stroke oldStroke = g2.getStroke();
         g2.setStroke(new BasicStroke(thickness));

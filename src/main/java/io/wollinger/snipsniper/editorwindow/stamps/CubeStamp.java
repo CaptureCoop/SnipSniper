@@ -67,7 +67,7 @@ public class CubeStamp implements IStamp{
         }
     }
 
-    public void render(Graphics g, InputContainer input) {
+    public void render(Graphics g, InputContainer input, boolean isSaveRender) {
         g.fillRect(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
     }
 

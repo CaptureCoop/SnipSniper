@@ -22,7 +22,7 @@ public class EditorWindowRender extends JPanel{
 		g.drawImage(editorWnd.img, 0,0,this.getWidth(),this.getHeight(),this);
 		g.drawImage(editorWnd.overdraw, 0,0,this.getWidth(),this.getHeight(),this);
 		g.setColor(editorWnd.currentColor.c);
-		editorWnd.stamps[editorWnd.selectedStamp].render(g, editorWnd.input);
+		editorWnd.stamps[editorWnd.selectedStamp].render(g, editorWnd.input, false);
 	}
 	
 }
