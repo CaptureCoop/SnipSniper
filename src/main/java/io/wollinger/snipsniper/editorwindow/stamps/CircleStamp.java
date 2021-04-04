@@ -20,6 +20,7 @@ public class CircleStamp implements IStamp{
 
     private float fontSizeModifier;
     private int count = 1;
+    private boolean solidColor;
 
     public CircleStamp(Config cfg) {
         width = cfg.getInt("editorStampCircleWidth");
@@ -32,6 +33,7 @@ public class CircleStamp implements IStamp{
         speedHeight = cfg.getInt("editorStampCircleHeightSpeed");
         speed = cfg.getInt("editorStampCircleSpeed");
         fontSizeModifier = cfg.getFloat("editorStampCircleFontSizeModifier");
+        solidColor = cfg.getBool("editorStampCircleSolidColor");
     }
 
     @Override
@@ -70,7 +72,12 @@ public class CircleStamp implements IStamp{
     }
 
     public void render(Graphics g, InputContainer input, boolean isSaveRender) {
+        Color oldFillColor = g.getColor();
+        if(solidColor) {
+            g.setColor(new Color(oldFillColor.getRed(), oldFillColor.getGreen(), oldFillColor.getBlue(), 255));
+        }
         g.fillOval(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
+        g.setColor(oldFillColor);
 
         Color oldColor = g.getColor();
         g.setColor(Color.BLACK);
