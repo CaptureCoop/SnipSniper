@@ -25,14 +25,14 @@ editorStampCubeHeightMinimum=20
 editorStampCubeWidthSpeed=20
 editorStampCubeHeightSpeed=20
 
-editorStampCircleWidth=40
-editorStampCircleHeight=40
-editorStampCircleWidthMinimum=10
-editorStampCircleHeightMinimum=10
-editorStampCircleSpeed=20
-editorStampCircleWidthSpeed=20
-editorStampCircleHeightSpeed=20
-editorStampCircleSolidColor=true
-editorStampCircleFontSizeModifier=1.25
+editorStampCounterWidth=40
+editorStampCounterHeight=40
+editorStampCounterWidthMinimum=10
+editorStampCounterHeightMinimum=10
+editorStampCounterSpeed=20
+editorStampCounterWidthSpeed=20
+editorStampCounterHeightSpeed=20
+editorStampCounterSolidColor=true
+editorStampCounterFontSizeModifier=1.25
 
 smartPixel=true

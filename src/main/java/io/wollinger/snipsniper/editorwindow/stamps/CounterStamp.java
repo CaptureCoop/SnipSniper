@@ -6,7 +6,7 @@ import io.wollinger.snipsniper.utils.InputContainer;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class CircleStamp implements IStamp{
+public class CounterStamp implements IStamp{
     private int width;
     private int height;
     private int thickness;
@@ -22,18 +22,18 @@ public class CircleStamp implements IStamp{
     private int count = 1;
     private final boolean solidColor;
 
-    public CircleStamp(Config cfg) {
-        width = cfg.getInt("editorStampCircleWidth");
-        height = cfg.getInt("editorStampCircleHeight");
+    public CounterStamp(Config cfg) {
+        width = cfg.getInt("editorStampCounterWidth");
+        height = cfg.getInt("editorStampCounterHeight");
 
-        minimumWidth = cfg.getInt("editorStampCircleWidthMinimum");
-        minimumHeight = cfg.getInt("editorStampCircleHeightMinimum");
+        minimumWidth = cfg.getInt("editorStampCounterWidthMinimum");
+        minimumHeight = cfg.getInt("editorStampCounterHeightMinimum");
 
-        speedWidth = cfg.getInt("editorStampCircleWidthSpeed");
-        speedHeight = cfg.getInt("editorStampCircleHeightSpeed");
-        speed = cfg.getInt("editorStampCircleSpeed");
-        fontSizeModifier = cfg.getFloat("editorStampCircleFontSizeModifier");
-        solidColor = cfg.getBool("editorStampCircleSolidColor");
+        speedWidth = cfg.getInt("editorStampCounterWidthSpeed");
+        speedHeight = cfg.getInt("editorStampCounterHeightSpeed");
+        speed = cfg.getInt("editorStampCounterSpeed");
+        fontSizeModifier = cfg.getFloat("editorStampCounterFontSizeModifier");
+        solidColor = cfg.getBool("editorStampCounterSolidColor");
     }
 
     @Override
