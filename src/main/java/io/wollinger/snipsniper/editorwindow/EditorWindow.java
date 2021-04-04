@@ -16,15 +16,15 @@ import io.wollinger.snipsniper.utils.PBRColor;
 
 public class EditorWindow extends JFrame{
 	private static final long serialVersionUID = -7363672331227971815L;
+
+	private BufferedImage img;
+	private BufferedImage overdraw;
+	private Sniper sniperInstance;
+	private EditorWindowRender renderer;
+	private EditorListener listener;
 	
-	BufferedImage img;
-	BufferedImage overdraw;
-	Sniper sniperInstance;
-	EditorWindowRender renderer;
-	EditorListener listener;
-	
-	PBRColor currentColor = new PBRColor(255,255,0,150);
-	Color censorColor = Color.BLACK;
+	private PBRColor currentColor = new PBRColor(255,255,0,150);
+	private Color censorColor = Color.BLACK;
 	
 	final static int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
 
@@ -50,7 +50,7 @@ public class EditorWindow extends JFrame{
 		this.inClipboard = inClipboard;
 		this.title = _title;
 
-		stamps[0] = new CubeStamp(_sInstance.cfg);
+		stamps[0] = new CubeStamp(this);
 		stamps[1] = new CircleStamp(_sInstance.cfg);
 
 		refreshTitle();
@@ -113,6 +113,10 @@ public class EditorWindow extends JFrame{
 		return null;
 	}
 
+	public void setColor(PBRColor color) {
+		currentColor = color;
+	}
+
 	public void setMode(EditorWindow.MODE mode) {
 		this.mode = mode;
 	}
@@ -120,5 +124,25 @@ public class EditorWindow extends JFrame{
 	public EditorWindow.MODE getMode() {
 		return mode;
 	}
-	
+
+	public Sniper getSniperInstance() {
+		return sniperInstance;
+	}
+
+	public BufferedImage getImage() {
+		return img;
+	}
+
+	public BufferedImage getOverdraw() {
+		return overdraw;
+	}
+
+	public PBRColor getColor() {
+		return currentColor;
+	}
+
+	public Color getCensorColor() {
+		return censorColor;
+	}
+
 }

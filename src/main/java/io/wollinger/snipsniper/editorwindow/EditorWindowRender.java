@@ -15,13 +15,13 @@ public class EditorWindowRender extends JPanel{
 	
 	public EditorWindowRender(EditorWindow _wnd) {
 		editorWnd = _wnd;
-		this.setPreferredSize(new Dimension(_wnd.img.getWidth(), _wnd.img.getHeight()));
+		this.setPreferredSize(new Dimension(_wnd.getImage().getWidth(), _wnd.getImage().getHeight()));
 	}
 
 	public void paint(Graphics g) {
-		g.drawImage(editorWnd.img, 0,0,this.getWidth(),this.getHeight(),this);
-		g.drawImage(editorWnd.overdraw, 0,0,this.getWidth(),this.getHeight(),this);
-		g.setColor(editorWnd.currentColor.c);
+		g.drawImage(editorWnd.getImage(), 0,0,this.getWidth(),this.getHeight(),this);
+		g.drawImage(editorWnd.getOverdraw(), 0,0,this.getWidth(),this.getHeight(),this);
+		g.setColor(editorWnd.getColor().c);
 		editorWnd.stamps[editorWnd.selectedStamp].render(g, editorWnd.input, false);
 	}
 	

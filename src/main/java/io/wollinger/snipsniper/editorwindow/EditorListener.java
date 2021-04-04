@@ -61,10 +61,10 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			lastPoint = new Vector2Int(arg0.getPoint().getX() + (float) brushSize.x / 2, arg0.getPoint().getY() + (float) brushSize.y / 2);
 
 			if(arg0.getButton() == 1)
-				save(editorInstance.currentColor.c, editorInstance.overdraw.getGraphics(), false);
+				save(editorInstance.getColor().c, editorInstance.getOverdraw().getGraphics(), false);
 			else if(arg0.getButton() == 2) {
-				save(editorInstance.censorColor, editorInstance.img.getGraphics(), true);
-				save(editorInstance.censorColor, editorInstance.overdraw.getGraphics(), true);
+				save(editorInstance.getCensorColor(), editorInstance.getImage().getGraphics(), true);
+				save(editorInstance.getCensorColor(), editorInstance.getOverdraw().getGraphics(), true);
 			}
 
 			startPoint = null;
@@ -127,7 +127,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		if(input.isKeyPressed(KeyEvent.VK_V)) {
 			final Color hsvColor = Color.getHSBColor(currentHSV, 1, 1);
 
-			editorInstance.currentColor = new PBRColor(hsvColor.getRed(), hsvColor.getGreen(), hsvColor.getBlue(), editorInstance.currentColor.c.getAlpha());
+			editorInstance.setColor(new PBRColor(hsvColor.getRed(), hsvColor.getGreen(), hsvColor.getBlue(), editorInstance.getColor().c.getAlpha()));
 			if(arg0.getWheelRotation() == 1)
 				currentHSV += 0.01F;
 			else if(arg0.getWheelRotation() == -1)
@@ -147,7 +147,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.input.setKey(arg0.getKeyCode(), true);
 
 		if(arg0.getKeyCode() == KeyEvent.VK_C)
-			new ColorChooser("Marker Color", editorInstance.currentColor);
+			new ColorChooser("Marker Color", editorInstance.getColor());
 
 		if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();
