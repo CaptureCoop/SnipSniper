@@ -1,0 +1,14 @@
+{
+  "language": "de",
+  "strings": {
+    "menu_open_image_folder": "Screenshot Ordner öffnen",
+    "menu_config": "Einstellungen",
+    "menu_create_profile": "Profil erstellen",
+    "menu_remove_profile": "Profil löschen",
+    "menu_about": "Über",
+    "menu_quit": "Beenden",
+    "about_programming": "Programmierung",
+    "about_cd": "Kreativdirektor",
+    "about_math": "Mathematik"
+  }
+}

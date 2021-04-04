@@ -1,0 +1,14 @@
+{
+  "language": "en",
+  "strings": {
+    "menu_open_image_folder": "Open image folder",
+    "menu_config": "Config",
+    "menu_create_profile": "Create profile",
+    "menu_remove_profile": "Remove profile",
+    "menu_about": "About",
+    "menu_quit": "Quit",
+    "about_programming": "Programming",
+    "about_cd": "Creative directory",
+    "about_math": "Math"
+  }
+}
