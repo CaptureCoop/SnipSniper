@@ -9,8 +9,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import io.wollinger.snipsniper.Config;
-import io.wollinger.snipsniper.editorwindow.stamps.CubeStamp;
 import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
 import io.wollinger.snipsniper.utils.ColorChooser;
 import io.wollinger.snipsniper.utils.InputContainer;
@@ -59,10 +57,10 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			lastPoint = new Vector2Int(arg0.getPoint().getX() + (float) brushSize.x / 2, arg0.getPoint().getY() + (float) brushSize.y / 2);
 
 			if(arg0.getButton() == 1)
-				save(editorInstance.getColor().c, editorInstance.getOverdraw().getGraphics(), false);
+				save(editorInstance.getColor().c, editorInstance.getOverdraw().getGraphics());
 			else if(arg0.getButton() == 2) {
-				save(editorInstance.getCensorColor(), editorInstance.getImage().getGraphics(), true);
-				save(editorInstance.getCensorColor(), editorInstance.getOverdraw().getGraphics(), true);
+				save(editorInstance.getCensorColor(), editorInstance.getImage().getGraphics());
+				save(editorInstance.getCensorColor(), editorInstance.getOverdraw().getGraphics());
 			}
 
 			startPoint = null;
@@ -85,7 +83,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.repaint();
 	}
 
-	public void save(Color color, Graphics g, boolean fast) {
+	public void save(Color color, Graphics g) {
 		g.setColor(color);
 		editorInstance.stamps[editorInstance.selectedStamp].render(g, editorInstance.input, true);
 		editorInstance.repaint();
