@@ -31,5 +31,7 @@ editorStampCircleHeightMinimum=10
 editorStampCircleSpeed=20
 editorStampCircleWidthSpeed=20
 editorStampCircleHeightSpeed=20
+editorStampCircleSolidColor=true
+editorStampCircleFontSizeModifier=1.25
 
 smartPixel=true

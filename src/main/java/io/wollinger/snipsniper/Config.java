@@ -81,6 +81,12 @@ public class Config {
 			return Integer.parseInt(getString(_key));
 		return -1;
 	}
+
+	public float getFloat(String _key) {
+		if(getString(_key) != null)
+			return Float.parseFloat(getString(_key));
+		return -1F;
+	}
 	
 	public boolean getBool(String _key) {
 		if(getString(_key) != null)

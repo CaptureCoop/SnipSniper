@@ -6,21 +6,23 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
+import io.wollinger.snipsniper.editorwindow.stamps.CircleStamp;
+import io.wollinger.snipsniper.editorwindow.stamps.CubeStamp;
+import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
+import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 
 public class EditorWindow extends JFrame{
 	private static final long serialVersionUID = -7363672331227971815L;
-	
-	BufferedImage img;
-	BufferedImage overdraw;
-	Sniper sniperInstance;
-	EditorWindowRender renderer;
-	EditorListener listener;
-	
-	PBRColor currentColor = new PBRColor(255,255,0,150);
-	Color censorColor = Color.BLACK;
+
+	private BufferedImage img;
+	private BufferedImage overdraw;
+	private Sniper sniperInstance;
+
+	private PBRColor currentColor = new PBRColor(255,255,0,150);
+	private Color censorColor = Color.BLACK;
 	
 	final static int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
 
@@ -28,9 +30,10 @@ public class EditorWindow extends JFrame{
 	private String saveLocation;
 	private boolean inClipboard;
 
-	//TODO: Fix modes & make them modular
-	private MODE mode = MODE.CUBE;
-	public static enum MODE {CUBE, CIRCLE}
+	public IStamp[] stamps = new IStamp[2];
+	public int selectedStamp = 0;
+
+	InputContainer input = new InputContainer();
 
 	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight, String saveLocation, boolean inClipboard) {
 		img = _img;
@@ -41,6 +44,9 @@ public class EditorWindow extends JFrame{
 		this.inClipboard = inClipboard;
 		this.title = _title;
 
+		stamps[0] = new CubeStamp(this);
+		stamps[1] = new CircleStamp(_sInstance.cfg);
+
 		refreshTitle();
 
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -49,10 +55,9 @@ public class EditorWindow extends JFrame{
 		this.setVisible(true);
 		int barSize = this.getHeight() - this.getInsets().bottom;
 
-		listener = new EditorListener(this);
-		
-		renderer = new EditorWindowRender(this);
-		
+		EditorListener listener = new EditorListener(this);
+
+		EditorWindowRender renderer = new EditorWindowRender(this);
 		renderer.addMouseListener(listener);
 		renderer.addMouseMotionListener(listener);
 		renderer.addMouseWheelListener(listener);
@@ -90,23 +95,32 @@ public class EditorWindow extends JFrame{
 	
 	public void kill() {
 		img = null;
+		overdraw = null;
 		this.dispose();
 	}
 
-	public String modeToString(EditorWindow.MODE mode) {
-		if(mode == EditorWindow.MODE.CUBE)
-			return "Cube";
-		else if(mode == EditorWindow.MODE.CIRCLE)
-			return "Circle";
-		return null;
+	public void setColor(PBRColor color) {
+		currentColor = color;
 	}
 
-	public void setMode(EditorWindow.MODE mode) {
-		this.mode = mode;
+	public Sniper getSniperInstance() {
+		return sniperInstance;
 	}
 
-	public EditorWindow.MODE getMode() {
-		return mode;
+	public BufferedImage getImage() {
+		return img;
 	}
-	
+
+	public BufferedImage getOverdraw() {
+		return overdraw;
+	}
+
+	public PBRColor getColor() {
+		return currentColor;
+	}
+
+	public Color getCensorColor() {
+		return censorColor;
+	}
+
 }

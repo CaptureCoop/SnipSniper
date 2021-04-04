@@ -5,36 +5,21 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import io.wollinger.snipsniper.utils.Vector2Int;
-
 public class EditorWindowRender extends JPanel{
 	private static final long serialVersionUID = 4283800435207434147L;
 	
-	EditorWindow editorWnd;
+	private final EditorWindow editorWnd;
 	
 	public EditorWindowRender(EditorWindow _wnd) {
 		editorWnd = _wnd;
-		this.setPreferredSize(new Dimension(_wnd.img.getWidth(), _wnd.img.getHeight()));
+		this.setPreferredSize(new Dimension(_wnd.getImage().getWidth(), _wnd.getImage().getHeight()));
 	}
 
-	//TODO: Fix modes & make them modular
 	public void paint(Graphics g) {
-		g.drawImage(editorWnd.img, 0,0,this.getWidth(),this.getHeight(),this);
-		g.drawImage(editorWnd.overdraw, 0,0,this.getWidth(),this.getHeight(),this);
-		g.setColor(editorWnd.currentColor.c);
-
-		Vector2Int mousePos = editorWnd.listener.mousePos;
-
-		if(mousePos != null) {
-			String type = editorWnd.modeToString(editorWnd.getMode());
-			Vector2Int brushSize = new Vector2Int(editorWnd.sniperInstance.cfg.getInt("editorStamp" + type + "Width"), editorWnd.sniperInstance.cfg.getInt("editorStamp" + type + "Height"));
-
-			if(editorWnd.getMode() == EditorWindow.MODE.CUBE) {
-				g.fillRect(mousePos.x - brushSize.x / 2, mousePos.y - brushSize.y / 2, brushSize.x, brushSize.y);
-			} else if(editorWnd.getMode() == EditorWindow.MODE.CIRCLE) {
-				g.drawOval(mousePos.x - brushSize.x / 2, mousePos.y - brushSize.y / 2, brushSize.x, brushSize.y);
-			}
-		}
+		g.drawImage(editorWnd.getImage(), 0,0,this.getWidth(),this.getHeight(),this);
+		g.drawImage(editorWnd.getOverdraw(), 0,0,this.getWidth(),this.getHeight(),this);
+		g.setColor(editorWnd.getColor().c);
+		editorWnd.stamps[editorWnd.selectedStamp].render(g, editorWnd.input, false, false);
 	}
 	
 }
