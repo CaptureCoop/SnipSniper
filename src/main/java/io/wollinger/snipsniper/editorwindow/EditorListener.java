@@ -130,7 +130,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
 		InputContainer input = editorInstance.input;
-		editorInstance.stamps[editorInstance.selectedStamp].updateSize(input, arg0.getWheelRotation());
 
 		if(input.isKeyPressed(KeyEvent.VK_V)) {
 			final Color hsvColor = Color.getHSBColor(currentHSV, 1, 1);
@@ -144,6 +143,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			editorInstance.repaint();
 			return;
 		}
+
+		editorInstance.stamps[editorInstance.selectedStamp].updateSize(input, arg0.getWheelRotation());
 
 		editorInstance.repaint();
 	}
