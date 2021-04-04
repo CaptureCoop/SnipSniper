@@ -1,12 +1,14 @@
 package io.wollinger.snipsniper.utils;
 
+import io.wollinger.snipsniper.Main;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class Utils {
 	
@@ -76,5 +78,19 @@ public class Utils {
 	    Graphics g = b.getGraphics();
 	    g.drawImage(source, 0, 0, source.getWidth(), source.getHeight(), null);
 	    return b;
+	}
+
+	public static String loadFileFromJar(String file) throws IOException {
+		String content = "";
+		InputStream inputStream = ClassLoader.getSystemClassLoader().getSystemResourceAsStream(file);
+		InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+		BufferedReader in = new BufferedReader(streamReader);
+
+		for (String line; (line = in.readLine()) != null;)
+			content += line;
+
+		inputStream.close();
+		streamReader.close();
+		return content;
 	}
 }

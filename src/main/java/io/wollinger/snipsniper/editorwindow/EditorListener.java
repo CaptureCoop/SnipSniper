@@ -64,9 +64,12 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	}
 
 	public void save(Color color, Graphics g, boolean isCensor) {
-		g.setColor(color);
-		editorInstance.stamps[editorInstance.selectedStamp].render(g, editorInstance.input, true, isCensor);
+		Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHints(editorInstance.getQualityHints());
+		g2.setColor(color);
+		editorInstance.stamps[editorInstance.selectedStamp].render(g2, editorInstance.input, true, isCensor);
 		editorInstance.repaint();
+		g2.dispose();
 		g.dispose();
 	}
 
