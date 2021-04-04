@@ -71,7 +71,7 @@ public class CircleStamp implements IStamp{
         }
     }
 
-    public void render(Graphics g, InputContainer input, boolean isSaveRender) {
+    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor) {
         Color oldFillColor = g.getColor();
         if(solidColor) {
             g.setColor(new Color(oldFillColor.getRed(), oldFillColor.getGreen(), oldFillColor.getBlue(), 255));
@@ -88,7 +88,7 @@ public class CircleStamp implements IStamp{
         g.drawString("" + count, input.getMouseX()-w/2, input.getMouseY()+h/3);
         g.setColor(oldColor);
 
-        if(isSaveRender)
+        if(isSaveRender && !isCensor)
             count++;
     }
 

@@ -71,8 +71,8 @@ public class CubeStamp implements IStamp{
         }
     }
 
-    public void render(Graphics g, InputContainer input, boolean isSaveRender) {
-        if(editor.getSniperInstance().cfg.getBool("smartPixel") && isSaveRender) {
+    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor) {
+        if(editor.getSniperInstance().cfg.getBool("smartPixel") && isSaveRender && !isCensor) {
             Vector2Int pos = new Vector2Int(input.getMouseX()+width/2, input.getMouseY()+height/2);
             Vector2Int size = new Vector2Int(-width, -height);
 
