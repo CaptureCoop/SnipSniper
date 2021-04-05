@@ -23,6 +23,14 @@ public class InputContainer {
         return keys[keyCode];
     }
 
+    public boolean areKeysPressed(int... keyCodes) {
+        for(int n : keyCodes) {
+            if(!keys[n])
+                return false;
+        }
+        return true;
+    }
+
     public int getMouseWheelDirection() {
         return mouseWheelDirection;
     }
