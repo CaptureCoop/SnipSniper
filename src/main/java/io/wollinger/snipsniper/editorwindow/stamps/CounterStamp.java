@@ -101,7 +101,9 @@ public class CounterStamp implements IStamp{
     @Override
     public void editorUndo(int historyPoint) {
         if(historyPoints.contains(historyPoint)) {
-            historyPoints.remove(historyPoint-1);
+            for(int i = 0; i < historyPoints.size(); i++)
+                if(historyPoints.get(i) == historyPoint)
+                    historyPoints.remove(i);
             if (count > 1)
                 count--;
         }
