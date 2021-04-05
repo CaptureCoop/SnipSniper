@@ -107,6 +107,10 @@ public class EditorWindow extends JFrame{
 		currentColor = color;
 	}
 
+	public void setImage(BufferedImage image) {
+		this.img = image;
+	}
+
 	public Sniper getSniperInstance() {
 		return sniperInstance;
 	}

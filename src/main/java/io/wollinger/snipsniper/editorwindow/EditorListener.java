@@ -8,17 +8,23 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import io.wollinger.snipsniper.utils.ColorChooser;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.Utils;
 
 public class EditorListener implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
 	
 	EditorWindow editorInstance;
 
+	ArrayList<BufferedImage> history = new ArrayList<>();
+
 	public EditorListener(EditorWindow _editWnd) {
 		editorInstance = _editWnd;
+		history.add(Utils.copyImage(editorInstance.getImage()));
 	}
 	
 	@Override
@@ -70,6 +76,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.repaint();
 		g2.dispose();
 		g.dispose();
+		history.add(Utils.copyImage(editorInstance.getImage()));
 	}
 
 	float currentHSV;
@@ -114,6 +121,16 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		if(arg0.getKeyCode() == KeyEvent.VK_S) {
 			editorInstance.saveImage();
 			editorInstance.kill();
+		}
+
+		if(editorInstance.input.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_Z)) {
+			int size = history.size();
+			if(size > 1) {
+				size--;
+				history.remove(size);
+				size--;
+				editorInstance.setImage(Utils.copyImage(history.get(size)));
+			}
 		}
 
 		editorInstance.stamps[editorInstance.selectedStamp].updateSize(editorInstance.input, 0);
