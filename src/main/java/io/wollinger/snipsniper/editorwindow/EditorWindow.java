@@ -19,7 +19,6 @@ public class EditorWindow extends JFrame{
 	private static final long serialVersionUID = -7363672331227971815L;
 
 	private BufferedImage img;
-	private BufferedImage overdraw;
 	private final Sniper sniperInstance;
 
 	private PBRColor currentColor = new PBRColor(255,255,0,150);
@@ -41,7 +40,6 @@ public class EditorWindow extends JFrame{
 	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight, String saveLocation, boolean inClipboard) {
 		img = _img;
 		sniperInstance = _sInstance;
-		overdraw = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		this.saveLocation = saveLocation;
 		this.inClipboard = inClipboard;
@@ -94,7 +92,6 @@ public class EditorWindow extends JFrame{
 		BufferedImage finalImg = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = finalImg.getGraphics();
 		g.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), this);
-		g.drawImage(overdraw, 0, 0, img.getWidth(), img.getHeight(), this);
 		g.dispose();
 		sniperInstance.saveImage(finalImg, "_edited");
 		if(sniperInstance.cfg.getBool("copyToClipboard"))
@@ -103,7 +100,6 @@ public class EditorWindow extends JFrame{
 	
 	public void kill() {
 		img = null;
-		overdraw = null;
 		this.dispose();
 	}
 
@@ -117,10 +113,6 @@ public class EditorWindow extends JFrame{
 
 	public BufferedImage getImage() {
 		return img;
-	}
-
-	public BufferedImage getOverdraw() {
-		return overdraw;
 	}
 
 	public PBRColor getColor() {

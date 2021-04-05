@@ -42,11 +42,10 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		if(arg0.getButton() == 1)
-			save(editorInstance.getColor().c, editorInstance.getOverdraw().getGraphics(), false);
-		else if(arg0.getButton() == 2) {
+		if(arg0.getButton() == 1) {
+			save(editorInstance.getColor().c, editorInstance.getImage().getGraphics(), false);
+		}else if(arg0.getButton() == 2) {
 			save(editorInstance.getCensorColor(), editorInstance.getImage().getGraphics(), true);
-			save(editorInstance.getCensorColor(), editorInstance.getOverdraw().getGraphics(), true);
 		}
 		editorInstance.repaint();
 	}

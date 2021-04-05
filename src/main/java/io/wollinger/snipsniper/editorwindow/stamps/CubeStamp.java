@@ -80,7 +80,7 @@ public class CubeStamp implements IStamp{
                 for (int x = 0; x < -size.x; x++) {
                     int posX = pos.x - x;
                     int posY = pos.y - y;
-                    if(posX >= 0 && posY >= 0 && posX < editor.getOverdraw().getWidth() && posY < editor.getOverdraw().getHeight()) {
+                    if(posX >= 0 && posY >= 0 && posX < editor.getImage().getWidth() && posY < editor.getImage().getHeight()) {
                         Color c = new Color(editor.getImage().getRGB(posX, posY));
                         int total = c.getRed() + c.getGreen() + c.getBlue();
                         int alpha = (int)((205F/765F) * total + 25);
