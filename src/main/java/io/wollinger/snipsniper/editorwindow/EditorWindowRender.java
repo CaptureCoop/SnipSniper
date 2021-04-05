@@ -19,7 +19,7 @@ public class EditorWindowRender extends JPanel{
 		g2.setRenderingHints(editorWnd.getQualityHints());
 		g2.drawImage(editorWnd.getImage(), 0,0,this.getWidth(),this.getHeight(),this);
 		g2.setColor(editorWnd.getColor().c);
-		editorWnd.stamps[editorWnd.selectedStamp].render(g2, editorWnd.input, false, false);
+		editorWnd.stamps[editorWnd.selectedStamp].render(g2, editorWnd.input, false, false, -1);
 		g2.dispose();
 	}
 	

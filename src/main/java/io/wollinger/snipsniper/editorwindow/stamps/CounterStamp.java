@@ -5,6 +5,7 @@ import io.wollinger.snipsniper.utils.InputContainer;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class CounterStamp implements IStamp{
     private int width;
@@ -21,6 +22,8 @@ public class CounterStamp implements IStamp{
     private final float fontSizeModifier;
     private int count = 1;
     private final boolean solidColor;
+
+    private ArrayList<Integer> historyPoints = new ArrayList<>();
 
     public CounterStamp(Config cfg) {
         width = cfg.getInt("editorStampCounterWidth");
@@ -71,7 +74,10 @@ public class CounterStamp implements IStamp{
         }
     }
 
-    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor) {
+    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+        if(isSaveRender && historyPoint != -1 && !isCensor) {
+            historyPoints.add(historyPoint);
+        }
         Color oldFillColor = g.getColor();
         if(solidColor) {
             g.setColor(new Color(oldFillColor.getRed(), oldFillColor.getGreen(), oldFillColor.getBlue(), 255));
@@ -90,6 +96,15 @@ public class CounterStamp implements IStamp{
 
         if(isSaveRender && !isCensor)
             count++;
+    }
+
+    @Override
+    public void editorUndo(int historyPoint) {
+        if(historyPoints.contains(historyPoint)) {
+            historyPoints.remove(historyPoint-1);
+            if (count > 1)
+                count--;
+        }
     }
 
     @Override

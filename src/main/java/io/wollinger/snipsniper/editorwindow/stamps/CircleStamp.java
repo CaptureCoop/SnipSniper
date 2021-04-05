@@ -80,13 +80,19 @@ public class CircleStamp implements IStamp{
         }
     }
 
-    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor) {
+    @Override
+    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
         Graphics2D g2 = (Graphics2D)g;
         Stroke oldStroke = g2.getStroke();
         g2.setStroke(new BasicStroke(thickness));
         g.drawOval(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
         g2.setStroke(oldStroke);
         g2.dispose();
+    }
+
+    @Override
+    public void editorUndo(int historyPoint) {
+
     }
 
     @Override

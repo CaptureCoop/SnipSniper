@@ -6,7 +6,8 @@ import java.awt.*;
 
 public interface IStamp {
     void updateSize(InputContainer input, int mouseWheelDirection);
-    void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor);
+    void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint);
+    void editorUndo(int historyPoint);
 
     int getWidth();
     int getHeight();

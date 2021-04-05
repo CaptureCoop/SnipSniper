@@ -11,6 +11,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
 import io.wollinger.snipsniper.utils.ColorChooser;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
@@ -72,7 +73,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHints(editorInstance.getQualityHints());
 		g2.setColor(color);
-		editorInstance.stamps[editorInstance.selectedStamp].render(g2, editorInstance.input, true, isCensor);
+		editorInstance.stamps[editorInstance.selectedStamp].render(g2, editorInstance.input, true, isCensor, history.size());
 		editorInstance.repaint();
 		g2.dispose();
 		g.dispose();
@@ -130,6 +131,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 				history.remove(size);
 				size--;
 				editorInstance.setImage(Utils.copyImage(history.get(size)));
+				for(IStamp stamp : editorInstance.stamps)
+					stamp.editorUndo(history.size());
 			}
 		}
 
