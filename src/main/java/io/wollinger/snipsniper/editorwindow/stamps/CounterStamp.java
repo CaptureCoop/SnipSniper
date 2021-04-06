@@ -9,6 +9,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class CounterStamp implements IStamp{
+    private final Config cfg;
+
     private int width;
     private int height;
     private int thickness;
@@ -29,6 +31,7 @@ public class CounterStamp implements IStamp{
     private ArrayList<Integer> historyPoints = new ArrayList<>();
 
     public CounterStamp(Config cfg) {
+        this.cfg = cfg;
         width = cfg.getInt("editorStampCounterWidth");
         height = cfg.getInt("editorStampCounterHeight");
 
@@ -81,21 +84,35 @@ public class CounterStamp implements IStamp{
         if(isSaveRender && historyPoint != -1 && !isCensor) {
             historyPoints.add(historyPoint);
         }
+        final int x = input.getMouseX() - width / 2;
+        final int y = input.getMouseY() - height / 2;
+
         Color oldFillColor = g.getColor();
         if(solidColor) {
             g.setColor(new Color(oldFillColor.getRed(), oldFillColor.getGreen(), oldFillColor.getBlue(), 255));
         }
-        g.fillOval(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
+        g.fillOval(x, y, width, height);
         g.setColor(oldFillColor);
 
         Color oldColor = g.getColor();
         g.setColor(Color.BLACK);
-
         int h = (int)(height/fontSizeModifier);
         g.setFont(new Font("TimesRoman", Font.PLAIN, h));
         int w = g.getFontMetrics().stringWidth(""+count);
         g.drawString("" + count, input.getMouseX()-w/2, input.getMouseY()+h/3);
         g.setColor(oldColor);
+
+        if(cfg.getBool("editorStampCounterBorderEnabled")) {
+            oldColor = g.getColor();
+            g.setColor(Color.BLACK);
+            Graphics2D g2 = (Graphics2D) g;
+            Stroke oldStroke = g2.getStroke();
+            g2.setStroke(new BasicStroke(height / cfg.getInt("editorStampCounterBorderModifier")));
+            g2.drawOval(x, y, width, height);
+            g2.setStroke(oldStroke);
+            g2.dispose();
+            g.setColor(oldColor);
+        }
 
         if(isSaveRender && !isCensor)
             count++;
