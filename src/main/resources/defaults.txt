@@ -19,6 +19,7 @@ maxFPS=60
 
 <--- Editor Settings --->
 smartPixel=true
+hsvColorSwitchSpeed=0.02
 
 <--- Editor Stamp Settings --->
 editorStampCubeWidth=75

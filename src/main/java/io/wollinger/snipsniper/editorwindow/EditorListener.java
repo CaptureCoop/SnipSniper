@@ -91,10 +91,11 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			float[] hsv = new float[3];
 			Color.RGBtoHSB(oldColor.getRed(),oldColor.getGreen(),oldColor.getBlue(),hsv);
 
+			float speed = editorInstance.getSniperInstance().cfg.getFloat("hsvColorSwitchSpeed");
 			if(arg0.getWheelRotation() == 1)
-				hsv[0] += 0.01F;
+				hsv[0] += speed;
 			else if(arg0.getWheelRotation() == -1)
-				hsv[0] -= 0.01F;
+				hsv[0] -= speed;
 
 			Color newColor = Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
 			stamp.setColor(new PBRColor(newColor.getRed(), newColor.getGreen(), newColor.getBlue(), alpha));
