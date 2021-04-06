@@ -22,7 +22,7 @@ public class CubeStamp implements IStamp{
     private final int speedHeight;
     private final int speed;
 
-    private PBRColor color = new PBRColor(Color.RED);
+    private PBRColor color = new PBRColor(Color.YELLOW);
 
     public CubeStamp(EditorWindow editor) {
         this.editor = editor;

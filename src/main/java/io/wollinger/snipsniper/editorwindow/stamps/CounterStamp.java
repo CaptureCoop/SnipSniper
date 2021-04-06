@@ -20,7 +20,7 @@ public class CounterStamp implements IStamp{
     private final int speedHeight;
     private final int speed;
 
-    private PBRColor color = new PBRColor(Color.YELLOW);
+    private PBRColor color = new PBRColor(175, 254, 0, 255);
 
     private final float fontSizeModifier;
     private int count = 1;
