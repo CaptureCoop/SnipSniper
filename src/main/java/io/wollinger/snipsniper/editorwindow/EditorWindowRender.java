@@ -1,5 +1,7 @@
 package io.wollinger.snipsniper.editorwindow;
 
+import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
+
 import java.awt.*;
 
 import javax.swing.JPanel;
@@ -18,8 +20,9 @@ public class EditorWindowRender extends JPanel{
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHints(editorWnd.getQualityHints());
 		g2.drawImage(editorWnd.getImage(), 0,0,this.getWidth(),this.getHeight(),this);
-		g2.setColor(editorWnd.getColor().c);
-		editorWnd.stamps[editorWnd.selectedStamp].render(g2, editorWnd.input, false, false, -1);
+		IStamp stamp = editorWnd.stamps[editorWnd.selectedStamp];
+		g2.setColor(stamp.getColor().c);
+		stamp.render(g2, editorWnd.input, false, false, -1);
 		g2.dispose();
 	}
 	

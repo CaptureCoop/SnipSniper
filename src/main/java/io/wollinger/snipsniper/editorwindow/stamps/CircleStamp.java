@@ -2,6 +2,7 @@ package io.wollinger.snipsniper.editorwindow.stamps;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.InputContainer;
+import io.wollinger.snipsniper.utils.PBRColor;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -17,6 +18,8 @@ public class CircleStamp implements IStamp{
     private final int speedWidth;
     private final int speedHeight;
     private final int speed;
+
+    private PBRColor color = new PBRColor(Color.PINK);
 
     public CircleStamp(Config cfg) {
         width = cfg.getInt("editorStampCircleWidth");
@@ -133,5 +136,15 @@ public class CircleStamp implements IStamp{
     @Override
     public int getThickness() {
         return thickness;
+    }
+
+    @Override
+    public void setColor(PBRColor color) {
+        this.color = color;
+    }
+
+    @Override
+    public PBRColor getColor() {
+        return color;
     }
 }

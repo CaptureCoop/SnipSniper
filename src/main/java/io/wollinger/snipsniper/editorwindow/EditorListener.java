@@ -50,7 +50,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		if(arg0.getButton() == 1) {
-			save(editorInstance.getColor().c, editorInstance.getImage().getGraphics(), false);
+			save(editorInstance.stamps[editorInstance.selectedStamp].getColor().c, editorInstance.getImage().getGraphics(), false);
 		}else if(arg0.getButton() == 2) {
 			save(editorInstance.getCensorColor(), editorInstance.getImage().getGraphics(), true);
 		}
@@ -87,7 +87,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 		if(input.isKeyPressed(KeyEvent.VK_ALT)) {
 			final Color hsvColor = Color.getHSBColor(currentHSV, 1, 1);
-			editorInstance.setColor(new PBRColor(hsvColor.getRed(), hsvColor.getGreen(), hsvColor.getBlue(), editorInstance.getColor().c.getAlpha()));
+			IStamp stamp = editorInstance.stamps[editorInstance.selectedStamp];
+			stamp.setColor(new PBRColor(hsvColor.getRed(), hsvColor.getGreen(), hsvColor.getBlue(), stamp.getColor().c.getAlpha()));
 			if(arg0.getWheelRotation() == 1)
 				currentHSV += 0.01F;
 			else if(arg0.getWheelRotation() == -1)
@@ -107,7 +108,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.input.setKey(arg0.getKeyCode(), true);
 
 		if(arg0.getKeyCode() == KeyEvent.VK_C)
-			new ColorChooser("Marker Color", editorInstance.getColor());
+			new ColorChooser("Marker Color", editorInstance.stamps[editorInstance.selectedStamp].getColor());
 
 		if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();

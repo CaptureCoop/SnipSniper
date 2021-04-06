@@ -21,7 +21,6 @@ public class EditorWindow extends JFrame{
 	private BufferedImage img;
 	private final Sniper sniperInstance;
 
-	private PBRColor currentColor = new PBRColor(255,255,0,150);
 	private final Color censorColor = Color.BLACK;
 	
 	final static int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
@@ -103,10 +102,6 @@ public class EditorWindow extends JFrame{
 		this.dispose();
 	}
 
-	public void setColor(PBRColor color) {
-		currentColor = color;
-	}
-
 	public void setImage(BufferedImage image) {
 		this.img = image;
 	}
@@ -117,10 +112,6 @@ public class EditorWindow extends JFrame{
 
 	public BufferedImage getImage() {
 		return img;
-	}
-
-	public PBRColor getColor() {
-		return currentColor;
 	}
 
 	public Color getCensorColor() {

@@ -2,6 +2,7 @@ package io.wollinger.snipsniper.editorwindow.stamps;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.InputContainer;
+import io.wollinger.snipsniper.utils.PBRColor;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -18,6 +19,8 @@ public class CounterStamp implements IStamp{
     private final int speedWidth;
     private final int speedHeight;
     private final int speed;
+
+    private PBRColor color = new PBRColor(Color.YELLOW);
 
     private final float fontSizeModifier;
     private int count = 1;
@@ -150,5 +153,15 @@ public class CounterStamp implements IStamp{
     @Override
     public int getThickness() {
         return thickness;
+    }
+
+    @Override
+    public void setColor(PBRColor color) {
+        this.color = color;
+    }
+
+    @Override
+    public PBRColor getColor() {
+        return color;
     }
 }

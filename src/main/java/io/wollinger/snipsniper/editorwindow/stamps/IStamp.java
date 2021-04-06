@@ -1,6 +1,7 @@
 package io.wollinger.snipsniper.editorwindow.stamps;
 
 import io.wollinger.snipsniper.utils.InputContainer;
+import io.wollinger.snipsniper.utils.PBRColor;
 
 import java.awt.*;
 
@@ -20,4 +21,7 @@ public interface IStamp {
     int getSpeed();
 
     int getThickness();
+
+    void setColor(PBRColor color);
+    PBRColor getColor();
 }

@@ -3,6 +3,7 @@ package io.wollinger.snipsniper.editorwindow.stamps;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.editorwindow.EditorWindow;
 import io.wollinger.snipsniper.utils.InputContainer;
+import io.wollinger.snipsniper.utils.PBRColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -20,6 +21,8 @@ public class CubeStamp implements IStamp{
     private final int speedWidth;
     private final int speedHeight;
     private final int speed;
+
+    private PBRColor color = new PBRColor(Color.RED);
 
     public CubeStamp(EditorWindow editor) {
         this.editor = editor;
@@ -72,7 +75,8 @@ public class CubeStamp implements IStamp{
     }
 
     public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
-        if(editor.getSniperInstance().cfg.getBool("smartPixel") && isSaveRender && !isCensor) {
+        boolean isSmartPixel = editor.getSniperInstance().cfg.getBool("smartPixel");
+        if(isSmartPixel && isSaveRender && !isCensor) {
             Vector2Int pos = new Vector2Int(input.getMouseX()+width/2, input.getMouseY()+height/2);
             Vector2Int size = new Vector2Int(-width, -height);
 
@@ -84,14 +88,19 @@ public class CubeStamp implements IStamp{
                         Color c = new Color(editor.getImage().getRGB(posX, posY));
                         int total = c.getRed() + c.getGreen() + c.getBlue();
                         int alpha = (int)((205F/765F) * total + 25);
-                        Color oC = editor.getColor().c;
+                        Color oC = color.c;
                         g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
                         g.drawLine(posX, posY, posX, posY);
                     }
                 }
             }
         } else {
+            Color oldColor = g.getColor();
+            if(isSmartPixel)
+                g.setColor(new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), 150));
+
             g.fillRect(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
+            g.setColor(oldColor);
         }
     }
 
@@ -138,5 +147,15 @@ public class CubeStamp implements IStamp{
     @Override
     public int getThickness() {
         return thickness;
+    }
+
+    @Override
+    public void setColor(PBRColor color) {
+        this.color = color;
+    }
+
+    @Override
+    public PBRColor getColor() {
+        return color;
     }
 }
