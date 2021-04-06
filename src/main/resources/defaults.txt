@@ -18,6 +18,9 @@ killSwitch=60
 maxFPS=60
 
 <--- Editor Settings --->
+smartPixel=true
+
+<--- Editor Stamp Settings --->
 editorStampCubeWidth=75
 editorStampCubeHeight=20
 editorStampCubeWidthMinimum=10
@@ -34,6 +37,8 @@ editorStampCounterWidthSpeed=20
 editorStampCounterHeightSpeed=20
 editorStampCounterSolidColor=true
 editorStampCounterFontSizeModifier=1.25
+editorStampCounterBorderEnabled=true
+editorStampCounterBorderModifier=20
 
 editorStampCircleWidth=40
 editorStampCircleHeight=40
@@ -43,5 +48,3 @@ editorStampCircleSpeed=20
 editorStampCircleWidthSpeed=20
 editorStampCircleHeightSpeed=20
 editorStampCircleThickness=4
-
-smartPixel=true
