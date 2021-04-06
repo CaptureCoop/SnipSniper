@@ -80,20 +80,24 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		history.add(Utils.copyImage(editorInstance.getImage()));
 	}
 
-	float currentHSV;
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
 		InputContainer input = editorInstance.input;
 
 		if(input.isKeyPressed(KeyEvent.VK_ALT)) {
-			final Color hsvColor = Color.getHSBColor(currentHSV, 1, 1);
 			IStamp stamp = editorInstance.stamps[editorInstance.selectedStamp];
-			stamp.setColor(new PBRColor(hsvColor.getRed(), hsvColor.getGreen(), hsvColor.getBlue(), stamp.getColor().c.getAlpha()));
-			if(arg0.getWheelRotation() == 1)
-				currentHSV += 0.01F;
-			else if(arg0.getWheelRotation() == -1)
-				currentHSV -= 0.01F;
+			Color oldColor = stamp.getColor().c;
+			final int alpha = stamp.getColor().c.getAlpha();
+			float[] hsv = new float[3];
+			Color.RGBtoHSB(oldColor.getRed(),oldColor.getGreen(),oldColor.getBlue(),hsv);
 
+			if(arg0.getWheelRotation() == 1)
+				hsv[0] += 0.01F;
+			else if(arg0.getWheelRotation() == -1)
+				hsv[0] -= 0.01F;
+
+			Color newColor = Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
+			stamp.setColor(new PBRColor(newColor.getRed(), newColor.getGreen(), newColor.getBlue(), alpha));
 			editorInstance.repaint();
 			return;
 		}
