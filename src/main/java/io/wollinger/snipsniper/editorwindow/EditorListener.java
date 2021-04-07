@@ -98,7 +98,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 				hsv[0] -= speed;
 
 			Color newColor = Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
-			stamp.setColor(new PBRColor(newColor.getRed(), newColor.getGreen(), newColor.getBlue(), alpha));
+			stamp.setColor(new PBRColor(newColor, alpha));
 			editorInstance.repaint();
 			return;
 		}
