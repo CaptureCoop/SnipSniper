@@ -107,7 +107,7 @@ public class CounterStamp implements IStamp{
             g.setColor(Color.BLACK);
             Graphics2D g2 = (Graphics2D) g;
             Stroke oldStroke = g2.getStroke();
-            g2.setStroke(new BasicStroke(height / cfg.getInt("editorStampCounterBorderModifier")));
+            g2.setStroke(new BasicStroke(height / cfg.getFloat("editorStampCounterBorderModifier")));
             g2.drawOval(x, y, width, height);
             g2.setStroke(oldStroke);
             g2.dispose();
