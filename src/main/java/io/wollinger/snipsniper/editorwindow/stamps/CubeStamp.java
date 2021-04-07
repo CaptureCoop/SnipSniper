@@ -96,8 +96,9 @@ public class CubeStamp implements IStamp{
             }
         } else {
             Color oldColor = g.getColor();
+            g.setColor(color.c);
             if(isSmartPixel)
-                g.setColor(new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), 150));
+                g.setColor(new PBRColor(color.c, 150).c);
 
             g.fillRect(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
             g.setColor(oldColor);

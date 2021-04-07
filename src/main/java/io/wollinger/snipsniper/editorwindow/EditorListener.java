@@ -49,10 +49,11 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
+		editorInstance.input.clearMousePath();
 		if(arg0.getButton() == 1) {
-			save(editorInstance.stamps[editorInstance.selectedStamp].getColor().c, editorInstance.getImage().getGraphics(), false);
+			save(editorInstance.getImage().getGraphics(), false);
 		}else if(arg0.getButton() == 2) {
-			save(editorInstance.getCensorColor(), editorInstance.getImage().getGraphics(), true);
+			save(editorInstance.getImage().getGraphics(), true);
 		}
 		editorInstance.repaint();
 	}
@@ -71,10 +72,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.repaint();
 	}
 
-	public void save(Color color, Graphics g, boolean isCensor) {
+	public void save(Graphics g, boolean isCensor) {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHints(editorInstance.getQualityHints());
-		g2.setColor(color);
 		editorInstance.stamps[editorInstance.selectedStamp].render(g2, editorInstance.input, true, isCensor, history.size());
 		editorInstance.repaint();
 		g2.dispose();
