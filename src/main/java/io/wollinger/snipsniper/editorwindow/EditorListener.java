@@ -59,7 +59,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		editorInstance.input.setMousePosition((int)arg0.getPoint().getX(), (int)arg0.getPoint().getY());
+		InputContainer input = editorInstance.input;
+		input.addMousePathPoint(arg0.getPoint());
+		input.setMousePosition((int)arg0.getPoint().getX(), (int)arg0.getPoint().getY());
 		editorInstance.repaint();
 	}
 
