@@ -12,8 +12,6 @@ import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
-import javafx.scene.shape.Circle;
 
 public class EditorWindow extends JFrame{
 	private static final long serialVersionUID = -7363672331227971815L;
@@ -34,7 +32,7 @@ public class EditorWindow extends JFrame{
 
 	InputContainer input = new InputContainer();
 
-	private RenderingHints qualityHints;
+	private final RenderingHints qualityHints;
 
 	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight, String saveLocation, boolean inClipboard) {
 		img = _img;
