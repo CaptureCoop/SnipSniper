@@ -86,13 +86,17 @@ public class btnAbout extends MenuItem{
 	}
 
 	public void loadHTML() throws IOException {
-		html = "";
-		InputStream inputStream = ClassLoader.getSystemClassLoader().getSystemResourceAsStream("about.html");
+		StringBuilder htmlTemp = new StringBuilder();
+		InputStream inputStream = ClassLoader.getSystemResourceAsStream("about.html");
+		if(inputStream == null)
+			throw new FileNotFoundException("Could not load about.html inside jar!");
 		InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 		BufferedReader in = new BufferedReader(streamReader);
 
 		for (String line; (line = in.readLine()) != null;)
-			html += line;
+			htmlTemp.append(line);
+
+		html = htmlTemp.toString();
 
 		inputStream.close();
 		streamReader.close();

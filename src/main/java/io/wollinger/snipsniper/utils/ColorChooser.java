@@ -2,8 +2,6 @@ package io.wollinger.snipsniper.utils;
 
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -17,7 +15,7 @@ public class ColorChooser extends JFrame{
 
 	private JColorChooser jcc;
 	
-	private PBRColor color = null;
+	private final PBRColor color;
 	
 	ColorChooser instance;
 	
@@ -47,12 +45,7 @@ public class ColorChooser extends JFrame{
         JPanel colorPanel = new JPanel();
         JPanel submitButtonPanel = new JPanel();
         JButton submit = new JButton("Okay");
-        submit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				instance.close();
-			}
-        });
+        submit.addActionListener(listener -> instance.close());
        
         mainmain.setLayout(new BoxLayout(mainmain, BoxLayout.Y_AXIS));
         

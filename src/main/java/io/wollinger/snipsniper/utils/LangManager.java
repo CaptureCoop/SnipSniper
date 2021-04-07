@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class LangManager {
     private static final String[] langIds = {"en", "de"};
-    private static HashMap<String, JSONObject> langMap = new HashMap<>();
+    private static final HashMap<String, JSONObject> langMap = new HashMap<>();
 
     public static void load() {
         for(String str : langIds) {

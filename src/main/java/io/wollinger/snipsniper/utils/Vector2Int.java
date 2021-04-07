@@ -4,8 +4,8 @@ import java.awt.Point;
 
 public class Vector2Int {
 
-	public int x = 0;
-	public int y = 0;
+	public int x;
+	public int y;
 	
 	public Vector2Int() {
 		x = 0;

@@ -13,7 +13,6 @@ public class CounterStamp implements IStamp{
 
     private int width;
     private int height;
-    private int thickness;
 
     private final int minimumWidth;
     private final int minimumHeight;
@@ -169,7 +168,7 @@ public class CounterStamp implements IStamp{
 
     @Override
     public int getThickness() {
-        return thickness;
+        return 0;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package io.wollinger.snipsniper.utils;
 
-import io.wollinger.snipsniper.Main;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -22,40 +20,19 @@ public class Utils {
 	}
 
 	public static void printArgs(PrintStream out, final String message, final Object... args) {
+		out.println(formatArgs(message, args));
+	}
+
+	public static String formatArgs(final String message, final Object ...args) {
 		final int size = args.length;
 		String newMessage = message;
 		for(int i = 0; i < size; i++) {
-			final String id = "\\{" + i + "\\}";
+			final String id = "\\{" + i + "}";
 			newMessage = newMessage.replaceAll(id, args[i].toString());
 		}
-		out.println(newMessage);
+		return newMessage;
 	}
 
-	public static String hsvToRgb(float hue, float saturation, float value) {
-
-		int h = (int)(hue * 6);
-		float f = hue * 6 - h;
-		float p = value * (1 - saturation);
-		float q = value * (1 - f * saturation);
-		float t = value * (1 - (1 - f) * saturation);
-
-		switch (h) {
-			case 0: return rgbToString(value, t, p);
-			case 1: return rgbToString(q, value, p);
-			case 2: return rgbToString(p, value, t);
-			case 3: return rgbToString(p, q, value);
-			case 4: return rgbToString(t, p, value);
-			case 5: return rgbToString(value, p, q);
-			default: throw new RuntimeException("Something went wrong when converting from HSV to RGB. Input was " + hue + ", " + saturation + ", " + value);
-		}
-	}
-
-	public static String rgbToString(float r, float g, float b) {
-		String rs = Integer.toHexString((int)(r * 256));
-		String gs = Integer.toHexString((int)(g * 256));
-		String bs = Integer.toHexString((int)(b * 256));
-		return rs + gs + bs;
-	}
 	public static String rgb2hex(Color _color) {
 		return String.format("#%02x%02x%02x", _color.getRed(), _color.getGreen(), _color.getBlue()); 
 	}
@@ -81,16 +58,18 @@ public class Utils {
 	}
 
 	public static String loadFileFromJar(String file) throws IOException {
-		String content = "";
-		InputStream inputStream = ClassLoader.getSystemClassLoader().getSystemResourceAsStream(file);
+		StringBuilder content = new StringBuilder();
+		InputStream inputStream = ClassLoader.getSystemResourceAsStream(file);
+		if(inputStream == null)
+			throw new FileNotFoundException(Utils.formatArgs("Could not load file {0} from jar!", file));
 		InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 		BufferedReader in = new BufferedReader(streamReader);
 
 		for (String line; (line = in.readLine()) != null;)
-			content += line;
+			content.append(line);
 
 		inputStream.close();
 		streamReader.close();
-		return content;
+		return content.toString();
 	}
 }
