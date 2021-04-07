@@ -49,3 +49,7 @@ editorStampCircleSpeed=20
 editorStampCircleWidthSpeed=20
 editorStampCircleHeightSpeed=20
 editorStampCircleThickness=4
+
+editorStampSimpleBrushDistance=7
+editorStampSimpleBrushSize=20
+editorStampSimpleBrushSizeSpeed=5
