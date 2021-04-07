@@ -27,7 +27,7 @@ public class CounterStamp implements IStamp{
     private int count = 1;
     private final boolean solidColor;
 
-    private ArrayList<Integer> historyPoints = new ArrayList<>();
+    private final ArrayList<Integer> historyPoints = new ArrayList<>();
 
     public CounterStamp(Config cfg) {
         this.cfg = cfg;
