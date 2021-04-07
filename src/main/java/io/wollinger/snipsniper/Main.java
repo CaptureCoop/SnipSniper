@@ -13,7 +13,7 @@ import org.apache.commons.lang3.SystemUtils;
 
 public class Main {
 	
-	public final static String VERSION = "20210407_1";
+	public final static String VERSION = "20210408_1";
 	
 	public static String jarFolder = new File("").getAbsolutePath() + "/";
 	public static String mainFolder = jarFolder + "SnipSniper";
