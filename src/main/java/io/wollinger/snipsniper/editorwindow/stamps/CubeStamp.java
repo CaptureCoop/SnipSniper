@@ -96,8 +96,12 @@ public class CubeStamp implements IStamp{
             }
         } else {
             Color oldColor = g.getColor();
-            g.setColor(color.c);
-            if(isSmartPixel)
+            if(!isCensor)
+                g.setColor(color.c);
+            else
+                g.setColor(editor.getCensorColor());
+
+            if(isSmartPixel && !isCensor)
                 g.setColor(new PBRColor(color.c, 150).c);
 
             g.fillRect(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
