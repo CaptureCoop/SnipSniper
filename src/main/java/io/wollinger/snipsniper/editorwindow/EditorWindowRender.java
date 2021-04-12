@@ -23,6 +23,7 @@ public class EditorWindowRender extends JPanel{
 		IStamp stamp = editorWnd.stamps[editorWnd.selectedStamp];
 		stamp.render(g2, editorWnd.input, false, false, -1);
 		g2.dispose();
+		editorWnd.repaint(); //TODO: Find more elegant way to do this, for example a loop
 	}
 	
 }
