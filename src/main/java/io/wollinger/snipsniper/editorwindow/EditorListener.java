@@ -10,12 +10,10 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Date;
 
 import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
-import io.wollinger.snipsniper.utils.ColorChooser;
-import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
-import io.wollinger.snipsniper.utils.Utils;
+import io.wollinger.snipsniper.utils.*;
 
 public class EditorListener implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
 	
@@ -61,7 +59,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		InputContainer input = editorInstance.input;
-		input.addMousePathPoint(arg0.getPoint());
+		input.addMousePathPoint(new PointWithTime(arg0.getPoint(), new Date().getTime()));
 		input.setMousePosition((int)arg0.getPoint().getX(), (int)arg0.getPoint().getY());
 		editorInstance.repaint();
 	}

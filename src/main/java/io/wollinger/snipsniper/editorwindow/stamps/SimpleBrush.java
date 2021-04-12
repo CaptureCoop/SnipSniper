@@ -3,6 +3,7 @@ package io.wollinger.snipsniper.editorwindow.stamps;
 import io.wollinger.snipsniper.editorwindow.EditorWindow;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.PointWithTime;
 
 import java.awt.*;
 
@@ -32,6 +33,7 @@ public class SimpleBrush implements IStamp {
         }
     }
 
+    PointWithTime lastPoint = null;
     @Override
     public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
         Color oldColor = g.getColor();
@@ -39,9 +41,12 @@ public class SimpleBrush implements IStamp {
         g.fillOval(input.getMouseX()-size/2, input.getMouseY()-size/2, size, size);
         g.setColor(oldColor);
 
-        Point p0 = input.getMousePathPoint(0);
-        Point p1 = input.getMousePathPoint(1);
-        if(p0 != null && p1 != null) {
+        PointWithTime p0time = input.getMousePathPoint(0);
+        PointWithTime p1time = input.getMousePathPoint(1);
+
+        if(p0time != null && p1time != null) {
+            Point p0 = p0time.getPoint();
+            Point p1 = p1time.getPoint();
             Graphics2D g2 = (Graphics2D)editorWindow.getImage().getGraphics();
             g2.setRenderingHints(editorWindow.getQualityHints());
             Stroke oldStroke = g2.getStroke();
@@ -49,13 +54,23 @@ public class SimpleBrush implements IStamp {
             g2.setColor(new Color(color.c.getRed(), color.c.getGreen(), color.c.getBlue(), 255));
             g2.setStroke(new BasicStroke(size, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
-            double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());
-            if(distance > editorWindow.getSniperInstance().cfg.getInt("editorStampSimpleBrushDistance")) {
+            //double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());
+            //int ourDistance = editorWindow.getSniperInstance().cfg.getInt("editorStampSimpleBrushDistance");
+
+            if(lastPoint == null) lastPoint = new PointWithTime(p1time);
+
+            long t = p0time.getTime() - lastPoint.getTime();
+            System.out.println(t);
+            double distance = t;
+
+            if(distance < 10) {
                 g2.drawLine((int) p0.getX(), (int) p0.getY(), (int) p1.getX(), (int) p1.getY());
                 input.removeMousePathPoint(0);
             } else {
                 input.removeMousePathPoint(1);
             }
+
+            lastPoint = new PointWithTime(p1time);
 
             g2.setStroke(oldStroke);
             g.setColor(oldColor);

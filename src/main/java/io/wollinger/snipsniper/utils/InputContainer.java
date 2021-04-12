@@ -8,7 +8,7 @@ public class InputContainer {
     private int mouseX;
     private int mouseY;
 
-    private final ArrayList<Point> mousePath = new ArrayList<>();
+    private final ArrayList<PointWithTime> mousePath = new ArrayList<>();
 
     public void setKey(int keyCode, boolean pressed) {
         keys[keyCode] = pressed;
@@ -19,7 +19,7 @@ public class InputContainer {
         this.mouseY = mouseY;
     }
 
-    public void addMousePathPoint(Point point) {
+    public void addMousePathPoint(PointWithTime point) {
         mousePath.add(point);
     }
 
@@ -43,7 +43,7 @@ public class InputContainer {
         return mouseY;
     }
 
-    public Point getMousePathPoint(int i) {
+    public PointWithTime getMousePathPoint(int i) {
         if(mousePath.size() > i)
             return mousePath.get(i);
         return null;
