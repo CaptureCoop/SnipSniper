@@ -80,41 +80,43 @@ public class CounterStamp implements IStamp{
     }
 
     public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
-        if(isSaveRender && historyPoint != -1 && !isCensor) {
+        if(isSaveRender && historyPoint != -1) {
             historyPoints.add(historyPoint);
         }
-        final int x = input.getMouseX() - width / 2;
-        final int y = input.getMouseY() - height / 2;
+        if(!isCensor) {
+            final int x = input.getMouseX() - width / 2;
+            final int y = input.getMouseY() - height / 2;
 
-        Color oldFillColor = g.getColor();
-        g.setColor(color.c);
-        if(solidColor) {
-            g.setColor(new PBRColor(color.c, 255).c);
-        }
-        g.fillOval(x, y, width, height);
-        g.setColor(oldFillColor);
+            Color oldFillColor = g.getColor();
+            g.setColor(color.c);
+            if (solidColor) {
+                g.setColor(new PBRColor(color.c, 255).c);
+            }
+            g.fillOval(x, y, width, height);
+            g.setColor(oldFillColor);
 
-        Color oldColor = g.getColor();
-        g.setColor(Color.BLACK);
-        int h = (int)(height/fontSizeModifier);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, h));
-        int w = g.getFontMetrics().stringWidth(""+count);
-        g.drawString("" + count, input.getMouseX()-w/2, input.getMouseY()+h/3);
-        g.setColor(oldColor);
-
-        if(cfg.getBool("editorStampCounterBorderEnabled")) {
-            oldColor = g.getColor();
+            Color oldColor = g.getColor();
             g.setColor(Color.BLACK);
-            Graphics2D g2 = (Graphics2D) g;
-            Stroke oldStroke = g2.getStroke();
-            g2.setStroke(new BasicStroke(height / cfg.getFloat("editorStampCounterBorderModifier")));
-            g2.drawOval(x, y, width, height);
-            g2.setStroke(oldStroke);
-            g2.dispose();
+            int h = (int) (height / fontSizeModifier);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, h));
+            int w = g.getFontMetrics().stringWidth("" + count);
+            g.drawString("" + count, input.getMouseX() - w / 2, input.getMouseY() + h / 3);
             g.setColor(oldColor);
+
+            if (cfg.getBool("editorStampCounterBorderEnabled")) {
+                oldColor = g.getColor();
+                g.setColor(Color.BLACK);
+                Graphics2D g2 = (Graphics2D) g;
+                Stroke oldStroke = g2.getStroke();
+                g2.setStroke(new BasicStroke(height / cfg.getFloat("editorStampCounterBorderModifier")));
+                g2.drawOval(x, y, width, height);
+                g2.setStroke(oldStroke);
+                g2.dispose();
+                g.setColor(oldColor);
+            }
         }
 
-        if(isSaveRender && !isCensor)
+        if(isSaveRender)
             count++;
     }
 
