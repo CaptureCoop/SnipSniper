@@ -31,6 +31,8 @@ public class EditorWindow extends JFrame{
 
 	private final RenderingHints qualityHints;
 
+	public static final String FILENAME_MODIFIER = "_edited";
+
 	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight, String saveLocation, boolean inClipboard) {
 		img = _img;
 		sniperInstance = _sInstance;
@@ -88,7 +90,7 @@ public class EditorWindow extends JFrame{
 		Graphics g = finalImg.getGraphics();
 		g.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), this);
 		g.dispose();
-		sniperInstance.saveImage(finalImg, "_edited");
+		sniperInstance.saveImage(finalImg, FILENAME_MODIFIER);
 		if(sniperInstance.cfg.getBool("copyToClipboard"))
 			sniperInstance.copyToClipboard(finalImg);
 	}
