@@ -9,13 +9,15 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
-import io.wollinger.snipsniper.utils.ColorChooser;
-import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
-import io.wollinger.snipsniper.utils.Utils;
+import io.wollinger.snipsniper.utils.*;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 public class EditorListener implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
 	
@@ -128,6 +130,22 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			editorInstance.selectedStamp = 2;
 		if(arg0.getKeyCode() == KeyEvent.VK_4)
 			editorInstance.selectedStamp = 3;
+
+		if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+			JFileChooser chooser = new JFileChooser();
+			File file = new File(editorInstance.getSniperInstance().constructFilename(editorInstance.FILENAME_MODIFIER));
+			chooser.setSelectedFile(file);
+			int result = chooser.showSaveDialog(chooser);
+			if(result == JFileChooser.APPROVE_OPTION){
+				try {
+					if(chooser.getSelectedFile().createNewFile()) {
+						ImageIO.write(editorInstance.getImage(), "png", chooser.getSelectedFile());
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 
 		if(arg0.getKeyCode() == KeyEvent.VK_S) {
 			editorInstance.saveImage();
