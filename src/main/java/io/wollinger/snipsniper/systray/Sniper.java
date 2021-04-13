@@ -205,12 +205,17 @@ public class Sniper implements NativeKeyListener{
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
 		debug("Copied Image to clipboard", DebugType.INFO);
 	}
-	
-	public String saveImage(BufferedImage finalImg, String _modifier) {
-		File file;
-		LocalDateTime now = LocalDateTime.now();  
+
+	public String constructFilename(String _modifier) {
+		LocalDateTime now = LocalDateTime.now();
 		String filename = now.toString().replace(".", "_").replace(":", "_");
 		filename += _modifier + ".png";
+		return filename;
+	}
+
+	public String saveImage(BufferedImage finalImg, String _modifier) {
+		File file;
+		String filename = constructFilename(_modifier);
 		String savePath = cfg.getString("pictureFolder");
 		File path = new File(savePath);
 		file = new File(savePath + filename);
