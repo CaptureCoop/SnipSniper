@@ -118,8 +118,10 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		arg0.consume();
 		editorInstance.input.setKey(arg0.getKeyCode(), true);
 
-		if(arg0.getKeyCode() == KeyEvent.VK_C)
-			new ColorChooser("Marker Color", editorInstance.stamps[editorInstance.selectedStamp].getColor());
+		if(arg0.getKeyCode() == KeyEvent.VK_C) {
+			IStamp stamp = editorInstance.stamps[editorInstance.selectedStamp];
+			new ColorChooser(editorInstance.getSniperInstance(), "Marker Color", editorInstance.stamps[editorInstance.selectedStamp].getColor(), stamp.getID() + "DefaultColor");
+		}
 
 		if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();

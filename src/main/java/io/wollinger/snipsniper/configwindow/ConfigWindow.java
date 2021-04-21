@@ -103,7 +103,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		JButton colorBtn = new JButton("Color");
 		colorBtn.addActionListener(e -> {
 			if(colorChooser == null || !colorChooser.isDisplayable())
-				colorChooser = new ColorChooser("Border color", borderColor);
+				colorChooser = new ColorChooser(sniperInstance, "Border color", borderColor, null);
 		});
 		row3_2.add(colorBtn);
 		row3.add(row3_2);
