@@ -22,6 +22,8 @@ public interface IStamp {
 
     int getThickness();
 
+    String getID();
+
     void setColor(PBRColor color);
     PBRColor getColor();
 }

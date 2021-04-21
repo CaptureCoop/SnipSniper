@@ -177,6 +177,11 @@ public class CounterStamp implements IStamp{
     }
 
     @Override
+    public String getID() {
+        return "editorStampCounter";
+    }
+
+    @Override
     public void setColor(PBRColor color) {
         this.color = color;
     }

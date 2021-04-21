@@ -115,6 +115,11 @@ public class SimpleBrush implements IStamp {
     }
 
     @Override
+    public String getID() {
+        return "editorStampSimpleBrush";
+    }
+
+    @Override
     public void setColor(PBRColor color) {
         this.color = color;
     }

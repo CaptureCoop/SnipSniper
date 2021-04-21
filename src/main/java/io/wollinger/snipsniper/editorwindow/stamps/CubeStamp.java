@@ -157,6 +157,11 @@ public class CubeStamp implements IStamp{
     }
 
     @Override
+    public String getID() {
+        return "editorStampCube";
+    }
+
+    @Override
     public void setColor(PBRColor color) {
         this.color = color;
     }

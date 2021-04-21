@@ -143,6 +143,11 @@ public class CircleStamp implements IStamp{
     }
 
     @Override
+    public String getID() {
+        return "editorStampCircle";
+    }
+
+    @Override
     public void setColor(PBRColor color) {
         this.color = color;
     }
