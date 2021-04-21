@@ -25,23 +25,23 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 	ArrayList<BufferedImage> history = new ArrayList<>();
 
-	public EditorListener(EditorWindow _editWnd) {
-		editorInstance = _editWnd;
+	public EditorListener(EditorWindow editorInstance) {
+		this.editorInstance = editorInstance;
 		history.add(Utils.copyImage(editorInstance.getImage()));
 	}
 	
 	@Override
-	public void mouseClicked(MouseEvent arg0) { }
+	public void mouseClicked(MouseEvent mouseEvent) { }
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) { }
+	public void mouseEntered(MouseEvent mouseEvent) { }
 
 	@Override
-	public void mouseExited(MouseEvent arg0) { }
+	public void mouseExited(MouseEvent mouseEvent) { }
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		if(arg0.getButton() == 3) {
+	public void mousePressed(MouseEvent mouseEvent) {
+		if(mouseEvent.getButton() == 3) {
 			if(editorInstance.isDirty)
 				editorInstance.saveImage();
 			editorInstance.kill();
@@ -51,27 +51,27 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
+	public void mouseReleased(MouseEvent mouseEvent) {
 		editorInstance.input.clearMousePath();
-		if(arg0.getButton() == 1) {
+		if(mouseEvent.getButton() == 1) {
 			save(editorInstance.getImage().getGraphics(), false);
-		}else if(arg0.getButton() == 2) {
+		}else if(mouseEvent.getButton() == 2) {
 			save(editorInstance.getImage().getGraphics(), true);
 		}
 		editorInstance.repaint();
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
+	public void mouseDragged(MouseEvent mouseEvent) {
 		InputContainer input = editorInstance.input;
-		input.addMousePathPoint(arg0.getPoint());
-		input.setMousePosition((int)arg0.getPoint().getX(), (int)arg0.getPoint().getY());
+		input.addMousePathPoint(mouseEvent.getPoint());
+		input.setMousePosition((int) mouseEvent.getPoint().getX(), (int) mouseEvent.getPoint().getY());
 		editorInstance.repaint();
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		editorInstance.input.setMousePosition((int)arg0.getPoint().getX(), (int)arg0.getPoint().getY());
+	public void mouseMoved(MouseEvent mouseEvent) {
+		editorInstance.input.setMousePosition((int) mouseEvent.getPoint().getX(), (int) mouseEvent.getPoint().getY());
 		editorInstance.repaint();
 	}
 
@@ -87,7 +87,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	}
 
 	@Override
-	public void mouseWheelMoved(MouseWheelEvent arg0) {
+	public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
 		InputContainer input = editorInstance.input;
 
 		if(input.isKeyPressed(KeyEvent.VK_ALT)) {
@@ -98,9 +98,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			Color.RGBtoHSB(oldColor.getRed(),oldColor.getGreen(),oldColor.getBlue(),hsv);
 
 			float speed = editorInstance.getSniperInstance().cfg.getFloat("hsvColorSwitchSpeed");
-			if(arg0.getWheelRotation() == 1)
+			if(mouseWheelEvent.getWheelRotation() == 1)
 				hsv[0] += speed;
-			else if(arg0.getWheelRotation() == -1)
+			else if(mouseWheelEvent.getWheelRotation() == -1)
 				hsv[0] -= speed;
 
 			Color newColor = Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
@@ -109,32 +109,33 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			return;
 		}
 
-		editorInstance.getSelectedStamp().updateSize(input, arg0.getWheelRotation());
+		editorInstance.getSelectedStamp().updateSize(input, mouseWheelEvent.getWheelRotation());
 		editorInstance.repaint();
 	}
 
 	@Override
-	public void keyPressed(KeyEvent arg0) {
-		arg0.consume();
-		editorInstance.input.setKey(arg0.getKeyCode(), true);
+	public void keyPressed(KeyEvent keyEvent) {
+		keyEvent.consume();
+		int keyCode = keyEvent.getKeyCode();
+		editorInstance.input.setKey(keyCode, true);
 		IStamp stamp = editorInstance.getSelectedStamp();
 
-		if(arg0.getKeyCode() == KeyEvent.VK_C) {
+		if(keyCode == KeyEvent.VK_C) {
 			new ColorChooser(editorInstance.getSniperInstance(), "Marker Color", stamp.getColor(), stamp.getID() + "DefaultColor");
 		}
-		if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE)
+		if(keyCode == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();
 
-		if(arg0.getKeyCode() == KeyEvent.VK_1)
+		if(keyCode == KeyEvent.VK_1)
 			editorInstance.setSelectedStamp(0);
-		if(arg0.getKeyCode() == KeyEvent.VK_2)
+		if(keyCode == KeyEvent.VK_2)
 			editorInstance.setSelectedStamp(1);
-		if(arg0.getKeyCode() == KeyEvent.VK_3)
+		if(keyCode == KeyEvent.VK_3)
 			editorInstance.setSelectedStamp(2);
-		if(arg0.getKeyCode() == KeyEvent.VK_4)
+		if(keyCode == KeyEvent.VK_4)
 			editorInstance.setSelectedStamp(3);
 
-		if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+		if(keyCode == KeyEvent.VK_ENTER) {
 			JFileChooser chooser = new JFileChooser();
 			File file = new File(editorInstance.getSniperInstance().constructFilename(EditorWindow.FILENAME_MODIFIER));
 			chooser.setSelectedFile(file);
@@ -150,7 +151,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			}
 		}
 
-		if(arg0.getKeyCode() == KeyEvent.VK_S) {
+		if(keyCode == KeyEvent.VK_S) {
 			if(editorInstance.isDirty)
 				editorInstance.saveImage();
 			editorInstance.kill();
@@ -173,11 +174,11 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-		editorInstance.input.setKey(arg0.getKeyCode(), false);
+	public void keyReleased(KeyEvent keyEvent) {
+		editorInstance.input.setKey(keyEvent.getKeyCode(), false);
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) { }
+	public void keyTyped(KeyEvent keyEvent) { }
 
 }

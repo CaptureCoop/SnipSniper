@@ -35,17 +35,17 @@ public class EditorWindow extends JFrame{
 
 	public boolean isDirty = false;
 
-	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight, String saveLocation, boolean inClipboard) {
-		img = _img;
-		sniperInstance = _sInstance;
+	public EditorWindow(BufferedImage img, int x, int y, String title, Sniper sniperInstance, boolean leftToRight, String saveLocation, boolean inClipboard) {
+		this.img = img;
+		this.sniperInstance = sniperInstance;
 
 		this.saveLocation = saveLocation;
 		this.inClipboard = inClipboard;
-		this.title = _title;
+		this.title = title;
 
 		stamps[0] = new CubeStamp(this);
-		stamps[1] = new CounterStamp(_sInstance.cfg);
-		stamps[2] = new CircleStamp(_sInstance.cfg);
+		stamps[1] = new CounterStamp(sniperInstance.cfg);
+		stamps[2] = new CircleStamp(sniperInstance.cfg);
 		stamps[3] = new SimpleBrush(this);
 
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -72,9 +72,9 @@ public class EditorWindow extends JFrame{
 		this.pack();
 		
 		int borderSize = sniperInstance.cfg.getInt("borderSize");
-		if(!_leftToRight) borderSize = -borderSize;
+		if(!leftToRight) borderSize = -borderSize;
 		
-		this.setLocation((_x - X_OFFSET) + borderSize, (_y - barSize) + borderSize);
+		this.setLocation((x - X_OFFSET) + borderSize, (y - barSize) + borderSize);
 	}
 
 	public void refreshTitle() {

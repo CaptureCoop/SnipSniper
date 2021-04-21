@@ -42,13 +42,14 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	public Thread thread = null;
 	
-	public CaptureWindow(Sniper _sniperInstance) {
+	public CaptureWindow(Sniper sniperInstance) {
+		this.sniperInstance = sniperInstance;
+
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
 		instance = this;
-		sniperInstance = _sniperInstance;
-		sniperInstance.trayIcon.setImage(Icons.alt_icons[_sniperInstance.profileID]);
+		sniperInstance.trayIcon.setImage(Icons.alt_icons[sniperInstance.profileID]);
 		if(sniperInstance.cfg.getInt("snipeDelay") != 0) {
 			try {
 				Thread.sleep(sniperInstance.cfg.getInt("snipeDelay") * 1000L);
@@ -289,25 +290,25 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	}
 
 	@Override
-	public void windowActivated(WindowEvent arg0) { }
+	public void windowActivated(WindowEvent windowEvent) { }
 
 	@Override
-	public void windowClosed(WindowEvent arg0) { }
+	public void windowClosed(WindowEvent windowEvent) { }
 
 	@Override
-	public void windowClosing(WindowEvent arg0) {
-		this.sniperInstance.killCaptureWindow();
+	public void windowClosing(WindowEvent windowEvent) {
+		sniperInstance.killCaptureWindow();
 	}
 
 	@Override
-	public void windowDeactivated(WindowEvent arg0) { }
+	public void windowDeactivated(WindowEvent windowEvent) { }
 
 	@Override
-	public void windowDeiconified(WindowEvent arg0) { }
+	public void windowDeiconified(WindowEvent windowEvent) { }
 
 	@Override
-	public void windowIconified(WindowEvent arg0) { }
+	public void windowIconified(WindowEvent windowEvent) { }
 
 	@Override
-	public void windowOpened(WindowEvent arg0) { }
+	public void windowOpened(WindowEvent windowEvent) { }
 }

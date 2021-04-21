@@ -38,29 +38,28 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	ColorChooser colorChooser = null;
 	Sniper sniperInstance;
 	
-	public JLabel createJLabel(String _title, int _horizontalAlignment, int _verticalAlignment) {
-		JLabel jlabel = new JLabel(_title);
-		jlabel.setHorizontalAlignment(_horizontalAlignment);
-		jlabel.setVerticalAlignment(_verticalAlignment);
+	public JLabel createJLabel(String title, int horizontalAlignment, int verticalAlignment) {
+		JLabel jlabel = new JLabel(title);
+		jlabel.setHorizontalAlignment(horizontalAlignment);
+		jlabel.setVerticalAlignment(verticalAlignment);
 		return jlabel;
 	}
 	
-	public ConfigWindow(Sniper _sniperInstance) {
+	public ConfigWindow(Sniper sniperInstance) {
+		this.sniperInstance = sniperInstance;
 		this.addWindowListener(this);
 		this.setSize(512,512);
 		this.setTitle("Config");
 		this.setIconImage(Icons.icon_taskbar);
-		
-		sniperInstance = _sniperInstance;
 
 		hotKeyButton = new HotKeyButton(sniperInstance.cfg.getString("hotkey"));
-		saveToDisk.setSelected(_sniperInstance.cfg.getBool("saveToDisk"));
-		copyToClipboard.setSelected(_sniperInstance.cfg.getBool("copyToClipboard"));
-		borderSize.setText(_sniperInstance.cfg.getInt("borderSize") + "");
-		pictureLocation.setText(_sniperInstance.cfg.getRawString("pictureFolder") + "");
-		borderColor = new PBRColor(_sniperInstance.cfg.getColor("borderColor"));
-		snipeDelay.setText(_sniperInstance.cfg.getInt("snipeDelay") + "");
-		openEditor.setSelected(_sniperInstance.cfg.getBool("openEditor"));
+		saveToDisk.setSelected(sniperInstance.cfg.getBool("saveToDisk"));
+		copyToClipboard.setSelected(sniperInstance.cfg.getBool("copyToClipboard"));
+		borderSize.setText(sniperInstance.cfg.getInt("borderSize") + "");
+		pictureLocation.setText(sniperInstance.cfg.getRawString("pictureFolder") + "");
+		borderColor = new PBRColor(sniperInstance.cfg.getColor("borderColor"));
+		snipeDelay.setText(sniperInstance.cfg.getInt("snipeDelay") + "");
+		openEditor.setSelected(sniperInstance.cfg.getBool("openEditor"));
 		
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new ConfigSaveButton(this));
@@ -135,8 +134,8 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		this.setLocation((w/2) - this.getWidth()/2, (h/2) - this.getHeight()/2);
 	}
 	
-	void msgError(String _msg) {
-		JOptionPane.showMessageDialog(null, _msg,"Error", JOptionPane.INFORMATION_MESSAGE);
+	void msgError(String msg) {
+		JOptionPane.showMessageDialog(null, msg,"Error", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public void save() {

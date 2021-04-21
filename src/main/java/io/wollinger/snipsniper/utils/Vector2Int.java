@@ -12,24 +12,24 @@ public class Vector2Int {
 		y = 0;
 	}
 	
-	public Vector2Int(int _x, int _y) {
-		x = _x;
-		y = _y;
+	public Vector2Int(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
-	public Vector2Int(Vector2Int _vec2int) {
-		x = _vec2int.x;
-		y = _vec2int.y;
+	public Vector2Int(Vector2Int vec2int) {
+		x = vec2int.x;
+		y = vec2int.y;
 	}
 	
-	public Vector2Int(Point _point) {
-		x = (int) _point.getX();
-		y = (int) _point.getY();
+	public Vector2Int(Point point) {
+		x = (int) point.getX();
+		y = (int) point.getY();
 	}
 
-	public Vector2Int(double _x, double _y) {
-		x = (int) _x;
-		y = (int) _y;
+	public Vector2Int(double x, double y) {
+		this.x = (int) x;
+		this.y = (int) y;
 	}
 
 	public String toString() {

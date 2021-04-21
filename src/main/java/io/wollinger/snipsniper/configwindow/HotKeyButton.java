@@ -37,19 +37,19 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 	}
 	
 	@Override
-	public void nativeKeyPressed(NativeKeyEvent arg0) {
+	public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
 		if(listening) {
-			hotkey = arg0.getKeyCode();
+			hotkey = nativeKeyEvent.getKeyCode();
 			listening = false;
 			instance.setText(NativeKeyEvent.getKeyText(hotkey));
 		}
 	}
 
 	@Override
-	public void nativeKeyReleased(NativeKeyEvent arg0) { }
+	public void nativeKeyReleased(NativeKeyEvent nativeKeyEvent) { }
 
 	@Override
-	public void nativeKeyTyped(NativeKeyEvent arg0) { }
+	public void nativeKeyTyped(NativeKeyEvent nativeKeyEvent) { }
 
 	@Override
 	public void nativeMousePressed(NativeMouseEvent nativeMouseEvent) {

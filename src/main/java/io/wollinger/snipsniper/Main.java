@@ -26,10 +26,6 @@ public class Main {
 
 	public static boolean isIdle = true;
 
-	//TODO: Bug happens when other monitor is main one
-	//TODO: Copy config file 1 to 1 instead of values
-	//TODO: Check if logging works as intended and log every profile the same file with [Profile 1] prefixes
-	
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
 		if(SystemUtils.IS_OS_WINDOWS)
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

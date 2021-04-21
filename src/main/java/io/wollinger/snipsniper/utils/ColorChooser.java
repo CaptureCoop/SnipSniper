@@ -25,11 +25,11 @@ public class ColorChooser extends JFrame{
 
 	ColorChooser instance;
 	
-	public ColorChooser(Sniper sniper, String _title, PBRColor _color, String configKey) {
+	public ColorChooser(Sniper sniper, String title, PBRColor color, String configKey) {
 	    this.sniper = sniper;
-		color = _color;
+		this.color = color;
 		instance = this;
-		this.setTitle(_title);
+		this.setTitle(title);
 		this.configKey = configKey;
 		init();
 	}

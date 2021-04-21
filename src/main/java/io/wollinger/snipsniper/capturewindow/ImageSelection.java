@@ -8,8 +8,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 public class ImageSelection implements Transferable{
 	private final Image image;
 	
-	public ImageSelection(Image _image) {
-		this.image = _image;
+	public ImageSelection(Image image) {
+		this.image = image;
 	}
 	
 	// Returns supported flavors

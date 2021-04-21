@@ -9,9 +9,9 @@ public class EditorWindowRender extends JPanel{
 	
 	private final EditorWindow editorWnd;
 	
-	public EditorWindowRender(EditorWindow _wnd) {
-		editorWnd = _wnd;
-		this.setPreferredSize(new Dimension(_wnd.getImage().getWidth(), _wnd.getImage().getHeight()));
+	public EditorWindowRender(EditorWindow wnd) {
+		editorWnd = wnd;
+		this.setPreferredSize(new Dimension(wnd.getImage().getWidth(), wnd.getImage().getHeight()));
 	}
 
 	public void paint(Graphics g) {

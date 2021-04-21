@@ -58,8 +58,8 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	
 	File logFile = null;
 	
-	public Sniper(int _profileID) {
-		profileID = _profileID;
+	public Sniper(int profileID) {
+		this.profileID = profileID;
 		
 		cfg = new Config(this);
 		instance = this;
@@ -183,22 +183,22 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		}
 	}
 
-	public void copyToClipboard(BufferedImage _img) {
-		ImageSelection imgSel = new ImageSelection(_img);
+	public void copyToClipboard(BufferedImage img) {
+		ImageSelection imgSel = new ImageSelection(img);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
 		debug("Copied Image to clipboard", DebugType.INFO);
 	}
 
-	public String constructFilename(String _modifier) {
+	public String constructFilename(String modifier) {
 		LocalDateTime now = LocalDateTime.now();
 		String filename = now.toString().replace(".", "_").replace(":", "_");
-		filename += _modifier + ".png";
+		filename += modifier + ".png";
 		return filename;
 	}
 
-	public String saveImage(BufferedImage finalImg, String _modifier) {
+	public String saveImage(BufferedImage finalImg, String modifier) {
 		File file;
-		String filename = constructFilename(_modifier);
+		String filename = constructFilename(modifier);
 		String savePath = cfg.getString("pictureFolder");
 		File path = new File(savePath);
 		file = new File(savePath + filename);
@@ -226,11 +226,11 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		return null;
 	}
 	
-	private void debugPrint(String _p, String _t, String _m) {
+	private void debugPrint(String p, String t, String m) {
 		String msg = "%DATE% %TIME%[%PROFILE%] [%TYPE%]: %MESSAGE%";
-		msg = msg.replace("%PROFILE%", _p);
-		msg = msg.replace("%TYPE%", _t);
-		msg = msg.replace("%MESSAGE%", _m);
+		msg = msg.replace("%PROFILE%", p);
+		msg = msg.replace("%TYPE%", t);
+		msg = msg.replace("%MESSAGE%", m);
 		final LocalDateTime time = LocalDateTime.now();
 		msg = msg.replace("%DATE%", "" + DateTimeFormatter.ISO_DATE.format(time));
 		msg = msg.replace("%TIME%", "" + DateTimeFormatter.ISO_TIME.format(time));
@@ -294,15 +294,15 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	}
 
 	@Override
-	public void nativeKeyPressed(NativeKeyEvent e) {
-		checkNativeKey("KB", e.getKeyCode());
+	public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
+		checkNativeKey("KB", nativeKeyEvent.getKeyCode());
 	}
 
 	@Override
-	public void nativeKeyReleased(NativeKeyEvent arg0) { }
+	public void nativeKeyReleased(NativeKeyEvent nativeKeyEvent) { }
 
 	@Override
-	public void nativeKeyTyped(NativeKeyEvent arg0) { }
+	public void nativeKeyTyped(NativeKeyEvent nativeKeyEvent) { }
 
 
 	@Override

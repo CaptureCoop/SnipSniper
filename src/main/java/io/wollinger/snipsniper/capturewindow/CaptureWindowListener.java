@@ -10,43 +10,43 @@ import java.awt.event.MouseMotionListener;
 public class CaptureWindowListener implements KeyListener, MouseListener, MouseMotionListener{
 	CaptureWindow wndInstance;
 	
-	public CaptureWindowListener(CaptureWindow _wndInstance) {
-		wndInstance = _wndInstance;
+	public CaptureWindowListener(CaptureWindow wndInstance) {
+		this.wndInstance = wndInstance;
 	}
-	
+
 	//Mouse Motion Listener
-	
+
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		wndInstance.cPoint = e.getPoint();
+	public void mouseDragged(MouseEvent mouseEvent) {
+		wndInstance.cPoint = mouseEvent.getPoint();
 	}
 	
 	@Override
-	public void mouseMoved(MouseEvent e) { }
-	
+	public void mouseMoved(MouseEvent mouseEvent) { }
+
 	//Mouse Listener
-	
-	@Override
-	public void mouseClicked(MouseEvent e) { }
-	
-	@Override
-	public void mouseEntered(MouseEvent e) { }
 
 	@Override
-	public void mouseExited(MouseEvent e) { }
+	public void mouseClicked(MouseEvent mouseEvent) { }
+	
+	@Override
+	public void mouseEntered(MouseEvent mouseEvent) { }
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		if(e.getButton() == 1) {
-			wndInstance.startPoint = e.getPoint();
+	public void mouseExited(MouseEvent mouseEvent) { }
+
+	@Override
+	public void mousePressed(MouseEvent mouseEvent) {
+		if(mouseEvent.getButton() == 1) {
+			wndInstance.startPoint = mouseEvent.getPoint();
 			wndInstance.startPointTotal = MouseInfo.getPointerInfo().getLocation();
 			wndInstance.startedCapture = true;
 		}
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {	
-		if(e.getButton() == 1) {
+	public void mouseReleased(MouseEvent mouseEvent) {
+		if(mouseEvent.getButton() == 1) {
 			wndInstance.cPointAlt = MouseInfo.getPointerInfo().getLocation();
 			wndInstance.capture();
 		}
@@ -55,14 +55,14 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	//Key Listener
 	
 	@Override
-	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+	public void keyPressed(KeyEvent keyEvent) {
+		if(keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE)
 			wndInstance.sniperInstance.killCaptureWindow();
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) { }
+	public void keyReleased(KeyEvent keyEvent) { }
 
 	@Override
-	public void keyTyped(KeyEvent e) { }
+	public void keyTyped(KeyEvent keyEvent) { }
 }

@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 public class ConfigSaveButton implements ActionListener{
 	ConfigWindow cfgWnd;
 	
-	public ConfigSaveButton(ConfigWindow _cfgWnd) {
-		this.cfgWnd = _cfgWnd;
+	public ConfigSaveButton(ConfigWindow cfgWnd) {
+		this.cfgWnd = cfgWnd;
 	}
 
 	@Override
