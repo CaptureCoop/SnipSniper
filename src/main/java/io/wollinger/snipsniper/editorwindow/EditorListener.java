@@ -79,7 +79,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.isDirty = true;
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHints(editorInstance.getQualityHints());
-		editorInstance.stamps[editorInstance.selectedStamp].render(g2, editorInstance.input, true, isCensor, history.size());
+		editorInstance.getSelectedStamp().render(g2, editorInstance.input, true, isCensor, history.size());
 		editorInstance.repaint();
 		g2.dispose();
 		g.dispose();
@@ -91,7 +91,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		InputContainer input = editorInstance.input;
 
 		if(input.isKeyPressed(KeyEvent.VK_ALT)) {
-			IStamp stamp = editorInstance.stamps[editorInstance.selectedStamp];
+			IStamp stamp = editorInstance.getSelectedStamp();
 			Color oldColor = stamp.getColor().c;
 			final int alpha = stamp.getColor().c.getAlpha();
 			float[] hsv = new float[3];
@@ -109,7 +109,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			return;
 		}
 
-		editorInstance.stamps[editorInstance.selectedStamp].updateSize(input, arg0.getWheelRotation());
+		editorInstance.getSelectedStamp().updateSize(input, arg0.getWheelRotation());
 		editorInstance.repaint();
 	}
 
@@ -117,23 +117,22 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	public void keyPressed(KeyEvent arg0) {
 		arg0.consume();
 		editorInstance.input.setKey(arg0.getKeyCode(), true);
+		IStamp stamp = editorInstance.getSelectedStamp();
 
 		if(arg0.getKeyCode() == KeyEvent.VK_C) {
-			IStamp stamp = editorInstance.stamps[editorInstance.selectedStamp];
-			new ColorChooser(editorInstance.getSniperInstance(), "Marker Color", editorInstance.stamps[editorInstance.selectedStamp].getColor(), stamp.getID() + "DefaultColor");
+			new ColorChooser(editorInstance.getSniperInstance(), "Marker Color", stamp.getColor(), stamp.getID() + "DefaultColor");
 		}
-
 		if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();
 
 		if(arg0.getKeyCode() == KeyEvent.VK_1)
-			editorInstance.selectedStamp = 0;
+			editorInstance.setSelectedStamp(0);
 		if(arg0.getKeyCode() == KeyEvent.VK_2)
-			editorInstance.selectedStamp = 1;
+			editorInstance.setSelectedStamp(1);
 		if(arg0.getKeyCode() == KeyEvent.VK_3)
-			editorInstance.selectedStamp = 2;
+			editorInstance.setSelectedStamp(2);
 		if(arg0.getKeyCode() == KeyEvent.VK_4)
-			editorInstance.selectedStamp = 3;
+			editorInstance.setSelectedStamp(3);
 
 		if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
 			JFileChooser chooser = new JFileChooser();
@@ -164,12 +163,12 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 				history.remove(size);
 				size--;
 				editorInstance.setImage(Utils.copyImage(history.get(size)));
-				for(IStamp stamp : editorInstance.stamps)
-					stamp.editorUndo(history.size());
+				for(IStamp cStamp : editorInstance.getStamps())
+					cStamp.editorUndo(history.size());
 			}
 		}
 
-		editorInstance.stamps[editorInstance.selectedStamp].updateSize(editorInstance.input, 0);
+		stamp.updateSize(editorInstance.input, 0);
 		editorInstance.repaint();
 	}
 

@@ -24,8 +24,8 @@ public class EditorWindow extends JFrame{
 	private final String saveLocation;
 	private final boolean inClipboard;
 
-	public IStamp[] stamps = new IStamp[4];
-	public int selectedStamp = 0;
+	private IStamp[] stamps = new IStamp[4];
+	private int selectedStamp = 0;
 
 	InputContainer input = new InputContainer();
 
@@ -100,6 +100,18 @@ public class EditorWindow extends JFrame{
 	public void kill() {
 		img = null;
 		this.dispose();
+	}
+
+	public void setSelectedStamp(int i) {
+		selectedStamp = i;
+	}
+
+	public IStamp getSelectedStamp() {
+		return stamps[selectedStamp];
+	}
+
+	public IStamp[] getStamps() {
+		return stamps;
 	}
 
 	public void setImage(BufferedImage image) {

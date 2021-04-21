@@ -20,8 +20,7 @@ public class EditorWindowRender extends JPanel{
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHints(editorWnd.getQualityHints());
 		g2.drawImage(editorWnd.getImage(), 0,0,this.getWidth(),this.getHeight(),this);
-		IStamp stamp = editorWnd.stamps[editorWnd.selectedStamp];
-		stamp.render(g2, editorWnd.input, false, false, -1);
+		editorWnd.getSelectedStamp().render(g2, editorWnd.input, false, false, -1);
 		g2.dispose();
 		editorWnd.repaint(); //TODO: Find more elegant way to do this, for example a loop
 	}
