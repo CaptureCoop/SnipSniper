@@ -24,7 +24,7 @@ public class EditorWindow extends JFrame{
 	private final String saveLocation;
 	private final boolean inClipboard;
 
-	private IStamp[] stamps = new IStamp[4];
+	private final IStamp[] stamps = new IStamp[4];
 	private int selectedStamp = 0;
 
 	InputContainer input = new InputContainer();

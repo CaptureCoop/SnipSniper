@@ -16,7 +16,7 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 public class ColorChooser extends JFrame{
 	private static final long serialVersionUID = 8590714455238968415L;
 
-	private Sniper sniper;
+	private final Sniper sniper;
 
 	private JColorChooser jcc;
 	

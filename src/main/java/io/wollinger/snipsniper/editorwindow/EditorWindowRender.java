@@ -1,7 +1,5 @@
 package io.wollinger.snipsniper.editorwindow;
 
-import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
-
 import java.awt.*;
 
 import javax.swing.JPanel;

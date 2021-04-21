@@ -136,7 +136,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 		if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
 			JFileChooser chooser = new JFileChooser();
-			File file = new File(editorInstance.getSniperInstance().constructFilename(editorInstance.FILENAME_MODIFIER));
+			File file = new File(editorInstance.getSniperInstance().constructFilename(EditorWindow.FILENAME_MODIFIER));
 			chooser.setSelectedFile(file);
 			int result = chooser.showSaveDialog(chooser);
 			if(result == JFileChooser.APPROVE_OPTION){
