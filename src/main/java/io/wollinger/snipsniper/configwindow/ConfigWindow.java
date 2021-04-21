@@ -20,13 +20,11 @@ import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.PBRColor;
 import io.wollinger.snipsniper.utils.Utils;
 import org.jnativehook.GlobalScreen;
-import org.jnativehook.keyboard.NativeKeyEvent;
 
 public class ConfigWindow extends JFrame implements WindowListener{
-
 	private static final long serialVersionUID = -1627369445259468935L;
 	
-	HotKeyButton hotKeyButton = new HotKeyButton();
+	HotKeyButton hotKeyButton;
 	JCheckBox saveToDisk = new JCheckBox();
 	JCheckBox copyToClipboard = new JCheckBox();
 	JTextField borderSize = new JTextField();
@@ -55,11 +53,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		
 		sniperInstance = _sniperInstance;
 
-		if(_sniperInstance.cfg.getInt("hotkey") == -1)
-			hotKeyButton.setText("None");
-		else
-			hotKeyButton.setText(NativeKeyEvent.getKeyText(_sniperInstance.cfg.getInt("hotkey")));
-		hotKeyButton.hotkey = sniperInstance.cfg.getInt("hotkey");
+		hotKeyButton = new HotKeyButton(sniperInstance.cfg.getString("hotkey"));
 		saveToDisk.setSelected(_sniperInstance.cfg.getBool("saveToDisk"));
 		copyToClipboard.setSelected(_sniperInstance.cfg.getBool("copyToClipboard"));
 		borderSize.setText(_sniperInstance.cfg.getInt("borderSize") + "");
@@ -194,8 +188,13 @@ public class ConfigWindow extends JFrame implements WindowListener{
 			}
 			return;
 		}
-		
-		sniperInstance.cfg.set("hotkey", hotKeyButton.hotkey + "");
+
+		if(hotKeyButton.hotkey != -1) {
+			String hotkeyModifier = "KB";
+			if (!hotKeyButton.isKeyboard)
+				hotkeyModifier = "M";
+			sniperInstance.cfg.set("hotkey", hotkeyModifier + hotKeyButton.hotkey);
+		}
 		sniperInstance.cfg.set("pictureFolder", _saveLocation);
 		sniperInstance.cfg.set("saveToDisk", _saveToDisk + "");
 		sniperInstance.cfg.set("borderSize", _borderSize + "");
@@ -212,6 +211,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	void close() {
 		if(!closed) {
 			GlobalScreen.removeNativeKeyListener(hotKeyButton);
+			GlobalScreen.removeNativeMouseListener(hotKeyButton);
 			closed = true;
 			if(colorChooser != null) {
 				colorChooser.dispose();

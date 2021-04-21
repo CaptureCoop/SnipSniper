@@ -4,17 +4,32 @@ import javax.swing.JButton;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
+import org.jnativehook.mouse.NativeMouseEvent;
+import org.jnativehook.mouse.NativeMouseListener;
 
-public class HotKeyButton extends JButton implements NativeKeyListener{
+public class HotKeyButton extends JButton implements NativeKeyListener, NativeMouseListener {
 	private static final long serialVersionUID = 8834166293141062833L;
 	
 	private boolean listening = false;
 	public int hotkey;
 	private final HotKeyButton instance;
-	
-	public HotKeyButton() {
+	public boolean isKeyboard = true;
+
+	public HotKeyButton(String key) {
+		if(key.startsWith("NONE")) {
+			this.setText("NONE");
+		} else if(key.startsWith("KB")) {
+			hotkey = Integer.parseInt(key.replace("KB", ""));
+			this.setText(NativeKeyEvent.getKeyText(hotkey));
+		} else if (key.startsWith("M")) {
+			hotkey = Integer.parseInt(key.replace("M", ""));
+			isKeyboard = false;
+			this.setText("Mouse " + hotkey);
+		}
+
 		instance = this;
 		GlobalScreen.addNativeKeyListener(this);
+		GlobalScreen.addNativeMouseListener(this);
 		this.addActionListener(listener -> {
 			listening = true;
 			instance.setText("...listening");
@@ -36,4 +51,24 @@ public class HotKeyButton extends JButton implements NativeKeyListener{
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent arg0) { }
 
+	@Override
+	public void nativeMousePressed(NativeMouseEvent nativeMouseEvent) {
+		if(listening) {
+			hotkey = nativeMouseEvent.getButton();
+
+			if(hotkey == 1 || hotkey == 2) {
+				hotkey = -1;
+				return;
+			}
+			isKeyboard = false;
+			listening = false;
+			instance.setText("Mouse " + hotkey);
+		}
+	}
+
+	@Override
+	public void nativeMouseClicked(NativeMouseEvent nativeMouseEvent) { }
+
+	@Override
+	public void nativeMouseReleased(NativeMouseEvent nativeMouseEvent) { }
 }

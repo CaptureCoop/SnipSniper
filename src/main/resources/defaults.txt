@@ -1,6 +1,6 @@
 <--- Normal Config Settings --->
 language=en
-hotkey=-1
+hotkey=NONE
 pictureFolder=%userprofile%\pictures\SnipSniper\
 saveToDisk=true
 borderSize=0

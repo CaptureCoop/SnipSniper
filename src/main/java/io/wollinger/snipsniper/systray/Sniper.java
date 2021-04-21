@@ -40,8 +40,10 @@ import io.wollinger.snipsniper.systray.buttons.btnExit;
 import io.wollinger.snipsniper.systray.buttons.btnOpenImgFolder;
 import io.wollinger.snipsniper.utils.DebugType;
 import io.wollinger.snipsniper.utils.Icons;
+import org.jnativehook.mouse.NativeMouseEvent;
+import org.jnativehook.mouse.NativeMouseListener;
 
-public class Sniper implements NativeKeyListener{
+public class Sniper implements NativeKeyListener, NativeMouseListener {
 	public int profileID; //0 = default
 	
 	CaptureWindow cWnd;
@@ -128,6 +130,7 @@ public class Sniper implements NativeKeyListener{
 			e.printStackTrace();
 		}
 		GlobalScreen.addNativeKeyListener(this);
+		GlobalScreen.addNativeMouseListener(this);
 	}
 	
 	//This refreshes the buttons so that they only show profiles that exist/don't exist respectively.
@@ -155,6 +158,7 @@ public class Sniper implements NativeKeyListener{
 						cfg.deleteFile();
 						SystemTray.getSystemTray().remove(Main.profiles[index].trayIcon);
 						GlobalScreen.removeNativeKeyListener(instance);
+						GlobalScreen.removeNativeMouseListener(instance);
 						Main.profiles[index].trayIcon = null;
 						Main.profiles[index] = null;
 						instance = null;
@@ -178,27 +182,6 @@ public class Sniper implements NativeKeyListener{
 			System.gc();
 		}
 	}
-
-	@Override
-	public void nativeKeyPressed(NativeKeyEvent e) {
-		if(cfg.getInt("hotkey") != -1) {
-			if (e.getKeyCode() == cfg.getInt("hotkey")) {
-				if(cWnd == null && Main.isIdle) {
-					cWnd = new CaptureWindow(instance);
-					Main.isIdle = false;
-				}
-			} else if (e.getKeyCode() == cfg.getInt("killSwitch") && cfg.getBool("debug")) {
-				debug("KillSwitch detected. Goodbye!", DebugType.INFO);
-				System.exit(0);
-			}
-		}
-	}
-
-	@Override
-	public void nativeKeyReleased(NativeKeyEvent arg0) { }
-
-	@Override
-	public void nativeKeyTyped(NativeKeyEvent arg0) { }
 
 	public void copyToClipboard(BufferedImage _img) {
 		ImageSelection imgSel = new ImageSelection(_img);
@@ -294,5 +277,44 @@ public class Sniper implements NativeKeyListener{
 				System.exit(0);
 		}
 	}
-	
+
+	public void checkNativeKey(String identifier, int pressedKey) {
+		String hotkey = cfg.getString("hotkey");
+		if(!hotkey.equals("NONE")) {
+			if(hotkey.startsWith(identifier)) {
+				int key = Integer.parseInt(hotkey.replace(identifier, ""));
+				if(pressedKey == key) {
+					if(cWnd == null && Main.isIdle) {
+						cWnd = new CaptureWindow(instance);
+						Main.isIdle = false;
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void nativeKeyPressed(NativeKeyEvent e) {
+		checkNativeKey("KB", e.getKeyCode());
+	}
+
+	@Override
+	public void nativeKeyReleased(NativeKeyEvent arg0) { }
+
+	@Override
+	public void nativeKeyTyped(NativeKeyEvent arg0) { }
+
+
+	@Override
+	public void nativeMouseClicked(NativeMouseEvent nativeMouseEvent) {
+	}
+
+	@Override
+	public void nativeMousePressed(NativeMouseEvent nativeMouseEvent) {
+		checkNativeKey("M", nativeMouseEvent.getButton());
+
+	}
+
+	@Override
+	public void nativeMouseReleased(NativeMouseEvent nativeMouseEvent) { }
 }
