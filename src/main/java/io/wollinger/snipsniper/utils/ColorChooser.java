@@ -1,5 +1,8 @@
 package io.wollinger.snipsniper.utils;
 
+import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.systray.Sniper;
+
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 
@@ -13,16 +16,21 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 public class ColorChooser extends JFrame{
 	private static final long serialVersionUID = 8590714455238968415L;
 
+	private Sniper sniper;
+
 	private JColorChooser jcc;
 	
 	private final PBRColor color;
-	
+	private final String configKey;
+
 	ColorChooser instance;
 	
-	public ColorChooser(String _title, PBRColor _color) {
+	public ColorChooser(Sniper sniper, String _title, PBRColor _color, String configKey) {
+	    this.sniper = sniper;
 		color = _color;
 		instance = this;
 		this.setTitle(_title);
+		this.configKey = configKey;
 		init();
 	}
 	
@@ -30,6 +38,16 @@ public class ColorChooser extends JFrame{
 		color.c = jcc.getColor();
 		this.dispose();
 	}
+
+	public void save() {
+	    color.c = jcc.getColor();
+        if(configKey != null) {
+            Config cfg = sniper.cfg;
+            cfg.set(configKey, Utils.rgb2hex(color.c));
+            cfg.save();
+        }
+        this.dispose();
+    }
 	
 	void init() {
 		jcc = new JColorChooser();
@@ -46,7 +64,10 @@ public class ColorChooser extends JFrame{
         JPanel submitButtonPanel = new JPanel();
         JButton submit = new JButton("Okay");
         submit.addActionListener(listener -> instance.close());
-       
+
+        JButton save = new JButton("Save as default");
+        save.addActionListener(listener -> instance.save());
+
         mainmain.setLayout(new BoxLayout(mainmain, BoxLayout.Y_AXIS));
         
         colorPanel.add(jcc);
@@ -62,6 +83,10 @@ public class ColorChooser extends JFrame{
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
         this.pack();
+        if(configKey != null) {
+            save.setPreferredSize(new Dimension(this.getWidth() / 4, 50));
+            submitButtonPanel.add(save);
+        }
         submit.setPreferredSize(new Dimension(this.getWidth()/2, 50));
         submitButtonPanel.add(submit);
 
