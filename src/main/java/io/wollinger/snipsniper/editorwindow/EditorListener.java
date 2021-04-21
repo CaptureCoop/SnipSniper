@@ -42,7 +42,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		if(arg0.getButton() == 3) {
-			editorInstance.saveImage();
+			if(editorInstance.isDirty)
+				editorInstance.saveImage();
 			editorInstance.kill();
 		}
 			
@@ -75,6 +76,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	}
 
 	public void save(Graphics g, boolean isCensor) {
+		editorInstance.isDirty = true;
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHints(editorInstance.getQualityHints());
 		editorInstance.stamps[editorInstance.selectedStamp].render(g2, editorInstance.input, true, isCensor, history.size());
@@ -148,7 +150,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		}
 
 		if(arg0.getKeyCode() == KeyEvent.VK_S) {
-			editorInstance.saveImage();
+			if(editorInstance.isDirty)
+				editorInstance.saveImage();
 			editorInstance.kill();
 		}
 

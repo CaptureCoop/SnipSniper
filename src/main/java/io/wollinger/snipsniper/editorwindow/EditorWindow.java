@@ -33,6 +33,8 @@ public class EditorWindow extends JFrame{
 
 	public static final String FILENAME_MODIFIER = "_edited";
 
+	public boolean isDirty = false;
+
 	public EditorWindow(BufferedImage _img, int _x, int _y, String _title, Sniper _sInstance, boolean _leftToRight, String saveLocation, boolean inClipboard) {
 		img = _img;
 		sniperInstance = _sInstance;
