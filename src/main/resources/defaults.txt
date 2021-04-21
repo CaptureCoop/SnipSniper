@@ -22,6 +22,7 @@ smartPixel=true
 hsvColorSwitchSpeed=0.02
 
 <--- Editor Stamp Settings --->
+editorStampCubeDefaultColor=#FFFF00
 editorStampCubeWidth=75
 editorStampCubeHeight=20
 editorStampCubeWidthMinimum=10
@@ -29,6 +30,7 @@ editorStampCubeHeightMinimum=20
 editorStampCubeWidthSpeed=20
 editorStampCubeHeightSpeed=20
 
+editorStampCounterDefaultColor=#affe00
 editorStampCounterWidth=40
 editorStampCounterHeight=40
 editorStampCounterWidthMinimum=10
@@ -41,6 +43,7 @@ editorStampCounterFontSizeModifier=1.25
 editorStampCounterBorderEnabled=true
 editorStampCounterBorderModifier=20
 
+editorStampCircleDefaultColor=#FF0064
 editorStampCircleWidth=40
 editorStampCircleHeight=40
 editorStampCircleWidthMinimum=10
@@ -50,6 +53,7 @@ editorStampCircleWidthSpeed=20
 editorStampCircleHeightSpeed=20
 editorStampCircleThickness=4
 
+editorStampSimpleBrushDefaultColor=#00A6B0
 editorStampSimpleBrushDistance=7
 editorStampSimpleBrushSize=20
 editorStampSimpleBrushSizeSpeed=5

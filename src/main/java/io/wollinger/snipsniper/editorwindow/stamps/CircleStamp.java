@@ -19,9 +19,10 @@ public class CircleStamp implements IStamp{
     private final int speedHeight;
     private final int speed;
 
-    private PBRColor color = new PBRColor(255,0,100,100);
+    private PBRColor color;
 
     public CircleStamp(Config cfg) {
+        color = new PBRColor(cfg.getColor("editorStampCircleDefaultColor"));
         width = cfg.getInt("editorStampCircleWidth");
         height = cfg.getInt("editorStampCircleHeight");
 

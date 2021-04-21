@@ -22,11 +22,13 @@ public class CubeStamp implements IStamp{
     private final int speedHeight;
     private final int speed;
 
-    private PBRColor color = new PBRColor(Color.YELLOW);
+    private PBRColor color;
 
     public CubeStamp(EditorWindow editor) {
         this.editor = editor;
         Config cfg = editor.getSniperInstance().cfg;
+
+        color = new PBRColor(cfg.getColor("editorStampCubeDefaultColor"));
         width = cfg.getInt("editorStampCubeWidth");
         height = cfg.getInt("editorStampCubeHeight");
         thickness = 0;

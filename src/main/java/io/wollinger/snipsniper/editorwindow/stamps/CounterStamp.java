@@ -21,7 +21,7 @@ public class CounterStamp implements IStamp{
     private final int speedHeight;
     private final int speed;
 
-    private PBRColor color = new PBRColor(175, 254, 0, 255);
+    private PBRColor color;
 
     private final float fontSizeModifier;
     private int count = 1;
@@ -31,6 +31,8 @@ public class CounterStamp implements IStamp{
 
     public CounterStamp(Config cfg) {
         this.cfg = cfg;
+
+        color = new PBRColor(cfg.getColor("editorStampCounterDefaultColor"));
         width = cfg.getInt("editorStampCounterWidth");
         height = cfg.getInt("editorStampCounterHeight");
 
