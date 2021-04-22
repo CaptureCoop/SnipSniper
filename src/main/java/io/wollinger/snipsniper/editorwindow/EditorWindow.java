@@ -96,12 +96,8 @@ public class EditorWindow extends JFrame{
 				}
 			}
 		}
-		if(!found) {
-			if(bestMonitor != null) {
-				setLocation((int) getLocation().getX(), bestMonitor.getBounds().y);
-				System.out.println(bestMonitor.getBounds().y);
-			}
-		}
+		if(!found && bestMonitor != null)
+			setLocation((int) getLocation().getX(), bestMonitor.getBounds().y);
 	}
 
 	public void refreshTitle() {
