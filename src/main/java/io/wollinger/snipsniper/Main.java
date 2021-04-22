@@ -35,6 +35,11 @@ public class Main {
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
 		new CommandLineHelper().handle(args);
 
+		if(!isDemo) {
+			new File(profilesFolder).mkdirs();
+			new File(logFolder).mkdirs();
+		}
+
 		LogManager.log("Main", "Launching SnipSniper Version " + Main.VERSION, Level.INFO);
 
 		if(SystemUtils.IS_OS_WINDOWS)
@@ -47,10 +52,7 @@ public class Main {
 		LogManager.log("Main", "Loading resources", Level.INFO);
 		Icons.loadResources();
 
-		if(!isDemo) {
-			new File(profilesFolder).mkdirs();
-			new File(logFolder).mkdirs();
-		} else {
+		if(isDemo) {
 			LogManager.log("Main", "========================================================", Level.INFO);
 			LogManager.log("Main", "SnipSniper is running in DEMO mode", Level.INFO);
 			LogManager.log("Main", "This means that no files will be created and/or modified", Level.INFO);
