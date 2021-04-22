@@ -12,19 +12,28 @@ public class CommandLineHelper {
         if(args.length == 0)
             return;
 
-        switch(args[0]) {
-            case "-help":
-            case "-?":
-                helpText();
-                System.exit(0);
-            case "-version":
-            case "-v":
-                System.out.println(Main.VERSION);
-                System.exit(0);
-            case "-demo":
-                Main.isDemo = true;
-                break;
+        boolean doExit = false;
+
+        for(String arg : args) {
+            switch(arg) {
+                case "-help":
+                case "-?":
+                    helpText();
+                    doExit = true;
+                    break;
+                case "-version":
+                case "-v":
+                    System.out.println(Main.VERSION);
+                    doExit = true;
+                    break;
+                case "-demo":
+                    Main.isDemo = true;
+                    break;
+            }
         }
+
+        if(doExit)
+            System.exit(0);
     }
 
     public void helpText() {
