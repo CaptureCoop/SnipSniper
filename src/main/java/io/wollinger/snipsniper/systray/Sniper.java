@@ -139,29 +139,39 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			if(Main.profiles[index] == null) {
 				MenuItem mi = new MenuItem("Profile " + (i + 1));
 				mi.addActionListener(listener -> {
-					if(Main.profiles[index] == null) {
-						Main.profiles[index] = new Sniper(index + 1);
-						Main.profiles[index].cfg.save();
-					}
+					addProfile(index);
 				});
 				createProfilesMenu.add(mi);
 			} else if(Main.profiles[index] != null) {
 				MenuItem mi = new MenuItem("Profile " + (i + 1));
 				mi.addActionListener(listener -> {
-					if(Main.profiles[index] != null) {
-						cfg.deleteFile();
-						SystemTray.getSystemTray().remove(Main.profiles[index].trayIcon);
-						GlobalScreen.removeNativeKeyListener(instance);
-						GlobalScreen.removeNativeMouseListener(instance);
-						Main.profiles[index].trayIcon = null;
-						Main.profiles[index] = null;
-						instance = null;
-					}
+					removeProfile(index);
 				});
 				removeProfilesMenu.add(mi);
 			}
 		}
 
+	}
+
+	public void addProfile(int id) {
+		if(Main.profiles[id] == null) {
+			LogManager.log(profileID, "Creating profile " + (id + 1), Level.INFO);
+			Main.profiles[id] = new Sniper(id + 1);
+			Main.profiles[id].cfg.save();
+		}
+	}
+
+	public void removeProfile(int id) {
+		if(Main.profiles[id] != null) {
+			LogManager.log(profileID, "Removing profile " + (id + 1), Level.INFO);
+			cfg.deleteFile();
+			SystemTray.getSystemTray().remove(Main.profiles[id].trayIcon);
+			GlobalScreen.removeNativeKeyListener(instance);
+			GlobalScreen.removeNativeMouseListener(instance);
+			Main.profiles[id].trayIcon = null;
+			Main.profiles[id] = null;
+			instance = null;
+		}
 	}
 
 	public void killCaptureWindow() {
