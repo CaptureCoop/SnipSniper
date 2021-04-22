@@ -12,11 +12,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +20,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import io.wollinger.snipsniper.utils.LangManager;
+import io.wollinger.snipsniper.utils.LogManager;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -38,7 +35,6 @@ import io.wollinger.snipsniper.systray.buttons.btnAbout;
 import io.wollinger.snipsniper.systray.buttons.btnConfig;
 import io.wollinger.snipsniper.systray.buttons.btnExit;
 import io.wollinger.snipsniper.systray.buttons.btnOpenImgFolder;
-import io.wollinger.snipsniper.utils.DebugType;
 import io.wollinger.snipsniper.utils.Icons;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseListener;
@@ -55,16 +51,14 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	
 	Menu createProfilesMenu;
 	Menu removeProfilesMenu;
-	
-	File logFile = null;
-	
+
 	public Sniper(int profileID) {
 		this.profileID = profileID;
 		
 		cfg = new Config(this);
 		instance = this;
 		
-		debug("Loading profile " + profileID, DebugType.INFO);
+		LogManager.log(profileID, "Loading profile " + profileID, Level.INFO);
 		
 	    SystemTray tray = SystemTray.getSystemTray();
 	    
@@ -120,13 +114,13 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			
 			tray.add(trayIcon);
 		} catch (AWTException e) {
-			debug("There was an issue setting up the Tray Icon! Message: " + e.getMessage(), DebugType.ERROR);
+			LogManager.log(profileID, "There was an issue setting up the Tray Icon! Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
 		try {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException e) {
-			debug("There was an issue setting up NativeHook! Message: " + e.getMessage(), DebugType.ERROR);
+			LogManager.log(profileID, "There was an issue setting up NativeHook! Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
 		GlobalScreen.addNativeKeyListener(this);
@@ -135,7 +129,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	
 	//This refreshes the buttons so that they only show profiles that exist/don't exist respectively.
 	void refreshProfiles() {
-		debug("Refreshing profiles in task tray", DebugType.INFO);
+		LogManager.log(profileID, "Refreshing profiles in task tray", Level.INFO);
 		createProfilesMenu.removeAll();
 		removeProfilesMenu.removeAll();
 		
@@ -186,7 +180,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	public void copyToClipboard(BufferedImage img) {
 		ImageSelection imgSel = new ImageSelection(img);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
-		debug("Copied Image to clipboard", DebugType.INFO);
+		LogManager.log(profileID, "Copied Image to clipboard", Level.INFO);
 	}
 
 	public String constructFilename(String modifier) {
@@ -206,20 +200,20 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			if(cfg.getBool("saveToDisk")) {
 				if(!path.exists()) {
 					if(!path.mkdirs()) {
-						debug("Failed saving, directory missing & could not create it!", DebugType.WARNING);
+						LogManager.log(profileID, "Failed saving, directory missing & could not create it!", Level.WARNING);
 						return null;
 					}
 				}
 				if(file.createNewFile()) {
 					ImageIO.write(finalImg, "png", file);
-					debug("Saved image on disk. Location: " + file, DebugType.INFO);
+					LogManager.log(profileID, "Saved image on disk. Location: " + file, Level.INFO);
 					return file.getAbsolutePath();
 				}
 			}
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Could not save image to \"" + file.toString()  + "\"!" , "Error", JOptionPane.INFORMATION_MESSAGE);
-			debug("Failed Saving. Wanted Location: " + file, DebugType.WARNING);
-			debug("Detailed Error: " + e.getMessage(), DebugType.WARNING);
+			LogManager.log(profileID, "Failed Saving. Wanted Location: " + file, Level.WARNING);
+			LogManager.log(profileID, "Detailed Error: " + e.getMessage(), Level.WARNING);
 			e.printStackTrace();
 			return null;
 		}

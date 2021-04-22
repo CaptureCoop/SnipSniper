@@ -9,9 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import io.wollinger.snipsniper.systray.Sniper;
-import io.wollinger.snipsniper.utils.DebugType;
+import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
 
 public class Config {
@@ -31,7 +32,7 @@ public class Config {
 			
 			loadFile("/defaults.txt", defaults, true);
 		} catch (NumberFormatException | IOException e) {
-			sniperInstance.debug("There was an error loading the config. Message: " + e.getMessage(), DebugType.ERROR);
+			LogManager.log(sniperInstance.profileID, "There was an error loading the config. Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
 	}
@@ -63,7 +64,7 @@ public class Config {
 		else if(defaults.containsKey(key))
 			returnVal = defaults.get(key);
 		else
-			sniperInstance.debug("No value found for <" + key + ">.", DebugType.ERROR);
+			LogManager.log(sniperInstance.profileID, "No value found for <" + key + ">.", Level.SEVERE);
 		return returnVal;
 	}
 	
@@ -120,7 +121,7 @@ public class Config {
 		String filename = getFilename(sniperInstance.profileID);
 		File file = new File(Main.profilesFolder + "/" + filename);
 		if(!file.delete())
-			sniperInstance.debug("Could not delete profile config!", DebugType.WARNING);
+			LogManager.log(sniperInstance.profileID, "Could not delete profile config!", Level.WARNING);
 	}
 	
 	private void saveFile(HashMap<String, String> map) {
@@ -133,7 +134,7 @@ public class Config {
 			}
 			writer.close();
 		} catch (IOException e) {
-			sniperInstance.debug("There was an error saving the config! Message: " + e.getMessage(), DebugType.ERROR);
+			LogManager.log(sniperInstance.profileID, "There was an error saving the config! Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
 	}

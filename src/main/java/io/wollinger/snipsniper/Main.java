@@ -29,6 +29,8 @@ public class Main {
 
 	public static boolean isDemo = false;
 
+	public static File logFile = null;
+
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
 		new CommandLineHelper().handle(args);
 

@@ -9,12 +9,13 @@ import java.awt.event.WindowListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 import javax.swing.JFrame;
 
 import io.wollinger.snipsniper.systray.Sniper;
-import io.wollinger.snipsniper.utils.DebugType;
 import io.wollinger.snipsniper.utils.Icons;
+import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
 import io.wollinger.snipsniper.editorwindow.EditorWindow;
 
@@ -54,8 +55,9 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			try {
 				Thread.sleep(sniperInstance.cfg.getInt("snipeDelay") * 1000L);
 			} catch (InterruptedException e) {
-				sniperInstance.debug("There was an error with the delay! Message: " + e.getMessage(), DebugType.ERROR);
-				sniperInstance.debug("More info: " + Arrays.toString(e.getStackTrace()), DebugType.ERROR);
+				int profileID = sniperInstance.profileID;
+				LogManager.log(profileID, "There was an error with the delay! Message: " + e.getMessage(), Level.SEVERE);
+				LogManager.log(profileID, "More info: " + Arrays.toString(e.getStackTrace()), Level.SEVERE);
 			}
 		}
 		
@@ -140,7 +142,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		try {
 			screenshot = new Robot().createScreenCapture(screenshotRect);
 		} catch (AWTException e) {
-			sniperInstance.debug("Couldn't take screenshot. Message: " + e.getMessage(), DebugType.ERROR);
+			LogManager.log(sniperInstance.profileID, "Couldn't take screenshot. Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
 		screenshotTinted = Utils.copyImage(screenshot);
@@ -230,9 +232,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 					leftToRight = true;
 				}
 				if (sniperInstance.cfg.getBool("openEditor")) {
-					sniperInstance.debug("Taking screenshot. Position info:", DebugType.INFO);
-					sniperInstance.debug("Captured area: " + captureArea.toString(), DebugType.INFO);
-					sniperInstance.debug("Area requested by JFrame.setLocation(): " + "X: " + cPointAlt.getX() + " Y: " + cPointAlt.getY(), DebugType.INFO);
 					new EditorWindow(finalImg, posX, posY, "SnipSniper Editor", sniperInstance, leftToRight, finalLocation, inClipboard);
 				}
 			}
@@ -282,7 +281,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 			lastPoint = cPoint;
 		} else {
-			sniperInstance.debug("WARNING: Screenshot is null when trying to render. Trying again.", DebugType.WARNING);
+			LogManager.log(sniperInstance.profileID, "WARNING: Screenshot is null when trying to render. Trying again.", Level.WARNING);
 			this.repaint();
 		}
 		g2.dispose();
