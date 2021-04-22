@@ -221,27 +221,27 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	}
 
 	@Override
-	public void windowActivated(WindowEvent arg0) { }
+	public void windowActivated(WindowEvent windowEvent) { }
 
 	@Override
-	public void windowClosed(WindowEvent arg0) {
+	public void windowClosed(WindowEvent windowEvent) {
 		close();
 	}
 
 	@Override
-	public void windowClosing(WindowEvent arg0) {
+	public void windowClosing(WindowEvent windowEvent) {
 		close();
 	}
 
 	@Override
-	public void windowDeactivated(WindowEvent arg0) { }
+	public void windowDeactivated(WindowEvent windowEvent) { }
 
 	@Override
-	public void windowDeiconified(WindowEvent arg0) { }
+	public void windowDeiconified(WindowEvent windowEvent) { }
 
 	@Override
-	public void windowIconified(WindowEvent arg0) { }
+	public void windowIconified(WindowEvent windowEvent) { }
 
 	@Override
-	public void windowOpened(WindowEvent arg0) { }
+	public void windowOpened(WindowEvent windowEvent) { }
 }
