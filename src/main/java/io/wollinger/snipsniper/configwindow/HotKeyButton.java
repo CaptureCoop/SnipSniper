@@ -1,6 +1,8 @@
 package io.wollinger.snipsniper.configwindow;
 
 import javax.swing.JButton;
+
+import io.wollinger.snipsniper.utils.LangManager;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
@@ -17,7 +19,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 
 	public HotKeyButton(String key) {
 		if(key.startsWith("NONE")) {
-			this.setText("NONE");
+			this.setText(LangManager.getItem("config_label_none"));
 			hotkey = -1;
 		} else if(key.startsWith("KB")) {
 			hotkey = Integer.parseInt(key.replace("KB", ""));
@@ -25,7 +27,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 		} else if (key.startsWith("M")) {
 			hotkey = Integer.parseInt(key.replace("M", ""));
 			isKeyboard = false;
-			this.setText("Mouse " + hotkey);
+			this.setText(LangManager.getItem("config_label_mouse") + " " + hotkey);
 		}
 
 		instance = this;
@@ -33,7 +35,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 		GlobalScreen.addNativeMouseListener(this);
 		this.addActionListener(listener -> {
 			listening = true;
-			instance.setText("...listening");
+			instance.setText(LangManager.getItem("config_label_hotkey_listening"));
 		});
 	}
 	
@@ -64,7 +66,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 			}
 			isKeyboard = false;
 			listening = false;
-			instance.setText("Mouse " + hotkey);
+			instance.setText(LangManager.getItem("config_label_mouse") + " " + hotkey);
 		}
 	}
 

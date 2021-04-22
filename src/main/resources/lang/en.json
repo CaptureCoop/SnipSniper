@@ -10,6 +10,22 @@
     "menu_quit": "Quit",
     "about_programming": "Programming",
     "about_cd": "Creative director",
-    "about_math": "Math"
+    "about_math": "Math",
+
+    "config_label_config": "Config",
+    "config_label_hotkey": "Capture Hotkey",
+    "config_label_saveimages": "Save Images on Capture",
+    "config_label_copyclipboard": "Copy images to clipboard on capture",
+    "config_label_bordersize": "Border size (in px)",
+    "config_label_picturelocation": "Picture Location",
+    "config_label_snapdelay": "Snap Delay in seconds",
+    "config_label_openeditor": "Open Editor after capture",
+    "config_label_color": "Color",
+    "config_label_bordercolor": "Border color",
+    "config_label_delete": "Delete",
+    "config_label_none": "NONE",
+    "config_label_save": "Save",
+    "config_label_hotkey_listening": "Listening...",
+    "config_label_mouse": "Mouse"
   }
 }

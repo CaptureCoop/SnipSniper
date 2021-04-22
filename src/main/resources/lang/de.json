@@ -10,6 +10,22 @@
     "menu_quit": "Beenden",
     "about_programming": "Programmierung",
     "about_cd": "Kreativdirektor",
-    "about_math": "Mathematik"
+    "about_math": "Mathematik",
+
+    "config_label_config": "Einstellungen",
+    "config_label_hotkey": "Aufnahme Taste",
+    "config_label_saveimages": "Bild nach dem Aufnehmen Abspeichern",
+    "config_label_copyclipboard": "Bild nach dem Aufnehmen Kopieren",
+    "config_label_bordersize": "Rand Größe (In Pixeln)",
+    "config_label_picturelocation": "Bild Ordner",
+    "config_label_snapdelay": "Aufnahme Verzögerung (In Sekunden)",
+    "config_label_openeditor": "Editor öffnen nach Aufnahme",
+    "config_label_color": "Farbe",
+    "config_label_bordercolor": "Rand Farbe",
+    "config_label_delete": "Löschen",
+    "config_label_none": "KEINE",
+    "config_label_save": "Speichern",
+    "config_label_hotkey_listening": "Warten auf Eingabe...",
+    "config_label_mouse": "Maus"
   }
 }

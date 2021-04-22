@@ -15,10 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import io.wollinger.snipsniper.systray.Sniper;
-import io.wollinger.snipsniper.utils.ColorChooser;
-import io.wollinger.snipsniper.utils.Icons;
-import io.wollinger.snipsniper.utils.PBRColor;
-import io.wollinger.snipsniper.utils.Utils;
+import io.wollinger.snipsniper.utils.*;
 import org.jnativehook.GlobalScreen;
 
 public class ConfigWindow extends JFrame implements WindowListener{
@@ -49,7 +46,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		this.sniperInstance = sniperInstance;
 		this.addWindowListener(this);
 		this.setSize(512,512);
-		this.setTitle("Config");
+		this.setTitle(LangManager.getItem("config_label_config"));
 		this.setIconImage(Icons.icon_taskbar);
 
 		hotKeyButton = new HotKeyButton(sniperInstance.cfg.getString("hotkey"));
@@ -61,18 +58,18 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		snipeDelay.setText(sniperInstance.cfg.getInt("snipeDelay") + "");
 		openEditor.setSelected(sniperInstance.cfg.getBool("openEditor"));
 		
-		JButton saveButton = new JButton("Save");
+		JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
 		saveButton.addActionListener(new ConfigSaveButton(this));
 		
 		JPanel options = new JPanel(new GridLayout(0,1));
 
 		JPanel row0 = new JPanel(new GridLayout(0,2));
-		row0.add(createJLabel("Capture Hotkey", JLabel.CENTER, JLabel.CENTER));
+		row0.add(createJLabel(LangManager.getItem("config_label_hotkey"), JLabel.CENTER, JLabel.CENTER));
 		JPanel row0_1 = new JPanel(new GridLayout(0,2));
 		row0_1.add(hotKeyButton);
-		JButton deleteHotKey = new JButton("Delete");
+		JButton deleteHotKey = new JButton(LangManager.getItem("config_label_delete"));
 		deleteHotKey.addActionListener(e -> {
-			hotKeyButton.setText("None");
+			hotKeyButton.setText(LangManager.getItem("config_label_none"));
 			hotKeyButton.hotkey = -1;
 		});
 		row0_1.add(deleteHotKey);
@@ -80,42 +77,42 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		options.add(row0);
 		
 		JPanel row1 = new JPanel(new GridLayout(0,2));
-		row1.add(createJLabel("Save Images on Capture", JLabel.CENTER, JLabel.CENTER));
+		row1.add(createJLabel(LangManager.getItem("config_label_saveimages"), JLabel.CENTER, JLabel.CENTER));
 		row1.add(saveToDisk);
 		options.add(row1);
 		
 		JPanel row2 = new JPanel(new GridLayout(0,2));
-		row2.add(createJLabel("Copy images to clipboard on capture", JLabel.CENTER, JLabel.CENTER));
+		row2.add(createJLabel(LangManager.getItem("config_label_copyclipboard"), JLabel.CENTER, JLabel.CENTER));
 		row2.add(copyToClipboard);
 		options.add(row2);
 		
 		JPanel row3 = new JPanel(new GridLayout(0,2));
-		row3.add(createJLabel("Border size (in px)", JLabel.CENTER, JLabel.CENTER));
+		row3.add(createJLabel(LangManager.getItem("config_label_bordersize"), JLabel.CENTER, JLabel.CENTER));
 		JPanel row3_2 = new JPanel(new GridLayout(0,2));
 		row3_2.add(borderSize);
-		JButton colorBtn = new JButton("Color");
+		JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
 		colorBtn.addActionListener(e -> {
 			if(colorChooser == null || !colorChooser.isDisplayable())
-				colorChooser = new ColorChooser(sniperInstance, "Border color", borderColor, null);
+				colorChooser = new ColorChooser(sniperInstance, LangManager.getItem("config_label_bordercolor"), borderColor, null);
 		});
 		row3_2.add(colorBtn);
 		row3.add(row3_2);
 		options.add(row3);
 		
 		JPanel row4 = new JPanel(new GridLayout(0,2));
-		row4.add(createJLabel("Picture Location", JLabel.CENTER, JLabel.CENTER));
+		row4.add(createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.CENTER, JLabel.CENTER));
 		row4.add(pictureLocation);
 		options.add(row4);
 
 		JPanel row5 = new JPanel(new GridLayout(0,2));
-		row5.add(createJLabel("Snap Delay in s:", JLabel.CENTER, JLabel.CENTER));
+		row5.add(createJLabel(LangManager.getItem("config_label_snapdelay"), JLabel.CENTER, JLabel.CENTER));
 		JPanel row5_2 = new JPanel(new GridLayout(0,2));
 		row5_2.add(snipeDelay);
 		row5.add(row5_2);
 		options.add(row5);
 		
 		JPanel row6 = new JPanel(new GridLayout(0,2));
-		row6.add(createJLabel("Open Editor after Capture", JLabel.CENTER, JLabel.CENTER));
+		row6.add(createJLabel(LangManager.getItem("config_label_openeditor"), JLabel.CENTER, JLabel.CENTER));
 		row6.add(openEditor);
 		options.add(row6);
 		
