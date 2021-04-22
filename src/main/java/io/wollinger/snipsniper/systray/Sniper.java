@@ -225,58 +225,6 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		}
 		return null;
 	}
-	
-	private void debugPrint(String p, String t, String m) {
-		String msg = "%DATE% %TIME%[%PROFILE%] [%TYPE%]: %MESSAGE%";
-		msg = msg.replace("%PROFILE%", p);
-		msg = msg.replace("%TYPE%", t);
-		msg = msg.replace("%MESSAGE%", m);
-		final LocalDateTime time = LocalDateTime.now();
-		msg = msg.replace("%DATE%", "" + DateTimeFormatter.ISO_DATE.format(time));
-		msg = msg.replace("%TIME%", "" + DateTimeFormatter.ISO_TIME.format(time));
-		
-		System.out.println(msg);		
-		
-		if(cfg.getBool("logTextFile")) {
-			if(logFile == null) {
-				LocalDateTime now = LocalDateTime.now();  
-				String filename = now.toString().replace(".", "_").replace(":", "_");
-				filename += ".txt";
-				
-				logFile = new File(Main.logFolder + filename);
-				try {
-					if (logFile.createNewFile()) debug("Created new logfile at: " + logFile.getAbsolutePath(), DebugType.INFO);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			
-			msg += "\n";
-			
-			try {
-				Files.write(Paths.get(logFile.getAbsolutePath()), msg.getBytes(), StandardOpenOption.APPEND);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public void debug(String message, DebugType type) {
-		int logLvl = cfg.getInt("logLevel");
-		if(!cfg.getBool("debug") || logLvl == 0) return;
-		
-		switch (type) {
-			case INFO:
-				if(logLvl >= 3) debugPrint("Profile " + profileID, "INFO", message);
-				break;
-			case WARNING:
-				if(logLvl >= 2) debugPrint("Profile " + profileID, "WARNING", message);
-				break;
-			case ERROR:
-				if(logLvl >= 1) debugPrint("Profile " + profileID, "ERROR", message);
-				System.exit(0);
-		}
-	}
 
 	public void checkNativeKey(String identifier, int pressedKey) {
 		String hotkey = cfg.getString("hotkey");
