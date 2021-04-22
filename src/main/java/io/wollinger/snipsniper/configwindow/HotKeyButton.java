@@ -18,6 +18,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 	public HotKeyButton(String key) {
 		if(key.startsWith("NONE")) {
 			this.setText("NONE");
+			hotkey = -1;
 		} else if(key.startsWith("KB")) {
 			hotkey = Integer.parseInt(key.replace("KB", ""));
 			this.setText(NativeKeyEvent.getKeyText(hotkey));
