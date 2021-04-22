@@ -1,6 +1,7 @@
 package io.wollinger.snipsniper.utils;
 
 import io.wollinger.snipsniper.Main;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -8,17 +9,17 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 public class LangManager {
-    private static final String[] langIds = {"en", "de"};
     private static final HashMap<String, JSONObject> langMap = new HashMap<>();
 
     public static void load() {
-        for(String str : langIds) {
-            try {
-                String content = Utils.loadFileFromJar("lang/" + str + ".json");
-                langMap.put(str, new JSONObject(content));
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            JSONArray languages = new JSONObject(Utils.loadFileFromJar("lang/languages.json")).getJSONArray("languages");
+            for(int i = 0; i < languages.length(); i++) {
+                String content = Utils.loadFileFromJar("lang/" + languages.getString(i) + ".json");
+                langMap.put(languages.getString(i), new JSONObject(content));
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
