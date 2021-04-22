@@ -29,7 +29,7 @@ public class Config {
 			if(new File(Main.profilesFolder + filename).exists())
 				loadFile(Main.profilesFolder + filename, settings, false);
 			
-			loadFile("/cfg/" + defaultFile + ".txt", defaults, true);
+			loadFile("/cfg/" + defaultFile, defaults, true);
 		} catch (NumberFormatException | IOException e) {
 			LogManager.log(id, "There was an error loading the config. Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
