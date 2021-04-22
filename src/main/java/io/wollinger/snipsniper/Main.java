@@ -44,11 +44,18 @@ public class Main {
 		LangManager.load();
 
 		System.setProperty("sun.java2d.uiScale", "1.0");
+
+		LogManager.log("Main", "Loading resources", Level.INFO);
 		Icons.loadResources();
 
 		if(!isDemo) {
 			new File(profilesFolder).mkdirs();
 			new File(logFolder).mkdirs();
+		} else {
+			LogManager.log("Main", "========================================================", Level.INFO);
+			LogManager.log("Main", "SnipSniper is running in DEMO mode", Level.INFO);
+			LogManager.log("Main", "This means that no files will be created and/or modified", Level.INFO);
+			LogManager.log("Main", "========================================================", Level.INFO);
 		}
 
 		if(SystemUtils.IS_OS_WINDOWS) {
@@ -59,6 +66,7 @@ public class Main {
 				}
 			}
 		}
+	}
 
 	public static void exit() {
 		LogManager.log("Main", "Exit requested. Goodbye!", Level.INFO);
