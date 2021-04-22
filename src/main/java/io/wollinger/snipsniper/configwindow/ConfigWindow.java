@@ -132,7 +132,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	}
 	
 	void msgError(String msg) {
-		JOptionPane.showMessageDialog(null, msg,"Error", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, msg,LangManager.getItem("config_sanitation_error"), JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public void save() {
@@ -147,24 +147,24 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		if(Utils.isInteger(borderSize.getText())) {
 			_borderSize = Integer.parseInt(borderSize.getText());
 		} else {
-			msgError("Border size must be a number between 0-999!");
+			msgError(LangManager.getItem("config_sanitation_border_minmax"));
 			return;
 		}
 		
 		if(Utils.isInteger(snipeDelay.getText())) {
 			_snipeDelay = Integer.parseInt(snipeDelay.getText());
 			if(_snipeDelay < 0) {
-				msgError("Snipe delay can not be less then 0!");
+				msgError(LangManager.getItem("config_sanitation_delay_less0"));
 				return;
 			}
 		}
 		
 		//ERROR CHECKING
 		if(_borderSize < 0) {
-			msgError("Border size can not be less then 0!");
+			msgError(LangManager.getItem("config_sanitation_border_min"));
 			return;
 		} else if (_borderSize > maxBorder) {
-			msgError("Border size can not be more then 999!");
+			msgError(LangManager.getItem("config_sanitation_border_max"));
 			return;
 		}
 		
@@ -174,12 +174,12 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		
 		File saveLocationCheck = new File(saveLocationFinal);
 		if(!saveLocationCheck.exists()) {
-			Object[] options = {"Okay" , "Create Directory" };
-			int msgBox = JOptionPane.showOptionDialog(null,"Directory does not exist!", "Error", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+			Object[] options = {"Okay" , LangManager.getItem("config_sanitation_createdirectory") };
+			int msgBox = JOptionPane.showOptionDialog(null,LangManager.getItem("config_sanitation_directory_notexist"), LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 			if(msgBox == 1) {
 				File f = new File(saveLocationFinal);
 				if(!f.mkdirs()) {
-					msgError("Directory could not be created!");
+					msgError(LangManager.getItem("config_sanitation_failed_createdirectory"));
 				}
 			}
 			return;
@@ -190,7 +190,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 			if (!hotKeyButton.isKeyboard)
 				hotkeyModifier = "M";
 			sniperInstance.cfg.set("hotkey", hotkeyModifier + hotKeyButton.hotkey);
-		} else if(hotKeyButton.hotkey == -1) {
+		} else {
 			sniperInstance.cfg.set("hotkey", "NONE");
 		}
 		sniperInstance.cfg.set("pictureFolder", _saveLocation);

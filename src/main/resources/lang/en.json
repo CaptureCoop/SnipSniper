@@ -26,6 +26,15 @@
     "config_label_none": "NONE",
     "config_label_save": "Save",
     "config_label_hotkey_listening": "Listening...",
-    "config_label_mouse": "Mouse"
+    "config_label_mouse": "Mouse",
+
+    "config_sanitation_error": "Error",
+    "config_sanitation_border_minmax": "Border size must be a number between 0-999!",
+    "config_sanitation_border_min": "Border size can not be less then 0!",
+    "config_sanitation_border_max": "Border size can not be more then 999!",
+    "config_sanitation_delay_less0": "Snipe delay can not be less then 0!",
+    "config_sanitation_directory_notexist": "Directory does not exist!",
+    "config_sanitation_createdirectory": "Create Directory",
+    "config_sanitation_failed_createdirectory": "Directory could not be created!"
   }
 }

@@ -26,6 +26,15 @@
     "config_label_none": "KEINE",
     "config_label_save": "Speichern",
     "config_label_hotkey_listening": "Warten auf Eingabe...",
-    "config_label_mouse": "Maus"
+    "config_label_mouse": "Maus",
+
+    "config_sanitation_error": "Fehler",
+    "config_sanitation_border_minmax": "Rand Größe muss eine Zahl sein zwischen 0-999!",
+    "config_sanitation_border_min": "Rand Größe darf nicht unter 0 sein!",
+    "config_sanitation_border_max": "Rand Größe darf nicht über 999 sein!",
+    "config_sanitation_delay_less0": "Aufnahme Verzögerung darf nicht weniger als 0 sein!",
+    "config_sanitation_directory_notexist": "Ordner existiert nicht!",
+    "config_sanitation_createdirectory": "Ordner erstellen",
+    "config_sanitation_failed_createdirectory": "Ordner konnte nicht erstellt werden!"
   }
 }
