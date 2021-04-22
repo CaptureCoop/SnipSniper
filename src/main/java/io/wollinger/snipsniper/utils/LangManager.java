@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class LangManager {
     private static final String[] langIds = {"en", "de"};
@@ -22,7 +23,12 @@ public class LangManager {
     }
 
     public static String getItem(String key) {
-        return langMap.get(Main.config.getString("language")).getJSONObject("strings").getString(key);
+        String language = Main.config.getString("language");
+        if(langMap.get(language).getJSONObject("strings").has(key))
+            return langMap.get(language).getJSONObject("strings").getString(key);
+
+        LogManager.log("lang", "Could not find key <" + key + "> in language file <" + language + ">", Level.SEVERE);
+        return "null";
     }
 
 }
