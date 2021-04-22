@@ -55,7 +55,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	public Sniper(int profileID) {
 		this.profileID = profileID;
 		
-		cfg = new Config(this);
+		cfg = new Config("profile" + profileID + ".cfg", "cfg" + profileID, "profile_defaults.cfg");
 		instance = this;
 		
 		LogManager.log(profileID, "Loading profile " + profileID, Level.INFO);
@@ -70,15 +70,15 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		popup.add(new btnOpenImgFolder(this));
 		popup.add(new btnConfig(this));
 
-		createProfilesMenu = new Menu(LangManager.getItem("menu_create_profile", cfg.getString("language")));
+		createProfilesMenu = new Menu(LangManager.getItem("menu_create_profile"));
 		popup.add(createProfilesMenu);
 		
-		removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile", cfg.getString("language")));
+		removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile"));
 		popup.add(removeProfilesMenu);
 
 		popup.add(new btnAbout(this));
 
-		popup.add(new btnExit(this));
+		popup.add(new btnExit());
 		
 		try {
 			trayIcon = new TrayIcon(Icons.icons[profileID], "SnipSniper ", popup );
@@ -137,13 +137,13 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			int index = i;
 			
 			if(Main.profiles[index] == null) {
-				MenuItem mi = new MenuItem("Profile " + (i + 1));
+				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
 				mi.addActionListener(listener -> {
 					addProfile(index);
 				});
 				createProfilesMenu.add(mi);
 			} else if(Main.profiles[index] != null) {
-				MenuItem mi = new MenuItem("Profile " + (i + 1));
+				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
 				mi.addActionListener(listener -> {
 					removeProfile(index);
 				});

@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
 
@@ -20,19 +19,19 @@ public class Config {
 	private final HashMap <String, String> settings = new HashMap<>();
 	private final HashMap <String, String> defaults = new HashMap<>();
 
-	Sniper sniperInstance;
-	
-	public Config (Sniper sniperInstance) {
-		this.sniperInstance = sniperInstance;
-		
-		String filename = getFilename(sniperInstance.profileID);
+	private String id;
+	private String filename;
+
+	public Config (String filename, String id, String defaultFile) {
+		this.filename = filename;
+		this.id = id;
 		try {
 			if(new File(Main.profilesFolder + filename).exists())
 				loadFile(Main.profilesFolder + filename, settings, false);
 			
-			loadFile("/defaults.txt", defaults, true);
+			loadFile("/cfg/" + defaultFile, defaults, true);
 		} catch (NumberFormatException | IOException e) {
-			LogManager.log(sniperInstance.profileID, "There was an error loading the config. Message: " + e.getMessage(), Level.SEVERE);
+			LogManager.log(id, "There was an error loading the config. Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
 	}
@@ -64,7 +63,7 @@ public class Config {
 		else if(defaults.containsKey(key))
 			returnVal = defaults.get(key);
 		else
-			LogManager.log(sniperInstance.profileID, "No value found for <" + key + ">.", Level.SEVERE);
+			LogManager.log(id, "No value found for <" + key + ">.", Level.SEVERE);
 		return returnVal;
 	}
 	
@@ -108,24 +107,13 @@ public class Config {
 			settings.replace(key, value);
 	}
 	
-	String getFilename(int profileID) {
-		String filename;
-		if(profileID == 0)
-			filename = "default.txt";
-		else
-			filename = "profile" + profileID + ".txt";
-		return filename;
-	}
-	
 	public void deleteFile() {
-		String filename = getFilename(sniperInstance.profileID);
 		File file = new File(Main.profilesFolder + "/" + filename);
 		if(!file.delete())
-			LogManager.log(sniperInstance.profileID, "Could not delete profile config!", Level.WARNING);
+			LogManager.log(id, "Could not delete profile config!", Level.WARNING);
 	}
 	
 	private void saveFile(HashMap<String, String> map) {
-		String filename = getFilename(sniperInstance.profileID);
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(Main.profilesFolder + "/" + filename));
 			for (String key : map.keySet()) {
@@ -134,7 +122,7 @@ public class Config {
 			}
 			writer.close();
 		} catch (IOException e) {
-			LogManager.log(sniperInstance.profileID, "There was an error saving the config! Message: " + e.getMessage(), Level.SEVERE);
+			LogManager.log(id, "There was an error saving the config! Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
 	}

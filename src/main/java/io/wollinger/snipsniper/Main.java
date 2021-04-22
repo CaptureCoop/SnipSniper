@@ -1,7 +1,6 @@
 package io.wollinger.snipsniper;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 
 import javax.swing.UIManager;
@@ -16,11 +15,11 @@ import org.apache.commons.lang3.SystemUtils;
 
 public class Main {
 	
-	public final static String VERSION = "20210422_4";
+	public final static String VERSION = "20210422_6";
 	
 	public static String jarFolder = new File("").getAbsolutePath() + "/";
 	public static String mainFolder = jarFolder + "SnipSniper";
-	public static String profilesFolder = mainFolder + "/Profiles/";
+	public static String profilesFolder = mainFolder + "/cfg/";
 	public static String logFolder = mainFolder + "/logs/";
 	
 	public final static int PROFILE_COUNT = 7;
@@ -33,8 +32,17 @@ public class Main {
 
 	public static File logFile = null;
 
+	public static Config config;
+
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
 		new CommandLineHelper().handle(args);
+
+		if(!isDemo) {
+			new File(profilesFolder).mkdirs();
+			new File(logFolder).mkdirs();
+			config = new Config("main.cfg", "cfgM", "main_defaults.cfg");
+			config.save();
+		}
 
 		LogManager.log("Main", "Launching SnipSniper Version " + Main.VERSION, Level.INFO);
 
@@ -48,10 +56,7 @@ public class Main {
 		LogManager.log("Main", "Loading resources", Level.INFO);
 		Icons.loadResources();
 
-		if(!isDemo) {
-			new File(profilesFolder).mkdirs();
-			new File(logFolder).mkdirs();
-		} else {
+		if(isDemo) {
 			LogManager.log("Main", "========================================================", Level.INFO);
 			LogManager.log("Main", "SnipSniper is running in DEMO mode", Level.INFO);
 			LogManager.log("Main", "This means that no files will be created and/or modified", Level.INFO);
@@ -61,7 +66,7 @@ public class Main {
 		if(SystemUtils.IS_OS_WINDOWS) {
 			new Sniper(0).cfg.save();
 			for (int i = 0; i < PROFILE_COUNT; i++) {
-				if (new File(profilesFolder + "profile" + (i + 1) + ".txt").exists()) {
+				if (new File(profilesFolder + "profile" + (i + 1) + ".cfg").exists()) {
 					profiles[i] = new Sniper(i + 1);
 				}
 			}
