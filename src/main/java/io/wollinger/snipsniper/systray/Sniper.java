@@ -137,13 +137,13 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			int index = i;
 			
 			if(Main.profiles[index] == null) {
-				MenuItem mi = new MenuItem("Profile " + (i + 1));
+				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
 				mi.addActionListener(listener -> {
 					addProfile(index);
 				});
 				createProfilesMenu.add(mi);
 			} else if(Main.profiles[index] != null) {
-				MenuItem mi = new MenuItem("Profile " + (i + 1));
+				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
 				mi.addActionListener(listener -> {
 					removeProfile(index);
 				});
