@@ -1,0 +1,39 @@
+{
+  "language": "it",
+  "comment": "Simpleen.io was used for this, if you speak this language please help us out by fixing mistakes. Thank you!",
+  "strings": {
+    "menu_open_image_folder": "Aprire la cartella delle immagini",
+    "menu_config": "Configurare",
+    "menu_create_profile": "Crea profilo",
+    "menu_remove_profile": "Rimuovi profilo",
+    "menu_profile": "Profilo",
+    "menu_about": "Informazioni su",
+    "menu_quit": "Abbandona",
+    "about_programming": "Programmazione",
+    "about_cd": "Direttore creativo",
+    "about_math": "Matematica",
+
+    "config_label_config": "Config",
+    "config_label_hotkey": "Tasto di scelta rapida per la cattura",
+    "config_label_saveimages": "Salvare le immagini alla cattura",
+    "config_label_copyclipboard": "Copia le immagini negli appunti alla cattura",
+    "config_label_bordersize": "Dimensione del bordo (in px)",
+    "config_label_picturelocation": "Posizione della cartella delle immagini",
+    "config_label_snapdelay": "Ritardo di scatto in secondi",
+    "config_label_openeditor": "Aprire l'editor dopo l'acquisizione",
+    "config_label_color": "Colore",
+    "config_label_bordercolor": "Colore del bordo",
+    "config_label_delete": "Cancella",
+    "config_label_none": "NESSUNO",
+    "config_label_save": "Salva",
+    "config_label_hotkey_listening": "Ascolto...",
+    "config_label_mouse": "Mouse",
+
+    "config_sanitation_error": "Errore",
+    "config_sanitation_border_minmax": "La dimensione del bordo deve essere un numero compreso tra 0 e 999!",
+    "config_sanitation_border_min": "La dimensione del bordo non può essere inferiore a 0!",
+    "config_sanitation_border_max": "La dimensione del bordo non può essere più di 999!",
+    "config_sanitation_delay_less0": "Il ritardo dello snipe non può essere inferiore a 0!",
+    "config_sanitation_directory_notexist": "La directory non esiste!"
+  }
+}

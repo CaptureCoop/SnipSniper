@@ -1,0 +1,41 @@
+{
+  "language": "ru",
+  "comment": "Simpleen.io was used for this, if you speak this language please help us out by fixing mistakes. Thank you!",
+  "strings": {
+    "menu_open_image_folder": "Открытая папка изображений",
+    "menu_config": "Конфигурация",
+    "menu_create_profile": "Создать профиль",
+    "menu_remove_profile": "Удалить профиль",
+    "menu_profile": "Профиль",
+    "menu_about": "О сайте",
+    "menu_quit": "Уйти с сайта .",
+    "about_programming": "Программирование",
+    "about_cd": "креативный директор",
+    "about_math": "Математика",
+
+    "config_label_config": "Конфигурация",
+    "config_label_hotkey": "Горячая клавиша захвата",
+    "config_label_saveimages": "Сохранять изображения при захвате",
+    "config_label_copyclipboard": "Скопируйте изображения в буфер обмена при захвате",
+    "config_label_bordersize": "Размер границы (в px)",
+    "config_label_picturelocation": "Расположение папки изображений",
+    "config_label_snapdelay": "Задержка срабатывания в секундах",
+    "config_label_openeditor": "Открыть редактор после захвата",
+    "config_label_color": "Цвет",
+    "config_label_bordercolor": "Цвет границы",
+    "config_label_delete": "Удалить",
+    "config_label_none": "НЕТ",
+    "config_label_save": "Сохранить",
+    "config_label_hotkey_listening": "Слушаю...",
+    "config_label_mouse": "Мышь",
+
+    "config_sanitation_error": "Ошибка",
+    "config_sanitation_border_minmax": "Размер границы должен быть от 0 до 999!",
+    "config_sanitation_border_min": "Размер границы не может быть меньше 0!",
+    "config_sanitation_border_max": "Размер границы не может быть больше 999!",
+    "config_sanitation_delay_less0": "Задержка бекаса не должна быть меньше 0!",
+    "config_sanitation_directory_notexist": "Каталога не существует!",
+    "config_sanitation_createdirectory": "Создать каталог",
+    "config_sanitation_failed_createdirectory": "Каталог не мог быть создан!"
+  }
+}

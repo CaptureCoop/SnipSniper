@@ -1,0 +1,41 @@
+{
+  "language": "ja",
+  "comment": "Simpleen.io was used for this, if you speak this language please help us out by fixing mistakes. Thank you!",
+  "strings": {
+    "menu_open_image_folder": "画像フォルダを開く",
+    "menu_config": "コンフィグ",
+    "menu_create_profile": "プロファイルの作成",
+    "menu_remove_profile": "プロファイルの削除",
+    "menu_profile": "プロフィール",
+    "menu_about": "会社概要",
+    "menu_quit": "やめる",
+    "about_programming": "プログラミング",
+    "about_cd": "クリエイティブディレクター",
+    "about_math": "数学",
+
+    "config_label_config": "コンフィグ",
+    "config_label_hotkey": "キャプチャーホットキー",
+    "config_label_saveimages": "キャプチャー時の画像保存",
+    "config_label_copyclipboard": "キャプチャー時に画像をクリップボードにコピー",
+    "config_label_bordersize": "枠の大きさ（単位：px",
+    "config_label_picturelocation": "画像フォルダの場所",
+    "config_label_snapdelay": "スナップディレイ（秒",
+    "config_label_openeditor": "キャプチャ後にエディタを開く",
+    "config_label_color": "色",
+    "config_label_bordercolor": "枠の色",
+    "config_label_delete": "削除",
+    "config_label_none": "なし",
+    "config_label_save": "保存",
+    "config_label_hotkey_listening": "リスニング...",
+    "config_label_mouse": "マウス",
+
+    "config_sanitation_error": "エラー",
+    "config_sanitation_border_minmax": "ボーダーサイズは0～999の間の数字でなければなりません。",
+    "config_sanitation_border_min": "ボーダーサイズは0より小さいことはできません",
+    "config_sanitation_border_max": "ボーダーサイズは999以上にはできません",
+    "config_sanitation_delay_less0": "スナイプの遅延は0以下ではありません。",
+    "config_sanitation_directory_notexist": "ディレクトリが存在しません。",
+    "config_sanitation_createdirectory": "ディレクトリの作成",
+    "config_sanitation_failed_createdirectory": "ディレクトリが作成されませんでした。"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "language": "zh_CN",
+  "comment": "Deeple was used for this, if you speak this language please help us out by fixing mistakes. Thank you!",
+  "strings": {
+    "menu_open_image_folder": "打开图像文件夹",
+    "menu_config": "配置",
+    "menu_create_profile": "创建个人资料",
+    "menu_remove_profile": "删除简介",
+    "menu_profile": "形象",
+    "menu_about": "关于",
+    "menu_quit": "辞职",
+    "about_programming": "编程",
+    "about_cd": "创意总监",
+    "about_math": "数学",
+
+    "config_label_config": "配置",
+    "config_label_hotkey": "捕获热键",
+    "config_label_saveimages": "捕获时保存图像",
+    "config_label_copyclipboard": "捕获时将图像复制到剪贴板",
+    "config_label_bordersize": "边框尺寸（单位：px",
+    "config_label_picturelocation": "图像文件夹位置",
+    "config_label_snapdelay": "捕获延迟，以秒为单位",
+    "config_label_openeditor": "捕获后打开编辑器",
+    "config_label_color": "颜色",
+    "config_label_bordercolor": "边界颜色",
+    "config_label_delete": "删除",
+    "config_label_none": "无",
+    "config_label_save": "拯救",
+    "config_label_hotkey_listening": "聆听...",
+    "config_label_mouse": "鼠标",
+
+    "config_sanitation_error": "误差",
+    "config_sanitation_border_minmax": "边框尺寸必须是0到999之间的数字!",
+    "config_sanitation_border_min": "边框尺寸不能小于0!",
+    "config_sanitation_border_max": "边框尺寸不能超过999!",
+    "config_sanitation_delay_less0": "狙击手的延迟不能小于0!",
+    "config_sanitation_directory_notexist": "目录不存在!",
+    "config_sanitation_createdirectory": "创建目录",
+    "config_sanitation_failed_createdirectory": "无法创建目录!"
+  }
+}
