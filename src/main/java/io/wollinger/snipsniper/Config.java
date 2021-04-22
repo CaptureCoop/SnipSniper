@@ -19,8 +19,8 @@ public class Config {
 	private final HashMap <String, String> settings = new HashMap<>();
 	private final HashMap <String, String> defaults = new HashMap<>();
 
-	private String id;
-	private String filename;
+	private final String id;
+	private final String filename;
 
 	public Config (String filename, String id, String defaultFile) {
 		this.filename = filename;

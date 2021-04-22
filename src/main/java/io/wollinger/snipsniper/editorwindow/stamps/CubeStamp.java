@@ -90,7 +90,7 @@ public class CubeStamp implements IStamp{
                         Color c = new Color(editor.getImage().getRGB(posX, posY));
                         int total = c.getRed() + c.getGreen() + c.getBlue();
                         int alpha = (int)((205F/765F) * total + 25);
-                        Color oC = color.c;
+                        Color oC = color.getColor();
                         g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
                         g.drawLine(posX, posY, posX, posY);
                     }
@@ -99,12 +99,12 @@ public class CubeStamp implements IStamp{
         } else {
             Color oldColor = g.getColor();
             if(!isCensor)
-                g.setColor(color.c);
+                g.setColor(color.getColor());
             else
                 g.setColor(editor.getCensorColor());
 
             if(isSmartPixel && !isCensor)
-                g.setColor(new PBRColor(color.c, 150).c);
+                g.setColor(new PBRColor(color.getColor(), 150).getColor());
 
             g.fillRect(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
             g.setColor(oldColor);

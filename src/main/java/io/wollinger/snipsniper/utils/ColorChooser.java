@@ -35,15 +35,15 @@ public class ColorChooser extends JFrame{
 	}
 	
 	public void close() {
-		color.c = jcc.getColor();
+		color.setColor(jcc.getColor());
 		this.dispose();
 	}
 
 	public void save() {
-	    color.c = jcc.getColor();
+	    color.setColor(jcc.getColor());
         if(configKey != null) {
             Config cfg = sniper.cfg;
-            cfg.set(configKey, Utils.rgb2hex(color.c));
+            cfg.set(configKey, Utils.rgb2hex(color.getColor()));
             cfg.save();
         }
         this.dispose();
@@ -51,7 +51,7 @@ public class ColorChooser extends JFrame{
 	
 	void init() {
 		jcc = new JColorChooser();
-		jcc.setColor(color.c);
+		jcc.setColor(color.getColor());
         AbstractColorChooserPanel[] panels = jcc.getChooserPanels();
         jcc.setPreviewPanel(new JPanel());
         for (AbstractColorChooserPanel accp : panels) {

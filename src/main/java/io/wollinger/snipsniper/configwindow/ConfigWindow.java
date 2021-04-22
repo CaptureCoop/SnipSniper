@@ -197,7 +197,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		sniperInstance.cfg.set("saveToDisk", _saveToDisk + "");
 		sniperInstance.cfg.set("borderSize", _borderSize + "");
 		sniperInstance.cfg.set("copyToClipboard", _copyToClipboard + "");
-		sniperInstance.cfg.set("borderColor", Utils.rgb2hex(borderColor.c));
+		sniperInstance.cfg.set("borderColor", Utils.rgb2hex(borderColor.getColor()));
 		sniperInstance.cfg.set("snipeDelay", _snipeDelay + "");
 		sniperInstance.cfg.set("openEditor", _openEditor + "");
 		sniperInstance.cfg.save();

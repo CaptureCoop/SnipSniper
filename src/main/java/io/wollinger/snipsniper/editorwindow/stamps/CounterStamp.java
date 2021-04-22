@@ -90,9 +90,9 @@ public class CounterStamp implements IStamp{
             final int y = input.getMouseY() - height / 2;
 
             Color oldFillColor = g.getColor();
-            g.setColor(color.c);
+            g.setColor(color.getColor());
             if (solidColor) {
-                g.setColor(new PBRColor(color.c, 255).c);
+                g.setColor(new PBRColor(color.getColor(), 255).getColor());
             }
             g.fillOval(x, y, width, height);
             g.setColor(oldFillColor);

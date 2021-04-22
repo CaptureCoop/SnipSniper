@@ -90,7 +90,7 @@ public class CircleStamp implements IStamp{
         Stroke oldStroke = g2.getStroke();
         g2.setStroke(new BasicStroke(thickness));
         Color oldColor = g2.getColor();
-        g2.setColor(color.c);
+        g2.setColor(color.getColor());
         g2.drawOval(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
         g2.setColor(oldColor);
         g2.setStroke(oldStroke);

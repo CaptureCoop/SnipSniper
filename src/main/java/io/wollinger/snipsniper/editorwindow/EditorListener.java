@@ -92,8 +92,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 		if(input.isKeyPressed(KeyEvent.VK_ALT)) {
 			IStamp stamp = editorInstance.getSelectedStamp();
-			Color oldColor = stamp.getColor().c;
-			final int alpha = stamp.getColor().c.getAlpha();
+			Color oldColor = stamp.getColor().getColor();
+			final int alpha = stamp.getColor().getColor().getAlpha();
 			float[] hsv = new float[3];
 			Color.RGBtoHSB(oldColor.getRed(),oldColor.getGreen(),oldColor.getBlue(),hsv);
 

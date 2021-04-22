@@ -41,7 +41,7 @@ public class SimpleBrush implements IStamp {
     @Override
     public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
         Color oldColor = g.getColor();
-        g.setColor(new Color(color.c.getRed(), color.c.getGreen(), color.c.getBlue(), 255));
+        g.setColor(new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), 255));
         g.fillOval(input.getMouseX()-size/2, input.getMouseY()-size/2, size, size);
         g.setColor(oldColor);
 
@@ -52,7 +52,7 @@ public class SimpleBrush implements IStamp {
             g2.setRenderingHints(editorWindow.getQualityHints());
             Stroke oldStroke = g2.getStroke();
             oldColor = g2.getColor();
-            g2.setColor(new Color(color.c.getRed(), color.c.getGreen(), color.c.getBlue(), 255));
+            g2.setColor(new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), 255));
             g2.setStroke(new BasicStroke(size, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
             double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());
