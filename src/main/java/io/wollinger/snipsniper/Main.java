@@ -19,7 +19,7 @@ public class Main {
 	
 	public static String jarFolder = new File("").getAbsolutePath() + "/";
 	public static String mainFolder = jarFolder + "SnipSniper";
-	public static String profilesFolder = mainFolder + "/Profiles/";
+	public static String profilesFolder = mainFolder + "/cfg/";
 	public static String logFolder = mainFolder + "/logs/";
 	
 	public final static int PROFILE_COUNT = 7;
@@ -40,7 +40,8 @@ public class Main {
 		if(!isDemo) {
 			new File(profilesFolder).mkdirs();
 			new File(logFolder).mkdirs();
-			config = new Config("main.txt", "cfgM", "main_defaults.cfg");
+			config = new Config("main.cfg", "cfgM", "main_defaults.cfg");
+			config.save();
 		}
 
 		LogManager.log("Main", "Launching SnipSniper Version " + Main.VERSION, Level.INFO);
