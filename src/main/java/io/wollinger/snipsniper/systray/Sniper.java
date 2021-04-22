@@ -87,8 +87,8 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			trayIcon.addMouseListener(new MouseListener() {
 
 				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					if (arg0.getButton() == 1)
+				public void mouseClicked(MouseEvent mouseEvent) {
+					if (mouseEvent.getButton() == 1)
 		            	if(cWnd == null && Main.isIdle) {
 							cWnd = new CaptureWindow(instance);
 							Main.isIdle = false;
@@ -96,17 +96,17 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 				}
 
 				@Override
-				public void mouseEntered(MouseEvent arg0) { }
+				public void mouseEntered(MouseEvent mouseEvent) { }
 
 				@Override
-				public void mouseExited(MouseEvent arg0) { }
+				public void mouseExited(MouseEvent mouseEvent) { }
 
 				@Override
-				public void mousePressed(MouseEvent arg0) { }
+				public void mousePressed(MouseEvent mouseEvent) { }
 
 				@Override
-				public void mouseReleased(MouseEvent arg0) {
-					if(arg0.getButton() == MouseEvent.BUTTON3)
+				public void mouseReleased(MouseEvent mouseEvent) {
+					if(mouseEvent.getButton() == MouseEvent.BUTTON3)
 						refreshProfiles();
 				}
 				
