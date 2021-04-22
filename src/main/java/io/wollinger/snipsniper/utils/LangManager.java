@@ -1,5 +1,6 @@
 package io.wollinger.snipsniper.utils;
 
+import io.wollinger.snipsniper.Main;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -20,8 +21,8 @@ public class LangManager {
         }
     }
 
-    public static String getItem(String key, String language) {
-        return langMap.get(language).getJSONObject("strings").getString(key);
+    public static String getItem(String key) {
+        return langMap.get(Main.config.getString("language")).getJSONObject("strings").getString(key);
     }
 
 }

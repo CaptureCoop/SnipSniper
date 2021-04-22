@@ -10,7 +10,7 @@ public class btnExit extends MenuItem{
 	private static final long serialVersionUID = 1300642542165595046L;
 
 	public btnExit() {
-		this.setLabel(LangManager.getItem("menu_quit", Main.config.getString("language")));
+		this.setLabel(LangManager.getItem("menu_quit"));
 		this.addActionListener(listener -> Main.exit());
 	}
 	

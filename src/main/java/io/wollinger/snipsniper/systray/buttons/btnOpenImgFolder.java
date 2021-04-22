@@ -5,7 +5,6 @@ import java.awt.MenuItem;
 import java.io.File;
 import java.io.IOException;
 
-import io.wollinger.snipsniper.Main;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.LangManager;
 
@@ -13,7 +12,7 @@ public class btnOpenImgFolder extends MenuItem{
 	private static final long serialVersionUID = -7145792425566523072L;
 	
 	public btnOpenImgFolder(Sniper sniperInstance) {
-		this.setLabel(LangManager.getItem("menu_open_image_folder", Main.config.getString("language")));
+		this.setLabel(LangManager.getItem("menu_open_image_folder"));
 		this.addActionListener(listener -> {
 			try {
 				String path = sniperInstance.cfg.getString("pictureFolder");

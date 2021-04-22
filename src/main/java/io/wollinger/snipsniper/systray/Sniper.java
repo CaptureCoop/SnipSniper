@@ -70,10 +70,10 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		popup.add(new btnOpenImgFolder(this));
 		popup.add(new btnConfig(this));
 
-		createProfilesMenu = new Menu(LangManager.getItem("menu_create_profile", Main.config.getString("language")));
+		createProfilesMenu = new Menu(LangManager.getItem("menu_create_profile"));
 		popup.add(createProfilesMenu);
 		
-		removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile", Main.config.getString("language")));
+		removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile"));
 		popup.add(removeProfilesMenu);
 
 		popup.add(new btnAbout(this));
