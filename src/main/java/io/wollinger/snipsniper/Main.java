@@ -1,7 +1,6 @@
 package io.wollinger.snipsniper;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 
 import javax.swing.UIManager;

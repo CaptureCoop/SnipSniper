@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
 
@@ -23,14 +22,14 @@ public class Config {
 	private String id;
 	private String filename;
 
-	public Config (String filename, String id) {
+	public Config (String filename, String id, String defaultFile) {
 		this.filename = filename;
 		this.id = id;
 		try {
 			if(new File(Main.profilesFolder + filename).exists())
 				loadFile(Main.profilesFolder + filename, settings, false);
 			
-			loadFile("/defaults.txt", defaults, true);
+			loadFile("/cfg/" + defaultFile + ".txt", defaults, true);
 		} catch (NumberFormatException | IOException e) {
 			LogManager.log(id, "There was an error loading the config. Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
@@ -107,15 +106,6 @@ public class Config {
 		else
 			settings.replace(key, value);
 	}
-	
-	/*String getFilename(int profileID) {
-		String filename;
-		if(profileID == 0)
-			filename = "default.txt";
-		else
-			filename = "profile" + profileID + ".txt";
-		return filename;
-	}*/
 	
 	public void deleteFile() {
 		File file = new File(Main.profilesFolder + "/" + filename);
