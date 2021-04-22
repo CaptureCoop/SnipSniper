@@ -193,6 +193,8 @@ public class ConfigWindow extends JFrame implements WindowListener{
 			if (!hotKeyButton.isKeyboard)
 				hotkeyModifier = "M";
 			sniperInstance.cfg.set("hotkey", hotkeyModifier + hotKeyButton.hotkey);
+		} else if(hotKeyButton.hotkey == -1) {
+			sniperInstance.cfg.set("hotkey", "NONE");
 		}
 		sniperInstance.cfg.set("pictureFolder", _saveLocation);
 		sniperInstance.cfg.set("saveToDisk", _saveToDisk + "");
