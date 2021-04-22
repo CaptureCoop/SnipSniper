@@ -2,6 +2,7 @@ package io.wollinger.snipsniper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -10,6 +11,7 @@ import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.CommandLineHelper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.LangManager;
+import io.wollinger.snipsniper.utils.LogManager;
 import org.apache.commons.lang3.SystemUtils;
 
 public class Main {
@@ -33,6 +35,8 @@ public class Main {
 
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
 		new CommandLineHelper().handle(args);
+
+		LogManager.log("Main", "Launching SnipSniper Version " + Main.VERSION, Level.INFO);
 
 		if(SystemUtils.IS_OS_WINDOWS)
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

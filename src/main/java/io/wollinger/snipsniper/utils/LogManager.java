@@ -13,14 +13,14 @@ import java.util.logging.Level;
 
 public class LogManager {
 
-    public static void log(int profileID, String message, Level level) {
-        String msg = "%DATE% %TIME% [%PROFILE%] [%TYPE%]: %MESSAGE%";
-        msg = msg.replace("%PROFILE%", "Profile " + profileID);
+    public static void log(String id, String message, Level level) {
+        String msg = "%DATETIME% [%PROFILE%] [%TYPE%]: %MESSAGE%";
+        msg = msg.replace("%PROFILE%", id);
         msg = msg.replace("%TYPE%", level.toString());
         msg = msg.replace("%MESSAGE%", message);
         final LocalDateTime time = LocalDateTime.now();
-        msg = msg.replace("%DATE%", "" + DateTimeFormatter.ISO_DATE.format(time));
-        msg = msg.replace("%TIME%", "" + DateTimeFormatter.ISO_TIME.format(time));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss:SS");
+        msg = msg.replace("%DATETIME%", "" + formatter.format(time));
 
         System.out.println(msg);
 
@@ -33,7 +33,7 @@ public class LogManager {
                 Main.logFile = new File(Main.logFolder + filename);
                 try {
                     if (Main.logFile.createNewFile())
-                        LogManager.log(profileID, "Created new logfile at: " + Main.logFile.getAbsolutePath(), Level.INFO);
+                        LogManager.log(id, "Created new logfile at: " + Main.logFile.getAbsolutePath(), Level.INFO);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -47,6 +47,10 @@ public class LogManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void log(int profileID, String message, Level level) {
+        LogManager.log("Pro" + profileID, message, level);
     }
 
 }
