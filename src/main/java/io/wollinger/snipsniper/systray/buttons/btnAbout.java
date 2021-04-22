@@ -22,7 +22,7 @@ public class btnAbout extends MenuItem{
 	//LOGO USES AGENCY FB BOLD
 	public btnAbout(Sniper sniper) {
 		this.sniper = sniper;
-		setLabel(LangManager.getItem("menu_about", sniper.cfg.getString("language")));
+		setLabel(LangManager.getItem("menu_about", Main.config.getString("language")));
 
 		if(html == null) {
 			try {
@@ -100,7 +100,7 @@ public class btnAbout extends MenuItem{
 
 		inputStream.close();
 		streamReader.close();
-		String language = sniper.cfg.getString("language");
+		String language = Main.config.getString("language");
 		html = html.replace("%VERSION%", Main.VERSION);
 		html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming", language));
 		html = html.replace("%ABOUT_CD%", LangManager.getItem("about_cd", language));

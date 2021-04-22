@@ -9,8 +9,8 @@ import java.awt.MenuItem;
 public class btnExit extends MenuItem{
 	private static final long serialVersionUID = 1300642542165595046L;
 
-	public btnExit(Sniper sniper) {
-		this.setLabel(LangManager.getItem("menu_quit", sniper.cfg.getString("language")));
+	public btnExit() {
+		this.setLabel(LangManager.getItem("menu_quit", Main.config.getString("language")));
 		this.addActionListener(listener -> Main.exit());
 	}
 	

@@ -70,15 +70,15 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		popup.add(new btnOpenImgFolder(this));
 		popup.add(new btnConfig(this));
 
-		createProfilesMenu = new Menu(LangManager.getItem("menu_create_profile", cfg.getString("language")));
+		createProfilesMenu = new Menu(LangManager.getItem("menu_create_profile", Main.config.getString("language")));
 		popup.add(createProfilesMenu);
 		
-		removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile", cfg.getString("language")));
+		removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile", Main.config.getString("language")));
 		popup.add(removeProfilesMenu);
 
 		popup.add(new btnAbout(this));
 
-		popup.add(new btnExit(this));
+		popup.add(new btnExit());
 		
 		try {
 			trayIcon = new TrayIcon(Icons.icons[profileID], "SnipSniper ", popup );

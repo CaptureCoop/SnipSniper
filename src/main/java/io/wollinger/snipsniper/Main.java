@@ -32,12 +32,15 @@ public class Main {
 
 	public static File logFile = null;
 
+	public static Config config;
+
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
 		new CommandLineHelper().handle(args);
 
 		if(!isDemo) {
 			new File(profilesFolder).mkdirs();
 			new File(logFolder).mkdirs();
+			config = new Config("main.txt", "cfgM", "main_defaults.cfg");
 		}
 
 		LogManager.log("Main", "Launching SnipSniper Version " + Main.VERSION, Level.INFO);
