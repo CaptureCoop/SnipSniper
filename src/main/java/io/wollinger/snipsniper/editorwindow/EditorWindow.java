@@ -75,6 +75,33 @@ public class EditorWindow extends JFrame{
 		if(!leftToRight) borderSize = -borderSize;
 		
 		this.setLocation((x - X_OFFSET) + borderSize, (y - barSize) + borderSize);
+
+		GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		boolean found = false;
+		GraphicsConfiguration bestMonitor = null;
+		final int SAFETY_OFFSET_X = 10; //This prevents this setup not working if you do a screenshot on the top left, which would cause the location not to be in any bounds
+		for (GraphicsDevice gd : localGE.getScreenDevices()) {
+			for (GraphicsConfiguration graphicsConfiguration : gd.getConfigurations()) {
+				if(!found) {
+					Rectangle bounds = graphicsConfiguration.getBounds();
+
+					Point testLocation = new Point((int) (getLocation().getX() + SAFETY_OFFSET_X), (int) getLocation().getY());
+
+					if (bounds.contains(testLocation))
+						found = true;
+
+					if (testLocation.getX() > bounds.getX() && testLocation.getX() < (bounds.getX() + bounds.getWidth()) && bestMonitor == null) {
+						bestMonitor = graphicsConfiguration;
+					}
+				}
+			}
+		}
+		if(!found) {
+			if(bestMonitor != null) {
+				setLocation((int) getLocation().getX(), bestMonitor.getBounds().y);
+				System.out.println(bestMonitor.getBounds().y);
+			}
+		}
 	}
 
 	public void refreshTitle() {
