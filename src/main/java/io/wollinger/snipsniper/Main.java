@@ -60,6 +60,9 @@ public class Main {
 			}
 		}
 
+	public static void exit() {
+		LogManager.log("Main", "Exit requested. Goodbye!", Level.INFO);
+		System.exit(0);
 	}
 
 }

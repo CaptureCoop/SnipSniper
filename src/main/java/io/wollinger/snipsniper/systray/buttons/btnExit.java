@@ -1,5 +1,6 @@
 package io.wollinger.snipsniper.systray.buttons;
 
+import io.wollinger.snipsniper.Main;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.LangManager;
 
@@ -10,7 +11,7 @@ public class btnExit extends MenuItem{
 
 	public btnExit(Sniper sniper) {
 		this.setLabel(LangManager.getItem("menu_quit", sniper.cfg.getString("language")));
-		this.addActionListener(listener -> System.exit(0));
+		this.addActionListener(listener -> Main.exit());
 	}
 	
 }
