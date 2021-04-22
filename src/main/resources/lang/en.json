@@ -13,13 +13,13 @@
     "about_math": "Math",
 
     "config_label_config": "Config",
-    "config_label_hotkey": "Capture Hotkey",
-    "config_label_saveimages": "Save Images on Capture",
+    "config_label_hotkey": "Capture hotkey",
+    "config_label_saveimages": "Save images on capture",
     "config_label_copyclipboard": "Copy images to clipboard on capture",
     "config_label_bordersize": "Border size (in px)",
-    "config_label_picturelocation": "Picture Location",
-    "config_label_snapdelay": "Snap Delay in seconds",
-    "config_label_openeditor": "Open Editor after capture",
+    "config_label_picturelocation": "Image folder location",
+    "config_label_snapdelay": "Snap delay in seconds",
+    "config_label_openeditor": "Open editor after capture",
     "config_label_color": "Color",
     "config_label_bordercolor": "Border color",
     "config_label_delete": "Delete",
@@ -29,12 +29,12 @@
     "config_label_mouse": "Mouse",
 
     "config_sanitation_error": "Error",
-    "config_sanitation_border_minmax": "Border size must be a number between 0-999!",
-    "config_sanitation_border_min": "Border size can not be less then 0!",
-    "config_sanitation_border_max": "Border size can not be more then 999!",
-    "config_sanitation_delay_less0": "Snipe delay can not be less then 0!",
+    "config_sanitation_border_minmax": "Border size must be a number between 0 and 999!",
+    "config_sanitation_border_min": "Border size can not be less than 0!",
+    "config_sanitation_border_max": "Border size can not be more than 999!",
+    "config_sanitation_delay_less0": "Snipe delay can not be less than 0!",
     "config_sanitation_directory_notexist": "Directory does not exist!",
-    "config_sanitation_createdirectory": "Create Directory",
+    "config_sanitation_createdirectory": "Create directory",
     "config_sanitation_failed_createdirectory": "Directory could not be created!"
   }
 }
