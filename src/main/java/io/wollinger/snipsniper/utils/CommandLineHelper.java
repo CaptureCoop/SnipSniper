@@ -18,6 +18,7 @@ public class CommandLineHelper {
                 helpText();
                 System.exit(0);
             case "-version":
+            case "-v":
                 System.out.println(Main.VERSION);
                 System.exit(0);
             case "-demo":
@@ -27,10 +28,9 @@ public class CommandLineHelper {
     }
 
     public void helpText() {
-        System.out.println("-help    = Displays this");
-        System.out.println("-?       = Displays this");
-        System.out.println("-version = Displays version");
-        System.out.println("-demo    = Starts SnipSniper in demo mode (No configs are beeing created)");
+        System.out.println("-help / -?    = Displays this");
+        System.out.println("-version / -v = Displays version");
+        System.out.println("-demo         = Starts SnipSniper in demo mode (No configs are beeing created)");
     }
 
 }
