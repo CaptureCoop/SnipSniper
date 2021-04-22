@@ -40,9 +40,10 @@ public class Main {
 		if(!isDemo) {
 			new File(profilesFolder).mkdirs();
 			new File(logFolder).mkdirs();
-			config = new Config("main.cfg", "cfgM", "main_defaults.cfg");
-			config.save();
 		}
+
+		config = new Config("main.cfg", "cfgM", "main_defaults.cfg");
+		config.save();
 
 		LogManager.log("Main", "Launching SnipSniper Version " + Main.VERSION, Level.INFO);
 
