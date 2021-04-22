@@ -7,11 +7,14 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,6 +54,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	
 	Menu createProfilesMenu;
 	Menu removeProfilesMenu;
+	Menu languageMenu;
 
 	public Sniper(int profileID) {
 		this.profileID = profileID;
@@ -75,6 +79,22 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		
 		removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile"));
 		popup.add(removeProfilesMenu);
+
+		languageMenu = new Menu(LangManager.getItem("menu_languages"));
+		for(String language : LangManager.languages) {
+			MenuItem mi = new MenuItem(LangManager.getItem("lang_" + language));
+			mi.addActionListener(e -> {
+				Main.config.set("language", language);
+				Main.config.save();
+				try {
+					Main.restartApplication();
+				} catch (Exception exception) {
+					exception.printStackTrace();
+				}
+			});
+			languageMenu.add(mi);
+		}
+		popup.add(languageMenu);
 
 		popup.add(new btnAbout(this));
 

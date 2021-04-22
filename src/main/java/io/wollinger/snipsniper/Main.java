@@ -1,6 +1,9 @@
 package io.wollinger.snipsniper;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 import javax.swing.UIManager;
@@ -72,6 +75,25 @@ public class Main {
 				}
 			}
 		}
+	}
+
+	//https://stackoverflow.com/questions/4159802/how-can-i-restart-a-java-application
+	public static void restartApplication() throws URISyntaxException, IOException {
+		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+		final File currentJar = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+
+		if(!currentJar.getName().endsWith(".jar"))
+			return;
+
+		final ArrayList<String> command = new ArrayList<String>();
+		command.add(javaBin);
+		command.add("-Dfile.encoding=GB18030");
+		command.add("-jar");
+		command.add(currentJar.getPath());
+
+		final ProcessBuilder builder = new ProcessBuilder(command);
+		builder.start();
+		System.exit(0);
 	}
 
 	public static void exit() {
