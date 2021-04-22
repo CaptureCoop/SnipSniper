@@ -7,6 +7,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import io.wollinger.snipsniper.systray.Sniper;
+import io.wollinger.snipsniper.utils.CommandLineHelper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.LangManager;
 import org.apache.commons.lang3.SystemUtils;
@@ -26,16 +27,23 @@ public class Main {
 
 	public static boolean isIdle = true;
 
+	public static boolean isDemo = false;
+
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
+		new CommandLineHelper().handle(args);
+
 		if(SystemUtils.IS_OS_WINDOWS)
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		LangManager.load();
 
 		System.setProperty("sun.java2d.uiScale", "1.0");
-		new File(profilesFolder).mkdirs();
-		new File(logFolder).mkdirs();
 		Icons.loadResources();
+
+		if(!isDemo) {
+			new File(profilesFolder).mkdirs();
+			new File(logFolder).mkdirs();
+		}
 
 		if(SystemUtils.IS_OS_WINDOWS) {
 			new Sniper(0).cfg.save();

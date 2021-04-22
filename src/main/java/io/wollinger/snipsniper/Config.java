@@ -139,10 +139,12 @@ public class Config {
 	}
 	
 	public void save() {
-		if(settings.isEmpty())
-			saveFile(defaults);
-		else
-			saveFile(settings);
+		if(!Main.isDemo) {
+			if (settings.isEmpty())
+				saveFile(defaults);
+			else
+				saveFile(settings);
+		}
 	}
 	
 }
