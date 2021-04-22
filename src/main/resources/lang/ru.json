@@ -2,6 +2,13 @@
   "language": "ru",
   "comment": "Simpleen.io was used for this, if you speak this language please help us out by fixing mistakes. Thank you!",
   "strings": {
+    "lang_de": "немецкий язык",
+    "lang_en": "английский язык",
+    "lang_it": "итальянский",
+    "lang_ja": "Японский",
+    "lang_ru": "русский",
+    "lang_zh": "китайский язык",
+
     "menu_open_image_folder": "Открытая папка изображений",
     "menu_config": "Конфигурация",
     "menu_create_profile": "Создать профиль",

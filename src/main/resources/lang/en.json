@@ -1,6 +1,13 @@
 {
   "language": "en",
   "strings": {
+    "lang_de": "German",
+    "lang_en": "English",
+    "lang_it": "Italian",
+    "lang_ja": "Japanese",
+    "lang_ru": "Russian",
+    "lang_zh": "Chinese",
+
     "menu_open_image_folder": "Open image folder",
     "menu_config": "Config",
     "menu_create_profile": "Create profile",

@@ -1,6 +1,13 @@
 {
   "language": "de",
   "strings": {
+    "lang_de": "Deutsch",
+    "lang_en": "Englisch",
+    "lang_it": "Italienisch",
+    "lang_ja": "Japanisch",
+    "lang_ru": "Russisch",
+    "lang_zh": "Chinesisch",
+
     "menu_open_image_folder": "Screenshot Ordner öffnen",
     "menu_config": "Einstellungen",
     "menu_create_profile": "Profil erstellen",

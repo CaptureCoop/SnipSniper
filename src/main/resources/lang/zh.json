@@ -2,6 +2,13 @@
   "language": "zh",
   "comment": "Deeple was used for this, if you speak this language please help us out by fixing mistakes. Thank you!",
   "strings": {
+    "lang_de": "德国",
+    "lang_en": "英语",
+    "lang_it": "意大利语",
+    "lang_ja": "日本人",
+    "lang_ru": "俄罗斯",
+    "lang_zh": "中国",
+
     "menu_open_image_folder": "打开图像文件夹",
     "menu_config": "配置",
     "menu_create_profile": "创建个人资料",

@@ -2,6 +2,13 @@
   "language": "it",
   "comment": "Simpleen.io was used for this, if you speak this language please help us out by fixing mistakes. Thank you!",
   "strings": {
+    "lang_de": "Tedesco",
+    "lang_en": "Inglese",
+    "lang_it": "Italiano",
+    "lang_ja": "Giapponese",
+    "lang_ru": "Russo",
+    "lang_zh": "Cinese",
+
     "menu_open_image_folder": "Aprire la cartella delle immagini",
     "menu_config": "Configurare",
     "menu_create_profile": "Crea profilo",
