@@ -3,11 +3,11 @@ package io.wollinger.snipsniper;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.CommandLineHelper;
@@ -47,6 +47,14 @@ public class Main {
 
 		config = new Config("main.cfg", "cfgM", "main_defaults.cfg");
 		config.save();
+
+		if(Main.config.getBool("enforceEncoding") && !Charset.defaultCharset().toString().equals("GB18030")) {
+			try {
+				Main.restartApplication();
+			} catch (Exception exception) {
+				exception.printStackTrace();
+			}
+		}
 
 		LogManager.log("Main", "Launching SnipSniper Version " + Main.VERSION, Level.INFO);
 
