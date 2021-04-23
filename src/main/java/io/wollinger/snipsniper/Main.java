@@ -96,15 +96,17 @@ public class Main {
 		if(!currentJar.getName().endsWith(".jar"))
 			return;
 
-		final ArrayList<String> command = new ArrayList<String>();
+		final ArrayList<String> command = new ArrayList<>();
 		command.add(javaBin);
-		command.add("-Dfile.encoding=GB18030");
+		if(!LangManager.getEncoding().equals("none"))
+			command.add("-Dfile.encoding=" + LangManager.getEncoding());
 		command.add("-jar");
 		command.add(currentJar.getPath());
+		Collections.addAll(command, Main.args);
 
 		final ProcessBuilder builder = new ProcessBuilder(command);
 		builder.start();
-		System.exit(0);
+		exit();
 	}
 
 	public static void exit() {
