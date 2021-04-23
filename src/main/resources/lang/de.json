@@ -45,6 +45,8 @@
     "config_sanitation_delay_less0": "Aufnahme Verzögerung darf nicht weniger als 0 sein!",
     "config_sanitation_directory_notexist": "Ordner existiert nicht!",
     "config_sanitation_createdirectory": "Ordner erstellen",
-    "config_sanitation_failed_createdirectory": "Ordner konnte nicht erstellt werden!"
+    "config_sanitation_failed_createdirectory": "Ordner konnte nicht erstellt werden!",
+
+    "error_charset_not_available": "Charset \"{0}\" fehlt. Sprache \"{1}\" nicht verfügbar."
   }
 }

@@ -46,6 +46,8 @@
     "config_sanitation_delay_less0": "狙击手的延迟不能小于0!",
     "config_sanitation_directory_notexist": "目录不存在!",
     "config_sanitation_createdirectory": "创建目录",
-    "config_sanitation_failed_createdirectory": "无法创建目录!"
+    "config_sanitation_failed_createdirectory": "无法创建目录!",
+
+    "error_charset_not_available": "缺少字符集\"{0}\"。语言\"{1}\"不可用。"
   }
 }

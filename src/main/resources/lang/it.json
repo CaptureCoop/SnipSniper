@@ -44,6 +44,8 @@
     "config_sanitation_border_min": "La dimensione del bordo non può essere inferiore a 0!",
     "config_sanitation_border_max": "La dimensione del bordo non può essere più di 999!",
     "config_sanitation_delay_less0": "Il ritardo dello snipe non può essere inferiore a 0!",
-    "config_sanitation_directory_notexist": "La directory non esiste!"
+    "config_sanitation_directory_notexist": "La directory non esiste!",
+
+    "error_charset_not_available": "Charset \"{0}\" mancante. Lingua \"{1}\" non disponibile."
   }
 }

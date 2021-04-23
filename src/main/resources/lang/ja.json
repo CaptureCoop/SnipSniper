@@ -46,6 +46,8 @@
     "config_sanitation_delay_less0": "スナイプの遅延は0以下ではありません。",
     "config_sanitation_directory_notexist": "ディレクトリが存在しません。",
     "config_sanitation_createdirectory": "ディレクトリの作成",
-    "config_sanitation_failed_createdirectory": "ディレクトリが作成されませんでした。"
+    "config_sanitation_failed_createdirectory": "ディレクトリが作成されませんでした。",
+
+    "error_charset_not_available": "Charset \"{0}\" がありません。言語\"{1}\"がありません。"
   }
 }

@@ -46,6 +46,8 @@
     "config_sanitation_delay_less0": "Задержка бекаса не должна быть меньше 0!",
     "config_sanitation_directory_notexist": "Каталога не существует!",
     "config_sanitation_createdirectory": "Создать каталог",
-    "config_sanitation_failed_createdirectory": "Каталог не мог быть создан!"
+    "config_sanitation_failed_createdirectory": "Каталог не мог быть создан!",
+
+    "error_charset_not_available": "Шарсет \"{0}\" пропал. Язык \"{1}\" отсутствует."
   }
 }

@@ -46,6 +46,8 @@
     "config_sanitation_delay_less0": "Le délai du Snipe ne peut être inférieur à 0 !",
     "config_sanitation_directory_notexist": "Le répertoire n'existe pas !",
     "config_sanitation_createdirectory": "Créer un répertoire",
-    "config_sanitation_failed_createdirectory": "Le répertoire n'a pas pu être créé !"
+    "config_sanitation_failed_createdirectory": "Le répertoire n'a pas pu être créé !",
+
+    "error_charset_not_available": "Charset \"{0}\" manquant. Langue \"{1}\" non disponible."
   }
 }

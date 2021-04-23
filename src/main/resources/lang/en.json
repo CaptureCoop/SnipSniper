@@ -45,6 +45,8 @@
     "config_sanitation_delay_less0": "Snipe delay can not be less than 0!",
     "config_sanitation_directory_notexist": "Directory does not exist!",
     "config_sanitation_createdirectory": "Create directory",
-    "config_sanitation_failed_createdirectory": "Directory could not be created!"
+    "config_sanitation_failed_createdirectory": "Directory could not be created!",
+
+    "error_charset_not_available": "Charset \"{0}\" missing. Language \"{1}\" not available."
   }
 }
