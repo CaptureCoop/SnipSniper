@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 
 import javax.swing.*;
@@ -37,8 +38,15 @@ public class Main {
 
 	public static Config config;
 
+	public static String[] args;
+
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
-		new CommandLineHelper().handle(args);
+		if(!SystemUtils.IS_OS_WINDOWS)
+			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
+
+		CommandLineHelper cmdline = new CommandLineHelper();
+		cmdline.handle(args);
+		Main.args = args;
 
 		if(!isDemo) {
 			new File(profilesFolder).mkdirs();
@@ -51,7 +59,18 @@ public class Main {
 			config.set("language", language);
 		config.save();
 
-		if(Main.config.getBool("enforceEncoding") && !Charset.defaultCharset().toString().equals("GB18030")) {
+		LangManager.load();
+
+		LogManager.log("Main", "Launching SnipSniper Version " + Main.VERSION, Level.INFO);
+		LogManager.log("Main", "Launching language <" + Main.config.getString("language") + "> Using encoding <" + Charset.defaultCharset() + ">!", Level.INFO);
+
+		if(!LangManager.languages.contains(Main.config.getString("language"))) {
+			LogManager.log("Main", "Language <" + Main.config.getString("language") + "> not found. Available languages: " + LangManager.languages.toString(), Level.SEVERE);
+			exit();
+		}
+
+		if(!LangManager.getEncoding().equals("none") && Main.config.getBool("enforceEncoding") && !Charset.defaultCharset().toString().equals(LangManager.getEncoding())) {
+			LogManager.log("Main", "Charset <" + LangManager.getEncoding() + "> needed! Restarting with correct charset...", Level.WARNING);
 			try {
 				Main.restartApplication();
 			} catch (Exception exception) {
@@ -59,12 +78,7 @@ public class Main {
 			}
 		}
 
-		LogManager.log("Main", "Launching SnipSniper Version " + Main.VERSION, Level.INFO);
-
-		if(SystemUtils.IS_OS_WINDOWS)
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-		LangManager.load();
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		System.setProperty("sun.java2d.uiScale", "1.0");
 
@@ -77,13 +91,10 @@ public class Main {
 			LogManager.log("Main", "This means that no files will be created and/or modified", Level.INFO);
 			LogManager.log("Main", "========================================================", Level.INFO);
 		}
-
-		if(SystemUtils.IS_OS_WINDOWS) {
-			new Sniper(0).cfg.save();
-			for (int i = 0; i < PROFILE_COUNT; i++) {
-				if (new File(profilesFolder + "profile" + (i + 1) + ".cfg").exists()) {
-					profiles[i] = new Sniper(i + 1);
-				}
+		new Sniper(0).cfg.save();
+		for (int i = 0; i < PROFILE_COUNT; i++) {
+			if (new File(profilesFolder + "profile" + (i + 1) + ".cfg").exists()) {
+				profiles[i] = new Sniper(i + 1);
 			}
 		}
 	}
