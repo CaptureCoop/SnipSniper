@@ -73,6 +73,10 @@ public class Main {
 			}
 			LogManager.log("Main", "Charset <" + LangManager.getEncoding() + "> needed! Restarting with correct charset...", Level.WARNING);
 			try {
+				if(cmdline.isRestartedInstance()) {
+					JOptionPane.showMessageDialog(null, "Charset change failed. Please try using a different Java Version! (Java 1.8 / 8)");
+					exit();
+				}
 				Main.restartApplication();
 			} catch (Exception exception) {
 				exception.printStackTrace();
@@ -116,6 +120,7 @@ public class Main {
 			command.add("-Dfile.encoding=" + LangManager.getEncoding());
 		command.add("-jar");
 		command.add(currentJar.getPath());
+		command.add("-r");
 		Collections.addAll(command, Main.args);
 
 		final ProcessBuilder builder = new ProcessBuilder(command);

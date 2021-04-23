@@ -5,6 +5,7 @@ import io.wollinger.snipsniper.Main;
 public class CommandLineHelper {
 
     private String language;
+    private boolean isRestartedInstance = false;
 
     public CommandLineHelper() {
 
@@ -38,6 +39,9 @@ public class CommandLineHelper {
                     if(args.length > index + 1) language = args[index + 1];
                     else System.out.println("Missing argument after " + arg + "!");
                     break;
+                case "-r":
+                    isRestartedInstance = true;
+                    break;
             }
             index++;
         }
@@ -55,6 +59,10 @@ public class CommandLineHelper {
 
     public String getLanguage() {
         return language;
+    }
+
+    public boolean isRestartedInstance() {
+        return isRestartedInstance;
     }
 
 }
