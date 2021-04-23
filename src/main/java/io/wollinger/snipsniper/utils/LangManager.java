@@ -35,4 +35,9 @@ public class LangManager {
         return "null";
     }
 
+    public static String getEncoding() {
+        String language = Main.config.getString("language");
+        return langMap.get(language).getString("encoding");
+    }
+
 }
