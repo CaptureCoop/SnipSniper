@@ -11,14 +11,11 @@ import java.util.logging.Level;
 import javax.swing.*;
 
 import io.wollinger.snipsniper.systray.Sniper;
-import io.wollinger.snipsniper.utils.CommandLineHelper;
-import io.wollinger.snipsniper.utils.Icons;
-import io.wollinger.snipsniper.utils.LangManager;
-import io.wollinger.snipsniper.utils.LogManager;
+import io.wollinger.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
 
 public class Main {
-	
+
 	public final static String VERSION = "20210423_3";
 	
 	public static String jarFolder = new File("").getAbsolutePath() + "/";
@@ -57,7 +54,6 @@ public class Main {
 		String language = cmdline.getLanguage();
 		if(language != null && !language.isEmpty())
 			config.set("language", language);
-		config.save();
 
 		LangManager.load();
 
@@ -70,6 +66,11 @@ public class Main {
 		}
 
 		if(!LangManager.getEncoding().equals("none") && Main.config.getBool("enforceEncoding") && !Charset.defaultCharset().toString().equals(LangManager.getEncoding())) {
+			if(!Charset.availableCharsets().containsKey(LangManager.getEncoding())) {
+				LogManager.log("Main", "Charset \"" + LangManager.getEncoding() + "\" missing. Language \"" + Main.config.getString("language")+ "\" not available", Level.SEVERE);
+				JOptionPane.showMessageDialog(null, Utils.formatArgs(LangManager.getItem(LangManager.languages.get(0), "error_charset_not_available"), LangManager.getEncoding(), Main.config.getString("language")));
+				exit();
+			}
 			LogManager.log("Main", "Charset <" + LangManager.getEncoding() + "> needed! Restarting with correct charset...", Level.WARNING);
 			try {
 				Main.restartApplication();
@@ -77,6 +78,8 @@ public class Main {
 				exception.printStackTrace();
 			}
 		}
+
+		config.save();
 
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 

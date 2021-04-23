@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +25,7 @@ import javax.swing.JOptionPane;
 
 import io.wollinger.snipsniper.utils.LangManager;
 import io.wollinger.snipsniper.utils.LogManager;
+import io.wollinger.snipsniper.utils.Utils;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -83,16 +85,22 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		languageMenu = new Menu(LangManager.getItem("menu_languages"));
 		for(String language : LangManager.languages) {
 			MenuItem mi = new MenuItem(LangManager.getItem("lang_" + language));
-			mi.addActionListener(e -> {
-				Main.config.set("language", language);
-				Main.config.save();
-				try {
-					Main.restartApplication();
-				} catch (Exception exception) {
-					exception.printStackTrace();
-				}
-			});
+			if(LangManager.getEncoding(language).equals("none") || Charset.availableCharsets().containsKey(LangManager.getEncoding(language))) {
+				mi.addActionListener(e -> {
+					Main.config.set("language", language);
+					Main.config.save();
+					try {
+						Main.restartApplication();
+					} catch (Exception exception) {
+						exception.printStackTrace();
+					}
+				});
+			} else {
+				mi.setLabel(mi.getLabel() + " (" + LangManager.getItem("config_sanitation_error") + ")");
+				mi.addActionListener(e -> JOptionPane.showMessageDialog(null, Utils.formatArgs(LangManager.getItem("error_charset_not_available"), LangManager.getEncoding(language), language)));
+			}
 			languageMenu.add(mi);
+
 		}
 		popup.add(languageMenu);
 
