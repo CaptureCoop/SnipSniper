@@ -46,6 +46,9 @@ public class Main {
 		}
 
 		config = new Config("main.cfg", "cfgM", "main_defaults.cfg");
+		String language = cmdline.getLanguage();
+		if(language != null && !language.isEmpty())
+			config.set("language", language);
 		config.save();
 
 		if(Main.config.getBool("enforceEncoding") && !Charset.defaultCharset().toString().equals("GB18030")) {

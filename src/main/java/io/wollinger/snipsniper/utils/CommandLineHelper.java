@@ -4,6 +4,8 @@ import io.wollinger.snipsniper.Main;
 
 public class CommandLineHelper {
 
+    private String language;
+
     public CommandLineHelper() {
 
     }
@@ -14,6 +16,7 @@ public class CommandLineHelper {
 
         boolean doExit = false;
 
+        int index = 0;
         for(String arg : args) {
             switch(arg) {
                 case "-help":
@@ -29,7 +32,14 @@ public class CommandLineHelper {
                 case "-demo":
                     Main.isDemo = true;
                     break;
+                case "-language":
+                case "-lang":
+                case "-l":
+                    if(args.length > index + 1) language = args[index + 1];
+                    else System.out.println("Missing argument after " + arg + "!");
+                    break;
             }
+            index++;
         }
 
         if(doExit)
@@ -37,9 +47,14 @@ public class CommandLineHelper {
     }
 
     public void helpText() {
-        System.out.println("-help / -?    = Displays this");
-        System.out.println("-version / -v = Displays version");
-        System.out.println("-demo         = Starts SnipSniper in demo mode (No configs are beeing created)");
+        System.out.println("-help / -?     = Displays this");
+        System.out.println("-version / -v  = Displays version");
+        System.out.println("-demo          = Starts SnipSniper in demo mode (No configs are beeing created)");
+        System.out.println("-language / -l = Sets the language. Useful for demo mode");
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
 }
