@@ -26,8 +26,7 @@ public class LangManager {
         }
     }
 
-    public static String getItem(String key) {
-        String language = Main.config.getString("language");
+    public static String getItem(String language, String key) {
         if(langMap.get(language).getJSONObject("strings").has(key))
             return langMap.get(language).getJSONObject("strings").getString(key);
 
@@ -35,8 +34,15 @@ public class LangManager {
         return "null";
     }
 
+    public static String getItem(String key) {
+        return getItem(Main.config.getString("language"), key);
+    }
+
     public static String getEncoding() {
-        String language = Main.config.getString("language");
+        return LangManager.getEncoding(Main.config.getString("language"));
+    }
+
+    public static String getEncoding(String language) {
         return langMap.get(language).getString("encoding");
     }
 
