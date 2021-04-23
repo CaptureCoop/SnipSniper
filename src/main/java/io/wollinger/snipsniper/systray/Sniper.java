@@ -101,7 +101,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		popup.add(new btnExit());
 		
 		try {
-			trayIcon = new TrayIcon(Icons.icons[profileID], "SnipSniper ", popup );
+			trayIcon = new TrayIcon(Icons.icons[profileID], "SnipSniper (Profile " + profileID + ")", popup );
 			trayIcon.setImageAutoSize( true );
 			
 			trayIcon.addMouseListener(new MouseListener() {

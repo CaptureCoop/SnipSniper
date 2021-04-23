@@ -62,7 +62,7 @@ public class Main {
 		LangManager.load();
 
 		LogManager.log("Main", "Launching SnipSniper Version " + Main.VERSION, Level.INFO);
-		LogManager.log("Main", "Launching language <" + Main.config.getString("language") + "> Using encoding <" + Charset.defaultCharset() + ">!", Level.INFO);
+		LogManager.log("Main", "Launching language <" + Main.config.getString("language") + "> using encoding <" + Charset.defaultCharset() + ">!", Level.INFO);
 
 		if(!LangManager.languages.contains(Main.config.getString("language"))) {
 			LogManager.log("Main", "Language <" + Main.config.getString("language") + "> not found. Available languages: " + LangManager.languages.toString(), Level.SEVERE);
