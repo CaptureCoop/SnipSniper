@@ -46,8 +46,10 @@ public class Main {
 		Main.args = args;
 
 		if(!isDemo) {
-			new File(profilesFolder).mkdirs();
-			new File(logFolder).mkdirs();
+			if (!new File(profilesFolder).mkdirs() || !new File(logFolder).mkdirs()){
+				LogManager.log("Main", "Could not create required folders! Exiting...", Level.SEVERE);
+				exit();
+			}
 		}
 
 		config = new Config("main.cfg", "cfgM", "main_defaults.cfg");
