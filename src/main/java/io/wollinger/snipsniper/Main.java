@@ -46,7 +46,9 @@ public class Main {
 		Main.args = args;
 
 		if(!isDemo) {
-			if (!new File(profilesFolder).mkdirs() || !new File(logFolder).mkdirs()){
+			File tempProfileFolder = new File(profilesFolder);
+			File tempLogFolder = new File(logFolder);
+			if ((!tempProfileFolder.exists() && !tempProfileFolder.mkdirs()) || (!tempLogFolder.exists() && !tempLogFolder.mkdirs())){
 				LogManager.log("Main", "Could not create required folders! Exiting...", Level.SEVERE);
 				exit();
 			}
