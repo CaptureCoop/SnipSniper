@@ -87,7 +87,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 					SnipSniper.config.set("language", language);
 					SnipSniper.config.save();
 					try {
-						SnipSniper.restartApplication();
+						SnipSniper.resetProfiles();
 					} catch (Exception exception) {
 						exception.printStackTrace();
 					}
@@ -151,7 +151,14 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		GlobalScreen.addNativeKeyListener(this);
 		GlobalScreen.addNativeMouseListener(this);
 	}
-	
+
+	public void kill() {
+		GlobalScreen.removeNativeKeyListener(this);
+		GlobalScreen.removeNativeMouseListener(this);
+
+		SystemTray.getSystemTray().remove(trayIcon);
+	}
+
 	//This refreshes the buttons so that they only show profiles that exist/don't exist respectively.
 	void refreshProfiles() {
 		LogManager.log(profileID, "Refreshing profiles in task tray", Level.INFO);
@@ -289,7 +296,6 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	@Override
 	public void nativeMousePressed(NativeMouseEvent nativeMouseEvent) {
 		checkNativeKey("M", nativeMouseEvent.getButton());
-
 	}
 
 	@Override

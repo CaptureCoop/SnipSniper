@@ -1,10 +1,12 @@
 package io.wollinger.snipsniper;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.logging.Level;
 
@@ -24,7 +26,8 @@ public class SnipSniper {
 	public static String logFolder = mainFolder + "/logs/";
 	
 	public final static int PROFILE_COUNT = 7;
-	
+
+	public static Sniper mainProfile;
 	public static Sniper[] profiles = new Sniper[PROFILE_COUNT];
 
 	public static boolean isIdle = true;
@@ -116,7 +119,22 @@ public class SnipSniper {
 			LogManager.log("Main", "= This means that no files will be created and/or modified =", Level.INFO);
 			LogManager.log("Main", "============================================================", Level.INFO);
 		}
-		new Sniper(0).cfg.save();
+
+		resetProfiles();
+
+	}
+
+	public static void resetProfiles() {
+		SystemTray tray = SystemTray.getSystemTray();
+		for(TrayIcon icon : tray.getTrayIcons()) {
+			tray.remove(icon);
+		}
+
+		mainProfile = null;
+		Arrays.fill(profiles, null);
+
+		mainProfile = new Sniper(0);
+		mainProfile.cfg.save();
 		for (int i = 0; i < PROFILE_COUNT; i++) {
 			if (new File(profilesFolder + "profile" + (i + 1) + ".cfg").exists()) {
 				profiles[i] = new Sniper(i + 1);
