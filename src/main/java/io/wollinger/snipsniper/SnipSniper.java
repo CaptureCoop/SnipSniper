@@ -18,7 +18,7 @@ import org.apache.commons.lang3.SystemUtils;
 
 public class SnipSniper {
 
-	public final static String VERSION = "20210423_3";
+	public static String VERSION;
 	
 	public static String jarFolder = new File("").getAbsolutePath() + "/";
 	public static String mainFolder = jarFolder + "SnipSniper";
@@ -43,6 +43,13 @@ public class SnipSniper {
 	public SnipSniper(String[] args, boolean saveInDocuments, boolean isDebug) {
 		if(!SystemUtils.IS_OS_WINDOWS)
 			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
+
+		try {
+			SnipSniper.VERSION = Utils.loadFileFromJar("version.txt") + ".";
+			SnipSniper.VERSION += Utils.loadFileFromJar("build.txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
