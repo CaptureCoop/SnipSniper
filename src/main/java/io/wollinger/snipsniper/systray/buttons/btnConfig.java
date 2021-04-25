@@ -2,7 +2,6 @@ package io.wollinger.snipsniper.systray.buttons;
 
 import java.awt.MenuItem;
 
-import io.wollinger.snipsniper.Main;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.configwindow.ConfigWindow;
 import io.wollinger.snipsniper.utils.LangManager;

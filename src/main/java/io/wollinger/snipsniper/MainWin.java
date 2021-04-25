@@ -1,7 +1,7 @@
 package io.wollinger.snipsniper;
 
-public class Main {
+public class MainWin {
     public static void main(String[] args) {
-        new SnipSniper(args, false, false);
+        new SnipSniper(args, true, false);
     }
 }

@@ -7,14 +7,11 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
@@ -23,6 +20,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.utils.LangManager;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
@@ -32,7 +30,6 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 import io.wollinger.snipsniper.Config;
-import io.wollinger.snipsniper.Main;
 import io.wollinger.snipsniper.capturewindow.CaptureWindow;
 import io.wollinger.snipsniper.capturewindow.ImageSelection;
 import io.wollinger.snipsniper.configwindow.ConfigWindow;
@@ -87,10 +84,10 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			MenuItem mi = new MenuItem(LangManager.getItem("lang_" + language));
 			if(LangManager.getEncoding(language).equals("none") || Charset.availableCharsets().containsKey(LangManager.getEncoding(language))) {
 				mi.addActionListener(e -> {
-					Main.config.set("language", language);
-					Main.config.save();
+					SnipSniper.config.set("language", language);
+					SnipSniper.config.save();
 					try {
-						Main.restartApplication();
+						SnipSniper.restartApplication();
 					} catch (Exception exception) {
 						exception.printStackTrace();
 					}
@@ -117,9 +114,9 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 				@Override
 				public void mouseClicked(MouseEvent mouseEvent) {
 					if (mouseEvent.getButton() == 1)
-		            	if(cWnd == null && Main.isIdle) {
+		            	if(cWnd == null && SnipSniper.isIdle) {
 							cWnd = new CaptureWindow(instance);
-							Main.isIdle = false;
+							SnipSniper.isIdle = false;
 		            	}
 				}
 
@@ -161,16 +158,16 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		createProfilesMenu.removeAll();
 		removeProfilesMenu.removeAll();
 		
-		for(int i = 0; i < Main.PROFILE_COUNT; i++) {
+		for(int i = 0; i < SnipSniper.PROFILE_COUNT; i++) {
 			int index = i;
 			
-			if(Main.profiles[index] == null) {
+			if(SnipSniper.profiles[index] == null) {
 				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
 				mi.addActionListener(listener -> {
 					addProfile(index);
 				});
 				createProfilesMenu.add(mi);
-			} else if(Main.profiles[index] != null) {
+			} else if(SnipSniper.profiles[index] != null) {
 				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
 				mi.addActionListener(listener -> {
 					removeProfile(index);
@@ -182,22 +179,22 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	}
 
 	public void addProfile(int id) {
-		if(Main.profiles[id] == null) {
+		if(SnipSniper.profiles[id] == null) {
 			LogManager.log(profileID, "Creating profile " + (id + 1), Level.INFO);
-			Main.profiles[id] = new Sniper(id + 1);
-			Main.profiles[id].cfg.save();
+			SnipSniper.profiles[id] = new Sniper(id + 1);
+			SnipSniper.profiles[id].cfg.save();
 		}
 	}
 
 	public void removeProfile(int id) {
-		if(Main.profiles[id] != null) {
+		if(SnipSniper.profiles[id] != null) {
 			LogManager.log(profileID, "Removing profile " + (id + 1), Level.INFO);
 			cfg.deleteFile();
-			SystemTray.getSystemTray().remove(Main.profiles[id].trayIcon);
+			SystemTray.getSystemTray().remove(SnipSniper.profiles[id].trayIcon);
 			GlobalScreen.removeNativeKeyListener(instance);
 			GlobalScreen.removeNativeMouseListener(instance);
-			Main.profiles[id].trayIcon = null;
-			Main.profiles[id] = null;
+			SnipSniper.profiles[id].trayIcon = null;
+			SnipSniper.profiles[id] = null;
 			instance = null;
 		}
 	}
@@ -205,7 +202,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	public void killCaptureWindow() {
 		if(cWnd != null) {
 			trayIcon.setImage(Icons.icons[profileID]);
-			Main.isIdle = true;
+			SnipSniper.isIdle = true;
 			cWnd.screenshot = null;
 			cWnd.screenshotTinted = null;
 			cWnd.isRunning = false;
@@ -264,9 +261,9 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			if(hotkey.startsWith(identifier)) {
 				int key = Integer.parseInt(hotkey.replace(identifier, ""));
 				if(pressedKey == key) {
-					if(cWnd == null && Main.isIdle) {
+					if(cWnd == null && SnipSniper.isIdle) {
 						cWnd = new CaptureWindow(instance);
-						Main.isIdle = false;
+						SnipSniper.isIdle = false;
 					}
 				}
 			}

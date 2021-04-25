@@ -26,8 +26,8 @@ public class Config {
 		this.filename = filename;
 		this.id = id;
 		try {
-			if(new File(Main.profilesFolder + filename).exists())
-				loadFile(Main.profilesFolder + filename, settings, false);
+			if(new File(SnipSniper.profilesFolder + filename).exists())
+				loadFile(SnipSniper.profilesFolder + filename, settings, false);
 			
 			loadFile("/cfg/" + defaultFile, defaults, true);
 		} catch (NumberFormatException | IOException e) {
@@ -108,14 +108,14 @@ public class Config {
 	}
 	
 	public void deleteFile() {
-		File file = new File(Main.profilesFolder + "/" + filename);
+		File file = new File(SnipSniper.profilesFolder + "/" + filename);
 		if(!file.delete())
 			LogManager.log(id, "Could not delete profile config!", Level.WARNING);
 	}
 	
 	private void saveFile(HashMap<String, String> map) {
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(Main.profilesFolder + "/" + filename));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(SnipSniper.profilesFolder + "/" + filename));
 			for (String key : map.keySet()) {
 				String value = map.get(key);
 				writer.write(key + "=" + value + "\n");
@@ -128,7 +128,7 @@ public class Config {
 	}
 	
 	public void save() {
-		if(!Main.isDemo) {
+		if(!SnipSniper.isDemo) {
 			if (settings.isEmpty())
 				saveFile(defaults);
 			else

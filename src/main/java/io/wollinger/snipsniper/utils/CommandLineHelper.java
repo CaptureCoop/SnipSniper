@@ -1,11 +1,12 @@
 package io.wollinger.snipsniper.utils;
 
-import io.wollinger.snipsniper.Main;
+import io.wollinger.snipsniper.SnipSniper;
 
 public class CommandLineHelper {
 
     private String language;
     private boolean isRestartedInstance = false;
+    private boolean isDebug = false;
 
     public CommandLineHelper() {
 
@@ -27,11 +28,11 @@ public class CommandLineHelper {
                     break;
                 case "-version":
                 case "-v":
-                    System.out.println(Main.VERSION);
+                    System.out.println(SnipSniper.VERSION);
                     doExit = true;
                     break;
                 case "-demo":
-                    Main.isDemo = true;
+                    SnipSniper.isDemo = true;
                     break;
                 case "-language":
                 case "-lang":
@@ -41,6 +42,10 @@ public class CommandLineHelper {
                     break;
                 case "-r":
                     isRestartedInstance = true;
+                    break;
+                case "-d":
+                case "-debug":
+                    isDebug = true;
                     break;
             }
             index++;
@@ -63,6 +68,10 @@ public class CommandLineHelper {
 
     public boolean isRestartedInstance() {
         return isRestartedInstance;
+    }
+
+    public boolean isDebug() {
+        return isDebug;
     }
 
 }

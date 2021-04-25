@@ -1,6 +1,6 @@
 package io.wollinger.snipsniper.utils;
 
-import io.wollinger.snipsniper.Main;
+import io.wollinger.snipsniper.SnipSniper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -35,11 +35,11 @@ public class LangManager {
     }
 
     public static String getItem(String key) {
-        return getItem(Main.config.getString("language"), key);
+        return getItem(SnipSniper.config.getString("language"), key);
     }
 
     public static String getEncoding() {
-        return LangManager.getEncoding(Main.config.getString("language"));
+        return LangManager.getEncoding(SnipSniper.config.getString("language"));
     }
 
     public static String getEncoding(String language) {

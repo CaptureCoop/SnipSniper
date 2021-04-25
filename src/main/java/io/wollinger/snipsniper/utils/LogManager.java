@@ -1,6 +1,6 @@
 package io.wollinger.snipsniper.utils;
 
-import io.wollinger.snipsniper.Main;
+import io.wollinger.snipsniper.SnipSniper;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,16 +24,16 @@ public class LogManager {
 
         System.out.println(msg);
 
-        if(!Main.isDemo) {
-            if (Main.logFile == null) {
+        if(!SnipSniper.isDemo) {
+            if (SnipSniper.logFile == null) {
                 LocalDateTime now = LocalDateTime.now();
                 String filename = now.toString().replace(".", "_").replace(":", "_");
                 filename += ".txt";
 
-                Main.logFile = new File(Main.logFolder + filename);
+                SnipSniper.logFile = new File(SnipSniper.logFolder + filename);
                 try {
-                    if (Main.logFile.createNewFile())
-                        LogManager.log(id, "Created new logfile at: " + Main.logFile.getAbsolutePath(), Level.INFO);
+                    if (SnipSniper.logFile.createNewFile())
+                        LogManager.log(id, "Created new logfile at: " + SnipSniper.logFile.getAbsolutePath(), Level.INFO);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -42,7 +42,7 @@ public class LogManager {
             msg += "\n";
 
             try {
-                Files.write(Paths.get(Main.logFile.getAbsolutePath()), msg.getBytes(), StandardOpenOption.APPEND);
+                Files.write(Paths.get(SnipSniper.logFile.getAbsolutePath()), msg.getBytes(), StandardOpenOption.APPEND);
             } catch (IOException e) {
                 e.printStackTrace();
             }
