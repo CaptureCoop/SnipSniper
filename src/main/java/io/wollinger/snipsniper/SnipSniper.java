@@ -82,19 +82,20 @@ public class SnipSniper {
 			exit();
 		}
 
-		if(!LangManager.getEncoding().equals("none") && SnipSniper.config.getBool("enforceEncoding") && !Charset.defaultCharset().toString().equals(LangManager.getEncoding())) {
-			if(!Charset.availableCharsets().containsKey(LangManager.getEncoding())) {
-				LogManager.log("Main", "Charset \"" + LangManager.getEncoding() + "\" missing. Language \"" + SnipSniper.config.getString("language")+ "\" not available", Level.SEVERE);
-				JOptionPane.showMessageDialog(null, Utils.formatArgs(LangManager.getItem(LangManager.languages.get(0), "error_charset_not_available"), LangManager.getEncoding(), SnipSniper.config.getString("language")));
+		String wantedEncoding = SnipSniper.config.getString("encoding");
+		if(SnipSniper.config.getBool("enforceEncoding") && !Charset.defaultCharset().toString().equals(wantedEncoding)) {
+			if(!Charset.availableCharsets().containsKey(wantedEncoding)) {
+				LogManager.log("Main", "Charset \"" + wantedEncoding + "\" missing. Language \"" + SnipSniper.config.getString("language")+ "\" not available", Level.SEVERE);
+				JOptionPane.showMessageDialog(null, Utils.formatArgs(LangManager.getItem(LangManager.languages.get(0), "error_charset_not_available"), wantedEncoding, SnipSniper.config.getString("language")));
 				exit();
 			}
-			LogManager.log("Main", "Charset <" + LangManager.getEncoding() + "> needed! Restarting with correct charset...", Level.WARNING);
+			LogManager.log("Main", "Charset <" + wantedEncoding + "> needed! Restarting with correct charset...", Level.WARNING);
 			try {
 				if(cmdline.isRestartedInstance()) {
 					JOptionPane.showMessageDialog(null, "Charset change failed. Please try using a different Java Version! (Java 1.8 / 8)");
 					exit();
 				}
-				SnipSniper.restartApplication();
+				SnipSniper.restartApplication(wantedEncoding);
 			} catch (Exception exception) {
 				exception.printStackTrace();
 			}
@@ -150,7 +151,7 @@ public class SnipSniper {
 	}
 
 	//https://stackoverflow.com/questions/4159802/how-can-i-restart-a-java-application
-	public static void restartApplication() throws URISyntaxException, IOException {
+	public static void restartApplication(String encoding) throws URISyntaxException, IOException {
 		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 		final File currentJar = new File(SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
@@ -159,8 +160,8 @@ public class SnipSniper {
 
 		final ArrayList<String> command = new ArrayList<>();
 		command.add(javaBin);
-		if(!LangManager.getEncoding().equals("none"))
-			command.add("-Dfile.encoding=" + LangManager.getEncoding());
+		if(encoding != null && !encoding.isEmpty())
+			command.add("-Dfile.encoding=" + encoding);
 		command.add("-jar");
 		command.add(currentJar.getPath());
 		command.add("-r");

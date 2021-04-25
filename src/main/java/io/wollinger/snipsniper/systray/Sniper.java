@@ -82,22 +82,16 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		languageMenu = new Menu(LangManager.getItem("menu_languages"));
 		for(String language : LangManager.languages) {
 			MenuItem mi = new MenuItem(LangManager.getItem("lang_" + language));
-			if(LangManager.getEncoding(language).equals("none") || Charset.availableCharsets().containsKey(LangManager.getEncoding(language))) {
-				mi.addActionListener(e -> {
-					SnipSniper.config.set("language", language);
-					SnipSniper.config.save();
-					try {
-						SnipSniper.resetProfiles();
-					} catch (Exception exception) {
-						exception.printStackTrace();
-					}
-				});
-			} else {
-				mi.setLabel(mi.getLabel() + " (" + LangManager.getItem("config_sanitation_error") + ")");
-				mi.addActionListener(e -> JOptionPane.showMessageDialog(null, Utils.formatArgs(LangManager.getItem("error_charset_not_available"), LangManager.getEncoding(language), language)));
-			}
+			mi.addActionListener(e -> {
+				SnipSniper.config.set("language", language);
+				SnipSniper.config.save();
+				try {
+					SnipSniper.resetProfiles();
+				} catch (Exception exception) {
+					exception.printStackTrace();
+				}
+			});
 			languageMenu.add(mi);
-
 		}
 		popup.add(languageMenu);
 
