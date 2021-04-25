@@ -1,1 +1,1 @@
---vendor "Sven Wollinger" --copyright "2021 Sven Wollinger" --description "SnipSniper" --name "SnipSniper" --input build/libs/ --main-jar SnipSniper.jar --main-class io.wollinger.snipsniper.MainWin --icon src/main/resources/res/SnSn.ico --java-options -Dfile.encoding=GB18030 --add-launcher SnipSniperDebug=jpackage_debug.txt
+--dest release --vendor "Sven Wollinger" --copyright "2021 Sven Wollinger" --description "SnipSniper" --name "SnipSniper" --input build/libs/ --main-jar SnipSniper.jar --icon src/main/resources/res/SnSn.ico --java-options -Dfile.encoding=GB18030

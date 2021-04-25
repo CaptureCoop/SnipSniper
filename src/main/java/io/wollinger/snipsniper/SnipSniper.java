@@ -144,8 +144,8 @@ public class SnipSniper {
 	}
 
 	public static void setSaveLocationToDocuments() {
-		SnipSniper.jarFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-		SnipSniper.mainFolder = jarFolder + "/SnipSniper";
+		SnipSniper.jarFolder = System.getProperty("user.home");
+		SnipSniper.mainFolder = jarFolder + "/.SnipSniper";
 		SnipSniper.profilesFolder = mainFolder + "/cfg/";
 		SnipSniper.logFolder = mainFolder + "/logs/";
 	}
