@@ -110,6 +110,13 @@ public class Main {
 		}
 	}
 
+	public static void setSaveLocationToDocuments() {
+		Main.jarFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
+		Main.mainFolder = jarFolder + "/SnipSniper";
+		Main.profilesFolder = mainFolder + "/cfg/";
+		Main.logFolder = mainFolder + "/logs/";
+	}
+
 	//https://stackoverflow.com/questions/4159802/how-can-i-restart-a-java-application
 	public static void restartApplication() throws URISyntaxException, IOException {
 		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
