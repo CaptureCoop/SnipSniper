@@ -35,13 +35,13 @@ goto done
 :create_install
 echo Creating installer
 %jpackage% @jpackage_defaults.txt --main-class io.wollinger.snipsniper.MainWin --app-version @src/main/resources/version.txt --type exe --add-launcher SnipSniperDebug=jpackage_debug_win.txt --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut
-rename release\SnipSniper*.exe "SnipSniper Installer.exe"
+rename release\SnipSniper*.exe "SnipSniper_Installer.exe"
 goto :EOF
 
 :create_portable
 echo Creating portable
 %jpackage% @jpackage_defaults.txt --main-class io.wollinger.snipsniper.Main --app-version @src/main/resources/version.txt --type app-image --add-launcher SnipSniperDebug=jpackage_debug.txt
-rename release\SnipSniper "SnipSniper Portable"
+rename release\SnipSniper "SnipSniper_Portable"
 goto :EOF
 
 :create_jar
