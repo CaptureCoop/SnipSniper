@@ -3,7 +3,6 @@ cls
 
 set jpackage="C:\Users\Sven\.jdks\openjdk-16.0.1\bin\jpackage.exe"
 
-
 IF "%~1" == "" goto help
 
 if %1==clean goto clean
@@ -28,7 +27,6 @@ goto :EOF
 
 :create_full
 call :clean
-call :create_directory
 call :create_install
 call :create_portable
 call :create_jar
@@ -36,13 +34,13 @@ goto done
 
 :create_install
 echo Creating installer
-%jpackage% @jpackageflags.txt --dest release --app-version @src/main/resources/version.txt --type exe --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut
+%jpackage% @jpackage_defaults.txt --dest release --app-version @src/main/resources/version.txt --type exe --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut
 rename release\SnipSniper*.exe "SnipSniper Installer.exe"
 goto :EOF
 
 :create_portable
 echo Creating portable
-%jpackage% @jpackageflags.txt --dest release --app-version @src/main/resources/version.txt --type app-image
+%jpackage% @jpackage_defaults.txt --dest release --app-version @src/main/resources/version.txt --type app-image
 rename release\SnipSniper "SnipSniper Portable"
 goto :EOF
 
