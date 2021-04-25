@@ -1,5 +1,54 @@
 @echo off
+cls
 
-set jpackage="C:\Users\Sven\.jdks\adopt-openjdk-14.0.2\bin\jpackage.exe"
+set jpackage="C:\Users\Sven\.jdks\openjdk-16.0.1\bin\jpackage.exe"
 
-%jpackage% --vendor "Sven Wollinger" --app-version @src/main/resources/version.txt --copyright "2021 Sven Wollinger" --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut --description "SnipSniper" --name "SnipSniper" --dest build/libs/ --input build/libs/ --main-jar SnipSniper.jar --main-class io.wollinger.snipsniper.MainWin --icon src/main/resources/res/SnSn.ico --java-options -Dfile.encoding=GB18030 --add-launcher SnipSniperDebug=jpackagedebug.txt
+
+IF "%~1" == "" goto help
+
+if %1==clean goto clean
+if %1==full goto create_full
+if %1==portable goto create_portable
+if %1==installer goto create_install
+if %1==jar goto create_jar
+
+:help
+echo Available parameters
+echo build clean
+echo build full
+echo build portable
+echo build installer
+echo build jar
+goto done
+
+:clean
+RMDIR /S /Q release
+echo Cleaned!
+goto :EOF
+
+:create_full
+call :clean
+call :create_directory
+call :create_install
+call :create_portable
+call :create_jar
+goto done
+
+:create_install
+echo Creating installer
+%jpackage% @jpackageflags.txt --dest release --app-version @src/main/resources/version.txt --type exe --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut
+rename release\SnipSniper*.exe "SnipSniper Installer.exe"
+goto :EOF
+
+:create_portable
+echo Creating portable
+%jpackage% @jpackageflags.txt --dest release --app-version @src/main/resources/version.txt --type app-image
+rename release\SnipSniper "SnipSniper Portable"
+goto :EOF
+
+:create_jar
+echo Creating jar
+xcopy build\libs\SnipSniper.jar release > nul
+goto :EOF
+
+:done
