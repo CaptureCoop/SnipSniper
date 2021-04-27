@@ -133,15 +133,21 @@ public class SnipSniper {
 			LogManager.log(ID, "============================================================", Level.INFO);
 		}
 
-		if(cmdline.isEditorOnly()) {
+		if(cmdline.isEditorOnly() || isEditorOnly) {
 			Config config = new Config("editor.cfg", "CFGE", "profile_defaults.cfg");
 			config.save();
 
 			boolean fileExists = true;
 			BufferedImage img = null;
-			if(cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty()) {
+			if((cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty()) || (isEditorOnly && args.length > 0)) {
 				try {
-					File file = new File(cmdline.getEditorFile());
+					String path;
+					if(cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty())
+						path = cmdline.getEditorFile();
+					else
+						path = args[0];
+
+					File file = new File(path);
 					fileExists = file.exists();
 					if(fileExists)
 						img = ImageIO.read(file);
