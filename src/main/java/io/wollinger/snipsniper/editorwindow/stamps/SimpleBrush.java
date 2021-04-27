@@ -14,14 +14,15 @@ public class SimpleBrush implements IStamp {
     private final int speed;
 
     private PBRColor color;
+    private final Config config;
 
     public SimpleBrush(EditorWindow editorWindow) {
         this.editorWindow = editorWindow;
-        Config cfg = editorWindow.getSniperInstance().cfg;
+        this.config = editorWindow.getConfig();
 
-        color = new PBRColor(cfg.getColor("editorStampSimpleBrushDefaultColor"));
-        size = cfg.getInt("editorStampSimpleBrushSize");
-        speed = cfg.getInt("editorStampSimpleBrushSizeSpeed");
+        color = new PBRColor(config.getColor("editorStampSimpleBrushDefaultColor"));
+        size = config.getInt("editorStampSimpleBrushSize");
+        speed = config.getInt("editorStampSimpleBrushSizeSpeed");
     }
 
     @Override
@@ -56,7 +57,7 @@ public class SimpleBrush implements IStamp {
             g2.setStroke(new BasicStroke(size, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
             double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());
-            if(distance > editorWindow.getSniperInstance().cfg.getInt("editorStampSimpleBrushDistance")) {
+            if(distance > config.getInt("editorStampSimpleBrushDistance")) {
                 g2.drawLine((int) p0.getX(), (int) p0.getY(), (int) p1.getX(), (int) p1.getY());
                 input.removeMousePathPoint(0);
             } else {

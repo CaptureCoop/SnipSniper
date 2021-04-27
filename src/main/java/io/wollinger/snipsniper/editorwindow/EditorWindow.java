@@ -5,16 +5,19 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
+import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.editorwindow.stamps.*;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.InputContainer;
+import io.wollinger.snipsniper.utils.Utils;
 
 public class EditorWindow extends JFrame{
 	private static final long serialVersionUID = -7363672331227971815L;
 
+	private String id;
 	private BufferedImage img;
-	private final Sniper sniperInstance;
+	private final Config config;
 
 	private final Color censorColor = Color.BLACK;
 	
@@ -35,17 +38,18 @@ public class EditorWindow extends JFrame{
 
 	public boolean isDirty = false;
 
-	public EditorWindow(BufferedImage img, int x, int y, String title, Sniper sniperInstance, boolean leftToRight, String saveLocation, boolean inClipboard) {
+	public EditorWindow(String id, BufferedImage img, int x, int y, String title, Config config, boolean leftToRight, String saveLocation, boolean inClipboard) {
+		this.id = id;
 		this.img = img;
-		this.sniperInstance = sniperInstance;
+		this.config = config;
 
 		this.saveLocation = saveLocation;
 		this.inClipboard = inClipboard;
 		this.title = title;
 
 		stamps[0] = new CubeStamp(this);
-		stamps[1] = new CounterStamp(sniperInstance.cfg);
-		stamps[2] = new CircleStamp(sniperInstance.cfg);
+		stamps[1] = new CounterStamp(config);
+		stamps[2] = new CircleStamp(config);
 		stamps[3] = new SimpleBrush(this);
 
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -71,7 +75,7 @@ public class EditorWindow extends JFrame{
 		this.add(renderer);
 		this.pack();
 		
-		int borderSize = sniperInstance.cfg.getInt("borderSize");
+		int borderSize = config.getInt("borderSize");
 		if(!leftToRight) borderSize = -borderSize;
 		
 		this.setLocation((x - X_OFFSET) + borderSize, (y - barSize) + borderSize);
@@ -115,9 +119,9 @@ public class EditorWindow extends JFrame{
 		Graphics g = finalImg.getGraphics();
 		g.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), this);
 		g.dispose();
-		sniperInstance.saveImage(finalImg, FILENAME_MODIFIER);
-		if(sniperInstance.cfg.getBool("copyToClipboard"))
-			sniperInstance.copyToClipboard(finalImg);
+		Utils.saveImage(id, finalImg, FILENAME_MODIFIER, config);
+		if(config.getBool("copyToClipboard"))
+			Utils.copyToClipboard(id,finalImg);
 	}
 	
 	public void kill() {
@@ -141,8 +145,8 @@ public class EditorWindow extends JFrame{
 		this.img = image;
 	}
 
-	public Sniper getSniperInstance() {
-		return sniperInstance;
+	public Config getConfig() {
+		return config;
 	}
 
 	public BufferedImage getImage() {

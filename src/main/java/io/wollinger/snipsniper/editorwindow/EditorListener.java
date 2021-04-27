@@ -97,7 +97,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			float[] hsv = new float[3];
 			Color.RGBtoHSB(oldColor.getRed(),oldColor.getGreen(),oldColor.getBlue(),hsv);
 
-			float speed = editorInstance.getSniperInstance().cfg.getFloat("hsvColorSwitchSpeed");
+			float speed = editorInstance.getConfig().getFloat("hsvColorSwitchSpeed");
 			if(mouseWheelEvent.getWheelRotation() == 1)
 				hsv[0] += speed;
 			else if(mouseWheelEvent.getWheelRotation() == -1)
@@ -121,7 +121,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		IStamp stamp = editorInstance.getSelectedStamp();
 
 		if(keyCode == KeyEvent.VK_C) {
-			new ColorChooser(editorInstance.getSniperInstance(), "Marker Color", stamp.getColor(), stamp.getID() + "DefaultColor");
+			new ColorChooser(editorInstance.getConfig(), "Marker Color", stamp.getColor(), stamp.getID() + "DefaultColor");
 		}
 		if(keyCode == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();
@@ -137,7 +137,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 		if(keyCode == KeyEvent.VK_ENTER) {
 			JFileChooser chooser = new JFileChooser();
-			File file = new File(editorInstance.getSniperInstance().constructFilename(EditorWindow.FILENAME_MODIFIER));
+			File file = new File(Utils.constructFilename(EditorWindow.FILENAME_MODIFIER));
 			chooser.setSelectedFile(file);
 			int result = chooser.showSaveDialog(chooser);
 			if(result == JFileChooser.APPROVE_OPTION){

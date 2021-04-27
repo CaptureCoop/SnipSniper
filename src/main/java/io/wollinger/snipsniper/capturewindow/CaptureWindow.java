@@ -210,11 +210,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			boolean inClipboard = false;
 
 			if(sniperInstance.cfg.getBool("saveToDisk")) {
-				finalLocation = sniperInstance.saveImage(finalImg, "");
+				finalLocation = Utils.saveImage(sniperInstance.getID(), finalImg, "", sniperInstance.cfg);
 			}
 
 			if(sniperInstance.cfg.getBool("copyToClipboard")) {
-				sniperInstance.copyToClipboard(finalImg);
+				Utils.copyToClipboard(sniperInstance.getID(), finalImg);
 				inClipboard = true;
 			}
 
@@ -232,7 +232,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 					leftToRight = true;
 				}
 				if (sniperInstance.cfg.getBool("openEditor")) {
-					new EditorWindow(finalImg, posX, posY, "SnipSniper Editor", sniperInstance, leftToRight, finalLocation, inClipboard);
+					new EditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", sniperInstance.cfg, leftToRight, finalLocation, inClipboard);
 				}
 			}
 

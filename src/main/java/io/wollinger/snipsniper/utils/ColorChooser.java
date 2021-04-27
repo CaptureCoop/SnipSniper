@@ -16,7 +16,7 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 public class ColorChooser extends JFrame{
 	private static final long serialVersionUID = 8590714455238968415L;
 
-	private final Sniper sniper;
+	private final Config config;
 
 	private JColorChooser jcc;
 	
@@ -25,9 +25,9 @@ public class ColorChooser extends JFrame{
 
 	ColorChooser instance;
 	
-	public ColorChooser(Sniper sniper, String title, PBRColor color, String configKey) {
+	public ColorChooser(Config config, String title, PBRColor color, String configKey) {
         instance = this;
-        this.sniper = sniper;
+        this.config = config;
 		this.color = color;
 		this.setTitle(title);
 		this.configKey = configKey;
@@ -42,9 +42,8 @@ public class ColorChooser extends JFrame{
 	public void save() {
 	    color.setColor(jcc.getColor());
         if(configKey != null) {
-            Config cfg = sniper.cfg;
-            cfg.set(configKey, Utils.rgb2hex(color.getColor()));
-            cfg.save();
+            config.set(configKey, Utils.rgb2hex(color.getColor()));
+            config.save();
         }
         this.dispose();
     }

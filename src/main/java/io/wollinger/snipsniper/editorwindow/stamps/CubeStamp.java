@@ -23,21 +23,22 @@ public class CubeStamp implements IStamp{
     private final int speed;
 
     private PBRColor color;
+    private final Config config;
 
     public CubeStamp(EditorWindow editor) {
         this.editor = editor;
-        Config cfg = editor.getSniperInstance().cfg;
+        this.config = editor.getConfig();
 
-        color = new PBRColor(cfg.getColor("editorStampCubeDefaultColor"));
-        width = cfg.getInt("editorStampCubeWidth");
-        height = cfg.getInt("editorStampCubeHeight");
+        color = new PBRColor(config.getColor("editorStampCubeDefaultColor"));
+        width = config.getInt("editorStampCubeWidth");
+        height = config.getInt("editorStampCubeHeight");
         thickness = 0;
 
-        minimumWidth = cfg.getInt("editorStampCubeWidthMinimum");
-        minimumHeight = cfg.getInt("editorStampCubeHeightMinimum");
+        minimumWidth = config.getInt("editorStampCubeWidthMinimum");
+        minimumHeight = config.getInt("editorStampCubeHeightMinimum");
 
-        speedWidth = cfg.getInt("editorStampCubeWidthSpeed");
-        speedHeight = cfg.getInt("editorStampCubeHeightSpeed");
+        speedWidth = config.getInt("editorStampCubeWidthSpeed");
+        speedHeight = config.getInt("editorStampCubeHeightSpeed");
         speed = 0;
     }
 
@@ -77,7 +78,7 @@ public class CubeStamp implements IStamp{
     }
 
     public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
-        boolean isSmartPixel = editor.getSniperInstance().cfg.getBool("smartPixel");
+        boolean isSmartPixel = config.getBool("smartPixel");
         if(isSmartPixel && isSaveRender && !isCensor) {
             Vector2Int pos = new Vector2Int(input.getMouseX()+width/2, input.getMouseY()+height/2);
             Vector2Int size = new Vector2Int(-width, -height);
