@@ -34,7 +34,7 @@ goto done
 
 :create_install
 echo Creating installer
-%jpackage% @jpackage_defaults.txt --main-class io.wollinger.snipsniper.main.MainWin --app-version @src/main/resources/version.txt --type exe --add-launcher SnipSniperDebug=jpackage_debug_win.txt --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut
+%jpackage% @jpackage_defaults.txt --main-class io.wollinger.snipsniper.main.MainStatic --app-version @src/main/resources/version.txt --type exe --add-launcher SnipSniperDebug=jpackage_debug_win.txt --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut
 rename release\SnipSniper*.exe "SnipSniper_Installer.exe"
 goto :EOF
 
