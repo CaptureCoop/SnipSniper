@@ -56,8 +56,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				Thread.sleep(sniperInstance.cfg.getInt("snipeDelay") * 1000L);
 			} catch (InterruptedException e) {
 				int profileID = sniperInstance.profileID;
-				LogManager.log(profileID, "There was an error with the delay! Message: " + e.getMessage(), Level.SEVERE);
-				LogManager.log(profileID, "More info: " + Arrays.toString(e.getStackTrace()), Level.SEVERE);
+				LogManager.log(sniperInstance.getID(), "There was an error with the delay! Message: " + e.getMessage(), Level.SEVERE);
+				LogManager.log(sniperInstance.getID(), "More info: " + Arrays.toString(e.getStackTrace()), Level.SEVERE);
 			}
 		}
 		
@@ -142,7 +142,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		try {
 			screenshot = new Robot().createScreenCapture(screenshotRect);
 		} catch (AWTException e) {
-			LogManager.log(sniperInstance.profileID, "Couldn't take screenshot. Message: " + e.getMessage(), Level.SEVERE);
+			LogManager.log(sniperInstance.getID(), "Couldn't take screenshot. Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
 		screenshotTinted = Utils.copyImage(screenshot);
@@ -281,7 +281,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 			lastPoint = cPoint;
 		} else {
-			LogManager.log(sniperInstance.profileID, "WARNING: Screenshot is null when trying to render. Trying again.", Level.WARNING);
+			LogManager.log(sniperInstance.getID(), "WARNING: Screenshot is null when trying to render. Trying again.", Level.WARNING);
 			this.repaint();
 		}
 		g2.dispose();

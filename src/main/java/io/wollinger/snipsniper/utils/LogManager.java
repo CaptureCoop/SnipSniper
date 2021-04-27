@@ -49,8 +49,4 @@ public class LogManager {
         }
     }
 
-    public static void log(int profileID, String message, Level level) {
-        LogManager.log("PRO" + profileID, message, level);
-    }
-
 }

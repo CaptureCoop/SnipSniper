@@ -61,7 +61,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		cfg = new Config("profile" + profileID + ".cfg", "cfg" + profileID, "profile_defaults.cfg");
 		instance = this;
 		
-		LogManager.log(profileID, "Loading profile " + profileID, Level.INFO);
+		LogManager.log(getID(), "Loading profile " + profileID, Level.INFO);
 		
 	    SystemTray tray = SystemTray.getSystemTray();
 	    
@@ -133,13 +133,13 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			
 			tray.add(trayIcon);
 		} catch (AWTException e) {
-			LogManager.log(profileID, "There was an issue setting up the Tray Icon! Message: " + e.getMessage(), Level.SEVERE);
+			LogManager.log(getID(), "There was an issue setting up the Tray Icon! Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
 		try {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException e) {
-			LogManager.log(profileID, "There was an issue setting up NativeHook! Message: " + e.getMessage(), Level.SEVERE);
+			LogManager.log(getID(), "There was an issue setting up NativeHook! Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
 		GlobalScreen.addNativeKeyListener(this);
@@ -155,7 +155,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 	//This refreshes the buttons so that they only show profiles that exist/don't exist respectively.
 	void refreshProfiles() {
-		LogManager.log(profileID, "Refreshing profiles in task tray", Level.INFO);
+		LogManager.log(getID(), "Refreshing profiles in task tray", Level.INFO);
 		createProfilesMenu.removeAll();
 		removeProfilesMenu.removeAll();
 		
@@ -181,7 +181,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 	public void addProfile(int id) {
 		if(SnipSniper.profiles[id] == null) {
-			LogManager.log(profileID, "Creating profile " + (id + 1), Level.INFO);
+			LogManager.log(getID(), "Creating profile " + (id + 1), Level.INFO);
 			SnipSniper.profiles[id] = new Sniper(id + 1);
 			SnipSniper.profiles[id].cfg.save();
 		}
@@ -189,7 +189,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 	public void removeProfile(int id) {
 		if(SnipSniper.profiles[id] != null) {
-			LogManager.log(profileID, "Removing profile " + (id + 1), Level.INFO);
+			LogManager.log(getID(), "Removing profile " + (id + 1), Level.INFO);
 			cfg.deleteFile();
 			SystemTray.getSystemTray().remove(SnipSniper.profiles[id].trayIcon);
 			GlobalScreen.removeNativeKeyListener(instance);
