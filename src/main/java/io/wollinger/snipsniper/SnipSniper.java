@@ -1,8 +1,10 @@
 package io.wollinger.snipsniper;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -10,8 +12,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.logging.Level;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import io.wollinger.snipsniper.editorwindow.EditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
@@ -130,8 +134,31 @@ public class SnipSniper {
 			LogManager.log(ID, "============================================================", Level.INFO);
 		}
 
-		resetProfiles();
+		if(cmdline.isEditorOnly()) {
+			Config config = new Config("editor.cfg", "CFGE", "profile_defaults.cfg");
+			config.save();
 
+			BufferedImage img = null;
+			if(cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty()) {
+				try {
+					img = ImageIO.read(new File(cmdline.getEditorFile()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				img = new BufferedImage(512, 256, BufferedImage.TYPE_INT_RGB);
+			}
+
+			if(img != null) {
+				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+				int x = (int) (screenSize.getWidth() / 2 - img.getWidth() / 2);
+				int y = (int) (screenSize.getHeight() / 2 - img.getHeight() / 2);
+				new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, "", false);
+				//TODO: it exits fine when closed, check if this always happens
+			}
+		} else {
+			resetProfiles();
+		}
 	}
 
 	public static void resetProfiles() {
