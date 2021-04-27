@@ -5,25 +5,17 @@ import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
-import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.time.LocalDateTime;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.utils.LangManager;
 import io.wollinger.snipsniper.utils.LogManager;
-import io.wollinger.snipsniper.utils.Utils;
+
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -31,7 +23,6 @@ import org.jnativehook.keyboard.NativeKeyListener;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.capturewindow.CaptureWindow;
-import io.wollinger.snipsniper.capturewindow.ImageSelection;
 import io.wollinger.snipsniper.configwindow.ConfigWindow;
 import io.wollinger.snipsniper.systray.buttons.btnAbout;
 import io.wollinger.snipsniper.systray.buttons.btnConfig;

@@ -15,7 +15,7 @@ import io.wollinger.snipsniper.utils.Utils;
 public class EditorWindow extends JFrame{
 	private static final long serialVersionUID = -7363672331227971815L;
 
-	private String id;
+	private final String id;
 	private BufferedImage img;
 	private final Config config;
 
