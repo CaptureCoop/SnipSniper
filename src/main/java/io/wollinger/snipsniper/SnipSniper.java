@@ -137,10 +137,14 @@ public class SnipSniper {
 			Config config = new Config("editor.cfg", "CFGE", "profile_defaults.cfg");
 			config.save();
 
+			boolean fileExists = true;
 			BufferedImage img = null;
 			if(cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty()) {
 				try {
-					img = ImageIO.read(new File(cmdline.getEditorFile()));
+					File file = new File(cmdline.getEditorFile());
+					fileExists = file.exists();
+					if(fileExists)
+						img = ImageIO.read(file);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -148,12 +152,14 @@ public class SnipSniper {
 				img = new BufferedImage(512, 256, BufferedImage.TYPE_INT_RGB);
 			}
 
-			if(img != null) {
+			if(img != null && fileExists) {
 				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 				int x = (int) (screenSize.getWidth() / 2 - img.getWidth() / 2);
 				int y = (int) (screenSize.getHeight() / 2 - img.getHeight() / 2);
 				new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, "", false);
 				//TODO: it exits fine when closed, check if this always happens
+			} else {
+				JOptionPane.showMessageDialog(null, "Image not found!", "Error", 0);
 			}
 		} else {
 			resetProfiles();
