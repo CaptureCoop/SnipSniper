@@ -13,11 +13,11 @@ if %1==jar goto create_jar
 
 :help
 echo Available parameters
-echo build clean
-echo build full
-echo build portable
-echo build installer
-echo build jar
+echo make clean
+echo make full
+echo make portable
+echo make installer
+echo make jar
 goto done
 
 :clean
