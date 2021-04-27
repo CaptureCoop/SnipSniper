@@ -228,6 +228,10 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		}
 	}
 
+	public String getID() {
+		return "PRO" + profileID;
+	}
+
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
 		checkNativeKey("KB", nativeKeyEvent.getKeyCode());
