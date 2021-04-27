@@ -7,6 +7,8 @@ public class CommandLineHelper {
     private String language;
     private boolean isRestartedInstance = false;
     private boolean isDebug = false;
+    private boolean editorOnly = false;
+    private String editorFile;
 
     public CommandLineHelper() {
 
@@ -47,6 +49,9 @@ public class CommandLineHelper {
                 case "-debug":
                     isDebug = true;
                     break;
+                case "-editor":
+                    editorOnly = true;
+                    if(args.length > index +1) editorFile = args[index + 1];
             }
             index++;
         }
@@ -72,6 +77,14 @@ public class CommandLineHelper {
 
     public boolean isDebug() {
         return isDebug;
+    }
+
+    public boolean isEditorOnly() {
+        return editorOnly;
+    }
+
+    public String getEditorFile() {
+        return editorFile;
     }
 
 }
