@@ -23,10 +23,10 @@ public class SnipSniper {
 
 	public static String VERSION;
 	
-	public static String jarFolder = new File("").getAbsolutePath() + "/";
-	public static String mainFolder = jarFolder + "SnipSniper";
-	public static String profilesFolder = mainFolder + "/cfg/";
-	public static String logFolder = mainFolder + "/logs/";
+	public static String jarFolder;
+	public static String mainFolder;
+	public static String profilesFolder;
+	public static String logFolder;
 	
 	public final static int PROFILE_COUNT = 7;
 
@@ -46,6 +46,17 @@ public class SnipSniper {
 	private final static String ID = "MAIN";
 
 	public SnipSniper(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly) {
+		String folderToUseString = SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+		File folderToUse = new File(folderToUseString);
+		if(folderToUse.getName().endsWith(".jar"))
+			jarFolder = folderToUseString.replace(folderToUse.getName(), "");
+		else
+			jarFolder = folderToUseString;
+
+		mainFolder = jarFolder + "SnipSniper";
+		profilesFolder = mainFolder + "/cfg/";
+		logFolder = mainFolder + "/logs/";
+
 		if(!SystemUtils.IS_OS_WINDOWS)
 			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
 
