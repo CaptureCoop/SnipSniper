@@ -40,6 +40,8 @@ public class SnipSniper {
 
 	public static String[] args;
 
+	private final static String ID = "MAIN";
+
 	public SnipSniper(String[] args, boolean saveInDocuments, boolean isDebug) {
 		if(!SystemUtils.IS_OS_WINDOWS)
 			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
@@ -62,41 +64,41 @@ public class SnipSniper {
 			File tempProfileFolder = new File(profilesFolder);
 			File tempLogFolder = new File(logFolder);
 			if ((!tempProfileFolder.exists() && !tempProfileFolder.mkdirs()) || (!tempLogFolder.exists() && !tempLogFolder.mkdirs())){
-				LogManager.log("Main", "Could not create required folders! Exiting...", Level.SEVERE);
+				LogManager.log(ID, "Could not create required folders! Exiting...", Level.SEVERE);
 				exit();
 			}
 		}
 
-		config = new Config("main.cfg", "cfgM", "main_defaults.cfg");
+		config = new Config("main.cfg", "CFGM", "main_defaults.cfg");
 		String language = cmdline.getLanguage();
 		if(language != null && !language.isEmpty())
 			config.set("language", language);
 
 		LangManager.load();
 
-		LogManager.log("Main", "Launching SnipSniper Version " + SnipSniper.VERSION, Level.INFO);
+		LogManager.log(ID, "Launching SnipSniper Version " + SnipSniper.VERSION, Level.INFO);
 
 		if(isDebug || cmdline.isDebug()) {
-			LogManager.log("Main", "========================================", Level.INFO);
-			LogManager.log("Main", "= SnipSniper is running in debug mode! =", Level.INFO);
-			LogManager.log("Main", "========================================", Level.INFO);
+			LogManager.log(ID, "========================================", Level.INFO);
+			LogManager.log(ID, "= SnipSniper is running in debug mode! =", Level.INFO);
+			LogManager.log(ID, "========================================", Level.INFO);
 		}
 
-		LogManager.log("Main", "Launching language <" + SnipSniper.config.getString("language") + "> using encoding <" + Charset.defaultCharset() + ">!", Level.INFO);
+		LogManager.log(ID, "Launching language <" + SnipSniper.config.getString("language") + "> using encoding <" + Charset.defaultCharset() + ">!", Level.INFO);
 
 		if(!LangManager.languages.contains(SnipSniper.config.getString("language"))) {
-			LogManager.log("Main", "Language <" + SnipSniper.config.getString("language") + "> not found. Available languages: " + LangManager.languages.toString(), Level.SEVERE);
+			LogManager.log(ID, "Language <" + SnipSniper.config.getString("language") + "> not found. Available languages: " + LangManager.languages.toString(), Level.SEVERE);
 			exit();
 		}
 
 		String wantedEncoding = SnipSniper.config.getString("encoding");
 		if(SnipSniper.config.getBool("enforceEncoding") && !Charset.defaultCharset().toString().equals(wantedEncoding)) {
 			if(!Charset.availableCharsets().containsKey(wantedEncoding)) {
-				LogManager.log("Main", "Charset \"" + wantedEncoding + "\" missing. Language \"" + SnipSniper.config.getString("language")+ "\" not available", Level.SEVERE);
+				LogManager.log(ID, "Charset \"" + wantedEncoding + "\" missing. Language \"" + SnipSniper.config.getString("language")+ "\" not available", Level.SEVERE);
 				JOptionPane.showMessageDialog(null, Utils.formatArgs(LangManager.getItem(LangManager.languages.get(0), "error_charset_not_available"), wantedEncoding, SnipSniper.config.getString("language")));
 				exit();
 			}
-			LogManager.log("Main", "Charset <" + wantedEncoding + "> needed! Restarting with correct charset...", Level.WARNING);
+			LogManager.log(ID, "Charset <" + wantedEncoding + "> needed! Restarting with correct charset...", Level.WARNING);
 			try {
 				if(cmdline.isRestartedInstance()) {
 					JOptionPane.showMessageDialog(null, "Charset change failed. Please try using a different Java Version! (Java 1.8 / 8)");
@@ -118,14 +120,14 @@ public class SnipSniper {
 
 		System.setProperty("sun.java2d.uiScale", "1.0");
 
-		LogManager.log("Main", "Loading resources", Level.INFO);
+		LogManager.log(ID, "Loading resources", Level.INFO);
 		Icons.loadResources();
 
 		if(isDemo) {
-			LogManager.log("Main", "============================================================", Level.INFO);
-			LogManager.log("Main", "= SnipSniper is running in DEMO mode                       =", Level.INFO);
-			LogManager.log("Main", "= This means that no files will be created and/or modified =", Level.INFO);
-			LogManager.log("Main", "============================================================", Level.INFO);
+			LogManager.log(ID, "============================================================", Level.INFO);
+			LogManager.log(ID, "= SnipSniper is running in DEMO mode                       =", Level.INFO);
+			LogManager.log(ID, "= This means that no files will be created and/or modified =", Level.INFO);
+			LogManager.log(ID, "============================================================", Level.INFO);
 		}
 
 		resetProfiles();
@@ -180,7 +182,7 @@ public class SnipSniper {
 	}
 
 	public static void exit() {
-		LogManager.log("Main", "Exit requested. Goodbye!", Level.INFO);
+		LogManager.log(ID, "Exit requested. Goodbye!", Level.INFO);
 		System.exit(0);
 	}
 
