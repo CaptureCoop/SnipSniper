@@ -1,12 +1,16 @@
 package io.wollinger.snipsniper.utils;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.capturewindow.ImageSelection;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.logging.Level;
 
 public class Utils {
 	
@@ -21,6 +25,49 @@ public class Utils {
 
 	public static void printArgs(PrintStream out, final String message, final Object... args) {
 		out.println(formatArgs(message, args));
+	}
+
+	public static String saveImage(String profileID, BufferedImage finalImg, String modifier, Config config) {
+		File file;
+		String filename = Utils.constructFilename(modifier);
+		String savePath = config.getString("pictureFolder");
+		File path = new File(savePath);
+		file = new File(savePath + filename);
+		try {
+			if(config.getBool("saveToDisk")) {
+				if(!path.exists()) {
+					if(!path.mkdirs()) {
+						LogManager.log(profileID, "Failed saving, directory missing & could not create it!", Level.WARNING);
+						return null;
+					}
+				}
+				if(file.createNewFile()) {
+					ImageIO.write(finalImg, "png", file);
+					LogManager.log(profileID, "Saved image on disk. Location: " + file, Level.INFO);
+					return file.getAbsolutePath();
+				}
+			}
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Could not save image to \"" + file.toString()  + "\"!" , "Error", JOptionPane.INFORMATION_MESSAGE);
+			LogManager.log(profileID, "Failed Saving. Wanted Location: " + file, Level.WARNING);
+			LogManager.log(profileID, "Detailed Error: " + e.getMessage(), Level.WARNING);
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+
+	public static void copyToClipboard(String id, BufferedImage img) {
+		ImageSelection imgSel = new ImageSelection(img);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
+		LogManager.log(id, "Copied Image to clipboard", Level.INFO);
+	}
+
+	public static String constructFilename(String modifier) {
+		LocalDateTime now = LocalDateTime.now();
+		String filename = now.toString().replace(".", "_").replace(":", "_");
+		filename += modifier + ".png";
+		return filename;
 	}
 
 	public static String formatArgs(final String message, final Object ...args) {

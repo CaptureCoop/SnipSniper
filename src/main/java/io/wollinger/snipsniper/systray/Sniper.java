@@ -213,49 +213,6 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		}
 	}
 
-	public void copyToClipboard(BufferedImage img) {
-		ImageSelection imgSel = new ImageSelection(img);
-		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
-		LogManager.log(profileID, "Copied Image to clipboard", Level.INFO);
-	}
-
-	public String constructFilename(String modifier) {
-		LocalDateTime now = LocalDateTime.now();
-		String filename = now.toString().replace(".", "_").replace(":", "_");
-		filename += modifier + ".png";
-		return filename;
-	}
-
-	public String saveImage(BufferedImage finalImg, String modifier) {
-		File file;
-		String filename = constructFilename(modifier);
-		String savePath = cfg.getString("pictureFolder");
-		File path = new File(savePath);
-		file = new File(savePath + filename);
-		try {
-			if(cfg.getBool("saveToDisk")) {
-				if(!path.exists()) {
-					if(!path.mkdirs()) {
-						LogManager.log(profileID, "Failed saving, directory missing & could not create it!", Level.WARNING);
-						return null;
-					}
-				}
-				if(file.createNewFile()) {
-					ImageIO.write(finalImg, "png", file);
-					LogManager.log(profileID, "Saved image on disk. Location: " + file, Level.INFO);
-					return file.getAbsolutePath();
-				}
-			}
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Could not save image to \"" + file.toString()  + "\"!" , "Error", JOptionPane.INFORMATION_MESSAGE);
-			LogManager.log(profileID, "Failed Saving. Wanted Location: " + file, Level.WARNING);
-			LogManager.log(profileID, "Detailed Error: " + e.getMessage(), Level.WARNING);
-			e.printStackTrace();
-			return null;
-		}
-		return null;
-	}
-
 	public void checkNativeKey(String identifier, int pressedKey) {
 		String hotkey = cfg.getString("hotkey");
 		if(!hotkey.equals("NONE")) {
