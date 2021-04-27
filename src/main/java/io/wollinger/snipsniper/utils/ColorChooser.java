@@ -31,6 +31,7 @@ public class ColorChooser extends JFrame{
 		this.color = color;
 		this.setTitle(title);
 		this.configKey = configKey;
+		this.setIconImage(Icons.icon_taskbar);
 		init();
 	}
 	
