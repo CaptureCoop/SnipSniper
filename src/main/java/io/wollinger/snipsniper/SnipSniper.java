@@ -4,7 +4,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -200,7 +202,12 @@ public class SnipSniper {
 	}
 
 	public static void setSaveLocationToJar() {
-		String folderToUseString = SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+		String folderToUseString = null;
+		try {
+			folderToUseString = URLDecoder.decode(SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().getFile(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		File folderToUse = new File(folderToUseString);
 		if(folderToUse.getName().endsWith(".jar"))
 			jarFolder = folderToUseString.replace(folderToUse.getName(), "");
