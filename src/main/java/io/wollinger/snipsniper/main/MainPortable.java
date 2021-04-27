@@ -2,8 +2,8 @@ package io.wollinger.snipsniper.main;
 
 import io.wollinger.snipsniper.SnipSniper;
 
-public class MainDebug {
+public class MainPortable {
     public static void main(String[] args) {
-        new SnipSniper(args, false, true);
+        new SnipSniper(args, false, false);
     }
 }

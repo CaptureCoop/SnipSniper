@@ -40,7 +40,7 @@ goto :EOF
 
 :create_portable
 echo Creating portable
-%jpackage% @jpackage_defaults.txt --main-class io.wollinger.snipsniper.main.Main --app-version @src/main/resources/version.txt --type app-image --add-launcher SnipSniperDebug=jpackage_debug.txt
+%jpackage% @jpackage_defaults.txt --main-class io.wollinger.snipsniper.main.MainPortable --app-version @src/main/resources/version.txt --type app-image --add-launcher SnipSniperDebug=jpackage_debug.txt
 rename release\SnipSniper "SnipSniper_Portable"
 goto :EOF
 
