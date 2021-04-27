@@ -17,6 +17,8 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 	private final HotKeyButton instance;
 	public boolean isKeyboard = true;
 
+	private String oldLabel;
+
 	public HotKeyButton(String key) {
 		if(key.startsWith("NONE")) {
 			this.setText(LangManager.getItem("config_label_none"));
@@ -37,15 +39,23 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 			listening = true;
 			instance.setText(LangManager.getItem("config_label_hotkey_listening"));
 		});
+
+		oldLabel = instance.getText();
 	}
 	
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
 		if(listening) {
-			isKeyboard = true;
-			hotkey = nativeKeyEvent.getKeyCode();
-			listening = false;
-			instance.setText(NativeKeyEvent.getKeyText(hotkey));
+			if(nativeKeyEvent.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
+				listening = false;
+				instance.setText(oldLabel);
+			} else {
+				isKeyboard = true;
+				hotkey = nativeKeyEvent.getKeyCode();
+				listening = false;
+				instance.setText(NativeKeyEvent.getKeyText(hotkey));
+				oldLabel = instance.getText();
+			}
 		}
 	}
 
@@ -67,6 +77,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 			isKeyboard = false;
 			listening = false;
 			instance.setText(LangManager.getItem("config_label_mouse") + " " + hotkey);
+			oldLabel = instance.getText();
 		}
 	}
 
