@@ -27,6 +27,20 @@ public class Utils {
 		out.println(formatArgs(message, args));
 	}
 
+	public static BufferedImage imageToBufferedImage(Image img) {
+		if (img instanceof BufferedImage) {
+			return (BufferedImage) img;
+		}
+
+		BufferedImage image = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+		Graphics2D g = image.createGraphics();
+		g.drawImage(img, 0, 0, null);
+		g.dispose();
+
+		return image;
+	}
+
 	public static String saveImage(String profileID, BufferedImage finalImg, String modifier, Config config) {
 		File file;
 		String filename = Utils.constructFilename(modifier);
