@@ -167,7 +167,7 @@ public class SnipSniper {
 				new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, "", false);
 				//TODO: it exits fine when closed, check if this always happens
 			} else {
-				JOptionPane.showMessageDialog(null, "Image not found!", "Error", 0);
+				JOptionPane.showMessageDialog(null, "Image not found!", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
 			resetProfiles();
