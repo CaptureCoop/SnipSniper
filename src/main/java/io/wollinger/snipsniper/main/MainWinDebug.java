@@ -1,4 +1,6 @@
-package io.wollinger.snipsniper;
+package io.wollinger.snipsniper.main;
+
+import io.wollinger.snipsniper.SnipSniper;
 
 public class MainWinDebug {
     public static void main(String[] args) {
