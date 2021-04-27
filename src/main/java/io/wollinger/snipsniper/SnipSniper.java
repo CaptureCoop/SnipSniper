@@ -46,17 +46,6 @@ public class SnipSniper {
 	private final static String ID = "MAIN";
 
 	public SnipSniper(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly) {
-		String folderToUseString = SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().getFile();
-		File folderToUse = new File(folderToUseString);
-		if(folderToUse.getName().endsWith(".jar"))
-			jarFolder = folderToUseString.replace(folderToUse.getName(), "");
-		else
-			jarFolder = folderToUseString;
-
-		mainFolder = jarFolder + "SnipSniper";
-		profilesFolder = mainFolder + "/cfg/";
-		logFolder = mainFolder + "/logs/";
-
 		if(!SystemUtils.IS_OS_WINDOWS)
 			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
 
@@ -73,6 +62,8 @@ public class SnipSniper {
 
 		if(saveInDocuments)
 			SnipSniper.setSaveLocationToDocuments();
+		else
+			setSaveLocationToJar();
 
 		if(!isDemo) {
 			File tempProfileFolder = new File(profilesFolder);
@@ -206,6 +197,19 @@ public class SnipSniper {
 		SnipSniper.mainFolder = jarFolder + "/.SnipSniper";
 		SnipSniper.profilesFolder = mainFolder + "/cfg/";
 		SnipSniper.logFolder = mainFolder + "/logs/";
+	}
+
+	public static void setSaveLocationToJar() {
+		String folderToUseString = SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+		File folderToUse = new File(folderToUseString);
+		if(folderToUse.getName().endsWith(".jar"))
+			jarFolder = folderToUseString.replace(folderToUse.getName(), "");
+		else
+			jarFolder = folderToUseString;
+
+		mainFolder = jarFolder + "SnipSniper";
+		profilesFolder = mainFolder + "/cfg/";
+		logFolder = mainFolder + "/logs/";
 	}
 
 	//https://stackoverflow.com/questions/4159802/how-can-i-restart-a-java-application
