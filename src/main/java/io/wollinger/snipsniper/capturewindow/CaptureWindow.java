@@ -232,7 +232,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 					leftToRight = true;
 				}
 				if (sniperInstance.cfg.getBool("openEditor")) {
-					new EditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", sniperInstance.cfg, leftToRight, finalLocation, inClipboard);
+					new EditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", sniperInstance.cfg, leftToRight, finalLocation, inClipboard, false);
 				}
 			}
 

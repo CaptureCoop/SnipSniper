@@ -10,6 +10,7 @@ public class Icons {
 	
 	public static BufferedImage icon;
 	public static BufferedImage icon_taskbar;
+	public static BufferedImage icon_editor;
 	public static BufferedImage[] icons;
 	public static BufferedImage[] alt_icons;
 	
@@ -17,6 +18,7 @@ public class Icons {
 		try {
 			icon = ImageIO.read(SnipSniper.class.getResource("/res/icon.png"));
 			icon_taskbar = ImageIO.read(SnipSniper.class.getResource("/res/SnSn.png"));
+			icon_editor = ImageIO.read(SnipSniper.class.getResource("/res/editor.png"));
 			icons = new BufferedImage[8];
 			alt_icons = new BufferedImage[8];
 			for(int i = 0; i < 8; i++) {

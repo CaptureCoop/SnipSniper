@@ -1,1 +1,2 @@
 main-class=io.wollinger.snipsniper.main.MainStaticEditor
+icon=src/main/resources/res/editor.ico

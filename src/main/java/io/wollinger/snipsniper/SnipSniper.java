@@ -164,7 +164,7 @@ public class SnipSniper {
 				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 				int x = (int) (screenSize.getWidth() / 2 - img.getWidth() / 2);
 				int y = (int) (screenSize.getHeight() / 2 - img.getHeight() / 2);
-				new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, "", false);
+				new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, "", false, true);
 				//TODO: it exits fine when closed, check if this always happens
 			} else {
 				JOptionPane.showMessageDialog(null, "Image not found!", "Error", JOptionPane.ERROR_MESSAGE);

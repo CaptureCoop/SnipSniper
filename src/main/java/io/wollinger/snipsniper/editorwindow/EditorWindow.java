@@ -38,7 +38,7 @@ public class EditorWindow extends JFrame{
 
 	public boolean isDirty = false;
 
-	public EditorWindow(String id, BufferedImage img, int x, int y, String title, Config config, boolean leftToRight, String saveLocation, boolean inClipboard) {
+	public EditorWindow(String id, BufferedImage img, int x, int y, String title, Config config, boolean leftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
 		this.id = id;
 		this.img = img;
 		this.config = config;
@@ -59,7 +59,10 @@ public class EditorWindow extends JFrame{
 
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setResizable(false);
-		this.setIconImage(Icons.icon_taskbar);
+		if(isStandalone)
+			this.setIconImage(Icons.icon_editor);
+		else
+			this.setIconImage(Icons.icon_taskbar);
 		this.setVisible(true);
 		int barSize = this.getHeight() - this.getInsets().bottom;
 
