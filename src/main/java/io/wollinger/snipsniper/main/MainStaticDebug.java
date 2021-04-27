@@ -4,6 +4,6 @@ import io.wollinger.snipsniper.SnipSniper;
 
 public class MainStaticDebug {
     public static void main(String[] args) {
-        new SnipSniper(args, true, true);
+        new SnipSniper(args, true, true, false);
     }
 }

@@ -45,7 +45,7 @@ public class SnipSniper {
 
 	private final static String ID = "MAIN";
 
-	public SnipSniper(String[] args, boolean saveInDocuments, boolean isDebug) {
+	public SnipSniper(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly) {
 		if(!SystemUtils.IS_OS_WINDOWS)
 			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
 
