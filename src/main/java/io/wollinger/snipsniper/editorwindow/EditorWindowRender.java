@@ -12,15 +12,18 @@ public class EditorWindowRender extends JPanel{
 	
 	public EditorWindowRender(EditorWindow wnd) {
 		editorWnd = wnd;
-		this.setPreferredSize(new Dimension(wnd.getImage().getWidth(), wnd.getImage().getHeight()));
+		if(wnd.getImage() != null)
+			this.setPreferredSize(new Dimension(wnd.getImage().getWidth(), wnd.getImage().getHeight()));
 		this.setDropTarget(new EditorDropTarget(editorWnd, this));
 	}
 
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHints(editorWnd.getQualityHints());
-		g2.drawImage(editorWnd.getImage(), 0,0,this.getWidth(),this.getHeight(),this);
-		editorWnd.getSelectedStamp().render(g2, editorWnd.input, false, false, -1);
+		if(editorWnd.getImage() != null)
+			g2.drawImage(editorWnd.getImage(), 0,0,this.getWidth(),this.getHeight(),this);
+		if(editorWnd.isStarted())
+			editorWnd.getSelectedStamp().render(g2, editorWnd.input, false, false, -1);
 		g2.dispose();
 		editorWnd.repaint(); //TODO: Find more elegant way to do this, for example a loop
 	}
