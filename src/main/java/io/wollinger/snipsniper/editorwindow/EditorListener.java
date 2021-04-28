@@ -134,6 +134,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			editorInstance.setSelectedStamp(2);
 		if(keyCode == KeyEvent.VK_4)
 			editorInstance.setSelectedStamp(3);
+		if(keyCode == KeyEvent.VK_5)
+			editorInstance.setSelectedStamp(4);
 
 		if(keyCode == KeyEvent.VK_ENTER) {
 			JFileChooser chooser = new JFileChooser();

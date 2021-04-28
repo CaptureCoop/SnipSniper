@@ -27,7 +27,7 @@ public class EditorWindow extends JFrame{
 	private final String saveLocation;
 	private final boolean inClipboard;
 
-	private final IStamp[] stamps = new IStamp[4];
+	private final IStamp[] stamps = new IStamp[5];
 	private int selectedStamp = 0;
 
 	InputContainer input = new InputContainer();
@@ -51,6 +51,7 @@ public class EditorWindow extends JFrame{
 		stamps[1] = new CounterStamp(config);
 		stamps[2] = new CircleStamp(config);
 		stamps[3] = new SimpleBrush(this);
+		stamps[4] = new TextStamp(config);
 
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
