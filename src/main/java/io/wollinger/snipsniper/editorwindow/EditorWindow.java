@@ -31,12 +31,17 @@ public class EditorWindow extends JFrame{
 	private int selectedStamp = 0;
 
 	InputContainer input = new InputContainer();
+	private EditorWindowRender editorWindowRender;
+	private EditorListener editorListener;
 
 	private final RenderingHints qualityHints;
 
 	public static final String FILENAME_MODIFIER = "_edited";
 
 	public boolean isDirty = false;
+
+	private boolean isStandalone;
+	private boolean isStarted = false;
 
 	public EditorWindow(String id, BufferedImage img, int x, int y, String title, Config config, boolean leftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
 		this.id = id;
@@ -46,6 +51,7 @@ public class EditorWindow extends JFrame{
 		this.saveLocation = saveLocation;
 		this.inClipboard = inClipboard;
 		this.title = title;
+		this.isStandalone = isStandalone;
 
 		stamps[0] = new CubeStamp(this);
 		stamps[1] = new CounterStamp(config);
@@ -59,25 +65,34 @@ public class EditorWindow extends JFrame{
 		refreshTitle();
 
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setResizable(false);
-		if(isStandalone)
+		this.setResizable(true);
+		if (isStandalone)
 			this.setIconImage(Icons.icon_editor);
 		else
 			this.setIconImage(Icons.icon_taskbar);
-		this.setVisible(true);
 		int barSize = this.getHeight() - this.getInsets().bottom;
 
-		EditorListener listener = new EditorListener(this);
-
-		EditorWindowRender renderer = new EditorWindowRender(this);
-		renderer.addMouseListener(listener);
-		renderer.addMouseMotionListener(listener);
-		renderer.addMouseWheelListener(listener);
-		this.addKeyListener(listener);
+		editorWindowRender = new EditorWindowRender(this);
 		this.setFocusTraversalKeysEnabled(false);
 
-		this.add(renderer);
+		this.add(editorWindowRender);
 		this.pack();
+
+		if(img == null) {
+			BufferedImage dropImage = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
+			Graphics g = dropImage.getGraphics();
+			g.setColor(Color.WHITE);
+			g.fillRect(0,0,dropImage.getWidth(), dropImage.getHeight());
+			g.setColor(Color.BLACK);
+			String string = "Drop image here";
+			g.setFont(new Font("Arial", Font.BOLD, 20));
+			int width = g.getFontMetrics().stringWidth(string);
+			g.drawString(string, dropImage.getWidth()/2 - width/2, 256);
+			g.dispose();
+			setImage(dropImage);
+		} else {
+			start();
+		}
 		
 		int borderSize = config.getInt("borderSize");
 		if(!leftToRight) borderSize = -borderSize;
@@ -106,6 +121,16 @@ public class EditorWindow extends JFrame{
 		}
 		if(!found && bestMonitor != null)
 			setLocation((int) getLocation().getX(), bestMonitor.getBounds().y);
+		setVisible(true);
+	}
+
+	public void start() {
+		editorListener = new EditorListener(this);
+		editorWindowRender.addMouseListener(editorListener);
+		editorWindowRender.addMouseMotionListener(editorListener);
+		editorWindowRender.addMouseWheelListener(editorListener);
+		addKeyListener(editorListener);
+		isStarted = true;
 	}
 
 	public void refreshTitle() {
@@ -117,7 +142,7 @@ public class EditorWindow extends JFrame{
 		}
 		setTitle(newTitle);
 	}
-	
+
 	public void saveImage() {
 		BufferedImage finalImg = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = finalImg.getGraphics();
@@ -137,6 +162,14 @@ public class EditorWindow extends JFrame{
 		selectedStamp = i;
 	}
 
+	public boolean isStarted () {
+		return isStarted;
+	}
+
+	public EditorListener getEditorListener() {
+		return editorListener;
+	}
+
 	public IStamp getSelectedStamp() {
 		return stamps[selectedStamp];
 	}
@@ -147,6 +180,16 @@ public class EditorWindow extends JFrame{
 
 	public void setImage(BufferedImage image) {
 		this.img = image;
+
+		Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Rectangle winSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+
+		int taskBarHeight = scrnSize.height - winSize.height;
+
+		this.setSize(image.getWidth(), image.getHeight() + taskBarHeight);
+		if(getEditorListener() != null)
+			getEditorListener().resetHistory();
+
 	}
 
 	public Config getConfig() {
