@@ -151,7 +151,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			}
 		}
 
-		if(keyCode == KeyEvent.VK_S) {
+		if(editorInstance.input.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_S)) {
 			if(editorInstance.isDirty)
 				editorInstance.saveImage();
 			editorInstance.kill();
