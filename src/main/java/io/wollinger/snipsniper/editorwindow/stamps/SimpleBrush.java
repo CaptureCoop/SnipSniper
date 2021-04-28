@@ -6,6 +6,7 @@ import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class SimpleBrush implements IStamp {
     private final EditorWindow editorWindow;
@@ -26,7 +27,7 @@ public class SimpleBrush implements IStamp {
     }
 
     @Override
-    public void updateSize(InputContainer input, int mouseWheelDirection) {
+    public void update(InputContainer input, int mouseWheelDirection, KeyEvent keyEvent) {
         if(mouseWheelDirection != 0) {
             switch (mouseWheelDirection) {
                 case 1:

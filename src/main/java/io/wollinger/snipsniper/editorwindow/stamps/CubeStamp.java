@@ -43,7 +43,7 @@ public class CubeStamp implements IStamp{
     }
 
     @Override
-    public void updateSize(InputContainer input, int mouseWheelDirection) {
+    public void update(InputContainer input, int mouseWheelDirection, KeyEvent keyEvent) {
         String dir = "Width";
         if (input.isKeyPressed(KeyEvent.VK_SHIFT))
             dir = "Height";

@@ -109,7 +109,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			return;
 		}
 
-		editorInstance.getSelectedStamp().updateSize(input, mouseWheelEvent.getWheelRotation());
+		editorInstance.getSelectedStamp().update(input, mouseWheelEvent.getWheelRotation(), null);
 		editorInstance.repaint();
 	}
 
@@ -169,7 +169,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			}
 		}
 
-		stamp.updateSize(editorInstance.input, 0);
+		stamp.update(editorInstance.input, 0, keyEvent);
 		editorInstance.repaint();
 	}
 

@@ -36,7 +36,7 @@ public class CircleStamp implements IStamp{
     }
 
     @Override
-    public void updateSize(InputContainer input, int mouseWheelDirection) {
+    public void update(InputContainer input, int mouseWheelDirection, KeyEvent keyEvent) {
         if(mouseWheelDirection != 0) {
             if(input.isKeyPressed(KeyEvent.VK_B)) {
                 switch (mouseWheelDirection) {

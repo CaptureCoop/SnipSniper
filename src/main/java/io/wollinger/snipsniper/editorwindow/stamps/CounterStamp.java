@@ -47,7 +47,7 @@ public class CounterStamp implements IStamp{
     }
 
     @Override
-    public void updateSize(InputContainer input, int mouseWheelDirection) {
+    public void update(InputContainer input, int mouseWheelDirection, KeyEvent keyEvent) {
         if(mouseWheelDirection != 0) {
             boolean doWidth = true;
             boolean doHeight = true;
