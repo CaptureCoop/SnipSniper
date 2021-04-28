@@ -27,6 +27,11 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 	public EditorListener(EditorWindow editorInstance) {
 		this.editorInstance = editorInstance;
+		resetHistory();
+	}
+
+	public void resetHistory() {
+		history.clear();
 		history.add(Utils.copyImage(editorInstance.getImage()));
 	}
 	
