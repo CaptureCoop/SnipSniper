@@ -17,6 +17,8 @@ public class TextStamp implements IStamp{
 
     private ArrayList<Integer> nonTypeKeys = new ArrayList<>();
 
+    private boolean isBold = false;
+
     public TextStamp(Config config) {
         nonTypeKeys.add(KeyEvent.VK_SHIFT);
         nonTypeKeys.add(KeyEvent.VK_CONTROL);
@@ -33,6 +35,9 @@ public class TextStamp implements IStamp{
             fontSize -= fontSizeSpeed;
         else if(mouseWheelDirection == -1)
             fontSize += fontSizeSpeed;
+
+        if(input.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_B))
+            isBold = !isBold;
 
         if(keyEvent != null) {
             if (keyEvent.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
@@ -54,7 +59,10 @@ public class TextStamp implements IStamp{
 
         Font oldFont = g.getFont();
         Color oldColor = g.getColor();
-        g.setFont(new Font("Arial", Font.PLAIN, fontSize));
+        int fontMode = Font.PLAIN;
+        if(isBold)
+            fontMode = Font.BOLD;
+        g.setFont(new Font("Arial", fontMode, fontSize));
         g.setColor(color.getColor());
         g.drawString(textToDraw, input.getMouseX(), input.getMouseY());
         g.setFont(oldFont);
