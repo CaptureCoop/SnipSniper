@@ -55,7 +55,7 @@ public class EditorWindow extends JFrame{
 
 		stamps[0] = new CubeStamp(this);
 		stamps[1] = new CounterStamp(config);
-		stamps[2] = new CircleStamp(config);
+		stamps[2] = new CircleStamp(this, config);
 		stamps[3] = new SimpleBrush(this);
 		stamps[4] = new TextStamp(config);
 
@@ -181,15 +181,15 @@ public class EditorWindow extends JFrame{
 	public void setImage(BufferedImage image) {
 		this.img = image;
 
-		Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Rectangle winSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		Insets insets = getInsets();
+		setSize(insets.left + insets.right + image.getWidth(), insets.bottom + insets.top + image.getHeight());
 
-		int taskBarHeight = scrnSize.height - winSize.height;
-
-		this.setSize(image.getWidth(), image.getHeight() + taskBarHeight);
 		if(getEditorListener() != null)
 			getEditorListener().resetHistory();
+	}
 
+	public EditorWindowRender getEditorWindowRender (){
+		return editorWindowRender;
 	}
 
 	public Config getConfig() {
