@@ -158,19 +158,18 @@ public class SnipSniper {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			} else {
-				img = new BufferedImage(512, 256, BufferedImage.TYPE_INT_RGB);
 			}
 
-			if(img != null && fileExists) {
-				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-				int x = (int) (screenSize.getWidth() / 2 - img.getWidth() / 2);
-				int y = (int) (screenSize.getHeight() / 2 - img.getHeight() / 2);
-				new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, "", false, true);
-				//TODO: it exits fine when closed, check if this always happens
-			} else {
-				JOptionPane.showMessageDialog(null, "Image not found!", "Error", JOptionPane.ERROR_MESSAGE);
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			int width = 512;
+			int height = 512;
+			if(img != null) {
+				width = img.getWidth();
+				height = img.getHeight();
 			}
+			int x = (int) (screenSize.getWidth() / 2 - width / 2);
+			int y = (int) (screenSize.getHeight() / 2 - height / 2);
+			new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, "", false, true);
 		} else {
 			resetProfiles();
 		}
