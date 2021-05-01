@@ -41,7 +41,7 @@ public class EditorDropTarget extends DropTarget {
             Rectangle rect = editorWindow.getGraphicsConfiguration().getBounds();
             editorWindow.setLocation((int)(rect.getX() + (rect.getWidth()/2) - (image.getWidth()/2)), (int)(rect.getY() + (rect.getHeight()/2) - image.getHeight()/2));
 
-            editorWindow.setImage(image);
+            editorWindow.setImage(image, true);
             if(!editorWindow.isStarted())
                 editorWindow.start();
         } catch (UnsupportedFlavorException | IOException e) {

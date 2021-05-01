@@ -89,7 +89,7 @@ public class EditorWindow extends JFrame{
 			int width = g.getFontMetrics().stringWidth(string);
 			g.drawString(string, dropImage.getWidth()/2 - width/2, 256);
 			g.dispose();
-			setImage(dropImage);
+			setImage(dropImage, false);
 		} else {
 			start();
 		}
@@ -178,14 +178,16 @@ public class EditorWindow extends JFrame{
 		return stamps;
 	}
 
-	public void setImage(BufferedImage image) {
+	public void setImage(BufferedImage image, boolean resetHistory) {
+		LogManager.log(id, "Setting new Image", Level.INFO);
 		this.img = image;
 
 		Insets insets = getInsets();
 		setSize(insets.left + insets.right + image.getWidth(), insets.bottom + insets.top + image.getHeight());
 
-		if(getEditorListener() != null)
+		if(getEditorListener() != null && resetHistory) {
 			getEditorListener().resetHistory();
+		}
 	}
 
 	public EditorWindowRender getEditorWindowRender (){
@@ -206,6 +208,10 @@ public class EditorWindow extends JFrame{
 
 	public RenderingHints getQualityHints() {
 		return qualityHints;
+	}
+
+	public String getID() {
+		return id;
 	}
 
 }

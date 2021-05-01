@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 import io.wollinger.snipsniper.editorwindow.stamps.IStamp;
 import io.wollinger.snipsniper.utils.*;
@@ -31,6 +32,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	}
 
 	public void resetHistory() {
+		LogManager.log(editorInstance.getID(), "Reset editor history", Level.INFO);
 		history.clear();
 		history.add(Utils.copyImage(editorInstance.getImage()));
 	}
@@ -170,7 +172,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 				size--;
 				history.remove(size);
 				size--;
-				editorInstance.setImage(Utils.copyImage(history.get(size)));
+				editorInstance.setImage(Utils.copyImage(history.get(size)), false);
 				for(IStamp cStamp : editorInstance.getStamps())
 					cStamp.editorUndo(history.size());
 			}
