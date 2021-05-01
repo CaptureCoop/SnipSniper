@@ -1,5 +1,7 @@
 package io.wollinger.snipsniper.editorwindow;
 
+import io.wollinger.snipsniper.utils.Utils;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -25,7 +27,21 @@ public class EditorDropTarget extends DropTarget {
         try {
             evt.acceptDrop(DnDConstants.ACTION_COPY);
             List droppedFiles = (List) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-            editorWindow.setImage(ImageIO.read((File) droppedFiles.get(0)));
+            GraphicsDevice device = editorWindow.getGraphicsConfiguration().getDevice();
+            BufferedImage image = ImageIO.read((File) droppedFiles.get(0));
+
+            int monitorWidth = device.getDisplayMode().getWidth()-100;
+            int monitorHeight = device.getDisplayMode().getHeight()-100;
+
+            if(image.getWidth() >= monitorWidth || image.getHeight() > monitorHeight) {
+                Dimension newDimension = Utils.getScaledDimension(image, new Dimension(monitorWidth, monitorHeight));
+                image = Utils.imageToBufferedImage(image.getScaledInstance((int)newDimension.getWidth(), (int)newDimension.getHeight(), 5));
+            }
+
+            Rectangle rect = editorWindow.getGraphicsConfiguration().getBounds();
+            editorWindow.setLocation((int)(rect.getX() + (rect.getWidth()/2) - (image.getWidth()/2)), (int)(rect.getY() + (rect.getHeight()/2) - image.getHeight()/2));
+
+            editorWindow.setImage(image);
             if(!editorWindow.isStarted())
                 editorWindow.start();
         } catch (UnsupportedFlavorException | IOException e) {
