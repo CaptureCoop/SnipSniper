@@ -65,7 +65,7 @@ public class EditorWindow extends JFrame{
 		refreshTitle();
 
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setResizable(true);
+		this.setResizable(false);
 		if (isStandalone)
 			this.setIconImage(Icons.icon_editor);
 		else
