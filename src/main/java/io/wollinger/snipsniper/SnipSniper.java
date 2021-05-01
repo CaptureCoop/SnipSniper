@@ -23,27 +23,24 @@ import org.apache.commons.lang3.SystemUtils;
 
 public final class SnipSniper {
 
-	public static String VERSION;
+	private static String VERSION;
 	
-	public static String jarFolder;
-	public static String mainFolder;
-	public static String profilesFolder;
-	public static String logFolder;
-	
-	public final static int PROFILE_COUNT = 7;
+	private static String jarFolder;
+	private static String mainFolder;
+	private static String profilesFolder;
+	private static String logFolder;
 
-	public static Sniper mainProfile;
-	public static Sniper[] profiles = new Sniper[PROFILE_COUNT];
+	private final static int PROFILE_COUNT = 7;
 
-	public static boolean isIdle = true;
+	private static Sniper[] profiles = new Sniper[PROFILE_COUNT];
 
-	public static boolean isDemo = false;
+	private static boolean isIdle = true;
 
-	public static File logFile = null;
+	private static boolean isDemo = false;
 
-	public static Config config;
+	private static Config config;
 
-	public static String[] args;
+	private static String[] args;
 
 	private final static String ID = "MAIN";
 
@@ -181,7 +178,7 @@ public final class SnipSniper {
 			tray.remove(icon);
 		}
 
-		mainProfile = null;
+		Sniper mainProfile;
 		Arrays.fill(profiles, null);
 
 		mainProfile = new Sniper(0);
@@ -205,17 +202,21 @@ public final class SnipSniper {
 		try {
 			folderToUseString = URLDecoder.decode(SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().getFile(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			LogManager.log(ID, "Could not set profiles folder. Error: " + e.getMessage(), Level.SEVERE);
+			exit();
 		}
-		File folderToUse = new File(folderToUseString);
-		if(folderToUse.getName().endsWith(".jar"))
-			jarFolder = folderToUseString.replace(folderToUse.getName(), "");
-		else
-			jarFolder = folderToUseString;
 
-		mainFolder = jarFolder + "SnipSniper";
-		profilesFolder = mainFolder + "/cfg/";
-		logFolder = mainFolder + "/logs/";
+		if(folderToUseString != null) {
+			File folderToUse = new File(folderToUseString);
+			if (folderToUse.getName().endsWith(".jar"))
+				jarFolder = folderToUseString.replace(folderToUse.getName(), "");
+			else
+				jarFolder = folderToUseString;
+
+			mainFolder = jarFolder + "SnipSniper";
+			profilesFolder = mainFolder + "/cfg/";
+			logFolder = mainFolder + "/logs/";
+		}
 	}
 
 	//https://stackoverflow.com/questions/4159802/how-can-i-restart-a-java-application
@@ -243,6 +244,58 @@ public final class SnipSniper {
 	public static void exit() {
 		LogManager.log(ID, "Exit requested. Goodbye!", Level.INFO);
 		System.exit(0);
+	}
+
+	public static String getVersion() {
+		return VERSION;
+	}
+
+	public static String getProfilesFolder() {
+		return profilesFolder;
+	}
+
+	public static int getProfileCount() {
+		return PROFILE_COUNT;
+	}
+
+	public static String getLogFolder() {
+		return logFolder;
+	}
+
+	public static Config getConfig() {
+		return config;
+	}
+
+	public static boolean isDemo() {
+		return isDemo;
+	}
+
+	public static void setDemo(boolean state) {
+		isDemo = state;
+	}
+
+	public static boolean isIdle() {
+		return isIdle;
+	}
+
+	public static void setIdle(boolean state) {
+		isIdle = state;
+	}
+
+	public static Sniper getProfile(int id) {
+		return profiles[id];
+	}
+
+	public static void setProfile(int id, Sniper sniper) {
+		profiles[id] = sniper;
+	}
+
+	public static boolean hasProfile(int id) {
+		return profiles[id] != null;
+	}
+
+	public static void removeProfile(int id) {
+		profiles[id] = null;
 	}
 
 }

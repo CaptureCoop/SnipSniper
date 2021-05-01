@@ -13,6 +13,8 @@ import java.util.logging.Level;
 
 public class LogManager {
 
+    private static File logFile = null;
+
     public static void log(String id, String message, Level level) {
         String msg = "%DATETIME% [%PROFILE%] [%TYPE%]: %MESSAGE%";
         msg = msg.replace("%PROFILE%", id);
@@ -24,16 +26,16 @@ public class LogManager {
 
         System.out.println(msg);
 
-        if(!SnipSniper.isDemo) {
-            if (SnipSniper.logFile == null) {
+        if(!SnipSniper.isDemo()) {
+            if (logFile == null) {
                 LocalDateTime now = LocalDateTime.now();
                 String filename = now.toString().replace(".", "_").replace(":", "_");
                 filename += ".txt";
 
-                SnipSniper.logFile = new File(SnipSniper.logFolder + filename);
+                logFile = new File(SnipSniper.getLogFolder() + filename);
                 try {
-                    if (SnipSniper.logFile.createNewFile())
-                        LogManager.log(id, "Created new logfile at: " + SnipSniper.logFile.getAbsolutePath(), Level.INFO);
+                    if (logFile.createNewFile())
+                        LogManager.log(id, "Created new logfile at: " + logFile.getAbsolutePath(), Level.INFO);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -42,7 +44,7 @@ public class LogManager {
             msg += "\n";
 
             try {
-                Files.write(Paths.get(SnipSniper.logFile.getAbsolutePath()), msg.getBytes(), StandardOpenOption.APPEND);
+                Files.write(Paths.get(logFile.getAbsolutePath()), msg.getBytes(), StandardOpenOption.APPEND);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -100,7 +100,7 @@ public class btnAbout extends MenuItem{
 
 		inputStream.close();
 		streamReader.close();
-		html = html.replace("%VERSION%", SnipSniper.VERSION);
+		html = html.replace("%VERSION%", SnipSniper.getVersion());
 		html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming"));
 		html = html.replace("%ABOUT_CD%", LangManager.getItem("about_cd"));
 		html = html.replace("%ABOUT_MATH%", LangManager.getItem("about_math"));

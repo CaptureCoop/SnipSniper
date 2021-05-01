@@ -74,8 +74,8 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		for(String language : LangManager.languages) {
 			MenuItem mi = new MenuItem(LangManager.getItem("lang_" + language));
 			mi.addActionListener(e -> {
-				SnipSniper.config.set("language", language);
-				SnipSniper.config.save();
+				SnipSniper.getConfig().set("language", language);
+				SnipSniper.getConfig().save();
 				try {
 					SnipSniper.resetProfiles();
 				} catch (Exception exception) {
@@ -99,9 +99,9 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 				@Override
 				public void mouseClicked(MouseEvent mouseEvent) {
 					if (mouseEvent.getButton() == 1)
-		            	if(cWnd == null && SnipSniper.isIdle) {
+		            	if(cWnd == null && SnipSniper.isIdle()) {
 							cWnd = new CaptureWindow(instance);
-							SnipSniper.isIdle = false;
+							SnipSniper.setIdle(false);
 		            	}
 				}
 
@@ -137,29 +137,22 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		GlobalScreen.addNativeMouseListener(this);
 	}
 
-	public void kill() {
-		GlobalScreen.removeNativeKeyListener(this);
-		GlobalScreen.removeNativeMouseListener(this);
-
-		SystemTray.getSystemTray().remove(trayIcon);
-	}
-
 	//This refreshes the buttons so that they only show profiles that exist/don't exist respectively.
 	void refreshProfiles() {
 		LogManager.log(getID(), "Refreshing profiles in task tray", Level.INFO);
 		createProfilesMenu.removeAll();
 		removeProfilesMenu.removeAll();
 		
-		for(int i = 0; i < SnipSniper.PROFILE_COUNT; i++) {
+		for(int i = 0; i < SnipSniper.getProfileCount(); i++) {
 			int index = i;
 			
-			if(SnipSniper.profiles[index] == null) {
+			if(!SnipSniper.hasProfile(index)) {
 				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
 				mi.addActionListener(listener -> {
 					addProfile(index);
 				});
 				createProfilesMenu.add(mi);
-			} else if(SnipSniper.profiles[index] != null) {
+			} else if(SnipSniper.hasProfile(index)) {
 				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
 				mi.addActionListener(listener -> {
 					removeProfile(index);
@@ -170,31 +163,34 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 	}
 
+	public void kill() {
+		GlobalScreen.removeNativeKeyListener(this);
+		GlobalScreen.removeNativeMouseListener(this);
+		SystemTray.getSystemTray().remove(trayIcon);
+		cfg.deleteFile();
+		trayIcon = null;
+	}
+
 	public void addProfile(int id) {
-		if(SnipSniper.profiles[id] == null) {
+		if(!SnipSniper.hasProfile(id)) {
 			LogManager.log(getID(), "Creating profile " + (id + 1), Level.INFO);
-			SnipSniper.profiles[id] = new Sniper(id + 1);
-			SnipSniper.profiles[id].cfg.save();
+			SnipSniper.setProfile(id, new Sniper(id + 1));
+			SnipSniper.getProfile(id).cfg.save();
 		}
 	}
 
 	public void removeProfile(int id) {
-		if(SnipSniper.profiles[id] != null) {
+		if(SnipSniper.hasProfile(id)) {
 			LogManager.log(getID(), "Removing profile " + (id + 1), Level.INFO);
-			cfg.deleteFile();
-			SystemTray.getSystemTray().remove(SnipSniper.profiles[id].trayIcon);
-			GlobalScreen.removeNativeKeyListener(instance);
-			GlobalScreen.removeNativeMouseListener(instance);
-			SnipSniper.profiles[id].trayIcon = null;
-			SnipSniper.profiles[id] = null;
-			instance = null;
+			SnipSniper.getProfile(id).kill();
+			SnipSniper.removeProfile(id);
 		}
 	}
 
 	public void killCaptureWindow() {
 		if(cWnd != null) {
 			trayIcon.setImage(Icons.icons[profileID]);
-			SnipSniper.isIdle = true;
+			SnipSniper.setIdle(true);
 			cWnd.screenshot = null;
 			cWnd.screenshotTinted = null;
 			cWnd.isRunning = false;
@@ -210,9 +206,9 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			if(hotkey.startsWith(identifier)) {
 				int key = Integer.parseInt(hotkey.replace(identifier, ""));
 				if(pressedKey == key) {
-					if(cWnd == null && SnipSniper.isIdle) {
+					if(cWnd == null && SnipSniper.isIdle()) {
 						cWnd = new CaptureWindow(instance);
-						SnipSniper.isIdle = false;
+						SnipSniper.setIdle(false);
 					}
 				}
 			}

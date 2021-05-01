@@ -35,7 +35,7 @@ public class LangManager {
     }
 
     public static String getItem(String key) {
-        return getItem(SnipSniper.config.getString("language"), key);
+        return getItem(SnipSniper.getConfig().getString("language"), key);
     }
 
 }

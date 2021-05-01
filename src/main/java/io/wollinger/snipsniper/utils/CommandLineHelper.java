@@ -30,11 +30,11 @@ public class CommandLineHelper {
                     break;
                 case "-version":
                 case "-v":
-                    System.out.println(SnipSniper.VERSION);
+                    System.out.println(SnipSniper.getVersion());
                     doExit = true;
                     break;
                 case "-demo":
-                    SnipSniper.isDemo = true;
+                    SnipSniper.setDemo(true);
                     break;
                 case "-language":
                 case "-lang":
