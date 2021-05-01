@@ -21,7 +21,7 @@ import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
 
-public class SnipSniper {
+public final class SnipSniper {
 
 	public static String VERSION;
 	
@@ -47,7 +47,7 @@ public class SnipSniper {
 
 	private final static String ID = "MAIN";
 
-	public SnipSniper(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly) {
+	public static void start(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly) {
 		if(!SystemUtils.IS_OS_WINDOWS)
 			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
 
