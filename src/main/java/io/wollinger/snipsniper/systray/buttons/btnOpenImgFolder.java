@@ -12,8 +12,8 @@ public class btnOpenImgFolder extends MenuItem{
 	private static final long serialVersionUID = -7145792425566523072L;
 	
 	public btnOpenImgFolder(Sniper sniperInstance) {
-		this.setLabel(LangManager.getItem("menu_open_image_folder"));
-		this.addActionListener(listener -> {
+		setLabel(LangManager.getItem("menu_open_image_folder"));
+		addActionListener(listener -> {
 			try {
 				String path = sniperInstance.cfg.getString("pictureFolder");
 				Desktop.getDesktop().open(new File(path));
