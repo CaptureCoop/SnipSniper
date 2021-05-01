@@ -12,15 +12,15 @@ public class EditorWindowRender extends JPanel{
 	public EditorWindowRender(EditorWindow wnd) {
 		editorWnd = wnd;
 		if(wnd.getImage() != null)
-			this.setPreferredSize(new Dimension(wnd.getImage().getWidth(), wnd.getImage().getHeight()));
-		this.setDropTarget(new EditorDropTarget(editorWnd));
+			setPreferredSize(new Dimension(wnd.getImage().getWidth(), wnd.getImage().getHeight()));
+		setDropTarget(new EditorDropTarget(editorWnd));
 	}
 
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHints(editorWnd.getQualityHints());
 		if(editorWnd.getImage() != null)
-			g2.drawImage(editorWnd.getImage(), 0,0,this.getWidth(),this.getHeight(),this);
+			g2.drawImage(editorWnd.getImage(), 0,0,getWidth(),getHeight(),this);
 		if(editorWnd.isStarted())
 			editorWnd.getSelectedStamp().render(g2, editorWnd.input, false, false, -1);
 		g2.dispose();

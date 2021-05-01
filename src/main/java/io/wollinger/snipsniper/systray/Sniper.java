@@ -236,8 +236,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 
 	@Override
-	public void nativeMouseClicked(NativeMouseEvent nativeMouseEvent) {
-	}
+	public void nativeMouseClicked(NativeMouseEvent nativeMouseEvent) { }
 
 	@Override
 	public void nativeMousePressed(NativeMouseEvent nativeMouseEvent) {

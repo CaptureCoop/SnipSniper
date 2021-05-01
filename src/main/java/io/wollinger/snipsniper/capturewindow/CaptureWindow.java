@@ -62,15 +62,15 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		
 		screenshot();
 		
-		this.setUndecorated(true);		
-		this.setIconImage(Icons.icon_taskbar);
+		setUndecorated(true);
+		setIconImage(Icons.icon_taskbar);
 		
 		listener = new CaptureWindowListener(this);
-		this.addWindowListener(this);
-		this.addMouseListener(listener);
-		this.addMouseMotionListener(listener);
-		this.addKeyListener(listener);
-		this.addFocusListener(new FocusListener() {
+		addWindowListener(this);
+		addMouseListener(listener);
+		addMouseMotionListener(listener);
+		addKeyListener(listener);
+		addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
 				setSize();
@@ -152,11 +152,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	}
 	
 	public void setSize() {
-		this.setLocation((int)bounds.getX(),(int)bounds.getY());
-		this.setSize(bounds.width, bounds.height);
-		this.requestFocus();
-		this.setAlwaysOnTop(true);	
-		this.repaint();
+		setLocation((int)bounds.getX(),(int)bounds.getY());
+		setSize(bounds.width, bounds.height);
+		requestFocus();
+		setAlwaysOnTop(true);
+		repaint();
 	}
 	
 	Rectangle calcRectangle() {
@@ -185,7 +185,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		if(!imageSaved) {
 			BufferedImage finalImg;
 			isRunning = false;
-			this.dispose();
+			dispose();
 			finishedCapture = true;
 
 			int borderSize = sniperInstance.cfg.getInt("borderSize");
@@ -217,22 +217,20 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				inClipboard = true;
 			}
 
-			if(finalImg != null) {
-				int posX = (int) cPointAlt.getX();
-				int posY = (int) cPointAlt.getY();
-				boolean leftToRight = false;
+			int posX = (int) cPointAlt.getX();
+			int posY = (int) cPointAlt.getY();
+			boolean leftToRight = false;
 
-				if (!(startPointTotal.getX() > cPointAlt.getX())) {
-					posX -= finalImg.getWidth();
-					leftToRight = true;
-				}
-				if (!(startPointTotal.getY() > cPointAlt.getY())) {
-					posY -= finalImg.getHeight();
-					leftToRight = true;
-				}
-				if (sniperInstance.cfg.getBool("openEditor")) {
-					new EditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", sniperInstance.cfg, leftToRight, finalLocation, inClipboard, false);
-				}
+			if (!(startPointTotal.getX() > cPointAlt.getX())) {
+				posX -= finalImg.getWidth();
+				leftToRight = true;
+			}
+			if (!(startPointTotal.getY() > cPointAlt.getY())) {
+				posY -= finalImg.getHeight();
+				leftToRight = true;
+			}
+			if (sniperInstance.cfg.getBool("openEditor")) {
+				new EditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", sniperInstance.cfg, leftToRight, finalLocation, inClipboard, false);
 			}
 
 			sniperInstance.killCaptureWindow();
@@ -281,7 +279,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			lastPoint = cPoint;
 		} else {
 			LogManager.log(sniperInstance.getID(), "WARNING: Screenshot is null when trying to render. Trying again.", Level.WARNING);
-			this.repaint();
+			repaint();
 		}
 		g2.dispose();
 		gBuffer.dispose();

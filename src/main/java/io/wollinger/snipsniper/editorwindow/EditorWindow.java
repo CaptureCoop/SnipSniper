@@ -63,19 +63,19 @@ public class EditorWindow extends JFrame{
 
 		refreshTitle();
 
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setResizable(false);
 		if (isStandalone)
-			this.setIconImage(Icons.icon_editor);
+			setIconImage(Icons.icon_editor);
 		else
-			this.setIconImage(Icons.icon_taskbar);
-		int barSize = this.getHeight() - this.getInsets().bottom;
+			setIconImage(Icons.icon_taskbar);
+		int barSize = getHeight() - getInsets().bottom;
 
 		editorWindowRender = new EditorWindowRender(this);
-		this.setFocusTraversalKeysEnabled(false);
+		setFocusTraversalKeysEnabled(false);
 
-		this.add(editorWindowRender);
-		this.pack();
+		add(editorWindowRender);
+		pack();
 
 		if(img == null) {
 			BufferedImage dropImage = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
@@ -96,7 +96,7 @@ public class EditorWindow extends JFrame{
 		int borderSize = config.getInt("borderSize");
 		if(!leftToRight) borderSize = -borderSize;
 		
-		this.setLocation((x - X_OFFSET) + borderSize, (y - barSize) + borderSize);
+		setLocation((x - X_OFFSET) + borderSize, (y - barSize) + borderSize);
 
 		GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		boolean found = false;
@@ -154,7 +154,7 @@ public class EditorWindow extends JFrame{
 	
 	public void kill() {
 		img = null;
-		this.dispose();
+		dispose();
 	}
 
 	public void setSelectedStamp(int i) {
@@ -179,7 +179,7 @@ public class EditorWindow extends JFrame{
 
 	public void setImage(BufferedImage image, boolean resetHistory) {
 		LogManager.log(id, "Setting new Image", Level.INFO);
-		this.img = image;
+		img = image;
 
 		Insets insets = getInsets();
 		setSize(insets.left + insets.right + image.getWidth(), insets.bottom + insets.top + image.getHeight());
