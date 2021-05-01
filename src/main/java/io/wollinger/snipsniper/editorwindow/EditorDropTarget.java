@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class EditorDropTarget extends DropTarget {
-    private EditorWindow editorWindow;
-    private EditorWindowRender render;
+    private final EditorWindow editorWindow;
+    private final EditorWindowRender render;
 
     public EditorDropTarget(EditorWindow editorWindow, EditorWindowRender render) {
         this.editorWindow = editorWindow;

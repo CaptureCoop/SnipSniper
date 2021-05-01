@@ -15,10 +15,10 @@ public class TextStamp implements IStamp{
     private int fontSizeSpeed;
     private String text;
 
-    private ArrayList<Integer> nonTypeKeys = new ArrayList<>();
+    private final ArrayList<Integer> nonTypeKeys = new ArrayList<>();
 
     private int fontMode = Font.PLAIN;
-    private Config config;
+    private final Config config;
 
     public TextStamp(Config config) {
         this.config = config;
@@ -92,36 +92,6 @@ public class TextStamp implements IStamp{
 
     @Override
     public int getHeight() {
-        return 0;
-    }
-
-    @Override
-    public int getMinWidth() {
-        return 0;
-    }
-
-    @Override
-    public int getMinHeight() {
-        return 0;
-    }
-
-    @Override
-    public int getSpeedWidth() {
-        return 0;
-    }
-
-    @Override
-    public int getSpeedHeight() {
-        return 0;
-    }
-
-    @Override
-    public int getSpeed() {
-        return 0;
-    }
-
-    @Override
-    public int getThickness() {
         return 0;
     }
 

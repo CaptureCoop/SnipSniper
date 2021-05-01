@@ -91,36 +91,6 @@ public class SimpleBrush implements IStamp {
     }
 
     @Override
-    public int getMinWidth() {
-        return 0;
-    }
-
-    @Override
-    public int getMinHeight() {
-        return 0;
-    }
-
-    @Override
-    public int getSpeedWidth() {
-        return 0;
-    }
-
-    @Override
-    public int getSpeedHeight() {
-        return 0;
-    }
-
-    @Override
-    public int getSpeed() {
-        return 0;
-    }
-
-    @Override
-    public int getThickness() {
-        return 0;
-    }
-
-    @Override
     public String getID() {
         return "editorStampSimpleBrush";
     }

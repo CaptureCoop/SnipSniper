@@ -152,36 +152,6 @@ public class CounterStamp implements IStamp{
     }
 
     @Override
-    public int getMinWidth() {
-        return minimumWidth;
-    }
-
-    @Override
-    public int getMinHeight() {
-        return minimumHeight;
-    }
-
-    @Override
-    public int getSpeedWidth() {
-        return speedWidth;
-    }
-
-    @Override
-    public int getSpeedHeight() {
-        return speedHeight;
-    }
-
-    @Override
-    public int getSpeed() {
-        return speed;
-    }
-
-    @Override
-    public int getThickness() {
-        return 0;
-    }
-
-    @Override
     public String getID() {
         return "editorStampCounter";
     }

@@ -8,7 +8,6 @@ import javax.swing.*;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.editorwindow.stamps.*;
-import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.LogManager;
@@ -33,7 +32,7 @@ public class EditorWindow extends JFrame{
 	private int selectedStamp = 0;
 
 	InputContainer input = new InputContainer();
-	private EditorWindowRender editorWindowRender;
+	private final EditorWindowRender editorWindowRender;
 	private EditorListener editorListener;
 
 	private final RenderingHints qualityHints;
@@ -42,7 +41,6 @@ public class EditorWindow extends JFrame{
 
 	public boolean isDirty = false;
 
-	private boolean isStandalone;
 	private boolean isStarted = false;
 
 	public EditorWindow(String id, BufferedImage img, int x, int y, String title, Config config, boolean leftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
@@ -53,11 +51,10 @@ public class EditorWindow extends JFrame{
 		this.saveLocation = saveLocation;
 		this.inClipboard = inClipboard;
 		this.title = title;
-		this.isStandalone = isStandalone;
 
 		stamps[0] = new CubeStamp(this);
 		stamps[1] = new CounterStamp(config);
-		stamps[2] = new CircleStamp(this, config);
+		stamps[2] = new CircleStamp(config);
 		stamps[3] = new SimpleBrush(this);
 		stamps[4] = new TextStamp(config);
 
@@ -192,10 +189,6 @@ public class EditorWindow extends JFrame{
 			for(IStamp stamp : stamps)
 				stamp.reset();
 		}
-	}
-
-	public EditorWindowRender getEditorWindowRender (){
-		return editorWindowRender;
 	}
 
 	public Config getConfig() {

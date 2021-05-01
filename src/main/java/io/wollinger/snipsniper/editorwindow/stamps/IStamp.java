@@ -16,15 +16,6 @@ public interface IStamp {
     int getWidth();
     int getHeight();
 
-    int getMinWidth();
-    int getMinHeight();
-
-    int getSpeedWidth();
-    int getSpeedHeight();
-    int getSpeed();
-
-    int getThickness();
-
     String getID();
 
     void setColor(PBRColor color);
