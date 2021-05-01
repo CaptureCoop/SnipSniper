@@ -13,20 +13,20 @@ public class TextStamp implements IStamp{
     private PBRColor color;
     private int fontSize;
     private int fontSizeSpeed;
-    private String text = "";
+    private String text;
 
     private ArrayList<Integer> nonTypeKeys = new ArrayList<>();
 
     private int fontMode = Font.PLAIN;
+    private Config config;
 
     public TextStamp(Config config) {
+        this.config = config;
+
         nonTypeKeys.add(KeyEvent.VK_SHIFT);
         nonTypeKeys.add(KeyEvent.VK_CONTROL);
         nonTypeKeys.add(KeyEvent.VK_ALT);
-
-        color = new PBRColor(new Color(200,150,255));
-        fontSize = 20;
-        fontSizeSpeed = 2;
+        reset();
     }
 
     @Override
@@ -75,6 +75,14 @@ public class TextStamp implements IStamp{
     @Override
     public void editorUndo(int historyPoint) {
 
+    }
+
+    @Override
+    public void reset() {
+        text = "";
+        color = new PBRColor(new Color(200,150,255));
+        fontSize = 20;
+        fontSizeSpeed = 2;
     }
 
     @Override

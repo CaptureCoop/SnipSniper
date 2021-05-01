@@ -13,30 +13,22 @@ public class CircleStamp implements IStamp{
     private int height;
     private int thickness;
 
-    private final int minimumWidth;
-    private final int minimumHeight;
+    private int minimumWidth;
+    private int minimumHeight;
 
-    private final int speedWidth;
-    private final int speedHeight;
-    private final int speed;
+    private int speedWidth;
+    private int speedHeight;
+    private int speed;
 
     private PBRColor color;
 
     private EditorWindow editorWindow;
+    private Config config;
 
-    public CircleStamp(EditorWindow editorWindow, Config cfg) {
+    public CircleStamp(EditorWindow editorWindow, Config config) {
         this.editorWindow = editorWindow;
-        color = new PBRColor(cfg.getColor("editorStampCircleDefaultColor"));
-        width = cfg.getInt("editorStampCircleWidth");
-        height = cfg.getInt("editorStampCircleHeight");
-
-        minimumWidth = cfg.getInt("editorStampCircleWidthMinimum");
-        minimumHeight = cfg.getInt("editorStampCircleHeightMinimum");
-
-        speedWidth = cfg.getInt("editorStampCircleWidthSpeed");
-        speedHeight = cfg.getInt("editorStampCircleHeightSpeed");
-        speed = cfg.getInt("editorStampCircleSpeed");
-        thickness = cfg.getInt("editorStampCircleThickness");
+        this.config = config;
+        reset();
     }
 
     @Override
@@ -129,6 +121,21 @@ public class CircleStamp implements IStamp{
     @Override
     public void editorUndo(int historyPoint) {
 
+    }
+
+    @Override
+    public void reset() {
+        color = new PBRColor(config.getColor("editorStampCircleDefaultColor"));
+        width = config.getInt("editorStampCircleWidth");
+        height = config.getInt("editorStampCircleHeight");
+
+        minimumWidth = config.getInt("editorStampCircleWidthMinimum");
+        minimumHeight = config.getInt("editorStampCircleHeightMinimum");
+
+        speedWidth = config.getInt("editorStampCircleWidthSpeed");
+        speedHeight = config.getInt("editorStampCircleHeightSpeed");
+        speed = config.getInt("editorStampCircleSpeed");
+        thickness = config.getInt("editorStampCircleThickness");
     }
 
     @Override

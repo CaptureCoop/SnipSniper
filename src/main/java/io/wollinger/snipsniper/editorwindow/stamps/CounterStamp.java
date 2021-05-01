@@ -14,36 +14,24 @@ public class CounterStamp implements IStamp{
     private int width;
     private int height;
 
-    private final int minimumWidth;
-    private final int minimumHeight;
+    private int minimumWidth;
+    private int minimumHeight;
 
-    private final int speedWidth;
-    private final int speedHeight;
-    private final int speed;
+    private int speedWidth;
+    private int speedHeight;
+    private int speed;
 
     private PBRColor color;
 
-    private final float fontSizeModifier;
-    private int count = 1;
-    private final boolean solidColor;
+    private float fontSizeModifier;
+    private int count;
+    private boolean solidColor;
 
     private final ArrayList<Integer> historyPoints = new ArrayList<>();
 
     public CounterStamp(Config cfg) {
         this.cfg = cfg;
-
-        color = new PBRColor(cfg.getColor("editorStampCounterDefaultColor"));
-        width = cfg.getInt("editorStampCounterWidth");
-        height = cfg.getInt("editorStampCounterHeight");
-
-        minimumWidth = cfg.getInt("editorStampCounterWidthMinimum");
-        minimumHeight = cfg.getInt("editorStampCounterHeightMinimum");
-
-        speedWidth = cfg.getInt("editorStampCounterWidthSpeed");
-        speedHeight = cfg.getInt("editorStampCounterHeightSpeed");
-        speed = cfg.getInt("editorStampCounterSpeed");
-        fontSizeModifier = cfg.getFloat("editorStampCounterFontSizeModifier");
-        solidColor = cfg.getBool("editorStampCounterSolidColor");
+        reset();
     }
 
     @Override
@@ -134,6 +122,23 @@ public class CounterStamp implements IStamp{
             if (count > 1)
                 count--;
         }
+    }
+
+    @Override
+    public void reset() {
+        count = 1;
+        color = new PBRColor(cfg.getColor("editorStampCounterDefaultColor"));
+        width = cfg.getInt("editorStampCounterWidth");
+        height = cfg.getInt("editorStampCounterHeight");
+
+        minimumWidth = cfg.getInt("editorStampCounterWidthMinimum");
+        minimumHeight = cfg.getInt("editorStampCounterHeightMinimum");
+
+        speedWidth = cfg.getInt("editorStampCounterWidthSpeed");
+        speedHeight = cfg.getInt("editorStampCounterHeightSpeed");
+        speed = cfg.getInt("editorStampCounterSpeed");
+        fontSizeModifier = cfg.getFloat("editorStampCounterFontSizeModifier");
+        solidColor = cfg.getBool("editorStampCounterSolidColor");
     }
 
     @Override

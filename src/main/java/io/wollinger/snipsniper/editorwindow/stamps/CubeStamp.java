@@ -13,14 +13,14 @@ public class CubeStamp implements IStamp{
     private final EditorWindow editor;
     private int width;
     private int height;
-    private final int thickness;
+    private int thickness;
 
-    private final int minimumWidth;
-    private final int minimumHeight;
+    private int minimumWidth;
+    private int minimumHeight;
 
-    private final int speedWidth;
-    private final int speedHeight;
-    private final int speed;
+    private int speedWidth;
+    private int speedHeight;
+    private int speed;
 
     private PBRColor color;
     private final Config config;
@@ -28,18 +28,7 @@ public class CubeStamp implements IStamp{
     public CubeStamp(EditorWindow editor) {
         this.editor = editor;
         this.config = editor.getConfig();
-
-        color = new PBRColor(config.getColor("editorStampCubeDefaultColor"));
-        width = config.getInt("editorStampCubeWidth");
-        height = config.getInt("editorStampCubeHeight");
-        thickness = 0;
-
-        minimumWidth = config.getInt("editorStampCubeWidthMinimum");
-        minimumHeight = config.getInt("editorStampCubeHeightMinimum");
-
-        speedWidth = config.getInt("editorStampCubeWidthSpeed");
-        speedHeight = config.getInt("editorStampCubeHeightSpeed");
-        speed = 0;
+        reset();
     }
 
     @Override
@@ -115,6 +104,21 @@ public class CubeStamp implements IStamp{
     @Override
     public void editorUndo(int historyPoint) {
 
+    }
+
+    @Override
+    public void reset() {
+        color = new PBRColor(config.getColor("editorStampCubeDefaultColor"));
+        width = config.getInt("editorStampCubeWidth");
+        height = config.getInt("editorStampCubeHeight");
+        thickness = 0;
+
+        minimumWidth = config.getInt("editorStampCubeWidthMinimum");
+        minimumHeight = config.getInt("editorStampCubeHeightMinimum");
+
+        speedWidth = config.getInt("editorStampCubeWidthSpeed");
+        speedHeight = config.getInt("editorStampCubeHeightSpeed");
+        speed = 0;
     }
 
     @Override

@@ -12,7 +12,7 @@ public class SimpleBrush implements IStamp {
     private final EditorWindow editorWindow;
 
     private int size;
-    private final int speed;
+    private int speed;
 
     private PBRColor color;
     private final Config config;
@@ -20,10 +20,7 @@ public class SimpleBrush implements IStamp {
     public SimpleBrush(EditorWindow editorWindow) {
         this.editorWindow = editorWindow;
         this.config = editorWindow.getConfig();
-
-        color = new PBRColor(config.getColor("editorStampSimpleBrushDefaultColor"));
-        size = config.getInt("editorStampSimpleBrushSize");
-        speed = config.getInt("editorStampSimpleBrushSizeSpeed");
+        reset();
     }
 
     @Override
@@ -74,6 +71,13 @@ public class SimpleBrush implements IStamp {
     @Override
     public void editorUndo(int historyPoint) {
 
+    }
+
+    @Override
+    public void reset() {
+        color = new PBRColor(config.getColor("editorStampSimpleBrushDefaultColor"));
+        size = config.getInt("editorStampSimpleBrushSize");
+        speed = config.getInt("editorStampSimpleBrushSizeSpeed");
     }
 
     @Override

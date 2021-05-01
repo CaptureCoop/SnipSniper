@@ -2,6 +2,7 @@ package io.wollinger.snipsniper.editorwindow;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.logging.Level;
 
 import javax.swing.*;
 
@@ -10,6 +11,7 @@ import io.wollinger.snipsniper.editorwindow.stamps.*;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.InputContainer;
+import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
 
 public class EditorWindow extends JFrame{
@@ -187,6 +189,8 @@ public class EditorWindow extends JFrame{
 
 		if(getEditorListener() != null && resetHistory) {
 			getEditorListener().resetHistory();
+			for(IStamp stamp : stamps)
+				stamp.reset();
 		}
 	}
 

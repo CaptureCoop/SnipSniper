@@ -11,6 +11,8 @@ public interface IStamp {
     void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint);
     void editorUndo(int historyPoint);
 
+    void reset();
+
     int getWidth();
     int getHeight();
 
