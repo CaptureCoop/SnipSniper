@@ -13,7 +13,7 @@ import java.util.logging.Level;
 
 public class LogManager {
 
-    private static File logFile = null;
+    private static File logFile;
 
     public static void log(String id, String message, Level level) {
         String msg = "%DATETIME% [%PROFILE%] [%TYPE%]: %MESSAGE%";
