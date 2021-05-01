@@ -1,7 +1,6 @@
 package io.wollinger.snipsniper.utils;
 
 import io.wollinger.snipsniper.Config;
-import io.wollinger.snipsniper.systray.Sniper;
 
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
@@ -54,12 +53,12 @@ public class ColorChooser extends JFrame{
 		jcc.setColor(color.getColor());
         AbstractColorChooserPanel[] panels = jcc.getChooserPanels();
         jcc.setPreviewPanel(new JPanel());
-        for (AbstractColorChooserPanel accp : panels) {
-            if (!accp.getDisplayName().equals("RGB")) {
-                jcc.removeChooserPanel(accp);
+        for (AbstractColorChooserPanel colorPanel : panels) {
+            if (!colorPanel.getDisplayName().equals("RGB")) {
+                jcc.removeChooserPanel(colorPanel);
             }
         }
-        JPanel mainmain = new JPanel();
+        JPanel mainPanel = new JPanel();
         JPanel colorPanel = new JPanel();
         JPanel submitButtonPanel = new JPanel();
         JButton submit = new JButton("Okay");
@@ -68,14 +67,14 @@ public class ColorChooser extends JFrame{
         JButton save = new JButton("Save as default");
         save.addActionListener(listener -> instance.save());
 
-        mainmain.setLayout(new BoxLayout(mainmain, BoxLayout.Y_AXIS));
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         
         colorPanel.add(jcc);
+
+        mainPanel.add(colorPanel);
+        mainPanel.add(submitButtonPanel);
         
-        mainmain.add(colorPanel);
-        mainmain.add(submitButtonPanel);
-        
-        this.add(mainmain);
+        this.add(mainPanel);
         this.setResizable(false);
         this.setFocusable(true);
         

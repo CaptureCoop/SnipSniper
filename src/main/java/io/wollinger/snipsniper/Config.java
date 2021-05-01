@@ -37,10 +37,10 @@ public class Config {
 	}
 	
 	void loadFile(String filename, HashMap<String, String> map, boolean inJar) throws IOException, NumberFormatException {
-			BufferedReader reader = null;
+			BufferedReader reader;
 			if(!inJar)
 				reader = new BufferedReader(new FileReader(filename));
-			else if(inJar)
+			else
 				reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename)));
 			
 			String line = reader.readLine();

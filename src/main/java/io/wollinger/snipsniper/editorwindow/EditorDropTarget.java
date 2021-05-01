@@ -16,11 +16,9 @@ import java.util.List;
 
 public class EditorDropTarget extends DropTarget {
     private final EditorWindow editorWindow;
-    private final EditorWindowRender render;
 
-    public EditorDropTarget(EditorWindow editorWindow, EditorWindowRender render) {
+    public EditorDropTarget(EditorWindow editorWindow) {
         this.editorWindow = editorWindow;
-        this.render = render;
     }
 
     public synchronized void drop(DropTargetDropEvent evt) {

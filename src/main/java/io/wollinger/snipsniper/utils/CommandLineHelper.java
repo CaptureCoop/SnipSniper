@@ -63,7 +63,7 @@ public class CommandLineHelper {
     public void helpText() {
         System.out.println("-help / -?     = Displays this");
         System.out.println("-version / -v  = Displays version");
-        System.out.println("-demo          = Starts SnipSniper in demo mode (No configs are beeing created)");
+        System.out.println("-demo          = Starts SnipSniper in demo mode (No configs are being created)");
         System.out.println("-language / -l = Sets the language. Useful for demo mode");
     }
 

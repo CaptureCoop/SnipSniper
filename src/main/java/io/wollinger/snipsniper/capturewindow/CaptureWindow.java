@@ -55,7 +55,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			try {
 				Thread.sleep(sniperInstance.cfg.getInt("snipeDelay") * 1000L);
 			} catch (InterruptedException e) {
-				int profileID = sniperInstance.profileID;
 				LogManager.log(sniperInstance.getID(), "There was an error with the delay! Message: " + e.getMessage(), Level.SEVERE);
 				LogManager.log(sniperInstance.getID(), "More info: " + Arrays.toString(e.getStackTrace()), Level.SEVERE);
 			}

@@ -141,7 +141,7 @@ public class SnipSniper {
 			Config config = new Config("editor.cfg", "CFGE", "profile_defaults.cfg");
 			config.save();
 
-			boolean fileExists = true;
+			boolean fileExists;
 			BufferedImage img = null;
 			if((cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty()) || (isEditorOnly && args.length > 0)) {
 				try {

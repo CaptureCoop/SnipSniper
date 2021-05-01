@@ -13,14 +13,12 @@ public class CubeStamp implements IStamp{
     private final EditorWindow editor;
     private int width;
     private int height;
-    private int thickness;
 
     private int minimumWidth;
     private int minimumHeight;
 
     private int speedWidth;
     private int speedHeight;
-    private int speed;
 
     private PBRColor color;
     private final Config config;
@@ -50,7 +48,7 @@ public class CubeStamp implements IStamp{
                     height -= idSpeed;
                     if (height <= idMinimum)
                         height = idMinimum;
-                } else if (dir.equals("Width")) {
+                } else {
                     width -= idSpeed;
                     if (width <= idMinimum)
                         width = idMinimum;
@@ -59,7 +57,7 @@ public class CubeStamp implements IStamp{
             case -1:
                 if (dir.equals("Height")) {
                     height += idSpeed;
-                } else if (dir.equals("Width")) {
+                } else {
                     width += idSpeed;
                 }
                 break;
@@ -111,14 +109,12 @@ public class CubeStamp implements IStamp{
         color = new PBRColor(config.getColor("editorStampCubeDefaultColor"));
         width = config.getInt("editorStampCubeWidth");
         height = config.getInt("editorStampCubeHeight");
-        thickness = 0;
 
         minimumWidth = config.getInt("editorStampCubeWidthMinimum");
         minimumHeight = config.getInt("editorStampCubeHeightMinimum");
 
         speedWidth = config.getInt("editorStampCubeWidthSpeed");
         speedHeight = config.getInt("editorStampCubeHeightSpeed");
-        speed = 0;
     }
 
     @Override

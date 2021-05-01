@@ -1,7 +1,6 @@
 package io.wollinger.snipsniper.editorwindow;
 
 import java.awt.*;
-import java.awt.dnd.DropTarget;
 
 import javax.swing.JPanel;
 
@@ -14,7 +13,7 @@ public class EditorWindowRender extends JPanel{
 		editorWnd = wnd;
 		if(wnd.getImage() != null)
 			this.setPreferredSize(new Dimension(wnd.getImage().getWidth(), wnd.getImage().getHeight()));
-		this.setDropTarget(new EditorDropTarget(editorWnd, this));
+		this.setDropTarget(new EditorDropTarget(editorWnd));
 	}
 
 	public void paint(Graphics g) {
