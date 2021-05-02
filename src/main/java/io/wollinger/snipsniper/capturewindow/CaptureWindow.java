@@ -65,12 +65,12 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		addKeyListener(listener);
 		addFocusListener(new FocusListener() {
 			@Override
-			public void focusGained(FocusEvent e) {
+			public void focusGained(FocusEvent focusEvent) {
 				setSize();
 			}
 
 			@Override
-			public void focusLost(FocusEvent e) {
+			public void focusLost(FocusEvent focusEvent) {
 				setSize();
 			}
 		});
