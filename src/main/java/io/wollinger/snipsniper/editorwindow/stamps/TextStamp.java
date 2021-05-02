@@ -80,9 +80,9 @@ public class TextStamp implements IStamp{
     @Override
     public void reset() {
         text = "";
-        color = new PBRColor(new Color(200,150,255));
-        fontSize = 20;
-        fontSizeSpeed = 2;
+        color = new PBRColor(config.getColor("editorStampTextDefaultColor"));
+        fontSize = config.getInt("editorStampTextDefaultFontSize");
+        fontSizeSpeed = config.getInt("editorStampTextDefaultSpeed");
     }
 
     @Override
@@ -97,7 +97,7 @@ public class TextStamp implements IStamp{
 
     @Override
     public String getID() {
-        return null;
+        return "editorStampText";
     }
 
     @Override
