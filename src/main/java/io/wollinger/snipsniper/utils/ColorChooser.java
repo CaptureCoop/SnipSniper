@@ -3,7 +3,6 @@ package io.wollinger.snipsniper.utils;
 import io.wollinger.snipsniper.Config;
 
 import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -14,16 +13,13 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 public class ColorChooser extends JFrame{
 	private static final long serialVersionUID = 8590714455238968415L;
-
-	private final Config config;
-
-	private JColorChooser jcc;
 	
+    ColorChooser instance;
+    private JColorChooser jcc;
 	private final PBRColor color;
 	private final String configKey;
+    private final Config config;
 
-	ColorChooser instance;
-	
 	public ColorChooser(Config config, String title, PBRColor color, String configKey, int x, int y) {
         instance = this;
         this.config = config;

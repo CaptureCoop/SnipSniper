@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class EditorPasteListener implements KeyListener {
-    private EditorWindow editorWindow;
+    private final EditorWindow editorWindow;
 
     private final boolean[] keys = new boolean[9182];
 

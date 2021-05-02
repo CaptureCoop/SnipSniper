@@ -32,7 +32,7 @@ public final class SnipSniper {
 
 	private final static int PROFILE_COUNT = 7;
 
-	private static Sniper[] profiles = new Sniper[PROFILE_COUNT];
+	private static final Sniper[] profiles = new Sniper[PROFILE_COUNT];
 
 	private static boolean isIdle = true;
 
