@@ -24,8 +24,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	private final RenderingHints qualityHints;
 
 	Sniper sniperInstance;
-	private CaptureWindow instance;
-	private CaptureWindowListener listener;
 
 	Point startPoint;
 	Point startPointTotal;
@@ -39,18 +37,12 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	public boolean startedCapture = false;
 	public boolean isRunning = true;
 
-	private boolean finishedCapture = false;
-	private boolean imageSaved = false;
-
-	private Thread thread = null;
-	
 	public CaptureWindow(Sniper sniperInstance) {
 		this.sniperInstance = sniperInstance;
 
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-		instance = this;
 		sniperInstance.trayIcon.setImage(Icons.alt_icons[sniperInstance.profileID]);
 		if(sniperInstance.cfg.getInt("snipeDelay") != 0) {
 			try {
@@ -65,8 +57,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		
 		setUndecorated(true);
 		setIconImage(Icons.icon_taskbar);
-		
-		listener = new CaptureWindowListener(this);
+
+		CaptureWindowListener listener = new CaptureWindowListener(this);
 		addWindowListener(this);
 		addMouseListener(listener);
 		addMouseMotionListener(listener);
@@ -88,7 +80,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	
 	public void loop() {
-		thread = new Thread(() -> {
+		Thread thread = new Thread(() -> {
 			final double nsPerTick = 1000000000D / sniperInstance.cfg.getInt("maxFPS");
 			long lastTime = System.nanoTime();
 			long lastTimer = System.currentTimeMillis();
@@ -96,12 +88,12 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			boolean screenshotDone = false;
 
 			while (isRunning) {
-				if(screenshotDone) {
+				if (screenshotDone) {
 					setVisible(true);
 					setSize();
 					specialRepaint();
 				}
-				if(screenshot != null && screenshotTinted != null && !screenshotDone) screenshotDone = true;
+				if (screenshot != null && screenshotTinted != null && !screenshotDone) screenshotDone = true;
 
 				long now = System.nanoTime();
 				delta += (now - lastTime) / nsPerTick;
@@ -109,7 +101,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 				while (delta >= 1) {
 					delta -= 1;
-					if(screenshotDone) specialRepaint();
+					if (screenshotDone) specialRepaint();
 				}
 
 				if (System.currentTimeMillis() - lastTimer >= 1000)
@@ -117,7 +109,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			}
 		});
 		thread.start();
-		
 	}
 	
 	public void specialRepaint() {
@@ -183,59 +174,56 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	}
 	
 	void capture() {
-		if(!imageSaved) {
-			BufferedImage finalImg;
-			isRunning = false;
-			dispose();
-			finishedCapture = true;
+		BufferedImage finalImg;
+		isRunning = false;
+		dispose();
 
-			int borderSize = sniperInstance.cfg.getInt("borderSize");
-			Rectangle captureArea = calcRectangle();
+		int borderSize = sniperInstance.cfg.getInt("borderSize");
+		Rectangle captureArea = calcRectangle();
 
-			if (captureArea.width == 0 || captureArea.height == 0) {
-				sniperInstance.trayIcon.displayMessage("Error: Screenshot width or height is 0!", "ERROR", MessageType.ERROR);
-				sniperInstance.killCaptureWindow();
-				return;
-			}
-
-			BufferedImage croppedBuffer = screenshot.getSubimage(captureArea.x, captureArea.y, captureArea.width, captureArea.height);
-			finalImg = new BufferedImage(croppedBuffer.getWidth() + borderSize *2, croppedBuffer.getHeight() + borderSize *2, BufferedImage.TYPE_INT_RGB);
-			Graphics g = finalImg.getGraphics();
-			g.setColor(sniperInstance.cfg.getColor("borderColor"));
-			g.fillRect(0, 0, finalImg.getWidth(),finalImg.getHeight());
-			g.drawImage(croppedBuffer, borderSize, borderSize, croppedBuffer.getWidth(), croppedBuffer.getHeight(), this);
-			g.dispose();
-
-			String finalLocation = null;
-			boolean inClipboard = false;
-
-			if(sniperInstance.cfg.getBool("saveToDisk")) {
-				finalLocation = Utils.saveImage(sniperInstance.getID(), finalImg, "", sniperInstance.cfg);
-			}
-
-			if(sniperInstance.cfg.getBool("copyToClipboard")) {
-				Utils.copyToClipboard(sniperInstance.getID(), finalImg);
-				inClipboard = true;
-			}
-
-			int posX = (int) cPointAlt.getX();
-			int posY = (int) cPointAlt.getY();
-			boolean leftToRight = false;
-
-			if (!(startPointTotal.getX() > cPointAlt.getX())) {
-				posX -= finalImg.getWidth();
-				leftToRight = true;
-			}
-			if (!(startPointTotal.getY() > cPointAlt.getY())) {
-				posY -= finalImg.getHeight();
-				leftToRight = true;
-			}
-			if (sniperInstance.cfg.getBool("openEditor")) {
-				new EditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", sniperInstance.cfg, leftToRight, finalLocation, inClipboard, false);
-			}
-
+		if (captureArea.width == 0 || captureArea.height == 0) {
+			sniperInstance.trayIcon.displayMessage("Error: Screenshot width or height is 0!", "ERROR", MessageType.ERROR);
 			sniperInstance.killCaptureWindow();
+			return;
 		}
+
+		BufferedImage croppedBuffer = screenshot.getSubimage(captureArea.x, captureArea.y, captureArea.width, captureArea.height);
+		finalImg = new BufferedImage(croppedBuffer.getWidth() + borderSize *2, croppedBuffer.getHeight() + borderSize *2, BufferedImage.TYPE_INT_RGB);
+		Graphics g = finalImg.getGraphics();
+		g.setColor(sniperInstance.cfg.getColor("borderColor"));
+		g.fillRect(0, 0, finalImg.getWidth(),finalImg.getHeight());
+		g.drawImage(croppedBuffer, borderSize, borderSize, croppedBuffer.getWidth(), croppedBuffer.getHeight(), this);
+		g.dispose();
+
+		String finalLocation = null;
+		boolean inClipboard = false;
+
+		if(sniperInstance.cfg.getBool("saveToDisk")) {
+			finalLocation = Utils.saveImage(sniperInstance.getID(), finalImg, "", sniperInstance.cfg);
+		}
+
+		if(sniperInstance.cfg.getBool("copyToClipboard")) {
+			Utils.copyToClipboard(sniperInstance.getID(), finalImg);
+			inClipboard = true;
+		}
+
+		int posX = (int) cPointAlt.getX();
+		int posY = (int) cPointAlt.getY();
+		boolean leftToRight = false;
+
+		if (!(startPointTotal.getX() > cPointAlt.getX())) {
+			posX -= finalImg.getWidth();
+			leftToRight = true;
+		}
+		if (!(startPointTotal.getY() > cPointAlt.getY())) {
+			posY -= finalImg.getHeight();
+			leftToRight = true;
+		}
+		if (sniperInstance.cfg.getBool("openEditor")) {
+			new EditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", sniperInstance.cfg, leftToRight, finalLocation, inClipboard, false);
+		}
+
+		sniperInstance.killCaptureWindow();
 	}
 	
 	public Rectangle area;
