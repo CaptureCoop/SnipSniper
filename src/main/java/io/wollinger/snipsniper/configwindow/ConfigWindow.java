@@ -3,6 +3,8 @@ package io.wollinger.snipsniper.configwindow;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -59,7 +61,7 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		openEditor.setSelected(sniperInstance.cfg.getBool("openEditor"));
 		
 		JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-		saveButton.addActionListener(new ConfigSaveButton(this));
+		saveButton.addActionListener(e -> save());
 		
 		JPanel options = new JPanel(new GridLayout(0,1));
 
