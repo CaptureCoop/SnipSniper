@@ -6,6 +6,9 @@ import io.wollinger.snipsniper.capturewindow.ImageSelection;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -29,6 +32,18 @@ public class Utils {
 
 	public static Dimension getScaledDimension(BufferedImage image, Dimension boundary) {
 		return Utils.getScaledDimension(new Dimension(image.getWidth(), image.getHeight()), boundary);
+	}
+
+	public static Image getImageFromClipboard() {
+		Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+		if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+			try {
+				return (Image) transferable.getTransferData(DataFlavor.imageFlavor);
+			} catch (UnsupportedFlavorException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 	//https://stackoverflow.com/a/10245583

@@ -25,8 +25,8 @@ public class EditorWindow extends JFrame{
 	final static int X_OFFSET = 8; // This is the offset for X, since the window moves too far to the right otherwise.
 
 	private final String title;
-	private final String saveLocation;
-	private final boolean inClipboard;
+	private String saveLocation;
+	private boolean inClipboard;
 
 	private final IStamp[] stamps = new IStamp[5];
 	private int selectedStamp = 0;
@@ -83,10 +83,11 @@ public class EditorWindow extends JFrame{
 			g.setColor(Color.WHITE);
 			g.fillRect(0,0,dropImage.getWidth(), dropImage.getHeight());
 			g.setColor(Color.BLACK);
-			String string = "Drop image here";
+			String string = "Drop image here or use CTRL + V to paste one!";
 			g.setFont(new Font("Arial", Font.BOLD, 20));
 			int width = g.getFontMetrics().stringWidth(string);
-			g.drawString(string, dropImage.getWidth()/2 - width/2, 256);
+			g.drawString(string, dropImage.getWidth()/2 - width/2, dropImage.getHeight()/2);
+			g.drawImage(Icons.icon_editor, dropImage.getWidth()/3,dropImage.getHeight()/10, dropImage.getWidth()/3, dropImage.getHeight()/3, this);
 			g.dispose();
 			setImage(dropImage, false);
 		} else {
@@ -133,6 +134,7 @@ public class EditorWindow extends JFrame{
 	}
 
 	public void refreshTitle() {
+		LogManager.log(id, "Refreshing title", Level.INFO);
 		String newTitle = title;
 		if(saveLocation != null && !saveLocation.isEmpty())
 			newTitle += " (" + saveLocation + ")";
@@ -175,6 +177,28 @@ public class EditorWindow extends JFrame{
 
 	public IStamp[] getStamps() {
 		return stamps;
+	}
+
+	public void initImage(BufferedImage image, String location) {
+		GraphicsDevice device = getGraphicsConfiguration().getDevice();
+		int monitorWidth = device.getDisplayMode().getWidth()-100;
+		int monitorHeight = device.getDisplayMode().getHeight()-100;
+
+		if(image.getWidth() >= monitorWidth || image.getHeight() > monitorHeight) {
+			Dimension newDimension = Utils.getScaledDimension(image, new Dimension(monitorWidth, monitorHeight));
+			image = Utils.imageToBufferedImage(image.getScaledInstance((int)newDimension.getWidth(), (int)newDimension.getHeight(), 5));
+		}
+
+		Rectangle rect = getGraphicsConfiguration().getBounds();
+		setLocation((int)(rect.getX() + (rect.getWidth()/2) - (image.getWidth()/2)), (int)(rect.getY() + (rect.getHeight()/2) - image.getHeight()/2));
+
+		setImage(image, true);
+		if(!isStarted())
+			start();
+
+		saveLocation = location;
+		inClipboard = false;
+		refreshTitle();
 	}
 
 	public void setImage(BufferedImage image, boolean resetHistory) {

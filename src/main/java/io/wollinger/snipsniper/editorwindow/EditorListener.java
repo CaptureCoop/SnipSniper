@@ -166,6 +166,10 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			editorInstance.kill();
 		}
 
+		if(editorInstance.input.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
+			editorInstance.initImage(Utils.imageToBufferedImage(Utils.getImageFromClipboard()), "from clipboard");
+		}
+
 		if(editorInstance.input.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_Z)) {
 			int size = history.size();
 			if(size > 1) {
