@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class RectangleStamp implements IStamp {
-    private Config config;
+    private final Config config;
 
     private int width;
     private int height;

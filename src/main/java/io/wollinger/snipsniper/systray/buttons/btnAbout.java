@@ -41,9 +41,8 @@ public class btnAbout extends MenuItem{
 			JPanel panel = new JPanel(new GridLayout(1,0));
 			
 			try {
-				Image logo = ImageIO.read(this.getClass().getResource("/res/SnSn.png")).getScaledInstance(100,100,Image.SCALE_DEFAULT);
-				JLabel logoLabel = new JLabel(new ImageIcon(logo));
-				panel.add(logoLabel);
+				ImageIcon icon = new ImageIcon(ImageIO.read(this.getClass().getResource("/res/SnSn.png")).getScaledInstance(100,100,Image.SCALE_DEFAULT));
+				panel.add(new JLabel(icon));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -51,8 +50,7 @@ public class btnAbout extends MenuItem{
 			JPanel rightSide = new JPanel(new GridLayout(2, 0));
 			try {
 				Image splash = ImageIO.read(this.getClass().getResource("/splash.png")).getScaledInstance((int)(512F/2.2F),(int)(185F/2.2F),Image.SCALE_DEFAULT);
-				JLabel splashLabel = new JLabel(new ImageIcon(splash));
-				rightSide.add(splashLabel);
+				rightSide.add(new JLabel(new ImageIcon(splash)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
