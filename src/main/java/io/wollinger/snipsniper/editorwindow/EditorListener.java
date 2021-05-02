@@ -129,10 +129,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.input.setKey(keyCode, true);
 		IStamp stamp = editorInstance.getSelectedStamp();
 
-		if(editorInstance.input.areKeysPressed(KeyEvent.VK_ALT, KeyEvent.VK_C)) {
+		if(editorInstance.input.areKeysPressed(KeyEvent.VK_ALT, KeyEvent.VK_C))
 			openColorChooser = true;
-			//new ColorChooser(editorInstance.getConfig(), "Marker Color", stamp.getColor(), stamp.getID() + "DefaultColor");
-		}
 
 		if(keyCode == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();
@@ -168,10 +166,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			if(editorInstance.isDirty)
 				editorInstance.saveImage();
 			editorInstance.kill();
-		}
-
-		if(editorInstance.input.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
-			editorInstance.initImage(Utils.imageToBufferedImage(Utils.getImageFromClipboard()), "from clipboard");
 		}
 
 		if(editorInstance.input.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_Z)) {

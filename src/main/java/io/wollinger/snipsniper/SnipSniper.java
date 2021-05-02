@@ -140,9 +140,9 @@ public final class SnipSniper {
 
 			boolean fileExists;
 			BufferedImage img = null;
+			String path = "";
 			if((cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty()) || (isEditorOnly && args.length > 0)) {
 				try {
-					String path;
 					if(cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty())
 						path = cmdline.getEditorFile();
 					else
@@ -166,7 +166,7 @@ public final class SnipSniper {
 			}
 			int x = (int) (screenSize.getWidth() / 2 - width / 2);
 			int y = (int) (screenSize.getHeight() / 2 - height / 2);
-			new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, "", false, true);
+			new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, path, false, true);
 		} else {
 			resetProfiles();
 		}

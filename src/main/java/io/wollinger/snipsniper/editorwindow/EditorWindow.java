@@ -75,6 +75,7 @@ public class EditorWindow extends JFrame{
 		setFocusTraversalKeysEnabled(false);
 
 		add(editorWindowRender);
+		addKeyListener(new EditorPasteListener(this));
 		pack();
 
 		if(img == null) {
