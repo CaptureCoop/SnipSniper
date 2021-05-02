@@ -6,6 +6,7 @@ set jpackage="%userprofile%\.jdks\openjdk-16.0.1\bin\jpackage.exe"
 
 IF "%~1" == "" goto help
 
+if %1==help goto help
 if %1==clean goto clean
 if %1==full goto create_full
 if %1==portable goto create_portable
@@ -13,11 +14,11 @@ if %1==installer goto create_install
 if %1==jar goto create_jar
 
 :help
-echo Available parameters (<debug> is optional and adds Debug Binaries for console output)
+echo Available parameters (debug is optional and adds Debug Binaries for console output)
 echo make clean
-echo make full <debug>
-echo make portable <debug>
-echo make installer <debug>
+echo make full ^<debug^>
+echo make portable ^<debug^>
+echo make installer ^<debug^>
 echo make jar
 goto done
 
