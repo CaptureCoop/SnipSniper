@@ -42,45 +42,36 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	
 	Sniper instance;
 	
-	Menu createProfilesMenu;
-	Menu removeProfilesMenu;
-	Menu languageMenu;
+	private final Menu createProfilesMenu = new Menu(LangManager.getItem("menu_create_profile"));
+	private final Menu removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile"));
 
 	public Sniper(int profileID) {
-		this.profileID = profileID;
-		
-		cfg = new Config("profile" + profileID + ".cfg", "cfg" + profileID, "profile_defaults.cfg");
 		instance = this;
-		
+		this.profileID = profileID;
+		cfg = new Config("profile" + profileID + ".cfg", "cfg" + profileID, "profile_defaults.cfg");
+
 		LogManager.log(getID(), "Loading profile " + profileID, Level.INFO);
 		
 	    SystemTray tray = SystemTray.getSystemTray();
-	    
-	    Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-		logger.setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
+
+		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
 	    
 		PopupMenu popup = new PopupMenu();
 
 		popup.add(new btnOpenImgFolder(this));
 		popup.add(new btnConfig(this));
 
-		createProfilesMenu = new Menu(LangManager.getItem("menu_create_profile"));
 		popup.add(createProfilesMenu);
 		
-		removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile"));
 		popup.add(removeProfilesMenu);
 
-		languageMenu = new Menu(LangManager.getItem("menu_languages"));
+		Menu languageMenu = new Menu(LangManager.getItem("menu_languages"));
 		for(String language : LangManager.languages) {
 			MenuItem mi = new MenuItem(LangManager.getItem("lang_" + language));
 			mi.addActionListener(e -> {
 				SnipSniper.getConfig().set("language", language);
 				SnipSniper.getConfig().save();
-				try {
-					SnipSniper.resetProfiles();
-				} catch (Exception exception) {
-					exception.printStackTrace();
-				}
+				SnipSniper.resetProfiles();
 			});
 			languageMenu.add(mi);
 		}
@@ -148,15 +139,11 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			
 			if(!SnipSniper.hasProfile(index)) {
 				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
-				mi.addActionListener(listener -> {
-					addProfile(index);
-				});
+				mi.addActionListener(listener -> addProfile(index));
 				createProfilesMenu.add(mi);
 			} else if(SnipSniper.hasProfile(index)) {
 				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
-				mi.addActionListener(listener -> {
-					removeProfile(index);
-				});
+				mi.addActionListener(listener -> removeProfile(index));
 				removeProfilesMenu.add(mi);
 			}
 		}
