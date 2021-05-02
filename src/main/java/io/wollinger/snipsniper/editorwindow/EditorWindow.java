@@ -12,6 +12,7 @@ import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
+import org.w3c.dom.css.Rect;
 
 public class EditorWindow extends JFrame{
 	private static final long serialVersionUID = -7363672331227971815L;
@@ -28,7 +29,7 @@ public class EditorWindow extends JFrame{
 	private String saveLocation;
 	private boolean inClipboard;
 
-	private final IStamp[] stamps = new IStamp[5];
+	private final IStamp[] stamps = new IStamp[6];
 	private int selectedStamp = 0;
 
 	InputContainer input = new InputContainer();
@@ -57,6 +58,7 @@ public class EditorWindow extends JFrame{
 		stamps[2] = new CircleStamp(config);
 		stamps[3] = new SimpleBrush(this);
 		stamps[4] = new TextStamp(config);
+		stamps[5] = new RectangleStamp(config);
 
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
