@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 cls
 
-set jpackage="C:\Users\Sven\.jdks\openjdk-16.0.1\bin\jpackage.exe"
+set jpackage="%userprofile%\.jdks\openjdk-16.0.1\bin\jpackage.exe"
 
 IF "%~1" == "" goto help
 
