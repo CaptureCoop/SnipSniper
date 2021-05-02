@@ -127,7 +127,6 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		keyEvent.consume();
 		int keyCode = keyEvent.getKeyCode();
 		editorInstance.input.setKey(keyCode, true);
-		IStamp stamp = editorInstance.getSelectedStamp();
 
 		if(editorInstance.input.areKeysPressed(KeyEvent.VK_ALT, KeyEvent.VK_C))
 			openColorChooser = true;
@@ -135,29 +134,22 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		if(keyCode == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();
 
-		if(keyCode == KeyEvent.VK_1)
-			editorInstance.setSelectedStamp(0);
-		if(keyCode == KeyEvent.VK_2)
-			editorInstance.setSelectedStamp(1);
-		if(keyCode == KeyEvent.VK_3)
-			editorInstance.setSelectedStamp(2);
-		if(keyCode == KeyEvent.VK_4)
-			editorInstance.setSelectedStamp(3);
-		if(keyCode == KeyEvent.VK_5)
-			editorInstance.setSelectedStamp(4);
-		if(keyCode == KeyEvent.VK_6)
-			editorInstance.setSelectedStamp(5);
+		switch (keyCode) {
+			case KeyEvent.VK_1: editorInstance.setSelectedStamp(0); break;
+			case KeyEvent.VK_2: editorInstance.setSelectedStamp(1); break;
+			case KeyEvent.VK_3: editorInstance.setSelectedStamp(2); break;
+			case KeyEvent.VK_4: editorInstance.setSelectedStamp(3); break;
+			case KeyEvent.VK_5: editorInstance.setSelectedStamp(4); break;
+			case KeyEvent.VK_6: editorInstance.setSelectedStamp(5); break;
+		}
 
 		if(keyCode == KeyEvent.VK_ENTER) {
 			JFileChooser chooser = new JFileChooser();
-			File file = new File(Utils.constructFilename(EditorWindow.FILENAME_MODIFIER));
-			chooser.setSelectedFile(file);
-			int result = chooser.showSaveDialog(chooser);
-			if(result == JFileChooser.APPROVE_OPTION){
+			chooser.setSelectedFile(new File(Utils.constructFilename(EditorWindow.FILENAME_MODIFIER)));
+			if(chooser.showSaveDialog(chooser) == JFileChooser.APPROVE_OPTION){
 				try {
-					if(chooser.getSelectedFile().createNewFile()) {
+					if(chooser.getSelectedFile().createNewFile())
 						ImageIO.write(editorInstance.getImage(), "png", chooser.getSelectedFile());
-					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -182,7 +174,7 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 			}
 		}
 
-		stamp.update(editorInstance.input, 0, keyEvent);
+		editorInstance.getSelectedStamp().update(editorInstance.input, 0, keyEvent);
 		editorInstance.repaint();
 	}
 
