@@ -24,24 +24,25 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	private final RenderingHints qualityHints;
 
 	Sniper sniperInstance;
-	CaptureWindow instance;
-	CaptureWindowListener listener;
+	private CaptureWindow instance;
+	private CaptureWindowListener listener;
 
 	Point startPoint;
 	Point startPointTotal;
 	Point cPoint;
 	Point cPointAlt;
-	Rectangle bounds = null;
+	private Rectangle bounds = null;
 	
 	public BufferedImage screenshot = null;
 	public BufferedImage screenshotTinted = null;
 	
-	boolean startedCapture = false;
-	boolean finishedCapture = false;
-	boolean imageSaved = false;
+	public boolean startedCapture = false;
 	public boolean isRunning = true;
-	
-	public Thread thread = null;
+
+	private boolean finishedCapture = false;
+	private boolean imageSaved = false;
+
+	private Thread thread = null;
 	
 	public CaptureWindow(Sniper sniperInstance) {
 		this.sniperInstance = sniperInstance;
