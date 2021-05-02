@@ -190,7 +190,9 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		if(openColorChooser) {
 			//This fixes an issue with the ALT key getting "stuck" since the key up event is not beeing received if the color window is in the front.
 			openColorChooser = false;
-			new ColorChooser(editorInstance.getConfig(), "Marker Color", editorInstance.getSelectedStamp().getColor(), editorInstance.getSelectedStamp().getID() + "DefaultColor");
+			int x = (int)((editorInstance.getLocation().getX() + editorInstance.getWidth()/2));
+			int y = (int)((editorInstance.getLocation().getY() + editorInstance.getHeight()/2));
+			new ColorChooser(editorInstance.getConfig(), "Marker Color", editorInstance.getSelectedStamp().getColor(), editorInstance.getSelectedStamp().getID() + "DefaultColor", x, y);
 		}
 	}
 

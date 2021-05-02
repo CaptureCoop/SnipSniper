@@ -92,8 +92,11 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		row3_2.add(borderSize);
 		JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
 		colorBtn.addActionListener(e -> {
-			if(colorChooser == null || !colorChooser.isDisplayable())
-				colorChooser = new ColorChooser(sniperInstance.cfg, LangManager.getItem("config_label_bordercolor"), borderColor, null);
+			if(colorChooser == null || !colorChooser.isDisplayable()) {
+				int x = (int)((getLocation().getX() + getWidth()/2));
+				int y = (int)((getLocation().getY() + getHeight()/2));
+				colorChooser = new ColorChooser(sniperInstance.cfg, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y);
+			}
 		});
 		row3_2.add(colorBtn);
 		row3.add(row3_2);

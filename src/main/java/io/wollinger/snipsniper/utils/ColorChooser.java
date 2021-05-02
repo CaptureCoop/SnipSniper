@@ -24,7 +24,7 @@ public class ColorChooser extends JFrame{
 
 	ColorChooser instance;
 	
-	public ColorChooser(Config config, String title, PBRColor color, String configKey) {
+	public ColorChooser(Config config, String title, PBRColor color, String configKey, int x, int y) {
         instance = this;
         this.config = config;
 		this.color = color;
@@ -33,7 +33,7 @@ public class ColorChooser extends JFrame{
         setTitle(title);
         setIconImage(Icons.icon_taskbar);
 		setAlwaysOnTop(true);
-		init();
+		init(x, y);
 	}
 	
 	public void close() {
@@ -50,7 +50,7 @@ public class ColorChooser extends JFrame{
         dispose();
     }
 	
-	void init() {
+	void init(int x, int y) {
 		jcc = new JColorChooser();
 		jcc.setColor(color.getColor());
         AbstractColorChooserPanel[] panels = jcc.getChooserPanels();
@@ -92,9 +92,7 @@ public class ColorChooser extends JFrame{
         submitButtonPanel.add(submit);
 
         pack();
-        int w = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth();
-		int h = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getHeight();
-		setLocation((w/2) - getWidth()/2, (h/2) - getHeight()/2);
+        setLocation(x - getWidth()/2, y - getHeight()/2);
         setVisible(true);
 	}
 }
