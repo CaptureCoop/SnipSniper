@@ -69,7 +69,6 @@ public class EditorWindow extends JFrame{
 			setIconImage(Icons.icon_editor);
 		else
 			setIconImage(Icons.icon_taskbar);
-		int barSize = getHeight() - getInsets().bottom;
 
 		editorWindowRender = new EditorWindowRender(this);
 		setFocusTraversalKeysEnabled(false);
@@ -98,7 +97,7 @@ public class EditorWindow extends JFrame{
 		int borderSize = config.getInt("borderSize");
 		if(!leftToRight) borderSize = -borderSize;
 		
-		setLocation((x - X_OFFSET) + borderSize, (y - barSize) + borderSize);
+		setLocation((x - X_OFFSET) + borderSize, y - getInsets().top);
 
 		GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		boolean found = false;
