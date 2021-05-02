@@ -22,7 +22,9 @@ echo make jar
 goto done
 
 :clean
-RMDIR /S /Q release
+if exist release\ (
+    RMDIR /S /Q release
+)
 echo Cleaned!
 goto :EOF
 
