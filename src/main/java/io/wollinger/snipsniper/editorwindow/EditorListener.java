@@ -26,6 +26,8 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 
 	ArrayList<BufferedImage> history = new ArrayList<>();
 
+	private boolean openColorChooser = false;
+
 	public EditorListener(EditorWindow editorInstance) {
 		this.editorInstance = editorInstance;
 		resetHistory();
@@ -127,9 +129,11 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 		editorInstance.input.setKey(keyCode, true);
 		IStamp stamp = editorInstance.getSelectedStamp();
 
-		if(keyCode == KeyEvent.VK_C) {
-			new ColorChooser(editorInstance.getConfig(), "Marker Color", stamp.getColor(), stamp.getID() + "DefaultColor");
+		if(editorInstance.input.areKeysPressed(KeyEvent.VK_ALT, KeyEvent.VK_C)) {
+			openColorChooser = true;
+			//new ColorChooser(editorInstance.getConfig(), "Marker Color", stamp.getColor(), stamp.getID() + "DefaultColor");
 		}
+
 		if(keyCode == KeyEvent.VK_ESCAPE)
 			editorInstance.kill();
 
@@ -189,6 +193,11 @@ public class EditorListener implements MouseListener, MouseMotionListener, Mouse
 	@Override
 	public void keyReleased(KeyEvent keyEvent) {
 		editorInstance.input.setKey(keyEvent.getKeyCode(), false);
+		if(openColorChooser) {
+			//This fixes an issue with the ALT key getting "stuck" since the key up event is not beeing received if the color window is in the front.
+			openColorChooser = false;
+			new ColorChooser(editorInstance.getConfig(), "Marker Color", editorInstance.getSelectedStamp().getColor(), editorInstance.getSelectedStamp().getID() + "DefaultColor");
+		}
 	}
 
 	@Override

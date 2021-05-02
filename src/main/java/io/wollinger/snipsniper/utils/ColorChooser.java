@@ -28,15 +28,17 @@ public class ColorChooser extends JFrame{
         instance = this;
         this.config = config;
 		this.color = color;
-		this.setTitle(title);
 		this.configKey = configKey;
-		this.setIconImage(Icons.icon_taskbar);
+
+        setTitle(title);
+        setIconImage(Icons.icon_taskbar);
+		setAlwaysOnTop(true);
 		init();
 	}
 	
 	public void close() {
 		color.setColor(jcc.getColor());
-		this.dispose();
+		dispose();
 	}
 
 	public void save() {
@@ -45,7 +47,7 @@ public class ColorChooser extends JFrame{
             config.set(configKey, Utils.rgb2hex(color.getColor()));
             config.save();
         }
-        this.dispose();
+        dispose();
     }
 	
 	void init() {
@@ -74,14 +76,14 @@ public class ColorChooser extends JFrame{
         mainPanel.add(colorPanel);
         mainPanel.add(submitButtonPanel);
         
-        this.add(mainPanel);
-        this.setResizable(false);
-        this.setFocusable(true);
+        add(mainPanel);
+        setResizable(false);
+        setFocusable(true);
         
-        this.setAlwaysOnTop(true);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
-        this.pack();
+        pack();
         if(configKey != null) {
             save.setPreferredSize(new Dimension(this.getWidth() / 4, 50));
             submitButtonPanel.add(save);
@@ -89,10 +91,10 @@ public class ColorChooser extends JFrame{
         submit.setPreferredSize(new Dimension(this.getWidth()/2, 50));
         submitButtonPanel.add(submit);
 
-        this.pack();
+        pack();
         int w = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth();
 		int h = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getHeight();
-		this.setLocation((w/2) - this.getWidth()/2, (h/2) - this.getHeight()/2);
-        this.setVisible(true);
+		setLocation((w/2) - getWidth()/2, (h/2) - getHeight()/2);
+        setVisible(true);
 	}
 }
