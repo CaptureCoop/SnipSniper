@@ -1,4 +1,4 @@
-package io.wollinger.snipsniper.capturewindow;
+package io.wollinger.snipsniper.utils;
 
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;

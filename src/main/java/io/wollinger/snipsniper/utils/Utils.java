@@ -1,7 +1,6 @@
 package io.wollinger.snipsniper.utils;
 
 import io.wollinger.snipsniper.Config;
-import io.wollinger.snipsniper.capturewindow.ImageSelection;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
