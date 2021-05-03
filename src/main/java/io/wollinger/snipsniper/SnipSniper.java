@@ -108,7 +108,8 @@ public final class SnipSniper {
 					JOptionPane.showMessageDialog(null, "Charset change failed. Please try using a different Java Version! (Java 1.8 / 8)");
 					exit();
 				}
-				SnipSniper.restartApplication(wantedEncoding);
+				if(!Utils.restartApplication(wantedEncoding, args))
+					LogManager.log(ID, "Restart failed. Possibly not running in jar. Starting with charset <" + Charset.defaultCharset() + ">", Level.WARNING);
 			} catch (Exception exception) {
 				exception.printStackTrace();
 			}
@@ -217,28 +218,6 @@ public final class SnipSniper {
 			profilesFolder = mainFolder + "/cfg/";
 			logFolder = mainFolder + "/logs/";
 		}
-	}
-
-	//https://stackoverflow.com/questions/4159802/how-can-i-restart-a-java-application
-	public static void restartApplication(String encoding) throws URISyntaxException, IOException {
-		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-		final File currentJar = new File(SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-
-		if(!currentJar.getName().endsWith(".jar"))
-			return;
-
-		final ArrayList<String> command = new ArrayList<>();
-		command.add(javaBin);
-		if(encoding != null && !encoding.isEmpty())
-			command.add("-Dfile.encoding=" + encoding);
-		command.add("-jar");
-		command.add(currentJar.getPath());
-		command.add("-r");
-		Collections.addAll(command, SnipSniper.args);
-
-		final ProcessBuilder builder = new ProcessBuilder(command);
-		builder.start();
-		exit();
 	}
 
 	public static void exit() {

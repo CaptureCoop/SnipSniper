@@ -1,6 +1,7 @@
 package io.wollinger.snipsniper.utils;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.SnipSniper;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,8 +11,11 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 
 public class Utils {
@@ -29,8 +33,27 @@ public class Utils {
 		out.println(formatArgs(message, args));
 	}
 
-	public static Dimension getScaledDimension(BufferedImage image, Dimension boundary) {
-		return Utils.getScaledDimension(new Dimension(image.getWidth(), image.getHeight()), boundary);
+	//https://stackoverflow.com/questions/4159802/how-can-i-restart-a-java-application
+	public static boolean restartApplication(String encoding, String... args) throws URISyntaxException, IOException {
+		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+		final File currentJar = new File(SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+
+		if(!currentJar.getName().endsWith(".jar"))
+			return false;
+
+		final ArrayList<String> command = new ArrayList<>();
+		command.add(javaBin);
+		if(encoding != null && !encoding.isEmpty())
+			command.add("-Dfile.encoding=" + encoding);
+		command.add("-jar");
+		command.add(currentJar.getPath());
+		command.add("-r");
+		Collections.addAll(command, args);
+
+		final ProcessBuilder builder = new ProcessBuilder(command);
+		builder.start();
+		SnipSniper.exit();
+		return true;
 	}
 
 	public static Image getImageFromClipboard() {
@@ -43,6 +66,10 @@ public class Utils {
 			}
 		}
 		return null;
+	}
+
+	public static Dimension getScaledDimension(BufferedImage image, Dimension boundary) {
+		return Utils.getScaledDimension(new Dimension(image.getWidth(), image.getHeight()), boundary);
 	}
 
 	//https://stackoverflow.com/a/10245583
