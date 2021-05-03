@@ -3,8 +3,6 @@ package io.wollinger.snipsniper.configwindow;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -46,10 +44,10 @@ public class ConfigWindow extends JFrame implements WindowListener{
 	
 	public ConfigWindow(Sniper sniperInstance) {
 		this.sniperInstance = sniperInstance;
-		this.addWindowListener(this);
-		this.setSize(512,512);
-		this.setTitle(LangManager.getItem("config_label_config"));
-		this.setIconImage(Icons.icon_taskbar);
+		addWindowListener(this);
+		setSize(512,512);
+		setTitle(LangManager.getItem("config_label_config"));
+		setIconImage(Icons.icon_taskbar);
 
 		hotKeyButton = new HotKeyButton(sniperInstance.cfg.getString("hotkey"));
 		saveToDisk.setSelected(sniperInstance.cfg.getBool("saveToDisk"));
@@ -127,17 +125,17 @@ public class ConfigWindow extends JFrame implements WindowListener{
 		row7.add(saveButton);
 		options.add(row7);
 		
-		this.setMinimumSize(new Dimension(512,256));
-		this.add(options);
-		this.pack();
-		this.setVisible(true);
+		setMinimumSize(new Dimension(512,256));
+		add(options);
+		pack();
+		setVisible(true);
 		int w = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth();
 		int h = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getHeight();
-		this.setLocation((w/2) - this.getWidth()/2, (h/2) - this.getHeight()/2);
+		setLocation((w/2) - getWidth()/2, (h/2) - getHeight()/2);
 	}
 	
 	void msgError(String msg) {
-		JOptionPane.showMessageDialog(null, msg,LangManager.getItem("config_sanitation_error"), JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, msg,LangManager.getItem("config_sanitation_error"), JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public void save() {
