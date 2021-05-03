@@ -5,12 +5,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
@@ -19,6 +16,7 @@ import javax.swing.*;
 import io.wollinger.snipsniper.editorwindow.EditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
+import io.wollinger.snipsniper.viewer.ViewerWindow;
 import org.apache.commons.lang3.SystemUtils;
 
 public final class SnipSniper {
@@ -40,8 +38,6 @@ public final class SnipSniper {
 
 	private static Config config;
 
-	private static String[] args;
-
 	private final static String ID = "MAIN";
 
 	public static void start(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly) {
@@ -57,8 +53,7 @@ public final class SnipSniper {
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
-		SnipSniper.args = args;
-
+	
 		if(saveInDocuments)
 			SnipSniper.setSaveLocationToDocuments();
 		else
@@ -168,6 +163,11 @@ public final class SnipSniper {
 			int x = (int) (screenSize.getWidth() / 2 - width / 2);
 			int y = (int) (screenSize.getHeight() / 2 - height / 2);
 			new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, path, false, true);
+		} else if(cmdline.isViewerOnly()) {
+			File file = null;
+			if(cmdline.getViewerFile() != null && !cmdline.getViewerFile().isEmpty())
+				file = new File(cmdline.getViewerFile());
+			new ViewerWindow(file);
 		} else {
 			resetProfiles();
 		}
