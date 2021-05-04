@@ -9,6 +9,8 @@ public class CommandLineHelper {
     private boolean isDebug = false;
     private boolean editorOnly = false;
     private String editorFile;
+    private boolean viewerOnly = false;
+    private String viewerFile;
 
     public CommandLineHelper() {
 
@@ -52,6 +54,11 @@ public class CommandLineHelper {
                 case "-editor":
                     editorOnly = true;
                     if(args.length > index +1) editorFile = args[index + 1];
+                    break;
+                case "-viewer":
+                    viewerOnly = true;
+                    if(args.length > index +1) viewerFile = args[index + 1];
+                    break;
             }
             index++;
         }
@@ -85,6 +92,14 @@ public class CommandLineHelper {
 
     public String getEditorFile() {
         return editorFile;
+    }
+
+    public boolean isViewerOnly() {
+        return viewerOnly;
+    }
+
+    public String getViewerFile() {
+        return viewerFile;
     }
 
 }

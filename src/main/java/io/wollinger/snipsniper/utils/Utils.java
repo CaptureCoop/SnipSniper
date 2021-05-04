@@ -33,6 +33,21 @@ public class Utils {
 		out.println(formatArgs(message, args));
 	}
 
+	public static BufferedImage getDragPasteImage(BufferedImage icon, String text) {
+		BufferedImage dropImage = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = dropImage.getGraphics();
+		g.setColor(Color.WHITE);
+		g.fillRect(0,0,dropImage.getWidth(), dropImage.getHeight());
+		g.setColor(Color.BLACK);
+		String string = text;
+		g.setFont(new Font("Arial", Font.BOLD, 20));
+		int width = g.getFontMetrics().stringWidth(string);
+		g.drawString(string, dropImage.getWidth()/2 - width/2, dropImage.getHeight()/2);
+		g.drawImage(icon, dropImage.getWidth()/3,dropImage.getHeight()/10, dropImage.getWidth()/3, dropImage.getHeight()/3, null);
+		g.dispose();
+		return dropImage;
+	}
+
 	//https://stackoverflow.com/questions/4159802/how-can-i-restart-a-java-application
 	public static boolean restartApplication(String encoding, String... args) throws URISyntaxException, IOException {
 		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
@@ -54,6 +69,15 @@ public class Utils {
 		builder.start();
 		SnipSniper.exit();
 		return true;
+	}
+
+	public static String getFileExtension(File file) {
+		String name = file.getName();
+		int lastIndexOf = name.lastIndexOf(".");
+		if (lastIndexOf == -1) {
+			return ""; // empty extension
+		}
+		return name.substring(lastIndexOf);
 	}
 
 	public static Image getImageFromClipboard() {

@@ -16,6 +16,7 @@ import javax.swing.*;
 import io.wollinger.snipsniper.editorwindow.EditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
+import io.wollinger.snipsniper.viewer.ViewerWindow;
 import org.apache.commons.lang3.SystemUtils;
 
 public final class SnipSniper {
@@ -36,10 +37,10 @@ public final class SnipSniper {
 	private static boolean isDemo = false;
 
 	private static Config config;
-	
+
 	private final static String ID = "MAIN";
 
-	public static void start(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly) {
+	public static void start(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly, boolean isViewerOnly) {
 		if(!SystemUtils.IS_OS_WINDOWS)
 			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
 
@@ -130,7 +131,7 @@ public final class SnipSniper {
 		}
 
 		if(cmdline.isEditorOnly() || isEditorOnly) {
-			Config config = new Config("editor.cfg", "CFGE", "profile_defaults.cfg");
+			Config config =  EditorWindow.getStandaloneEditorConfig();
 			config.save();
 
 			boolean fileExists;
@@ -162,6 +163,20 @@ public final class SnipSniper {
 			int x = (int) (screenSize.getWidth() / 2 - width / 2);
 			int y = (int) (screenSize.getHeight() / 2 - height / 2);
 			new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, path, false, true);
+		} else if(cmdline.isViewerOnly() || isViewerOnly) {
+			File file = null;
+			if(cmdline.getViewerFile() != null && !cmdline.getViewerFile().isEmpty())
+				file = new File(cmdline.getViewerFile());
+
+			if(isViewerOnly) {
+				if(args.length > 0) {
+					file = new File(args[0]);
+					if(!file.exists())
+						file = null;
+				}
+			}
+
+			new ViewerWindow(file);
 		} else {
 			resetProfiles();
 		}
