@@ -56,6 +56,15 @@ public class Utils {
 		return true;
 	}
 
+	public static String getFileExtension(File file) {
+		String name = file.getName();
+		int lastIndexOf = name.lastIndexOf(".");
+		if (lastIndexOf == -1) {
+			return ""; // empty extension
+		}
+		return name.substring(lastIndexOf);
+	}
+
 	public static Image getImageFromClipboard() {
 		Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
 		if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
