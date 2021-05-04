@@ -49,15 +49,15 @@ goto done
 
 :create_install
 echo Creating installer
-if "%2"=="debug" set debug=--add-launcher SnipSniperDebug=jpackage_static_debug.txt
-%jpackage% @jpackage_defaults.txt --main-class io.wollinger.snipsniper.main.MainStatic --app-version @src/main/resources/version.txt --type exe --add-launcher SnipSniperEditor=jpackage_static_editor.txt %debug% --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut
+if "%2"=="debug" set debug=--add-launcher SnipSniperDebug=jpackage\jpackage_static_debug.txt
+%jpackage% @jpackage\jpackage_defaults.txt --main-class io.wollinger.snipsniper.main.MainStatic --app-version @src/main/resources/version.txt --type exe --add-launcher SnipSniperEditor=jpackage\jpackage_static_editor.txt %debug% --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut
 rename release\SnipSniper*.exe "SnipSniper_Installer.exe"
 goto :EOF
 
 :create_portable
 echo Creating portable
-if "%2"=="debug" set debug=--add-launcher SnipSniperDebug=jpackage_portable_debug.txt
-%jpackage% @jpackage_defaults.txt --main-class io.wollinger.snipsniper.main.MainPortable --app-version @src/main/resources/version.txt --type app-image --add-launcher SnipSniperEditor=jpackage_portable_editor.txt %debug%
+if "%2"=="debug" set debug=--add-launcher SnipSniperDebug=jpackage\jpackage_portable_debug.txt
+%jpackage% @jpackage\jpackage_defaults.txt --main-class io.wollinger.snipsniper.main.MainPortable --app-version @src/main/resources/version.txt --type app-image --add-launcher SnipSniperEditor=jpackage\jpackage_portable_editor.txt %debug%
 rename release\SnipSniper "SnipSniper_Portable"
 goto :EOF
 
