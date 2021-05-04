@@ -40,7 +40,7 @@ public final class SnipSniper {
 
 	private final static String ID = "MAIN";
 
-	public static void start(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly) {
+	public static void start(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly, boolean isViewerOnly) {
 		if(!SystemUtils.IS_OS_WINDOWS)
 			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
 
@@ -163,10 +163,19 @@ public final class SnipSniper {
 			int x = (int) (screenSize.getWidth() / 2 - width / 2);
 			int y = (int) (screenSize.getHeight() / 2 - height / 2);
 			new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, path, false, true);
-		} else if(cmdline.isViewerOnly()) {
+		} else if(cmdline.isViewerOnly() || isViewerOnly) {
 			File file = null;
 			if(cmdline.getViewerFile() != null && !cmdline.getViewerFile().isEmpty())
 				file = new File(cmdline.getViewerFile());
+
+			if(isViewerOnly) {
+				if(args.length > 0) {
+					file = new File(args[0]);
+					if(!file.exists())
+						file = null;
+				}
+			}
+
 			new ViewerWindow(file);
 		} else {
 			resetProfiles();

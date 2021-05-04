@@ -2,8 +2,8 @@ package io.wollinger.snipsniper.main;
 
 import io.wollinger.snipsniper.SnipSniper;
 
-public class MainPortableEditor {
+public class MainPortableViewer {
     public static void main(String[] args) {
-        SnipSniper.start(args, false, false, true, false);
+        SnipSniper.start(args, false, false, false, true);
     }
 }
