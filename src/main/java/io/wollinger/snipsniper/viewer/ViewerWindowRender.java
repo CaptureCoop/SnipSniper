@@ -8,6 +8,7 @@ public class ViewerWindowRender extends JPanel {
 
     public ViewerWindowRender(ViewerWindow viewerWindow) {
         this.viewerWindow = viewerWindow;
+        setDropTarget(new ViewerWindowDropTarget(viewerWindow));
     }
 
     public void paint(Graphics g) {

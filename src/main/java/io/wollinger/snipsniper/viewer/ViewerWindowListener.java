@@ -23,6 +23,8 @@ public class ViewerWindowListener implements KeyListener {
                 viewerWindow.slideImage(1);
         } else if(keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
             viewerWindow.openEditor();
+        } else if(keyEvent.getKeyCode() == KeyEvent.VK_F5) {
+            viewerWindow.refreshFolder();
         }
     }
 

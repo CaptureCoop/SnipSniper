@@ -121,6 +121,13 @@ public class ViewerWindow extends JFrame {
         return image;
     }
 
+    public void setImage(File file) {
+        currentFile = file;
+        initImage(file);
+        refreshFolder();
+        refreshTitle();
+    }
+
     public boolean isLocked() {
         return locked;
     }
