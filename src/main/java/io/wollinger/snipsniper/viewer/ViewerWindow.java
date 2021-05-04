@@ -43,6 +43,10 @@ public class ViewerWindow extends JFrame {
             //TODO: Make this translation
             image = Utils.getDragPasteImage(Icons.icon, "Drop image here!");
         }
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation((int)(screenSize.getWidth()/2 - getWidth()/2), (int)(screenSize.getHeight()/2 - getHeight()/2));
+
         setVisible(true);
     }
 
