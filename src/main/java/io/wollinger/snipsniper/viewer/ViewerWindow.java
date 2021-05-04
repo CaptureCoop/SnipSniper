@@ -39,6 +39,8 @@ public class ViewerWindow extends JFrame {
         if(file != null) {
             refreshFolder();
             initImage(currentFile);
+        } else {
+            image = Utils.getDragPasteImage();
         }
         setVisible(true);
     }
