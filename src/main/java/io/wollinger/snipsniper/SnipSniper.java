@@ -5,12 +5,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
@@ -39,9 +36,7 @@ public final class SnipSniper {
 	private static boolean isDemo = false;
 
 	private static Config config;
-
-	private static String[] args;
-
+	
 	private final static String ID = "MAIN";
 
 	public static void start(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly) {
@@ -57,8 +52,7 @@ public final class SnipSniper {
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
-		SnipSniper.args = args;
-
+	
 		if(saveInDocuments)
 			SnipSniper.setSaveLocationToDocuments();
 		else
