@@ -1,5 +1,8 @@
 package io.wollinger.snipsniper.viewer;
 
+import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.editorwindow.EditorWindow;
+import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.Utils;
 
 import javax.imageio.ImageIO;
@@ -10,17 +13,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class ViewerWindow extends JFrame {
 
     private File currentFile;
-    private ArrayList<File> folder;
+    private ArrayList<String> files = new ArrayList<>();
 
     private BufferedImage image;
 
     private List<String> extensions = Arrays.asList(".png", ".jpg", ".jpeg");
-    //TODO: add more extensions
+
+    private boolean locked = false;
 
     public ViewerWindow(File file) {
         currentFile = file;
@@ -28,10 +33,12 @@ public class ViewerWindow extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         refreshTitle();
         setSize(512,512);
+        setIconImage(Icons.icon);
         add(new ViewerWindowRender(this));
+        addKeyListener(new ViewerWindowListener(this));
         if(file != null) {
             refreshFolder();
-            initImage(file);
+            initImage(currentFile);
         }
         setVisible(true);
     }
@@ -45,20 +52,48 @@ public class ViewerWindow extends JFrame {
 
     public void refreshFolder() {
         File path = new File(currentFile.getAbsolutePath().replace(currentFile.getName(), ""));
-        folder = new ArrayList<>(Arrays.asList(path.listFiles()));
-        ArrayList<File> filesToRemove = new ArrayList<>();
+        ArrayList<File> folder = new ArrayList<>(Arrays.asList(path.listFiles()));
+        files.clear();
         for(File cFile : folder) {
-            if(!extensions.contains(Utils.getFileExtension(cFile)))
-                filesToRemove.add(cFile);
+            if(extensions.contains(Utils.getFileExtension(cFile).toLowerCase()))
+                files.add(cFile.getAbsolutePath());
         }
-        for(File cFile : filesToRemove)
-            folder.remove(cFile);
+    }
+
+    public void slideImage(int direction) {
+        locked = true;
+        int index = files.indexOf(currentFile.getAbsolutePath());
+        if(direction == -1) {
+            if(index > 0)
+                index--;
+            else
+                index = files.size()-1;
+        } else if(direction == 1) {
+            if(index < files.size()-1)
+                index++;
+            else
+                index = 0;
+        }
+        File newFile = new File(files.get(index));
+        if(!currentFile.getAbsolutePath().equals(newFile.getAbsolutePath())) {
+            currentFile = newFile;
+            initImage(currentFile);
+            refreshTitle();
+        }
+        locked = false;
+    }
+
+    public void openEditor() {
+        Config config = EditorWindow.getStandaloneEditorConfig();
+        config.save();
+        new EditorWindow("EDIT", image, (int)getLocation().getX(), (int)getLocation().getY(), "SnipSniper Editor", config, false, currentFile.getAbsolutePath(), false, true);
+        if(config.getBool("closeViewerOnOpenEditor"))
+            dispose();
     }
 
     public void initImage(File file) {
         if(file.exists()) {
-            //TODO: Handle file not existing / not beeing image
-            if(!extensions.contains(Utils.getFileExtension(file)))
+            if(!extensions.contains(Utils.getFileExtension(file).toLowerCase()))
                 return;
 
             try {
@@ -84,6 +119,10 @@ public class ViewerWindow extends JFrame {
 
     public BufferedImage getImage() {
         return image;
+    }
+
+    public boolean isLocked() {
+        return locked;
     }
 
 }
