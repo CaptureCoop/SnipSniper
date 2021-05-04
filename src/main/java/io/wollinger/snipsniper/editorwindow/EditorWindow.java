@@ -80,7 +80,8 @@ public class EditorWindow extends JFrame{
 		pack();
 
 		if(img == null) {
-			setImage(Utils.getDragPasteImage(), false);
+			//TODO: Make this a translation
+			setImage(Utils.getDragPasteImage(Icons.icon_editor, "Drop image here or use CTRL + V to paste one!"), false);
 		} else {
 			start();
 		}

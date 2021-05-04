@@ -40,7 +40,8 @@ public class ViewerWindow extends JFrame {
             refreshFolder();
             initImage(currentFile);
         } else {
-            image = Utils.getDragPasteImage();
+            //TODO: Make this translation
+            image = Utils.getDragPasteImage(Icons.icon, "Drop image here!");
         }
         setVisible(true);
     }

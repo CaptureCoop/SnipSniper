@@ -33,17 +33,17 @@ public class Utils {
 		out.println(formatArgs(message, args));
 	}
 
-	public static BufferedImage getDragPasteImage() {
+	public static BufferedImage getDragPasteImage(BufferedImage icon, String text) {
 		BufferedImage dropImage = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = dropImage.getGraphics();
 		g.setColor(Color.WHITE);
 		g.fillRect(0,0,dropImage.getWidth(), dropImage.getHeight());
 		g.setColor(Color.BLACK);
-		String string = "Drop image here or use CTRL + V to paste one!";
+		String string = text;
 		g.setFont(new Font("Arial", Font.BOLD, 20));
 		int width = g.getFontMetrics().stringWidth(string);
 		g.drawString(string, dropImage.getWidth()/2 - width/2, dropImage.getHeight()/2);
-		g.drawImage(Icons.icon_editor, dropImage.getWidth()/3,dropImage.getHeight()/10, dropImage.getWidth()/3, dropImage.getHeight()/3, null);
+		g.drawImage(icon, dropImage.getWidth()/3,dropImage.getHeight()/10, dropImage.getWidth()/3, dropImage.getHeight()/3, null);
 		g.dispose();
 		return dropImage;
 	}
