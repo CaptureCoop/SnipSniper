@@ -237,4 +237,8 @@ public class EditorWindow extends JFrame{
 		return id;
 	}
 
+	public static Config getStandaloneEditorConfig() {
+		return new Config("editor.cfg", "CFGE", "profile_defaults.cfg");
+	}
+
 }

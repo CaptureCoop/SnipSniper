@@ -131,7 +131,7 @@ public final class SnipSniper {
 		}
 
 		if(cmdline.isEditorOnly() || isEditorOnly) {
-			Config config = new Config("editor.cfg", "CFGE", "profile_defaults.cfg");
+			Config config =  EditorWindow.getStandaloneEditorConfig();
 			config.save();
 
 			boolean fileExists;
