@@ -19,7 +19,7 @@ public class Icons {
 		try {
 			icon = ImageIO.read(SnipSniper.class.getResource("/res/icon.png"));
 			icon_taskbar = ImageIO.read(SnipSniper.class.getResource("/res/SnSn.png"));
-			icon_editor = ImageIO.read(SnipSniper.class.getResource("/res/editor.png"));
+			icon_editor = ImageIO.read(SnipSniper.class.getResource("/res/SnSnEd.png"));
 			icon_viewer = ImageIO.read(SnipSniper.class.getResource("/res/SnSnVi.png"));
 			icons = new BufferedImage[8];
 			alt_icons = new BufferedImage[8];
