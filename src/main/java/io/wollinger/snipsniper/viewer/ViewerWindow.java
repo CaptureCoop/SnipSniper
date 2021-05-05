@@ -33,7 +33,7 @@ public class ViewerWindow extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         refreshTitle();
         setSize(512,512);
-        setIconImage(Icons.icon);
+        setIconImage(Icons.icon_viewer);
         add(new ViewerWindowRender(this));
         addKeyListener(new ViewerWindowListener(this));
         if(file != null) {
@@ -41,7 +41,7 @@ public class ViewerWindow extends JFrame {
             initImage(currentFile);
         } else {
             //TODO: Make this translation
-            image = Utils.getDragPasteImage(Icons.icon, "Drop image here!");
+            image = Utils.getDragPasteImage(Icons.icon_viewer, "Drop image here!");
         }
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
