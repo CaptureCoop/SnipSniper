@@ -40,7 +40,7 @@ public class Utils {
 		g.fillRect(0,0,dropImage.getWidth(), dropImage.getHeight());
 		g.setColor(Color.BLACK);
 		String string = text;
-		g.setFont(new Font("Arial", Font.BOLD, 20));
+		g.setFont(new Font("Meiryo", Font.BOLD, 20));
 		int width = g.getFontMetrics().stringWidth(string);
 		g.drawString(string, dropImage.getWidth()/2 - width/2, dropImage.getHeight()/2);
 		g.drawImage(icon, dropImage.getWidth()/3,dropImage.getHeight()/10, dropImage.getWidth()/3, dropImage.getHeight()/3, null);
