@@ -15,8 +15,6 @@ import io.wollinger.snipsniper.utils.Utils;
 import org.w3c.dom.css.Rect;
 
 public class EditorWindow extends JFrame{
-	private static final long serialVersionUID = -7363672331227971815L;
-
 	private final String id;
 	private BufferedImage img;
 	private final Config config;

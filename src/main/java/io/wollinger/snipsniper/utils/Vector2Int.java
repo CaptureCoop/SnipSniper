@@ -3,7 +3,6 @@ package io.wollinger.snipsniper.utils;
 import java.awt.Point;
 
 public class Vector2Int {
-
 	public int x;
 	public int y;
 	

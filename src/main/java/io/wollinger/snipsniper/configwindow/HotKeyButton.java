@@ -10,8 +10,6 @@ import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseListener;
 
 public class HotKeyButton extends JButton implements NativeKeyListener, NativeMouseListener {
-	private static final long serialVersionUID = 8834166293141062833L;
-	
 	private boolean listening = false;
 	public int hotkey;
 	private final HotKeyButton instance;

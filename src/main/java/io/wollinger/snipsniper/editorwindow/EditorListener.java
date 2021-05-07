@@ -21,7 +21,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class EditorListener implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
-	
 	EditorWindow editorInstance;
 
 	ArrayList<BufferedImage> history = new ArrayList<>();

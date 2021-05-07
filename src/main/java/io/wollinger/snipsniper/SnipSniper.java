@@ -20,7 +20,6 @@ import io.wollinger.snipsniper.viewer.ViewerWindow;
 import org.apache.commons.lang3.SystemUtils;
 
 public final class SnipSniper {
-
 	private static String VERSION;
 	
 	private static String jarFolder;

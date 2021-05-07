@@ -14,7 +14,6 @@ import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 
 public class btnAbout extends MenuItem{
-	private static final long serialVersionUID = 8081581034217628950L;
 	private final Sniper sniper;
 
 	private static String html;

@@ -19,21 +19,19 @@ import io.wollinger.snipsniper.utils.*;
 import org.jnativehook.GlobalScreen;
 
 public class ConfigWindow extends JFrame implements WindowListener{
-	private static final long serialVersionUID = -1627369445259468935L;
-	
-	HotKeyButton hotKeyButton;
-	JCheckBox saveToDisk = new JCheckBox();
-	JCheckBox copyToClipboard = new JCheckBox();
-	JTextField borderSize = new JTextField();
-	JTextField pictureLocation = new JTextField();
-	PBRColor borderColor;
-	JTextField snipeDelay = new JTextField();
-	JCheckBox openEditor = new JCheckBox();
-	
-	int maxBorder = 999;
+	private HotKeyButton hotKeyButton;
+	private JCheckBox saveToDisk = new JCheckBox();
+	private JCheckBox copyToClipboard = new JCheckBox();
+	private JTextField borderSize = new JTextField();
+	private JTextField pictureLocation = new JTextField();
+	private PBRColor borderColor;
+	private JTextField snipeDelay = new JTextField();
+	private JCheckBox openEditor = new JCheckBox();
 
-	ColorChooser colorChooser = null;
-	Sniper sniperInstance;
+	private int maxBorder = 999;
+
+	private ColorChooser colorChooser = null;
+	private Sniper sniperInstance;
 	
 	public JLabel createJLabel(String title, int horizontalAlignment, int verticalAlignment) {
 		JLabel jlabel = new JLabel(title);

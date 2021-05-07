@@ -3,7 +3,6 @@ package io.wollinger.snipsniper.utils;
 import io.wollinger.snipsniper.SnipSniper;
 
 public class CommandLineHelper {
-
     private String language;
     private boolean isRestartedInstance = false;
     private boolean isDebug = false;

@@ -5,8 +5,6 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 public class EditorWindowRender extends JPanel{
-	private static final long serialVersionUID = 4283800435207434147L;
-	
 	private final EditorWindow editorWnd;
 	
 	public EditorWindowRender(EditorWindow wnd) {

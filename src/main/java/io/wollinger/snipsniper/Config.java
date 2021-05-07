@@ -15,7 +15,6 @@ import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
 
 public class Config {
-
 	private final HashMap <String, String> settings = new HashMap<>();
 	private final HashMap <String, String> defaults = new HashMap<>();
 

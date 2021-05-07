@@ -20,10 +20,8 @@ import io.wollinger.snipsniper.utils.Utils;
 import io.wollinger.snipsniper.editorwindow.EditorWindow;
 
 public class CaptureWindow extends JFrame implements WindowListener{
-	private static final long serialVersionUID = 3129624729137795417L;
-	private final RenderingHints qualityHints;
-
 	Sniper sniperInstance;
+	private final RenderingHints qualityHints;
 
 	Point startPoint;
 	Point startPointTotal;
