@@ -1,7 +1,6 @@
 package io.wollinger.snipsniper.SnipScope;
 
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.Utils;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -9,10 +8,12 @@ import java.awt.event.*;
 
 public class SnipScopeListener implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener{
     private final SnipScopeWindow snipScopeWindow;
+    private final InputContainer input;
     private Point lastPoint;
 
     public SnipScopeListener(SnipScopeWindow snipScopeWindow) {
         this.snipScopeWindow = snipScopeWindow;
+        input = snipScopeWindow.getInputContainer();
         snipScopeWindow.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
                 snipScopeWindow.resizeTrigger();
@@ -27,19 +28,16 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        InputContainer input = snipScopeWindow.getInputContainer();
         input.setKey(keyEvent.getKeyCode(), true);
         if(input.isKeyPressed(KeyEvent.VK_R)) {
-            snipScopeWindow.setPosition(new Vector2Int());
-            snipScopeWindow.setZoom(1);
-            snipScopeWindow.setZoomOffset(new Vector2Int());
+            snipScopeWindow.resetZoom();
         }
         snipScopeWindow.repaint();
     }
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        snipScopeWindow.getInputContainer().setKey(keyEvent.getKeyCode(), false);
+        input.setKey(keyEvent.getKeyCode(), false);
     }
 
     //Mouse listener
@@ -65,7 +63,7 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
-        if (snipScopeWindow.getInputContainer().isKeyPressed(KeyEvent.VK_SPACE)) {
+        if (input.isKeyPressed(KeyEvent.VK_SPACE)) {
             if(lastPoint == null) lastPoint = mouseEvent.getPoint();
             double x = lastPoint.getX() - mouseEvent.getPoint().getX();
             double y = lastPoint.getY() - mouseEvent.getPoint().getY();
@@ -85,11 +83,10 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
+        float oldZoom = snipScopeWindow.getZoom();
         if(mouseWheelEvent.getWheelRotation() == -1) {
-            float oldZoom = snipScopeWindow.getZoom();
             snipScopeWindow.setZoom(oldZoom+0.1F);
         } else if(mouseWheelEvent.getWheelRotation() == 1) {
-            float oldZoom = snipScopeWindow.getZoom();
             if(oldZoom >= 0.2F)
                 snipScopeWindow.setZoom(oldZoom-0.1F);
         }
