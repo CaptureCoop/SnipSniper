@@ -15,6 +15,10 @@ public class SCEditorWindow extends SnipScopeWindow {
 
     public SCEditorWindow(String id, BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         super(image);
+
+        if(image == null)
+            init(Utils.getDragPasteImage(Icons.icon_editor, "Drop image here or use CTRL + V to paste one!"));
+
         this.id = id;
         this.config = config;
 
