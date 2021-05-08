@@ -1,7 +1,7 @@
-package io.wollinger.snipsniper.editorwindow.stamps;
+package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
-import io.wollinger.snipsniper.editorwindow.EditorWindow;
+import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 
@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class SimpleBrush implements IStamp {
-    private final EditorWindow editorWindow;
+    private final SCEditorWindow editorWindow;
 
     private int size;
     private int speed;
@@ -17,7 +17,7 @@ public class SimpleBrush implements IStamp {
     private PBRColor color;
     private final Config config;
 
-    public SimpleBrush(EditorWindow editorWindow) {
+    public SimpleBrush(SCEditorWindow editorWindow) {
         this.editorWindow = editorWindow;
         this.config = editorWindow.getConfig();
         reset();

@@ -1,7 +1,6 @@
 package io.wollinger.snipsniper.viewer;
 
 import io.wollinger.snipsniper.Config;
-import io.wollinger.snipsniper.editorwindow.EditorWindow;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.Utils;
@@ -92,7 +91,7 @@ public class ViewerWindow extends JFrame {
     }
 
     public void openEditor() {
-        Config config = EditorWindow.getStandaloneEditorConfig();
+        Config config = SCEditorWindow.getStandaloneEditorConfig();
         config.save();
         new SCEditorWindow("EDIT", image, (int)getLocation().getX(), (int)getLocation().getY(), "SnipSniper Editor", config, false, currentFile.getAbsolutePath(), false, true);
         if(config.getBool("closeViewerOnOpenEditor"))

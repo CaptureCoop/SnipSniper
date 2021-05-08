@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import io.wollinger.snipsniper.editorwindow.EditorWindow;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
@@ -131,7 +130,7 @@ public final class SnipSniper {
 		}
 
 		if(cmdline.isEditorOnly() || isEditorOnly) {
-			Config config =  EditorWindow.getStandaloneEditorConfig();
+			Config config =  SCEditorWindow.getStandaloneEditorConfig();
 			config.save();
 
 			boolean fileExists;

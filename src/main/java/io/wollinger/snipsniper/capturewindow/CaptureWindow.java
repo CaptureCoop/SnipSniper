@@ -18,7 +18,6 @@ import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
-import io.wollinger.snipsniper.editorwindow.EditorWindow;
 
 public class CaptureWindow extends JFrame implements WindowListener{
 	Sniper sniperInstance;

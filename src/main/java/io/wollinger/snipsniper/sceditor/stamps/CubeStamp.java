@@ -1,7 +1,7 @@
-package io.wollinger.snipsniper.editorwindow.stamps;
+package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
-import io.wollinger.snipsniper.editorwindow.EditorWindow;
+import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class CubeStamp implements IStamp{
-    private final EditorWindow editor;
+    private final SCEditorWindow editor;
     private int width;
     private int height;
 
@@ -23,7 +23,7 @@ public class CubeStamp implements IStamp{
     private PBRColor color;
     private final Config config;
 
-    public CubeStamp(EditorWindow editor) {
+    public CubeStamp(SCEditorWindow editor) {
         this.editor = editor;
         this.config = editor.getConfig();
         reset();
