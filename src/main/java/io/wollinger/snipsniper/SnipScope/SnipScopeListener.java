@@ -84,13 +84,9 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
             double x = lastPoint.getX() - e.getPoint().getX();
             double y = lastPoint.getY() - e.getPoint().getY();
 
-
             Vector2Int oldPos = snipScopeWindow.getPosition();
             snipScopeWindow.setPosition(new Vector2Int(oldPos.x + x, oldPos.y +y));
 
-            System.out.println(snipScopeWindow.getPosition());
-
-            System.out.println(x + ", " + y);
             lastPoint = e.getPoint();
             snipScopeWindow.repaint();
         }
@@ -98,7 +94,11 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
+        Graphics g = snipScopeWindow.getImage().getGraphics();
+        Vector2Int point = snipScopeWindow.getPointOnImage(e.getPoint());
+        g.fillRect(point.x, point.y, 50,50);
+        g.dispose();
+        snipScopeWindow.repaint();
     }
 
     //Mouse wheel listener

@@ -2,6 +2,7 @@ package io.wollinger.snipsniper.SnipScope;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.InputContainer;
+import io.wollinger.snipsniper.utils.Utils;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import javax.swing.*;
@@ -51,6 +52,29 @@ public class SnipScopeWindow extends JFrame {
         modY = (int)(offsetY * getZoom() - offsetY);
 
         repaint();
+    }
+
+    public Vector2Int getPointOnImage(Point point) {
+        int originalX = (int)point.getX();
+        int originalY = (int)point.getY();
+
+        float imageWidth = image.getWidth();
+        float imageHeight = image.getHeight();
+
+        float contentWidth = getContentPane().getWidth();
+        float contentHeight = getContentPane().getHeight();
+
+        float differenceWidth = imageWidth / contentWidth;
+        float differenceHeight = imageHeight / contentHeight;
+
+        originalX *= differenceWidth;
+        originalY *= differenceHeight;
+
+
+
+        System.out.println(Utils.formatArgs("{0}, {1}", originalX, originalY));
+
+        return new Vector2Int(originalX, originalY);
     }
 
     public BufferedImage getImage() {
