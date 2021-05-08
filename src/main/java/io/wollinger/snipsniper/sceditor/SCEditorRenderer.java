@@ -15,5 +15,6 @@ public class SCEditorRenderer extends SnipScopeRenderer {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        scEditorWindow.getSelectedStamp().render(g, scEditorWindow.getInputContainer(), false, false, -1);
     }
 }
