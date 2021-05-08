@@ -1,5 +1,7 @@
 package io.wollinger.snipsniper.SnipScope;
 
+import io.wollinger.snipsniper.utils.Vector2Int;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,7 +19,19 @@ public class SnipScopeRenderer extends JPanel {
         if(image != null && optimalDimension != null) {
             int x = getWidth()/2 - (int)(optimalDimension.getWidth()/2);
             int y = getHeight()/2 - (int)(optimalDimension.getHeight()/2);
-            g.drawImage(image, x, y, (int)optimalDimension.getWidth(), (int)optimalDimension.getHeight(), this);
+
+            x -= snipScopeWindow.modX;
+            y -= snipScopeWindow.modY;
+
+            Vector2Int posModifier = snipScopeWindow.getPosition();
+            System.out.println("MOD: " + snipScopeWindow.modX + " " + snipScopeWindow.modY);
+            System.out.println("POS: " + posModifier);
+            x -= posModifier.x;
+            y -= posModifier.y;
+
+            float zoom = snipScopeWindow.getZoom();
+            System.out.println("ZOOM: " + zoom + "\n");
+            g.drawImage(image, (int)(x), (int)(y), (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom), this);
         }
     }
 
