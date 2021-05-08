@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import io.wollinger.snipsniper.SnipScope.SnipScopeWindow;
 import io.wollinger.snipsniper.editorwindow.EditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
@@ -161,7 +162,9 @@ public final class SnipSniper {
 			}
 			int x = (int) (screenSize.getWidth() / 2 - width / 2);
 			int y = (int) (screenSize.getHeight() / 2 - height / 2);
-			new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, path, false, true);
+			new SnipScopeWindow(config, img, path);
+			//TODO: Just for testing, make it its own thing
+			//new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, path, false, true);
 		} else if(cmdline.isViewerOnly() || isViewerOnly) {
 			File file = null;
 			if(cmdline.getViewerFile() != null && !cmdline.getViewerFile().isEmpty())
