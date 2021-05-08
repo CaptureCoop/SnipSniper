@@ -1,6 +1,5 @@
 package io.wollinger.snipsniper.snipscope;
 
-import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.Utils;
 import io.wollinger.snipsniper.utils.Vector2Int;
@@ -12,26 +11,20 @@ import java.awt.image.BufferedImage;
 public class SnipScopeWindow extends JFrame {
     private BufferedImage image;
 
-    private SnipScopeRenderer renderer;
-
     private Dimension optimalImageDimension;
     private Vector2Int position = new Vector2Int(0,0);
     private Vector2Int zoomOffset = new Vector2Int(0, 0);
 
+    private SnipScopeRenderer renderer;
+
     private float zoom = 1;
     private final InputContainer inputContainer = new InputContainer();
 
-    public SnipScopeWindow(BufferedImage image) {
-        if(image != null)
-            init(image);
-    }
-
-    public void init(BufferedImage image) {
+    public void init(BufferedImage image, SnipScopeRenderer renderer, SnipScopeListener listener) {
         this.image = image;
+        this.renderer = renderer;
 
-        SnipScopeListener listener = new SnipScopeListener(this);
         addKeyListener(listener);
-        renderer = new SnipScopeRenderer(this);
         renderer.addMouseListener(listener);
         renderer.addMouseMotionListener(listener);
         renderer.addMouseWheelListener(listener);
