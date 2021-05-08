@@ -28,11 +28,7 @@ public class SnipScopeRenderer extends JPanel {
             y -= posModifier.y;
 
             float zoom = snipScopeWindow.getZoom();
-
-            /*System.out.println("MOD: " + snipScopeWindow.modX + " " + snipScopeWindow.modY);
-            System.out.println("POS: " + posModifier);
-            System.out.println("ZOOM: " + zoom + "\n");*/
-            g.drawImage(image, (int)(x), (int)(y), (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom), this);
+            g.drawImage(image, x, y, (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom), this);
         }
     }
 

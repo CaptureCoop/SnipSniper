@@ -8,7 +8,6 @@ import io.wollinger.snipsniper.utils.Vector2Int;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.PrintStream;
 
 public class SnipScopeWindow extends JFrame {
     private Config config;
@@ -39,9 +38,22 @@ public class SnipScopeWindow extends JFrame {
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        setSize(512,512);
         setVisible(true);
-        calculateZoom();
+
+        Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
+        if(image.getWidth() >= screenDimension.getWidth() || image.getHeight() > screenDimension.getHeight()) {
+            Dimension newDimension = Utils.getScaledDimension(image, screenDimension);
+            setOptimalImageDimension(newDimension);
+            setSize(newDimension);
+        } else {
+            Insets insets = getInsets();
+            setSize(insets.left + insets.right + image.getWidth(), insets.bottom + insets.top + image.getHeight());
+            setOptimalImageDimension(new Dimension(image.getWidth(), image.getHeight()));
+        }
+
+        int w = (int) getOptimalImageDimension().getWidth();
+        int h = (int) getOptimalImageDimension().getHeight();
+        setLocation((int)(screenDimension.getWidth()/2 - w/2), (int)(screenDimension.getHeight()/2 - h/2));
     }
 
     public void calculateZoom() {
@@ -59,8 +71,6 @@ public class SnipScopeWindow extends JFrame {
     }
 
     public Vector2Int getPointOnImage(Point point) {
-        PrintStream stream = System.out;
-
         Dimension optimalDimension = getOptimalImageDimension();
         double imageX = renderer.getWidth()/2 - optimalDimension.getWidth()/2;
         double imageY = renderer.getHeight()/2 - optimalDimension.getHeight()/2;
@@ -71,29 +81,19 @@ public class SnipScopeWindow extends JFrame {
         imageX -= position.x;
         imageY -= position.y;
 
-        System.out.println("Raw point: " + point);
-
-        Utils.printArgs(stream, "IMAGE X:{0}, Y:{1}", imageX, imageY);
-
-        System.out.println("Optimal: " + optimalDimension);
-        System.out.println("IMG Size: " + image.getWidth() + " " + image.getHeight());
-
         double width = optimalDimension.getWidth() * zoom;
         double height = optimalDimension.getHeight() * zoom;
 
         double posOnImageX = (point.getX() - imageX) * ((double)image.getWidth()/width);
         double posOnImageY = (point.getY() - imageY) * ((double)image.getHeight()/ height);
 
-        Utils.printArgs(stream, "point - imagex/y x:{0} y{1}", point.getX() - imageX, point.getY() - imageY);
-
-        Utils.printArgs(stream, "w: {0}, h:{1}", (double)image.getWidth()/width, (double)image.getHeight()/height);
-
-        Utils.printArgs(stream, "POS ON IMAGE X:{0}, Y:{1}\n", posOnImageX, posOnImageY);
-
-        Vector2Int vec = new Vector2Int(posOnImageX, posOnImageY);
-        return vec;
+        return new Vector2Int(posOnImageX, posOnImageY);
     }
 
+    public void resizeTrigger() {
+        setOptimalImageDimension(Utils.getScaledDimension(image, renderer.getSize()));
+        calculateZoom();
+    }
 
     public Vector2Int getZoomOffset() {
         return zoomOffset;
