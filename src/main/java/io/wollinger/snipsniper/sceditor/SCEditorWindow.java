@@ -19,7 +19,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         this.config = config;
 
         SCEditorRenderer renderer = new SCEditorRenderer(this);
-        SnipScopeListener listener = new SnipScopeListener(this);
+        SCEditorListener listener = new SCEditorListener(this);
 
         if(image == null)
             image = Utils.getDragPasteImage(Icons.icon_editor, "Drop image here or use CTRL + V to paste one!");
