@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import io.wollinger.snipsniper.SnipScope.SnipScopeWindow;
 import io.wollinger.snipsniper.editorwindow.EditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
