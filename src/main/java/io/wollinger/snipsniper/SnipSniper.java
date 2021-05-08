@@ -162,9 +162,7 @@ public final class SnipSniper {
 			}
 			int x = (int) (screenSize.getWidth() / 2 - width / 2);
 			int y = (int) (screenSize.getHeight() / 2 - height / 2);
-			new SnipScopeWindow(config, img, path);
-			//TODO: Just for testing, make it its own thing
-			//new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, path, false, true);
+			new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, path, false, true);
 		} else if(cmdline.isViewerOnly() || isViewerOnly) {
 			File file = null;
 			if(cmdline.getViewerFile() != null && !cmdline.getViewerFile().isEmpty())
