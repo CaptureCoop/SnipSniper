@@ -8,19 +8,21 @@ import io.wollinger.snipsniper.utils.Vector2Int;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.PrintStream;
 
 public class SnipScopeWindow extends JFrame {
     private Config config;
     private BufferedImage image;
     private String fileLocation;
 
+    private SnipScopeRenderer renderer;
+
     private Dimension optimalImageDimension;
     private Vector2Int position = new Vector2Int(0,0);
+    private Vector2Int zoomOffset = new Vector2Int(0, 0);
+
     private float zoom = 1;
     private InputContainer inputContainer = new InputContainer();
-
-    public int modX = 0;
-    public int modY = 0;
 
     public SnipScopeWindow(Config config, BufferedImage image, String fileLocation) {
         this.config = config;
@@ -29,10 +31,11 @@ public class SnipScopeWindow extends JFrame {
 
         SnipScopeListener listener = new SnipScopeListener(this);
         addKeyListener(listener);
-        addMouseListener(listener);
-        addMouseMotionListener(listener);
-        addMouseWheelListener(listener);
-        add(new SnipScopeRenderer(this));
+        renderer = new SnipScopeRenderer(this);
+        renderer.addMouseListener(listener);
+        renderer.addMouseMotionListener(listener);
+        renderer.addMouseWheelListener(listener);
+        add(renderer);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -48,33 +51,60 @@ public class SnipScopeWindow extends JFrame {
         int offsetX = dimWidth/2;
         int offsetY = dimHeight/2;
 
-        modX = (int)(offsetX * getZoom() - offsetX);
-        modY = (int)(offsetY * getZoom() - offsetY);
+        int modX = (int)(offsetX * getZoom() - offsetX);
+        int modY = (int)(offsetY * getZoom() - offsetY);
+        zoomOffset = new Vector2Int(modX, modY);
 
         repaint();
     }
 
     public Vector2Int getPointOnImage(Point point) {
-        int originalX = (int)point.getX();
-        int originalY = (int)point.getY();
+        PrintStream stream = System.out;
 
-        float imageWidth = image.getWidth();
-        float imageHeight = image.getHeight();
+        Dimension optimalDimension = getOptimalImageDimension();
+        double imageX = renderer.getWidth()/2 - optimalDimension.getWidth()/2;
+        double imageY = renderer.getHeight()/2 - optimalDimension.getHeight()/2;
 
-        float contentWidth = getContentPane().getWidth();
-        float contentHeight = getContentPane().getHeight();
+        imageX -= zoomOffset.x;
+        imageY -= zoomOffset.y;
 
-        float differenceWidth = imageWidth / contentWidth;
-        float differenceHeight = imageHeight / contentHeight;
+        imageX -= position.x;
+        imageY -= position.y;
 
-        originalX *= differenceWidth;
-        originalY *= differenceHeight;
+        System.out.println("Raw point: " + point);
+
+        Utils.printArgs(stream, "IMAGE X:{0}, Y:{1}", imageX, imageY);
+
+        System.out.println("Optimal: " + optimalDimension);
+        System.out.println("IMG Size: " + image.getWidth() + " " + image.getHeight());
+
+        double width = optimalDimension.getWidth() * zoom;
+        double height = optimalDimension.getHeight() * zoom;
+
+        double posOnImageX = (point.getX() - imageX) * ((double)image.getWidth()/width);
+        double posOnImageY = (point.getY() - imageY) * ((double)image.getHeight()/ height);
+
+        Utils.printArgs(stream, "point - imagex/y x:{0} y{1}", point.getX() - imageX, point.getY() - imageY);
+
+        Utils.printArgs(stream, "w: {0}, h:{1}", (double)image.getWidth()/width, (double)image.getHeight()/height);
+
+        Utils.printArgs(stream, "POS ON IMAGE X:{0}, Y:{1}\n", posOnImageX, posOnImageY);
+
+        Vector2Int vec = new Vector2Int(posOnImageX, posOnImageY);
+        return vec;
+    }
 
 
+    public Vector2Int getZoomOffset() {
+        return zoomOffset;
+    }
 
-        System.out.println(Utils.formatArgs("{0}, {1}", originalX, originalY));
+    public void setZoomOffset(Vector2Int vec2int) {
+        zoomOffset = vec2int;
+    }
 
-        return new Vector2Int(originalX, originalY);
+    public SnipScopeRenderer getRenderer() {
+        return renderer;
     }
 
     public BufferedImage getImage() {
