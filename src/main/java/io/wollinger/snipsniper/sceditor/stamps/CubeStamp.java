@@ -70,7 +70,6 @@ public class CubeStamp implements IStamp{
         Vector2Int vec = editor.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
         int mx = vec.x;
         int my = vec.y;
-        System.out.println(isSmartPixel + " " + isSaveRender + " " + isCensor);
         if(isSmartPixel && isSaveRender && !isCensor) {
 
             Vector2Int pos = new Vector2Int(mx+width/2, my+height/2);

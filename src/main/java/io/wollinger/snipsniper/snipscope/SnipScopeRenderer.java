@@ -13,6 +13,8 @@ public class SnipScopeRenderer extends JPanel {
         this.snipScopeWindow = snipScopeWindow;
     }
 
+    public Rectangle lastRectangle;
+
     public void paint(Graphics g) {
         Dimension optimalDimension = snipScopeWindow.getOptimalImageDimension();
         BufferedImage image = snipScopeWindow.getImage();
@@ -28,7 +30,8 @@ public class SnipScopeRenderer extends JPanel {
             y -= posModifier.y;
 
             float zoom = snipScopeWindow.getZoom();
-            g.drawImage(image, x, y, (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom), this);
+            lastRectangle = new Rectangle(x, y, (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom));
+            g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height , this);
         }
     }
 
