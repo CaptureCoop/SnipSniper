@@ -78,7 +78,7 @@ public class CircleStamp implements IStamp{
     }
 
     @Override
-    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
         Graphics2D g2 = (Graphics2D)g;
         Stroke oldStroke = g2.getStroke();
         g2.setStroke(new BasicStroke(thickness));
@@ -88,6 +88,7 @@ public class CircleStamp implements IStamp{
         g2.setColor(oldColor);
         g2.setStroke(oldStroke);
         g2.dispose();
+        return null;
     }
 
     @Override

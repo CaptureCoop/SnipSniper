@@ -55,7 +55,7 @@ public class TextStamp implements IStamp{
     }
 
     @Override
-    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
         String textToDraw = "Text";
         if(!text.isEmpty())
             textToDraw = text;
@@ -70,6 +70,7 @@ public class TextStamp implements IStamp{
 
         if(isSaveRender)
             text = "";
+        return null;
     }
 
     @Override

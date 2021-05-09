@@ -69,7 +69,7 @@ public class CounterStamp implements IStamp{
         }
     }
 
-    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
         if(isSaveRender && historyPoint != -1) {
             historyPoints.add(historyPoint);
         }
@@ -108,6 +108,8 @@ public class CounterStamp implements IStamp{
 
         if(isSaveRender)
             count++;
+
+        return null;
     }
 
     @Override

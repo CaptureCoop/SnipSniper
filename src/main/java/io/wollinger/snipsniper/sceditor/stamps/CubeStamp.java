@@ -64,10 +64,16 @@ public class CubeStamp implements IStamp{
         }
     }
 
-    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
         boolean isSmartPixel = config.getBool("smartPixel");
+
+        Vector2Int vec = editor.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
+        int mx = vec.x;
+        int my = vec.y;
+        System.out.println(isSmartPixel + " " + isSaveRender + " " + isCensor);
         if(isSmartPixel && isSaveRender && !isCensor) {
-            Vector2Int pos = new Vector2Int(input.getMouseX()+width/2, input.getMouseY()+height/2);
+
+            Vector2Int pos = new Vector2Int(mx+width/2, my+height/2);
             Vector2Int size = new Vector2Int(-width, -height);
 
             for (int y = 0; y < -size.y; y++) {
@@ -75,6 +81,7 @@ public class CubeStamp implements IStamp{
                     int posX = pos.x - x;
                     int posY = pos.y - y;
                     if(posX >= 0 && posY >= 0 && posX < editor.getImage().getWidth() && posY < editor.getImage().getHeight()) {
+
                         Color c = new Color(editor.getImage().getRGB(posX, posY));
                         int total = c.getRed() + c.getGreen() + c.getBlue();
                         int alpha = (int)((205F/765F) * total + 25);
@@ -94,9 +101,10 @@ public class CubeStamp implements IStamp{
             if(isSmartPixel && !isCensor)
                 g.setColor(new PBRColor(color.getColor(), 150).getColor());
 
-            g.fillRect(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
+            g.fillRect(mx - width / 2, my - height / 2, width, height);
             g.setColor(oldColor);
         }
+        return new Rectangle(mx - width / 2, my - height / 2, width, height);
     }
 
     @Override

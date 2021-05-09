@@ -25,6 +25,10 @@ public class SCEditorListener extends SnipScopeListener {
             case KeyEvent.VK_5: scEditorWindow.setSelectedStamp(4); break;
             case KeyEvent.VK_6: scEditorWindow.setSelectedStamp(5); break;
         }
+
+        if(keyEvent.getKeyCode() == KeyEvent.VK_SHIFT) {
+            scEditorWindow.getSelectedStamp().render(scEditorWindow.getImage().getGraphics(), scEditorWindow.getInputContainer(), true, false, -1);
+        }
     }
 
     @Override

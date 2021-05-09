@@ -38,7 +38,7 @@ public class SimpleBrush implements IStamp {
     }
 
     @Override
-    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
         Color oldColor = g.getColor();
         g.setColor(new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), 255));
         g.fillOval(input.getMouseX()-size/2, input.getMouseY()-size/2, size, size);
@@ -66,6 +66,7 @@ public class SimpleBrush implements IStamp {
             g.setColor(oldColor);
             g2.dispose();
         }
+        return null;
     }
 
     @Override
