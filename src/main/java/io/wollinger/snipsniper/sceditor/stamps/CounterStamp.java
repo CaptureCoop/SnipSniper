@@ -1,15 +1,17 @@
 package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class CounterStamp implements IStamp{
-    private final Config cfg;
+    private SCEditorWindow scEditorWindow;
 
     private int width;
     private int height;
@@ -29,8 +31,8 @@ public class CounterStamp implements IStamp{
 
     private final ArrayList<Integer> historyPoints = new ArrayList<>();
 
-    public CounterStamp(Config cfg) {
-        this.cfg = cfg;
+    public CounterStamp(SCEditorWindow scEditorWindow) {
+        this.scEditorWindow = scEditorWindow;
         reset();
     }
 
@@ -70,12 +72,16 @@ public class CounterStamp implements IStamp{
     }
 
     public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+        Rectangle drawnRectangle = null;
         if(isSaveRender && historyPoint != -1) {
             historyPoints.add(historyPoint);
         }
+
+        Vector2Int mousePos = scEditorWindow.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
+
         if(!isCensor) {
-            final int x = input.getMouseX() - width / 2;
-            final int y = input.getMouseY() - height / 2;
+            final int x = mousePos.x - width / 2;
+            final int y = mousePos.y - height / 2;
 
             Color oldFillColor = g.getColor();
             g.setColor(color.getColor());
@@ -85,20 +91,22 @@ public class CounterStamp implements IStamp{
             g.fillOval(x, y, width, height);
             g.setColor(oldFillColor);
 
+            drawnRectangle = new Rectangle(x, y, width, height);
+
             Color oldColor = g.getColor();
             g.setColor(Color.BLACK);
             int h = (int) (height / fontSizeModifier);
             g.setFont(new Font("TimesRoman", Font.PLAIN, h));
             int w = g.getFontMetrics().stringWidth("" + count);
-            g.drawString("" + count, input.getMouseX() - w / 2, input.getMouseY() + h / 3);
+            g.drawString("" + count, mousePos.x - w / 2, mousePos.y + h / 3);
             g.setColor(oldColor);
 
-            if (cfg.getBool("editorStampCounterBorderEnabled")) {
+            if (scEditorWindow.getConfig().getBool("editorStampCounterBorderEnabled")) {
                 oldColor = g.getColor();
                 g.setColor(Color.BLACK);
                 Graphics2D g2 = (Graphics2D) g;
                 Stroke oldStroke = g2.getStroke();
-                g2.setStroke(new BasicStroke(height / cfg.getFloat("editorStampCounterBorderModifier")));
+                g2.setStroke(new BasicStroke(height / scEditorWindow.getConfig().getFloat("editorStampCounterBorderModifier")));
                 g2.drawOval(x, y, width, height);
                 g2.setStroke(oldStroke);
                 g2.dispose();
@@ -109,7 +117,7 @@ public class CounterStamp implements IStamp{
         if(isSaveRender)
             count++;
 
-        return null;
+        return drawnRectangle;
     }
 
     @Override
@@ -129,6 +137,7 @@ public class CounterStamp implements IStamp{
     @Override
     public void reset() {
         count = 1;
+        Config cfg = scEditorWindow.getConfig();
         color = new PBRColor(cfg.getColor("editorStampCounterDefaultColor"));
         width = cfg.getInt("editorStampCounterWidth");
         height = cfg.getInt("editorStampCounterHeight");

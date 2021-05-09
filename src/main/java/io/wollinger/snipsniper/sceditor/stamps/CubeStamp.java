@@ -66,13 +66,11 @@ public class CubeStamp implements IStamp{
 
     public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
         boolean isSmartPixel = config.getBool("smartPixel");
+        Vector2Int mousePos = editor.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
 
-        Vector2Int vec = editor.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
-        int mx = vec.x;
-        int my = vec.y;
         if(isSmartPixel && isSaveRender && !isCensor) {
 
-            Vector2Int pos = new Vector2Int(mx+width/2, my+height/2);
+            Vector2Int pos = new Vector2Int(mousePos.x+width/2, mousePos.y+height/2);
             Vector2Int size = new Vector2Int(-width, -height);
 
             for (int y = 0; y < -size.y; y++) {
@@ -100,10 +98,10 @@ public class CubeStamp implements IStamp{
             if(isSmartPixel && !isCensor)
                 g.setColor(new PBRColor(color.getColor(), 150).getColor());
 
-            g.fillRect(mx - width / 2, my - height / 2, width, height);
+            g.fillRect(mousePos.x - width / 2, mousePos.y - height / 2, width, height);
             g.setColor(oldColor);
         }
-        return new Rectangle(mx - width / 2, my - height / 2, width, height);
+        return new Rectangle(mousePos.x - width / 2, mousePos.y - height / 2, width, height);
     }
 
     @Override

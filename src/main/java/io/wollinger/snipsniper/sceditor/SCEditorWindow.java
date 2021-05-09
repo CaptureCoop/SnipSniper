@@ -29,11 +29,11 @@ public class SCEditorWindow extends SnipScopeWindow {
         qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
         stamps[0] = new CubeStamp(this);
-        stamps[1] = new CounterStamp(config);
-        stamps[2] = new CircleStamp(config);
+        stamps[1] = new CounterStamp(this);
+        stamps[2] = new CircleStamp(this);
         stamps[3] = new SimpleBrush(this);
-        stamps[4] = new TextStamp(config);
-        stamps[5] = new RectangleStamp(config);
+        stamps[4] = new TextStamp(this);
+        stamps[5] = new RectangleStamp(this);
 
         SCEditorRenderer renderer = new SCEditorRenderer(this);
         SCEditorListener listener = new SCEditorListener(this);

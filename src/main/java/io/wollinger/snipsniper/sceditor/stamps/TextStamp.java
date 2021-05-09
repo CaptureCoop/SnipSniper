@@ -1,8 +1,10 @@
 package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -18,10 +20,10 @@ public class TextStamp implements IStamp{
     private final ArrayList<Integer> nonTypeKeys = new ArrayList<>();
 
     private int fontMode = Font.PLAIN;
-    private final Config config;
+    private final SCEditorWindow scEditorWindow;
 
-    public TextStamp(Config config) {
-        this.config = config;
+    public TextStamp(SCEditorWindow scEditorWindow) {
+        this.scEditorWindow = scEditorWindow;
 
         nonTypeKeys.add(KeyEvent.VK_SHIFT);
         nonTypeKeys.add(KeyEvent.VK_CONTROL);
@@ -56,6 +58,7 @@ public class TextStamp implements IStamp{
 
     @Override
     public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+        Vector2Int mousePos = scEditorWindow.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
         String textToDraw = "Text";
         if(!text.isEmpty())
             textToDraw = text;
@@ -64,13 +67,13 @@ public class TextStamp implements IStamp{
         Color oldColor = g.getColor();
         g.setFont(new Font("Arial", fontMode, fontSize));
         g.setColor(color.getColor());
-        g.drawString(textToDraw, input.getMouseX(), input.getMouseY());
+        g.drawString(textToDraw, mousePos.x, mousePos.y);
         g.setFont(oldFont);
         g.setColor(oldColor);
 
         if(isSaveRender)
             text = "";
-        return null;
+        return new Rectangle(mousePos.x, mousePos.y, g.getFontMetrics().stringWidth(text), fontSize);
     }
 
     @Override
@@ -80,6 +83,7 @@ public class TextStamp implements IStamp{
 
     @Override
     public void reset() {
+        Config config = scEditorWindow.getConfig();
         text = "";
         color = new PBRColor(config.getColor("editorStampTextDefaultColor"));
         fontSize = config.getInt("editorStampTextDefaultFontSize");
