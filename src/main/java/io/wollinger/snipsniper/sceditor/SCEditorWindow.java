@@ -56,6 +56,8 @@ public class SCEditorWindow extends SnipScopeWindow {
         else
             setIconImage(Icons.icon_taskbar);
 
+        setFocusTraversalKeysEnabled(false);
+
         if(!isStandalone) {
             int borderSize = config.getInt("borderSize");
             if (!isLeftToRight) borderSize = -borderSize;
@@ -87,8 +89,25 @@ public class SCEditorWindow extends SnipScopeWindow {
                 System.out.println("Setting location");
             }
         }
+        refreshTitle();
         setVisible(true);
         setSizeAuto();
+    }
+
+    public void kill() {
+        img = null;
+        dispose();
+    }
+
+    public void saveImage() {
+        BufferedImage image = getImage();
+        BufferedImage finalImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics g = finalImg.getGraphics();
+        g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), this);
+        g.dispose();
+        Utils.saveImage(id, finalImg, "_edited", config);
+        if(config.getBool("copyToClipboard"))
+            Utils.copyToClipboard(id,finalImg);
     }
 
     public void refreshTitle() {
