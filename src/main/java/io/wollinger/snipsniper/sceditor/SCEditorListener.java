@@ -2,6 +2,7 @@ package io.wollinger.snipsniper.sceditor;
 
 import io.wollinger.snipsniper.snipscope.SnipScopeListener;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -27,7 +28,10 @@ public class SCEditorListener extends SnipScopeListener {
         }
 
         if(keyEvent.getKeyCode() == KeyEvent.VK_SHIFT) {
-            scEditorWindow.getSelectedStamp().render(scEditorWindow.getImage().getGraphics(), scEditorWindow.getInputContainer(), true, false, -1);
+            Graphics2D g = (Graphics2D) scEditorWindow.getImage().getGraphics();
+            g.setRenderingHints(scEditorWindow.getQualityHints());
+            scEditorWindow.getSelectedStamp().render(g, scEditorWindow.getInputContainer(), true, false, -1);
+            g.dispose();
         }
     }
 

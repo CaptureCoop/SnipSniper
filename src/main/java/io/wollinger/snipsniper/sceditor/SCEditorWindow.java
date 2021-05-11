@@ -24,6 +24,9 @@ public class SCEditorWindow extends SnipScopeWindow {
     private final IStamp[] stamps = new IStamp[6];
     private int selectedStamp = 0;
 
+    public boolean isDirty = false;
+    private boolean isStarted = false;
+
     private final RenderingHints qualityHints;
 
     public SCEditorWindow(String id, BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
@@ -92,10 +95,12 @@ public class SCEditorWindow extends SnipScopeWindow {
         refreshTitle();
         setVisible(true);
         setSizeAuto();
+        if(isStandalone)
+            setLocationAuto();
     }
 
     public void kill() {
-        img = null;
+        //TODO: set image to null?
         dispose();
     }
 
