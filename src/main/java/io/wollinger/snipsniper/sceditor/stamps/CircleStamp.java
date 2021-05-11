@@ -81,13 +81,17 @@ public class CircleStamp implements IStamp{
 
     @Override
     public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+        Double[] difference = scEditorWindow.getDifferenceFromImage();
+        int drawWidth = (int) ((double)width * difference[0]);
+        int drawHeight = (int) ((double)height * difference[1]);
+
         Vector2Int mousePos = scEditorWindow.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
         Graphics2D g2 = (Graphics2D)g;
         Stroke oldStroke = g2.getStroke();
         g2.setStroke(new BasicStroke(thickness));
         Color oldColor = g2.getColor();
         g2.setColor(color.getColor());
-        Rectangle rectangle = new Rectangle(mousePos.x - width / 2, mousePos.y - height / 2, width, height);
+        Rectangle rectangle = new Rectangle(mousePos.x - drawWidth / 2, mousePos.y - drawHeight / 2, drawWidth, drawHeight);
         g2.drawOval(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         g2.setColor(oldColor);
         g2.setStroke(oldStroke);

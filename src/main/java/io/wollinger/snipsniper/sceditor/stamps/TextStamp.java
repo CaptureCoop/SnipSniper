@@ -63,9 +63,11 @@ public class TextStamp implements IStamp{
         if(!text.isEmpty())
             textToDraw = text;
 
+        int drawFontSize = (int) ((double)fontSize * scEditorWindow.getDifferenceFromImage()[1]);
+
         Font oldFont = g.getFont();
         Color oldColor = g.getColor();
-        g.setFont(new Font("Arial", fontMode, fontSize));
+        g.setFont(new Font("Arial", fontMode, drawFontSize));
         g.setColor(color.getColor());
         g.drawString(textToDraw, mousePos.x, mousePos.y);
         g.setFont(oldFont);
@@ -73,7 +75,7 @@ public class TextStamp implements IStamp{
 
         if(isSaveRender)
             text = "";
-        return new Rectangle(mousePos.x, mousePos.y, g.getFontMetrics().stringWidth(text), fontSize);
+        return new Rectangle(mousePos.x, mousePos.y-(drawFontSize), g.getFontMetrics().stringWidth(textToDraw), drawFontSize*2);
     }
 
     @Override

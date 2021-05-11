@@ -84,10 +84,14 @@ public class RectangleStamp implements IStamp {
         Vector2Int mousePos = scEditorWindow.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
         Graphics2D g2 = (Graphics2D)g;
         Stroke oldStroke = g2.getStroke();
-        g2.setStroke(new BasicStroke(thickness));
+        Double[] difference = scEditorWindow.getDifferenceFromImage();
+        int strokeThickness = (int)(thickness*difference[0]);
+        if(strokeThickness <= 0)
+            strokeThickness = 1;
+        g2.setStroke(new BasicStroke(strokeThickness));
         Color oldColor = g2.getColor();
         g2.setColor(color.getColor());
-        Rectangle rectangle = new Rectangle(mousePos.x - width / 2, mousePos.y - height / 2, width, height);
+        Rectangle rectangle = new Rectangle((int)(mousePos.x - ((double)width*difference[0]) / 2), (int)(mousePos.y - ((double)height*difference[1]) / 2), (int)((double)width*difference[0]), (int)((double)height*difference[1]));
         g2.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         g2.setColor(oldColor);
         g2.setStroke(oldStroke);

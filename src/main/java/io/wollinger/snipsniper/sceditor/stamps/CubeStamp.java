@@ -67,11 +67,14 @@ public class CubeStamp implements IStamp{
     public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
         boolean isSmartPixel = config.getBool("smartPixel");
         Vector2Int mousePos = editor.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
+        Double[] difference = editor.getDifferenceFromImage();
+
+        int drawWidth = (int) ((double)width * difference[0]);
+        int drawHeight = (int) ((double)height * difference[1]);
 
         if(isSmartPixel && isSaveRender && !isCensor) {
-
-            Vector2Int pos = new Vector2Int(mousePos.x+width/2, mousePos.y+height/2);
-            Vector2Int size = new Vector2Int(-width, -height);
+            Vector2Int pos = new Vector2Int(mousePos.x+drawWidth/2, mousePos.y+drawHeight/2);
+            Vector2Int size = new Vector2Int(-drawWidth, -drawHeight);
 
             for (int y = 0; y < -size.y; y++) {
                 for (int x = 0; x < -size.x; x++) {
@@ -98,10 +101,10 @@ public class CubeStamp implements IStamp{
             if(isSmartPixel && !isCensor)
                 g.setColor(new PBRColor(color.getColor(), 150).getColor());
 
-            g.fillRect(mousePos.x - width / 2, mousePos.y - height / 2, width, height);
+            g.fillRect(mousePos.x - drawWidth / 2, mousePos.y - drawHeight / 2, drawWidth, drawHeight);
             g.setColor(oldColor);
         }
-        return new Rectangle(mousePos.x - width / 2, mousePos.y - height / 2, width, height);
+        return new Rectangle(mousePos.x - drawWidth / 2, mousePos.y - drawHeight / 2, drawWidth, drawHeight);
     }
 
     @Override
