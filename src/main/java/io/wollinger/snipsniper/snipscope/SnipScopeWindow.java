@@ -102,6 +102,10 @@ public class SnipScopeWindow extends JFrame {
         calculateZoom();
     }
 
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
     public Vector2Int getZoomOffset() {
         return zoomOffset;
     }

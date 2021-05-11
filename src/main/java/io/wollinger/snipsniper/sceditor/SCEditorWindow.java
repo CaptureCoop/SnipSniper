@@ -24,10 +24,14 @@ public class SCEditorWindow extends SnipScopeWindow {
     private final IStamp[] stamps = new IStamp[6];
     private int selectedStamp = 0;
 
+    private SCEditorListener listener;
+
     public boolean isDirty = false;
     private boolean isStarted = false;
 
     private final RenderingHints qualityHints;
+
+    public static final String FILENAME_MODIFIER = "_edited";
 
     public SCEditorWindow(String id, BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         this.id = id;
@@ -46,13 +50,15 @@ public class SCEditorWindow extends SnipScopeWindow {
         stamps[4] = new TextStamp(this);
         stamps[5] = new RectangleStamp(this);
 
-        SCEditorRenderer renderer = new SCEditorRenderer(this);
-        SCEditorListener listener = new SCEditorListener(this);
-
         if(image == null)
             image = Utils.getDragPasteImage(Icons.icon_editor, "Drop image here or use CTRL + V to paste one!");
 
+        SCEditorRenderer renderer = new SCEditorRenderer(this);
+        listener = new SCEditorListener(this);
+
         init(image, renderer, listener);
+
+        listener.resetHistory();
 
         if (isStandalone)
             setIconImage(Icons.icon_editor);
@@ -110,7 +116,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         Graphics g = finalImg.getGraphics();
         g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), this);
         g.dispose();
-        Utils.saveImage(id, finalImg, "_edited", config);
+        Utils.saveImage(id, finalImg, FILENAME_MODIFIER, config);
         if(config.getBool("copyToClipboard"))
             Utils.copyToClipboard(id,finalImg);
     }
@@ -124,6 +130,17 @@ public class SCEditorWindow extends SnipScopeWindow {
             newTitle += " (Clipboard)";
         }
         setTitle(newTitle);
+    }
+
+    public void setImage(BufferedImage image, boolean resetHistory) {
+        super.setImage(image);
+        LogManager.log(id, "Setting new Image", Level.INFO);
+
+        if(listener != null && resetHistory) {
+            listener.resetHistory();
+            for(IStamp stamp : stamps)
+                stamp.reset();
+        }
     }
 
     public static Config getStandaloneEditorConfig() {
@@ -152,5 +169,9 @@ public class SCEditorWindow extends SnipScopeWindow {
 
     public Map<?,?> getQualityHints() {
         return qualityHints;
+    }
+
+    public String getID() {
+        return id;
     }
 }
