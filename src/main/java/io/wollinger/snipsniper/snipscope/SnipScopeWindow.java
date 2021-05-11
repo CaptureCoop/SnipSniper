@@ -30,8 +30,9 @@ public class SnipScopeWindow extends JFrame {
         renderer.addMouseWheelListener(listener);
         add(renderer);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setVisible(true);
+    }
 
+    public void setSizeAuto() {
         Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         if(image.getWidth() >= screenDimension.getWidth() || image.getHeight() > screenDimension.getHeight()) {
             Dimension newDimension = Utils.getScaledDimension(image, screenDimension);
@@ -42,8 +43,11 @@ public class SnipScopeWindow extends JFrame {
             setSize(insets.left + insets.right + image.getWidth(), insets.bottom + insets.top + image.getHeight());
             setOptimalImageDimension(new Dimension(image.getWidth(), image.getHeight()));
         }
+    }
 
+    public void setLocationAuto() {
         Dimension dimension = getOptimalImageDimension();
+        Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((int)(screenDimension.getWidth()/2 - dimension.getWidth()/2), (int)(screenDimension.getHeight()/2 - dimension.getHeight()/2));
     }
 
