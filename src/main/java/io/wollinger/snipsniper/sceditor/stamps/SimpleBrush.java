@@ -8,7 +8,6 @@ import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Vector;
 
 public class SimpleBrush implements IStamp {
     private final SCEditorWindow scEditorWindow;
@@ -62,8 +61,6 @@ public class SimpleBrush implements IStamp {
 
         if(p1Temp != null)
             p1 = p1Temp.toPoint();
-
-        System.out.println(input.getMousePathPoint(0) + " " + p1);
 
         if(p0 != null && p1 != null) {
             Graphics2D g2 = (Graphics2D)scEditorWindow.getImage().getGraphics();

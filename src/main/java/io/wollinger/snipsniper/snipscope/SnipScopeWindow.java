@@ -107,6 +107,7 @@ public class SnipScopeWindow extends JFrame {
 
     public void setImage(BufferedImage image) {
         this.image = image;
+        optimalImageDimension = Utils.getScaledDimension(image, renderer.getSize());
     }
 
     public Vector2Int getZoomOffset() {

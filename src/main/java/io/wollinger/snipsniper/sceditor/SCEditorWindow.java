@@ -25,6 +25,7 @@ public class SCEditorWindow extends SnipScopeWindow {
     private int selectedStamp = 0;
 
     private SCEditorListener listener;
+    private SCEditorRenderer renderer;
 
     public boolean isDirty = false;
     private boolean isStarted = false;
@@ -53,7 +54,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         if(image == null)
             image = Utils.getDragPasteImage(Icons.icon_editor, "Drop image here or use CTRL + V to paste one!");
 
-        SCEditorRenderer renderer = new SCEditorRenderer(this);
+        renderer = new SCEditorRenderer(this);
         listener = new SCEditorListener(this);
 
         init(image, renderer, listener);
@@ -95,7 +96,6 @@ public class SCEditorWindow extends SnipScopeWindow {
 
             if(!found && bestMonitor != null) {
                 setLocation((int) getLocation().getX(), bestMonitor.getBounds().y);
-                System.out.println("Setting location");
             }
         }
         refreshTitle();
@@ -132,7 +132,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         setTitle(newTitle);
     }
 
-    public void setImage(BufferedImage image, boolean resetHistory) {
+    public void setImage(BufferedImage image, boolean resetHistory, boolean isNewImage) {
         super.setImage(image);
         LogManager.log(id, "Setting new Image", Level.INFO);
 
@@ -141,10 +141,23 @@ public class SCEditorWindow extends SnipScopeWindow {
             for(IStamp stamp : stamps)
                 stamp.reset();
         }
+
+        if(isNewImage) {
+            resetZoom();
+            renderer.resetPreview();
+        }
     }
 
     public static Config getStandaloneEditorConfig() {
         return new Config("editor.cfg", "CFGE", "profile_defaults.cfg");
+    }
+
+    public void setSaveLocation(String saveLocation) {
+        this.saveLocation = saveLocation;
+    }
+
+    public void setInClipboard(boolean inClipboard) {
+        this.inClipboard = inClipboard;
     }
 
     public IStamp getSelectedStamp() {

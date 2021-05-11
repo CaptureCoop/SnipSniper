@@ -45,6 +45,13 @@ public class SCEditorListener extends SnipScopeListener {
         if(keyCode == KeyEvent.VK_ESCAPE)
             scEditorWindow.kill();
 
+        if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
+            scEditorWindow.setSaveLocation("");
+            scEditorWindow.setInClipboard(true);
+            scEditorWindow.refreshTitle();
+            scEditorWindow.setImage(Utils.imageToBufferedImage(Utils.getImageFromClipboard()), true, true);
+        }
+
         switch (keyCode) {
             case KeyEvent.VK_1: scEditorWindow.setSelectedStamp(0); break;
             case KeyEvent.VK_2: scEditorWindow.setSelectedStamp(1); break;
@@ -79,7 +86,7 @@ public class SCEditorListener extends SnipScopeListener {
                 size--;
                 history.remove(size);
                 size--;
-                scEditorWindow.setImage(Utils.copyImage(history.get(size)), false);
+                scEditorWindow.setImage(Utils.copyImage(history.get(size)), false, false);
                 for(IStamp cStamp : scEditorWindow.getStamps())
                     cStamp.editorUndo(history.size());
             }
