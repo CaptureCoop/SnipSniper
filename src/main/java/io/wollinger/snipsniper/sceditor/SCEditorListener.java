@@ -34,9 +34,10 @@ public class SCEditorListener extends SnipScopeListener {
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
+        super.keyPressed(keyEvent);
+
         keyEvent.consume();
         int keyCode = keyEvent.getKeyCode();
-        scEditorWindow.getInputContainer().setKey(keyCode, true);
 
         if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_ALT, KeyEvent.VK_C))
             openColorChooser = true;
@@ -90,7 +91,8 @@ public class SCEditorListener extends SnipScopeListener {
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        scEditorWindow.getInputContainer().setKey(keyEvent.getKeyCode(), false);
+        super.keyReleased(keyEvent);
+
         if(openColorChooser) {
             //This fixes an issue with the ALT key getting "stuck" since the key up event is not beeing received if the color window is in the front.
             openColorChooser = false;
@@ -102,6 +104,8 @@ public class SCEditorListener extends SnipScopeListener {
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
+        super.mousePressed(mouseEvent);
+
         if(mouseEvent.getButton() == 3) {
             if(scEditorWindow.isDirty)
                 scEditorWindow.saveImage();
@@ -113,6 +117,8 @@ public class SCEditorListener extends SnipScopeListener {
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
+        super.mouseReleased(mouseEvent);
+
         scEditorWindow.getInputContainer().clearMousePath();
         if(mouseEvent.getButton() == 1) {
             save(scEditorWindow.getImage().getGraphics(), false);
@@ -135,6 +141,8 @@ public class SCEditorListener extends SnipScopeListener {
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
+        super.mouseWheelMoved(mouseWheelEvent);
+
         InputContainer input = scEditorWindow.getInputContainer();
 
         if(input.isKeyPressed(KeyEvent.VK_ALT)) {
@@ -171,6 +179,8 @@ public class SCEditorListener extends SnipScopeListener {
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
         super.mouseDragged(mouseEvent);
+
+        scEditorWindow.getInputContainer().addMousePathPoint(mouseEvent.getPoint());
 
         scEditorWindow.getInputContainer().setMousePosition(mouseEvent.getX(), mouseEvent.getY());
         scEditorWindow.repaint();

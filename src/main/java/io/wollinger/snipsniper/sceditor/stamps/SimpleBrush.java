@@ -4,12 +4,14 @@ import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Vector;
 
 public class SimpleBrush implements IStamp {
-    private final SCEditorWindow editorWindow;
+    private final SCEditorWindow scEditorWindow;
 
     private int size;
     private int speed;
@@ -17,9 +19,9 @@ public class SimpleBrush implements IStamp {
     private PBRColor color;
     private final Config config;
 
-    public SimpleBrush(SCEditorWindow editorWindow) {
-        this.editorWindow = editorWindow;
-        this.config = editorWindow.getConfig();
+    public SimpleBrush(SCEditorWindow scEditorWindow) {
+        this.scEditorWindow = scEditorWindow;
+        this.config = scEditorWindow.getConfig();
         reset();
     }
 
@@ -39,20 +41,37 @@ public class SimpleBrush implements IStamp {
 
     @Override
     public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+        Double[] difference = scEditorWindow.getDifferenceFromImage();
+        Vector2Int mousePos = scEditorWindow.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
+
+        int newSize = (int) ((double)size * difference[0]);
+
         Color oldColor = g.getColor();
         g.setColor(new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), 255));
-        g.fillOval(input.getMouseX()-size/2, input.getMouseY()-size/2, size, size);
+        g.fillOval(mousePos.x-newSize/2, mousePos.y-newSize/2, newSize, newSize);
         g.setColor(oldColor);
 
-        Point p0 = input.getMousePathPoint(0);
-        Point p1 = input.getMousePathPoint(1);
+        Vector2Int p0Temp = scEditorWindow.getPointOnImage(input.getMousePathPoint(0));
+        Vector2Int p1Temp = scEditorWindow.getPointOnImage(input.getMousePathPoint(1));
+
+        Point p0 = null;
+        Point p1 = null;
+
+        if(p0Temp != null)
+            p0 = p0Temp.toPoint();
+
+        if(p1Temp != null)
+            p1 = p1Temp.toPoint();
+
+        System.out.println(input.getMousePathPoint(0) + " " + p1);
+
         if(p0 != null && p1 != null) {
-            Graphics2D g2 = (Graphics2D)editorWindow.getImage().getGraphics();
-            g2.setRenderingHints(editorWindow.getQualityHints());
+            Graphics2D g2 = (Graphics2D)scEditorWindow.getImage().getGraphics();
+            g2.setRenderingHints(scEditorWindow.getQualityHints());
             Stroke oldStroke = g2.getStroke();
             oldColor = g2.getColor();
             g2.setColor(new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), 255));
-            g2.setStroke(new BasicStroke(size, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            g2.setStroke(new BasicStroke(newSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
             double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());
             if(distance > config.getInt("editorStampSimpleBrushDistance")) {
@@ -66,7 +85,7 @@ public class SimpleBrush implements IStamp {
             g.setColor(oldColor);
             g2.dispose();
         }
-        return null;
+        return new Rectangle(mousePos.x-newSize/2, mousePos.y-newSize/2, newSize, newSize);
     }
 
     @Override

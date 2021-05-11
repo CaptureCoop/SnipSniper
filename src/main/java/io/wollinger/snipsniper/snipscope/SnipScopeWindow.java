@@ -73,6 +73,9 @@ public class SnipScopeWindow extends JFrame {
     }
 
     public Vector2Int getPointOnImage(Point point) {
+        if(point == null)
+            return null;
+
         Dimension optimalDimension = optimalImageDimension;
         double imageX = (double)renderer.getWidth()/2 - optimalDimension.getWidth()/2;
         double imageY = (double)renderer.getHeight()/2 - optimalDimension.getHeight()/2;

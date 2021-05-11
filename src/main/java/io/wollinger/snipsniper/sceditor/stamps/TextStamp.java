@@ -75,7 +75,7 @@ public class TextStamp implements IStamp{
 
         if(isSaveRender)
             text = "";
-        return new Rectangle(mousePos.x, mousePos.y-(drawFontSize), g.getFontMetrics().stringWidth(textToDraw), drawFontSize*2);
+        return new Rectangle(mousePos.x, mousePos.y, g.getFontMetrics().stringWidth(textToDraw), drawFontSize);
     }
 
     @Override
