@@ -152,16 +152,7 @@ public final class SnipSniper {
 				}
 			}
 
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			int width = 512;
-			int height = 512;
-			if(img != null) {
-				width = img.getWidth();
-				height = img.getHeight();
-			}
-			int x = (int) (screenSize.getWidth() / 2 - width / 2);
-			int y = (int) (screenSize.getHeight() / 2 - height / 2);
-			new SCEditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, path, false, true);
+			new SCEditorWindow("EDIT", img, -1, -1, "SnipSniper Editor", config, false, path, false, true);
 		} else if(cmdline.isViewerOnly() || isViewerOnly) {
 			File file = null;
 			if(cmdline.getViewerFile() != null && !cmdline.getViewerFile().isEmpty())

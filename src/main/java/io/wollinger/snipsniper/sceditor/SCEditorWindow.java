@@ -67,12 +67,15 @@ public class SCEditorWindow extends SnipScopeWindow {
             setIconImage(Icons.icon_taskbar);
 
         setFocusTraversalKeysEnabled(false);
+        setVisible(true);
 
-        if(!isStandalone) {
+        if(!(x < 0 && y < 0)) {
             int borderSize = config.getInt("borderSize");
             if (!isLeftToRight) borderSize = -borderSize;
             setLocation((x - X_OFFSET) + borderSize, y - getInsets().top + borderSize);
+        }
 
+        if(!isStandalone) {
             GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
             boolean found = false;
             GraphicsConfiguration bestMonitor = null;
@@ -99,9 +102,8 @@ public class SCEditorWindow extends SnipScopeWindow {
             }
         }
         refreshTitle();
-        setVisible(true);
         setSizeAuto();
-        if(isStandalone)
+        if(x < 0 && y < 0)
             setLocationAuto();
     }
 
