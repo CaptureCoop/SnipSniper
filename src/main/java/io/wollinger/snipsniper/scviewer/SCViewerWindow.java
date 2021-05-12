@@ -22,7 +22,7 @@ import java.util.List;
 
 public class SCViewerWindow extends SnipScopeWindow {
     private File currentFile;
-    private ArrayList<String> files = new ArrayList<>();
+    private final ArrayList<String> files = new ArrayList<>();
 
     private final List<String> extensions = Arrays.asList(".png", ".jpg", ".jpeg");
 

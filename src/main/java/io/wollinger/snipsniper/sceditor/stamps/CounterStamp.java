@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class CounterStamp implements IStamp{
-    private SCEditorWindow scEditorWindow;
+    private final SCEditorWindow scEditorWindow;
 
     private int width;
     private int height;
