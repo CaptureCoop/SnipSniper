@@ -50,37 +50,41 @@ public class SimpleBrush implements IStamp {
         g.fillOval(mousePos.x-newSize/2, mousePos.y-newSize/2, newSize, newSize);
         g.setColor(oldColor);
 
-        Vector2Int p0Temp = scEditorWindow.getPointOnImage(input.getMousePathPoint(0));
-        Vector2Int p1Temp = scEditorWindow.getPointOnImage(input.getMousePathPoint(1));
+        if(!input.isKeyPressed(KeyEvent.VK_SPACE)) {
 
-        Point p0 = null;
-        Point p1 = null;
 
-        if(p0Temp != null)
-            p0 = p0Temp.toPoint();
+            Vector2Int p0Temp = scEditorWindow.getPointOnImage(input.getMousePathPoint(0));
+            Vector2Int p1Temp = scEditorWindow.getPointOnImage(input.getMousePathPoint(1));
 
-        if(p1Temp != null)
-            p1 = p1Temp.toPoint();
+            Point p0 = null;
+            Point p1 = null;
 
-        if(p0 != null && p1 != null) {
-            Graphics2D g2 = (Graphics2D)scEditorWindow.getImage().getGraphics();
-            g2.setRenderingHints(scEditorWindow.getQualityHints());
-            Stroke oldStroke = g2.getStroke();
-            oldColor = g2.getColor();
-            g2.setColor(new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), 255));
-            g2.setStroke(new BasicStroke(newSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            if (p0Temp != null)
+                p0 = p0Temp.toPoint();
 
-            double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());
-            if(distance > config.getInt("editorStampSimpleBrushDistance")) {
-                g2.drawLine((int) p0.getX(), (int) p0.getY(), (int) p1.getX(), (int) p1.getY());
-                input.removeMousePathPoint(0);
-            } else {
-                input.removeMousePathPoint(1);
+            if (p1Temp != null)
+                p1 = p1Temp.toPoint();
+
+            if (p0 != null && p1 != null) {
+                Graphics2D g2 = (Graphics2D) scEditorWindow.getImage().getGraphics();
+                g2.setRenderingHints(scEditorWindow.getQualityHints());
+                Stroke oldStroke = g2.getStroke();
+                oldColor = g2.getColor();
+                g2.setColor(new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), 255));
+                g2.setStroke(new BasicStroke(newSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
+                double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());
+                if (distance > config.getInt("editorStampSimpleBrushDistance")) {
+                    g2.drawLine((int) p0.getX(), (int) p0.getY(), (int) p1.getX(), (int) p1.getY());
+                    input.removeMousePathPoint(0);
+                } else {
+                    input.removeMousePathPoint(1);
+                }
+
+                g2.setStroke(oldStroke);
+                g.setColor(oldColor);
+                g2.dispose();
             }
-
-            g2.setStroke(oldStroke);
-            g.setColor(oldColor);
-            g2.dispose();
         }
         return new Rectangle(mousePos.x-newSize/2, mousePos.y-newSize/2, newSize, newSize);
     }
