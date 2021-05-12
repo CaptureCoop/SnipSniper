@@ -1,53 +1,69 @@
-package io.wollinger.snipsniper.viewer;
+package io.wollinger.snipsniper.scviewer;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
+import io.wollinger.snipsniper.snipscope.SnipScopeRenderer;
+import io.wollinger.snipsniper.snipscope.SnipScopeWindow;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.Utils;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
-public class ViewerWindow extends JFrame {
-
+public class SCViewerWindow extends SnipScopeWindow {
     private File currentFile;
     private ArrayList<String> files = new ArrayList<>();
 
-    private BufferedImage image;
-
-    private List<String> extensions = Arrays.asList(".png", ".jpg", ".jpeg");
+    private final List<String> extensions = Arrays.asList(".png", ".jpg", ".jpeg");
 
     private boolean locked = false;
 
-    public ViewerWindow(File file) {
+    public SCViewerWindow(File file) {
         currentFile = file;
-        setResizable(false);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         refreshTitle();
-        setSize(512,512);
         setIconImage(Icons.icon_viewer);
-        add(new ViewerWindowRender(this));
-        addKeyListener(new ViewerWindowListener(this));
+        BufferedImage image;
         if(file != null) {
             refreshFolder();
-            initImage(currentFile);
+            image = getImageFromFile(currentFile);
         } else {
-            //TODO: Make this translation
             image = Utils.getDragPasteImage(Icons.icon_viewer, "Drop image here!");
         }
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((int)(screenSize.getWidth()/2 - getWidth()/2), (int)(screenSize.getHeight()/2 - getHeight()/2));
+        SCViewerListener listener = new SCViewerListener(this);
+        SnipScopeRenderer renderer = new SnipScopeRenderer(this);
+        renderer.setDropTarget(new DropTarget() {
+            public synchronized void drop(DropTargetDropEvent evt) {
+                try {
+                    evt.acceptDrop(DnDConstants.ACTION_COPY);
+                    List droppedFiles = (List) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                    currentFile = (File) droppedFiles.get(0);
+                    setImage(getImageFromFile(currentFile));
+                    refreshFolder();
+                    refreshTitle();
+                    repaint();
+                } catch (UnsupportedFlavorException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        init(image, renderer , listener);
 
         setVisible(true);
+        setSizeAuto();
+        setLocationAuto();
     }
 
     public void refreshTitle() {
@@ -84,55 +100,39 @@ public class ViewerWindow extends JFrame {
         File newFile = new File(files.get(index));
         if(!currentFile.getAbsolutePath().equals(newFile.getAbsolutePath())) {
             currentFile = newFile;
-            initImage(currentFile);
+            setImage(getImageFromFile(currentFile));
             refreshTitle();
         }
         locked = false;
+        resetZoom();
     }
 
     public void openEditor() {
-        Config config = SCEditorWindow.getStandaloneEditorConfig();
-        config.save();
-        new SCEditorWindow("EDIT", image, (int)getLocation().getX(), (int)getLocation().getY(), "SnipSniper Editor", config, false, currentFile.getAbsolutePath(), false, true);
-        if(config.getBool("closeViewerOnOpenEditor"))
-            dispose();
+        if(currentFile != null) {
+            Config config = SCEditorWindow.getStandaloneEditorConfig();
+            config.save();
+
+            SCEditorWindow editor = new SCEditorWindow("EDIT", getImage(), (int) getLocation().getX(), (int) getLocation().getY(), "SnipSniper Editor", config, false, currentFile.getAbsolutePath(), false, true);
+            editor.setSize(getSize());
+            if (config.getBool("closeViewerOnOpenEditor"))
+                dispose();
+        }
     }
 
-    public void initImage(File file) {
+    public BufferedImage getImageFromFile(File file) {
         if(file.exists()) {
             if(!extensions.contains(Utils.getFileExtension(file).toLowerCase()))
-                return;
+                return null;
 
+            BufferedImage image = null;
             try {
                 image = ImageIO.read(file);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            GraphicsDevice device = getGraphicsConfiguration().getDevice();
-            int monitorWidth = device.getDisplayMode().getWidth()-100;
-            int monitorHeight = device.getDisplayMode().getHeight()-100;
-
-            if(image.getWidth() >= monitorWidth || image.getHeight() > monitorHeight) {
-                Dimension newDimension = Utils.getScaledDimension(image, new Dimension(monitorWidth, monitorHeight));
-                image = Utils.imageToBufferedImage(image.getScaledInstance((int)newDimension.getWidth(), (int)newDimension.getHeight(), 5));
-            }
-
-            Insets insets = getInsets();
-            setSize(insets.left + insets.right + image.getWidth(), insets.bottom + insets.top + image.getHeight());
+            return image;
         }
-        repaint();
-    }
-
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    public void setImage(File file) {
-        currentFile = file;
-        initImage(file);
-        refreshFolder();
-        refreshTitle();
+        return null;
     }
 
     public boolean isLocked() {

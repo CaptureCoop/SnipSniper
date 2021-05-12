@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class SnipScopeRenderer extends JPanel {
-    private SnipScopeWindow snipScopeWindow;
+    private final SnipScopeWindow snipScopeWindow;
 
     public SnipScopeRenderer(SnipScopeWindow snipScopeWindow) {
         this.snipScopeWindow = snipScopeWindow;

@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class SCEditorListener extends SnipScopeListener {
-    private SCEditorWindow scEditorWindow;
-    private ArrayList<BufferedImage> history = new ArrayList<>();
+    private final SCEditorWindow scEditorWindow;
+    private final ArrayList<BufferedImage> history = new ArrayList<>();
     private boolean openColorChooser = false;
 
     public SCEditorListener(SCEditorWindow snipScopeWindow) {
@@ -101,7 +101,7 @@ public class SCEditorListener extends SnipScopeListener {
         super.keyReleased(keyEvent);
 
         if(openColorChooser) {
-            //This fixes an issue with the ALT key getting "stuck" since the key up event is not beeing received if the color window is in the front.
+            //This fixes an issue with the ALT key getting "stuck" since the key up event is not being received if the color window is in the front.
             openColorChooser = false;
             int x = (int)((scEditorWindow.getLocation().getX() + scEditorWindow.getWidth()/2));
             int y = (int)((scEditorWindow.getLocation().getY() + scEditorWindow.getHeight()/2));
@@ -127,10 +127,12 @@ public class SCEditorListener extends SnipScopeListener {
         super.mouseReleased(mouseEvent);
 
         scEditorWindow.getInputContainer().clearMousePath();
-        if(mouseEvent.getButton() == 1) {
-            save(scEditorWindow.getImage().getGraphics(), false);
-        }else if(mouseEvent.getButton() == 2) {
-            save(scEditorWindow.getImage().getGraphics(), true);
+        if(!scEditorWindow.getInputContainer().isKeyPressed(KeyEvent.VK_SPACE)) {
+            if (mouseEvent.getButton() == 1) {
+                save(scEditorWindow.getImage().getGraphics(), false);
+            } else if (mouseEvent.getButton() == 2) {
+                save(scEditorWindow.getImage().getGraphics(), true);
+            }
         }
         scEditorWindow.repaint();
     }
@@ -171,7 +173,8 @@ public class SCEditorListener extends SnipScopeListener {
             return;
         }
 
-        scEditorWindow.getSelectedStamp().update(input, mouseWheelEvent.getWheelRotation(), null);
+        if(!input.isKeyPressed(KeyEvent.VK_SPACE))
+            scEditorWindow.getSelectedStamp().update(input, mouseWheelEvent.getWheelRotation(), null);
         scEditorWindow.repaint();
     }
 

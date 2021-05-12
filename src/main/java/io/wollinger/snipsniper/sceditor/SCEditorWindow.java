@@ -24,11 +24,10 @@ public class SCEditorWindow extends SnipScopeWindow {
     private final IStamp[] stamps = new IStamp[6];
     private int selectedStamp = 0;
 
-    private SCEditorListener listener;
-    private SCEditorRenderer renderer;
+    private final SCEditorListener listener;
+    private final SCEditorRenderer renderer;
 
     public boolean isDirty = false;
-    private boolean isStarted = false;
 
     private final RenderingHints qualityHints;
 

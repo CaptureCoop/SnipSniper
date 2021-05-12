@@ -14,9 +14,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
+import io.wollinger.snipsniper.scviewer.SCViewerWindow;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
-import io.wollinger.snipsniper.viewer.ViewerWindow;
 import org.apache.commons.lang3.SystemUtils;
 
 public final class SnipSniper {
@@ -166,7 +166,7 @@ public final class SnipSniper {
 				}
 			}
 
-			new ViewerWindow(file);
+			new SCViewerWindow(file);
 		} else {
 			resetProfiles();
 		}
