@@ -111,13 +111,14 @@ public final class SnipSniper {
 
 		config.save();
 
+		System.setProperty("sun.java2d.opengl", "true");
+		System.setProperty("sun.java2d.uiScale", "1.0");
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-
-		System.setProperty("sun.java2d.uiScale", "1.0");
 
 		LogManager.log(ID, "Loading resources", Level.INFO);
 		Icons.loadResources();
