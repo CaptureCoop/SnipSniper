@@ -1,6 +1,5 @@
 package io.wollinger.snipsniper.snipscope;
 
-import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.Utils;
 import io.wollinger.snipsniper.utils.Vector2Int;
@@ -10,34 +9,30 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class SnipScopeWindow extends JFrame {
-    private Config config;
     private BufferedImage image;
-    private String fileLocation;
-
-    private final SnipScopeRenderer renderer;
 
     private Dimension optimalImageDimension;
     private Vector2Int position = new Vector2Int(0,0);
     private Vector2Int zoomOffset = new Vector2Int(0, 0);
 
+    private SnipScopeRenderer renderer;
+
     private float zoom = 1;
     private final InputContainer inputContainer = new InputContainer();
 
-    public SnipScopeWindow(Config config, BufferedImage image, String fileLocation) {
-        this.config = config;
+    public void init(BufferedImage image, SnipScopeRenderer renderer, SnipScopeListener listener) {
         this.image = image;
-        this.fileLocation = fileLocation;
+        this.renderer = renderer;
 
-        SnipScopeListener listener = new SnipScopeListener(this);
         addKeyListener(listener);
-        renderer = new SnipScopeRenderer(this);
         renderer.addMouseListener(listener);
         renderer.addMouseMotionListener(listener);
         renderer.addMouseWheelListener(listener);
         add(renderer);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setVisible(true);
+    }
 
+    public void setSizeAuto() {
         Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         if(image.getWidth() >= screenDimension.getWidth() || image.getHeight() > screenDimension.getHeight()) {
             Dimension newDimension = Utils.getScaledDimension(image, screenDimension);
@@ -48,8 +43,11 @@ public class SnipScopeWindow extends JFrame {
             setSize(insets.left + insets.right + image.getWidth(), insets.bottom + insets.top + image.getHeight());
             setOptimalImageDimension(new Dimension(image.getWidth(), image.getHeight()));
         }
+    }
 
+    public void setLocationAuto() {
         Dimension dimension = getOptimalImageDimension();
+        Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((int)(screenDimension.getWidth()/2 - dimension.getWidth()/2), (int)(screenDimension.getHeight()/2 - dimension.getHeight()/2));
     }
 
@@ -67,8 +65,18 @@ public class SnipScopeWindow extends JFrame {
         repaint();
     }
 
+    public Double[] getDifferenceFromImage() {
+        Dimension optimalDimension = optimalImageDimension;
+        double width = (double)image.getWidth() / (optimalDimension.getWidth() * zoom);
+        double height = (double)image.getHeight() / (optimalDimension.getHeight() * zoom);
+        return new Double[]{width, height};
+    }
+
     public Vector2Int getPointOnImage(Point point) {
-        Dimension optimalDimension = getOptimalImageDimension();
+        if(point == null)
+            return null;
+
+        Dimension optimalDimension = optimalImageDimension;
         double imageX = (double)renderer.getWidth()/2 - optimalDimension.getWidth()/2;
         double imageY = (double)renderer.getHeight()/2 - optimalDimension.getHeight()/2;
 
@@ -78,11 +86,10 @@ public class SnipScopeWindow extends JFrame {
         imageX -= position.x;
         imageY -= position.y;
 
-        double width = optimalDimension.getWidth() * zoom;
-        double height = optimalDimension.getHeight() * zoom;
+        Double[] difference = getDifferenceFromImage();
 
-        double posOnImageX = (point.getX() - imageX) * ((double)image.getWidth()/width);
-        double posOnImageY = (point.getY() - imageY) * ((double)image.getHeight()/ height);
+        double posOnImageX = (point.getX() - imageX) * (difference[0]);
+        double posOnImageY = (point.getY() - imageY) * (difference[1]);
 
         return new Vector2Int(posOnImageX, posOnImageY);
     }
@@ -96,6 +103,11 @@ public class SnipScopeWindow extends JFrame {
     public void resizeTrigger() {
         setOptimalImageDimension(Utils.getScaledDimension(image, renderer.getSize()));
         calculateZoom();
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+        optimalImageDimension = Utils.getScaledDimension(image, renderer.getSize());
     }
 
     public Vector2Int getZoomOffset() {

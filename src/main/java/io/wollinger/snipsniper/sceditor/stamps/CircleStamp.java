@@ -1,8 +1,10 @@
-package io.wollinger.snipsniper.editorwindow.stamps;
+package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -21,10 +23,10 @@ public class CircleStamp implements IStamp{
 
     private PBRColor color;
 
-    private final Config config;
+    private final SCEditorWindow scEditorWindow;
 
-    public CircleStamp(Config config) {
-        this.config = config;
+    public CircleStamp(SCEditorWindow scEditorWindow) {
+        this.scEditorWindow = scEditorWindow;
         reset();
     }
 
@@ -78,16 +80,23 @@ public class CircleStamp implements IStamp{
     }
 
     @Override
-    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+        Double[] difference = scEditorWindow.getDifferenceFromImage();
+        int drawWidth = (int) ((double)width * difference[0]);
+        int drawHeight = (int) ((double)height * difference[1]);
+
+        Vector2Int mousePos = scEditorWindow.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
         Graphics2D g2 = (Graphics2D)g;
         Stroke oldStroke = g2.getStroke();
         g2.setStroke(new BasicStroke(thickness));
         Color oldColor = g2.getColor();
         g2.setColor(color.getColor());
-        g2.drawOval(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
+        Rectangle rectangle = new Rectangle(mousePos.x - drawWidth / 2, mousePos.y - drawHeight / 2, drawWidth, drawHeight);
+        g2.drawOval(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         g2.setColor(oldColor);
         g2.setStroke(oldStroke);
         g2.dispose();
+        return rectangle;
     }
 
     @Override
@@ -97,6 +106,7 @@ public class CircleStamp implements IStamp{
 
     @Override
     public void reset() {
+        Config config = scEditorWindow.getConfig();
         color = new PBRColor(config.getColor("editorStampCircleDefaultColor"));
         width = config.getInt("editorStampCircleWidth");
         height = config.getInt("editorStampCircleHeight");

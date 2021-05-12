@@ -13,11 +13,11 @@ import java.util.logging.Level;
 
 import javax.swing.JFrame;
 
+import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
-import io.wollinger.snipsniper.editorwindow.EditorWindow;
 
 public class CaptureWindow extends JFrame implements WindowListener{
 	Sniper sniperInstance;
@@ -218,7 +218,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			leftToRight = true;
 		}
 		if (sniperInstance.cfg.getBool("openEditor")) {
-			new EditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", sniperInstance.cfg, leftToRight, finalLocation, inClipboard, false);
+			new SCEditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", sniperInstance.cfg, leftToRight, finalLocation, inClipboard, false);
 		}
 
 		sniperInstance.killCaptureWindow();

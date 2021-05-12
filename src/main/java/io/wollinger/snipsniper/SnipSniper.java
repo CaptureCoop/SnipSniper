@@ -13,10 +13,10 @@ import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import io.wollinger.snipsniper.editorwindow.EditorWindow;
+import io.wollinger.snipsniper.sceditor.SCEditorWindow;
+import io.wollinger.snipsniper.scviewer.SCViewerWindow;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
-import io.wollinger.snipsniper.viewer.ViewerWindow;
 import org.apache.commons.lang3.SystemUtils;
 
 public final class SnipSniper {
@@ -111,13 +111,14 @@ public final class SnipSniper {
 
 		config.save();
 
+		System.setProperty("sun.java2d.opengl", "true");
+		System.setProperty("sun.java2d.uiScale", "1.0");
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-
-		System.setProperty("sun.java2d.uiScale", "1.0");
 
 		LogManager.log(ID, "Loading resources", Level.INFO);
 		Icons.loadResources();
@@ -130,7 +131,7 @@ public final class SnipSniper {
 		}
 
 		if(cmdline.isEditorOnly() || isEditorOnly) {
-			Config config =  EditorWindow.getStandaloneEditorConfig();
+			Config config =  SCEditorWindow.getStandaloneEditorConfig();
 			config.save();
 
 			boolean fileExists;
@@ -152,16 +153,7 @@ public final class SnipSniper {
 				}
 			}
 
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			int width = 512;
-			int height = 512;
-			if(img != null) {
-				width = img.getWidth();
-				height = img.getHeight();
-			}
-			int x = (int) (screenSize.getWidth() / 2 - width / 2);
-			int y = (int) (screenSize.getHeight() / 2 - height / 2);
-			new EditorWindow("EDIT", img, x, y, "SnipSniper Editor", config, false, path, false, true);
+			new SCEditorWindow("EDIT", img, -1, -1, "SnipSniper Editor", config, false, path, false, true);
 		} else if(cmdline.isViewerOnly() || isViewerOnly) {
 			File file = null;
 			if(cmdline.getViewerFile() != null && !cmdline.getViewerFile().isEmpty())
@@ -175,7 +167,7 @@ public final class SnipSniper {
 				}
 			}
 
-			new ViewerWindow(file);
+			new SCViewerWindow(file);
 		} else {
 			resetProfiles();
 		}

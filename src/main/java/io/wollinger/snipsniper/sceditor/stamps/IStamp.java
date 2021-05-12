@@ -1,4 +1,4 @@
-package io.wollinger.snipsniper.editorwindow.stamps;
+package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 
 public interface IStamp {
     void update(InputContainer input, int mouseWheelDirection, KeyEvent keyEvent);
-    void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint);
+    Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint);
     void editorUndo(int historyPoint);
 
     void reset();

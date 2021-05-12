@@ -31,6 +31,10 @@ public class Vector2Int {
 		this.y = (int) y;
 	}
 
+	public Point toPoint() {
+		return new Point(x,y);
+	}
+
 	public String toString() {
 		return "Vector2Int(" + x + "/" + y + ")";
 	}

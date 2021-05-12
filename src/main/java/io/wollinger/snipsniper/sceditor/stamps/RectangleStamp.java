@@ -1,14 +1,16 @@
-package io.wollinger.snipsniper.editorwindow.stamps;
+package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class RectangleStamp implements IStamp {
-    private final Config config;
+    private final SCEditorWindow scEditorWindow;
 
     private int width;
     private int height;
@@ -23,8 +25,8 @@ public class RectangleStamp implements IStamp {
 
     private PBRColor color;
 
-    public RectangleStamp(Config config) {
-        this.config = config;
+    public RectangleStamp(SCEditorWindow scEditorWindow) {
+        this.scEditorWindow = scEditorWindow;
         reset();
     }
 
@@ -78,16 +80,23 @@ public class RectangleStamp implements IStamp {
     }
 
     @Override
-    public void render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+        Vector2Int mousePos = scEditorWindow.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
         Graphics2D g2 = (Graphics2D)g;
         Stroke oldStroke = g2.getStroke();
-        g2.setStroke(new BasicStroke(thickness));
+        Double[] difference = scEditorWindow.getDifferenceFromImage();
+        int strokeThickness = (int)(thickness*difference[0]);
+        if(strokeThickness <= 0)
+            strokeThickness = 1;
+        g2.setStroke(new BasicStroke(strokeThickness));
         Color oldColor = g2.getColor();
         g2.setColor(color.getColor());
-        g2.drawRect(input.getMouseX() - width / 2, input.getMouseY() - height / 2, width, height);
+        Rectangle rectangle = new Rectangle((int)(mousePos.x - ((double)width*difference[0]) / 2), (int)(mousePos.y - ((double)height*difference[1]) / 2), (int)((double)width*difference[0]), (int)((double)height*difference[1]));
+        g2.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         g2.setColor(oldColor);
         g2.setStroke(oldStroke);
         g2.dispose();
+        return rectangle;
     }
 
     @Override
@@ -95,6 +104,7 @@ public class RectangleStamp implements IStamp {
 
     @Override
     public void reset() {
+        Config config = scEditorWindow.getConfig();
         color = new PBRColor(config.getColor("editorStampRectangleDefaultColor"));
 
         width = config.getInt("editorStampRectangleWidth");

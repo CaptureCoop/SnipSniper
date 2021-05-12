@@ -7,11 +7,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class SnipScopeRenderer extends JPanel {
-    private SnipScopeWindow snipScopeWindow;
+    private final SnipScopeWindow snipScopeWindow;
 
     public SnipScopeRenderer(SnipScopeWindow snipScopeWindow) {
         this.snipScopeWindow = snipScopeWindow;
     }
+
+    public Rectangle lastRectangle;
 
     public void paint(Graphics g) {
         Dimension optimalDimension = snipScopeWindow.getOptimalImageDimension();
@@ -28,7 +30,8 @@ public class SnipScopeRenderer extends JPanel {
             y -= posModifier.y;
 
             float zoom = snipScopeWindow.getZoom();
-            g.drawImage(image, x, y, (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom), this);
+            lastRectangle = new Rectangle(x, y, (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom));
+            g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height , this);
         }
     }
 
