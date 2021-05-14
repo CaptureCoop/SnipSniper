@@ -111,7 +111,7 @@ public final class SnipSniper {
 
 		config.save();
 
-		System.setProperty("sun.java2d.opengl", "true");
+		//System.setProperty("sun.java2d.opengl", "true"); TODO: This seems to make the standalone viewer not open the editor correctly. Disabling for now
 		System.setProperty("sun.java2d.uiScale", "1.0");
 
 		try {
