@@ -6,6 +6,7 @@ import io.wollinger.snipsniper.utils.Vector2Int;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class SnipScopeWindow extends JFrame {
@@ -21,6 +22,8 @@ public class SnipScopeWindow extends JFrame {
     private final InputContainer inputContainer = new InputContainer();
 
     private int movementKey = KeyEvent.VK_SPACE;
+    private boolean requireMovementKeyForZoom = true;
+
     public void init(BufferedImage image, SnipScopeRenderer renderer, SnipScopeListener listener) {
         this.image = image;
         this.renderer = renderer;
@@ -109,6 +112,14 @@ public class SnipScopeWindow extends JFrame {
     public void setImage(BufferedImage image) {
         this.image = image;
         optimalImageDimension = Utils.getScaledDimension(image, renderer.getSize());
+    }
+
+    public void setRequireMovementKeyForZoom(boolean value) {
+        requireMovementKeyForZoom = value;
+    }
+
+    public boolean isRequireMovementKeyForZoom() {
+        return requireMovementKeyForZoom;
     }
 
     public void setMovementKey(int keyCode) {

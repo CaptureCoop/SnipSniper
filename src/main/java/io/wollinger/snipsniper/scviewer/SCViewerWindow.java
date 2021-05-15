@@ -41,6 +41,8 @@ public class SCViewerWindow extends SnipScopeWindow {
             image = Utils.getDragPasteImage(Icons.icon_viewer, "Drop image here!");
         }
 
+        setRequireMovementKeyForZoom(false);
+
         SCViewerListener listener = new SCViewerListener(this);
         SnipScopeRenderer renderer = new SnipScopeRenderer(this);
         renderer.setDropTarget(new DropTarget() {
