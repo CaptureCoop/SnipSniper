@@ -51,17 +51,8 @@ public class SimpleBrush implements IStamp {
         g.setColor(oldColor);
 
         if(!input.isKeyPressed(scEditorWindow.getMovementKey())) {
-            Vector2Int p0Temp = scEditorWindow.getPointOnImage(input.getMousePathPoint(0));
-            Vector2Int p1Temp = scEditorWindow.getPointOnImage(input.getMousePathPoint(1));
-
-            Point p0 = null;
-            Point p1 = null;
-
-            if (p0Temp != null)
-                p0 = p0Temp.toPoint();
-
-            if (p1Temp != null)
-                p1 = p1Temp.toPoint();
+            Vector2Int p0 = scEditorWindow.getPointOnImage(input.getMousePathPoint(0));
+            Vector2Int p1 = scEditorWindow.getPointOnImage(input.getMousePathPoint(1));
 
             if (p0 != null && p1 != null) {
                 Graphics2D g2 = (Graphics2D) scEditorWindow.getImage().getGraphics();
@@ -73,7 +64,7 @@ public class SimpleBrush implements IStamp {
 
                 double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());
                 if (distance > config.getInt("editorStampSimpleBrushDistance")) {
-                    g2.drawLine((int) p0.getX(), (int) p0.getY(), (int) p1.getX(), (int) p1.getY());
+                    g2.drawLine(p0.getX(), p0.getY(), p1.getX(), p1.getY());
                     input.removeMousePathPoint(0);
                 } else {
                     input.removeMousePathPoint(1);

@@ -35,6 +35,14 @@ public class Vector2Int {
 		return new Point(x,y);
 	}
 
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
 	public String toString() {
 		return "Vector2Int(" + x + "/" + y + ")";
 	}
