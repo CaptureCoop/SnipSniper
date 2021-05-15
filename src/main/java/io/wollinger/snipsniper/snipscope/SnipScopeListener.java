@@ -63,7 +63,7 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
-        if (input.isKeyPressed(KeyEvent.VK_SPACE)) {
+        if (input.isKeyPressed(snipScopeWindow.getMovementKey())) {
             if(lastPoint == null) lastPoint = mouseEvent.getPoint();
             double x = lastPoint.getX() - mouseEvent.getPoint().getX();
             double y = lastPoint.getY() - mouseEvent.getPoint().getY();

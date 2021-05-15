@@ -20,6 +20,7 @@ public class SnipScopeWindow extends JFrame {
     private float zoom = 1;
     private final InputContainer inputContainer = new InputContainer();
 
+    private int movementKey = KeyEvent.VK_SPACE;
     public void init(BufferedImage image, SnipScopeRenderer renderer, SnipScopeListener listener) {
         this.image = image;
         this.renderer = renderer;
@@ -108,6 +109,14 @@ public class SnipScopeWindow extends JFrame {
     public void setImage(BufferedImage image) {
         this.image = image;
         optimalImageDimension = Utils.getScaledDimension(image, renderer.getSize());
+    }
+
+    public void setMovementKey(int keyCode) {
+        movementKey = keyCode;
+    }
+
+    public int getMovementKey() {
+        return movementKey;
     }
 
     public Vector2Int getZoomOffset() {

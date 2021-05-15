@@ -127,7 +127,7 @@ public class SCEditorListener extends SnipScopeListener {
         super.mouseReleased(mouseEvent);
 
         scEditorWindow.getInputContainer().clearMousePath();
-        if(!scEditorWindow.getInputContainer().isKeyPressed(KeyEvent.VK_SPACE)) {
+        if(!scEditorWindow.getInputContainer().isKeyPressed(scEditorWindow.getMovementKey())) {
             if (mouseEvent.getButton() == 1) {
                 save(scEditorWindow.getImage().getGraphics(), false);
             } else if (mouseEvent.getButton() == 2) {
@@ -173,7 +173,7 @@ public class SCEditorListener extends SnipScopeListener {
             return;
         }
 
-        if(!input.isKeyPressed(KeyEvent.VK_SPACE))
+        if(!input.isKeyPressed(scEditorWindow.getMovementKey()))
             scEditorWindow.getSelectedStamp().update(input, mouseWheelEvent.getWheelRotation(), null);
         scEditorWindow.repaint();
     }
