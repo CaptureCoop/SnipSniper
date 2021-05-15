@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class SCEditorWindow extends SnipScopeWindow {
-    private final String id;
     private final Config config;
     private final String title;
     private String saveLocation;
@@ -34,7 +33,7 @@ public class SCEditorWindow extends SnipScopeWindow {
     public static final String FILENAME_MODIFIER = "_edited";
 
     public SCEditorWindow(String id, BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
-        this.id = id;
+        super(id);
         this.config = config;
         this.title = title;
         this.saveLocation = saveLocation;
@@ -76,6 +75,7 @@ public class SCEditorWindow extends SnipScopeWindow {
             int borderSize = config.getInt("borderSize");
             if (!isLeftToRight) borderSize = -borderSize;
             setLocation((x - X_OFFSET) + borderSize, y - getInsets().top + borderSize);
+            LogManager.log(getID(), "Setting location to " + getLocation(), Level.INFO);
         }
 
         if(!isStandalone) {
@@ -117,13 +117,13 @@ public class SCEditorWindow extends SnipScopeWindow {
         Graphics g = finalImg.getGraphics();
         g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), this);
         g.dispose();
-        Utils.saveImage(id, finalImg, FILENAME_MODIFIER, config);
+        Utils.saveImage(getID(), finalImg, FILENAME_MODIFIER, config);
         if(config.getBool("copyToClipboard"))
-            Utils.copyToClipboard(id,finalImg);
+            Utils.copyToClipboard(getID(),finalImg);
     }
 
     public void refreshTitle() {
-        LogManager.log(id, "Refreshing title", Level.INFO);
+        LogManager.log(getID(), "Refreshing title", Level.INFO);
         String newTitle = title;
         if(saveLocation != null && !saveLocation.isEmpty())
             newTitle += " (" + saveLocation + ")";
@@ -135,7 +135,7 @@ public class SCEditorWindow extends SnipScopeWindow {
 
     public void setImage(BufferedImage image, boolean resetHistory, boolean isNewImage) {
         super.setImage(image);
-        LogManager.log(id, "Setting new Image", Level.INFO);
+        LogManager.log(getID(), "Setting new Image", Level.INFO);
 
         if(listener != null && resetHistory) {
             listener.resetHistory();
@@ -185,11 +185,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         return qualityHints;
     }
 
-    public String getID() {
-        return id;
-    }
-
     public String toString() {
-        return Utils.formatArgs("SCEditorWindow ID:[{0}] Pos:[{1}] Path:[{2}]", id, getLocation(), saveLocation);
+        return Utils.formatArgs("SCEditorWindow ID:[{0}] Pos:[{1}] Path:[{2}]", getID(), getLocation(), saveLocation);
     }
 }

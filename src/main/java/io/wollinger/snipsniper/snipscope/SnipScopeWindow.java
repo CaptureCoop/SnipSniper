@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class SnipScopeWindow extends JFrame {
+    private String id;
     private BufferedImage image;
 
     private Dimension optimalImageDimension;
@@ -23,6 +24,10 @@ public class SnipScopeWindow extends JFrame {
 
     private int movementKey = KeyEvent.VK_SPACE;
     private boolean requireMovementKeyForZoom = true;
+
+    public SnipScopeWindow(String id) {
+        this.id = id;
+    }
 
     public void init(BufferedImage image, SnipScopeRenderer renderer, SnipScopeListener listener) {
         this.image = image;
@@ -168,6 +173,10 @@ public class SnipScopeWindow extends JFrame {
 
     public InputContainer getInputContainer() {
         return inputContainer;
+    }
+
+    public String getID() {
+        return id;
     }
 
 }

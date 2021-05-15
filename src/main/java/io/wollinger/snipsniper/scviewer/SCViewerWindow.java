@@ -28,7 +28,8 @@ public class SCViewerWindow extends SnipScopeWindow {
 
     private boolean locked = false;
 
-    public SCViewerWindow(File file) {
+    public SCViewerWindow(String id, File file) {
+        super(id);
         currentFile = file;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         refreshTitle();
