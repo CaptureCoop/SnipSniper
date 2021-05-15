@@ -86,6 +86,9 @@ public class SCViewerWindow extends SnipScopeWindow {
     }
 
     public void slideImage(int direction) {
+        if(locked)
+            return;
+
         locked = true;
         int index = files.indexOf(currentFile.getAbsolutePath());
         if(direction == -1) {
