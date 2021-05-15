@@ -29,9 +29,12 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         input.setKey(keyEvent.getKeyCode(), true);
-        if(input.isKeyPressed(KeyEvent.VK_R)) {
+        if(input.isKeyPressed(KeyEvent.VK_R))
             snipScopeWindow.resetZoom();
-        }
+
+        if(input.isKeyPressed(KeyEvent.VK_ESCAPE))
+            snipScopeWindow.dispose();
+
         snipScopeWindow.repaint();
     }
 

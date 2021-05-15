@@ -3,6 +3,7 @@ package io.wollinger.snipsniper.scviewer;
 import io.wollinger.snipsniper.snipscope.SnipScopeListener;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 public class SCViewerListener extends SnipScopeListener {
     private final SCViewerWindow scViewerWindow;
@@ -10,6 +11,13 @@ public class SCViewerListener extends SnipScopeListener {
     public SCViewerListener(SCViewerWindow snipScopeWindow) {
         super(snipScopeWindow);
         scViewerWindow = snipScopeWindow;
+    }
+
+    @Override
+    public void mousePressed(MouseEvent mouseEvent) {
+        super.mousePressed(mouseEvent);
+        if(mouseEvent.getButton() == 3)
+            scViewerWindow.dispose();
     }
 
     @Override
