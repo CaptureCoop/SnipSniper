@@ -130,11 +130,9 @@ public class Utils {
 		}
 
 		BufferedImage image = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
 		Graphics2D g = image.createGraphics();
 		g.drawImage(img, 0, 0, null);
 		g.dispose();
-
 		return image;
 	}
 
@@ -212,6 +210,7 @@ public class Utils {
 	    BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
 	    Graphics g = b.getGraphics();
 	    g.drawImage(source, 0, 0, source.getWidth(), source.getHeight(), null);
+	    g.dispose();
 	    return b;
 	}
 
