@@ -106,11 +106,6 @@ public class SCEditorWindow extends SnipScopeWindow {
             setLocationAuto();
     }
 
-    public void kill() {
-        //TODO: set image to null?
-        dispose();
-    }
-
     public void saveImage() {
         BufferedImage image = getImage();
         BufferedImage finalImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);

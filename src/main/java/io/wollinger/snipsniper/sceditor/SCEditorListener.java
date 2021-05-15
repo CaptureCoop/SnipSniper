@@ -18,12 +18,14 @@ import java.util.logging.Level;
 
 public class SCEditorListener extends SnipScopeListener {
     private final SCEditorWindow scEditorWindow;
+    private final InputContainer input;
     private final ArrayList<BufferedImage> history = new ArrayList<>();
     private boolean openColorChooser = false;
 
     public SCEditorListener(SCEditorWindow snipScopeWindow) {
         super(snipScopeWindow);
         scEditorWindow = snipScopeWindow;
+        input = scEditorWindow.getInputContainer();
     }
 
     public void resetHistory() {
@@ -35,15 +37,10 @@ public class SCEditorListener extends SnipScopeListener {
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         super.keyPressed(keyEvent);
-
         keyEvent.consume();
-        int keyCode = keyEvent.getKeyCode();
 
-        if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_ALT, KeyEvent.VK_C))
+        if(input.areKeysPressed(KeyEvent.VK_ALT, KeyEvent.VK_C))
             openColorChooser = true;
-
-        if(keyCode == KeyEvent.VK_ESCAPE)
-            scEditorWindow.kill();
 
         if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
             scEditorWindow.setSaveLocation("");
@@ -52,7 +49,7 @@ public class SCEditorListener extends SnipScopeListener {
             scEditorWindow.setImage(Utils.imageToBufferedImage(Utils.getImageFromClipboard()), true, true);
         }
 
-        switch (keyCode) {
+        switch (keyEvent.getKeyCode()) {
             case KeyEvent.VK_1: scEditorWindow.setSelectedStamp(0); break;
             case KeyEvent.VK_2: scEditorWindow.setSelectedStamp(1); break;
             case KeyEvent.VK_3: scEditorWindow.setSelectedStamp(2); break;
@@ -61,7 +58,7 @@ public class SCEditorListener extends SnipScopeListener {
             case KeyEvent.VK_6: scEditorWindow.setSelectedStamp(5); break;
         }
 
-        if(keyCode == KeyEvent.VK_ENTER) {
+        if(input.isKeyPressed(KeyEvent.VK_ENTER)) {
             JFileChooser chooser = new JFileChooser();
             chooser.setSelectedFile(new File(Utils.constructFilename(SCEditorWindow.FILENAME_MODIFIER)));
             if(chooser.showSaveDialog(chooser) == JFileChooser.APPROVE_OPTION){
@@ -77,7 +74,7 @@ public class SCEditorListener extends SnipScopeListener {
         if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_S)) {
             if(scEditorWindow.isDirty)
                 scEditorWindow.saveImage();
-            scEditorWindow.kill();
+            scEditorWindow.dispose();
         }
 
         if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_Z)) {
@@ -116,7 +113,7 @@ public class SCEditorListener extends SnipScopeListener {
         if(mouseEvent.getButton() == 3) {
             if(scEditorWindow.isDirty)
                 scEditorWindow.saveImage();
-            scEditorWindow.kill();
+            scEditorWindow.dispose();
         }
 
         scEditorWindow.repaint();
@@ -125,13 +122,11 @@ public class SCEditorListener extends SnipScopeListener {
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
         super.mouseReleased(mouseEvent);
-
         scEditorWindow.getInputContainer().clearMousePath();
         if(!scEditorWindow.getInputContainer().isKeyPressed(scEditorWindow.getMovementKey())) {
-            if (mouseEvent.getButton() == 1) {
-                save(scEditorWindow.getImage().getGraphics(), false);
-            } else if (mouseEvent.getButton() == 2) {
-                save(scEditorWindow.getImage().getGraphics(), true);
+            switch(mouseEvent.getButton()) {
+                case 1: save(scEditorWindow.getImage().getGraphics(), false); break;
+                case 2: save(scEditorWindow.getImage().getGraphics(), true); break;
             }
         }
         scEditorWindow.repaint();
