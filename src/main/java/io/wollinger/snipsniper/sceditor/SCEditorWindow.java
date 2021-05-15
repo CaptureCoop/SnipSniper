@@ -40,8 +40,12 @@ public class SCEditorWindow extends SnipScopeWindow {
         this.saveLocation = saveLocation;
         this.inClipboard = inClipboard;
 
+        LogManager.log(id, "Starting new editor window. (" + this + ")", Level.INFO);
+
         qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
+        LogManager.log(id, "Loading stamps", Level.INFO);
 
         stamps[0] = new CubeStamp(this);
         stamps[1] = new CounterStamp(this);
@@ -104,6 +108,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         setSizeAuto();
         if(x < 0 && y < 0)
             setLocationAuto();
+
     }
 
     public void saveImage() {
@@ -182,5 +187,9 @@ public class SCEditorWindow extends SnipScopeWindow {
 
     public String getID() {
         return id;
+    }
+
+    public String toString() {
+        return Utils.formatArgs("SCEditorWindow ID:[{0}] Pos:[{1}] Path:[{2}]", id, getLocation(), saveLocation);
     }
 }
