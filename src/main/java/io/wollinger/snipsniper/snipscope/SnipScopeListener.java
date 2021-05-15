@@ -70,9 +70,7 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
             if(lastPoint == null) lastPoint = mouseEvent.getPoint();
             double x = lastPoint.getX() - mouseEvent.getPoint().getX();
             double y = lastPoint.getY() - mouseEvent.getPoint().getY();
-
-            Vector2Int oldPos = snipScopeWindow.getPosition();
-            snipScopeWindow.setPosition(new Vector2Int(oldPos.x + x, oldPos.y +y));
+            snipScopeWindow.setPosition(Vector2Int.add(snipScopeWindow.getPosition(), new Vector2Int(x, y)));
 
             lastPoint = mouseEvent.getPoint();
             snipScopeWindow.repaint();

@@ -22,12 +22,12 @@ public class SnipScopeRenderer extends JPanel {
             int x = getWidth()/2 - (int)(optimalDimension.getWidth()/2);
             int y = getHeight()/2 - (int)(optimalDimension.getHeight()/2);
 
-            x -= snipScopeWindow.getZoomOffset().x;
-            y -= snipScopeWindow.getZoomOffset().y;
+            x -= snipScopeWindow.getZoomOffset().getX();
+            y -= snipScopeWindow.getZoomOffset().getY();
 
             Vector2Int posModifier = snipScopeWindow.getPosition();
-            x -= posModifier.x;
-            y -= posModifier.y;
+            x -= posModifier.getX();
+            y -= posModifier.getY();
 
             float zoom = snipScopeWindow.getZoom();
             lastRectangle = new Rectangle(x, y, (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom));

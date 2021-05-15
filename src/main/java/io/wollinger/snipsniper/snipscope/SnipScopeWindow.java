@@ -84,11 +84,11 @@ public class SnipScopeWindow extends JFrame {
         double imageX = (double)renderer.getWidth()/2 - optimalDimension.getWidth()/2;
         double imageY = (double)renderer.getHeight()/2 - optimalDimension.getHeight()/2;
 
-        imageX -= zoomOffset.x;
-        imageY -= zoomOffset.y;
+        imageX -= zoomOffset.getX();
+        imageY -= zoomOffset.getY();
 
-        imageX -= position.x;
-        imageY -= position.y;
+        imageX -= position.getX();
+        imageY -= position.getY();
 
         Double[] difference = getDifferenceFromImage();
 

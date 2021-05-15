@@ -84,8 +84,8 @@ public class CounterStamp implements IStamp{
         int drawHeight = (int) ((double)height * difference[1]);
 
         if(!isCensor) {
-            final int x = mousePos.x - drawWidth / 2;
-            final int y = mousePos.y - drawHeight / 2;
+            final int x = mousePos.getX() - drawWidth / 2;
+            final int y = mousePos.getY() - drawHeight / 2;
 
             Color oldFillColor = g.getColor();
             g.setColor(color.getColor());
@@ -102,7 +102,7 @@ public class CounterStamp implements IStamp{
             int h = (int) (drawHeight / fontSizeModifier);
             g.setFont(new Font("TimesRoman", Font.PLAIN, h));
             int w = g.getFontMetrics().stringWidth("" + count);
-            g.drawString("" + count, mousePos.x - w / 2, mousePos.y + h / 3);
+            g.drawString("" + count, mousePos.getX() - w / 2, mousePos.getY() + h / 3);
             g.setColor(oldColor);
 
             if (scEditorWindow.getConfig().getBool("editorStampCounterBorderEnabled")) {

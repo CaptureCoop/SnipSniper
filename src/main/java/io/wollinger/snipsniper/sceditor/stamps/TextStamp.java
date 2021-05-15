@@ -69,13 +69,13 @@ public class TextStamp implements IStamp{
         Color oldColor = g.getColor();
         g.setFont(new Font("Arial", fontMode, drawFontSize));
         g.setColor(color.getColor());
-        g.drawString(textToDraw, mousePos.x, mousePos.y);
+        g.drawString(textToDraw, mousePos.getX(), mousePos.getY());
         g.setFont(oldFont);
         g.setColor(oldColor);
 
         if(isSaveRender)
             text = "";
-        return new Rectangle(mousePos.x, mousePos.y, g.getFontMetrics().stringWidth(textToDraw), drawFontSize);
+        return new Rectangle(mousePos.getX(), mousePos.getY(), g.getFontMetrics().stringWidth(textToDraw), drawFontSize);
     }
 
     @Override

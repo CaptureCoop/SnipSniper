@@ -47,7 +47,7 @@ public class SimpleBrush implements IStamp {
 
         Color oldColor = g.getColor();
         g.setColor(new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), 255));
-        g.fillOval(mousePos.x-newSize/2, mousePos.y-newSize/2, newSize, newSize);
+        g.fillOval(mousePos.getX() - newSize / 2, mousePos.getY() - newSize / 2, newSize, newSize);
         g.setColor(oldColor);
 
         if(!input.isKeyPressed(scEditorWindow.getMovementKey())) {
@@ -75,7 +75,7 @@ public class SimpleBrush implements IStamp {
                 g2.dispose();
             }
         }
-        return new Rectangle(mousePos.x-newSize/2, mousePos.y-newSize/2, newSize, newSize);
+        return new Rectangle(mousePos.getX() - newSize / 2, mousePos.getY() - newSize / 2, newSize, newSize);
     }
 
     @Override
