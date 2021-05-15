@@ -29,11 +29,11 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         input.setKey(keyEvent.getKeyCode(), true);
-        if(input.isKeyPressed(KeyEvent.VK_R))
-            snipScopeWindow.resetZoom();
 
-        if(input.isKeyPressed(KeyEvent.VK_ESCAPE))
-            snipScopeWindow.dispose();
+        switch(keyEvent.getKeyCode()) {
+            case KeyEvent.VK_R: snipScopeWindow.resetZoom(); break;
+            case KeyEvent.VK_ESCAPE: snipScopeWindow.dispose(); break;
+        }
 
         snipScopeWindow.repaint();
     }
@@ -88,11 +88,9 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
     public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
         if(!snipScopeWindow.isRequireMovementKeyForZoom() || input.isKeyPressed(snipScopeWindow.getMovementKey())) {
             float oldZoom = snipScopeWindow.getZoom();
-            if (mouseWheelEvent.getWheelRotation() == -1) {
-                snipScopeWindow.setZoom(oldZoom + 0.1F);
-            } else if (mouseWheelEvent.getWheelRotation() == 1) {
-                if (oldZoom >= 0.2F)
-                    snipScopeWindow.setZoom(oldZoom - 0.1F);
+            switch (mouseWheelEvent.getWheelRotation()) {
+                case -1: snipScopeWindow.setZoom(oldZoom + 0.1F); break;
+                case 1: if (oldZoom >= 0.2F) snipScopeWindow.setZoom(oldZoom - 0.1F); break;
             }
             snipScopeWindow.calculateZoom();
         }
