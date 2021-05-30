@@ -113,6 +113,11 @@ public class CubeStamp implements IStamp{
     }
 
     @Override
+    public void mousePressedEvent(int button, boolean pressed) {
+
+    }
+
+    @Override
     public void reset() {
         color = new PBRColor(config.getColor("editorStampCubeDefaultColor"));
         width = config.getInt("editorStampCubeWidth");

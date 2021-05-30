@@ -103,6 +103,11 @@ public class RectangleStamp implements IStamp {
     public void editorUndo(int historyPoint) { }
 
     @Override
+    public void mousePressedEvent(int button, boolean pressed) {
+
+    }
+
+    @Override
     public void reset() {
         Config config = scEditorWindow.getConfig();
         color = new PBRColor(config.getColor("editorStampRectangleDefaultColor"));

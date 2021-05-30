@@ -139,6 +139,11 @@ public class CounterStamp implements IStamp{
     }
 
     @Override
+    public void mousePressedEvent(int button, boolean pressed) {
+
+    }
+
+    @Override
     public void reset() {
         count = 1;
         Config cfg = scEditorWindow.getConfig();

@@ -11,6 +11,8 @@ public interface IStamp {
     Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint);
     void editorUndo(int historyPoint);
 
+    void mousePressedEvent(int button, boolean pressed);
+
     void reset();
 
     int getWidth();

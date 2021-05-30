@@ -110,6 +110,8 @@ public class SCEditorListener extends SnipScopeListener {
     public void mousePressed(MouseEvent mouseEvent) {
         super.mousePressed(mouseEvent);
 
+        scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.getButton(), true);
+
         if(mouseEvent.getButton() == 3) {
             if(scEditorWindow.isDirty)
                 scEditorWindow.saveImage();
@@ -122,6 +124,9 @@ public class SCEditorListener extends SnipScopeListener {
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
         super.mouseReleased(mouseEvent);
+
+        scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.getButton(), false);
+
         scEditorWindow.getInputContainer().clearMousePath();
         if(!scEditorWindow.getInputContainer().isKeyPressed(scEditorWindow.getMovementKey())) {
             switch(mouseEvent.getButton()) {

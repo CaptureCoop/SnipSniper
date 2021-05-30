@@ -105,6 +105,11 @@ public class CircleStamp implements IStamp{
     }
 
     @Override
+    public void mousePressedEvent(int button, boolean pressed) {
+
+    }
+
+    @Override
     public void reset() {
         Config config = scEditorWindow.getConfig();
         color = new PBRColor(config.getColor("editorStampCircleDefaultColor"));

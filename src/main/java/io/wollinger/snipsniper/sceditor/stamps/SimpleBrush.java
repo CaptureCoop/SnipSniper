@@ -84,6 +84,11 @@ public class SimpleBrush implements IStamp {
     }
 
     @Override
+    public void mousePressedEvent(int button, boolean pressed) {
+
+    }
+
+    @Override
     public void reset() {
         color = new PBRColor(config.getColor("editorStampSimpleBrushDefaultColor"));
         size = config.getInt("editorStampSimpleBrushSize");
