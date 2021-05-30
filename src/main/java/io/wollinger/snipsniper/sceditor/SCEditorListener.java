@@ -21,6 +21,7 @@ public class SCEditorListener extends SnipScopeListener {
     private final InputContainer input;
     private final ArrayList<BufferedImage> history = new ArrayList<>();
     private boolean openColorChooser = false;
+    private boolean openSaveAsWindow = false;
 
     public SCEditorListener(SCEditorWindow snipScopeWindow) {
         super(snipScopeWindow);
@@ -42,6 +43,9 @@ public class SCEditorListener extends SnipScopeListener {
         if(input.areKeysPressed(KeyEvent.VK_ALT, KeyEvent.VK_C))
             openColorChooser = true;
 
+        if(input.isKeyPressed(KeyEvent.VK_ENTER))
+            openSaveAsWindow = true;
+
         if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
             scEditorWindow.setSaveLocation("");
             scEditorWindow.setInClipboard(true);
@@ -56,19 +60,6 @@ public class SCEditorListener extends SnipScopeListener {
             case KeyEvent.VK_4: scEditorWindow.setSelectedStamp(3); break;
             case KeyEvent.VK_5: scEditorWindow.setSelectedStamp(4); break;
             case KeyEvent.VK_6: scEditorWindow.setSelectedStamp(5); break;
-        }
-
-        if(input.isKeyPressed(KeyEvent.VK_ENTER)) {
-            JFileChooser chooser = new JFileChooser();
-            chooser.setSelectedFile(new File(Utils.constructFilename(SCEditorWindow.FILENAME_MODIFIER)));
-            if(chooser.showSaveDialog(chooser) == JFileChooser.APPROVE_OPTION){
-                try {
-                    if(chooser.getSelectedFile().createNewFile())
-                        ImageIO.write(scEditorWindow.getImage(), "png", chooser.getSelectedFile());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
         if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_S)) {
@@ -103,6 +94,20 @@ public class SCEditorListener extends SnipScopeListener {
             int x = (int)((scEditorWindow.getLocation().getX() + scEditorWindow.getWidth()/2));
             int y = (int)((scEditorWindow.getLocation().getY() + scEditorWindow.getHeight()/2));
             new ColorChooser(scEditorWindow.getConfig(), "Marker Color", scEditorWindow.getSelectedStamp().getColor(), scEditorWindow.getSelectedStamp().getID() + "DefaultColor", x, y);
+        }
+
+        if(openSaveAsWindow) {
+            openSaveAsWindow = false;
+            JFileChooser chooser = new JFileChooser();
+            chooser.setSelectedFile(new File(Utils.constructFilename(SCEditorWindow.FILENAME_MODIFIER)));
+            if(chooser.showSaveDialog(chooser) == JFileChooser.APPROVE_OPTION){
+                try {
+                    if(chooser.getSelectedFile().createNewFile())
+                        ImageIO.write(scEditorWindow.getImage(), "png", chooser.getSelectedFile());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
