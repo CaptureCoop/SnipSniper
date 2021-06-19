@@ -27,6 +27,7 @@ dependencies {
     compile 'com.1stleg:jnativehook:2.1.0'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'org.json:json:20201115'
+    implementation 'com.formdev:flatlaf:1.2'
 }
 
 jar {

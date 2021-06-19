@@ -13,6 +13,10 @@ import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.scviewer.SCViewerWindow;
 import io.wollinger.snipsniper.systray.Sniper;
@@ -115,8 +119,8 @@ public final class SnipSniper {
 		System.setProperty("sun.java2d.uiScale", "1.0");
 
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+			UIManager.setLookAndFeel(new FlatIntelliJLaf());
+		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
 

@@ -30,6 +30,8 @@ SnipSniper uses these libraries in order to function properly
 
 * [org.json](https://www.json.org/) - JSON is a light-weight, language independent, data interchange format.
 
+* [FlatLaf](https://www.formdev.com/flatlaf/) - FlatLaf is a modern open-source cross-platform Look and Feel for Java Swing desktop applications.
+
 License
 ----
 
