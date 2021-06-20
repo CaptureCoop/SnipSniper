@@ -9,7 +9,8 @@ import java.awt.*;
 
 public class ConfigWindow extends JFrame {
     private Config config;
-    private JPanel mainConfigPanel;
+    private JPanel globalConfigPanel;
+    private JPanel snipConfigPanel;
     private JPanel editorConfigPanel;
     private JPanel viewerConfigPanel;
 
@@ -33,25 +34,26 @@ public class ConfigWindow extends JFrame {
         final int iconSize = 16;
         int index = 0;
 
-        if(showMain) {
-            mainConfigPanel = new JPanel();
-            tabPane.addTab("General Settings",  setupMainPane());
-            tabPane.setIconAt(index, new ImageIcon(Icons.icon_taskbar.getScaledInstance(iconSize, iconSize, 0)));
-            index++;
-        }
+        snipConfigPanel = new JPanel();
+        tabPane.addTab("SnipSniper Settings",  setupSnipPane());
+        tabPane.setIconAt(index, new ImageIcon(Icons.icon_taskbar.getScaledInstance(iconSize, iconSize, 0)));
+        index++;
 
-        if(showEditor) {
-            editorConfigPanel = new JPanel();
-            tabPane.addTab("Editor Settings", setupEditorPane());
-            tabPane.setIconAt(index, new ImageIcon(Icons.icon_editor.getScaledInstance(iconSize,iconSize,0)));
-            index++;
-        }
+        editorConfigPanel = new JPanel();
+        tabPane.addTab("Editor Settings", setupEditorPane());
+        tabPane.setIconAt(index, new ImageIcon(Icons.icon_editor.getScaledInstance(iconSize,iconSize,0)));
+        index++;
 
-        if(showViewer) {
-            viewerConfigPanel = new JPanel();
-            tabPane.addTab("Viewer Settings", setupViewerPane());
-            tabPane.setIconAt(index, new ImageIcon(Icons.icon_viewer.getScaledInstance(iconSize,iconSize,0)));
-        }
+        viewerConfigPanel = new JPanel();
+        tabPane.addTab("Viewer Settings", setupViewerPane());
+        tabPane.setIconAt(index, new ImageIcon(Icons.icon_viewer.getScaledInstance(iconSize,iconSize,0)));
+        index++;
+
+        globalConfigPanel = new JPanel();
+        tabPane.addTab("Global Settings", setupGlobalPane());
+        tabPane.setIconAt(index, new ImageIcon(Icons.icon.getScaledInstance(iconSize, iconSize, 0)));
+
+        //TODO: handle greying out options
 
         add(tabPane);
     }
@@ -65,12 +67,20 @@ public class ConfigWindow extends JFrame {
         return scrollPane;
     }
 
-    public JComponent setupMainPane() {
-        mainConfigPanel.setLayout(new BoxLayout(mainConfigPanel, BoxLayout.PAGE_AXIS));
+    public JComponent setupGlobalPane() {
+        globalConfigPanel.setLayout(new BoxLayout(globalConfigPanel, BoxLayout.PAGE_AXIS));
         for(int i = 0; i < 100; i++) {
-            mainConfigPanel.add(new JButton("Main Config Button"));
+            globalConfigPanel.add(new JButton("Global Config Button"));
         }
-        return generateScrollPane(mainConfigPanel);
+        return generateScrollPane(globalConfigPanel);
+    }
+
+    public JComponent setupSnipPane() {
+        snipConfigPanel.setLayout(new BoxLayout(snipConfigPanel, BoxLayout.PAGE_AXIS));
+        for(int i = 0; i < 100; i++) {
+            snipConfigPanel.add(new JButton("SnipSniper Config Button"));
+        }
+        return generateScrollPane(snipConfigPanel);
     }
 
     public JComponent setupEditorPane() {
