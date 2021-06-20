@@ -2,6 +2,7 @@ package io.wollinger.snipsniper.configwindow;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.*;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -81,7 +82,7 @@ public class ConfigWindow extends JFrame {
 
     public JComponent setupSnipPane(Config configOriginal) {
         snipConfigPanel.removeAll();
-        snipConfigPanel.setLayout(new BoxLayout(snipConfigPanel, BoxLayout.PAGE_AXIS));
+        snipConfigPanel.setLayout(new MigLayout("align 50% 0%"));
 
         final boolean[] allowSaving = {true};
         final int maxBorder = 999;
@@ -140,12 +141,7 @@ public class ConfigWindow extends JFrame {
 
 
         PBRColor borderColor = new PBRColor(config.getColor("borderColor"));
-        borderColor.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                config.set("borderColor", Utils.rgb2hex((Color)e.getSource()));
-            }
-        });
+        borderColor.addChangeListener(e -> config.set("borderColor", Utils.rgb2hex((Color)e.getSource())));
 
         JSpinner snipeDelay = new JSpinner(new SpinnerNumberModel(config.getInt("snipeDelay"), 0.0, 100, 1.0));
         snipeDelay.addChangeListener(e -> config.set("snipeDelay", (int)((double) snipeDelay.getValue()) + ""));
@@ -156,8 +152,10 @@ public class ConfigWindow extends JFrame {
 
         JPanel options = new JPanel(new GridLayout(0,1));
 
-        JPanel row0 = new JPanel(new GridLayout(0,2));
-        row0.add(createJLabel(LangManager.getItem("config_label_hotkey"), JLabel.CENTER, JLabel.CENTER));
+        int hGap = 20;
+
+        JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row0.add(createJLabel(LangManager.getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER));
         JPanel row0_1 = new JPanel(new GridLayout(0,2));
         row0_1.add(hotKeyButton);
         JButton deleteHotKey = new JButton(LangManager.getItem("config_label_delete"));
@@ -169,18 +167,18 @@ public class ConfigWindow extends JFrame {
         row0.add(row0_1);
         options.add(row0);
 
-        JPanel row1 = new JPanel(new GridLayout(0,2));
-        row1.add(createJLabel(LangManager.getItem("config_label_saveimages"), JLabel.CENTER, JLabel.CENTER));
+        JPanel row1 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row1.add(createJLabel(LangManager.getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER));
         row1.add(saveToDisk);
         options.add(row1);
 
-        JPanel row2 = new JPanel(new GridLayout(0,2));
-        row2.add(createJLabel(LangManager.getItem("config_label_copyclipboard"), JLabel.CENTER, JLabel.CENTER));
+        JPanel row2 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row2.add(createJLabel(LangManager.getItem("config_label_copyclipboard"), JLabel.RIGHT, JLabel.CENTER));
         row2.add(copyToClipboard);
         options.add(row2);
 
-        JPanel row3 = new JPanel(new GridLayout(0,2));
-        row3.add(createJLabel(LangManager.getItem("config_label_bordersize"), JLabel.CENTER, JLabel.CENTER));
+        JPanel row3 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row3.add(createJLabel(LangManager.getItem("config_label_bordersize"), JLabel.RIGHT, JLabel.CENTER));
         JPanel row3_2 = new JPanel(new GridLayout(0,2));
         row3_2.add(borderSize);
         JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
@@ -195,20 +193,20 @@ public class ConfigWindow extends JFrame {
         row3.add(row3_2);
         options.add(row3);
 
-        JPanel row4 = new JPanel(new GridLayout(0,2));
-        row4.add(createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.CENTER, JLabel.CENTER));
+        JPanel row4 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row4.add(createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER));
         row4.add(pictureLocation);
         options.add(row4);
 
-        JPanel row5 = new JPanel(new GridLayout(0,2));
-        row5.add(createJLabel(LangManager.getItem("config_label_snapdelay"), JLabel.CENTER, JLabel.CENTER));
+        JPanel row5 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row5.add(createJLabel(LangManager.getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER));
         JPanel row5_2 = new JPanel(new GridLayout(0,2));
         row5_2.add(snipeDelay);
         row5.add(row5_2);
         options.add(row5);
 
-        JPanel row6 = new JPanel(new GridLayout(0,2));
-        row6.add(createJLabel(LangManager.getItem("config_label_openeditor"), JLabel.CENTER, JLabel.CENTER));
+        JPanel row6 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row6.add(createJLabel(LangManager.getItem("config_label_openeditor"), JLabel.RIGHT, JLabel.CENTER));
         row6.add(openEditor);
         options.add(row6);
 
@@ -264,6 +262,12 @@ public class ConfigWindow extends JFrame {
         jlabel.setHorizontalAlignment(horizontalAlignment);
         jlabel.setVerticalAlignment(verticalAlignment);
         return jlabel;
+    }
+
+    public GridLayout getGridLayoutWithMargin(int row, int cols, int hGap) {
+        GridLayout layout = new GridLayout(row, cols);
+        layout.setHgap(hGap);
+        return layout;
     }
 
 }
