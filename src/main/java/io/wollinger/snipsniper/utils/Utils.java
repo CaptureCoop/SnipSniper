@@ -29,6 +29,11 @@ public class Utils {
 	    }
 	}
 
+	public static Color getContrastColor(Color color) {
+		double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
+		return y >= 128 ? Color.black : Color.white;
+	}
+
 	public static void printArgs(PrintStream out, final String message, final Object... args) {
 		out.println(formatArgs(message, args));
 	}
