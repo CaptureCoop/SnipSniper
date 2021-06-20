@@ -126,6 +126,7 @@ public final class SnipSniper {
 			UIManager.put( "ScrollBar.showButtons", true );
 			UIManager.put( "ScrollBar.width", 16 );
 			UIManager.put( "TabbedPane.showTabSeparators", true );
+			UIManager.put( "TitlePane.useWindowDecorations", false );
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
