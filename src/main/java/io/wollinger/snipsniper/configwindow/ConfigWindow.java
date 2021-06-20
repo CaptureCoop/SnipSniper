@@ -17,7 +17,7 @@ public class ConfigWindow extends JFrame {
     private JPanel editorConfigPanel;
     private JPanel viewerConfigPanel;
 
-    private ArrayList<ConfigWindowListener> listeners = new ArrayList<>();
+    private final ArrayList<ConfigWindowListener> listeners = new ArrayList<>();
 
     public ConfigWindow(Config config, boolean showMain, boolean showEditor, boolean showViewer) {
         this.config = config;
@@ -147,8 +147,7 @@ public class ConfigWindow extends JFrame {
                     int msgBox = JOptionPane.showOptionDialog(null,LangManager.getItem("config_sanitation_directory_notexist"), LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
                     if(msgBox == 1) {
-                        File f = new File(saveLocationFinal);
-                        allowSaving[0] = f.mkdirs();
+                        allowSaving[0] = new File(saveLocationFinal).mkdirs();
 
                         if(!allowSaving[0]) {
                             msgError(LangManager.getItem("config_sanitation_failed_createdirectory"));
@@ -235,16 +234,13 @@ public class ConfigWindow extends JFrame {
         options.add(row6);
 
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(allowSaving[0]) {
-                    configOriginal.loadFromConfig(config);
-                    configOriginal.save();
-                    for(ConfigWindowListener listener : listeners)
-                        listener.windowClosed();
-                    close();
-                }
+        saveButton.addActionListener(e -> {
+            if(allowSaving[0]) {
+                configOriginal.loadFromConfig(config);
+                configOriginal.save();
+                for(ConfigWindowListener listener : listeners)
+                    listener.windowClosed();
+                close();
             }
         });
 
