@@ -3,6 +3,11 @@ package io.wollinger.snipsniper.utils;
 import io.wollinger.snipsniper.Config;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,11 +23,39 @@ public class ColorChooser extends JFrame{
 	private final String configKey;
     private final Config config;
 
+    private ArrayList<CustomWindowListener> listeners = new ArrayList<>();
+
 	public ColorChooser(Config config, String title, PBRColor color, String configKey, int x, int y) {
         instance = this;
         this.config = config;
 		this.color = color;
 		this.configKey = configKey;
+
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent windowEvent) { }
+
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                close();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent windowEvent) { }
+
+            @Override
+            public void windowIconified(WindowEvent windowEvent) { }
+
+            @Override
+            public void windowDeiconified(WindowEvent windowEvent) { }
+
+            @Override
+            public void windowActivated(WindowEvent windowEvent) { }
+
+            @Override
+            public void windowDeactivated(WindowEvent windowEvent) { }
+        });
 
         setTitle(title);
         setIconImage(Icons.icon_taskbar);
@@ -31,17 +64,18 @@ public class ColorChooser extends JFrame{
 	}
 	
 	public void close() {
-		color.setColor(jcc.getColor());
+		for(CustomWindowListener listener : listeners) {
+		    listener.windowClosed();
+        }
 		dispose();
 	}
 
 	public void save() {
-	    color.setColor(jcc.getColor());
         if(configKey != null) {
             config.set(configKey, Utils.rgb2hex(color.getColor()));
             config.save();
         }
-        dispose();
+        close();
     }
 	
 	void init(int x, int y) {
@@ -58,7 +92,10 @@ public class ColorChooser extends JFrame{
         JPanel colorPanel = new JPanel();
         JPanel submitButtonPanel = new JPanel();
         JButton submit = new JButton("Okay");
-        submit.addActionListener(listener -> instance.close());
+        submit.addActionListener(e -> {
+            color.setColor(jcc.getColor());
+            instance.close();
+        });
 
         JButton save = new JButton("Save as default");
         save.addActionListener(listener -> instance.save());
@@ -75,8 +112,7 @@ public class ColorChooser extends JFrame{
         setFocusable(true);
         
         setAlwaysOnTop(true);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+
         pack();
         if(configKey != null) {
             save.setPreferredSize(new Dimension(this.getWidth() / 4, 50));
@@ -89,4 +125,8 @@ public class ColorChooser extends JFrame{
         setLocation(x - getWidth()/2, y - getHeight()/2);
         setVisible(true);
 	}
+
+	public void addWindowListener(CustomWindowListener listener) {
+	    listeners.add(listener);
+    }
 }
