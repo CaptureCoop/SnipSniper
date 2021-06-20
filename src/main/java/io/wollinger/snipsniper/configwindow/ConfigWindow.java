@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.sql.Array;
 import java.util.ArrayList;
 
 public class ConfigWindow extends JFrame {
@@ -19,7 +18,7 @@ public class ConfigWindow extends JFrame {
     private JPanel editorConfigPanel;
     private JPanel viewerConfigPanel;
 
-    private final ArrayList<ConfigWindowListener> listeners = new ArrayList<>();
+    private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
     private ArrayList<File> configFiles = new ArrayList<>();
 
     public ConfigWindow(Config config, boolean showMain, boolean showEditor, boolean showViewer) {
@@ -271,7 +270,7 @@ public class ConfigWindow extends JFrame {
             if(allowSaving[0]) {
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
-                for(ConfigWindowListener listener : listeners)
+                for(CustomWindowListener listener : listeners)
                     listener.windowClosed();
                 close();
             }
@@ -329,7 +328,7 @@ public class ConfigWindow extends JFrame {
         dispose();
     }
 
-    public void addCloseListener(ConfigWindowListener listener) {
+    public void addCloseListener(CustomWindowListener listener) {
         listeners.add(listener);
     }
 
