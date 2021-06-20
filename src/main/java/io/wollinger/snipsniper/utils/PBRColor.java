@@ -1,9 +1,14 @@
 package io.wollinger.snipsniper.utils;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.Color;
+import java.util.ArrayList;
 
+//Pass by reference color class. Nothing more.
 public class PBRColor {
 	private Color color;
+	private ArrayList<ChangeListener> listeners = new ArrayList<>();
 
 	public PBRColor(Color color) {
 		this.color = color;
@@ -23,6 +28,12 @@ public class PBRColor {
 
 	public void setColor(Color color) {
 		this.color = color;
+		for(ChangeListener listener : listeners) {
+			listener.stateChanged(new ChangeEvent(color));
+		}
 	}
-    //Pass by reference color class. Nothing more.
+
+	public void addChangeListener(ChangeListener listener) {
+		listeners.add(listener);
+	}
 }
