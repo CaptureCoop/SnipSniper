@@ -1,13 +1,18 @@
 package io.wollinger.snipsniper.configwindow;
 
 import javax.swing.JButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import com.sun.webkit.event.WCChangeListener;
 import io.wollinger.snipsniper.utils.LangManager;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseListener;
+
+import java.util.ArrayList;
 
 public class HotKeyButton extends JButton implements NativeKeyListener, NativeMouseListener {
 	private boolean listening = false;
@@ -16,6 +21,8 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 	public boolean isKeyboard = true;
 
 	private String oldLabel;
+
+	private ArrayList<ChangeListener> listeners = new ArrayList<>();
 
 	public HotKeyButton(String key) {
 		if(key.startsWith("NONE")) {
@@ -53,6 +60,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 				listening = false;
 				instance.setText(NativeKeyEvent.getKeyText(hotkey));
 				oldLabel = instance.getText();
+				notifyListeners();
 			}
 		}
 	}
@@ -72,6 +80,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 				hotkey = -1;
 				return;
 			}
+			notifyListeners();
 			isKeyboard = false;
 			listening = false;
 			instance.setText(LangManager.getItem("config_label_mouse") + " " + hotkey);
@@ -84,4 +93,13 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 
 	@Override
 	public void nativeMouseReleased(NativeMouseEvent nativeMouseEvent) { }
+
+	private void notifyListeners() {
+		for(ChangeListener listener : listeners)
+			listener.stateChanged(new ChangeEvent(this));
+	}
+
+	public void addDoneCapturingListener(ChangeListener listener) {
+		listeners.add(listener);
+	}
 }
