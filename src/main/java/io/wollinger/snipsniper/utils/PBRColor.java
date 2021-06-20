@@ -8,7 +8,7 @@ import java.util.ArrayList;
 //Pass by reference color class. Nothing more.
 public class PBRColor {
 	private Color color;
-	private ArrayList<ChangeListener> listeners = new ArrayList<>();
+	private final ArrayList<ChangeListener> listeners = new ArrayList<>();
 
 	public PBRColor(Color color) {
 		this.color = color;
