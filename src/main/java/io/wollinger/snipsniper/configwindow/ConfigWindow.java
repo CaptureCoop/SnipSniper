@@ -5,16 +5,10 @@ import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.*;
 import java.io.File;
+import java.util.ArrayList;
 
 public class ConfigWindow extends JFrame {
     private Config config; //TODO: allow choosing per tab with dropdowns.
@@ -23,12 +17,38 @@ public class ConfigWindow extends JFrame {
     private JPanel editorConfigPanel;
     private JPanel viewerConfigPanel;
 
+    private ArrayList<ConfigWindowListener> listeners = new ArrayList<>();
+
     public ConfigWindow(Config config, boolean showMain, boolean showEditor, boolean showViewer) {
         this.config = config;
 
         setSize(512, 512);
         setTitle(LangManager.getItem("config_label_config"));
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //TODO: Mark settings as closed so that settings can only be opened once.
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent windowEvent) { }
+
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                close();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent windowEvent) { }
+
+            @Override
+            public void windowIconified(WindowEvent windowEvent) { }
+
+            @Override
+            public void windowDeiconified(WindowEvent windowEvent) { }
+
+            @Override
+            public void windowActivated(WindowEvent windowEvent) { }
+
+            @Override
+            public void windowDeactivated(WindowEvent windowEvent) { }
+        });
         setup(showMain, showEditor, showViewer);
         setVisible(true);
 
@@ -105,6 +125,7 @@ public class ConfigWindow extends JFrame {
         JSpinner borderSize = new JSpinner(new SpinnerNumberModel(config.getInt("borderSize"), 0.0, maxBorder, 1.0));
         borderSize.addChangeListener(e -> config.set("borderSize", (int)((double) borderSize.getValue()) + ""));
 
+        //TODO: Add to wiki: if you just enter a word like "images" it will create the folder next to the jar.
         JTextField pictureLocation = new JTextField(config.getRawString("pictureFolder"));
         pictureLocation.addFocusListener(new FocusListener() {
             @Override
@@ -113,6 +134,9 @@ public class ConfigWindow extends JFrame {
             @Override
             public void focusLost(FocusEvent e) {
                 String saveLocationFinal = pictureLocation.getText();
+                if(!saveLocationFinal.endsWith("/"))
+                    saveLocationFinal += "/";
+
                 if(saveLocationFinal.contains("%userprofile%")) saveLocationFinal = saveLocationFinal.replace("%userprofile%", System.getenv("USERPROFILE"));
                 if(saveLocationFinal.contains("%username%")) saveLocationFinal = saveLocationFinal.replace("%username%", System.getProperty("user.name"));
 
@@ -217,7 +241,9 @@ public class ConfigWindow extends JFrame {
                 if(allowSaving[0]) {
                     configOriginal.loadFromConfig(config);
                     configOriginal.save();
-                    dispose();
+                    for(ConfigWindowListener listener : listeners)
+                        listener.windowClosed();
+                    close();
                 }
             }
         });
@@ -268,6 +294,14 @@ public class ConfigWindow extends JFrame {
         GridLayout layout = new GridLayout(row, cols);
         layout.setHgap(hGap);
         return layout;
+    }
+
+    public void close() {
+        dispose();
+    }
+
+    public void addCloseListener(ConfigWindowListener listener) {
+        listeners.add(listener);
     }
 
 }
