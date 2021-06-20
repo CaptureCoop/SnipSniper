@@ -27,6 +27,7 @@ public class Config {
 
 	public Config (Config config) {
 		//Copies config
+		LogManager.log(config.id, "Copying config for <" + config.filename + ">", Level.INFO);
 		loadFromConfig(config);
 	}
 
@@ -41,6 +42,7 @@ public class Config {
 	public Config (String filename, String id, String defaultFile) {
 		this.filename = filename;
 		this.id = id;
+		LogManager.log(id, "Creating config object for <" + filename + ">.", Level.INFO);
 		try {
 			if(new File(SnipSniper.getProfilesFolder() + filename).exists())
 				loadFile(SnipSniper.getProfilesFolder() + filename, settings, false);
