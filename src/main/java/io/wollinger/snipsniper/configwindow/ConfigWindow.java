@@ -67,9 +67,11 @@ public class ConfigWindow extends JFrame {
     public void refreshConfigFiles() {
         File profileFolder = new File(SnipSniper.getProfilesFolder());
         File[] files = profileFolder.listFiles();
-        for(File file : files) {
-            if(Utils.getFileExtension(file).equals(".cfg"))
-                configFiles.add(file);
+        if(files != null) {
+            for (File file : files) {
+                if (Utils.getFileExtension(file).equals(".cfg"))
+                    configFiles.add(file);
+            }
         }
     }
 

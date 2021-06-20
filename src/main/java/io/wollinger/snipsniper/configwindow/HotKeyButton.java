@@ -4,7 +4,6 @@ import javax.swing.JButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.sun.webkit.event.WCChangeListener;
 import io.wollinger.snipsniper.utils.LangManager;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -22,7 +21,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 
 	private String oldLabel;
 
-	private ArrayList<ChangeListener> listeners = new ArrayList<>();
+	private final ArrayList<ChangeListener> listeners = new ArrayList<>();
 
 	public HotKeyButton(String key) {
 		if(key.startsWith("NONE")) {

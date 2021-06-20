@@ -3,8 +3,6 @@ package io.wollinger.snipsniper.utils;
 import io.wollinger.snipsniper.Config;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ public class ColorChooser extends JFrame{
 	private final String configKey;
     private final Config config;
 
-    private ArrayList<CustomWindowListener> listeners = new ArrayList<>();
+    private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
 
 	public ColorChooser(Config config, String title, PBRColor color, String configKey, int x, int y) {
         instance = this;

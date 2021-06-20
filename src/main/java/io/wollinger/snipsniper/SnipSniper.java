@@ -14,9 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.scviewer.SCViewerWindow;
 import io.wollinger.snipsniper.systray.Sniper;
@@ -142,7 +140,7 @@ public final class SnipSniper {
 		}
 
 		if(cmdline.isEditorOnly() || isEditorOnly) {
-			Config config =  SCEditorWindow.getStandaloneEditorConfig();
+			Config config = SCEditorWindow.getStandaloneEditorConfig();
 			config.save();
 
 			boolean fileExists;

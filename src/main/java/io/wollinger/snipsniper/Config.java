@@ -32,8 +32,8 @@ public class Config {
 	}
 
 	public void loadFromConfig(Config config) {
-		this.filename = new String(config.filename);
-		this.id = new String(config.id);
+		this.filename = config.filename;
+		this.id = config.id;
 
 		settings.putAll((Map<? extends String, ? extends String>) config.settings.clone());
 		defaults.putAll((Map<? extends String, ? extends String>) config.defaults.clone());

@@ -44,10 +44,9 @@ public class Utils {
 		g.setColor(Color.WHITE);
 		g.fillRect(0,0,dropImage.getWidth(), dropImage.getHeight());
 		g.setColor(Color.BLACK);
-		String string = text;
 		g.setFont(new Font("Meiryo", Font.BOLD, 20));
-		int width = g.getFontMetrics().stringWidth(string);
-		g.drawString(string, dropImage.getWidth()/2 - width/2, dropImage.getHeight()/2);
+		int width = g.getFontMetrics().stringWidth(text);
+		g.drawString(text, dropImage.getWidth()/2 - width/2, dropImage.getHeight()/2);
 		g.drawImage(icon, dropImage.getWidth()/3,dropImage.getHeight()/10, dropImage.getWidth()/3, dropImage.getHeight()/3, null);
 		g.dispose();
 		return dropImage;
@@ -162,7 +161,7 @@ public class Utils {
 				}
 			}
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Could not save image to \"" + file.toString()  + "\"!" , "Error", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Could not save image to \"" + file + "\"!" , "Error", JOptionPane.INFORMATION_MESSAGE);
 			LogManager.log(profileID, "Failed Saving. Wanted Location: " + file, Level.WARNING);
 			LogManager.log(profileID, "Detailed Error: " + e.getMessage(), Level.WARNING);
 			e.printStackTrace();
