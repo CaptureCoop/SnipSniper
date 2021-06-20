@@ -11,10 +11,11 @@ public class btnConfig extends MenuItem{
 	public btnConfig(Sniper sniperInstance) {
 		setLabel(LangManager.getItem("menu_config"));
 		addActionListener(listener -> {
-			if(sniperInstance.cfgWnd == null)
-				sniperInstance.cfgWnd = new ConfigWindow(sniperInstance.cfg, true, true, true);
-			else
-				sniperInstance.cfgWnd.requestFocus();
+			//if(sniperInstance.cfgWnd == null)
+			//TODO: Is this okay?
+				new ConfigWindow(sniperInstance.cfg, true, true, true);
+			//else
+			//	sniperInstance.cfgWnd.requestFocus();
 		});
 		
 	}
