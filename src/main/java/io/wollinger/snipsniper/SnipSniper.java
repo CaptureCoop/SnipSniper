@@ -120,6 +120,9 @@ public final class SnipSniper {
 
 		try {
 			UIManager.setLookAndFeel(new FlatIntelliJLaf());
+			UIManager.put( "ScrollBar.showButtons", true );
+			UIManager.put( "ScrollBar.width", 16 );
+			UIManager.put( "TabbedPane.showTabSeparators", true );
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}

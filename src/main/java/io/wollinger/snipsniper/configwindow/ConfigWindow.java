@@ -35,40 +35,58 @@ public class ConfigWindow extends JFrame {
 
         if(showMain) {
             mainConfigPanel = new JPanel();
-            setupMainPane();
-            tabPane.addTab("General Settings", mainConfigPanel);
+            tabPane.addTab("General Settings",  setupMainPane());
             tabPane.setIconAt(index, new ImageIcon(Icons.icon_taskbar.getScaledInstance(iconSize, iconSize, 0)));
             index++;
         }
 
         if(showEditor) {
             editorConfigPanel = new JPanel();
-            setupEditorPane();
-            tabPane.addTab("Editor Settings", editorConfigPanel);
+            tabPane.addTab("Editor Settings", setupEditorPane());
             tabPane.setIconAt(index, new ImageIcon(Icons.icon_editor.getScaledInstance(iconSize,iconSize,0)));
             index++;
         }
 
         if(showViewer) {
             viewerConfigPanel = new JPanel();
-            setupViewerPane();
-            tabPane.addTab("Viewer Settings", viewerConfigPanel);
+            tabPane.addTab("Viewer Settings", setupViewerPane());
             tabPane.setIconAt(index, new ImageIcon(Icons.icon_viewer.getScaledInstance(iconSize,iconSize,0)));
         }
 
         add(tabPane);
     }
 
-    public void setupMainPane() {
-
+    public JScrollPane generateScrollPane(JComponent component) {
+        JScrollPane scrollPane = new JScrollPane(component);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+        return scrollPane;
     }
 
-    public void setupEditorPane() {
-
+    public JComponent setupMainPane() {
+        mainConfigPanel.setLayout(new BoxLayout(mainConfigPanel, BoxLayout.PAGE_AXIS));
+        for(int i = 0; i < 100; i++) {
+            mainConfigPanel.add(new JButton("Main Config Button"));
+        }
+        return generateScrollPane(mainConfigPanel);
     }
 
-    public void setupViewerPane() {
+    public JComponent setupEditorPane() {
+        editorConfigPanel.setLayout(new BoxLayout(editorConfigPanel, BoxLayout.PAGE_AXIS));
+        for(int i = 0; i < 100; i++) {
+            editorConfigPanel.add(new JButton("Editor Config Button"));
+        }
+        return generateScrollPane(editorConfigPanel);
+    }
 
+    public JComponent setupViewerPane() {
+        viewerConfigPanel.setLayout(new BoxLayout(viewerConfigPanel, BoxLayout.PAGE_AXIS));
+        for(int i = 0; i < 100; i++) {
+            viewerConfigPanel.add(new JButton("Viewer Config Button"));
+        }
+        return generateScrollPane(viewerConfigPanel);
     }
 
 }
