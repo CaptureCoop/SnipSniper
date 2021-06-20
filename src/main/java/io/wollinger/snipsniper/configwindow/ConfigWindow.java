@@ -6,8 +6,6 @@ import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -15,23 +13,18 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class ConfigWindow extends JFrame {
-    private Config config; //TODO: allow choosing per tab with dropdowns.
-
     private JTabbedPane tabPane;
-
     private JPanel snipConfigPanel;
     private JPanel editorConfigPanel;
     private JPanel viewerConfigPanel;
     private JPanel globalConfigPanel;
 
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
-    private ArrayList<File> configFiles = new ArrayList<>();
+    private final ArrayList<File> configFiles = new ArrayList<>();
 
-    private String id = "CFGW";
+    private final String id = "CFGW";
 
-    public ConfigWindow(Config config, boolean showMain, boolean showEditor, boolean showViewer) {
-        this.config = config;
-
+    public ConfigWindow(Config config) {
         LogManager.log(id, "Creating config window", Level.INFO);
 
         setSize(512, 512);
@@ -64,7 +57,7 @@ public class ConfigWindow extends JFrame {
 
         refreshConfigFiles();
 
-        setup(showMain, showEditor, showViewer);
+        setup(config);
         setVisible(true);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -80,8 +73,7 @@ public class ConfigWindow extends JFrame {
         }
     }
 
-    //TODO: Make sure that only pages related to from where we opened the config window are enabled.
-    public void setup(boolean showMain, boolean showEditor, boolean showViewer) {
+    public void setup(Config config) {
         tabPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 
         final int iconSize = 16;
@@ -134,17 +126,14 @@ public class ConfigWindow extends JFrame {
         Config config = new Config(configOriginal);
 
         HotKeyButton hotKeyButton = new HotKeyButton(config.getString("hotkey"));
-        hotKeyButton.addDoneCapturingListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if(hotKeyButton.hotkey != -1) {
-                    String hotkeyModifier = "KB";
-                    if (!hotKeyButton.isKeyboard)
-                        hotkeyModifier = "M";
-                    config.set("hotkey", hotkeyModifier + hotKeyButton.hotkey);
-                } else {
-                    config.set("hotkey", "NONE");
-                }
+        hotKeyButton.addDoneCapturingListener(e -> {
+            if(hotKeyButton.hotkey != -1) {
+                String hotkeyModifier = "KB";
+                if (!hotKeyButton.isKeyboard)
+                    hotkeyModifier = "M";
+                config.set("hotkey", hotkeyModifier + hotKeyButton.hotkey);
+            } else {
+                config.set("hotkey", "NONE");
             }
         });
 

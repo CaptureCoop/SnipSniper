@@ -12,7 +12,7 @@ public class btnConfig extends MenuItem{
 		setLabel(LangManager.getItem("menu_config"));
 		addActionListener(listener -> {
 			if(sniperInstance.cfgWnd == null) {
-				sniperInstance.cfgWnd = new ConfigWindow(sniperInstance.cfg, true, true, true);
+				sniperInstance.cfgWnd = new ConfigWindow(sniperInstance.cfg);
 				sniperInstance.cfgWnd.addCloseListener(() -> sniperInstance.cfgWnd = null);
 			} else {
 				sniperInstance.cfgWnd.requestFocus();
