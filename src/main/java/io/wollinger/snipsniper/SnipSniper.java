@@ -119,7 +119,10 @@ public final class SnipSniper {
 		System.setProperty("sun.java2d.uiScale", "1.0");
 
 		try {
-			UIManager.setLookAndFeel(new FlatIntelliJLaf());
+			if(config.getBool("darkMode"))
+				UIManager.setLookAndFeel(new FlatDarculaLaf());
+			else
+				UIManager.setLookAndFeel(new FlatIntelliJLaf());
 			UIManager.put( "ScrollBar.showButtons", true );
 			UIManager.put( "ScrollBar.width", 16 );
 			UIManager.put( "TabbedPane.showTabSeparators", true );
