@@ -242,6 +242,10 @@ public class ConfigWindow extends JFrame {
                 int x = (int)((getLocation().getX() + getWidth()/2));
                 int y = (int)((getLocation().getY() + getHeight()/2));
                 colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y);
+                colorChooser[0].addWindowListener(() -> {
+                    colorBtn.setBackground(borderColor.getColor());
+                    colorBtn.setForeground(Utils.getContrastColor(borderColor.getColor()));
+                });
             }
         });
         row3_2.add(colorBtn);
