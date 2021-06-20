@@ -1,6 +1,7 @@
 package io.wollinger.snipsniper.configwindow;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
@@ -8,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class ConfigWindow extends JFrame {
@@ -18,6 +20,7 @@ public class ConfigWindow extends JFrame {
     private JPanel viewerConfigPanel;
 
     private final ArrayList<ConfigWindowListener> listeners = new ArrayList<>();
+    private ArrayList<File> configFiles = new ArrayList<>();
 
     public ConfigWindow(Config config, boolean showMain, boolean showEditor, boolean showViewer) {
         this.config = config;
@@ -49,11 +52,23 @@ public class ConfigWindow extends JFrame {
             @Override
             public void windowDeactivated(WindowEvent windowEvent) { }
         });
+
+        refreshConfigFiles();
+
         setup(showMain, showEditor, showViewer);
         setVisible(true);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(screenSize.width / 2 - getWidth() / 2, screenSize.height / 2 - getHeight() / 2);
+    }
+
+    public void refreshConfigFiles() {
+        File profileFolder = new File(SnipSniper.getProfilesFolder());
+        File[] files = profileFolder.listFiles();
+        for(File file : files) {
+            if(Utils.getFileExtension(file).equals(".cfg"))
+                configFiles.add(file);
+        }
     }
 
     //TODO: Make sure that only pages related to from where we opened the config window are enabled.
@@ -177,6 +192,22 @@ public class ConfigWindow extends JFrame {
 
         int hGap = 20;
 
+        JPanel configDropdownRow = new JPanel(getGridLayoutWithMargin(0, 1, hGap));
+        ArrayList<String> profiles = new ArrayList<>();
+        for(File file : configFiles) {
+            if(file.getName().contains("profile"))
+                profiles.add(file.getName().replaceAll(".cfg", ""));
+        }
+        JComboBox dropdown = new JComboBox(profiles.toArray());
+        dropdown.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println(e.getItem());
+            }
+        });
+        configDropdownRow.add(dropdown);
+        options.add(configDropdownRow);
+
         JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row0.add(createJLabel(LangManager.getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER));
         JPanel row0_1 = new JPanel(new GridLayout(0,2));
@@ -205,6 +236,8 @@ public class ConfigWindow extends JFrame {
         JPanel row3_2 = new JPanel(new GridLayout(0,2));
         row3_2.add(borderSize);
         JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
+        colorBtn.setBackground(borderColor.getColor());
+        colorBtn.setForeground(Utils.getContrastColor(borderColor.getColor()));
         colorBtn.addActionListener(e -> {
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
                 int x = (int)((getLocation().getX() + getWidth()/2));
