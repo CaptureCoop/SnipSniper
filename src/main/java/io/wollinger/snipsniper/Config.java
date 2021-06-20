@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import io.wollinger.snipsniper.utils.LogManager;
@@ -18,12 +19,30 @@ public class Config {
 	private final HashMap <String, String> settings = new HashMap<>();
 	private final HashMap <String, String> defaults = new HashMap<>();
 
-	private final String id;
-	private final String filename;
+	private String id;
+	private String filename;
+
+	public static final String EXTENSION = "cfg";
+	public static final String DOT_EXTENSION = ".cfg";
+
+	public Config (Config config) {
+		//Copies config
+		LogManager.log(config.id, "Copying config for <" + config.filename + ">", Level.INFO);
+		loadFromConfig(config);
+	}
+
+	public void loadFromConfig(Config config) {
+		this.filename = config.filename;
+		this.id = config.id;
+
+		settings.putAll((Map<? extends String, ? extends String>) config.settings.clone());
+		defaults.putAll((Map<? extends String, ? extends String>) config.defaults.clone());
+	}
 
 	public Config (String filename, String id, String defaultFile) {
 		this.filename = filename;
 		this.id = id;
+		LogManager.log(id, "Creating config object for <" + filename + ">.", Level.INFO);
 		try {
 			if(new File(SnipSniper.getProfilesFolder() + filename).exists())
 				loadFile(SnipSniper.getProfilesFolder() + filename, settings, false);
@@ -62,7 +81,7 @@ public class Config {
 		else if(defaults.containsKey(key))
 			returnVal = defaults.get(key);
 		else
-			LogManager.log(id, "No value found for <" + key + ">.", Level.SEVERE);
+			LogManager.log(id, "No value found for <" + key + "> in Config <" + SnipSniper.getProfilesFolder() + filename + ">.", Level.SEVERE);
 		return returnVal;
 	}
 	
@@ -133,6 +152,10 @@ public class Config {
 			else
 				saveFile(settings);
 		}
+	}
+
+	public String getFilename() {
+		return filename;
 	}
 	
 }

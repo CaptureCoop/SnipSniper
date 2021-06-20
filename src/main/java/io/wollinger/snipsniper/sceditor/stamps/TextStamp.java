@@ -27,7 +27,7 @@ public class TextStamp implements IStamp{
     private Vector2Int livePosition = new Vector2Int();
     private boolean doSaveNextRender = false;
 
-    enum TextState {IDLE, TYPING};
+    enum TextState {IDLE, TYPING}
 
     public TextStamp(SCEditorWindow scEditorWindow) {
         this.scEditorWindow = scEditorWindow;

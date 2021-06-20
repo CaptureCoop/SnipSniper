@@ -14,9 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.scviewer.SCViewerWindow;
 import io.wollinger.snipsniper.systray.Sniper;
@@ -119,7 +117,14 @@ public final class SnipSniper {
 		System.setProperty("sun.java2d.uiScale", "1.0");
 
 		try {
-			UIManager.setLookAndFeel(new FlatIntelliJLaf());
+			if(config.getBool("darkMode"))
+				UIManager.setLookAndFeel(new FlatDarculaLaf());
+			else
+				UIManager.setLookAndFeel(new FlatIntelliJLaf());
+			UIManager.put( "ScrollBar.showButtons", true );
+			UIManager.put( "ScrollBar.width", 16 );
+			UIManager.put( "TabbedPane.showTabSeparators", true );
+			UIManager.put( "TitlePane.useWindowDecorations", false );
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
@@ -135,7 +140,7 @@ public final class SnipSniper {
 		}
 
 		if(cmdline.isEditorOnly() || isEditorOnly) {
-			Config config =  SCEditorWindow.getStandaloneEditorConfig();
+			Config config = SCEditorWindow.getStandaloneEditorConfig();
 			config.save();
 
 			boolean fileExists;
