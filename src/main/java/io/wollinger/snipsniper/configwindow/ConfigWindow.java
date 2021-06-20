@@ -127,16 +127,26 @@ public class ConfigWindow extends JFrame {
 
                         if(!allowSaving[0]) {
                             msgError(LangManager.getItem("config_sanitation_failed_createdirectory"));
+                        } else {
+                            config.set("pictureFolder", saveLocationFinal);
                         }
                     }
                 } else {
                     allowSaving[0] = true;
+                    config.set("pictureFolder", saveLocationFinal);
                 }
             }
         });
 
 
         PBRColor borderColor = new PBRColor(config.getColor("borderColor"));
+        borderColor.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                config.set("borderColor", Utils.rgb2hex((Color)e.getSource()));
+            }
+        });
+
         JTextField snipeDelay = new JTextField();
         snipeDelay.setText(config.getInt("snipeDelay") + "");
         JCheckBox openEditor = new JCheckBox();
