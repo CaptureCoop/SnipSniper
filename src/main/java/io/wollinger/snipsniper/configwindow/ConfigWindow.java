@@ -207,7 +207,7 @@ public class ConfigWindow extends JFrame {
             if(file.getName().contains("profile"))
                 profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
         }
-        JComboBox dropdown = new JComboBox(profiles.toArray());
+        JComboBox<Object> dropdown = new JComboBox<>(profiles.toArray());
         dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
         dropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
