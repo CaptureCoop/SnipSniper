@@ -147,10 +147,12 @@ public class ConfigWindow extends JFrame {
             }
         });
 
-        JTextField snipeDelay = new JTextField();
-        snipeDelay.setText(config.getInt("snipeDelay") + "");
+        JSpinner snipeDelay = new JSpinner(new SpinnerNumberModel(config.getInt("snipeDelay"), 0.0, 100, 1.0));
+        snipeDelay.addChangeListener(e -> config.set("snipeDelay", (int)((double) snipeDelay.getValue()) + ""));
+
         JCheckBox openEditor = new JCheckBox();
         openEditor.setSelected(config.getBool("openEditor"));
+        openEditor.addActionListener(e -> config.set("openEditor", openEditor.isSelected() + ""));
 
         JPanel options = new JPanel(new GridLayout(0,1));
 
