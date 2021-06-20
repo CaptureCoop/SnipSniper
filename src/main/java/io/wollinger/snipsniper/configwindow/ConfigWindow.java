@@ -6,23 +6,33 @@ import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class ConfigWindow extends JFrame {
     private Config config; //TODO: allow choosing per tab with dropdowns.
-    private JPanel globalConfigPanel;
+
+    private JTabbedPane tabPane;
+
     private JPanel snipConfigPanel;
     private JPanel editorConfigPanel;
     private JPanel viewerConfigPanel;
+    private JPanel globalConfigPanel;
 
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
     private ArrayList<File> configFiles = new ArrayList<>();
 
+    private String id = "CFGW";
+
     public ConfigWindow(Config config, boolean showMain, boolean showEditor, boolean showViewer) {
         this.config = config;
+
+        LogManager.log(id, "Creating config window", Level.INFO);
 
         setSize(512, 512);
         setTitle(LangManager.getItem("config_label_config"));
@@ -72,7 +82,7 @@ public class ConfigWindow extends JFrame {
 
     //TODO: Make sure that only pages related to from where we opened the config window are enabled.
     public void setup(boolean showMain, boolean showEditor, boolean showViewer) {
-        JTabbedPane tabPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 
         final int iconSize = 16;
         int index = 0;
@@ -124,7 +134,19 @@ public class ConfigWindow extends JFrame {
         Config config = new Config(configOriginal);
 
         HotKeyButton hotKeyButton = new HotKeyButton(config.getString("hotkey"));
-        hotKeyButton.addActionListener(e -> config.set("hotkey", hotKeyButton.hotkey + ""));
+        hotKeyButton.addDoneCapturingListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if(hotKeyButton.hotkey != -1) {
+                    String hotkeyModifier = "KB";
+                    if (!hotKeyButton.isKeyboard)
+                        hotkeyModifier = "M";
+                    config.set("hotkey", hotkeyModifier + hotKeyButton.hotkey);
+                } else {
+                    config.set("hotkey", "NONE");
+                }
+            }
+        });
 
         JCheckBox saveToDisk = new JCheckBox();
         saveToDisk.setSelected(config.getBool("saveToDisk"));
@@ -198,17 +220,11 @@ public class ConfigWindow extends JFrame {
         }
         JComboBox dropdown = new JComboBox(profiles.toArray());
         dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
-        dropdown.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    //TODO: Find a way to do this, i dont know what the exact issue is.
-                    //Perhaps its the issue that we should not clear snipConfigPanel directly, but a child panel or something. Ill see.
-
-                    /*snipConfigPanel.removeAll();
-                    setupSnipPane(config);
-                    snipConfigPanel.repaint();*/
-                }
+        dropdown.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                snipConfigPanel.removeAll();
+                Config newConfig = new Config(e.getItem() + ".cfg", "CFGT", "profile_defaults.cfg");
+                tabPane.setComponentAt(0, setupSnipPane(newConfig));
             }
         });
         configDropdownRow.add(dropdown);
@@ -336,6 +352,8 @@ public class ConfigWindow extends JFrame {
     }
 
     public void close() {
+        for(CustomWindowListener listener : listeners)
+            listener.windowClosed();
         dispose();
     }
 
