@@ -22,6 +22,9 @@ public class Config {
 	private String id;
 	private String filename;
 
+	public static final String EXTENSION = "cfg";
+	public static final String DOT_EXTENSION = ".cfg";
+
 	public Config (Config config) {
 		//Copies config
 		loadFromConfig(config);
@@ -147,6 +150,10 @@ public class Config {
 			else
 				saveFile(settings);
 		}
+	}
+
+	public String getFilename() {
+		return filename;
 	}
 	
 }

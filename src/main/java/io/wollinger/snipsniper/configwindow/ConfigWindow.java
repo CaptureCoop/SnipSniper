@@ -115,7 +115,6 @@ public class ConfigWindow extends JFrame {
     }
 
     public JComponent setupSnipPane(Config configOriginal) {
-        snipConfigPanel.removeAll();
         snipConfigPanel.setLayout(new MigLayout("align 50% 0%"));
 
         final boolean[] allowSaving = {true};
@@ -195,13 +194,21 @@ public class ConfigWindow extends JFrame {
         ArrayList<String> profiles = new ArrayList<>();
         for(File file : configFiles) {
             if(file.getName().contains("profile"))
-                profiles.add(file.getName().replaceAll(".cfg", ""));
+                profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
         }
         JComboBox dropdown = new JComboBox(profiles.toArray());
+        dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
         dropdown.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println(e.getItem());
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    //TODO: Find a way to do this, i dont know what the exact issue is.
+                    //Perhaps its the issue that we should not clear snipConfigPanel directly, but a child panel or something. Ill see.
+
+                    /*snipConfigPanel.removeAll();
+                    setupSnipPane(config);
+                    snipConfigPanel.repaint();*/
+                }
             }
         });
         configDropdownRow.add(dropdown);
