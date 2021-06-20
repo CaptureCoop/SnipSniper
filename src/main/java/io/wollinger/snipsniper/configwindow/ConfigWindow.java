@@ -292,8 +292,8 @@ public class ConfigWindow extends JFrame {
         row6.add(openEditor);
         options.add(row6);
 
-        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-        saveButton.addActionListener(e -> {
+        JButton saveAndClose = new JButton("Save and close");
+        saveAndClose.addActionListener(e -> {
             if(allowSaving[0]) {
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
@@ -303,10 +303,20 @@ public class ConfigWindow extends JFrame {
             }
         });
 
-        JPanel row7 = new JPanel(new GridLayout(0,5));
-        row7.add(new JPanel());
+        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
+        saveButton.addActionListener(e -> {
+            if(allowSaving[0]) {
+                configOriginal.loadFromConfig(config);
+                configOriginal.save();
+            }
+        });
+
+        GridLayout layout = new GridLayout(0,4);
+        layout.setHgap(hGap);
+        JPanel row7 = new JPanel(layout);
         row7.add(new JPanel());
         row7.add(saveButton);
+        row7.add(saveAndClose);
         options.add(row7);
 
         snipConfigPanel.add(options);
