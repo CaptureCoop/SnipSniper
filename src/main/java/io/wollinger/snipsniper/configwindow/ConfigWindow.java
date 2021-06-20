@@ -30,6 +30,7 @@ public class ConfigWindow extends JFrame {
         setSize(512, 512);
         setTitle(LangManager.getItem("config_label_config"));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setIconImage(Icons.icon_config);
         addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent windowEvent) { }
@@ -62,6 +63,7 @@ public class ConfigWindow extends JFrame {
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(screenSize.width / 2 - getWidth() / 2, screenSize.height / 2 - getHeight() / 2);
+        setSize((int)(snipConfigPanel.getWidth()*1.25F), getHeight());
     }
 
     public void refreshConfigFiles() {
@@ -98,7 +100,7 @@ public class ConfigWindow extends JFrame {
 
         globalConfigPanel = new JPanel();
         tabPane.addTab("Global Settings", setupGlobalPane());
-        tabPane.setIconAt(index, new ImageIcon(Icons.icon.getScaledInstance(iconSize, iconSize, 0)));
+        tabPane.setIconAt(index, new ImageIcon(Icons.icon_config.getScaledInstance(iconSize, iconSize, 0)));
 
         //TODO: handle greying out options
 
@@ -317,25 +319,25 @@ public class ConfigWindow extends JFrame {
 
     public JComponent setupEditorPane() {
         editorConfigPanel.setLayout(new BoxLayout(editorConfigPanel, BoxLayout.PAGE_AXIS));
-        for(int i = 0; i < 100; i++) {
-            editorConfigPanel.add(new JButton("Editor Config Button"));
-        }
+        JLabel label = new JLabel("<html><h1>Coming soon</h1></html>");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        editorConfigPanel.add(label);
         return generateScrollPane(editorConfigPanel);
     }
 
     public JComponent setupViewerPane() {
         viewerConfigPanel.setLayout(new BoxLayout(viewerConfigPanel, BoxLayout.PAGE_AXIS));
-        for(int i = 0; i < 100; i++) {
-            viewerConfigPanel.add(new JButton("Viewer Config Button"));
-        }
+        JLabel label = new JLabel("<html><h1>Coming soon</h1></html>");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        viewerConfigPanel.add(label);
         return generateScrollPane(viewerConfigPanel);
     }
 
     public JComponent setupGlobalPane() {
         globalConfigPanel.setLayout(new BoxLayout(globalConfigPanel, BoxLayout.PAGE_AXIS));
-        for(int i = 0; i < 100; i++) {
-            globalConfigPanel.add(new JButton("Global Config Button"));
-        }
+        JLabel label = new JLabel("<html><h1>Coming soon</h1></html>");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        globalConfigPanel.add(label);
         return generateScrollPane(globalConfigPanel);
     }
 
