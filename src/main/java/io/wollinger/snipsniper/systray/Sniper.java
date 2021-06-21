@@ -48,7 +48,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	public Sniper(int profileID) {
 		instance = this;
 		this.profileID = profileID;
-		cfg = new Config("profile" + profileID + ".cfg", "cfg" + profileID, "profile_defaults.cfg");
+		cfg = new Config("profile" + profileID + ".cfg", "CFG" + profileID, "profile_defaults.cfg");
 
 		LogManager.log(getID(), "Loading profile " + profileID, Level.INFO);
 		
