@@ -89,11 +89,12 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 				@Override
 				public void mouseClicked(MouseEvent mouseEvent) {
-					if (mouseEvent.getButton() == 1)
-		            	if(cWnd == null && SnipSniper.isIdle()) {
+					if (mouseEvent.getButton() == 1) {
+						if (cWnd == null && SnipSniper.isIdle()) {
 							cWnd = new CaptureWindow(instance);
 							SnipSniper.setIdle(false);
-		            	}
+						}
+					}
 				}
 
 				@Override

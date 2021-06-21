@@ -35,8 +35,8 @@ public class Config {
 		this.filename = config.filename;
 		this.id = config.id;
 
-		settings.putAll((Map<? extends String, ? extends String>) config.settings.clone());
-		defaults.putAll((Map<? extends String, ? extends String>) config.defaults.clone());
+		settings.putAll(copyMap(config.settings));
+		defaults.putAll(copyMap(config.defaults));
 	}
 
 	public Config (String filename, String id, String defaultFile) {
@@ -52,6 +52,14 @@ public class Config {
 			LogManager.log(id, "There was an error loading the config. Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
+	}
+
+	private HashMap<String, String> copyMap(HashMap<String, String> mapToCopy) {
+		HashMap<String, String> newMap = new HashMap<>();
+		for (String key : mapToCopy.keySet()) {
+			newMap.put(key, mapToCopy.get(key));
+		}
+		return newMap;
 	}
 	
 	void loadFile(String filename, HashMap<String, String> map, boolean inJar) throws IOException, NumberFormatException {
