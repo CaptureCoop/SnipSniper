@@ -131,6 +131,7 @@ public class ConfigWindow extends JFrame {
 
         HotKeyButton hotKeyButton = new HotKeyButton(config.getString("hotkey"));
         hotKeyButton.addDoneCapturingListener(e -> {
+            System.out.println(hotKeyButton.hotkey);
             if(hotKeyButton.hotkey != -1) {
                 String hotkeyModifier = "KB";
                 if (!hotKeyButton.isKeyboard)
@@ -231,6 +232,7 @@ public class ConfigWindow extends JFrame {
         deleteHotKey.addActionListener(e -> {
             hotKeyButton.setText(LangManager.getItem("config_label_none"));
             hotKeyButton.hotkey = -1;
+            config.set("hotkey", "NONE");
         });
         row0_1.add(deleteHotKey);
         row0.add(row0_1);
