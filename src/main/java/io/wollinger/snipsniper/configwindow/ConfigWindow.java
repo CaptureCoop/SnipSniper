@@ -341,6 +341,18 @@ public class ConfigWindow extends JFrame {
         return generateScrollPane(globalConfigPanel);
     }
 
+    public void setEnabledAll(JComponent component, boolean enabled) {
+        component.setEnabled(enabled);
+        for(Component c : component.getComponents()) {
+            if(c instanceof JComponent) {
+                JComponent cc = (JComponent) c;
+                cc.setEnabled(enabled);
+                if (cc.getComponents().length != 0)
+                    setEnabledAll(cc, enabled);
+            }
+        }
+    }
+
     public JLabel createJLabel(String title, int horizontalAlignment, int verticalAlignment) {
         JLabel jlabel = new JLabel(title);
         jlabel.setHorizontalAlignment(horizontalAlignment);
