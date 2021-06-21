@@ -188,7 +188,10 @@ public class Utils {
 		String newMessage = message;
 		for(int i = 0; i < size; i++) {
 			final String id = "\\{" + i + "}";
-			newMessage = newMessage.replaceAll(id, args[i].toString());
+			String replacer = "NULL";
+			if(args[i] != null)
+				replacer = args[i].toString();
+			newMessage = newMessage.replaceAll(id, replacer);
 		}
 		return newMessage;
 	}
