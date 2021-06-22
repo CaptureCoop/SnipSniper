@@ -1,5 +1,7 @@
 package io.wollinger.snipsniper.utils;
 
+import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+
 import io.wollinger.snipsniper.SnipSniper;
 
 import java.io.File;
@@ -14,6 +16,7 @@ import java.util.logging.Level;
 public class LogManager {
 
     private static File logFile;
+    public static String htmlLog = "";
 
     public static void log(String id, String message, Level level) {
         String msg = "%DATETIME% [%PROFILE%] [%TYPE%]: %MESSAGE%";
@@ -25,6 +28,16 @@ public class LogManager {
         msg = msg.replace("%DATETIME%", "" + formatter.format(time));
 
         System.out.println(msg);
+        String color = "white";
+        if(level == Level.WARNING)
+            color = "yellow";
+        else if(level == Level.SEVERE)
+            color = "red";
+        htmlLog += "<p style='margin-top:0'><font color='" + color + "'>" + escapeHtml4(msg) + "</font></p>";
+
+        DebugConsole console = SnipSniper.getDebugConsole();
+        if(console != null)
+            console.update();
 
         if(!SnipSniper.isDemo()) {
             if (logFile == null) {
