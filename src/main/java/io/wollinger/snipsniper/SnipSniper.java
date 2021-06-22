@@ -38,12 +38,16 @@ public final class SnipSniper {
 	private static boolean isDemo = false;
 
 	private static Config config;
+	
+	private static DebugConsole debugConsole;
 
 	private final static String ID = "MAIN";
 
 	public static void start(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly, boolean isViewerOnly) {
-		if(!SystemUtils.IS_OS_WINDOWS)
+		if(!SystemUtils.IS_OS_WINDOWS) {
 			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
+			System.exit(0);
+		}
 
 		try {
 			SnipSniper.VERSION = Utils.loadFileFromJar("version.txt") + ".";
@@ -54,11 +58,36 @@ public final class SnipSniper {
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
-	
+
 		if(saveInDocuments)
 			SnipSniper.setSaveLocationToDocuments();
 		else
 			setSaveLocationToJar();
+
+		config = new Config("main.cfg", "CFGM", "main_defaults.cfg");
+		String language = cmdline.getLanguage();
+		if(language != null && !language.isEmpty())
+			config.set("language", language);
+
+		LogManager.log(ID, "Loading resources", Level.INFO);
+		Icons.loadResources();
+
+		System.setProperty("sun.java2d.uiScale", "1.0");
+		try {
+			if(config.getBool("darkMode"))
+				UIManager.setLookAndFeel(new FlatDarculaLaf());
+			else
+				UIManager.setLookAndFeel(new FlatIntelliJLaf());
+			UIManager.put( "ScrollBar.showButtons", true );
+			UIManager.put( "ScrollBar.width", 16 );
+			UIManager.put( "TabbedPane.showTabSeparators", true );
+			UIManager.put( "TitlePane.useWindowDecorations", false );
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+
+		if(config.getBool("debug"))
+			openDebugConsole();
 
 		if(!isDemo) {
 			File tempProfileFolder = new File(profilesFolder);
@@ -68,11 +97,6 @@ public final class SnipSniper {
 				exit();
 			}
 		}
-
-		config = new Config("main.cfg", "CFGM", "main_defaults.cfg");
-		String language = cmdline.getLanguage();
-		if(language != null && !language.isEmpty())
-			config.set("language", language);
 
 		LangManager.load();
 
@@ -112,25 +136,6 @@ public final class SnipSniper {
 		}
 
 		config.save();
-
-		//System.setProperty("sun.java2d.opengl", "true"); TODO: This seems to make the standalone viewer not open the editor correctly. Disabling for now
-		System.setProperty("sun.java2d.uiScale", "1.0");
-
-		try {
-			if(config.getBool("darkMode"))
-				UIManager.setLookAndFeel(new FlatDarculaLaf());
-			else
-				UIManager.setLookAndFeel(new FlatIntelliJLaf());
-			UIManager.put( "ScrollBar.showButtons", true );
-			UIManager.put( "ScrollBar.width", 16 );
-			UIManager.put( "TabbedPane.showTabSeparators", true );
-			UIManager.put( "TitlePane.useWindowDecorations", false );
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
-
-		LogManager.log(ID, "Loading resources", Level.INFO);
-		Icons.loadResources();
 
 		if(isDemo) {
 			LogManager.log(ID, "============================================================", Level.INFO);
@@ -286,4 +291,13 @@ public final class SnipSniper {
 		profiles[id] = null;
 	}
 
+	public static DebugConsole getDebugConsole() {
+		return debugConsole;
+	}
+
+	public static void openDebugConsole() {
+		debugConsole = new DebugConsole();
+		debugConsole.update();
+		debugConsole.addCustomWindowListener(() -> debugConsole = null);
+	}
 }
