@@ -33,7 +33,7 @@ public class Icons {
 			}
 		} catch (Exception e) {
 			LogManager.log("ICON", "There was an error loading the icons! Message: " + e.getMessage(), Level.SEVERE);
-			SnipSniper.exit();
+			SnipSniper.exit(false);
 		}
 	}
 }

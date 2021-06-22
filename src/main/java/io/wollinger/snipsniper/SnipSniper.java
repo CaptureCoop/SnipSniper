@@ -69,7 +69,7 @@ public final class SnipSniper {
 			File tempLogFolder = new File(logFolder);
 			if ((!tempProfileFolder.exists() && !tempProfileFolder.mkdirs()) || (!tempLogFolder.exists() && !tempLogFolder.mkdirs())){
 				LogManager.log(ID, "Could not create required folders! Exiting...", Level.SEVERE);
-				exit();
+				exit(false);
 			}
 		}
 
@@ -115,7 +115,7 @@ public final class SnipSniper {
 
 		if(!LangManager.languages.contains(SnipSniper.config.getString("language"))) {
 			LogManager.log(ID, "Language <" + SnipSniper.config.getString("language") + "> not found. Available languages: " + LangManager.languages.toString(), Level.SEVERE);
-			exit();
+			exit(false);
 		}
 
 		String wantedEncoding = SnipSniper.config.getString("encoding");
@@ -123,13 +123,13 @@ public final class SnipSniper {
 			if(!Charset.availableCharsets().containsKey(wantedEncoding)) {
 				LogManager.log(ID, "Charset \"" + wantedEncoding + "\" missing. Language \"" + SnipSniper.config.getString("language")+ "\" not available", Level.SEVERE);
 				JOptionPane.showMessageDialog(null, Utils.formatArgs(LangManager.getItem(LangManager.languages.get(0), "error_charset_not_available"), wantedEncoding, SnipSniper.config.getString("language")));
-				exit();
+				exit(false);
 			}
 			LogManager.log(ID, "Charset <" + wantedEncoding + "> needed! Restarting with correct charset...", Level.WARNING);
 			try {
 				if(cmdline.isRestartedInstance()) {
 					JOptionPane.showMessageDialog(null, "Charset change failed. Please try using a different Java Version! (Java 1.8 / 8)");
-					exit();
+					exit(false);
 				}
 				if(!Utils.restartApplication(wantedEncoding, args))
 					LogManager.log(ID, "Restart failed. Possibly not running in jar. Starting with charset <" + Charset.defaultCharset() + ">", Level.WARNING);
@@ -221,7 +221,7 @@ public final class SnipSniper {
 			folderToUseString = URLDecoder.decode(SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().getFile(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			LogManager.log(ID, "Could not set profiles folder. Error: " + e.getMessage(), Level.SEVERE);
-			exit();
+			exit(false);
 		}
 
 		if(folderToUseString != null) {
@@ -237,8 +237,17 @@ public final class SnipSniper {
 		}
 	}
 
-	public static void exit() {
+	public static void exit(boolean exitForRestart) {
 		LogManager.log(ID, "Exit requested. Goodbye!", Level.INFO);
+		if(config.getBool("debug")) {
+			if (!exitForRestart && Desktop.isDesktopSupported()) {
+				try {
+					Desktop.getDesktop().edit(LogManager.getLogFile());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		System.exit(0);
 	}
 

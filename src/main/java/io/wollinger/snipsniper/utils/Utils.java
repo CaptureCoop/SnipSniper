@@ -71,7 +71,7 @@ public class Utils {
 
 		final ProcessBuilder builder = new ProcessBuilder(command);
 		builder.start();
-		SnipSniper.exit();
+		SnipSniper.exit(true);
 		return true;
 	}
 

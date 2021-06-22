@@ -64,4 +64,8 @@ public class LogManager {
         }
     }
 
+    public static File getLogFile() {
+        return logFile;
+    }
+
 }

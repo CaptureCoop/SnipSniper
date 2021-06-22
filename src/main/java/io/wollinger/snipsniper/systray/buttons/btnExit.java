@@ -9,7 +9,7 @@ public class btnExit extends MenuItem{
 
 	public btnExit() {
 		setLabel(LangManager.getItem("menu_quit"));
-		addActionListener(listener -> SnipSniper.exit());
+		addActionListener(listener -> SnipSniper.exit(false));
 	}
 	
 }
