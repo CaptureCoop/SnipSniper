@@ -131,7 +131,6 @@ public class ConfigWindow extends JFrame {
 
         HotKeyButton hotKeyButton = new HotKeyButton(config.getString("hotkey"));
         hotKeyButton.addDoneCapturingListener(e -> {
-            System.out.println(hotKeyButton.hotkey);
             if(hotKeyButton.hotkey != -1) {
                 String hotkeyModifier = "KB";
                 if (!hotKeyButton.isKeyboard)
