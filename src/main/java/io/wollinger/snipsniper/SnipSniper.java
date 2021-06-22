@@ -38,7 +38,7 @@ public final class SnipSniper {
 	private static boolean isDemo = false;
 
 	private static Config config;
-	
+
 	private static DebugConsole debugConsole;
 
 	private final static String ID = "MAIN";
@@ -64,6 +64,15 @@ public final class SnipSniper {
 		else
 			setSaveLocationToJar();
 
+		if(!isDemo) {
+			File tempProfileFolder = new File(profilesFolder);
+			File tempLogFolder = new File(logFolder);
+			if ((!tempProfileFolder.exists() && !tempProfileFolder.mkdirs()) || (!tempLogFolder.exists() && !tempLogFolder.mkdirs())){
+				LogManager.log(ID, "Could not create required folders! Exiting...", Level.SEVERE);
+				exit();
+			}
+		}
+
 		config = new Config("main.cfg", "CFGM", "main_defaults.cfg");
 		String language = cmdline.getLanguage();
 		if(language != null && !language.isEmpty())
@@ -86,23 +95,14 @@ public final class SnipSniper {
 			e.printStackTrace();
 		}
 
-		if(config.getBool("debug"))
+		if(config.getBool("debug") || isDebug || cmdline.isDebug())
 			openDebugConsole();
-
-		if(!isDemo) {
-			File tempProfileFolder = new File(profilesFolder);
-			File tempLogFolder = new File(logFolder);
-			if ((!tempProfileFolder.exists() && !tempProfileFolder.mkdirs()) || (!tempLogFolder.exists() && !tempLogFolder.mkdirs())){
-				LogManager.log(ID, "Could not create required folders! Exiting...", Level.SEVERE);
-				exit();
-			}
-		}
 
 		LangManager.load();
 
 		LogManager.log(ID, "Launching SnipSniper Version " + SnipSniper.VERSION, Level.INFO);
 
-		if(isDebug || cmdline.isDebug()) {
+		if(isDebug || cmdline.isDebug() || config.getBool("debug")) {
 			LogManager.log(ID, "========================================", Level.INFO);
 			LogManager.log(ID, "= SnipSniper is running in debug mode! =", Level.INFO);
 			LogManager.log(ID, "========================================", Level.INFO);
