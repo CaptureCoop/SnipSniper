@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import io.wollinger.snipsniper.SnipSniper;
+import io.wollinger.snipsniper.utils.DebugConsole;
 import io.wollinger.snipsniper.utils.LangManager;
 import io.wollinger.snipsniper.utils.LogManager;
 
@@ -76,6 +77,18 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			languageMenu.add(mi);
 		}
 		popup.add(languageMenu);
+
+		if(SnipSniper.getConfig().getBool("debug")) {
+			MenuItem consoleItem = new MenuItem("Console");
+			consoleItem.addActionListener(e -> {
+				DebugConsole console = SnipSniper.getDebugConsole();
+				if (console == null)
+					SnipSniper.openDebugConsole();
+				else
+					console.requestFocus();
+			});
+			popup.add(consoleItem);
+		}
 
 		popup.add(new btnAbout(this));
 
