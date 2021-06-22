@@ -373,7 +373,7 @@ public class ConfigWindow extends JFrame {
         dispose();
     }
 
-    public void addCloseListener(CustomWindowListener listener) {
+    public void addCustomWindowListener(CustomWindowListener listener) {
         listeners.add(listener);
     }
 
