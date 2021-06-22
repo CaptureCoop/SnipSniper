@@ -336,10 +336,61 @@ public class ConfigWindow extends JFrame {
 
     public JComponent setupGlobalPane() {
         globalConfigPanel.setLayout(new BoxLayout(globalConfigPanel, BoxLayout.PAGE_AXIS));
-        JLabel label = new JLabel("<html><h1>Coming soon</h1></html>");
-        label.setHorizontalAlignment(JLabel.CENTER);
-        globalConfigPanel.add(label);
+        globalConfigPanel.setLayout(new MigLayout("align 50% 0%"));
+
+        int hGap = 20;
+
+        JPanel options = new JPanel(new GridLayout(0,1));
+
+        Config config = new Config(SnipSniper.getConfig());
+
+        ArrayList<String> translatedLanguages = new ArrayList<>();
+        for(String lang : LangManager.languages)
+            translatedLanguages.add(LangManager.getItem(lang, "lang_" + lang));
+        JComboBox<Object> languageDropdown = new JComboBox<>(translatedLanguages.toArray());
+        languageDropdown.setSelectedIndex(LangManager.languages.indexOf(config.getString("language")));
+        languageDropdown.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                config.set("language", LangManager.languages.get(languageDropdown.getSelectedIndex()));
+            }
+        });
+        options.add(languageDropdown);
+
+        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
+        saveButton.addActionListener(e -> {
+            globalSave(config);
+        });
+
+        JButton saveAndClose = new JButton("Save and close");
+        saveAndClose.addActionListener(e -> {
+            globalSave(config);
+
+            for(CustomWindowListener listener : listeners)
+                listener.windowClosed();
+            close();
+        });
+
+        GridLayout layout = new GridLayout(0,4);
+        layout.setHgap(hGap);
+        JPanel saveRow = new JPanel(layout);
+        saveRow.add(new JPanel());
+        saveRow.add(saveButton);
+        saveRow.add(saveAndClose);
+        options.add(saveRow);
+
+        globalConfigPanel.add(options);
+
         return generateScrollPane(globalConfigPanel);
+    }
+
+    private void globalSave(Config config) {
+        boolean doRestartProfiles = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
+
+        SnipSniper.getConfig().loadFromConfig(config);
+        config.save();
+
+        if(doRestartProfiles)
+            SnipSniper.resetProfiles(); //TODO: Implement restarting of config window too.
     }
 
     public void setEnabledAll(JComponent component, boolean enabled) {
