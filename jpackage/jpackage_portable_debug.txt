@@ -1,2 +1,2 @@
-win-console=true
-main-class=io.wollinger.snipsniper.main.MainDebugPortable
+main-class=io.wollinger.snipsniper.main.MainPortable
+arguments=-debug

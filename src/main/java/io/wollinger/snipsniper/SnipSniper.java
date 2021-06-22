@@ -43,7 +43,7 @@ public final class SnipSniper {
 
 	private final static String ID = "MAIN";
 
-	public static void start(String[] args, boolean saveInDocuments, boolean isDebug, boolean isEditorOnly, boolean isViewerOnly) {
+	public static void start(String[] args, boolean saveInDocuments, boolean isEditorOnly, boolean isViewerOnly) {
 		if(!SystemUtils.IS_OS_WINDOWS) {
 			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
 			System.exit(0);
@@ -78,6 +78,9 @@ public final class SnipSniper {
 		if(language != null && !language.isEmpty())
 			config.set("language", language);
 
+		if(cmdline.isDebug())
+			config.set("debug", "true");
+
 		LogManager.log(ID, "Loading resources", Level.INFO);
 		Icons.loadResources();
 
@@ -95,14 +98,14 @@ public final class SnipSniper {
 			e.printStackTrace();
 		}
 
-		if(config.getBool("debug") || isDebug || cmdline.isDebug())
+		if(config.getBool("debug"))
 			openDebugConsole();
 
 		LangManager.load();
 
 		LogManager.log(ID, "Launching SnipSniper Version " + SnipSniper.VERSION, Level.INFO);
 
-		if(isDebug || cmdline.isDebug() || config.getBool("debug")) {
+		if(config.getBool("debug")) {
 			LogManager.log(ID, "========================================", Level.INFO);
 			LogManager.log(ID, "= SnipSniper is running in debug mode! =", Level.INFO);
 			LogManager.log(ID, "========================================", Level.INFO);
