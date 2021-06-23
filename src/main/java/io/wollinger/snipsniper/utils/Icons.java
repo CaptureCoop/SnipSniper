@@ -24,7 +24,7 @@ public class Icons {
 			icon_editor = ImageIO.read(SnipSniper.class.getResource("/res/SnSnEd.png"));
 			icon_viewer = ImageIO.read(SnipSniper.class.getResource("/res/SnSnVi.png"));
 			icon_config = ImageIO.read(SnipSniper.class.getResource("/res/SnSnCo.png"));
-			icon_console = ImageIO.read(SnipSniper.class.getResource("/res/SnSnCf.png"));
+			icon_console = ImageIO.read(SnipSniper.class.getResource("/res/SnSnCs.png"));
 			icons = new BufferedImage[8];
 			alt_icons = new BufferedImage[8];
 			for(int i = 0; i < 8; i++) {
