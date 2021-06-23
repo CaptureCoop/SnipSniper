@@ -44,7 +44,7 @@ public class SCViewerWindow extends SnipScopeWindow {
             image = Utils.getDragPasteImage(Icons.icon_viewer, "Drop image here!");
         }
 
-        config = new Config("viewer.cfg", "CFGV", "profile_defaults.cfg");
+        config = new Config("viewer.cfg", "CFG VIEWER", "profile_defaults.cfg");
         config.save();
 
         setRequireMovementKeyForZoom(false);

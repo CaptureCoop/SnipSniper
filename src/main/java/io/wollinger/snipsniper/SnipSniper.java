@@ -73,7 +73,7 @@ public final class SnipSniper {
 			}
 		}
 
-		config = new Config("main.cfg", "CFGM", "main_defaults.cfg");
+		config = new Config("main.cfg", "CFG MAIN", "main_defaults.cfg");
 		String language = cmdline.getLanguage();
 		if(language != null && !language.isEmpty())
 			config.set("language", language);
@@ -170,7 +170,7 @@ public final class SnipSniper {
 				}
 			}
 
-			new SCEditorWindow("EDIT", img, -1, -1, "SnipSniper Editor", config, false, path, false, true);
+			new SCEditorWindow("EDITOR", img, -1, -1, "SnipSniper Editor", config, false, path, false, true);
 		} else if(cmdline.isViewerOnly() || isViewerOnly) {
 			File file = null;
 			if(cmdline.getViewerFile() != null && !cmdline.getViewerFile().isEmpty())

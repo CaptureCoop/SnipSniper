@@ -211,7 +211,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	}
 
 	public String getID() {
-		return "PRO" + profileID;
+		return "PROFILE " + profileID;
 	}
 
 	@Override
