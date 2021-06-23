@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -144,8 +145,31 @@ public class Utils {
 		File file;
 		String filename = Utils.constructFilename(modifier);
 		String savePath = config.getString("pictureFolder");
-		File path = new File(savePath);
-		file = new File(savePath + filename);
+
+		String savePathModifier = "";
+
+		if(config.getBool("dateFolders")) {
+			LocalDate currentDate = LocalDate.now();
+
+			int day = currentDate.getDayOfMonth();
+			String dayString = day + "";
+			if(day < 10)
+				dayString = "0" + day;
+
+			int month = currentDate.getMonthValue();
+			String monthString = month + "";
+			if(month < 10)
+				monthString = "0" + month;
+
+			savePathModifier = "\\" + config.getString("dateFoldersFormat");
+			savePathModifier = savePathModifier.replaceAll("%day%", dayString);
+			savePathModifier = savePathModifier.replaceAll("%month%", monthString);
+			savePathModifier = savePathModifier.replaceAll("%year%", currentDate.getYear() + "");
+		}
+
+		File path = new File(savePath + savePathModifier);
+		file = new File(path.getAbsolutePath() + "\\" + filename);
+		System.out.println(file);
 		try {
 			if(config.getBool("saveToDisk")) {
 				if(!path.exists()) {
