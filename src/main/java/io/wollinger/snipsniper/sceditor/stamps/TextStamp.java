@@ -11,6 +11,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class TextStamp implements IStamp{
+    private final Config config;
+    private final SCEditorWindow scEditorWindow;
 
     private PBRColor color;
     private int fontSize;
@@ -20,16 +22,16 @@ public class TextStamp implements IStamp{
     private final ArrayList<Integer> nonTypeKeys = new ArrayList<>();
 
     private int fontMode = Font.PLAIN;
-    private final SCEditorWindow scEditorWindow;
 
     private TextState state = TextState.IDLE;
-    private Vector2Int position = new Vector2Int();
+    private Vector2Int cPosition = new Vector2Int();
     private Vector2Int livePosition = new Vector2Int();
     private boolean doSaveNextRender = false;
 
     enum TextState {IDLE, TYPING}
 
-    public TextStamp(SCEditorWindow scEditorWindow) {
+    public TextStamp(Config config, SCEditorWindow scEditorWindow) {
+        this.config = config;
         this.scEditorWindow = scEditorWindow;
 
         nonTypeKeys.add(KeyEvent.VK_SHIFT);
@@ -64,23 +66,31 @@ public class TextStamp implements IStamp{
     }
 
     @Override
-    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
+        if(input == null) {
+            input = new InputContainer();
+            input.setMousePosition(position.getX(), position.getY());
+        }
+
         livePosition = new Vector2Int(input.getMouseX(), input.getMouseY()); //Update method only gets called upon keypress
 
         Point pointToUseForRenderPos = new Point(input.getMouseX(), input.getMouseY());
 
         if(state == TextState.TYPING)
-            pointToUseForRenderPos = new Point(position.toPoint());
+            pointToUseForRenderPos = new Point(cPosition.toPoint());
 
         if(isSaveRender && !doSaveNextRender)
             return null;
 
-        Vector2Int renderPos = scEditorWindow.getPointOnImage(pointToUseForRenderPos);
+        Vector2Int renderPos = position;
+        if(scEditorWindow != null)
+            renderPos = scEditorWindow.getPointOnImage(pointToUseForRenderPos);
+
         String textToDraw = "Text";
         if(!text.isEmpty())
             textToDraw = text;
 
-        int drawFontSize = (int) ((double)fontSize * scEditorWindow.getDifferenceFromImage()[1]);
+        int drawFontSize = (int) ((double)fontSize * difference[1]);
 
         Font oldFont = g.getFont();
         Color oldColor = g.getColor();
@@ -89,7 +99,7 @@ public class TextStamp implements IStamp{
         g.drawString(textToDraw, renderPos.getX(), renderPos.getY());
         g.setFont(oldFont);
         g.setColor(oldColor);
-
+        
         if(isSaveRender) {
             reset();
         }
@@ -105,7 +115,7 @@ public class TextStamp implements IStamp{
     public void mousePressedEvent(int button, boolean pressed) {
         if(pressed && state == TextState.IDLE) {
             state = TextState.TYPING;
-            position = new Vector2Int(livePosition);
+            cPosition = new Vector2Int(livePosition);
         } else if(pressed && state == TextState.TYPING) {
             doSaveNextRender = true;
         }
@@ -113,7 +123,6 @@ public class TextStamp implements IStamp{
 
     @Override
     public void reset() {
-        Config config = scEditorWindow.getConfig();
         text = "";
         state = TextState.IDLE;
         doSaveNextRender = false;

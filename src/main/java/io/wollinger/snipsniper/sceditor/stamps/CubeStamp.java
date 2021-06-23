@@ -10,7 +10,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class CubeStamp implements IStamp{
-    private final SCEditorWindow editor;
+    private final Config config;
+    private final SCEditorWindow scEditorWindow;
     private int width;
     private int height;
 
@@ -21,11 +22,10 @@ public class CubeStamp implements IStamp{
     private int speedHeight;
 
     private PBRColor color;
-    private final Config config;
 
-    public CubeStamp(SCEditorWindow editor) {
-        this.editor = editor;
-        this.config = editor.getConfig();
+    public CubeStamp(Config config, SCEditorWindow scEditorWindow) {
+        this.config = config;
+        this.scEditorWindow = scEditorWindow;
         reset();
     }
 
@@ -64,25 +64,23 @@ public class CubeStamp implements IStamp{
         }
     }
 
-    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         boolean isSmartPixel = config.getBool("smartPixel");
-        Vector2Int mousePos = editor.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
-        Double[] difference = editor.getDifferenceFromImage();
 
         int drawWidth = (int) ((double)width * difference[0]);
         int drawHeight = (int) ((double)height * difference[1]);
 
-        if(isSmartPixel && isSaveRender && !isCensor) {
-            Vector2Int pos = new Vector2Int(mousePos.getX() + drawWidth / 2, mousePos.getY() + drawHeight / 2);
+        if(isSmartPixel && isSaveRender && !isCensor && scEditorWindow != null) {
+            Vector2Int pos = new Vector2Int(position.getX() + drawWidth / 2, position.getY() + drawHeight / 2);
             Vector2Int size = new Vector2Int(-drawWidth, -drawHeight);
 
             for (int y = 0; y < -size.getY(); y++) {
                 for (int x = 0; x < -size.getX(); x++) {
                     int posX = pos.getX() - x;
                     int posY = pos.getY() - y;
-                    if(posX >= 0 && posY >= 0 && posX < editor.getImage().getWidth() && posY < editor.getImage().getHeight()) {
+                    if(posX >= 0 && posY >= 0 && posX < scEditorWindow.getImage().getWidth() && posY < scEditorWindow.getImage().getHeight()) {
 
-                        Color c = new Color(editor.getImage().getRGB(posX, posY));
+                        Color c = new Color(scEditorWindow.getImage().getRGB(posX, posY));
                         int total = c.getRed() + c.getGreen() + c.getBlue();
                         int alpha = (int)((205F/765F) * total + 25);
                         Color oC = color.getColor();
@@ -96,15 +94,15 @@ public class CubeStamp implements IStamp{
             if(!isCensor)
                 g.setColor(color.getColor());
             else
-                g.setColor(editor.getCensorColor());
+                g.setColor(Color.BLACK); //TODO: Add to config
 
             if(isSmartPixel && !isCensor)
                 g.setColor(new PBRColor(color.getColor(), 150).getColor());
 
-            g.fillRect(mousePos.getX() - drawWidth / 2, mousePos.getY() - drawHeight / 2, drawWidth, drawHeight);
+            g.fillRect(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
             g.setColor(oldColor);
         }
-        return new Rectangle(mousePos.getX() - drawWidth / 2, mousePos.getY() - drawHeight / 2, drawWidth, drawHeight);
+        return new Rectangle(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
     }
 
     @Override
