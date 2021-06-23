@@ -412,6 +412,19 @@ public class ConfigWindow extends JFrame {
         row1.add(themeDropdown);
         options.add(row1);
 
+        JPanel row2 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row2.add(createJLabel("Debug Mode", JLabel.RIGHT, JLabel.CENTER));
+        JCheckBox debugCheckBox = new JCheckBox();
+        debugCheckBox.setSelected(config.getBool("debug"));
+        debugCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                config.set("debug", debugCheckBox.isSelected() + "");
+            }
+        });
+        row2.add(debugCheckBox);
+        options.add(row2);
+
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
             boolean restartConfig = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
@@ -450,6 +463,10 @@ public class ConfigWindow extends JFrame {
     private void globalSave(Config config) {
         boolean doRestartProfiles = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
         boolean didThemeChange = !config.getString("theme").equals(SnipSniper.getConfig().getString("theme"));
+        boolean didDebugChange = config.getBool("debug") != SnipSniper.getConfig().getBool("debug");
+
+        if(didDebugChange && config.getBool("debug"))
+            SnipSniper.openDebugConsole();
 
         if(didThemeChange) {
             try {
