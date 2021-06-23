@@ -127,7 +127,14 @@ public class ConfigWindow extends JFrame {
         final int maxBorder = 999;
         final ColorChooser[] colorChooser = {null};
 
-        Config config = new Config(configOriginal);
+        Config config;
+        boolean disablePage = false;
+        if (configOriginal != null) {
+            config = new Config(configOriginal);
+        } else {
+            config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
+            disablePage = true;
+        }
 
         HotKeyButton hotKeyButton = new HotKeyButton(config.getString("hotkey"));
         hotKeyButton.addDoneCapturingListener(e -> {
@@ -207,12 +214,17 @@ public class ConfigWindow extends JFrame {
 
         JPanel configDropdownRow = new JPanel(getGridLayoutWithMargin(0, 1, hGap));
         ArrayList<String> profiles = new ArrayList<>();
+        if(configOriginal == null)
+            profiles.add("Select a profile");
         for(File file : configFiles) {
             if(file.getName().contains("profile"))
                 profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
         }
         JComboBox<Object> dropdown = new JComboBox<>(profiles.toArray());
-        dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
+        if(configOriginal == null)
+            dropdown.setSelectedIndex(0);
+        else
+            dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
         dropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 snipConfigPanel.removeAll();
@@ -315,6 +327,9 @@ public class ConfigWindow extends JFrame {
 
         snipConfigPanel.add(options);
 
+        if(disablePage)
+            setEnabledAll(options, false, dropdown, saveAndClose);
+
         return generateScrollPane(snipConfigPanel);
     }
 
@@ -335,7 +350,6 @@ public class ConfigWindow extends JFrame {
     }
 
     public JComponent setupGlobalPane() {
-        globalConfigPanel.setLayout(new BoxLayout(globalConfigPanel, BoxLayout.PAGE_AXIS));
         globalConfigPanel.setLayout(new MigLayout("align 50% 0%"));
 
         int hGap = 20;
@@ -393,16 +407,27 @@ public class ConfigWindow extends JFrame {
             SnipSniper.resetProfiles(); //TODO: Implement restarting of config window too.
     }
 
-    public void setEnabledAll(JComponent component, boolean enabled) {
-        component.setEnabled(enabled);
+    private void setEnabledAll(JComponent component, boolean enabled, JComponent... ignore) {
+        setEnableSpecific(component, enabled, ignore);
+
         for(Component c : component.getComponents()) {
             if(c instanceof JComponent) {
                 JComponent cc = (JComponent) c;
-                cc.setEnabled(enabled);
+                setEnableSpecific(cc, enabled, ignore);
                 if (cc.getComponents().length != 0)
-                    setEnabledAll(cc, enabled);
+                    setEnabledAll(cc, enabled, ignore);
             }
         }
+    }
+
+    private void setEnableSpecific(JComponent component, boolean enabled, JComponent... ignore) {
+        boolean doDisable = true;
+        for(JComponent comp : ignore)
+            if(comp == component)
+                doDisable = false;
+
+        if(doDisable)
+            component.setEnabled(enabled);
     }
 
     public JLabel createJLabel(String title, int horizontalAlignment, int verticalAlignment) {
