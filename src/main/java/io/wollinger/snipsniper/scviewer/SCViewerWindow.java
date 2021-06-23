@@ -8,6 +8,7 @@ import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.Utils;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
@@ -23,6 +24,7 @@ import java.util.List;
 public class SCViewerWindow extends SnipScopeWindow {
     private File currentFile;
     private final ArrayList<String> files = new ArrayList<>();
+    private Config config;
 
     private final List<String> extensions = Arrays.asList(".png", ".jpg", ".jpeg");
 
@@ -41,6 +43,9 @@ public class SCViewerWindow extends SnipScopeWindow {
         } else {
             image = Utils.getDragPasteImage(Icons.icon_viewer, "Drop image here!");
         }
+
+        config = new Config("viewer.cfg", "CFGV", "profile_defaults.cfg");
+        config.save();
 
         setRequireMovementKeyForZoom(false);
 
@@ -67,6 +72,8 @@ public class SCViewerWindow extends SnipScopeWindow {
         setVisible(true);
         setSizeAuto();
         setLocationAuto();
+        if(config.getBool("openViewerInFullscreen"))
+            setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
     }
 
     public void refreshTitle() {
