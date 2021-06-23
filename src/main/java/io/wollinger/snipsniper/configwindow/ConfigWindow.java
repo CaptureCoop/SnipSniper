@@ -8,6 +8,8 @@ import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -398,6 +400,24 @@ public class ConfigWindow extends JFrame {
         smartPixelCheckBox.addActionListener(e -> config.set("smartPixel", smartPixelCheckBox.isSelected() + ""));
         row0.add(smartPixelCheckBox);
         options.add(row0);
+
+        JPanel row1 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row1.add(createJLabel("HSV color switch speed", JLabel.RIGHT, JLabel.CENTER));
+        JLabel hsvPercentage = new JLabel(config.getInt("hsvColorSwitchSpeed") + "%");
+        hsvPercentage.setHorizontalAlignment(JLabel.CENTER);
+        JSlider hsvSlider = new JSlider(JSlider.HORIZONTAL);
+        hsvSlider.addChangeListener(e -> {
+            hsvPercentage.setText(hsvSlider.getValue() + "%");
+            config.set("hsvColorSwitchSpeed", hsvSlider.getValue() + "");
+        });
+        hsvSlider.setMinimum(-100);
+        hsvSlider.setMaximum(100);
+        hsvSlider.setSnapToTicks(true);
+        hsvSlider.setValue(config.getInt("hsvColorSwitchSpeed"));
+        row1.add(hsvSlider);
+        row1.add(new JLabel());
+        row1.add(hsvPercentage);
+        options.add(row1);
 
         //END ELEMENTS
 

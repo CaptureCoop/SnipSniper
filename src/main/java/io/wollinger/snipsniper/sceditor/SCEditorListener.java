@@ -166,7 +166,7 @@ public class SCEditorListener extends SnipScopeListener {
             float[] hsv = new float[3];
             Color.RGBtoHSB(oldColor.getRed(),oldColor.getGreen(),oldColor.getBlue(),hsv);
 
-            float speed = scEditorWindow.getConfig().getFloat("hsvColorSwitchSpeed");
+            float speed = scEditorWindow.getConfig().getFloat("hsvColorSwitchSpeed") / 2500;
             if(mouseWheelEvent.getWheelRotation() == 1)
                 hsv[0] += speed;
             else if(mouseWheelEvent.getWheelRotation() == -1)
