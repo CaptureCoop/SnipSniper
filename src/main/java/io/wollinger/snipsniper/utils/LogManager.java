@@ -17,9 +17,23 @@ public class LogManager {
 
     private static File logFile;
     public static String htmlLog = "";
+    private static final int MAX_ID_LENGTH = 10;
 
     public static void log(String id, String message, Level level) {
-        String msg = "%DATETIME% [%PROFILE%] [%TYPE%]: %MESSAGE%";
+        String msg = "%DATETIME% [%PROFILE%]%INSERTSPACE% [%TYPE%]: %MESSAGE%";
+
+        if(id.length() <= MAX_ID_LENGTH) {
+            int amount = MAX_ID_LENGTH - id.length();
+            String str = "";
+            for(int i = 0; i < amount; i++)
+                str += " ";
+            System.out.println(" ");
+            msg = msg.replace("%INSERTSPACE%", str);
+        } else {
+            id = id.substring(0, Math.min(id.length(), MAX_ID_LENGTH));
+            msg = msg.replace("%INSERTSPACE%", "");
+        }
+
         msg = msg.replace("%PROFILE%", id);
         msg = msg.replace("%TYPE%", level.toString());
         msg = msg.replace("%MESSAGE%", message);
@@ -33,7 +47,7 @@ public class LogManager {
             color = "yellow";
         else if(level == Level.SEVERE)
             color = "red";
-        htmlLog += "<p style='margin-top:0'><font color='" + color + "'>" + escapeHtml4(msg) + "</font></p>";
+        htmlLog += "<p style='margin-top:0'><font color='" + color + "'>" + escapeHtml4(msg).replaceAll(" ", "&nbsp;") + "</font></p>";
 
         DebugConsole console = SnipSniper.getDebugConsole();
         if(console != null)
