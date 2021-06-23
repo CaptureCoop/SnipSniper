@@ -180,6 +180,8 @@ public class ConfigWindow extends JFrame {
         configDropdownRow.add(dropdown);
         options.add(configDropdownRow);
 
+        //BEGIN ELEMENTS
+
         JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row0.add(createJLabel(LangManager.getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER));
         JPanel row0_1 = new JPanel(new GridLayout(0,2));
@@ -306,6 +308,8 @@ public class ConfigWindow extends JFrame {
         row6.add(openEditor);
         options.add(row6);
 
+        //END ELEMENTS
+
         JButton saveAndClose = new JButton("Save and close");
         saveAndClose.addActionListener(e -> {
             if(allowSaving[0]) {
@@ -366,7 +370,7 @@ public class ConfigWindow extends JFrame {
         if(configOriginal == null)
             profiles.add("Select a profile");
         for(File file : configFiles) {
-            if(file.getName().contains("profile"))
+            if(file.getName().contains("profile") || file.getName().contains("editor"))
                 profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
         }
         JComboBox<Object> dropdown = new JComboBox<>(profiles.toArray());
@@ -385,9 +389,17 @@ public class ConfigWindow extends JFrame {
         configDropdownRow.add(dropdown);
         options.add(configDropdownRow);
 
+        //BEGIN ELEMENTS
 
+        JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row0.add(createJLabel("Smart Pixel", JLabel.RIGHT, JLabel.CENTER));
+        JCheckBox smartPixelCheckBox = new JCheckBox();
+        smartPixelCheckBox.setSelected(config.getBool("smartPixel"));
+        smartPixelCheckBox.addActionListener(e -> config.set("smartPixel", smartPixelCheckBox.isSelected() + ""));
+        row0.add(smartPixelCheckBox);
+        options.add(row0);
 
-
+        //END ELEMENTS
 
         JButton saveAndClose = new JButton("Save and close");
         saveAndClose.addActionListener(e -> {
