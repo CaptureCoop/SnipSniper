@@ -3,6 +3,7 @@ package io.wollinger.snipsniper.utils;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 import io.wollinger.snipsniper.SnipSniper;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,12 +24,7 @@ public class LogManager {
         String msg = "%DATETIME% [%PROFILE%]%INSERTSPACE% [%TYPE%]: %MESSAGE%";
 
         if(id.length() <= MAX_ID_LENGTH) {
-            int amount = MAX_ID_LENGTH - id.length();
-            String str = "";
-            for(int i = 0; i < amount; i++)
-                str += " ";
-            System.out.println(" ");
-            msg = msg.replace("%INSERTSPACE%", str);
+            msg = msg.replace("%INSERTSPACE%", StringUtils.repeat(" ", MAX_ID_LENGTH - id.length()));
         } else {
             id = id.substring(0, Math.min(id.length(), MAX_ID_LENGTH));
             msg = msg.replace("%INSERTSPACE%", "");
