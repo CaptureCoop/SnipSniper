@@ -21,10 +21,13 @@ public class ConfigWindow extends JFrame {
 
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
     private final ArrayList<File> configFiles = new ArrayList<>();
+    private Config lastSelectedConfig;
 
     private final String id = "CFGW";
 
-    public ConfigWindow(Config config) {
+    public static enum PAGE {snipPanel, editorPanel, viewerPanel, globalPanel}
+
+    public ConfigWindow(Config config, PAGE page) {
         LogManager.log(id, "Creating config window", Level.INFO);
 
         setSize(512, 512);
@@ -58,7 +61,7 @@ public class ConfigWindow extends JFrame {
 
         refreshConfigFiles();
 
-        setup(config);
+        setup(config, page);
         setVisible(true);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -77,32 +80,43 @@ public class ConfigWindow extends JFrame {
         }
     }
 
-    public void setup(Config config) {
+    public void setup(Config config, PAGE page) {
         tabPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 
         final int iconSize = 16;
         int index = 0;
+        int enableIndex = 0;
+
+        lastSelectedConfig = config;
 
         snipConfigPanel = new JPanel();
         tabPane.addTab("SnipSniper Settings",  setupSnipPane(config));
         tabPane.setIconAt(index, new ImageIcon(Icons.icon_taskbar.getScaledInstance(iconSize, iconSize, 0)));
+        if(page == PAGE.snipPanel)
+            enableIndex = index;
         index++;
 
         editorConfigPanel = new JPanel();
         tabPane.addTab("Editor Settings", setupEditorPane());
         tabPane.setIconAt(index, new ImageIcon(Icons.icon_editor.getScaledInstance(iconSize,iconSize,0)));
+        if(page == PAGE.editorPanel)
+            enableIndex = index;
         index++;
 
         viewerConfigPanel = new JPanel();
         tabPane.addTab("Viewer Settings", setupViewerPane());
         tabPane.setIconAt(index, new ImageIcon(Icons.icon_viewer.getScaledInstance(iconSize,iconSize,0)));
+        if(page == PAGE.viewerPanel)
+            enableIndex = index;
         index++;
 
         globalConfigPanel = new JPanel();
         tabPane.addTab("Global Settings", setupGlobalPane());
         tabPane.setIconAt(index, new ImageIcon(Icons.icon_config.getScaledInstance(iconSize, iconSize, 0)));
+        if(page == PAGE.globalPanel)
+            enableIndex = index;
 
-        //TODO: handle greying out options
+        tabPane.setSelectedIndex(enableIndex);
 
         add(tabPane);
     }
@@ -230,6 +244,7 @@ public class ConfigWindow extends JFrame {
                 snipConfigPanel.removeAll();
                 Config newConfig = new Config(e.getItem() + ".cfg", "CFGT", "profile_defaults.cfg");
                 tabPane.setComponentAt(0, setupSnipPane(newConfig));
+                lastSelectedConfig = newConfig;
             }
         });
         configDropdownRow.add(dropdown);
@@ -328,7 +343,7 @@ public class ConfigWindow extends JFrame {
         snipConfigPanel.add(options);
 
         if(disablePage)
-            setEnabledAll(options, false, dropdown, saveAndClose);
+            setEnabledAll(options, false, dropdown);
 
         return generateScrollPane(snipConfigPanel);
     }
@@ -372,7 +387,14 @@ public class ConfigWindow extends JFrame {
 
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
+            boolean restartConfig = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
+
             globalSave(config);
+
+            if(restartConfig) {
+                new ConfigWindow(lastSelectedConfig, PAGE.globalPanel);
+                dispose();
+            }
         });
 
         JButton saveAndClose = new JButton("Save and close");
