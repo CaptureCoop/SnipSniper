@@ -67,6 +67,11 @@ public class TextStamp implements IStamp{
 
     @Override
     public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
+        if(input == null) {
+            input = new InputContainer();
+            input.setMousePosition(position.getX(), position.getY());
+        }
+
         livePosition = new Vector2Int(input.getMouseX(), input.getMouseY()); //Update method only gets called upon keypress
 
         Point pointToUseForRenderPos = new Point(input.getMouseX(), input.getMouseY());
@@ -118,7 +123,6 @@ public class TextStamp implements IStamp{
 
     @Override
     public void reset() {
-        Config config = scEditorWindow.getConfig();
         text = "";
         state = TextState.IDLE;
         doSaveNextRender = false;
