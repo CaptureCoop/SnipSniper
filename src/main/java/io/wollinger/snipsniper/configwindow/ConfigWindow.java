@@ -1,5 +1,7 @@
 package io.wollinger.snipsniper.configwindow;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.utils.*;
@@ -383,15 +385,41 @@ public class ConfigWindow extends JFrame {
                 config.set("language", LangManager.languages.get(languageDropdown.getSelectedIndex()));
             }
         });
-        options.add(languageDropdown);
+
+        JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row0.add(createJLabel("Language", JLabel.RIGHT, JLabel.CENTER));
+        row0.add(languageDropdown);
+        options.add(row0);
+
+        String[] themes = {"Light Mode", "Dark Mode"};
+        JComboBox<Object> themeDropdown = new JComboBox<>(themes);
+        int themeIndex = 0;
+        if(config.getBool("darkMode"))
+            themeIndex = 1;
+        themeDropdown.setSelectedIndex(themeIndex);
+        themeDropdown.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                if(themeDropdown.getSelectedIndex() == 0) {
+                    config.set("darkMode", "false");
+                } else if(themeDropdown.getSelectedIndex() == 1) {
+                    config.set("darkMode", "true");
+                }
+            }
+        });
+
+        JPanel row1 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row1.add(createJLabel("Theme", JLabel.RIGHT, JLabel.CENTER));
+        row1.add(themeDropdown);
+        options.add(row1);
 
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
             boolean restartConfig = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
+            boolean didThemeChange = config.getBool("darkMode") != SnipSniper.getConfig().getBool("darkMode");
 
             globalSave(config);
 
-            if(restartConfig) {
+            if(restartConfig || didThemeChange) {
                 new ConfigWindow(lastSelectedConfig, PAGE.globalPanel);
                 dispose();
             }
@@ -421,6 +449,19 @@ public class ConfigWindow extends JFrame {
 
     private void globalSave(Config config) {
         boolean doRestartProfiles = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
+        boolean didThemeChange = config.getBool("darkMode") != SnipSniper.getConfig().getBool("darkMode");
+
+        if(didThemeChange) {
+            try {
+                if (config.getBool("darkMode")) {
+                    UIManager.setLookAndFeel(new FlatDarculaLaf());
+                } else {
+                    UIManager.setLookAndFeel(new FlatIntelliJLaf());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         SnipSniper.getConfig().loadFromConfig(config);
         config.save();
