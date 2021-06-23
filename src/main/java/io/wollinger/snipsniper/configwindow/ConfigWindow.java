@@ -393,16 +393,16 @@ public class ConfigWindow extends JFrame {
 
         String[] themes = {"Light Mode", "Dark Mode"};
         JComboBox<Object> themeDropdown = new JComboBox<>(themes);
-        int themeIndex = 0;
-        if(config.getBool("darkMode"))
+        int themeIndex = 0; //Light theme
+        if(config.getString("theme").equals("dark"))
             themeIndex = 1;
         themeDropdown.setSelectedIndex(themeIndex);
         themeDropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if(themeDropdown.getSelectedIndex() == 0) {
-                    config.set("darkMode", "false");
+                    config.set("theme", "light");
                 } else if(themeDropdown.getSelectedIndex() == 1) {
-                    config.set("darkMode", "true");
+                    config.set("theme", "dark");
                 }
             }
         });
@@ -415,7 +415,7 @@ public class ConfigWindow extends JFrame {
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
             boolean restartConfig = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
-            boolean didThemeChange = config.getBool("darkMode") != SnipSniper.getConfig().getBool("darkMode");
+            boolean didThemeChange = !config.getString("theme").equals(SnipSniper.getConfig().getString("theme"));
 
             globalSave(config);
 
@@ -449,13 +449,13 @@ public class ConfigWindow extends JFrame {
 
     private void globalSave(Config config) {
         boolean doRestartProfiles = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
-        boolean didThemeChange = config.getBool("darkMode") != SnipSniper.getConfig().getBool("darkMode");
+        boolean didThemeChange = !config.getString("theme").equals(SnipSniper.getConfig().getString("theme"));
 
         if(didThemeChange) {
             try {
-                if (config.getBool("darkMode")) {
+                if (config.getString("theme").equals("dark")) {
                     UIManager.setLookAndFeel(new FlatDarculaLaf());
-                } else {
+                } else if(config.getString("theme").equals("light")) {
                     UIManager.setLookAndFeel(new FlatIntelliJLaf());
                 }
             } catch (Exception e) {
