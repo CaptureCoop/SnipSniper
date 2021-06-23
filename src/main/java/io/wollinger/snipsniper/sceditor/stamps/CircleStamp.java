@@ -23,10 +23,10 @@ public class CircleStamp implements IStamp{
 
     private PBRColor color;
 
-    private final SCEditorWindow scEditorWindow;
+    private final Config config;
 
-    public CircleStamp(SCEditorWindow scEditorWindow) {
-        this.scEditorWindow = scEditorWindow;
+    public CircleStamp(Config config) {
+        this.config = config;
         reset();
     }
 
@@ -80,18 +80,16 @@ public class CircleStamp implements IStamp{
     }
 
     @Override
-    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
-        Double[] difference = scEditorWindow.getDifferenceFromImage();
+    public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         int drawWidth = (int) ((double)width * difference[0]);
         int drawHeight = (int) ((double)height * difference[1]);
 
-        Vector2Int mousePos = scEditorWindow.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
         Graphics2D g2 = (Graphics2D)g;
         Stroke oldStroke = g2.getStroke();
         g2.setStroke(new BasicStroke(thickness));
         Color oldColor = g2.getColor();
         g2.setColor(color.getColor());
-        Rectangle rectangle = new Rectangle(mousePos.getX() - drawWidth / 2, mousePos.getY() - drawHeight / 2, drawWidth, drawHeight);
+        Rectangle rectangle = new Rectangle(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
         g2.drawOval(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         g2.setColor(oldColor);
         g2.setStroke(oldStroke);
@@ -111,7 +109,6 @@ public class CircleStamp implements IStamp{
 
     @Override
     public void reset() {
-        Config config = scEditorWindow.getConfig();
         color = new PBRColor(config.getColor("editorStampCircleDefaultColor"));
         width = config.getInt("editorStampCircleWidth");
         height = config.getInt("editorStampCircleHeight");

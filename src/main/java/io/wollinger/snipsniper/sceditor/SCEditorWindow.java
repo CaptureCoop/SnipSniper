@@ -46,12 +46,12 @@ public class SCEditorWindow extends SnipScopeWindow {
 
         LogManager.log(id, "Loading stamps", Level.INFO);
 
-        stamps[0] = new CubeStamp(this);
-        stamps[1] = new CounterStamp(this);
-        stamps[2] = new CircleStamp(this);
-        stamps[3] = new SimpleBrush(this);
-        stamps[4] = new TextStamp(this);
-        stamps[5] = new RectangleStamp(this);
+        stamps[0] = new CubeStamp(config, this);
+        stamps[1] = new CounterStamp(config);
+        stamps[2] = new CircleStamp(config);
+        stamps[3] = new SimpleBrush(config, this);
+        stamps[4] = new TextStamp(config, this);
+        stamps[5] = new RectangleStamp(config);
 
         if(image == null)
             image = Utils.getDragPasteImage(Icons.icon_editor, "Drop image here or use CTRL + V to paste one!");

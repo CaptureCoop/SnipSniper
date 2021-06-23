@@ -10,17 +10,17 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class SimpleBrush implements IStamp {
+    private final Config config;
     private final SCEditorWindow scEditorWindow;
 
     private int size;
     private int speed;
 
     private PBRColor color;
-    private final Config config;
 
-    public SimpleBrush(SCEditorWindow scEditorWindow) {
+    public SimpleBrush(Config config, SCEditorWindow scEditorWindow) {
+        this.config = config;
         this.scEditorWindow = scEditorWindow;
-        this.config = scEditorWindow.getConfig();
         reset();
     }
 
@@ -39,18 +39,15 @@ public class SimpleBrush implements IStamp {
     }
 
     @Override
-    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
-        Double[] difference = scEditorWindow.getDifferenceFromImage();
-        Vector2Int mousePos = scEditorWindow.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
-
+    public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         int newSize = (int) ((double)size * difference[0]);
 
         Color oldColor = g.getColor();
         g.setColor(new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), 255));
-        g.fillOval(mousePos.getX() - newSize / 2, mousePos.getY() - newSize / 2, newSize, newSize);
+        g.fillOval(position.getX() - newSize / 2, position.getY() - newSize / 2, newSize, newSize);
         g.setColor(oldColor);
 
-        if(!input.isKeyPressed(scEditorWindow.getMovementKey())) {
+        if(scEditorWindow != null && !input.isKeyPressed(scEditorWindow.getMovementKey())) {
             Vector2Int p0 = scEditorWindow.getPointOnImage(input.getMousePathPoint(0));
             Vector2Int p1 = scEditorWindow.getPointOnImage(input.getMousePathPoint(1));
 
@@ -75,7 +72,7 @@ public class SimpleBrush implements IStamp {
                 g2.dispose();
             }
         }
-        return new Rectangle(mousePos.getX() - newSize / 2, mousePos.getY() - newSize / 2, newSize, newSize);
+        return new Rectangle(position.getX() - newSize / 2, position.getY() - newSize / 2, newSize, newSize);
     }
 
     @Override

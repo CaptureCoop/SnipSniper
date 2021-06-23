@@ -55,7 +55,7 @@ public class SCEditorRenderer extends SnipScopeRenderer {
         previewGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
         previewGraphics.fillRect(0,0, preview.getWidth(), preview.getHeight());
         previewGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-        scEditorWindow.getSelectedStamp().render(previewGraphics, scEditorWindow.getInputContainer(), false, false, -1);
+        scEditorWindow.getSelectedStamp().render(previewGraphics, scEditorWindow.getInputContainer(), scEditorWindow.getPointOnImage(new Point(scEditorWindow.getInputContainer().getMouseX(), scEditorWindow.getInputContainer().getMouseY())), scEditorWindow.getDifferenceFromImage(), false, false, -1);
         previewGraphics.dispose();
 
         g.drawImage(preview, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height, this);

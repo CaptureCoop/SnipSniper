@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class CounterStamp implements IStamp{
-    private final SCEditorWindow scEditorWindow;
+    private final Config config;
 
     private int width;
     private int height;
@@ -31,8 +31,8 @@ public class CounterStamp implements IStamp{
 
     private final ArrayList<Integer> historyPoints = new ArrayList<>();
 
-    public CounterStamp(SCEditorWindow scEditorWindow) {
-        this.scEditorWindow = scEditorWindow;
+    public CounterStamp(Config config) {
+        this.config = config;
         reset();
     }
 
@@ -71,21 +71,18 @@ public class CounterStamp implements IStamp{
         }
     }
 
-    public Rectangle render(Graphics g, InputContainer input, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         Rectangle drawnRectangle = null;
         if(isSaveRender && historyPoint != -1) {
             historyPoints.add(historyPoint);
         }
 
-        Vector2Int mousePos = scEditorWindow.getPointOnImage(new Point(input.getMouseX(), input.getMouseY()));
-
-        Double[] difference = scEditorWindow.getDifferenceFromImage();
         int drawWidth = (int) ((double)width * difference[0]);
         int drawHeight = (int) ((double)height * difference[1]);
 
         if(!isCensor) {
-            final int x = mousePos.getX() - drawWidth / 2;
-            final int y = mousePos.getY() - drawHeight / 2;
+            final int x = position.getX() - drawWidth / 2;
+            final int y = position.getY() - drawHeight / 2;
 
             Color oldFillColor = g.getColor();
             g.setColor(color.getColor());
@@ -102,15 +99,15 @@ public class CounterStamp implements IStamp{
             int h = (int) (drawHeight / fontSizeModifier);
             g.setFont(new Font("TimesRoman", Font.PLAIN, h));
             int w = g.getFontMetrics().stringWidth("" + count);
-            g.drawString("" + count, mousePos.getX() - w / 2, mousePos.getY() + h / 3);
+            g.drawString("" + count, position.getX() - w / 2, position.getY() + h / 3);
             g.setColor(oldColor);
 
-            if (scEditorWindow.getConfig().getBool("editorStampCounterBorderEnabled")) {
+            if (config.getBool("editorStampCounterBorderEnabled")) {
                 oldColor = g.getColor();
                 g.setColor(Color.BLACK);
                 Graphics2D g2 = (Graphics2D) g;
                 Stroke oldStroke = g2.getStroke();
-                g2.setStroke(new BasicStroke(drawHeight / scEditorWindow.getConfig().getFloat("editorStampCounterBorderModifier")));
+                g2.setStroke(new BasicStroke(drawHeight / config.getFloat("editorStampCounterBorderModifier")));
                 g2.drawOval(x, y, drawWidth, drawHeight);
                 g2.setStroke(oldStroke);
                 g2.dispose();
@@ -146,19 +143,18 @@ public class CounterStamp implements IStamp{
     @Override
     public void reset() {
         count = 1;
-        Config cfg = scEditorWindow.getConfig();
-        color = new PBRColor(cfg.getColor("editorStampCounterDefaultColor"));
-        width = cfg.getInt("editorStampCounterWidth");
-        height = cfg.getInt("editorStampCounterHeight");
+        color = new PBRColor(config.getColor("editorStampCounterDefaultColor"));
+        width = config.getInt("editorStampCounterWidth");
+        height = config.getInt("editorStampCounterHeight");
 
-        minimumWidth = cfg.getInt("editorStampCounterWidthMinimum");
-        minimumHeight = cfg.getInt("editorStampCounterHeightMinimum");
+        minimumWidth = config.getInt("editorStampCounterWidthMinimum");
+        minimumHeight = config.getInt("editorStampCounterHeightMinimum");
 
-        speedWidth = cfg.getInt("editorStampCounterWidthSpeed");
-        speedHeight = cfg.getInt("editorStampCounterHeightSpeed");
-        speed = cfg.getInt("editorStampCounterSpeed");
-        fontSizeModifier = cfg.getFloat("editorStampCounterFontSizeModifier");
-        solidColor = cfg.getBool("editorStampCounterSolidColor");
+        speedWidth = config.getInt("editorStampCounterWidthSpeed");
+        speedHeight = config.getInt("editorStampCounterHeightSpeed");
+        speed = config.getInt("editorStampCounterSpeed");
+        fontSizeModifier = config.getFloat("editorStampCounterFontSizeModifier");
+        solidColor = config.getBool("editorStampCounterSolidColor");
     }
 
     @Override

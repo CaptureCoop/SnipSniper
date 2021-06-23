@@ -146,7 +146,7 @@ public class SCEditorListener extends SnipScopeListener {
         scEditorWindow.isDirty = true;
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHints(scEditorWindow.getQualityHints());
-        scEditorWindow.getSelectedStamp().render(g2, scEditorWindow.getInputContainer(), true, isCensor, history.size());
+        scEditorWindow.getSelectedStamp().render(g2, scEditorWindow.getInputContainer(), scEditorWindow.getPointOnImage(new Point(input.getMouseX(), input.getMouseY())), scEditorWindow.getDifferenceFromImage(), true, isCensor, history.size());
         scEditorWindow.repaint();
         g2.dispose();
         g.dispose();
