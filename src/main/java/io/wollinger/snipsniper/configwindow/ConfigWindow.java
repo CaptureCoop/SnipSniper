@@ -8,8 +8,6 @@ import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -29,7 +27,7 @@ public class ConfigWindow extends JFrame {
 
     private final String id = "CFGW";
 
-    public static enum PAGE {snipPanel, editorPanel, viewerPanel, globalPanel}
+    public enum PAGE {snipPanel, editorPanel, viewerPanel, globalPanel}
 
     public ConfigWindow(Config config, PAGE page) {
         LogManager.log(id, "Creating config window", Level.INFO);
@@ -605,8 +603,10 @@ public class ConfigWindow extends JFrame {
     private void setEnableSpecific(JComponent component, boolean enabled, JComponent... ignore) {
         boolean doDisable = true;
         for(JComponent comp : ignore)
-            if(comp == component)
+            if(comp == component) {
                 doDisable = false;
+                break;
+            }
 
         if(doDisable)
             component.setEnabled(enabled);
