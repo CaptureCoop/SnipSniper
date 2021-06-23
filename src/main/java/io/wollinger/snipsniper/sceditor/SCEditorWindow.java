@@ -177,10 +177,6 @@ public class SCEditorWindow extends SnipScopeWindow {
         return config;
     }
 
-    public Color getCensorColor() {
-        return Color.BLACK;
-    }
-
     public Map<?,?> getQualityHints() {
         return qualityHints;
     }
