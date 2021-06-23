@@ -152,6 +152,37 @@ public class ConfigWindow extends JFrame {
             disablePage = true;
         }
 
+        JPanel options = new JPanel(new GridLayout(0,1));
+
+        int hGap = 20;
+
+        JPanel configDropdownRow = new JPanel(getGridLayoutWithMargin(0, 1, hGap));
+        ArrayList<String> profiles = new ArrayList<>();
+        if(configOriginal == null)
+            profiles.add("Select a profile");
+        for(File file : configFiles) {
+            if(file.getName().contains("profile"))
+                profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
+        }
+        JComboBox<Object> dropdown = new JComboBox<>(profiles.toArray());
+        if(configOriginal == null)
+            dropdown.setSelectedIndex(0);
+        else
+            dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
+        dropdown.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                snipConfigPanel.removeAll();
+                Config newConfig = new Config(e.getItem() + ".cfg", "CFGT", "profile_defaults.cfg");
+                tabPane.setComponentAt(0, setupSnipPane(newConfig));
+                lastSelectedConfig = newConfig;
+            }
+        });
+        configDropdownRow.add(dropdown);
+        options.add(configDropdownRow);
+
+        JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row0.add(createJLabel(LangManager.getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER));
+        JPanel row0_1 = new JPanel(new GridLayout(0,2));
         HotKeyButton hotKeyButton = new HotKeyButton(config.getString("hotkey"));
         hotKeyButton.addDoneCapturingListener(e -> {
             if(hotKeyButton.hotkey != -1) {
@@ -163,19 +194,61 @@ public class ConfigWindow extends JFrame {
                 config.set("hotkey", "NONE");
             }
         });
+        row0_1.add(hotKeyButton);
+        JButton deleteHotKey = new JButton(LangManager.getItem("config_label_delete"));
+        deleteHotKey.addActionListener(e -> {
+            hotKeyButton.setText(LangManager.getItem("config_label_none"));
+            hotKeyButton.hotkey = -1;
+            config.set("hotkey", "NONE");
+        });
+        row0_1.add(deleteHotKey);
+        row0.add(row0_1);
+        options.add(row0);
 
+        JPanel row1 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row1.add(createJLabel(LangManager.getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER));
         JCheckBox saveToDisk = new JCheckBox();
         saveToDisk.setSelected(config.getBool("saveToDisk"));
         saveToDisk.addActionListener(e -> config.set("saveToDisk", saveToDisk.isSelected() + ""));
+        row1.add(saveToDisk);
+        options.add(row1);
 
+        JPanel row2 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row2.add(createJLabel(LangManager.getItem("config_label_copyclipboard"), JLabel.RIGHT, JLabel.CENTER));
         JCheckBox copyToClipboard = new JCheckBox();
         copyToClipboard.setSelected(config.getBool("copyToClipboard"));
         copyToClipboard.addActionListener(e -> config.set("copyToClipboard", copyToClipboard.isSelected() + ""));
+        row2.add(copyToClipboard);
+        options.add(row2);
 
-        //TODO: Extend JSpinner class to notify user of too large number
-        JSpinner borderSize = new JSpinner(new SpinnerNumberModel(config.getInt("borderSize"), 0.0, maxBorder, 1.0));
+        JPanel row3 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row3.add(createJLabel(LangManager.getItem("config_label_bordersize"), JLabel.RIGHT, JLabel.CENTER));
+        JPanel row3_2 = new JPanel(new GridLayout(0,2));
+        JSpinner borderSize = new JSpinner(new SpinnerNumberModel(config.getInt("borderSize"), 0.0, maxBorder, 1.0)); //TODO: Extend JSpinner class to notify user of too large number
         borderSize.addChangeListener(e -> config.set("borderSize", (int)((double) borderSize.getValue()) + ""));
+        row3_2.add(borderSize);
+        JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
+        PBRColor borderColor = new PBRColor(config.getColor("borderColor"));
+        borderColor.addChangeListener(e -> config.set("borderColor", Utils.rgb2hex((Color)e.getSource())));
+        colorBtn.setBackground(borderColor.getColor());
+        colorBtn.setForeground(Utils.getContrastColor(borderColor.getColor()));
+        colorBtn.addActionListener(e -> {
+            if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
+                int x = (int)((getLocation().getX() + getWidth()/2));
+                int y = (int)((getLocation().getY() + getHeight()/2));
+                colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y);
+                colorChooser[0].addWindowListener(() -> {
+                    colorBtn.setBackground(borderColor.getColor());
+                    colorBtn.setForeground(Utils.getContrastColor(borderColor.getColor()));
+                });
+            }
+        });
+        row3_2.add(colorBtn);
+        row3.add(row3_2);
+        options.add(row3);
 
+        JPanel row4 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row4.add(createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER));
         //TODO: Add to wiki: if you just enter a word like "images" it will create the folder next to the jar.
         JTextField pictureLocation = new JTextField(config.getRawString("pictureFolder"));
         pictureLocation.addFocusListener(new FocusListener() {
@@ -212,106 +285,24 @@ public class ConfigWindow extends JFrame {
                 }
             }
         });
-
-
-        PBRColor borderColor = new PBRColor(config.getColor("borderColor"));
-        borderColor.addChangeListener(e -> config.set("borderColor", Utils.rgb2hex((Color)e.getSource())));
-
-        JSpinner snipeDelay = new JSpinner(new SpinnerNumberModel(config.getInt("snipeDelay"), 0.0, 100, 1.0));
-        snipeDelay.addChangeListener(e -> config.set("snipeDelay", (int)((double) snipeDelay.getValue()) + ""));
-
-        JCheckBox openEditor = new JCheckBox();
-        openEditor.setSelected(config.getBool("openEditor"));
-        openEditor.addActionListener(e -> config.set("openEditor", openEditor.isSelected() + ""));
-
-        JPanel options = new JPanel(new GridLayout(0,1));
-
-        int hGap = 20;
-
-        JPanel configDropdownRow = new JPanel(getGridLayoutWithMargin(0, 1, hGap));
-        ArrayList<String> profiles = new ArrayList<>();
-        if(configOriginal == null)
-            profiles.add("Select a profile");
-        for(File file : configFiles) {
-            if(file.getName().contains("profile"))
-                profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
-        }
-        JComboBox<Object> dropdown = new JComboBox<>(profiles.toArray());
-        if(configOriginal == null)
-            dropdown.setSelectedIndex(0);
-        else
-            dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
-        dropdown.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                snipConfigPanel.removeAll();
-                Config newConfig = new Config(e.getItem() + ".cfg", "CFGT", "profile_defaults.cfg");
-                tabPane.setComponentAt(0, setupSnipPane(newConfig));
-                lastSelectedConfig = newConfig;
-            }
-        });
-        configDropdownRow.add(dropdown);
-        options.add(configDropdownRow);
-
-        JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row0.add(createJLabel(LangManager.getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER));
-        JPanel row0_1 = new JPanel(new GridLayout(0,2));
-        row0_1.add(hotKeyButton);
-        JButton deleteHotKey = new JButton(LangManager.getItem("config_label_delete"));
-        deleteHotKey.addActionListener(e -> {
-            hotKeyButton.setText(LangManager.getItem("config_label_none"));
-            hotKeyButton.hotkey = -1;
-            config.set("hotkey", "NONE");
-        });
-        row0_1.add(deleteHotKey);
-        row0.add(row0_1);
-        options.add(row0);
-
-        JPanel row1 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row1.add(createJLabel(LangManager.getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER));
-        row1.add(saveToDisk);
-        options.add(row1);
-
-        JPanel row2 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row2.add(createJLabel(LangManager.getItem("config_label_copyclipboard"), JLabel.RIGHT, JLabel.CENTER));
-        row2.add(copyToClipboard);
-        options.add(row2);
-
-        JPanel row3 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row3.add(createJLabel(LangManager.getItem("config_label_bordersize"), JLabel.RIGHT, JLabel.CENTER));
-        JPanel row3_2 = new JPanel(new GridLayout(0,2));
-        row3_2.add(borderSize);
-        JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
-        colorBtn.setBackground(borderColor.getColor());
-        colorBtn.setForeground(Utils.getContrastColor(borderColor.getColor()));
-        colorBtn.addActionListener(e -> {
-            if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
-                int x = (int)((getLocation().getX() + getWidth()/2));
-                int y = (int)((getLocation().getY() + getHeight()/2));
-                colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y);
-                colorChooser[0].addWindowListener(() -> {
-                    colorBtn.setBackground(borderColor.getColor());
-                    colorBtn.setForeground(Utils.getContrastColor(borderColor.getColor()));
-                });
-            }
-        });
-        row3_2.add(colorBtn);
-        row3.add(row3_2);
-        options.add(row3);
-
-        JPanel row4 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row4.add(createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER));
         row4.add(pictureLocation);
         options.add(row4);
 
         JPanel row5 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row5.add(createJLabel(LangManager.getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER));
         JPanel row5_2 = new JPanel(new GridLayout(0,2));
+        JSpinner snipeDelay = new JSpinner(new SpinnerNumberModel(config.getInt("snipeDelay"), 0.0, 100, 1.0));
+        snipeDelay.addChangeListener(e -> config.set("snipeDelay", (int)((double) snipeDelay.getValue()) + ""));
         row5_2.add(snipeDelay);
         row5.add(row5_2);
         options.add(row5);
 
         JPanel row6 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row6.add(createJLabel(LangManager.getItem("config_label_openeditor"), JLabel.RIGHT, JLabel.CENTER));
+        JCheckBox openEditor = new JCheckBox();
+        openEditor.setSelected(config.getBool("openEditor"));
+        openEditor.addActionListener(e -> config.set("openEditor", openEditor.isSelected() + ""));
+
         row6.add(openEditor);
         options.add(row6);
 
@@ -350,11 +341,86 @@ public class ConfigWindow extends JFrame {
         return generateScrollPane(snipConfigPanel);
     }
 
-    public JComponent setupEditorPane(Config config) {
-        editorConfigPanel.setLayout(new BoxLayout(editorConfigPanel, BoxLayout.PAGE_AXIS));
-        JLabel label = new JLabel("<html><h1>Coming soon</h1></html>");
-        label.setHorizontalAlignment(JLabel.CENTER);
-        editorConfigPanel.add(label);
+    public JComponent setupEditorPane(Config configOriginal) {
+        editorConfigPanel.setLayout(new MigLayout("align 50% 0%"));
+
+        final boolean[] allowSaving = {true};
+        final int maxBorder = 999;
+        final ColorChooser[] colorChooser = {null};
+
+        Config config;
+        boolean disablePage = false;
+        if (configOriginal != null) {
+            config = new Config(configOriginal);
+        } else {
+            config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
+            disablePage = true;
+        }
+
+        JPanel options = new JPanel(new GridLayout(0,1));
+
+        int hGap = 20;
+
+        JPanel configDropdownRow = new JPanel(getGridLayoutWithMargin(0, 1, hGap));
+        ArrayList<String> profiles = new ArrayList<>();
+        if(configOriginal == null)
+            profiles.add("Select a profile");
+        for(File file : configFiles) {
+            if(file.getName().contains("profile"))
+                profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
+        }
+        JComboBox<Object> dropdown = new JComboBox<>(profiles.toArray());
+        if(configOriginal == null)
+            dropdown.setSelectedIndex(0);
+        else
+            dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
+        dropdown.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                editorConfigPanel.removeAll();
+                Config newConfig = new Config(e.getItem() + ".cfg", "CFGT", "profile_defaults.cfg");
+                tabPane.setComponentAt(1, setupEditorPane(newConfig));
+                lastSelectedConfig = newConfig;
+            }
+        });
+        configDropdownRow.add(dropdown);
+        options.add(configDropdownRow);
+
+
+
+
+
+        JButton saveAndClose = new JButton("Save and close");
+        saveAndClose.addActionListener(e -> {
+            if(allowSaving[0]) {
+                configOriginal.loadFromConfig(config);
+                configOriginal.save();
+                for(CustomWindowListener listener : listeners)
+                    listener.windowClosed();
+                close();
+            }
+        });
+
+        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
+        saveButton.addActionListener(e -> {
+            if(allowSaving[0]) {
+                configOriginal.loadFromConfig(config);
+                configOriginal.save();
+            }
+        });
+
+        GridLayout layout = new GridLayout(0,4);
+        layout.setHgap(hGap);
+        JPanel row7 = new JPanel(layout);
+        row7.add(new JPanel());
+        row7.add(saveButton);
+        row7.add(saveAndClose);
+        options.add(row7);
+
+        editorConfigPanel.add(options);
+
+        if(disablePage)
+            setEnabledAll(options, false, dropdown);
+
         return generateScrollPane(editorConfigPanel);
     }
 
