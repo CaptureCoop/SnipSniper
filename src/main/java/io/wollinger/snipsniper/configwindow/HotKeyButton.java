@@ -79,9 +79,9 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 				hotkey = -1;
 				return;
 			}
-			notifyListeners();
 			isKeyboard = false;
 			listening = false;
+			notifyListeners();
 			instance.setText(LangManager.getItem("config_label_mouse") + " " + hotkey);
 			oldLabel = instance.getText();
 		}

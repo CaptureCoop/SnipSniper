@@ -1,5 +1,7 @@
 package io.wollinger.snipsniper.configwindow;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.utils.*;
@@ -21,10 +23,13 @@ public class ConfigWindow extends JFrame {
 
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
     private final ArrayList<File> configFiles = new ArrayList<>();
+    private Config lastSelectedConfig;
 
     private final String id = "CFGW";
 
-    public ConfigWindow(Config config) {
+    public static enum PAGE {snipPanel, editorPanel, viewerPanel, globalPanel}
+
+    public ConfigWindow(Config config, PAGE page) {
         LogManager.log(id, "Creating config window", Level.INFO);
 
         setSize(512, 512);
@@ -58,7 +63,7 @@ public class ConfigWindow extends JFrame {
 
         refreshConfigFiles();
 
-        setup(config);
+        setup(config, page);
         setVisible(true);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -77,32 +82,43 @@ public class ConfigWindow extends JFrame {
         }
     }
 
-    public void setup(Config config) {
+    public void setup(Config config, PAGE page) {
         tabPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 
         final int iconSize = 16;
         int index = 0;
+        int enableIndex = 0;
+
+        lastSelectedConfig = config;
 
         snipConfigPanel = new JPanel();
         tabPane.addTab("SnipSniper Settings",  setupSnipPane(config));
         tabPane.setIconAt(index, new ImageIcon(Icons.icon_taskbar.getScaledInstance(iconSize, iconSize, 0)));
+        if(page == PAGE.snipPanel)
+            enableIndex = index;
         index++;
 
         editorConfigPanel = new JPanel();
         tabPane.addTab("Editor Settings", setupEditorPane());
         tabPane.setIconAt(index, new ImageIcon(Icons.icon_editor.getScaledInstance(iconSize,iconSize,0)));
+        if(page == PAGE.editorPanel)
+            enableIndex = index;
         index++;
 
         viewerConfigPanel = new JPanel();
         tabPane.addTab("Viewer Settings", setupViewerPane());
         tabPane.setIconAt(index, new ImageIcon(Icons.icon_viewer.getScaledInstance(iconSize,iconSize,0)));
+        if(page == PAGE.viewerPanel)
+            enableIndex = index;
         index++;
 
         globalConfigPanel = new JPanel();
         tabPane.addTab("Global Settings", setupGlobalPane());
         tabPane.setIconAt(index, new ImageIcon(Icons.icon_config.getScaledInstance(iconSize, iconSize, 0)));
+        if(page == PAGE.globalPanel)
+            enableIndex = index;
 
-        //TODO: handle greying out options
+        tabPane.setSelectedIndex(enableIndex);
 
         add(tabPane);
     }
@@ -127,7 +143,14 @@ public class ConfigWindow extends JFrame {
         final int maxBorder = 999;
         final ColorChooser[] colorChooser = {null};
 
-        Config config = new Config(configOriginal);
+        Config config;
+        boolean disablePage = false;
+        if (configOriginal != null) {
+            config = new Config(configOriginal);
+        } else {
+            config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
+            disablePage = true;
+        }
 
         HotKeyButton hotKeyButton = new HotKeyButton(config.getString("hotkey"));
         hotKeyButton.addDoneCapturingListener(e -> {
@@ -207,17 +230,23 @@ public class ConfigWindow extends JFrame {
 
         JPanel configDropdownRow = new JPanel(getGridLayoutWithMargin(0, 1, hGap));
         ArrayList<String> profiles = new ArrayList<>();
+        if(configOriginal == null)
+            profiles.add("Select a profile");
         for(File file : configFiles) {
             if(file.getName().contains("profile"))
                 profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
         }
         JComboBox<Object> dropdown = new JComboBox<>(profiles.toArray());
-        dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
+        if(configOriginal == null)
+            dropdown.setSelectedIndex(0);
+        else
+            dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
         dropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 snipConfigPanel.removeAll();
                 Config newConfig = new Config(e.getItem() + ".cfg", "CFGT", "profile_defaults.cfg");
                 tabPane.setComponentAt(0, setupSnipPane(newConfig));
+                lastSelectedConfig = newConfig;
             }
         });
         configDropdownRow.add(dropdown);
@@ -315,6 +344,9 @@ public class ConfigWindow extends JFrame {
 
         snipConfigPanel.add(options);
 
+        if(disablePage)
+            setEnabledAll(options, false, dropdown);
+
         return generateScrollPane(snipConfigPanel);
     }
 
@@ -335,23 +367,151 @@ public class ConfigWindow extends JFrame {
     }
 
     public JComponent setupGlobalPane() {
-        globalConfigPanel.setLayout(new BoxLayout(globalConfigPanel, BoxLayout.PAGE_AXIS));
-        JLabel label = new JLabel("<html><h1>Coming soon</h1></html>");
-        label.setHorizontalAlignment(JLabel.CENTER);
-        globalConfigPanel.add(label);
+        globalConfigPanel.setLayout(new MigLayout("align 50% 0%"));
+
+        int hGap = 20;
+
+        JPanel options = new JPanel(new GridLayout(0,1));
+
+        Config config = new Config(SnipSniper.getConfig());
+
+        ArrayList<String> translatedLanguages = new ArrayList<>();
+        for(String lang : LangManager.languages)
+            translatedLanguages.add(LangManager.getItem(lang, "lang_" + lang));
+        JComboBox<Object> languageDropdown = new JComboBox<>(translatedLanguages.toArray());
+        languageDropdown.setSelectedIndex(LangManager.languages.indexOf(config.getString("language")));
+        languageDropdown.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                config.set("language", LangManager.languages.get(languageDropdown.getSelectedIndex()));
+            }
+        });
+
+        JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row0.add(createJLabel("Language", JLabel.RIGHT, JLabel.CENTER));
+        row0.add(languageDropdown);
+        options.add(row0);
+
+        String[] themes = {"Light Mode", "Dark Mode"};
+        JComboBox<Object> themeDropdown = new JComboBox<>(themes);
+        int themeIndex = 0; //Light theme
+        if(config.getString("theme").equals("dark"))
+            themeIndex = 1;
+        themeDropdown.setSelectedIndex(themeIndex);
+        themeDropdown.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                if(themeDropdown.getSelectedIndex() == 0) {
+                    config.set("theme", "light");
+                } else if(themeDropdown.getSelectedIndex() == 1) {
+                    config.set("theme", "dark");
+                }
+            }
+        });
+
+        JPanel row1 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row1.add(createJLabel("Theme", JLabel.RIGHT, JLabel.CENTER));
+        row1.add(themeDropdown);
+        options.add(row1);
+
+        JPanel row2 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row2.add(createJLabel("Debug Mode", JLabel.RIGHT, JLabel.CENTER));
+        JCheckBox debugCheckBox = new JCheckBox();
+        debugCheckBox.setSelected(config.getBool("debug"));
+        debugCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                config.set("debug", debugCheckBox.isSelected() + "");
+            }
+        });
+        row2.add(debugCheckBox);
+        options.add(row2);
+
+        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
+        saveButton.addActionListener(e -> {
+            boolean restartConfig = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
+            boolean didThemeChange = !config.getString("theme").equals(SnipSniper.getConfig().getString("theme"));
+
+            globalSave(config);
+
+            if(restartConfig || didThemeChange) {
+                new ConfigWindow(lastSelectedConfig, PAGE.globalPanel);
+                close();
+            }
+        });
+
+        JButton saveAndClose = new JButton("Save and close");
+        saveAndClose.addActionListener(e -> {
+            globalSave(config);
+
+            for(CustomWindowListener listener : listeners)
+                listener.windowClosed();
+            close();
+        });
+
+        GridLayout layout = new GridLayout(0,4);
+        layout.setHgap(hGap);
+        JPanel saveRow = new JPanel(layout);
+        saveRow.add(new JPanel());
+        saveRow.add(saveButton);
+        saveRow.add(saveAndClose);
+        options.add(saveRow);
+
+        globalConfigPanel.add(options);
+
         return generateScrollPane(globalConfigPanel);
     }
 
-    public void setEnabledAll(JComponent component, boolean enabled) {
-        component.setEnabled(enabled);
+    private void globalSave(Config config) {
+        boolean doRestartProfiles = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
+        boolean didThemeChange = !config.getString("theme").equals(SnipSniper.getConfig().getString("theme"));
+        boolean didDebugChange = config.getBool("debug") != SnipSniper.getConfig().getBool("debug");
+
+        if(didDebugChange && config.getBool("debug")) {
+            SnipSniper.openDebugConsole();
+            doRestartProfiles = true;
+        } else if(didDebugChange && !config.getBool("debug")){
+            SnipSniper.closeDebugConsole();
+            doRestartProfiles = true;
+        }
+
+        if(didThemeChange) {
+            try {
+                if (config.getString("theme").equals("dark")) {
+                    UIManager.setLookAndFeel(new FlatDarculaLaf());
+                } else if(config.getString("theme").equals("light")) {
+                    UIManager.setLookAndFeel(new FlatIntelliJLaf());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        SnipSniper.getConfig().loadFromConfig(config);
+        config.save();
+        if(doRestartProfiles)
+            SnipSniper.resetProfiles();
+    }
+
+    private void setEnabledAll(JComponent component, boolean enabled, JComponent... ignore) {
+        setEnableSpecific(component, enabled, ignore);
+
         for(Component c : component.getComponents()) {
             if(c instanceof JComponent) {
                 JComponent cc = (JComponent) c;
-                cc.setEnabled(enabled);
+                setEnableSpecific(cc, enabled, ignore);
                 if (cc.getComponents().length != 0)
-                    setEnabledAll(cc, enabled);
+                    setEnabledAll(cc, enabled, ignore);
             }
         }
+    }
+
+    private void setEnableSpecific(JComponent component, boolean enabled, JComponent... ignore) {
+        boolean doDisable = true;
+        for(JComponent comp : ignore)
+            if(comp == component)
+                doDisable = false;
+
+        if(doDisable)
+            component.setEnabled(enabled);
     }
 
     public JLabel createJLabel(String title, int horizontalAlignment, int verticalAlignment) {

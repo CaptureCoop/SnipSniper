@@ -86,9 +86,9 @@ public final class SnipSniper {
 
 		System.setProperty("sun.java2d.uiScale", "1.0");
 		try {
-			if(config.getBool("darkMode"))
+			if(config.getString("theme").equals("dark"))
 				UIManager.setLookAndFeel(new FlatDarculaLaf());
-			else
+			else if(config.getString("theme").equals("light"))
 				UIManager.setLookAndFeel(new FlatIntelliJLaf());
 			UIManager.put( "ScrollBar.showButtons", true );
 			UIManager.put( "ScrollBar.width", 16 );
@@ -308,8 +308,19 @@ public final class SnipSniper {
 	}
 
 	public static void openDebugConsole() {
-		debugConsole = new DebugConsole();
-		debugConsole.update();
-		debugConsole.addCustomWindowListener(() -> debugConsole = null);
+		if(debugConsole == null) {
+			debugConsole = new DebugConsole();
+			debugConsole.update();
+			debugConsole.addCustomWindowListener(() -> debugConsole = null);
+		} else {
+			debugConsole.requestFocus();
+		}
+	}
+
+	public static void closeDebugConsole() {
+		if(debugConsole != null) {
+			debugConsole.dispose();
+			debugConsole = null;
+		}
 	}
 }
