@@ -99,14 +99,14 @@ public class ConfigWindow extends JFrame {
         index++;
 
         editorConfigPanel = new JPanel();
-        tabPane.addTab("Editor Settings", setupEditorPane());
+        tabPane.addTab("Editor Settings", setupEditorPane(config));
         tabPane.setIconAt(index, new ImageIcon(Icons.icon_editor.getScaledInstance(iconSize,iconSize,0)));
         if(page == PAGE.editorPanel)
             enableIndex = index;
         index++;
 
         viewerConfigPanel = new JPanel();
-        tabPane.addTab("Viewer Settings", setupViewerPane());
+        tabPane.addTab("Viewer Settings", setupViewerPane(config));
         tabPane.setIconAt(index, new ImageIcon(Icons.icon_viewer.getScaledInstance(iconSize,iconSize,0)));
         if(page == PAGE.viewerPanel)
             enableIndex = index;
@@ -350,7 +350,7 @@ public class ConfigWindow extends JFrame {
         return generateScrollPane(snipConfigPanel);
     }
 
-    public JComponent setupEditorPane() {
+    public JComponent setupEditorPane(Config config) {
         editorConfigPanel.setLayout(new BoxLayout(editorConfigPanel, BoxLayout.PAGE_AXIS));
         JLabel label = new JLabel("<html><h1>Coming soon</h1></html>");
         label.setHorizontalAlignment(JLabel.CENTER);
@@ -358,7 +358,7 @@ public class ConfigWindow extends JFrame {
         return generateScrollPane(editorConfigPanel);
     }
 
-    public JComponent setupViewerPane() {
+    public JComponent setupViewerPane(Config config) {
         viewerConfigPanel.setLayout(new BoxLayout(viewerConfigPanel, BoxLayout.PAGE_AXIS));
         JLabel label = new JLabel("<html><h1>Coming soon</h1></html>");
         label.setHorizontalAlignment(JLabel.CENTER);
