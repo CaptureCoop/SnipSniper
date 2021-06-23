@@ -308,8 +308,19 @@ public final class SnipSniper {
 	}
 
 	public static void openDebugConsole() {
-		debugConsole = new DebugConsole();
-		debugConsole.update();
-		debugConsole.addCustomWindowListener(() -> debugConsole = null);
+		if(debugConsole == null) {
+			debugConsole = new DebugConsole();
+			debugConsole.update();
+			debugConsole.addCustomWindowListener(() -> debugConsole = null);
+		} else {
+			debugConsole.requestFocus();
+		}
+	}
+
+	public static void closeDebugConsole() {
+		if(debugConsole != null) {
+			debugConsole.dispose();
+			debugConsole = null;
+		}
 	}
 }

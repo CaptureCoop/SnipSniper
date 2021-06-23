@@ -80,13 +80,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 		if(SnipSniper.getConfig().getBool("debug")) {
 			MenuItem consoleItem = new MenuItem("Console");
-			consoleItem.addActionListener(e -> {
-				DebugConsole console = SnipSniper.getDebugConsole();
-				if (console == null)
-					SnipSniper.openDebugConsole();
-				else
-					console.requestFocus();
-			});
+			consoleItem.addActionListener(e -> SnipSniper.openDebugConsole());
 			popup.add(consoleItem);
 		}
 

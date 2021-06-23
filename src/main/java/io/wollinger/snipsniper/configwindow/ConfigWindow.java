@@ -434,7 +434,7 @@ public class ConfigWindow extends JFrame {
 
             if(restartConfig || didThemeChange) {
                 new ConfigWindow(lastSelectedConfig, PAGE.globalPanel);
-                dispose();
+                close();
             }
         });
 
@@ -465,8 +465,13 @@ public class ConfigWindow extends JFrame {
         boolean didThemeChange = !config.getString("theme").equals(SnipSniper.getConfig().getString("theme"));
         boolean didDebugChange = config.getBool("debug") != SnipSniper.getConfig().getBool("debug");
 
-        if(didDebugChange && config.getBool("debug"))
+        if(didDebugChange && config.getBool("debug")) {
             SnipSniper.openDebugConsole();
+            doRestartProfiles = true;
+        } else if(didDebugChange && !config.getBool("debug")){
+            SnipSniper.closeDebugConsole();
+            doRestartProfiles = true;
+        }
 
         if(didThemeChange) {
             try {
@@ -482,9 +487,8 @@ public class ConfigWindow extends JFrame {
 
         SnipSniper.getConfig().loadFromConfig(config);
         config.save();
-
         if(doRestartProfiles)
-            SnipSniper.resetProfiles(); //TODO: Implement restarting of config window too.
+            SnipSniper.resetProfiles();
     }
 
     private void setEnabledAll(JComponent component, boolean enabled, JComponent... ignore) {
