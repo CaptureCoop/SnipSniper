@@ -440,11 +440,11 @@ public class ConfigWindow extends JFrame {
 
         GridLayout layout = new GridLayout(0,4);
         layout.setHgap(hGap);
-        JPanel row7 = new JPanel(layout);
-        row7.add(new JPanel());
-        row7.add(saveButton);
-        row7.add(saveAndClose);
-        options.add(row7);
+        JPanel saveRow = new JPanel(layout);
+        saveRow.add(new JPanel());
+        saveRow.add(saveButton);
+        saveRow.add(saveAndClose);
+        options.add(saveRow);
 
         editorConfigPanel.add(options);
 
