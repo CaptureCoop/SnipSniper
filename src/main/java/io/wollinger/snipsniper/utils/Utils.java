@@ -141,6 +141,13 @@ public class Utils {
 		return image;
 	}
 
+	public static String getDateWithProperZero(int date) {
+		String dateString = date + "";
+		if(date < 10)
+			dateString = "0" + date;
+		return dateString;
+	}
+
 	public static String saveImage(String profileID, BufferedImage finalImg, String modifier, Config config) {
 		File file;
 		String filename = Utils.constructFilename(modifier);
@@ -151,15 +158,8 @@ public class Utils {
 		if(config.getBool("dateFolders")) {
 			LocalDate currentDate = LocalDate.now();
 
-			int day = currentDate.getDayOfMonth();
-			String dayString = day + "";
-			if(day < 10)
-				dayString = "0" + day;
-
-			int month = currentDate.getMonthValue();
-			String monthString = month + "";
-			if(month < 10)
-				monthString = "0" + month;
+			String dayString = getDateWithProperZero(currentDate.getDayOfMonth());
+			String monthString = getDateWithProperZero(currentDate.getMonthValue());
 
 			savePathModifier = "\\" + config.getString("dateFoldersFormat");
 			savePathModifier = savePathModifier.replaceAll("%day%", dayString);
@@ -169,7 +169,6 @@ public class Utils {
 
 		File path = new File(savePath + savePathModifier);
 		file = new File(path.getAbsolutePath() + "\\" + filename);
-		System.out.println(file);
 		try {
 			if(config.getBool("saveToDisk")) {
 				if(!path.exists()) {
