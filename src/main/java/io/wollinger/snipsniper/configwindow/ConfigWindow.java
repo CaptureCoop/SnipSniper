@@ -361,7 +361,7 @@ public class ConfigWindow extends JFrame {
             disablePage = true;
         }
 
-        JPanel options = new JPanel(new GridLayout(0,1));
+        StampJPanel options = new StampJPanel(new GridLayout(0,1));
 
         int hGap = 20;
 
@@ -421,18 +421,15 @@ public class ConfigWindow extends JFrame {
         options.add(row2);
 
         JPanel row3 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        JPanel row3_stampConfig = new JPanel(new GridBagLayout());
+        JPanel row3_stampConfig = new JPanel();
         String[] stamps = {"Cube", "Counter", "Circle", "Simple Brush", "Text", "Rectangle"};
         JComboBox<Object> stampDropdown = new JComboBox<>(stamps);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        row3_stampConfig.add(stampDropdown, gbc);
-        row3_stampConfig.add(new JButton("Test"), gbc);
-
+        row3_stampConfig.add(stampDropdown);
         JPanel row3_stampPreview = new JPanel();
         row3.add(row3_stampConfig);
         row3.add(row3_stampPreview);
         options.add(row3);
+        options.addDrawComponent(this, row3_stampPreview);
 
         //END ELEMENTS
 
