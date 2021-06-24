@@ -413,9 +413,12 @@ public class ConfigWindow extends JFrame {
         hsvSlider.setSnapToTicks(true);
         hsvSlider.setValue(config.getInt("hsvColorSwitchSpeed"));
         row1.add(hsvSlider);
-        row1.add(new JLabel());
-        row1.add(hsvPercentage);
         options.add(row1);
+
+        JPanel row2 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row2.add(new JLabel());
+        row2.add(hsvPercentage);
+        options.add(row2);
 
         //END ELEMENTS
 
