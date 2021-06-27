@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class StampJPanel extends JPanel {
-    public StampJPanel(GridLayout gridLayout) {
+    public StampJPanel(GridBagLayout gridLayout) {
         super(gridLayout);
     }
 
@@ -20,12 +20,9 @@ public class StampJPanel extends JPanel {
         super.paint(g);
         jpanel.revalidate();
         int y = (int) (comp.getLocationOnScreen().getY() - getLocationOnScreen().getY());
-        System.out.println(y);
 
-
-
-        if(comp != null)
-        g.fillRect((int)comp.getLocation().getX(),y,64,64);
+//        if(comp != null)
+//        g.fillRect((int)comp.getLocation().getX(),y,64,64);
     }
 
 }

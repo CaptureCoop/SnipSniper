@@ -346,7 +346,7 @@ public class ConfigWindow extends JFrame {
     }
 
     public JComponent setupEditorPane(Config configOriginal) {
-        editorConfigPanel.setLayout(new MigLayout("align 50% 0%"));
+        //editorConfigPanel.setLayout(new MigLayout("align 50% 0%"));
 
         final boolean[] allowSaving = {true};
         final int maxBorder = 999;
@@ -361,11 +361,10 @@ public class ConfigWindow extends JFrame {
             disablePage = true;
         }
 
-        StampJPanel options = new StampJPanel(new GridLayout(0,1));
+        StampJPanel options = new StampJPanel(new GridBagLayout());
 
         int hGap = 20;
 
-        JPanel configDropdownRow = new JPanel(getGridLayoutWithMargin(0, 1, hGap));
         ArrayList<String> profiles = new ArrayList<>();
         if(configOriginal == null)
             profiles.add("Select a profile");
@@ -386,21 +385,25 @@ public class ConfigWindow extends JFrame {
                 lastSelectedConfig = newConfig;
             }
         });
-        configDropdownRow.add(dropdown);
-        options.add(configDropdownRow);
-
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = 1;
+        options.add(dropdown, gbc);
+        gbc.fill = 0;
         //BEGIN ELEMENTS
 
-        JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row0.add(createJLabel("Smart Pixel", JLabel.RIGHT, JLabel.CENTER));
+        gbc.gridy = 1;
+        options.add(createJLabel("Smart Pixel", JLabel.RIGHT, JLabel.CENTER), gbc);
         JCheckBox smartPixelCheckBox = new JCheckBox();
         smartPixelCheckBox.setSelected(config.getBool("smartPixel"));
         smartPixelCheckBox.addActionListener(e -> config.set("smartPixel", smartPixelCheckBox.isSelected() + ""));
-        row0.add(smartPixelCheckBox);
-        options.add(row0);
+        gbc.gridx = 1;
+        options.add(smartPixelCheckBox, gbc);
 
-        JPanel row1 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row1.add(createJLabel("HSV color switch speed", JLabel.RIGHT, JLabel.CENTER));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        options.add(createJLabel("HSV color switch speed", JLabel.RIGHT, JLabel.CENTER), gbc);
         JLabel hsvPercentage = new JLabel(config.getInt("hsvColorSwitchSpeed") + "%");
         hsvPercentage.setHorizontalAlignment(JLabel.CENTER);
         JSlider hsvSlider = new JSlider(JSlider.HORIZONTAL);
@@ -412,23 +415,25 @@ public class ConfigWindow extends JFrame {
         hsvSlider.setMaximum(100);
         hsvSlider.setSnapToTicks(true);
         hsvSlider.setValue(config.getInt("hsvColorSwitchSpeed"));
-        row1.add(hsvSlider);
-        options.add(row1);
+        gbc.gridx = 1;
+        options.add(hsvSlider, gbc);
 
-        JPanel row2 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row2.add(new JLabel());
-        row2.add(hsvPercentage);
-        options.add(row2);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        options.add(new JLabel(), gbc);
+        gbc.gridx = 1;
+        options.add(hsvPercentage, gbc);
 
-        JPanel row3 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        gbc.gridx = 0;
+        gbc.gridy = 4;
         JPanel row3_stampConfig = new JPanel();
         String[] stamps = {"Cube", "Counter", "Circle", "Simple Brush", "Text", "Rectangle"};
         JComboBox<Object> stampDropdown = new JComboBox<>(stamps);
         row3_stampConfig.add(stampDropdown);
         JPanel row3_stampPreview = new JPanel();
-        row3.add(row3_stampConfig);
-        row3.add(row3_stampPreview);
-        options.add(row3);
+        options.add(row3_stampConfig, gbc);
+        gbc.gridx = 1;
+        options.add(row3_stampPreview, gbc);
         options.addDrawComponent(this, row3_stampPreview);
 
         //END ELEMENTS
@@ -452,13 +457,15 @@ public class ConfigWindow extends JFrame {
             }
         });
 
+        gbc.gridx = 0;
+        gbc.gridy = 5;
         GridLayout layout = new GridLayout(0,4);
         layout.setHgap(hGap);
         JPanel saveRow = new JPanel(layout);
         saveRow.add(new JPanel());
         saveRow.add(saveButton);
         saveRow.add(saveAndClose);
-        options.add(saveRow);
+        options.add(saveRow, gbc);
 
         editorConfigPanel.add(options);
 
