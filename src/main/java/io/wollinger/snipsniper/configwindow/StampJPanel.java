@@ -20,7 +20,8 @@ public class StampJPanel extends JPanel {
         super.paint(g);
         jpanel.revalidate();
         int y = (int) (comp.getLocationOnScreen().getY() - getLocationOnScreen().getY());
-
+        g.setColor(new Color(100,100,100,100));
+        g.fillRect(0,0,getWidth(),getHeight());
 //        if(comp != null)
 //        g.fillRect((int)comp.getLocation().getX(),y,64,64);
     }
