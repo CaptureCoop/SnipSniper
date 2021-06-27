@@ -388,12 +388,19 @@ public class ConfigWindow extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.fill = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
         options.add(dropdown, gbc);
-        gbc.fill = 0;
         //BEGIN ELEMENTS
 
+        gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridwidth = 2;
+        gbc.weightx = 0.5F;
+        gbc.weighty = 1;
         options.add(createJLabel("Smart Pixel", JLabel.RIGHT, JLabel.CENTER), gbc);
         JCheckBox smartPixelCheckBox = new JCheckBox();
         smartPixelCheckBox.setSelected(config.getBool("smartPixel"));
