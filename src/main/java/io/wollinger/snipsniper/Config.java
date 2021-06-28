@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
 
@@ -80,7 +81,11 @@ public class Config {
 			reader.close();
 
 	}
-	
+
+	public String getRawString(Enum key) {
+		return getRawString(key.toString());
+	}
+
 	public String getRawString(String key) {
 		String returnVal = null;
 		if(settings.containsKey(key))
@@ -91,7 +96,11 @@ public class Config {
 			LogManager.log(id, "No value found for <" + key + "> in Config <" + SnipSniper.getProfilesFolder() + filename + ">.", Level.SEVERE);
 		return returnVal;
 	}
-	
+
+	public String getString(Enum key) {
+		return getString(key.toString());
+	}
+
 	public String getString(String key) {
 		String str = getRawString(key);
 		if(str != null) {
@@ -100,11 +109,19 @@ public class Config {
 		}
 		return str;
 	}
-	
+
+	public int getInt(Enum key) {
+		return getInt(key.toString());
+	}
+
 	public int getInt(String key) {
 		if(getString(key) != null)
 			return Integer.parseInt(getString(key));
 		return -1;
+	}
+
+	public float getFloat(Enum key) {
+		return getFloat(key.toString());
 	}
 
 	public float getFloat(String key) {
@@ -112,19 +129,31 @@ public class Config {
 			return Float.parseFloat(getString(key));
 		return -1F;
 	}
-	
+
+	public boolean getBool(Enum key) {
+		return getBool(key.toString());
+	}
+
 	public boolean getBool(String key) {
 		if(getString(key) != null)
 			return Boolean.parseBoolean(getString(key));
 		return false;
 	}
-	
+
+	public Color getColor(Enum key) {
+		return getColor(key.toString());
+	}
+
 	public Color getColor(String key) {
 		if(getString(key) != null)
 			return Utils.hex2rgb(getString(key));
 		return null;
 	}
-	
+
+	public void set (Enum key, String value) {
+		set(key.toString(), value);
+	}
+
 	public void set(String key, String value) {
 		if(!settings.containsKey(key))
 			settings.put(key, value);
