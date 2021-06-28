@@ -443,6 +443,9 @@ public class ConfigWindow extends JFrame {
         });
 
         options.add(stampDropdown, gbc);
+        gbc.gridx = 1;
+        options.add(createJLabel("Preview", JLabel.CENTER, JLabel.BOTTOM), gbc);
+        gbc.gridx = 0;
         gbc.insets.top = 0;
         gbc.gridy = 5;
         options.add(row3_stampConfig, gbc);
@@ -488,20 +491,8 @@ public class ConfigWindow extends JFrame {
     private void setupStampConfigPanel(JPanel panel, IStamp stamp) {
         panel.removeAll();
 
-        panel.add(createJLabel("Label 1", JLabel.RIGHT, JLabel.CENTER));
-        panel.add(new JButton("Button 1"));
-
-        panel.add(createJLabel("Label 2 (Its a very long one)", JLabel.RIGHT, JLabel.CENTER));
-        panel.add(new JButton("Button 2"));
-
-        panel.add(createJLabel("Label 3", JLabel.RIGHT, JLabel.CENTER));
-        panel.add(new JButton("Button 3"));
-
-        panel.add(createJLabel("Label 4", JLabel.RIGHT, JLabel.CENTER));
-        panel.add(new JButton("Button 4"));
-
-        panel.add(createJLabel("Label 5", JLabel.RIGHT, JLabel.CENTER));
-        panel.add(new JButton("Button 5"));
+        panel.add(createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER));
+        for(int i = 0; i < 5; i++) panel.add(new JLabel());
     }
 
     public JComponent setupViewerPane(Config config) {
