@@ -426,7 +426,7 @@ public class ConfigWindow extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.insets.top = 20;
-        JPanel row3_stampConfig = new JPanel(new GridLayout(0, 1));
+        JPanel row3_stampConfig = new JPanel(new GridLayout(0, 2));
         StampJPanel row3_stampPreview = new StampJPanel();
         row3_stampPreview.setStamp(new CubeStamp(config, null));
         JComboBox<Object> stampDropdown = new JComboBox<>(StampUtils.getStampsAsString());
@@ -436,11 +436,23 @@ public class ConfigWindow extends JFrame {
                 row3_stampPreview.repaint();
             }
         });
-        row3_stampConfig.add(stampDropdown);
+
+        options.add(stampDropdown, gbc);
+        gbc.insets.top = 0;
+        gbc.gridy = 5;
+        row3_stampConfig.add(createJLabel("Label 1", JLabel.RIGHT, JLabel.CENTER));
         row3_stampConfig.add(new JButton("Button 1"));
+
+        row3_stampConfig.add(createJLabel("Label 2 (Its a very long one)", JLabel.RIGHT, JLabel.CENTER));
         row3_stampConfig.add(new JButton("Button 2"));
+
+        row3_stampConfig.add(createJLabel("Label 3", JLabel.RIGHT, JLabel.CENTER));
         row3_stampConfig.add(new JButton("Button 3"));
+
+        row3_stampConfig.add(createJLabel("Label 4", JLabel.RIGHT, JLabel.CENTER));
         row3_stampConfig.add(new JButton("Button 4"));
+
+        row3_stampConfig.add(createJLabel("Label 5", JLabel.RIGHT, JLabel.CENTER));
         row3_stampConfig.add(new JButton("Button 5"));
         options.add(row3_stampConfig, gbc);
         gbc.gridx = 1;
@@ -467,7 +479,7 @@ public class ConfigWindow extends JFrame {
             }
         });
 
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridx = 0;
         gbc.insets.top = 20;
         options.add(saveButton, gbc);
