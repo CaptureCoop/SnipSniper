@@ -63,10 +63,10 @@ public class SCEditorWindow extends SnipScopeWindow {
 
         listener.resetHistory();
 
-        if (isStandalone)
+        //if (isStandalone)
             setIconImage(Icons.icon_editor);
-        else
-            setIconImage(Icons.icon_taskbar);
+        //else
+        //    setIconImage(Icons.icon_taskbar);
 
         setFocusTraversalKeysEnabled(false);
         setVisible(true);
