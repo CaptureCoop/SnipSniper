@@ -5,6 +5,7 @@ import com.formdev.flatlaf.FlatIntelliJLaf;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.sceditor.stamps.CubeStamp;
+import io.wollinger.snipsniper.sceditor.stamps.IStamp;
 import io.wollinger.snipsniper.sceditor.stamps.StampUtils;
 import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
@@ -428,11 +429,15 @@ public class ConfigWindow extends JFrame {
         gbc.insets.top = 20;
         JPanel row3_stampConfig = new JPanel(new GridLayout(0, 2));
         StampJPanel row3_stampPreview = new StampJPanel();
-        row3_stampPreview.setStamp(new CubeStamp(config, null));
+        IStamp stamp = new CubeStamp(config, null);
+        row3_stampPreview.setStamp(stamp);
+        setupStampConfigPanel(row3_stampConfig, stamp);
         JComboBox<Object> stampDropdown = new JComboBox<>(StampUtils.getStampsAsString());
         stampDropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                row3_stampPreview.setStamp(StampUtils.getNewIStampByIndex(stampDropdown.getSelectedIndex(), config, null));
+                IStamp newStamp = StampUtils.getNewIStampByIndex(stampDropdown.getSelectedIndex(), config, null);
+                row3_stampPreview.setStamp(newStamp);
+                setupStampConfigPanel(row3_stampConfig, newStamp);
                 row3_stampPreview.repaint();
             }
         });
@@ -440,20 +445,6 @@ public class ConfigWindow extends JFrame {
         options.add(stampDropdown, gbc);
         gbc.insets.top = 0;
         gbc.gridy = 5;
-        row3_stampConfig.add(createJLabel("Label 1", JLabel.RIGHT, JLabel.CENTER));
-        row3_stampConfig.add(new JButton("Button 1"));
-
-        row3_stampConfig.add(createJLabel("Label 2 (Its a very long one)", JLabel.RIGHT, JLabel.CENTER));
-        row3_stampConfig.add(new JButton("Button 2"));
-
-        row3_stampConfig.add(createJLabel("Label 3", JLabel.RIGHT, JLabel.CENTER));
-        row3_stampConfig.add(new JButton("Button 3"));
-
-        row3_stampConfig.add(createJLabel("Label 4", JLabel.RIGHT, JLabel.CENTER));
-        row3_stampConfig.add(new JButton("Button 4"));
-
-        row3_stampConfig.add(createJLabel("Label 5", JLabel.RIGHT, JLabel.CENTER));
-        row3_stampConfig.add(new JButton("Button 5"));
         options.add(row3_stampConfig, gbc);
         gbc.gridx = 1;
         options.add(row3_stampPreview, gbc);
@@ -492,6 +483,25 @@ public class ConfigWindow extends JFrame {
             setEnabledAll(options, false, dropdown);
 
         return generateScrollPane(editorConfigPanel);
+    }
+
+    private void setupStampConfigPanel(JPanel panel, IStamp stamp) {
+        panel.removeAll();
+
+        panel.add(createJLabel("Label 1", JLabel.RIGHT, JLabel.CENTER));
+        panel.add(new JButton("Button 1"));
+
+        panel.add(createJLabel("Label 2 (Its a very long one)", JLabel.RIGHT, JLabel.CENTER));
+        panel.add(new JButton("Button 2"));
+
+        panel.add(createJLabel("Label 3", JLabel.RIGHT, JLabel.CENTER));
+        panel.add(new JButton("Button 3"));
+
+        panel.add(createJLabel("Label 4", JLabel.RIGHT, JLabel.CENTER));
+        panel.add(new JButton("Button 4"));
+
+        panel.add(createJLabel("Label 5", JLabel.RIGHT, JLabel.CENTER));
+        panel.add(new JButton("Button 5"));
     }
 
     public JComponent setupViewerPane(Config config) {
