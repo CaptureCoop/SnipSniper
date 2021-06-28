@@ -429,7 +429,7 @@ public class ConfigWindow extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.insets.top = 20;
-        JPanel row3_stampConfig = new JPanel(new GridLayout(0, 2));
+        JPanel row3_stampConfig = new JPanel(getGridLayoutWithMargin(0, 2, 20));
         StampJPanel row3_stampPreview = new StampJPanel();
         IStamp stamp = new CubeStamp(config, null);
         row3_stampPreview.setStamp(stamp);
