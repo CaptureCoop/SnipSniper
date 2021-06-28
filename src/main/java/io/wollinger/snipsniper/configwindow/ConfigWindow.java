@@ -4,10 +4,18 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.SnipSniper;
+import io.wollinger.snipsniper.sceditor.SCEditorWindow;
+import io.wollinger.snipsniper.sceditor.stamps.CounterStamp;
+import io.wollinger.snipsniper.sceditor.stamps.CubeStamp;
+import io.wollinger.snipsniper.sceditor.stamps.IStamp;
+import io.wollinger.snipsniper.sceditor.stamps.StampUtils;
 import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.xml.soap.Text;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -410,13 +418,14 @@ public class ConfigWindow extends JFrame {
         JLabel hsvPercentage = new JLabel(config.getInt("hsvColorSwitchSpeed") + "%");
         hsvPercentage.setHorizontalAlignment(JLabel.CENTER);
         JSlider hsvSlider = new JSlider(JSlider.HORIZONTAL);
+        hsvSlider.setMinimum(-100);
+        hsvSlider.setMaximum(100);
+        hsvSlider.setSnapToTicks(true);
         hsvSlider.addChangeListener(e -> {
             hsvPercentage.setText(hsvSlider.getValue() + "%");
             config.set("hsvColorSwitchSpeed", hsvSlider.getValue() + "");
         });
-        hsvSlider.setMinimum(-100);
-        hsvSlider.setMaximum(100);
-        hsvSlider.setSnapToTicks(true);
+
         hsvSlider.setValue(config.getInt("hsvColorSwitchSpeed"));
         gbc.gridx = 1;
         options.add(hsvSlider, gbc);
@@ -429,15 +438,22 @@ public class ConfigWindow extends JFrame {
         gbc.gridy = 4;
         gbc.insets.top = 20;
         JPanel row3_stampConfig = new JPanel(new GridLayout(0, 1));
-        String[] stamps = {"Cube", "Counter", "Circle", "Simple Brush", "Text", "Rectangle"};
-        JComboBox<Object> stampDropdown = new JComboBox<>(stamps);
+        StampJPanel row3_stampPreview = new StampJPanel();
+        row3_stampPreview.setStamp(new CubeStamp(config, null));
+        JComboBox<Object> stampDropdown = new JComboBox<>(StampUtils.getStampsAsString());
+        stampDropdown.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                IStamp stamp = StampUtils.getNewIStampByIndex(stampDropdown.getSelectedIndex(), config, null);
+                row3_stampPreview.setStamp(stamp);
+                row3_stampPreview.repaint();
+            }
+        });
         row3_stampConfig.add(stampDropdown);
         row3_stampConfig.add(new JButton("Button 1"));
         row3_stampConfig.add(new JButton("Button 2"));
         row3_stampConfig.add(new JButton("Button 3"));
         row3_stampConfig.add(new JButton("Button 4"));
         row3_stampConfig.add(new JButton("Button 5"));
-        StampJPanel row3_stampPreview = new StampJPanel();
         options.add(row3_stampConfig, gbc);
         gbc.gridx = 1;
         options.add(row3_stampPreview, gbc);
