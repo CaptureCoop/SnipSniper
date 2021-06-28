@@ -4,18 +4,12 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.SnipSniper;
-import io.wollinger.snipsniper.sceditor.SCEditorWindow;
-import io.wollinger.snipsniper.sceditor.stamps.CounterStamp;
 import io.wollinger.snipsniper.sceditor.stamps.CubeStamp;
-import io.wollinger.snipsniper.sceditor.stamps.IStamp;
 import io.wollinger.snipsniper.sceditor.stamps.StampUtils;
 import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.xml.soap.Text;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -354,12 +348,7 @@ public class ConfigWindow extends JFrame {
     }
 
     public JComponent setupEditorPane(Config configOriginal) {
-        //editorConfigPanel.setLayout(new MigLayout("align 50% 0%"));
-        //editorConfigPanel.setLayout(new FlowLayout());
-
         final boolean[] allowSaving = {true};
-        final int maxBorder = 999;
-        final ColorChooser[] colorChooser = {null};
 
         Config config;
         boolean disablePage = false;
@@ -443,8 +432,7 @@ public class ConfigWindow extends JFrame {
         JComboBox<Object> stampDropdown = new JComboBox<>(StampUtils.getStampsAsString());
         stampDropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                IStamp stamp = StampUtils.getNewIStampByIndex(stampDropdown.getSelectedIndex(), config, null);
-                row3_stampPreview.setStamp(stamp);
+                row3_stampPreview.setStamp(StampUtils.getNewIStampByIndex(stampDropdown.getSelectedIndex(), config, null));
                 row3_stampPreview.repaint();
             }
         });
