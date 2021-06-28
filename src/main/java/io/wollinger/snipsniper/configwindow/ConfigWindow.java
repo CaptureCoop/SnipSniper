@@ -347,6 +347,7 @@ public class ConfigWindow extends JFrame {
 
     public JComponent setupEditorPane(Config configOriginal) {
         //editorConfigPanel.setLayout(new MigLayout("align 50% 0%"));
+        //editorConfigPanel.setLayout(new FlowLayout());
 
         final boolean[] allowSaving = {true};
         final int maxBorder = 999;
@@ -361,9 +362,7 @@ public class ConfigWindow extends JFrame {
             disablePage = true;
         }
 
-        StampJPanel options = new StampJPanel(new GridBagLayout());
-
-        int hGap = 20;
+        JPanel options = new JPanel(new GridBagLayout());
 
         ArrayList<String> profiles = new ArrayList<>();
         if(configOriginal == null)
@@ -386,21 +385,18 @@ public class ConfigWindow extends JFrame {
             }
         });
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.BOTH;
         gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = 1;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1F;
         options.add(dropdown, gbc);
         //BEGIN ELEMENTS
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridwidth = 2;
-        gbc.weightx = 0.5F;
-        gbc.weighty = 1;
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(0, 10, 0, 10);
         options.add(createJLabel("Smart Pixel", JLabel.RIGHT, JLabel.CENTER), gbc);
         JCheckBox smartPixelCheckBox = new JCheckBox();
         smartPixelCheckBox.setSelected(config.getBool("smartPixel"));
@@ -425,23 +421,26 @@ public class ConfigWindow extends JFrame {
         gbc.gridx = 1;
         options.add(hsvSlider, gbc);
 
-        gbc.gridx = 0;
         gbc.gridy = 3;
-        options.add(new JLabel(), gbc);
         gbc.gridx = 1;
         options.add(hsvPercentage, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
-        JPanel row3_stampConfig = new JPanel();
+        gbc.insets.top = 20;
+        JPanel row3_stampConfig = new JPanel(new GridLayout(0, 1));
         String[] stamps = {"Cube", "Counter", "Circle", "Simple Brush", "Text", "Rectangle"};
         JComboBox<Object> stampDropdown = new JComboBox<>(stamps);
         row3_stampConfig.add(stampDropdown);
-        JPanel row3_stampPreview = new JPanel();
+        row3_stampConfig.add(new JButton("Button 1"));
+        row3_stampConfig.add(new JButton("Button 2"));
+        row3_stampConfig.add(new JButton("Button 3"));
+        row3_stampConfig.add(new JButton("Button 4"));
+        row3_stampConfig.add(new JButton("Button 5"));
+        StampJPanel row3_stampPreview = new StampJPanel();
         options.add(row3_stampConfig, gbc);
         gbc.gridx = 1;
         options.add(row3_stampPreview, gbc);
-        options.addDrawComponent(this, row3_stampPreview);
 
         //END ELEMENTS
 
@@ -464,15 +463,12 @@ public class ConfigWindow extends JFrame {
             }
         });
 
-        gbc.gridx = 0;
         gbc.gridy = 5;
-        GridLayout layout = new GridLayout(0,4);
-        layout.setHgap(hGap);
-        JPanel saveRow = new JPanel(layout);
-        saveRow.add(new JPanel());
-        saveRow.add(saveButton);
-        saveRow.add(saveAndClose);
-        options.add(saveRow, gbc);
+        gbc.gridx = 0;
+        gbc.insets.top = 20;
+        options.add(saveButton, gbc);
+        gbc.gridx = 1;
+        options.add(saveAndClose, gbc);
 
         editorConfigPanel.add(options);
 

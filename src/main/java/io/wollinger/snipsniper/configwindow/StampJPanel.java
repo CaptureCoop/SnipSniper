@@ -4,26 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class StampJPanel extends JPanel {
-    public StampJPanel(GridBagLayout gridLayout) {
-        super(gridLayout);
-    }
-
-    private JComponent comp;
-    private JFrame jpanel;
-
-    public void addDrawComponent(JFrame panel, JComponent comp) {
-        this.comp = comp;
-        this.jpanel = panel;
-    }
 
     public void paint(Graphics g) {
         super.paint(g);
-        jpanel.revalidate();
-        int y = (int) (comp.getLocationOnScreen().getY() - getLocationOnScreen().getY());
-        g.setColor(new Color(100,100,100,100));
-        g.fillRect(0,0,getWidth(),getHeight());
-//        if(comp != null)
-//        g.fillRect((int)comp.getLocation().getX(),y,64,64);
+        int width = 64;
+        int height = 64;
+        g.drawRect(0,0,getWidth()-1,getHeight()-1);
+        g.setColor(Color.BLUE);
+        g.fillRect(getWidth()/2 - width/2, getHeight()/2 - height/2, width, height);
     }
 
 }
