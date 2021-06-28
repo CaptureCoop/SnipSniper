@@ -498,6 +498,11 @@ public class ConfigWindow extends JFrame {
         return spinner;
     }
 
+    private void setupStampConfigPanelSpinnerWithLabel(JPanel panel, String title, Enum configKey, int min, int max, StampJPanel previewPanel, Config config) {
+        panel.add(createJLabel(title, JLabel.RIGHT, JLabel.CENTER));
+        panel.add(setupStampConfigPanelSpinner(configKey, min, max, previewPanel, config));
+    }
+
     private void setupStampConfigPanel(JPanel panel, IStamp stamp, StampJPanel previewPanel, Config config) {
         panel.removeAll();
 
@@ -510,6 +515,7 @@ public class ConfigWindow extends JFrame {
                 config.set(ConfigHelper.PROFILE.editorStampCubeDefaultColor, Utils.rgb2hex(startColorPBR.getColor()));
                 colorButton.setBackground(startColorPBR.getColor());
                 colorButton.setForeground(Utils.getContrastColor(startColorPBR.getColor()));
+                previewPanel.setStamp(new CubeStamp(config, null));
             });
             colorButton.setBackground(startColor);
             colorButton.setForeground(Utils.getContrastColor(startColor));
@@ -518,23 +524,12 @@ public class ConfigWindow extends JFrame {
             });
             panel.add(colorButton);
 
-            panel.add(createJLabel("Start width", JLabel.RIGHT, JLabel.CENTER));
-            panel.add(setupStampConfigPanelSpinner(ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config));
-
-            panel.add(createJLabel("Start height", JLabel.RIGHT, JLabel.CENTER));
-            panel.add(setupStampConfigPanelSpinner(ConfigHelper.PROFILE.editorStampCubeHeight, 1, 999, previewPanel, config));
-
-            panel.add(createJLabel("Width change speed", JLabel.RIGHT, JLabel.CENTER));
-            panel.add(setupStampConfigPanelSpinner(ConfigHelper.PROFILE.editorStampCubeWidthSpeed, 1, 999, previewPanel, config));
-
-            panel.add(createJLabel("Height change speed", JLabel.RIGHT, JLabel.CENTER));
-            panel.add(setupStampConfigPanelSpinner(ConfigHelper.PROFILE.editorStampCubeHeightSpeed, 1, 999, previewPanel, config));
-
-            panel.add(createJLabel("Minimum width", JLabel.RIGHT, JLabel.CENTER));
-            panel.add(setupStampConfigPanelSpinner(ConfigHelper.PROFILE.editorStampCubeWidthMinimum, 1, 999, previewPanel, config));
-
-            panel.add(createJLabel("Minimum height", JLabel.RIGHT, JLabel.CENTER));
-            panel.add(setupStampConfigPanelSpinner(ConfigHelper.PROFILE.editorStampCubeHeightMinimum, 1, 999, previewPanel, config));
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
         } else {
             panel.add(createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER));
             for (int i = 0; i < 5; i++) panel.add(new JLabel());
