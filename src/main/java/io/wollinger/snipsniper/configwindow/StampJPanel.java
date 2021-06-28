@@ -11,6 +11,7 @@ public class StampJPanel extends JPanel {
 
     public void setStamp(IStamp stamp) {
         this.stamp = stamp;
+        repaint();
     }
 
     public void paint(Graphics g) {
