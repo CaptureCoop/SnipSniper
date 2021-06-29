@@ -90,7 +90,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 			while (isRunning) {
 				if (screenshotDone) {
-					setVisible(true);
+					if(!isVisible()) setVisible(true);
 					setSize();
 					specialRepaint();
 				}
