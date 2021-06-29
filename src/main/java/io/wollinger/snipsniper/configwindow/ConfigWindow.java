@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.SnipSniper;
+import io.wollinger.snipsniper.sceditor.stamps.CounterStamp;
 import io.wollinger.snipsniper.sceditor.stamps.CubeStamp;
 import io.wollinger.snipsniper.sceditor.stamps.IStamp;
 import io.wollinger.snipsniper.sceditor.stamps.StampUtils;
@@ -503,25 +504,30 @@ public class ConfigWindow extends JFrame {
         panel.add(setupStampConfigPanelSpinner(configKey, min, max, previewPanel, config));
     }
 
+    private JButton setupColorButton(String title, Config config, Enum configKey, ChangeListener whenChange) {
+        JButton colorButton = new JButton(title);
+        Color startColor = config.getColor(configKey);
+        PBRColor startColorPBR = new PBRColor(startColor);
+        startColorPBR.addChangeListener(e -> {
+            config.set(configKey, Utils.rgb2hex(startColorPBR.getColor()));
+            colorButton.setBackground(startColorPBR.getColor());
+            colorButton.setForeground(Utils.getContrastColor(startColorPBR.getColor()));
+        });
+        startColorPBR.addChangeListener(whenChange);
+        colorButton.setBackground(startColor);
+        colorButton.setForeground(Utils.getContrastColor(startColor));
+        colorButton.addActionListener(e -> {
+            new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2));
+        });
+        return colorButton;
+    }
+
     private void setupStampConfigPanel(JPanel panel, IStamp stamp, StampJPanel previewPanel, Config config) {
         panel.removeAll();
 
         if(stamp instanceof CubeStamp) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER));
-            JButton colorButton = new JButton("Color");
-            Color startColor = config.getColor(ConfigHelper.PROFILE.editorStampCubeDefaultColor);
-            PBRColor startColorPBR = new PBRColor(startColor);
-            startColorPBR.addChangeListener(e -> {
-                config.set(ConfigHelper.PROFILE.editorStampCubeDefaultColor, Utils.rgb2hex(startColorPBR.getColor()));
-                colorButton.setBackground(startColorPBR.getColor());
-                colorButton.setForeground(Utils.getContrastColor(startColorPBR.getColor()));
-                previewPanel.setStamp(new CubeStamp(config, null));
-            });
-            colorButton.setBackground(startColor);
-            colorButton.setForeground(Utils.getContrastColor(startColor));
-            colorButton.addActionListener(e -> {
-                new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2));
-            });
+            JButton colorButton = setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCubeDefaultColor, e -> previewPanel.setStamp(new CubeStamp(config, null)));
             panel.add(colorButton);
 
             setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
@@ -530,6 +536,9 @@ public class ConfigWindow extends JFrame {
             setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
             setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
             setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
+        } else if(stamp instanceof CounterStamp) {
+            panel.add(createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER));
+            for (int i = 0; i < 5; i++) panel.add(new JLabel());
         } else {
             panel.add(createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER));
             for (int i = 0; i < 5; i++) panel.add(new JLabel());
