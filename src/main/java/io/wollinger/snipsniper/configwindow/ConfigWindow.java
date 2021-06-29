@@ -35,6 +35,11 @@ public class ConfigWindow extends JFrame {
 
     public enum PAGE {snipPanel, editorPanel, viewerPanel, globalPanel}
 
+    private final int indexSnip = 0;
+    private final int indexEditor = 1;
+    private final int indexViewer = 2;
+    private final int indexGlobal = 3;
+
     public ConfigWindow(Config config, PAGE page) {
         LogManager.log(id, "Creating config window", Level.INFO);
 
@@ -143,6 +148,7 @@ public class ConfigWindow extends JFrame {
     }
 
     public JComponent setupSnipPane(Config configOriginal) {
+        snipConfigPanel.removeAll();
         snipConfigPanel.setLayout(new MigLayout("align 50% 0%"));
 
         final boolean[] allowSaving = {true};
@@ -332,6 +338,9 @@ public class ConfigWindow extends JFrame {
             if(allowSaving[0]) {
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
+                //This prevents a bug where the other tabs have an outdated config
+                tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
+                tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
             }
         });
 
@@ -352,6 +361,7 @@ public class ConfigWindow extends JFrame {
     }
 
     public JComponent setupEditorPane(Config configOriginal) {
+        editorConfigPanel.removeAll();
         final boolean[] allowSaving = {true};
 
         Config config;
@@ -472,6 +482,9 @@ public class ConfigWindow extends JFrame {
             if(allowSaving[0]) {
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
+                //This prevents a bug where the other tabs have an outdated config
+                tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
+                tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
             }
         });
 
@@ -546,6 +559,7 @@ public class ConfigWindow extends JFrame {
     }
 
     public JComponent setupViewerPane(Config config) {
+        viewerConfigPanel.removeAll();
         viewerConfigPanel.setLayout(new BoxLayout(viewerConfigPanel, BoxLayout.PAGE_AXIS));
         JLabel label = new JLabel("<html><h1>Coming soon</h1></html>");
         label.setHorizontalAlignment(JLabel.CENTER);
