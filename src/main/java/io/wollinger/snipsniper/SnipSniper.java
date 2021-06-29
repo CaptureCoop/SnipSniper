@@ -90,10 +90,12 @@ public final class SnipSniper {
 				UIManager.setLookAndFeel(new FlatDarculaLaf());
 			else if(config.getString(ConfigHelper.MAIN.theme).equals("light"))
 				UIManager.setLookAndFeel(new FlatIntelliJLaf());
-			UIManager.put( "ScrollBar.showButtons", true );
-			UIManager.put( "ScrollBar.width", 16 );
-			UIManager.put( "TabbedPane.showTabSeparators", true );
-			UIManager.put( "TitlePane.useWindowDecorations", false );
+			UIManager.put("ScrollBar.showButtons", true);
+			UIManager.put("ScrollBar.width", 16 );
+			UIManager.put("TabbedPane.showTabSeparators", true);
+
+			JFrame.setDefaultLookAndFeelDecorated( true );
+			JDialog.setDefaultLookAndFeelDecorated( true );
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
