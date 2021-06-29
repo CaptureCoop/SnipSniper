@@ -157,12 +157,15 @@ public class ConfigWindow extends JFrame {
 
         Config config;
         boolean disablePage = false;
-        if (configOriginal != null) {
+        boolean chooseProfile = false;
+        if (configOriginal != null && !configOriginal.getFilename().equals("editor.cfg")) {
             config = new Config(configOriginal);
         } else {
             config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
             disablePage = true;
+            chooseProfile = true;
         }
+
 
         JPanel options = new JPanel(new GridLayout(0,1));
 
@@ -170,14 +173,14 @@ public class ConfigWindow extends JFrame {
 
         JPanel configDropdownRow = new JPanel(getGridLayoutWithMargin(0, 1, hGap));
         ArrayList<String> profiles = new ArrayList<>();
-        if(configOriginal == null)
+        if(chooseProfile)
             profiles.add("Select a profile");
         for(File file : configFiles) {
             if(file.getName().contains("profile"))
                 profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
         }
         JComboBox<Object> dropdown = new JComboBox<>(profiles.toArray());
-        if(configOriginal == null)
+        if(chooseProfile)
             dropdown.setSelectedIndex(0);
         else
             dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
