@@ -12,6 +12,7 @@ import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
@@ -441,6 +442,12 @@ public class ConfigWindow extends JFrame {
         gbc.insets.top = 20;
         JPanel row3_stampConfig = new JPanel(getGridLayoutWithMargin(0, 2, 20));
         StampJPanel row3_stampPreview = new StampJPanel();
+        String theme = SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme);
+        if(theme.equals("light")) {
+            row3_stampPreview.setBackground(Icons.stamp_preview_light);
+        } else if(theme.equals("dark")) {
+            row3_stampPreview.setBackground(Icons.stamp_preview_dark);
+        }
         IStamp stamp = new CubeStamp(config, null);
         row3_stampPreview.setStamp(stamp);
         setupStampConfigPanel(row3_stampConfig, stamp, row3_stampPreview, config);
@@ -455,7 +462,13 @@ public class ConfigWindow extends JFrame {
 
         options.add(stampDropdown, gbc);
         gbc.gridx = 1;
-        options.add(createJLabel("Preview", JLabel.CENTER, JLabel.BOTTOM), gbc);
+        JPanel previewToggleAndLabel = new JPanel(new GridLayout(0,2));
+        previewToggleAndLabel.add(createJLabel("Preview", JLabel.RIGHT, JLabel.CENTER));
+        JCheckBox previewBGToggle = new JCheckBox();
+        previewBGToggle.setSelected(true);
+        previewBGToggle.addChangeListener(e -> row3_stampPreview.setBackgroundEnabled(previewBGToggle.isSelected()));
+        previewToggleAndLabel.add(previewBGToggle);
+        options.add(previewToggleAndLabel, gbc);
         gbc.gridx = 0;
         gbc.insets.top = 0;
         gbc.gridy = 5;
