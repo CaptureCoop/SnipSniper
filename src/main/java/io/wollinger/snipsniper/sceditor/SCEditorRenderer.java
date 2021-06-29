@@ -59,5 +59,6 @@ public class SCEditorRenderer extends SnipScopeRenderer {
         previewGraphics.dispose();
 
         g.drawImage(preview, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height, this);
+        repaint(); //TODO: Add something like a "gameloop" to do this, this is just a hack
     }
 }
