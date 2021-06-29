@@ -12,7 +12,6 @@ import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
@@ -503,18 +502,18 @@ public class ConfigWindow extends JFrame {
         return generateScrollPane(editorConfigPanel);
     }
 
-    private JSpinner setupStampConfigPanelSpinner(Enum configKey, int min, int max, StampJPanel previewPanel, Config config) {
+    private JSpinner setupStampConfigPanelSpinner(Enum configKey, int min, int max, StampJPanel previewPanel, Config config, int stampIndex) {
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(config.getInt(configKey), min, max, 1));
         spinner.addChangeListener(e -> {
             config.set(configKey, spinner.getValue() + "");
-            previewPanel.setStamp(new CubeStamp(config, null));
+            previewPanel.setStamp(StampUtils.getNewIStampByIndex(stampIndex, config, null));
         });
         return spinner;
     }
 
-    private void setupStampConfigPanelSpinnerWithLabel(JPanel panel, String title, Enum configKey, int min, int max, StampJPanel previewPanel, Config config) {
+    private void setupStampConfigPanelSpinnerWithLabel(JPanel panel, String title, Enum configKey, int min, int max, StampJPanel previewPanel, Config config, int stampIndex) {
         panel.add(createJLabel(title, JLabel.RIGHT, JLabel.CENTER));
-        panel.add(setupStampConfigPanelSpinner(configKey, min, max, previewPanel, config));
+        panel.add(setupStampConfigPanelSpinner(configKey, min, max, previewPanel, config, stampIndex));
     }
 
     private JButton setupColorButton(String title, Config config, Enum configKey, ChangeListener whenChange) {
@@ -543,15 +542,43 @@ public class ConfigWindow extends JFrame {
             JButton colorButton = setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCubeDefaultColor, e -> previewPanel.setStamp(new CubeStamp(config, null)));
             panel.add(colorButton);
 
-            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, previewPanel, config, StampUtils.INDEX_CUBE);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampCubeHeight, 1, 999, previewPanel, config, StampUtils.INDEX_CUBE);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampCubeWidthSpeed, 1, 999, previewPanel, config, StampUtils.INDEX_CUBE);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampCubeHeightSpeed, 1, 999, previewPanel, config, StampUtils.INDEX_CUBE);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCubeWidthMinimum, 1, 999, previewPanel, config, StampUtils.INDEX_CUBE);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCubeHeightMinimum, 1, 999, previewPanel, config, StampUtils.INDEX_CUBE);
         } else if(stamp instanceof CounterStamp) {
-            panel.add(createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER));
-            for (int i = 0; i < 5; i++) panel.add(new JLabel());
+            panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER));
+            JButton colorButton = setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCounterDefaultColor, e -> previewPanel.setStamp(new CounterStamp(config)));
+            panel.add(colorButton);
+
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampCounterWidth, 1, 999, previewPanel, config, StampUtils.INDEX_COUNTER);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampCounterHeight, 1, 999, previewPanel, config, StampUtils.INDEX_COUNTER);
+            setupStampConfigPanelSpinnerWithLabel(panel, "General change speed", ConfigHelper.PROFILE.editorStampCounterSpeed, 1, 999, previewPanel, config, StampUtils.INDEX_COUNTER);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampCounterWidthSpeed, 1, 999, previewPanel, config, StampUtils.INDEX_COUNTER);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampCounterHeightSpeed, 1, 999, previewPanel, config, StampUtils.INDEX_COUNTER);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCounterWidthMinimum, 1, 999, previewPanel, config, StampUtils.INDEX_COUNTER);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCounterHeightMinimum, 1, 999, previewPanel, config, StampUtils.INDEX_COUNTER);
+
+            panel.add(createJLabel("Solid color", JLabel.RIGHT, JLabel.CENTER));
+            JCheckBox cbSolidColor = new JCheckBox();
+            cbSolidColor.setSelected(config.getBool(ConfigHelper.PROFILE.editorStampCounterSolidColor));
+            cbSolidColor.addChangeListener(e -> {
+                config.set(ConfigHelper.PROFILE.editorStampCounterSolidColor, cbSolidColor.isSelected() + "");
+                previewPanel.setStamp(new CounterStamp(config));
+            });
+            panel.add(cbSolidColor);
+
+            panel.add(createJLabel("Stamp Border", JLabel.RIGHT, JLabel.CENTER));
+            JCheckBox cbBorder = new JCheckBox();
+            cbBorder.setSelected(config.getBool(ConfigHelper.PROFILE.editorStampCounterBorderEnabled));
+            cbBorder.addChangeListener(e -> {
+                config.set(ConfigHelper.PROFILE.editorStampCounterBorderEnabled, cbBorder.isSelected() + "");
+                previewPanel.setStamp(new CounterStamp(config));
+            });
+            panel.add(cbBorder);
+            //TODO: add missing options
         } else {
             panel.add(createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER));
             for (int i = 0; i < 5; i++) panel.add(new JLabel());
