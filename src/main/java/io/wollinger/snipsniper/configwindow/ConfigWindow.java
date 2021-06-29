@@ -597,7 +597,7 @@ public class ConfigWindow extends JFrame {
             //TODO: add missing options
         } else {
             panel.add(createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER));
-            for (int i = 0; i < 5; i++) panel.add(new JLabel());
+            for (int i = 0; i < 15; i++) panel.add(new JLabel());
         }
     }
 
