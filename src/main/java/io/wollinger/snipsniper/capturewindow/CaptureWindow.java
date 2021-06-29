@@ -13,6 +13,7 @@ import java.util.logging.Level;
 
 import javax.swing.JFrame;
 
+import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.ConfigHelper;
@@ -53,9 +54,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		}
 		
 		screenshot();
-		
+
 		setUndecorated(true);
 		setIconImage(Icons.icon_taskbar);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		CaptureWindowListener listener = new CaptureWindowListener(this);
 		addWindowListener(this);
@@ -242,7 +244,16 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 		if(screenshot != null && bufferImage != null) {
 			if(screenshotTinted != null && !hasSaved && bounds != null) {
+				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
+					LogManager.log(sniperInstance.getID(), "About to render image: " + screenshotTinted, Level.INFO);
+					LogManager.log(sniperInstance.getID(), "Frame Visible: " + isVisible(), Level.INFO);
+				}
 				g2.drawImage(screenshotTinted, 0,0, bounds.width, bounds.height, this);
+				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
+					LogManager.log(sniperInstance.getID(), "Rendered tinted background. More Info: ", Level.INFO);
+					LogManager.log(sniperInstance.getID(), "Image rendered:        " + screenshotTinted.toString(), Level.INFO);
+					LogManager.log(sniperInstance.getID(), "Frame Visible: " + isVisible(), Level.INFO);
+				}
 				hasSaved = true;
 			}
 
