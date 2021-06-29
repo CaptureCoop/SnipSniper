@@ -49,7 +49,11 @@ public class SnipScopeWindow extends JFrame {
             setSize(newDimension);
         } else {
             Insets insets = getInsets();
+            if(insets.top == 0)
+                insets.top = getHeight() - renderer.getHeight() - insets.bottom + 1;
+
             setSize(insets.left + insets.right + image.getWidth(), insets.bottom + insets.top + image.getHeight());
+            setLocation((int) getLocation().getX(), (int) (getLocation().getY() - insets.top));
             setOptimalImageDimension(new Dimension(image.getWidth(), image.getHeight()));
         }
     }
