@@ -218,10 +218,6 @@ public class Utils {
 		}
 		return newMessage;
 	}
-
-	public static String rgb2hex(Color color) {
-		return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
-	}
 	
 	public static BufferedImage resizeImage(BufferedImage original, int width, int height) {
 		BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -231,7 +227,11 @@ public class Utils {
 		g.dispose();
 		return newImage;
 	}
-	
+
+	public static String rgb2hex(Color color) {
+		return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+	}
+
 	public static Color hex2rgb(String colorStr) {
 	    return new Color(Integer.valueOf(colorStr.substring(1, 3), 16), Integer.valueOf( colorStr.substring(3, 5), 16), Integer.valueOf(colorStr.substring(5, 7), 16));
 	}
