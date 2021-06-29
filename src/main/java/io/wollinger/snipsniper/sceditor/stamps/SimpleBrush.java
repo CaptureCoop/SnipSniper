@@ -2,10 +2,7 @@ package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
-import io.wollinger.snipsniper.utils.ConfigHelper;
-import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
-import io.wollinger.snipsniper.utils.Vector2Int;
+import io.wollinger.snipsniper.utils.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -64,6 +61,8 @@ public class SimpleBrush implements IStamp {
                 if (distance > config.getInt(ConfigHelper.PROFILE.editorStampSimpleBrushDistance)) {
                     g2.drawLine(p0.getX(), p0.getY(), p1.getX(), p1.getY());
                     input.removeMousePathPoint(0);
+                    if(input.getMousePathPoint(1) != null)
+                        render(g, input, position, difference, isSaveRender, isCensor, historyPoint);
                 } else {
                     input.removeMousePathPoint(1);
                 }
