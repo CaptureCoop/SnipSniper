@@ -190,15 +190,15 @@ public class ConfigWindow extends JFrame {
         JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row0.add(createJLabel(LangManager.getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER));
         JPanel row0_1 = new JPanel(new GridLayout(0,2));
-        HotKeyButton hotKeyButton = new HotKeyButton(config.getString("hotkey"));
+        HotKeyButton hotKeyButton = new HotKeyButton(config.getString(ConfigHelper.PROFILE.hotkey));
         hotKeyButton.addDoneCapturingListener(e -> {
             if(hotKeyButton.hotkey != -1) {
                 String hotkeyModifier = "KB";
                 if (!hotKeyButton.isKeyboard)
                     hotkeyModifier = "M";
-                config.set("hotkey", hotkeyModifier + hotKeyButton.hotkey);
+                config.set(ConfigHelper.PROFILE.hotkey, hotkeyModifier + hotKeyButton.hotkey);
             } else {
-                config.set("hotkey", "NONE");
+                config.set(ConfigHelper.PROFILE.hotkey, "NONE");
             }
         });
         row0_1.add(hotKeyButton);
@@ -206,7 +206,7 @@ public class ConfigWindow extends JFrame {
         deleteHotKey.addActionListener(e -> {
             hotKeyButton.setText(LangManager.getItem("config_label_none"));
             hotKeyButton.hotkey = -1;
-            config.set("hotkey", "NONE");
+            config.set(ConfigHelper.PROFILE.hotkey, "NONE");
         });
         row0_1.add(deleteHotKey);
         row0.add(row0_1);
@@ -215,28 +215,28 @@ public class ConfigWindow extends JFrame {
         JPanel row1 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row1.add(createJLabel(LangManager.getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER));
         JCheckBox saveToDisk = new JCheckBox();
-        saveToDisk.setSelected(config.getBool("saveToDisk"));
-        saveToDisk.addActionListener(e -> config.set("saveToDisk", saveToDisk.isSelected() + ""));
+        saveToDisk.setSelected(config.getBool(ConfigHelper.PROFILE.saveToDisk));
+        saveToDisk.addActionListener(e -> config.set(ConfigHelper.PROFILE.saveToDisk, saveToDisk.isSelected() + ""));
         row1.add(saveToDisk);
         options.add(row1);
 
         JPanel row2 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row2.add(createJLabel(LangManager.getItem("config_label_copyclipboard"), JLabel.RIGHT, JLabel.CENTER));
         JCheckBox copyToClipboard = new JCheckBox();
-        copyToClipboard.setSelected(config.getBool("copyToClipboard"));
-        copyToClipboard.addActionListener(e -> config.set("copyToClipboard", copyToClipboard.isSelected() + ""));
+        copyToClipboard.setSelected(config.getBool(ConfigHelper.PROFILE.copyToClipboard));
+        copyToClipboard.addActionListener(e -> config.set(ConfigHelper.PROFILE.copyToClipboard, copyToClipboard.isSelected() + ""));
         row2.add(copyToClipboard);
         options.add(row2);
 
         JPanel row3 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row3.add(createJLabel(LangManager.getItem("config_label_bordersize"), JLabel.RIGHT, JLabel.CENTER));
         JPanel row3_2 = new JPanel(new GridLayout(0,2));
-        JSpinner borderSize = new JSpinner(new SpinnerNumberModel(config.getInt("borderSize"), 0.0, maxBorder, 1.0)); //TODO: Extend JSpinner class to notify user of too large number
-        borderSize.addChangeListener(e -> config.set("borderSize", (int)((double) borderSize.getValue()) + ""));
+        JSpinner borderSize = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.borderSize), 0.0, maxBorder, 1.0)); //TODO: Extend JSpinner class to notify user of too large number
+        borderSize.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderSize, (int)((double) borderSize.getValue()) + ""));
         row3_2.add(borderSize);
         JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
-        PBRColor borderColor = new PBRColor(config.getColor("borderColor"));
-        borderColor.addChangeListener(e -> config.set("borderColor", Utils.rgb2hex((Color)e.getSource())));
+        PBRColor borderColor = new PBRColor(config.getColor(ConfigHelper.PROFILE.borderColor));
+        borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, Utils.rgb2hex((Color)e.getSource())));
         colorBtn.setBackground(borderColor.getColor());
         colorBtn.setForeground(Utils.getContrastColor(borderColor.getColor()));
         colorBtn.addActionListener(e -> {
@@ -257,7 +257,7 @@ public class ConfigWindow extends JFrame {
         JPanel row4 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row4.add(createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER));
         //TODO: Add to wiki: if you just enter a word like "images" it will create the folder next to the jar.
-        JTextField pictureLocation = new JTextField(config.getRawString("pictureFolder"));
+        JTextField pictureLocation = new JTextField(config.getRawString(ConfigHelper.PROFILE.pictureFolder));
         pictureLocation.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) { }
@@ -283,12 +283,12 @@ public class ConfigWindow extends JFrame {
                         if(!allowSaving[0]) {
                             msgError(LangManager.getItem("config_sanitation_failed_createdirectory"));
                         } else {
-                            config.set("pictureFolder", saveLocationFinal);
+                            config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationFinal);
                         }
                     }
                 } else {
                     allowSaving[0] = true;
-                    config.set("pictureFolder", saveLocationFinal);
+                    config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationFinal);
                 }
             }
         });
@@ -298,8 +298,8 @@ public class ConfigWindow extends JFrame {
         JPanel row5 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row5.add(createJLabel(LangManager.getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER));
         JPanel row5_2 = new JPanel(new GridLayout(0,2));
-        JSpinner snipeDelay = new JSpinner(new SpinnerNumberModel(config.getInt("snipeDelay"), 0.0, 100, 1.0));
-        snipeDelay.addChangeListener(e -> config.set("snipeDelay", (int)((double) snipeDelay.getValue()) + ""));
+        JSpinner snipeDelay = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.snipeDelay), 0.0, 100, 1.0));
+        snipeDelay.addChangeListener(e -> config.set(ConfigHelper.PROFILE.snipeDelay, (int)((double) snipeDelay.getValue()) + ""));
         row5_2.add(snipeDelay);
         row5.add(row5_2);
         options.add(row5);
@@ -307,8 +307,8 @@ public class ConfigWindow extends JFrame {
         JPanel row6 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row6.add(createJLabel(LangManager.getItem("config_label_openeditor"), JLabel.RIGHT, JLabel.CENTER));
         JCheckBox openEditor = new JCheckBox();
-        openEditor.setSelected(config.getBool("openEditor"));
-        openEditor.addActionListener(e -> config.set("openEditor", openEditor.isSelected() + ""));
+        openEditor.setSelected(config.getBool(ConfigHelper.PROFILE.openEditor));
+        openEditor.addActionListener(e -> config.set(ConfigHelper.PROFILE.openEditor, openEditor.isSelected() + ""));
 
         row6.add(openEditor);
         options.add(row6);
@@ -399,15 +399,15 @@ public class ConfigWindow extends JFrame {
         gbc.insets = new Insets(0, 10, 0, 10);
         options.add(createJLabel("Smart Pixel", JLabel.RIGHT, JLabel.CENTER), gbc);
         JCheckBox smartPixelCheckBox = new JCheckBox();
-        smartPixelCheckBox.setSelected(config.getBool("smartPixel"));
-        smartPixelCheckBox.addActionListener(e -> config.set("smartPixel", smartPixelCheckBox.isSelected() + ""));
+        smartPixelCheckBox.setSelected(config.getBool(ConfigHelper.PROFILE.smartPixel));
+        smartPixelCheckBox.addActionListener(e -> config.set(ConfigHelper.PROFILE.smartPixel, smartPixelCheckBox.isSelected() + ""));
         gbc.gridx = 1;
         options.add(smartPixelCheckBox, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
         options.add(createJLabel("HSV color switch speed", JLabel.RIGHT, JLabel.CENTER), gbc);
-        JLabel hsvPercentage = new JLabel(config.getInt("hsvColorSwitchSpeed") + "%");
+        JLabel hsvPercentage = new JLabel(config.getInt(ConfigHelper.PROFILE.hsvColorSwitchSpeed) + "%");
         hsvPercentage.setHorizontalAlignment(JLabel.CENTER);
         JSlider hsvSlider = new JSlider(JSlider.HORIZONTAL);
         hsvSlider.setMinimum(-100);
@@ -415,10 +415,10 @@ public class ConfigWindow extends JFrame {
         hsvSlider.setSnapToTicks(true);
         hsvSlider.addChangeListener(e -> {
             hsvPercentage.setText(hsvSlider.getValue() + "%");
-            config.set("hsvColorSwitchSpeed", hsvSlider.getValue() + "");
+            config.set(ConfigHelper.PROFILE.hsvColorSwitchSpeed, hsvSlider.getValue() + "");
         });
 
-        hsvSlider.setValue(config.getInt("hsvColorSwitchSpeed"));
+        hsvSlider.setValue(config.getInt(ConfigHelper.PROFILE.hsvColorSwitchSpeed));
         gbc.gridx = 1;
         options.add(hsvSlider, gbc);
 
@@ -557,10 +557,10 @@ public class ConfigWindow extends JFrame {
         for(String lang : LangManager.languages)
             translatedLanguages.add(LangManager.getItem(lang, "lang_" + lang));
         JComboBox<Object> languageDropdown = new JComboBox<>(translatedLanguages.toArray());
-        languageDropdown.setSelectedIndex(LangManager.languages.indexOf(config.getString("language")));
+        languageDropdown.setSelectedIndex(LangManager.languages.indexOf(config.getString(ConfigHelper.MAIN.language)));
         languageDropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                config.set("language", LangManager.languages.get(languageDropdown.getSelectedIndex()));
+                config.set(ConfigHelper.MAIN.language, LangManager.languages.get(languageDropdown.getSelectedIndex()));
             }
         });
 
@@ -572,15 +572,15 @@ public class ConfigWindow extends JFrame {
         String[] themes = {"Light Mode", "Dark Mode"};
         JComboBox<Object> themeDropdown = new JComboBox<>(themes);
         int themeIndex = 0; //Light theme
-        if(config.getString("theme").equals("dark"))
+        if(config.getString(ConfigHelper.MAIN.theme).equals("dark"))
             themeIndex = 1;
         themeDropdown.setSelectedIndex(themeIndex);
         themeDropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if(themeDropdown.getSelectedIndex() == 0) {
-                    config.set("theme", "light");
+                    config.set(ConfigHelper.MAIN.theme, "light");
                 } else if(themeDropdown.getSelectedIndex() == 1) {
-                    config.set("theme", "dark");
+                    config.set(ConfigHelper.MAIN.theme, "dark");
                 }
             }
         });
@@ -593,20 +593,15 @@ public class ConfigWindow extends JFrame {
         JPanel row2 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
         row2.add(createJLabel("Debug Mode", JLabel.RIGHT, JLabel.CENTER));
         JCheckBox debugCheckBox = new JCheckBox();
-        debugCheckBox.setSelected(config.getBool("debug"));
-        debugCheckBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                config.set("debug", debugCheckBox.isSelected() + "");
-            }
-        });
+        debugCheckBox.setSelected(config.getBool(ConfigHelper.MAIN.debug));
+        debugCheckBox.addActionListener(e -> config.set(ConfigHelper.MAIN.debug, debugCheckBox.isSelected() + ""));
         row2.add(debugCheckBox);
         options.add(row2);
 
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
-            boolean restartConfig = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
-            boolean didThemeChange = !config.getString("theme").equals(SnipSniper.getConfig().getString("theme"));
+            boolean restartConfig = !config.getString(ConfigHelper.MAIN.language).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.language));
+            boolean didThemeChange = !config.getString(ConfigHelper.MAIN.theme).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme));
 
             globalSave(config);
 
@@ -639,23 +634,23 @@ public class ConfigWindow extends JFrame {
     }
 
     private void globalSave(Config config) {
-        boolean doRestartProfiles = !config.getString("language").equals(SnipSniper.getConfig().getString("language"));
-        boolean didThemeChange = !config.getString("theme").equals(SnipSniper.getConfig().getString("theme"));
-        boolean didDebugChange = config.getBool("debug") != SnipSniper.getConfig().getBool("debug");
+        boolean doRestartProfiles = !config.getString(ConfigHelper.MAIN.language).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.language));
+        boolean didThemeChange = !config.getString(ConfigHelper.MAIN.theme).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme));
+        boolean didDebugChange = config.getBool(ConfigHelper.MAIN.debug) != SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug);
 
-        if(didDebugChange && config.getBool("debug")) {
+        if(didDebugChange && config.getBool(ConfigHelper.MAIN.debug)) {
             SnipSniper.openDebugConsole();
             doRestartProfiles = true;
-        } else if(didDebugChange && !config.getBool("debug")){
+        } else if(didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)){
             SnipSniper.closeDebugConsole();
             doRestartProfiles = true;
         }
 
         if(didThemeChange) {
             try {
-                if (config.getString("theme").equals("dark")) {
+                if (config.getString(ConfigHelper.MAIN.theme).equals("dark")) {
                     UIManager.setLookAndFeel(new FlatDarculaLaf());
-                } else if(config.getString("theme").equals("light")) {
+                } else if(config.getString(ConfigHelper.MAIN.theme).equals("light")) {
                     UIManager.setLookAndFeel(new FlatIntelliJLaf());
                 }
             } catch (Exception e) {

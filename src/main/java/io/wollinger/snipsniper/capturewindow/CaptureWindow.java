@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
+import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
@@ -42,9 +43,9 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
 		sniperInstance.trayIcon.setImage(Icons.alt_icons[sniperInstance.profileID]);
-		if(sniperInstance.cfg.getInt("snipeDelay") != 0) {
+		if(sniperInstance.cfg.getInt(ConfigHelper.PROFILE.snipeDelay) != 0) {
 			try {
-				Thread.sleep(sniperInstance.cfg.getInt("snipeDelay") * 1000L);
+				Thread.sleep(sniperInstance.cfg.getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L);
 			} catch (InterruptedException e) {
 				LogManager.log(sniperInstance.getID(), "There was an error with the delay! Message: " + e.getMessage(), Level.SEVERE);
 				LogManager.log(sniperInstance.getID(), "More info: " + Arrays.toString(e.getStackTrace()), Level.SEVERE);
@@ -79,7 +80,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	public void loop() {
 		Thread thread = new Thread(() -> {
-			final double nsPerTick = 1000000000D / sniperInstance.cfg.getInt("maxFPS");
+			final double nsPerTick = 1000000000D / sniperInstance.cfg.getInt(ConfigHelper.PROFILE.maxFPS);
 			long lastTime = System.nanoTime();
 			long lastTimer = System.currentTimeMillis();
 			double delta = 0;
@@ -176,7 +177,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		isRunning = false;
 		dispose();
 
-		int borderSize = sniperInstance.cfg.getInt("borderSize");
+		int borderSize = sniperInstance.cfg.getInt(ConfigHelper.PROFILE.borderSize);
 		Rectangle captureArea = calcRectangle();
 
 		if (captureArea.width == 0 || captureArea.height == 0) {
@@ -188,7 +189,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		BufferedImage croppedBuffer = screenshot.getSubimage(captureArea.x, captureArea.y, captureArea.width, captureArea.height);
 		finalImg = new BufferedImage(croppedBuffer.getWidth() + borderSize *2, croppedBuffer.getHeight() + borderSize *2, BufferedImage.TYPE_INT_RGB);
 		Graphics g = finalImg.getGraphics();
-		g.setColor(sniperInstance.cfg.getColor("borderColor"));
+		g.setColor(sniperInstance.cfg.getColor(ConfigHelper.PROFILE.borderColor));
 		g.fillRect(0, 0, finalImg.getWidth(),finalImg.getHeight());
 		g.drawImage(croppedBuffer, borderSize, borderSize, croppedBuffer.getWidth(), croppedBuffer.getHeight(), this);
 		g.dispose();
@@ -196,11 +197,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		String finalLocation = null;
 		boolean inClipboard = false;
 
-		if(sniperInstance.cfg.getBool("saveToDisk")) {
+		if(sniperInstance.cfg.getBool(ConfigHelper.PROFILE.saveToDisk)) {
 			finalLocation = Utils.saveImage(sniperInstance.getID(), finalImg, "", sniperInstance.cfg);
 		}
 
-		if(sniperInstance.cfg.getBool("copyToClipboard")) {
+		if(sniperInstance.cfg.getBool(ConfigHelper.PROFILE.copyToClipboard)) {
 			Utils.copyToClipboard(sniperInstance.getID(), finalImg);
 			inClipboard = true;
 		}
@@ -217,7 +218,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			posY -= finalImg.getHeight();
 			leftToRight = true;
 		}
-		if (sniperInstance.cfg.getBool("openEditor")) {
+		if (sniperInstance.cfg.getBool(ConfigHelper.PROFILE.openEditor)) {
 			new SCEditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", sniperInstance.cfg, leftToRight, finalLocation, inClipboard, false);
 		}
 
@@ -248,7 +249,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			if(area != null && startedCapture) {
 				Graphics use = gBuffer;
 
-				boolean directDraw = sniperInstance.cfg.getBool("directDraw");
+				boolean directDraw = sniperInstance.cfg.getBool(ConfigHelper.PROFILE.directDraw);
 				if(directDraw)
 					use = g2;
 

@@ -151,17 +151,17 @@ public class Utils {
 	public static String saveImage(String profileID, BufferedImage finalImg, String modifier, Config config) {
 		File file;
 		String filename = Utils.constructFilename(modifier);
-		String savePath = config.getString("pictureFolder");
+		String savePath = config.getString(ConfigHelper.PROFILE.pictureFolder);
 
 		String savePathModifier = "";
 
-		if(config.getBool("dateFolders")) {
+		if(config.getBool(ConfigHelper.PROFILE.dateFolders)) {
 			LocalDate currentDate = LocalDate.now();
 
 			String dayString = getDateWithProperZero(currentDate.getDayOfMonth());
 			String monthString = getDateWithProperZero(currentDate.getMonthValue());
 
-			savePathModifier = "\\" + config.getString("dateFoldersFormat");
+			savePathModifier = "\\" + config.getString(ConfigHelper.PROFILE.dateFoldersFormat);
 			savePathModifier = savePathModifier.replaceAll("%day%", dayString);
 			savePathModifier = savePathModifier.replaceAll("%month%", monthString);
 			savePathModifier = savePathModifier.replaceAll("%year%", currentDate.getYear() + "");
@@ -170,7 +170,7 @@ public class Utils {
 		File path = new File(savePath + savePathModifier);
 		file = new File(path.getAbsolutePath() + "\\" + filename);
 		try {
-			if(config.getBool("saveToDisk")) {
+			if(config.getBool(ConfigHelper.PROFILE.saveToDisk)) {
 				if(!path.exists()) {
 					if(!path.mkdirs()) {
 						LogManager.log(profileID, "Failed saving, directory missing & could not create it!", Level.WARNING);

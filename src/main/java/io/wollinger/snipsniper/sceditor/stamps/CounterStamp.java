@@ -1,6 +1,7 @@
 package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
@@ -101,12 +102,12 @@ public class CounterStamp implements IStamp{
             g.drawString("" + count, position.getX() - w / 2, position.getY() + h / 3);
             g.setColor(oldColor);
 
-            if (config.getBool("editorStampCounterBorderEnabled")) {
+            if (config.getBool(ConfigHelper.PROFILE.editorStampCounterBorderEnabled)) {
                 oldColor = g.getColor();
                 g.setColor(Color.BLACK);
                 Graphics2D g2 = (Graphics2D) g;
                 Stroke oldStroke = g2.getStroke();
-                g2.setStroke(new BasicStroke(drawHeight / config.getFloat("editorStampCounterBorderModifier")));
+                g2.setStroke(new BasicStroke(drawHeight / config.getFloat(ConfigHelper.PROFILE.editorStampCounterBorderModifier)));
                 g2.drawOval(x, y, drawWidth, drawHeight);
                 g2.setStroke(oldStroke);
                 g2.dispose();
@@ -142,18 +143,18 @@ public class CounterStamp implements IStamp{
     @Override
     public void reset() {
         count = 1;
-        color = new PBRColor(config.getColor("editorStampCounterDefaultColor"));
-        width = config.getInt("editorStampCounterWidth");
-        height = config.getInt("editorStampCounterHeight");
+        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampCounterDefaultColor));
+        width = config.getInt(ConfigHelper.PROFILE.editorStampCounterWidth);
+        height = config.getInt(ConfigHelper.PROFILE.editorStampCounterHeight);
 
-        minimumWidth = config.getInt("editorStampCounterWidthMinimum");
-        minimumHeight = config.getInt("editorStampCounterHeightMinimum");
+        minimumWidth = config.getInt(ConfigHelper.PROFILE.editorStampCounterWidthMinimum);
+        minimumHeight = config.getInt(ConfigHelper.PROFILE.editorStampCounterHeightMinimum);
 
-        speedWidth = config.getInt("editorStampCounterWidthSpeed");
-        speedHeight = config.getInt("editorStampCounterHeightSpeed");
-        speed = config.getInt("editorStampCounterSpeed");
-        fontSizeModifier = config.getFloat("editorStampCounterFontSizeModifier");
-        solidColor = config.getBool("editorStampCounterSolidColor");
+        speedWidth = config.getInt(ConfigHelper.PROFILE.editorStampCounterWidthSpeed);
+        speedHeight = config.getInt(ConfigHelper.PROFILE.editorStampCounterHeightSpeed);
+        speed = config.getInt(ConfigHelper.PROFILE.editorStampCounterSpeed);
+        fontSizeModifier = config.getFloat(ConfigHelper.PROFILE.editorStampCounterFontSizeModifier);
+        solidColor = config.getBool(ConfigHelper.PROFILE.editorStampCounterSolidColor);
     }
 
     @Override

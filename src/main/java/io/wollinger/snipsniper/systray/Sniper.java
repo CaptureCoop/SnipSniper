@@ -13,9 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import io.wollinger.snipsniper.SnipSniper;
-import io.wollinger.snipsniper.utils.DebugConsole;
-import io.wollinger.snipsniper.utils.LangManager;
-import io.wollinger.snipsniper.utils.LogManager;
+import io.wollinger.snipsniper.utils.*;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -29,7 +27,6 @@ import io.wollinger.snipsniper.systray.buttons.btnAbout;
 import io.wollinger.snipsniper.systray.buttons.btnConfig;
 import io.wollinger.snipsniper.systray.buttons.btnExit;
 import io.wollinger.snipsniper.systray.buttons.btnOpenImgFolder;
-import io.wollinger.snipsniper.utils.Icons;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseListener;
 
@@ -70,7 +67,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		for(String language : LangManager.languages) {
 			MenuItem mi = new MenuItem(LangManager.getItem("lang_" + language));
 			mi.addActionListener(e -> {
-				SnipSniper.getConfig().set("language", language);
+				SnipSniper.getConfig().set(ConfigHelper.MAIN.language, language);
 				SnipSniper.getConfig().save();
 				SnipSniper.resetProfiles();
 			});
@@ -78,7 +75,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		}
 		popup.add(languageMenu);
 
-		if(SnipSniper.getConfig().getBool("debug")) {
+		if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 			MenuItem consoleItem = new MenuItem("Console");
 			consoleItem.addActionListener(e -> SnipSniper.openDebugConsole());
 			popup.add(consoleItem);
@@ -196,7 +193,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	}
 
 	public void checkNativeKey(String identifier, int pressedKey) {
-		String hotkey = cfg.getString("hotkey");
+		String hotkey = cfg.getString(ConfigHelper.PROFILE.hotkey);
 		if(!hotkey.equals("NONE")) {
 			if(hotkey.startsWith(identifier)) {
 				int key = Integer.parseInt(hotkey.replace(identifier, ""));

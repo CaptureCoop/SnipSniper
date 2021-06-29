@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
 

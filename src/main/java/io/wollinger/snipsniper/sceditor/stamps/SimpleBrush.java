@@ -2,6 +2,7 @@ package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
+import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
@@ -60,7 +61,7 @@ public class SimpleBrush implements IStamp {
                 g2.setStroke(new BasicStroke(newSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
                 double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());
-                if (distance > config.getInt("editorStampSimpleBrushDistance")) {
+                if (distance > config.getInt(ConfigHelper.PROFILE.editorStampSimpleBrushDistance)) {
                     g2.drawLine(p0.getX(), p0.getY(), p1.getX(), p1.getY());
                     input.removeMousePathPoint(0);
                 } else {
@@ -87,9 +88,9 @@ public class SimpleBrush implements IStamp {
 
     @Override
     public void reset() {
-        color = new PBRColor(config.getColor("editorStampSimpleBrushDefaultColor"));
-        size = config.getInt("editorStampSimpleBrushSize");
-        speed = config.getInt("editorStampSimpleBrushSizeSpeed");
+        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampSimpleBrushDefaultColor));
+        size = config.getInt(ConfigHelper.PROFILE.editorStampSimpleBrushSize);
+        speed = config.getInt(ConfigHelper.PROFILE.editorStampSimpleBrushSizeSpeed);
     }
 
     @Override

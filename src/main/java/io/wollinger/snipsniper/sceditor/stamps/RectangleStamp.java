@@ -1,6 +1,7 @@
 package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
@@ -106,18 +107,18 @@ public class RectangleStamp implements IStamp {
 
     @Override
     public void reset() {
-        color = new PBRColor(config.getColor("editorStampRectangleDefaultColor"));
+        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampRectangleDefaultColor));
 
-        width = config.getInt("editorStampRectangleWidth");
-        height = config.getInt("editorStampRectangleHeight");
+        width = config.getInt(ConfigHelper.PROFILE.editorStampRectangleWidth);
+        height = config.getInt(ConfigHelper.PROFILE.editorStampRectangleHeight);
 
-        minimumWidth = config.getInt("editorStampRectangleWidthMinimum");
-        minimumHeight = config.getInt("editorStampRectangleHeightMinimum");
+        minimumWidth = config.getInt(ConfigHelper.PROFILE.editorStampRectangleWidthMinimum);
+        minimumHeight = config.getInt(ConfigHelper.PROFILE.editorStampRectangleHeightMinimum);
 
-        speedWidth = config.getInt("editorStampRectangleWidthSpeed");
-        speedHeight = config.getInt("editorStampRectangleHeightSpeed");
+        speedWidth = config.getInt(ConfigHelper.PROFILE.editorStampRectangleWidthSpeed);
+        speedHeight = config.getInt(ConfigHelper.PROFILE.editorStampRectangleHeightSpeed);
 
-        thickness = config.getInt("editorStampRectangleThickness");
+        thickness = config.getInt(ConfigHelper.PROFILE.editorStampRectangleThickness);
     }
 
     @Override

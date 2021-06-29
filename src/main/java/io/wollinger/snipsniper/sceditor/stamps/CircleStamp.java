@@ -1,6 +1,7 @@
 package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
@@ -108,17 +109,17 @@ public class CircleStamp implements IStamp{
 
     @Override
     public void reset() {
-        color = new PBRColor(config.getColor("editorStampCircleDefaultColor"));
-        width = config.getInt("editorStampCircleWidth");
-        height = config.getInt("editorStampCircleHeight");
+        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampCircleDefaultColor));
+        width = config.getInt(ConfigHelper.PROFILE.editorStampCircleWidth);
+        height = config.getInt(ConfigHelper.PROFILE.editorStampCircleHeight);
 
-        minimumWidth = config.getInt("editorStampCircleWidthMinimum");
-        minimumHeight = config.getInt("editorStampCircleHeightMinimum");
+        minimumWidth = config.getInt(ConfigHelper.PROFILE.editorStampCircleWidthMinimum);
+        minimumHeight = config.getInt(ConfigHelper.PROFILE.editorStampCircleHeightMinimum);
 
-        speedWidth = config.getInt("editorStampCircleWidthSpeed");
-        speedHeight = config.getInt("editorStampCircleHeightSpeed");
-        speed = config.getInt("editorStampCircleSpeed");
-        thickness = config.getInt("editorStampCircleThickness");
+        speedWidth = config.getInt(ConfigHelper.PROFILE.editorStampCircleWidthSpeed);
+        speedHeight = config.getInt(ConfigHelper.PROFILE.editorStampCircleHeightSpeed);
+        speed = config.getInt(ConfigHelper.PROFILE.editorStampCircleSpeed);
+        thickness = config.getInt(ConfigHelper.PROFILE.editorStampCircleThickness);
     }
 
     @Override

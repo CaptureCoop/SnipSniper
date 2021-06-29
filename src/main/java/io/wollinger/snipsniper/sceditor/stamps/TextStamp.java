@@ -2,6 +2,7 @@ package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
+import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
@@ -126,9 +127,9 @@ public class TextStamp implements IStamp{
         text = "";
         state = TextState.IDLE;
         doSaveNextRender = false;
-        color = new PBRColor(config.getColor("editorStampTextDefaultColor"));
-        fontSize = config.getInt("editorStampTextDefaultFontSize");
-        fontSizeSpeed = config.getInt("editorStampTextDefaultSpeed");
+        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampTextDefaultColor));
+        fontSize = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultFontSize);
+        fontSizeSpeed = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultSpeed);
     }
 
     @Override

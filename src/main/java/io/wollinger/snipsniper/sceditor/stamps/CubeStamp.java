@@ -2,6 +2,7 @@ package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
+import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.PBRColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
@@ -65,7 +66,7 @@ public class CubeStamp implements IStamp{
     }
 
     public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
-        boolean isSmartPixel = config.getBool("smartPixel");
+        boolean isSmartPixel = config.getBool(ConfigHelper.PROFILE.smartPixel);
 
         int drawWidth = (int) ((double)width * difference[0]);
         int drawHeight = (int) ((double)height * difference[1]);
@@ -117,15 +118,15 @@ public class CubeStamp implements IStamp{
 
     @Override
     public void reset() {
-        color = new PBRColor(config.getColor("editorStampCubeDefaultColor"));
-        width = config.getInt("editorStampCubeWidth");
-        height = config.getInt("editorStampCubeHeight");
+        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampCubeDefaultColor));
+        width = config.getInt(ConfigHelper.PROFILE.editorStampCubeWidth);
+        height = config.getInt(ConfigHelper.PROFILE.editorStampCubeHeight);
 
-        minimumWidth = config.getInt("editorStampCubeWidthMinimum");
-        minimumHeight = config.getInt("editorStampCubeHeightMinimum");
+        minimumWidth = config.getInt(ConfigHelper.PROFILE.editorStampCubeWidthMinimum);
+        minimumHeight = config.getInt(ConfigHelper.PROFILE.editorStampCubeHeightMinimum);
 
-        speedWidth = config.getInt("editorStampCubeWidthSpeed");
-        speedHeight = config.getInt("editorStampCubeHeightSpeed");
+        speedWidth = config.getInt(ConfigHelper.PROFILE.editorStampCubeWidthSpeed);
+        speedHeight = config.getInt(ConfigHelper.PROFILE.editorStampCubeHeightSpeed);
     }
 
     @Override

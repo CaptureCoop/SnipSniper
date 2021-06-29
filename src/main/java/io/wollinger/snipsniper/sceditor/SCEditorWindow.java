@@ -3,6 +3,7 @@ package io.wollinger.snipsniper.sceditor;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.stamps.*;
 import io.wollinger.snipsniper.snipscope.SnipScopeWindow;
+import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
@@ -72,7 +73,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         setVisible(true);
 
         if(!(x < 0 && y < 0)) {
-            int borderSize = config.getInt("borderSize");
+            int borderSize = config.getInt(ConfigHelper.PROFILE.borderSize);
             if (!isLeftToRight) borderSize = -borderSize;
             setLocation((x - X_OFFSET) + borderSize, y - getInsets().top + borderSize);
             LogManager.log(getID(), "Setting location to " + getLocation(), Level.INFO);
@@ -82,7 +83,7 @@ public class SCEditorWindow extends SnipScopeWindow {
             GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
             boolean found = false;
             GraphicsConfiguration bestMonitor = null;
-            final int SAFETY_OFFSET_X = 10 + config.getInt("borderSize"); //This prevents this setup not working if you do a screenshot on the top left, which would cause the location not to be in any bounds
+            final int SAFETY_OFFSET_X = 10 + config.getInt(ConfigHelper.PROFILE.borderSize); //This prevents this setup not working if you do a screenshot on the top left, which would cause the location not to be in any bounds
             for (GraphicsDevice gd : localGE.getScreenDevices()) {
                 for (GraphicsConfiguration graphicsConfiguration : gd.getConfigurations()) {
                     if(!found) {
@@ -118,7 +119,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), this);
         g.dispose();
         Utils.saveImage(getID(), finalImg, FILENAME_MODIFIER, config);
-        if(config.getBool("copyToClipboard"))
+        if(config.getBool(ConfigHelper.PROFILE.copyToClipboard))
             Utils.copyToClipboard(getID(),finalImg);
     }
 

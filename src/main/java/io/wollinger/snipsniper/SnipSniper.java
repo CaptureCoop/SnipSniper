@@ -76,19 +76,19 @@ public final class SnipSniper {
 		config = new Config("main.cfg", "CFG MAIN", "main_defaults.cfg");
 		String language = cmdline.getLanguage();
 		if(language != null && !language.isEmpty())
-			config.set("language", language);
+			config.set(ConfigHelper.MAIN.language, language);
 
 		if(cmdline.isDebug())
-			config.set("debug", "true");
+			config.set(ConfigHelper.MAIN.debug, "true");
 
 		LogManager.log(ID, "Loading resources", Level.INFO);
 		Icons.loadResources();
 
 		System.setProperty("sun.java2d.uiScale", "1.0");
 		try {
-			if(config.getString("theme").equals("dark"))
+			if(config.getString(ConfigHelper.MAIN.theme).equals("dark"))
 				UIManager.setLookAndFeel(new FlatDarculaLaf());
-			else if(config.getString("theme").equals("light"))
+			else if(config.getString(ConfigHelper.MAIN.theme).equals("light"))
 				UIManager.setLookAndFeel(new FlatIntelliJLaf());
 			UIManager.put( "ScrollBar.showButtons", true );
 			UIManager.put( "ScrollBar.width", 16 );
@@ -98,31 +98,31 @@ public final class SnipSniper {
 			e.printStackTrace();
 		}
 
-		if(config.getBool("debug"))
+		if(config.getBool(ConfigHelper.MAIN.debug))
 			openDebugConsole();
 
 		LangManager.load();
 
 		LogManager.log(ID, "Launching SnipSniper Version " + SnipSniper.VERSION, Level.INFO);
 
-		if(config.getBool("debug")) {
+		if(config.getBool(ConfigHelper.MAIN.debug)) {
 			LogManager.log(ID, "========================================", Level.INFO);
 			LogManager.log(ID, "= SnipSniper is running in debug mode! =", Level.INFO);
 			LogManager.log(ID, "========================================", Level.INFO);
 		}
 
-		LogManager.log(ID, "Launching language <" + SnipSniper.config.getString("language") + "> using encoding <" + Charset.defaultCharset() + ">!", Level.INFO);
+		LogManager.log(ID, "Launching language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> using encoding <" + Charset.defaultCharset() + ">!", Level.INFO);
 
-		if(!LangManager.languages.contains(SnipSniper.config.getString("language"))) {
-			LogManager.log(ID, "Language <" + SnipSniper.config.getString("language") + "> not found. Available languages: " + LangManager.languages.toString(), Level.SEVERE);
+		if(!LangManager.languages.contains(SnipSniper.config.getString(ConfigHelper.MAIN.language))) {
+			LogManager.log(ID, "Language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> not found. Available languages: " + LangManager.languages.toString(), Level.SEVERE);
 			exit(false);
 		}
 
-		String wantedEncoding = SnipSniper.config.getString("encoding");
-		if(SnipSniper.config.getBool("enforceEncoding") && !Charset.defaultCharset().toString().equals(wantedEncoding)) {
+		String wantedEncoding = SnipSniper.config.getString(ConfigHelper.MAIN.encoding);
+		if(SnipSniper.config.getBool(ConfigHelper.MAIN.enforceEncoding) && !Charset.defaultCharset().toString().equals(wantedEncoding)) {
 			if(!Charset.availableCharsets().containsKey(wantedEncoding)) {
-				LogManager.log(ID, "Charset \"" + wantedEncoding + "\" missing. Language \"" + SnipSniper.config.getString("language")+ "\" not available", Level.SEVERE);
-				JOptionPane.showMessageDialog(null, Utils.formatArgs(LangManager.getItem(LangManager.languages.get(0), "error_charset_not_available"), wantedEncoding, SnipSniper.config.getString("language")));
+				LogManager.log(ID, "Charset \"" + wantedEncoding + "\" missing. Language \"" + SnipSniper.config.getString(ConfigHelper.MAIN.language)+ "\" not available", Level.SEVERE);
+				JOptionPane.showMessageDialog(null, Utils.formatArgs(LangManager.getItem(LangManager.languages.get(0), "error_charset_not_available"), wantedEncoding, SnipSniper.config.getString(ConfigHelper.MAIN.language)));
 				exit(false);
 			}
 			LogManager.log(ID, "Charset <" + wantedEncoding + "> needed! Restarting with correct charset...", Level.WARNING);
@@ -239,7 +239,7 @@ public final class SnipSniper {
 
 	public static void exit(boolean exitForRestart) {
 		LogManager.log(ID, "Exit requested. Goodbye!", Level.INFO);
-		if(config.getBool("debug")) {
+		if(config.getBool(ConfigHelper.MAIN.debug)) {
 			if (!exitForRestart && Desktop.isDesktopSupported()) {
 				try {
 					Desktop.getDesktop().edit(LogManager.getLogFile());

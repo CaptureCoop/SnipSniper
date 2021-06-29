@@ -4,6 +4,7 @@ import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.snipscope.SnipScopeRenderer;
 import io.wollinger.snipsniper.snipscope.SnipScopeWindow;
+import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.Utils;
 
@@ -72,7 +73,7 @@ public class SCViewerWindow extends SnipScopeWindow {
         setVisible(true);
         setSizeAuto();
         setLocationAuto();
-        if(config.getBool("openViewerInFullscreen"))
+        if(config.getBool(ConfigHelper.PROFILE.openViewerInFullscreen))
             setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
     }
 
@@ -127,7 +128,7 @@ public class SCViewerWindow extends SnipScopeWindow {
 
             SCEditorWindow editor = new SCEditorWindow("EDIT", getImage(), (int) getLocation().getX(), (int) getLocation().getY(), "SnipSniper Editor", config, false, currentFile.getAbsolutePath(), false, true);
             editor.setSize(getSize());
-            if (config.getBool("closeViewerOnOpenEditor"))
+            if (config.getBool(ConfigHelper.PROFILE.closeViewerOnOpenEditor))
                 dispose();
         }
     }
