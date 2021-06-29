@@ -40,7 +40,7 @@ public class SCEditorListener extends SnipScopeListener {
         super.keyPressed(keyEvent);
         keyEvent.consume();
 
-        if(input.areKeysPressed(KeyEvent.VK_ALT, KeyEvent.VK_C))
+        if(input.isKeyPressed(KeyEvent.VK_C))
             openColorChooser = true;
 
         if(input.isKeyPressed(KeyEvent.VK_ENTER))
