@@ -323,7 +323,7 @@ public class ConfigWindow extends JFrame {
 
         JButton saveAndClose = new JButton("Save and close");
         saveAndClose.addActionListener(e -> {
-            if(allowSaving[0]) {
+            if(allowSaving[0] && configOriginal != null) {
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
                 for(CustomWindowListener listener : listeners)
@@ -334,7 +334,7 @@ public class ConfigWindow extends JFrame {
 
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
-            if(allowSaving[0]) {
+            if(allowSaving[0] && configOriginal != null) {
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
                 //This prevents a bug where the other tabs have an outdated config
@@ -478,20 +478,24 @@ public class ConfigWindow extends JFrame {
 
         JButton saveAndClose = new JButton("Save and close");
         saveAndClose.addActionListener(e -> {
-            configOriginal.loadFromConfig(config);
-            configOriginal.save();
-            for(CustomWindowListener listener : listeners)
-                listener.windowClosed();
-            close();
+            if(configOriginal != null) {
+                configOriginal.loadFromConfig(config);
+                configOriginal.save();
+                for (CustomWindowListener listener : listeners)
+                    listener.windowClosed();
+                close();
+            }
         });
 
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
-            configOriginal.loadFromConfig(config);
-            configOriginal.save();
-            //This prevents a bug where the other tabs have an outdated config
-            tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
-            tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
+            if(configOriginal != null) {
+                configOriginal.loadFromConfig(config);
+                configOriginal.save();
+                //This prevents a bug where the other tabs have an outdated config
+                tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
+                tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
+            }
         });
 
         gbc.gridy = 6;
