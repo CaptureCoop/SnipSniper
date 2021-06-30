@@ -594,7 +594,11 @@ public class ConfigWindow extends JFrame {
                 previewPanel.setStamp(new CounterStamp(config));
             });
             panel.add(cbBorder);
-            //TODO: add missing options
+
+            setupStampConfigPanelSpinnerWithLabel(panel, "Font size modifier", ConfigHelper.PROFILE.editorStampCounterFontSizeModifier, 0.1, 10, 0.01D, previewPanel, config, StampUtils.INDEX_COUNTER);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Border modifier", ConfigHelper.PROFILE.editorStampCounterBorderModifier, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER);
+
+
         } else {
             panel.add(createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER));
             for (int i = 0; i < 15; i++) panel.add(new JLabel());
