@@ -30,6 +30,15 @@ public class Utils {
 	    }
 	}
 
+	public static boolean isDouble(String string) {
+		try {
+			Double.valueOf(string);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
 	public static Color getContrastColor(Color color) {
 		double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
 		return y >= 128 ? Color.black : Color.white;

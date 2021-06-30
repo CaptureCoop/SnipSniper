@@ -114,8 +114,12 @@ public class Config {
 	}
 
 	public int getInt(String key) {
-		if(getString(key) != null)
-			return Integer.parseInt(getString(key));
+		if(getString(key) != null) {
+			String value = getString(key);
+			if(Utils.isDouble(value))
+				return (int) Double.parseDouble(value);
+			else Integer.parseInt(getString(key));
+		}
 		return -1;
 	}
 
