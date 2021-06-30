@@ -9,7 +9,6 @@ import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
@@ -362,7 +361,6 @@ public class ConfigWindow extends JFrame {
 
     public JComponent setupEditorPane(Config configOriginal) {
         editorConfigPanel.removeAll();
-        final boolean[] allowSaving = {true};
 
         Config config;
         boolean disablePage = false;
@@ -480,24 +478,20 @@ public class ConfigWindow extends JFrame {
 
         JButton saveAndClose = new JButton("Save and close");
         saveAndClose.addActionListener(e -> {
-            if(allowSaving[0]) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                for(CustomWindowListener listener : listeners)
-                    listener.windowClosed();
-                close();
-            }
+            configOriginal.loadFromConfig(config);
+            configOriginal.save();
+            for(CustomWindowListener listener : listeners)
+                listener.windowClosed();
+            close();
         });
 
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
-            if(allowSaving[0]) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                //This prevents a bug where the other tabs have an outdated config
-                tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
-                tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
-            }
+            configOriginal.loadFromConfig(config);
+            configOriginal.save();
+            //This prevents a bug where the other tabs have an outdated config
+            tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
+            tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
         });
 
         gbc.gridy = 6;
@@ -541,9 +535,7 @@ public class ConfigWindow extends JFrame {
         startColorPBR.addChangeListener(whenChange);
         colorButton.setBackground(startColor);
         colorButton.setForeground(Utils.getContrastColor(startColor));
-        colorButton.addActionListener(e -> {
-            new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2));
-        });
+        colorButton.addActionListener(e -> new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2)));
         return colorButton;
     }
 
