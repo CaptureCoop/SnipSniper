@@ -238,6 +238,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		//TODO: Direct draw runs horribly on linux. Check out why?
 
 		if(!directDraw && bounds != null && bufferImage == null) {
+			//We are only setting this once, since the size of bounds should not really change
 			bufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
 		}
 
