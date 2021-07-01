@@ -225,7 +225,7 @@ public final class SnipSniper {
 		mainProfile = new Sniper(0);
 		mainProfile.cfg.save();
 
-		new ConfigWindow(mainProfile.cfg, ConfigWindow.PAGE.snipPanel);
+		if(SystemUtils.IS_OS_LINUX) new ConfigWindow(mainProfile.cfg, ConfigWindow.PAGE.snipPanel);
 		for (int i = 0; i < PROFILE_COUNT; i++) {
 			if (new File(profilesFolder + "profile" + (i + 1) + ".cfg").exists()) {
 				profiles[i] = new Sniper(i + 1);
