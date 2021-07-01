@@ -44,8 +44,8 @@ public final class SnipSniper {
 	private final static String ID = "MAIN";
 
 	public static void start(String[] args, boolean saveInDocuments, boolean isEditorOnly, boolean isViewerOnly) {
-		if(!SystemUtils.IS_OS_WINDOWS) {
-			System.out.println("SnipSniper is currently only available for Windows. Sorry!");
+		if(!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
+			System.out.println("SnipSniper is currently only available for Windows and Linux (In development, use with caution). Sorry!");
 			System.exit(0);
 		}
 
@@ -106,6 +106,13 @@ public final class SnipSniper {
 		LangManager.load();
 
 		LogManager.log(ID, "Launching SnipSniper Version " + SnipSniper.VERSION, Level.INFO);
+
+		if(SystemUtils.IS_OS_LINUX) {
+			LogManager.log(ID, "=================================================================================", Level.WARNING);
+			LogManager.log(ID, "= SnipSniper Linux is still in development and may not work properly or at all. =", Level.WARNING);
+			LogManager.log(ID, "=                        !!!!! USE WITH CAUTION !!!!                            =", Level.WARNING);
+			LogManager.log(ID, "=================================================================================", Level.WARNING);
+		}
 
 		if(config.getBool(ConfigHelper.MAIN.debug)) {
 			LogManager.log(ID, "========================================", Level.INFO);
@@ -193,9 +200,11 @@ public final class SnipSniper {
 	}
 
 	public static void resetProfiles() {
-		SystemTray tray = SystemTray.getSystemTray();
-		for(TrayIcon icon : tray.getTrayIcons()) {
-			tray.remove(icon);
+		if(SystemUtils.IS_OS_WINDOWS) {
+			SystemTray tray = SystemTray.getSystemTray();
+			for (TrayIcon icon : tray.getTrayIcons()) {
+				tray.remove(icon);
+			}
 		}
 
 		Sniper mainProfile;

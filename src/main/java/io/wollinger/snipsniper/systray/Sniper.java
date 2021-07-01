@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.utils.*;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -49,79 +50,84 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		cfg = new Config("profile" + profileID + ".cfg", "CFG" + profileID, "profile_defaults.cfg");
 
 		LogManager.log(getID(), "Loading profile " + profileID, Level.INFO);
-		
-	    SystemTray tray = SystemTray.getSystemTray();
 
 		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
-	    
-		PopupMenu popup = new PopupMenu();
 
-		popup.add(new btnOpenImgFolder(this));
-		popup.add(new btnConfig(this));
+		if(SystemUtils.IS_OS_WINDOWS) {
+			SystemTray tray = SystemTray.getSystemTray();
 
-		popup.add(createProfilesMenu);
-		
-		popup.add(removeProfilesMenu);
+			PopupMenu popup = new PopupMenu();
 
-		Menu languageMenu = new Menu(LangManager.getItem("menu_languages"));
-		for(String language : LangManager.languages) {
-			MenuItem mi = new MenuItem(LangManager.getItem("lang_" + language));
-			mi.addActionListener(e -> {
-				SnipSniper.getConfig().set(ConfigHelper.MAIN.language, language);
-				SnipSniper.getConfig().save();
-				SnipSniper.resetProfiles();
-			});
-			languageMenu.add(mi);
-		}
-		popup.add(languageMenu);
+			popup.add(new btnOpenImgFolder(this));
+			popup.add(new btnConfig(this));
 
-		if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
-			MenuItem consoleItem = new MenuItem("Console");
-			consoleItem.addActionListener(e -> SnipSniper.openDebugConsole());
-			popup.add(consoleItem);
-		}
+			popup.add(createProfilesMenu);
 
-		popup.add(new btnAbout(this));
+			popup.add(removeProfilesMenu);
 
-		popup.add(new btnExit());
-		
-		try {
-			trayIcon = new TrayIcon(Icons.icons[profileID], "SnipSniper (Profile " + profileID + ")", popup );
-			trayIcon.setImageAutoSize( true );
-			
-			trayIcon.addMouseListener(new MouseListener() {
+			Menu languageMenu = new Menu(LangManager.getItem("menu_languages"));
+			for (String language : LangManager.languages) {
+				MenuItem mi = new MenuItem(LangManager.getItem("lang_" + language));
+				mi.addActionListener(e -> {
+					SnipSniper.getConfig().set(ConfigHelper.MAIN.language, language);
+					SnipSniper.getConfig().save();
+					SnipSniper.resetProfiles();
+				});
+				languageMenu.add(mi);
+			}
+			popup.add(languageMenu);
 
-				@Override
-				public void mouseClicked(MouseEvent mouseEvent) {
-					if (mouseEvent.getButton() == 1) {
-						if (cWnd == null && SnipSniper.isIdle()) {
-							cWnd = new CaptureWindow(instance);
-							SnipSniper.setIdle(false);
+			if (SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
+				MenuItem consoleItem = new MenuItem("Console");
+				consoleItem.addActionListener(e -> SnipSniper.openDebugConsole());
+				popup.add(consoleItem);
+			}
+
+			popup.add(new btnAbout(this));
+
+			popup.add(new btnExit());
+
+			try {
+				trayIcon = new TrayIcon(Icons.icons[profileID], "SnipSniper (Profile " + profileID + ")", popup);
+				trayIcon.setImageAutoSize(true);
+
+				trayIcon.addMouseListener(new MouseListener() {
+
+					@Override
+					public void mouseClicked(MouseEvent mouseEvent) {
+						if (mouseEvent.getButton() == 1) {
+							if (cWnd == null && SnipSniper.isIdle()) {
+								cWnd = new CaptureWindow(instance);
+								SnipSniper.setIdle(false);
+							}
 						}
 					}
-				}
 
-				@Override
-				public void mouseEntered(MouseEvent mouseEvent) { }
+					@Override
+					public void mouseEntered(MouseEvent mouseEvent) {
+					}
 
-				@Override
-				public void mouseExited(MouseEvent mouseEvent) { }
+					@Override
+					public void mouseExited(MouseEvent mouseEvent) {
+					}
 
-				@Override
-				public void mousePressed(MouseEvent mouseEvent) { }
+					@Override
+					public void mousePressed(MouseEvent mouseEvent) {
+					}
 
-				@Override
-				public void mouseReleased(MouseEvent mouseEvent) {
-					if(mouseEvent.getButton() == MouseEvent.BUTTON3)
-						refreshProfiles();
-				}
-				
-			});
-			
-			tray.add(trayIcon);
-		} catch (AWTException e) {
-			LogManager.log(getID(), "There was an issue setting up the Tray Icon! Message: " + e.getMessage(), Level.SEVERE);
-			e.printStackTrace();
+					@Override
+					public void mouseReleased(MouseEvent mouseEvent) {
+						if (mouseEvent.getButton() == MouseEvent.BUTTON3)
+							refreshProfiles();
+					}
+
+				});
+
+				tray.add(trayIcon);
+			} catch (AWTException e) {
+				LogManager.log(getID(), "There was an issue setting up the Tray Icon! Message: " + e.getMessage(), Level.SEVERE);
+				e.printStackTrace();
+			}
 		}
 		try {
 			GlobalScreen.registerNativeHook();
