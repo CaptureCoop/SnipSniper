@@ -67,17 +67,17 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		addKeyListener(listener);
 		addFocusListener(new FocusListener() {
 			@Override
-			public void focusGained(FocusEvent focusEvent) {
-				setSize();
-			}
+			public void focusGained(FocusEvent focusEvent) { }
 
 			@Override
 			public void focusLost(FocusEvent focusEvent) {
 				setSize();
 			}
 		});
-     
-	   loop(); 
+     	setVisible(true);
+		setSize();
+		if(SystemUtils.IS_OS_LINUX) GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
+	   	loop();
 	}
 	
 	
@@ -244,7 +244,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		gBuffer.setRenderingHints(qualityHints);
 
 		if(screenshot != null && bufferImage != null) {
-			if(screenshotTinted != null && !hasSaved && bounds != null) {
+			if((screenshotTinted != null && !hasSaved && bounds != null) || SystemUtils.IS_OS_LINUX) {
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 					LogManager.log(sniperInstance.getID(), "About to render image: " + screenshotTinted, Level.INFO);
 					LogManager.log(sniperInstance.getID(), "Frame Visible: " + isVisible(), Level.INFO);
@@ -262,7 +262,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				Graphics use = gBuffer;
 
 				boolean directDraw = sniperInstance.cfg.getBool(ConfigHelper.PROFILE.directDraw);
-				if(directDraw)
+				if(directDraw || SystemUtils.IS_OS_LINUX)
 					use = g2;
 
 				use.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
