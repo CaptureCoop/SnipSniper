@@ -274,8 +274,7 @@ public class ConfigWindow extends JFrame {
                 if(!saveLocationFinal.endsWith("/"))
                     saveLocationFinal += "/";
 
-                if(saveLocationFinal.contains("%userprofile%")) saveLocationFinal = saveLocationFinal.replace("%userprofile%", System.getenv("USERPROFILE"));
-                if(saveLocationFinal.contains("%username%")) saveLocationFinal = saveLocationFinal.replace("%username%", System.getProperty("user.name"));
+                saveLocationFinal = Utils.replaceVars(saveLocationFinal);
 
                 File saveLocationCheck = new File(saveLocationFinal);
                 if(!saveLocationCheck.exists()) {

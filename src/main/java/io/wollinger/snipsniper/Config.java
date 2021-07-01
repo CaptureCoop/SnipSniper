@@ -103,8 +103,7 @@ public class Config {
 	public String getString(String key) {
 		String str = getRawString(key);
 		if(str != null) {
-			if(str.contains("%username%")) str = str.replace("%username%", System.getProperty("user.name"));
-			if(str.contains("%userprofile%")) str = str.replace("%userprofile%", System.getenv("USERPROFILE"));	
+			str = Utils.replaceVars(str);
 		}
 		return str;
 	}

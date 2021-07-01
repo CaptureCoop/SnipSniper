@@ -2,6 +2,7 @@ package io.wollinger.snipsniper.utils;
 
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.SnipSniper;
+import org.apache.commons.lang3.SystemUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -37,6 +38,13 @@ public class Utils {
 		} catch (NumberFormatException e) {
 			return false;
 		}
+	}
+
+	public static String replaceVars(String string) {
+		if(string.contains("%username%")) string = string.replace("%username%", System.getProperty("user.name"));
+		if(SystemUtils.IS_OS_WINDOWS) if(string.contains("%userprofile%")) string = string.replace("%userprofile%", System.getenv("USERPROFILE"));
+		if(SystemUtils.IS_OS_LINUX) if(string.contains("%userprofile%")) string = string.replace("%userprofile%", System.getProperty("user.home"));
+		return string;
 	}
 
 	public static Color getContrastColor(Color color) {
