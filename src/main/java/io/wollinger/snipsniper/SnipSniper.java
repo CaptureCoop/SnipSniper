@@ -9,17 +9,21 @@ import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import io.wollinger.snipsniper.configwindow.ConfigWindow;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.scviewer.SCViewerWindow;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
 
 public final class SnipSniper {
 	private static String VERSION;
@@ -47,6 +51,15 @@ public final class SnipSniper {
 		if(!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
 			System.out.println("SnipSniper is currently only available for Windows and Linux (In development, use with caution). Sorry!");
 			System.exit(0);
+		}
+
+		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
+
+		try {
+			GlobalScreen.registerNativeHook();
+		} catch (NativeHookException e) {
+			LogManager.log(ID, "There was an issue setting up NativeHook! Message: " + e.getMessage(), Level.SEVERE);
+			e.printStackTrace();
 		}
 
 		try {
@@ -106,7 +119,6 @@ public final class SnipSniper {
 		LangManager.load();
 
 		LogManager.log(ID, "Launching SnipSniper Version " + SnipSniper.VERSION, Level.INFO);
-
 		if(SystemUtils.IS_OS_LINUX) {
 			LogManager.log(ID, "=================================================================================", Level.WARNING);
 			LogManager.log(ID, "= SnipSniper Linux is still in development and may not work properly or at all. =", Level.WARNING);
@@ -212,6 +224,8 @@ public final class SnipSniper {
 
 		mainProfile = new Sniper(0);
 		mainProfile.cfg.save();
+
+		new ConfigWindow(mainProfile.cfg, ConfigWindow.PAGE.snipPanel);
 		for (int i = 0; i < PROFILE_COUNT; i++) {
 			if (new File(profilesFolder + "profile" + (i + 1) + ".cfg").exists()) {
 				profiles[i] = new Sniper(i + 1);

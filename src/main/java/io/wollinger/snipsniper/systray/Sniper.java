@@ -51,8 +51,6 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 		LogManager.log(getID(), "Loading profile " + profileID, Level.INFO);
 
-		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
-
 		if(SystemUtils.IS_OS_WINDOWS) {
 			SystemTray tray = SystemTray.getSystemTray();
 
@@ -129,12 +127,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 				e.printStackTrace();
 			}
 		}
-		try {
-			GlobalScreen.registerNativeHook();
-		} catch (NativeHookException e) {
-			LogManager.log(getID(), "There was an issue setting up NativeHook! Message: " + e.getMessage(), Level.SEVERE);
-			e.printStackTrace();
-		}
+
 		GlobalScreen.addNativeKeyListener(this);
 		GlobalScreen.addNativeMouseListener(this);
 	}
@@ -187,7 +180,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 	public void killCaptureWindow() {
 		if(cWnd != null) {
-			trayIcon.setImage(Icons.icons[profileID]);
+			if(SystemUtils.IS_OS_WINDOWS) trayIcon.setImage(Icons.icons[profileID]);
 			SnipSniper.setIdle(true);
 			cWnd.screenshot = null;
 			cWnd.screenshotTinted = null;
