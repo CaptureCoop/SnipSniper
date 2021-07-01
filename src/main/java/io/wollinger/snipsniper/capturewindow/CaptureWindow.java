@@ -237,7 +237,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		boolean directDraw = sniperInstance.cfg.getBool(ConfigHelper.PROFILE.directDraw);
 		//TODO: Direct draw runs horribly on linux. Check out why?
 
-		if(!directDraw && bounds != null) {
+		if(!directDraw && bounds != null && bufferImage == null) {
 			bufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
 		}
 
@@ -270,13 +270,13 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				hasSaved = true;
 			}
 
-			if(area != null && startedCapture) {
+			if(area != null && cPoint != null && startedCapture) {
 				use.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
 				use.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
 			}
 
 			if(area != null)
-				g2.drawImage(bufferImage, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
+				g2.drawImage(bufferImage, area.x, area.y, area.width, area.height, area.x, area.y, area.width, area.height, this);
 
 			if(cPoint != null && startPoint != null)
 				area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
