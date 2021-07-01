@@ -20,6 +20,7 @@ import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
+import org.apache.commons.lang3.SystemUtils;
 
 public class CaptureWindow extends JFrame implements WindowListener{
 	Sniper sniperInstance;
@@ -43,7 +44,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-		sniperInstance.trayIcon.setImage(Icons.alt_icons[sniperInstance.profileID]);
+		if(SystemUtils.IS_OS_WINDOWS) sniperInstance.trayIcon.setImage(Icons.alt_icons[sniperInstance.profileID]);
 		if(sniperInstance.cfg.getInt(ConfigHelper.PROFILE.snipeDelay) != 0) {
 			try {
 				Thread.sleep(sniperInstance.cfg.getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L);
