@@ -8,6 +8,7 @@ import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.LogManager;
 import io.wollinger.snipsniper.utils.Utils;
+import org.apache.commons.lang3.SystemUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -112,11 +113,13 @@ public class SCEditorWindow extends SnipScopeWindow {
         if(x < 0 && y < 0)
             setLocationAuto();
 
-        JMenuBar topBar = new JMenuBar();
-        JMenuItem configItem = new JMenuItem("Config");
-        configItem.addActionListener(e -> new ConfigWindow(config, ConfigWindow.PAGE.editorPanel));
-        topBar.add(configItem);
-        setJMenuBar(topBar);
+        if(SystemUtils.IS_OS_WINDOWS) {
+            JMenuBar topBar = new JMenuBar();
+            JMenuItem configItem = new JMenuItem("Config");
+            configItem.addActionListener(e -> new ConfigWindow(config, ConfigWindow.PAGE.editorPanel));
+            topBar.add(configItem);
+            setJMenuBar(topBar);
+        }
     }
 
     public void saveImage() {
