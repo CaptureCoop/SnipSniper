@@ -185,7 +185,7 @@ public class Utils {
 		}
 
 		File path = new File(savePath + savePathModifier);
-		file = new File(path.getAbsolutePath() + "\\" + filename);
+		file = new File(path.getAbsolutePath() + "//" + filename);
 		try {
 			if(config.getBool(ConfigHelper.PROFILE.saveToDisk)) {
 				if(!path.exists()) {
