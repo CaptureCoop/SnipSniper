@@ -234,22 +234,34 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	BufferedImage bufferImage;
 
 	public void paint(Graphics g) {
-		if(bounds != null) {
+		boolean directDraw = sniperInstance.cfg.getBool(ConfigHelper.PROFILE.directDraw);
+		//TODO: Direct draw runs horribly on linux. Check out why?
+
+		if(!directDraw && bounds != null) {
 			bufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
 		}
+
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHints(qualityHints);
 
-		Graphics2D gBuffer = (Graphics2D)bufferImage.getGraphics();
-		gBuffer.setRenderingHints(qualityHints);
+		Graphics use = g2;
 
-		if(screenshot != null && bufferImage != null) {
+		Graphics2D gBuffer = null;
+		if(!directDraw) {
+			gBuffer = (Graphics2D)bufferImage.getGraphics();
+			gBuffer.setRenderingHints(qualityHints);
+			use = gBuffer;
+		}
+
+		if(screenshot != null) {
 			if((screenshotTinted != null && !hasSaved && bounds != null) || SystemUtils.IS_OS_LINUX) {
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 					LogManager.log(sniperInstance.getID(), "About to render image: " + screenshotTinted, Level.INFO);
 					LogManager.log(sniperInstance.getID(), "Frame Visible: " + isVisible(), Level.INFO);
 				}
-				g2.drawImage(screenshotTinted, 0,0, bounds.width, bounds.height, this);
+
+				use.drawImage(screenshotTinted, 0,0, bounds.width,bounds.height, this);
+				area = bounds; //If we are drawing the background we need to set the area to the bounds, so that all of it is beeing drawn, not just the selected area
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 					LogManager.log(sniperInstance.getID(), "Rendered tinted background. More Info: ", Level.INFO);
 					LogManager.log(sniperInstance.getID(), "Image rendered:        " + screenshotTinted.toString(), Level.INFO);
@@ -259,19 +271,12 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			}
 
 			if(area != null && startedCapture) {
-				Graphics use = gBuffer;
-
-				boolean directDraw = sniperInstance.cfg.getBool(ConfigHelper.PROFILE.directDraw);
-				if(directDraw || SystemUtils.IS_OS_LINUX)
-					use = g2;
-
 				use.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
 				use.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
-
-				if(!directDraw)
-					g2.drawImage(bufferImage, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
 			}
 
+			if(area != null)
+				g2.drawImage(bufferImage, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
 
 			if(cPoint != null && startPoint != null)
 				area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
@@ -282,7 +287,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			repaint();
 		}
 		g2.dispose();
-		gBuffer.dispose();
+		if(gBuffer != null)
+			gBuffer.dispose();
 	}
 
 	@Override
