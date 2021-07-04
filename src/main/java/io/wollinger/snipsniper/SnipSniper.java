@@ -212,7 +212,7 @@ public final class SnipSniper {
 	}
 
 	public static void resetProfiles() {
-		if(SystemUtils.IS_OS_WINDOWS) {
+		if(SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
 			for (TrayIcon icon : tray.getTrayIcons()) {
 				tray.remove(icon);
@@ -225,7 +225,7 @@ public final class SnipSniper {
 		mainProfile = new Sniper(0);
 		mainProfile.cfg.save();
 
-		if(SystemUtils.IS_OS_LINUX) new ConfigWindow(mainProfile.cfg, ConfigWindow.PAGE.snipPanel);
+		if(!SystemTray.isSupported()) new ConfigWindow(mainProfile.cfg, ConfigWindow.PAGE.snipPanel);
 		for (int i = 0; i < PROFILE_COUNT; i++) {
 			if (new File(profilesFolder + "profile" + (i + 1) + ".cfg").exists()) {
 				profiles[i] = new Sniper(i + 1);

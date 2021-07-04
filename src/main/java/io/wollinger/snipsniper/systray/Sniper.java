@@ -51,7 +51,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 		LogManager.log(getID(), "Loading profile " + profileID, Level.INFO);
 
-		if(SystemUtils.IS_OS_WINDOWS) {
+		if(SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
 
 			PopupMenu popup = new PopupMenu();
@@ -180,7 +180,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 	public void killCaptureWindow() {
 		if(cWnd != null) {
-			if(SystemUtils.IS_OS_WINDOWS) trayIcon.setImage(Icons.icons[profileID]);
+			if(SystemTray.isSupported()) trayIcon.setImage(Icons.icons[profileID]);
 			SnipSniper.setIdle(true);
 			cWnd.screenshot = null;
 			cWnd.screenshotTinted = null;

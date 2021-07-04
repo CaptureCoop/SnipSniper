@@ -44,7 +44,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-		if(SystemUtils.IS_OS_WINDOWS) sniperInstance.trayIcon.setImage(Icons.alt_icons[sniperInstance.profileID]);
+		if(SystemTray.isSupported()) sniperInstance.trayIcon.setImage(Icons.alt_icons[sniperInstance.profileID]);
 		if(sniperInstance.cfg.getInt(ConfigHelper.PROFILE.snipeDelay) != 0) {
 			try {
 				Thread.sleep(sniperInstance.cfg.getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L);
