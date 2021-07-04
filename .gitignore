@@ -6,9 +6,6 @@
 /out/
 /.gradle/
 /build/
-/gradle/
 /release/*
-gradlew
-gradlew.bat
 SnipSniper.iml
 settings.gradle
