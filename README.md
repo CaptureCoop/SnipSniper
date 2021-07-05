@@ -17,9 +17,27 @@ The Screenshot Tool
 
 ### Installation
 
-Simply download SnipSniper.jar and place it in a suitable location.
-It will create a profiles folder next to it containing the profiles config.
-Everything else can be configured within SnipSnipers tray icon.
+SnipSniper currently works fully on Windows and is in development for Linux, which means that a few features might not be complete yet on Linux.
+
+Download SnipSniper:
+- [Latest stable release](https://github.com/SvenWollinger/SnipSniper/releases/latest/)
+- [Latest development build](https://github.com/SvenWollinger/SnipSniper/actions/workflows/dev.yml)
+
+There are dedicated Windows Versions available, but of course the classic standalone jar also works perfectly fine.
+
+On Windows we also offer our own installer, available [here](https://github.com/SvenWollinger/SnipSniperInstaller/releases/latest/download/SnipSniperInstaller.jar)
+
+### Building
+
+To build SnipSniper we recommend an IDE like IntelliJ that supports Gradle Projects.
+
+Simply import the SnipSniper project and build the gradle project.
+
+We recommend a java version above or equal to Java 8.
+
+Should you want to build more then the jar, as in the Windows Portable/Installer Versions you can use our make.bat file, which works under Windows.
+
+For this to work you need a java version above or equal to Java 16, as it uses jpackage.
 
 ### Libraries
 
