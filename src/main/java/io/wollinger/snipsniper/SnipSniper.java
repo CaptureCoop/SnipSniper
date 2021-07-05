@@ -26,7 +26,7 @@ import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
 public final class SnipSniper {
-	private static String VERSION;
+	public static Config BUILDINFO;
 	
 	private static String jarFolder;
 	private static String mainFolder;
@@ -59,13 +59,6 @@ public final class SnipSniper {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException e) {
 			LogManager.log(ID, "There was an issue setting up NativeHook! Message: " + e.getMessage(), Level.SEVERE);
-			e.printStackTrace();
-		}
-
-		try {
-			SnipSniper.VERSION = Utils.loadFileFromJar("version.txt") + ".";
-			SnipSniper.VERSION += Utils.loadFileFromJar("build.txt");
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -118,7 +111,9 @@ public final class SnipSniper {
 
 		LangManager.load();
 
-		LogManager.log(ID, "Launching SnipSniper Version " + SnipSniper.VERSION, Level.INFO);
+		BUILDINFO = new Config("buildinfo.cfg", "BUILDINFO", "buildinfo.cfg");
+
+		LogManager.log(ID, "Launching SnipSniper Version " + getVersion(), Level.INFO);
 		if(SystemUtils.IS_OS_LINUX) {
 			LogManager.log(ID, "=================================================================================", Level.WARNING);
 			LogManager.log(ID, "= SnipSniper Linux is still in development and may not work properly or at all. =", Level.WARNING);
@@ -277,7 +272,7 @@ public final class SnipSniper {
 	}
 
 	public static String getVersion() {
-		return VERSION;
+		return BUILDINFO.getString(ConfigHelper.BUILDINFO.version) + "." + BUILDINFO.getString(ConfigHelper.BUILDINFO.build);
 	}
 
 	public static String getProfilesFolder() {

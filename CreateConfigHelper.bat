@@ -37,4 +37,18 @@ for /F "tokens=*" %%A in (src\main\resources\cfg\profile_defaults.cfg) do (
 )
 
 echo } >> %javaFile%
+
+echo public enum BUILDINFO { >> %javaFile%
+
+for /F "tokens=*" %%A in (src\main\resources\cfg\buildinfo.cfg) do (
+    for /f "tokens=1 delims==" %%A in ("%%A") Do (
+        set tmp= %%A
+        set char=!tmp:~0,2!
+
+        IF NOT "!char!"==" <" echo %%A, >> %javaFile%
+    )
+)
+
+echo } >> %javaFile%
+
 echo } >> %javaFile%

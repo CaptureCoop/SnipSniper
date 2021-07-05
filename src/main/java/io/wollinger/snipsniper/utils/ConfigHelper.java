@@ -71,4 +71,10 @@ editorStampRectangleWidthSpeed,
 editorStampRectangleHeightSpeed, 
 editorStampRectangleThickness, 
 } 
+public enum BUILDINFO { 
+type, 
+version, 
+build, 
+builddate, 
+} 
 } 

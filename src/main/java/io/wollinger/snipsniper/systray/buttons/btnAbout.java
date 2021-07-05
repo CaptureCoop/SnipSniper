@@ -2,6 +2,7 @@ package io.wollinger.snipsniper.systray.buttons;
 
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.systray.Sniper;
+import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.LangManager;
 
 import java.awt.*;
@@ -96,6 +97,11 @@ public class btnAbout extends MenuItem{
 		inputStream.close();
 		streamReader.close();
 		html = html.replace("%VERSION%", SnipSniper.getVersion());
+		String type = "";
+		if(!SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.type).equals("none"))
+			type = "-" + SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.type);
+		html = html.replace("%TYPE%", type);
+		html = html.replace("%BUILDDATE%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.builddate));
 		html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming"));
 		html = html.replace("%ABOUT_CD%", LangManager.getItem("about_cd"));
 		html = html.replace("%ABOUT_MATH%", LangManager.getItem("about_math"));
