@@ -32,6 +32,12 @@ jobs:
     - name: Custom make file
       run: ./make.bat full
 
+    - uses: papeloto/action-zip@v1
+      name: Zipping folder
+      with:
+        files: release/SnipSniper_Portable_Win/
+        dest: release/SnipSniper_Portable_Win.zip
+
     - name: Upload assets to GitHub
       uses: AButler/upload-release-assets@v2.0
       with:
