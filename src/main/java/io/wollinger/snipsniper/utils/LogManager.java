@@ -19,8 +19,12 @@ public class LogManager {
     private static File logFile;
     public static String htmlLog = "";
     private static final int MAX_ID_LENGTH = 10;
+    private static boolean enabled = false;
 
     public static void log(String id, String message, Level level) {
+        if(!enabled)
+            return;
+
         String msg = "%DATETIME% [%PROFILE%]%INSERTSPACE% [%TYPE%]: %MESSAGE%";
 
         if(id.length() <= MAX_ID_LENGTH) {
@@ -49,7 +53,7 @@ public class LogManager {
         if(console != null)
             console.update();
 
-        if(!SnipSniper.isDemo()) {
+        if(!SnipSniper.isDemo() && SnipSniper.getLogFolder() != null) {
             if (logFile == null) {
                 LocalDateTime now = LocalDateTime.now();
                 String filename = now.toString().replace(".", "_").replace(":", "_");
@@ -72,6 +76,10 @@ public class LogManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void setEnabled(boolean enabled) {
+        LogManager.enabled = enabled;
     }
 
     public static File getLogFile() {

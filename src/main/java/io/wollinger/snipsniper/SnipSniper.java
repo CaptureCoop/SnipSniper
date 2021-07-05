@@ -62,8 +62,12 @@ public final class SnipSniper {
 			e.printStackTrace();
 		}
 
+		BUILDINFO = new Config("buildinfo.cfg", "BUILDINFO", "buildinfo.cfg");
+
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
+
+		LogManager.setEnabled(true);
 
 		if(saveInDocuments)
 			SnipSniper.setSaveLocationToDocuments();
@@ -110,8 +114,6 @@ public final class SnipSniper {
 			openDebugConsole();
 
 		LangManager.load();
-
-		BUILDINFO = new Config("buildinfo.cfg", "BUILDINFO", "buildinfo.cfg");
 
 		LogManager.log(ID, "Launching SnipSniper Version " + getVersion(), Level.INFO);
 		if(SystemUtils.IS_OS_LINUX) {

@@ -31,7 +31,7 @@ public class CommandLineHelper {
                     break;
                 case "-version":
                 case "-v":
-                    System.out.println(SnipSniper.getVersion());
+                    System.out.println(SnipSniper.getVersion() + "-" + SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.type));
                     doExit = true;
                     break;
                 case "-demo":
