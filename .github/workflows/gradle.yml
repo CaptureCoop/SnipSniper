@@ -27,5 +27,7 @@ jobs:
       run: ./gradlew build
     - uses: actions/upload-artifact@v2
       with:
-        name: build
+        name: jar-standalone
         path: build/libs
+    - name: Custom make file
+      run: ./make.bat full
