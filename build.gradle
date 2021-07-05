@@ -36,7 +36,7 @@ dependencies {
 
 task preBuild {
     String type = System.getProperty("type")
-    if(type == null) type = "none"
+    if(type == null) type = "dev"
 
     File f = new File(rootProject.projectDir.getAbsolutePath() + "\\src\\main\\resources\\cfg\\buildinfo.cfg")
     f.createNewFile()
@@ -45,6 +45,11 @@ task preBuild {
     f.append("\nversion=" + projectVersion)
     f.append("\nbuild=" + projectBuild)
     f.append("\nbuilddate=" + new Date().format('dd-MM-yyyy HH:mm:ss') + " (" + TimeZone.default.getID() + ")")
+
+    new File(rootProject.projectDir.getAbsolutePath() + "\\build\\").mkdirs()
+    File versionFile = new File(rootProject.projectDir.getAbsolutePath() + "\\build\\SSVersion.txt")
+    versionFile.createNewFile()
+    versionFile.write(projectVersion)
 }
 build.dependsOn preBuild
 

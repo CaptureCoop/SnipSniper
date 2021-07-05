@@ -97,10 +97,7 @@ public class btnAbout extends MenuItem{
 		inputStream.close();
 		streamReader.close();
 		html = html.replace("%VERSION%", SnipSniper.getVersion());
-		String type = "";
-		if(!SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.type).equals("none"))
-			type = "-" + SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.type);
-		html = html.replace("%TYPE%", type);
+		html = html.replace("%TYPE%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.type));
 		html = html.replace("%BUILDDATE%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.builddate));
 		html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming"));
 		html = html.replace("%ABOUT_CD%", LangManager.getItem("about_cd"));
