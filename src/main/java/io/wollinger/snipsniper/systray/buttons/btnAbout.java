@@ -23,12 +23,10 @@ public class btnAbout extends MenuItem{
 		this.sniper = sniper;
 		setLabel(LangManager.getItem("menu_about"));
 
-		if(html == null) {
-			try {
-				loadHTML();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			loadHTML();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		this.addActionListener(listener -> {
