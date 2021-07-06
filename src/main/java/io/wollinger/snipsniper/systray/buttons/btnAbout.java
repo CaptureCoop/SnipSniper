@@ -3,9 +3,13 @@ package io.wollinger.snipsniper.systray.buttons;
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.ConfigHelper;
+import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.LangManager;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -37,13 +41,28 @@ public class btnAbout extends MenuItem{
 			frame.setResizable(true);
 
 			JPanel panel = new JPanel(new GridLayout(1,0));
-			
-			try {
-				ImageIcon icon = new ImageIcon(ImageIO.read(this.getClass().getResource("/res/SnSn.png")).getScaledInstance(100,100,Image.SCALE_DEFAULT));
-				panel.add(new JLabel(icon));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
+			ImageIcon icon =new ImageIcon(Icons.icon_taskbar.getScaledInstance(100,100,Image.SCALE_DEFAULT));
+			JLabel label = new JLabel(icon);
+			label.addMouseListener(new MouseAdapter() {
+				int index = 0;
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					super.mouseClicked(e);
+					switch(index) {
+						case 0: setNewImage(Icons.icon_editor); index++; break;
+						case 1: setNewImage(Icons.icon_viewer); index++; break;
+						case 2: setNewImage(Icons.icon_console); index++; break;
+						case 3: setNewImage(Icons.icon_taskbar); index = 0; break;
+					}
+				}
+
+				public void setNewImage(BufferedImage image) {
+					label.setIcon(new ImageIcon(image.getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
+				}
+			});
+			panel.add(label);
 
 			JPanel rightSide = new JPanel(new GridLayout(2, 0));
 			try {
