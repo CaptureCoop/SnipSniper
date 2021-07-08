@@ -307,7 +307,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				globalBuffer.drawImage(selectBufferImage, selectArea.x, selectArea.y, selectArea.width, selectArea.height, selectArea.x, selectArea.y, selectArea.width, selectArea.height, this);
 			}
 
-			if(cPointLive != null) {
+			if(cPointLive != null && sniperInstance.cfg.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
 				Rectangle spyglassRectangle = new Rectangle(cPointLive.x - spyglassBufferImage.getWidth(), cPointLive.y - spyglassBufferImage.getHeight(), cPointLive.x, cPointLive.y);
 				generateSpyglass(spyglassBufferImage);
 				Shape oldClip = globalBuffer.getClip();
