@@ -6,6 +6,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -305,7 +306,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				globalBuffer.drawImage(selectBufferImage, selectArea.x, selectArea.y, selectArea.width, selectArea.height, selectArea.x, selectArea.y, selectArea.width, selectArea.height, this);
 				Rectangle spyglassRectangle = new Rectangle(cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), cPoint.x, cPoint.y);
 				generateSpyglass(spyglassBufferImage);
+				Shape oldClip = globalBuffer.getClip();
+				Ellipse2D.Double shape = new Ellipse2D.Double(spyglassRectangle.x, spyglassRectangle.y, spyglassBufferImage.getWidth(), spyglassBufferImage.getHeight());
+				globalBuffer.setClip(shape);
 				globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
+				globalBuffer.setClip(oldClip);
 				allBounds.addRectangle(spyglassRectangle);
 			}
 
@@ -332,17 +337,19 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 		g.fillRect(0, 0, image.getWidth(), image.getHeight());
 
-		for(int y = -ROWS/2; y < ROWS/2; y++) {
-			for(int x = -ROWS/2; x < ROWS/2; x++) {
-				Rectangle rect = new Rectangle((ROWS/2 + x) * ROW_SIZE, (ROWS/2 + y) * ROW_SIZE, ROW_SIZE, ROW_SIZE);
-				g.setColor(new Color(screenshot.getRGB(cPoint.x - x, cPoint.y - y)));
-				g.fillRect(rect.x, rect.y, rect.width, rect.height);
-				g.setColor(Color.BLACK);
-				g.drawRect(rect.x, rect.y, rect.width, rect.height);
+		for(int y = 0; y < ROWS; y++) {
+			for(int x = 0; x < ROWS; x++) {
+				Rectangle rect = new Rectangle(x * ROW_SIZE, y * ROW_SIZE, ROW_SIZE, ROW_SIZE);
+				int pixelX = cPoint.x + x - ROWS / 2;
+				int pixelY = cPoint.y + y - ROWS / 2;
+				if(pixelX < screenshot.getWidth() && pixelY < screenshot.getHeight()) {
+					g.setColor(new Color(screenshot.getRGB(pixelX, pixelY)));
+					g.fillRect(rect.x, rect.y, rect.width, rect.height);
+					g.setColor(Color.BLACK);
+					g.drawRect(rect.x, rect.y, rect.width, rect.height);
+				}
 			}
 		}
-
-
 		g.dispose();
 	}
 
