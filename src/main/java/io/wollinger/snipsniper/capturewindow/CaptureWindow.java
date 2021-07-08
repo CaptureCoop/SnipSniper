@@ -118,7 +118,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			int y = Math.min( rect.y, rect.height);
 			int width = Math.max(rect.x, rect.width);
 			int height = Math.max(rect.y, rect.height);
-			
+
 			repaint(x,y,width,height);
 		} else {
 			repaint();
@@ -251,10 +251,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 		if(spyglassBufferImage == null) {
 			spyglassBufferImage = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
-			Graphics gaga = spyglassBufferImage.getGraphics();
-			gaga.setColor(new Color(200, 200, 200, 100));
-			gaga.fillRect(0,0, spyglassBufferImage.getWidth(), spyglassBufferImage.getHeight());
-			gaga.dispose();
 		}
 
 		Graphics2D globalBuffer = (Graphics2D) globalBufferImage.getGraphics();
@@ -308,6 +304,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			if(cPoint != null && selectArea != null) {
 				globalBuffer.drawImage(selectBufferImage, selectArea.x, selectArea.y, selectArea.width, selectArea.height, selectArea.x, selectArea.y, selectArea.width, selectArea.height, this);
 				Rectangle spyglassRectangle = new Rectangle(cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), cPoint.x, cPoint.y);
+				generateSpyglass(spyglassBufferImage);
 				globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
 				allBounds.addRectangle(spyglassRectangle);
 			}
@@ -325,6 +322,28 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		globalBuffer.dispose();
 		selectBuffer.dispose();
 		spyglassBuffer.dispose();
+	}
+
+	private void generateSpyglass(BufferedImage image) {
+		Graphics2D g = (Graphics2D) image.getGraphics();
+
+		final int ROWS = 32;
+		final int ROW_SIZE = image.getWidth() / ROWS;
+
+		g.fillRect(0, 0, image.getWidth(), image.getHeight());
+
+		for(int y = -ROWS/2; y < ROWS/2; y++) {
+			for(int x = -ROWS/2; x < ROWS/2; x++) {
+				Rectangle rect = new Rectangle((ROWS/2 + x) * ROW_SIZE, (ROWS/2 + y) * ROW_SIZE, ROW_SIZE, ROW_SIZE);
+				g.setColor(new Color(screenshot.getRGB(cPoint.x - x, cPoint.y - y)));
+				g.fillRect(rect.x, rect.y, rect.width, rect.height);
+				g.setColor(Color.BLACK);
+				g.drawRect(rect.x, rect.y, rect.width, rect.height);
+			}
+		}
+
+
+		g.dispose();
 	}
 
 	@Override
