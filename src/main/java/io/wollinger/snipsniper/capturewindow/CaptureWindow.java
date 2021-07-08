@@ -28,6 +28,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	Point startPointTotal;
 	Point cPoint;
 	Point cPointAlt;
+	Point cPointLive;
 	private Rectangle bounds = null;
 	
 	public BufferedImage screenshot = null;
@@ -226,16 +227,16 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		sniperInstance.killCaptureWindow();
 	}
 	
-	public Rectangle selectArea;
-	Point lastPoint = null;
-	boolean hasSaved = false;
-	BufferedImage globalBufferImage;
-	BufferedImage selectBufferImage;
-	BufferedImage spyglassBufferImage;
+	private Rectangle selectArea;
+	private Point lastPoint = null;
+	private boolean hasSaved = false;
+	private BufferedImage globalBufferImage;
+	private BufferedImage selectBufferImage;
+	private BufferedImage spyglassBufferImage;
 
-	RectangleCollection allBounds = new RectangleCollection();
+	private RectangleCollection allBounds = new RectangleCollection();
 
-	Rectangle lastRect;
+	private Rectangle lastRect;
 
 	public void paint(Graphics g) {
 		boolean directDraw = sniperInstance.cfg.getBool(ConfigHelper.PROFILE.directDraw);
@@ -304,7 +305,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 			if(cPoint != null && selectArea != null) {
 				globalBuffer.drawImage(selectBufferImage, selectArea.x, selectArea.y, selectArea.width, selectArea.height, selectArea.x, selectArea.y, selectArea.width, selectArea.height, this);
-				Rectangle spyglassRectangle = new Rectangle(cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), cPoint.x, cPoint.y);
+			}
+
+			if(cPointLive != null) {
+				Rectangle spyglassRectangle = new Rectangle(cPointLive.x - spyglassBufferImage.getWidth(), cPointLive.y - spyglassBufferImage.getHeight(), cPointLive.x, cPointLive.y);
 				generateSpyglass(spyglassBufferImage);
 				Shape oldClip = globalBuffer.getClip();
 				Ellipse2D.Double shape = new Ellipse2D.Double(spyglassRectangle.x, spyglassRectangle.y, spyglassBufferImage.getWidth(), spyglassBufferImage.getHeight());
@@ -343,10 +347,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		for(int y = 0; y < ROWS; y++) {
 			for(int x = 0; x < ROWS; x++) {
 				Rectangle rect = new Rectangle(x * ROW_SIZE, y * ROW_SIZE, ROW_SIZE, ROW_SIZE);
-				int pixelX = cPoint.x + x - ROWS / 2;
-				int pixelY = cPoint.y + y - ROWS / 2;
-				if(pixelX < screenshot.getWidth() && pixelY < screenshot.getHeight()) {
-					g.setColor(new Color(screenshot.getRGB(pixelX, pixelY)));
+				int pixelX = cPointLive.x + x - ROWS / 2;
+				int pixelY = cPointLive.y + y - ROWS / 2;
+				if(pixelX < globalBufferImage.getWidth() && pixelY < globalBufferImage.getHeight()) {
+					g.setColor(new Color(globalBufferImage.getRGB(pixelX, pixelY)));
 					g.fillRect(rect.x, rect.y, rect.width, rect.height);
 					g.setColor(Color.BLACK);
 					g.drawRect(rect.x, rect.y, rect.width, rect.height);

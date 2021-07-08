@@ -19,10 +19,13 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	@Override
 	public void mouseDragged(MouseEvent mouseEvent) {
 		wndInstance.cPoint = mouseEvent.getPoint();
+		wndInstance.cPointLive = mouseEvent.getPoint();
 	}
 	
 	@Override
-	public void mouseMoved(MouseEvent mouseEvent) { }
+	public void mouseMoved(MouseEvent mouseEvent) {
+		wndInstance.cPointLive = mouseEvent.getPoint();
+	}
 
 	//Mouse Listener
 
@@ -30,7 +33,9 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	public void mouseClicked(MouseEvent mouseEvent) { }
 	
 	@Override
-	public void mouseEntered(MouseEvent mouseEvent) { }
+	public void mouseEntered(MouseEvent mouseEvent) {
+		wndInstance.cPointLive = mouseEvent.getPoint();
+	}
 
 	@Override
 	public void mouseExited(MouseEvent mouseEvent) { }
