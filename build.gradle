@@ -11,8 +11,8 @@ group 'io.wollinger'
 
 compileJava.options.encoding = 'UTF-8'
 
-String projectVersion = "3.4.5"
-String projectBuild = "20210705.4"
+String projectVersion = "3.4.6"
+String projectBuild = "20210709.1"
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
