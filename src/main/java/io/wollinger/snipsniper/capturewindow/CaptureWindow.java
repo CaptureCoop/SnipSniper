@@ -234,7 +234,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	BufferedImage spyglassBufferImage;
 	Rectangle spyglassRectangle;
 
-	Area redraw = new Area();
+	Rectangle2D redraw = new Rectangle2D.Double();
 
 	public void paint(Graphics g) {
 		boolean directDraw = sniperInstance.cfg.getBool(ConfigHelper.PROFILE.directDraw);
@@ -270,11 +270,9 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		}
 
 		Rectangle rr = redraw.getBounds();
-		//globalBuffer.setColor(new Color((int)(Math.random() * 0x1000000)));
-		//globalBuffer.fillRect(rr.x, rr.y, rr.width, rr.height);
 		globalBuffer.drawImage(screenshotTinted, rr.x, rr.y, rr.width, rr.height, rr.x, rr.y, rr.width, rr.height, this);
 
-		redraw.reset();
+		redraw = new Rectangle2D.Double();
 
 		if(screenshot != null) {
 			if((screenshotTinted != null && !hasSaved && bounds != null) || SystemUtils.IS_OS_LINUX) {
@@ -284,7 +282,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				}
 
 				globalBuffer.drawImage(screenshotTinted, 0,0, bounds.width,bounds.height, this);
-				redraw.add(new Area(bounds));
+				Rectangle2D.union(redraw, bounds, redraw);
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 					LogManager.log(sniperInstance.getID(), "Rendered tinted background. More Info: ", Level.INFO);
 					LogManager.log(sniperInstance.getID(), "Image rendered:        " + screenshotTinted.toString(), Level.INFO);
@@ -299,14 +297,14 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 			if(cPoint != null && startPoint != null) {
 				area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
-				redraw.add(new Area(area));
+				Rectangle2D.union(redraw, area, redraw);
 			}
 
 			if(cPoint != null && area != null) {
 				globalBuffer.drawImage(selectBufferImage, area.x, area.y, area.width, area.height, area.x, area.y, area.width, area.height, this);
 				spyglassRectangle = new Rectangle(cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), cPoint.x, cPoint.y);
 				globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
-				redraw.add(new Area(spyglassRectangle));
+				Rectangle2D.union(redraw, spyglassRectangle, redraw);
 			}
 
 			Rectangle r = redraw.getBounds();
