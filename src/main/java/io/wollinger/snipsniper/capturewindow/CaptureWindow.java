@@ -308,14 +308,37 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			}
 
 			if(cPointLive != null && sniperInstance.cfg.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
-				Rectangle spyglassRectangle = new Rectangle(cPointLive.x - spyglassBufferImage.getWidth(), cPointLive.y - spyglassBufferImage.getHeight(), cPointLive.x, cPointLive.y);
-				generateSpyglass(spyglassBufferImage);
-				Shape oldClip = globalBuffer.getClip();
-				Ellipse2D.Double shape = new Ellipse2D.Double(spyglassRectangle.x, spyglassRectangle.y, spyglassBufferImage.getWidth(), spyglassBufferImage.getHeight());
-				globalBuffer.setClip(shape);
-				globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
-				globalBuffer.setClip(oldClip);
-				allBounds.addRectangle(spyglassRectangle);
+				Rectangle spyglassRectangle = null;
+
+				GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
+				for (GraphicsDevice gd : localGE.getScreenDevices()) {
+					for (GraphicsConfiguration graphicsConfiguration : gd.getConfigurations()) {
+						Rectangle rect = graphicsConfiguration.getBounds();
+						Point point = MouseInfo.getPointerInfo().getLocation();
+						if(rect.contains(point)) {
+							if(point.x - spyglassBufferImage.getWidth() < rect.x) {
+								spyglassRectangle = new Rectangle(cPointLive.x, cPointLive.y - spyglassBufferImage.getHeight(), cPointLive.x + spyglassBufferImage.getWidth(), cPointLive.y);
+							} else {
+								spyglassRectangle = new Rectangle(cPointLive.x - spyglassBufferImage.getWidth(), cPointLive.y - spyglassBufferImage.getHeight(), cPointLive.x, cPointLive.y);
+							}
+
+							if(point.y - spyglassBufferImage.getHeight() < rect.y) {
+								spyglassRectangle = new Rectangle(spyglassRectangle.x, cPointLive.y, spyglassRectangle.width, cPointLive.y + spyglassBufferImage.getHeight());
+							}
+						}
+					}
+				}
+
+
+				if(spyglassRectangle != null) {
+					generateSpyglass(spyglassBufferImage);
+					Shape oldClip = globalBuffer.getClip();
+					Ellipse2D.Double shape = new Ellipse2D.Double(spyglassRectangle.x, spyglassRectangle.y, spyglassBufferImage.getWidth(), spyglassBufferImage.getHeight());
+					globalBuffer.setClip(shape);
+					globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
+					globalBuffer.setClip(oldClip);
+					allBounds.addRectangle(spyglassRectangle);
+				}
 			}
 
 			if(lastRect != null) {
@@ -349,7 +372,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				Rectangle rect = new Rectangle(x * ROW_SIZE, y * ROW_SIZE, ROW_SIZE, ROW_SIZE);
 				int pixelX = cPointLive.x + x - ROWS / 2;
 				int pixelY = cPointLive.y + y - ROWS / 2;
-				if(pixelX < globalBufferImage.getWidth() && pixelY < globalBufferImage.getHeight()) {
+				if(pixelX < globalBufferImage.getWidth() && pixelY < globalBufferImage.getHeight() && pixelX >= 0 && pixelY >= 0) {
 					g.setColor(new Color(globalBufferImage.getRGB(pixelX, pixelY)));
 					g.fillRect(rect.x, rect.y, rect.width, rect.height);
 					g.setColor(Color.BLACK);
