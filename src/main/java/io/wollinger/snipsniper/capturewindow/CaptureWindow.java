@@ -6,7 +6,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -112,15 +111,15 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	}
 	
 	public void specialRepaint() {
-		if(area != null) {
-			final Rectangle rect = area;
+		if(selectArea != null) {
+			final Rectangle rect = selectArea;
 			
 			int x = Math.min( rect.x, rect.width);
 			int y = Math.min( rect.y, rect.height);
 			int width = Math.max(rect.x, rect.width);
 			int height = Math.max(rect.y, rect.height);
-			repaint();
-			//repaint(x,y,width,height);
+			
+			repaint(x,y,width,height);
 		} else {
 			repaint();
 		}
@@ -226,13 +225,12 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		sniperInstance.killCaptureWindow();
 	}
 	
-	public Rectangle area;
+	public Rectangle selectArea;
 	Point lastPoint = null;
 	boolean hasSaved = false;
-	BufferedImage bufferImage;
+	BufferedImage globalBufferImage;
 	BufferedImage selectBufferImage;
 	BufferedImage spyglassBufferImage;
-	Rectangle spyglassRectangle;
 
 	RectangleCollection allBounds = new RectangleCollection();
 
@@ -245,9 +243,9 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		if(lastRect == null)
 			lastRect = bounds;
 
-		if(!directDraw && bounds != null && bufferImage == null && selectBufferImage == null) {
+		if(!directDraw && bounds != null && globalBufferImage == null && selectBufferImage == null) {
 			//We are only setting this once, since the size of bounds should not really change
-			bufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
+			globalBufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
 			selectBufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
 		}
 
@@ -259,7 +257,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			gaga.dispose();
 		}
 
-		Graphics2D globalBuffer = (Graphics2D) bufferImage.getGraphics();
+		Graphics2D globalBuffer = (Graphics2D) globalBufferImage.getGraphics();
 		globalBuffer.setRenderingHints(qualityHints);
 
 		Graphics2D selectBuffer = (Graphics2D) selectBufferImage.getGraphics();
@@ -298,24 +296,24 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				hasSaved = true;
 			}
 
-			if(area != null && cPoint != null && startedCapture) {
+			if(selectArea != null && cPoint != null && startedCapture) {
 				selectBuffer.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
 			}
 
 			if(cPoint != null && startPoint != null) {
-				area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
-				allBounds.addRectangle(Utils.fixRectangle(area));
+				selectArea = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
+				allBounds.addRectangle(Utils.fixRectangle(selectArea));
 			}
 
-			if(cPoint != null && area != null) {
-				globalBuffer.drawImage(selectBufferImage, area.x, area.y, area.width, area.height, area.x, area.y, area.width, area.height, this);
-				spyglassRectangle = new Rectangle(cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), cPoint.x, cPoint.y);
+			if(cPoint != null && selectArea != null) {
+				globalBuffer.drawImage(selectBufferImage, selectArea.x, selectArea.y, selectArea.width, selectArea.height, selectArea.x, selectArea.y, selectArea.width, selectArea.height, this);
+				Rectangle spyglassRectangle = new Rectangle(cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), cPoint.x, cPoint.y);
 				globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
 				allBounds.addRectangle(spyglassRectangle);
 			}
 
 			if(lastRect != null) {
-				g.drawImage(bufferImage, lastRect.x, lastRect.y, lastRect.width, lastRect.height, lastRect.x, lastRect.y, lastRect.width, lastRect.height, this);
+				g.drawImage(globalBufferImage, lastRect.x, lastRect.y, lastRect.width, lastRect.height, lastRect.x, lastRect.y, lastRect.width, lastRect.height, this);
 				lastRect = allBounds.getBounds();
 			}
 			lastPoint = cPoint;
