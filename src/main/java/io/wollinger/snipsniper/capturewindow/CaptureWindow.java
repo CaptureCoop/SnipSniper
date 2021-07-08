@@ -270,6 +270,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		}
 
 		Rectangle rr = redraw.getBounds();
+		//globalBuffer.setColor(new Color((int)(Math.random() * 0x1000000)));
+		//globalBuffer.fillRect(rr.x, rr.y, rr.width, rr.height);
 		globalBuffer.drawImage(screenshotTinted, rr.x, rr.y, rr.width, rr.height, rr.x, rr.y, rr.width, rr.height, this);
 
 		redraw.reset();
@@ -283,7 +285,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 				globalBuffer.drawImage(screenshotTinted, 0,0, bounds.width,bounds.height, this);
 				redraw.add(new Area(bounds));
-				//area = bounds; //If we are drawing the background we need to set the area to the bounds, so that all of it is beeing drawn, not just the selected area
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 					LogManager.log(sniperInstance.getID(), "Rendered tinted background. More Info: ", Level.INFO);
 					LogManager.log(sniperInstance.getID(), "Image rendered:        " + screenshotTinted.toString(), Level.INFO);
