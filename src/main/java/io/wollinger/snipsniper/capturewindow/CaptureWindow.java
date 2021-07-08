@@ -119,8 +119,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			int y = Math.min( rect.y, rect.height);
 			int width = Math.max(rect.x, rect.width);
 			int height = Math.max(rect.y, rect.height);
-
-			repaint(x,y,width,height);
+			repaint();
+			//repaint(x,y,width,height);
 		} else {
 			repaint();
 		}
@@ -234,11 +234,16 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	BufferedImage spyglassBufferImage;
 	Rectangle spyglassRectangle;
 
-	Rectangle2D redraw = new Rectangle2D.Double();
+	RectangleCollection allBounds = new RectangleCollection();
+
+	Rectangle lastRect;
 
 	public void paint(Graphics g) {
 		boolean directDraw = sniperInstance.cfg.getBool(ConfigHelper.PROFILE.directDraw);
 		//TODO: Direct draw runs horribly on linux. Check out why?
+
+		if(lastRect == null)
+			lastRect = bounds;
 
 		if(!directDraw && bounds != null && bufferImage == null && selectBufferImage == null) {
 			//We are only setting this once, since the size of bounds should not really change
@@ -269,10 +274,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			spyglassBuffer = (Graphics2D) g;
 		}
 
-		Rectangle rr = redraw.getBounds();
-		globalBuffer.drawImage(screenshotTinted, rr.x, rr.y, rr.width, rr.height, rr.x, rr.y, rr.width, rr.height, this);
-
-		redraw = new Rectangle2D.Double();
+		Rectangle clearRect = allBounds.getBounds();
+		if(clearRect != null) {
+			globalBuffer.drawImage(screenshotTinted, clearRect.x, clearRect.y, clearRect.width, clearRect.height, clearRect.x, clearRect.y, clearRect.width, clearRect.height, this);
+		}
+		allBounds.clear();
 
 		if(screenshot != null) {
 			if((screenshotTinted != null && !hasSaved && bounds != null) || SystemUtils.IS_OS_LINUX) {
@@ -282,8 +288,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				}
 
 				globalBuffer.drawImage(screenshotTinted, 0,0, bounds.width,bounds.height, this);
-				addRectangle(redraw, bounds);
-				System.out.println("B0 " + redraw.getBounds());
+				allBounds.addRectangle(bounds);
+
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 					LogManager.log(sniperInstance.getID(), "Rendered tinted background. More Info: ", Level.INFO);
 					LogManager.log(sniperInstance.getID(), "Image rendered:        " + screenshotTinted.toString(), Level.INFO);
@@ -298,21 +304,20 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 			if(cPoint != null && startPoint != null) {
 				area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
-				addRectangle(redraw, area);
-				System.out.println("B1 " + redraw.getBounds() + "->" + area);
+				allBounds.addRectangle(Utils.fixRectangle(area));
 			}
 
 			if(cPoint != null && area != null) {
 				globalBuffer.drawImage(selectBufferImage, area.x, area.y, area.width, area.height, area.x, area.y, area.width, area.height, this);
 				spyglassRectangle = new Rectangle(cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), cPoint.x, cPoint.y);
 				globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
-				addRectangle(redraw, spyglassRectangle);
-				System.out.println("B2 " + redraw.getBounds() + "->" + spyglassRectangle + "\n");
+				allBounds.addRectangle(spyglassRectangle);
 			}
 
-			Rectangle r = redraw.getBounds();
-			g.drawImage(bufferImage, r.x, r.y, r.width, r.height, r.x, r.y, r.width, r.height, this);
-			DrawUtils.drawRect(g, new Rectangle(r.x, r.y, r.width - r.x, r.height - r.y));
+			if(lastRect != null) {
+				g.drawImage(bufferImage, lastRect.x, lastRect.y, lastRect.width, lastRect.height, lastRect.x, lastRect.y, lastRect.width, lastRect.height, this);
+				lastRect = allBounds.getBounds();
+			}
 			lastPoint = cPoint;
 		} else {
 			LogManager.log(sniperInstance.getID(), "WARNING: Screenshot is null when trying to render. Trying again.", Level.WARNING);
@@ -322,19 +327,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		globalBuffer.dispose();
 		selectBuffer.dispose();
 		spyglassBuffer.dispose();
-	}
-
-	public void addRectangle(Rectangle2D addTo, Rectangle2D toAdd) {
-		Double newX = Math.min(addTo.getX(), toAdd.getX());
-		Double newY = Math.min(addTo.getY(), toAdd.getY());
-
-		if(newX == 0)
-			newX = toAdd.getX();
-		if(newY == 0)
-			newY = toAdd.getY();
-
-		Rectangle2D.union(addTo, toAdd, addTo);
-		addTo.setRect(newX, newY, addTo.getWidth(), addTo.getHeight());
 	}
 
 	@Override
