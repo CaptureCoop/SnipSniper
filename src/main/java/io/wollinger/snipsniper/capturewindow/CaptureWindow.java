@@ -6,6 +6,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -16,10 +17,7 @@ import javax.swing.JFrame;
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
-import io.wollinger.snipsniper.utils.ConfigHelper;
-import io.wollinger.snipsniper.utils.Icons;
-import io.wollinger.snipsniper.utils.LogManager;
-import io.wollinger.snipsniper.utils.Utils;
+import io.wollinger.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
 
 public class CaptureWindow extends JFrame implements WindowListener{
@@ -30,6 +28,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	Point startPointTotal;
 	Point cPoint;
 	Point cPointAlt;
+	Point cPointLive;
 	private Rectangle bounds = null;
 	
 	public BufferedImage screenshot = null;
@@ -114,8 +113,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	}
 	
 	public void specialRepaint() {
-		if(area != null) {
-			final Rectangle rect = area;
+		if(selectArea != null) {
+			final Rectangle rect = selectArea;
 			
 			int x = Math.min( rect.x, rect.width);
 			int y = Math.min( rect.y, rect.height);
@@ -228,31 +227,53 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		sniperInstance.killCaptureWindow();
 	}
 	
-	public Rectangle area;
-	Point lastPoint = null;
-	boolean hasSaved = false;
-	BufferedImage bufferImage;
+	private Rectangle selectArea;
+	private boolean hasSaved = false;
+	private BufferedImage globalBufferImage;
+	private BufferedImage selectBufferImage;
+	private BufferedImage spyglassBufferImage;
+
+	private RectangleCollection allBounds = new RectangleCollection();
+
+	private Rectangle lastRect;
 
 	public void paint(Graphics g) {
 		boolean directDraw = sniperInstance.cfg.getBool(ConfigHelper.PROFILE.directDraw);
 		//TODO: Direct draw runs horribly on linux. Check out why?
 
-		if(!directDraw && bounds != null && bufferImage == null) {
+		if(lastRect == null)
+			lastRect = bounds;
+
+		if(!directDraw && bounds != null && globalBufferImage == null && selectBufferImage == null) {
 			//We are only setting this once, since the size of bounds should not really change
-			bufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
+			globalBufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
+			selectBufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
 		}
 
-		Graphics2D g2 = (Graphics2D)g;
-		g2.setRenderingHints(qualityHints);
-
-		Graphics use = g2;
-
-		Graphics2D gBuffer = null;
-		if(!directDraw) {
-			gBuffer = (Graphics2D)bufferImage.getGraphics();
-			gBuffer.setRenderingHints(qualityHints);
-			use = gBuffer;
+		if(spyglassBufferImage == null) {
+			spyglassBufferImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
 		}
+
+		Graphics2D globalBuffer = (Graphics2D) globalBufferImage.getGraphics();
+		globalBuffer.setRenderingHints(qualityHints);
+
+		Graphics2D selectBuffer = (Graphics2D) selectBufferImage.getGraphics();
+		selectBuffer.setRenderingHints(qualityHints);
+
+		Graphics2D spyglassBuffer = (Graphics2D) spyglassBufferImage.getGraphics();
+		spyglassBuffer.setRenderingHints(qualityHints);
+
+		if(directDraw) {
+			globalBuffer = (Graphics2D) g;
+			selectBuffer = (Graphics2D) g;
+			spyglassBuffer = (Graphics2D) g;
+		}
+
+		Rectangle clearRect = allBounds.getBounds();
+		if(clearRect != null) {
+			globalBuffer.drawImage(screenshotTinted, clearRect.x, clearRect.y, clearRect.width, clearRect.height, clearRect.x, clearRect.y, clearRect.width, clearRect.height, this);
+		}
+		allBounds.clear();
 
 		if(screenshot != null) {
 			if((screenshotTinted != null && !hasSaved && bounds != null) || SystemUtils.IS_OS_LINUX) {
@@ -261,8 +282,9 @@ public class CaptureWindow extends JFrame implements WindowListener{
 					LogManager.log(sniperInstance.getID(), "Frame Visible: " + isVisible(), Level.INFO);
 				}
 
-				use.drawImage(screenshotTinted, 0,0, bounds.width,bounds.height, this);
-				area = bounds; //If we are drawing the background we need to set the area to the bounds, so that all of it is beeing drawn, not just the selected area
+				globalBuffer.drawImage(screenshotTinted, 0,0, bounds.width,bounds.height, this);
+				allBounds.addRectangle(bounds);
+
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 					LogManager.log(sniperInstance.getID(), "Rendered tinted background. More Info: ", Level.INFO);
 					LogManager.log(sniperInstance.getID(), "Image rendered:        " + screenshotTinted.toString(), Level.INFO);
@@ -271,25 +293,101 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				hasSaved = true;
 			}
 
-			if(area != null && cPoint != null && startedCapture) {
-				use.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
-				use.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
+			if(selectArea != null && cPoint != null && startedCapture) {
+				selectBuffer.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
 			}
 
-			if(area != null)
-				g2.drawImage(bufferImage, area.x, area.y, area.width, area.height, area.x, area.y, area.width, area.height, this);
+			if(cPoint != null && startPoint != null) {
+				selectArea = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
+				allBounds.addRectangle(Utils.fixRectangle(selectArea));
+			}
 
-			if(cPoint != null && startPoint != null)
-				area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
-	
-			lastPoint = cPoint;
+			if(cPoint != null && selectArea != null) {
+				globalBuffer.drawImage(selectBufferImage, selectArea.x, selectArea.y, selectArea.width, selectArea.height, selectArea.x, selectArea.y, selectArea.width, selectArea.height, this);
+			}
+
+			if(cPointLive != null && sniperInstance.cfg.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
+				Rectangle spyglassRectangle = null;
+
+				GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
+				for (GraphicsDevice gd : localGE.getScreenDevices()) {
+					for (GraphicsConfiguration graphicsConfiguration : gd.getConfigurations()) {
+						Rectangle rect = graphicsConfiguration.getBounds();
+						Point point = MouseInfo.getPointerInfo().getLocation();
+						if(rect.contains(point)) {
+							if(point.x - spyglassBufferImage.getWidth() < rect.x) {
+								spyglassRectangle = new Rectangle(cPointLive.x, cPointLive.y - spyglassBufferImage.getHeight(), cPointLive.x + spyglassBufferImage.getWidth(), cPointLive.y);
+							} else {
+								spyglassRectangle = new Rectangle(cPointLive.x - spyglassBufferImage.getWidth(), cPointLive.y - spyglassBufferImage.getHeight(), cPointLive.x, cPointLive.y);
+							}
+
+							if(point.y - spyglassBufferImage.getHeight() < rect.y) {
+								spyglassRectangle = new Rectangle(spyglassRectangle.x, cPointLive.y, spyglassRectangle.width, cPointLive.y + spyglassBufferImage.getHeight());
+							}
+						}
+					}
+				}
+
+
+				if(spyglassRectangle != null) {
+					generateSpyglass(spyglassBufferImage);
+					Shape oldClip = globalBuffer.getClip();
+					Ellipse2D.Double shape = new Ellipse2D.Double(spyglassRectangle.x, spyglassRectangle.y, spyglassBufferImage.getWidth(), spyglassBufferImage.getHeight());
+					globalBuffer.setClip(shape);
+					globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
+					globalBuffer.setClip(oldClip);
+					allBounds.addRectangle(spyglassRectangle);
+				}
+			}
+
+			if(lastRect != null) {
+				g.drawImage(globalBufferImage, lastRect.x, lastRect.y, lastRect.width, lastRect.height, lastRect.x, lastRect.y, lastRect.width, lastRect.height, this);
+				lastRect = allBounds.getBounds();
+			}
 		} else {
 			LogManager.log(sniperInstance.getID(), "WARNING: Screenshot is null when trying to render. Trying again.", Level.WARNING);
 			repaint();
 		}
-		g2.dispose();
-		if(gBuffer != null)
-			gBuffer.dispose();
+
+		globalBuffer.dispose();
+		selectBuffer.dispose();
+		spyglassBuffer.dispose();
+	}
+
+	private void generateSpyglass(BufferedImage image) {
+		Graphics2D g = (Graphics2D) image.getGraphics();
+
+		final int ROWS = 32;
+		final int ROW_SIZE = image.getWidth() / ROWS;
+		final int THICKNESS = 3;
+
+		g.setRenderingHints(qualityHints);
+
+		g.fillRect(0, 0, image.getWidth(), image.getHeight());
+
+		for(int y = 0; y < ROWS; y++) {
+			for(int x = 0; x < ROWS; x++) {
+				Rectangle rect = new Rectangle(x * ROW_SIZE, y * ROW_SIZE, ROW_SIZE, ROW_SIZE);
+				int pixelX = cPointLive.x + x - ROWS / 2;
+				int pixelY = cPointLive.y + y - ROWS / 2;
+				if(pixelX < globalBufferImage.getWidth() && pixelY < globalBufferImage.getHeight() && pixelX >= 0 && pixelY >= 0) {
+					g.setColor(new Color(globalBufferImage.getRGB(pixelX, pixelY)));
+					g.fillRect(rect.x, rect.y, rect.width, rect.height);
+				}
+				g.setColor(Color.BLACK);
+				g.drawRect(rect.x, rect.y, rect.width, rect.height);
+			}
+		}
+
+		Stroke oldStroke = g.getStroke();
+		g.setStroke(new BasicStroke(THICKNESS));
+		g.drawLine(image.getWidth()/2, 0, image.getWidth()/2, image.getHeight());
+		g.drawLine(0, image.getHeight()/2, image.getWidth(), image.getHeight()/2);
+		g.setStroke(new BasicStroke(THICKNESS*2));
+		g.drawOval(0,0,image.getWidth(),image.getHeight());
+		g.setStroke(oldStroke);
+
+		g.dispose();
 	}
 
 	@Override

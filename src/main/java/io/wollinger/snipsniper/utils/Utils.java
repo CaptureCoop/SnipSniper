@@ -283,4 +283,13 @@ public class Utils {
 		streamReader.close();
 		return content.toString();
 	}
+
+	public static Rectangle fixRectangle(Rectangle rect) {
+		Rectangle newRect = new Rectangle();
+		newRect.x = Math.min(rect.x, rect.width);
+		newRect.y = Math.min(rect.y, rect.height);
+		newRect.width = Math.max(rect.x, rect.width);
+		newRect.height = Math.max(rect.y, rect.height);
+		return newRect;
+	}
 }
