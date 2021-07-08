@@ -282,7 +282,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				}
 
 				globalBuffer.drawImage(screenshotTinted, 0,0, bounds.width,bounds.height, this);
-				Rectangle2D.union(redraw, bounds, redraw);
+				addRectangle(redraw, bounds);
+				System.out.println("B0 " + redraw.getBounds());
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 					LogManager.log(sniperInstance.getID(), "Rendered tinted background. More Info: ", Level.INFO);
 					LogManager.log(sniperInstance.getID(), "Image rendered:        " + screenshotTinted.toString(), Level.INFO);
@@ -297,18 +298,21 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 			if(cPoint != null && startPoint != null) {
 				area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
-				Rectangle2D.union(redraw, area, redraw);
+				addRectangle(redraw, area);
+				System.out.println("B1 " + redraw.getBounds() + "->" + area);
 			}
 
 			if(cPoint != null && area != null) {
 				globalBuffer.drawImage(selectBufferImage, area.x, area.y, area.width, area.height, area.x, area.y, area.width, area.height, this);
 				spyglassRectangle = new Rectangle(cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), cPoint.x, cPoint.y);
 				globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
-				Rectangle2D.union(redraw, spyglassRectangle, redraw);
+				addRectangle(redraw, spyglassRectangle);
+				System.out.println("B2 " + redraw.getBounds() + "->" + spyglassRectangle + "\n");
 			}
 
 			Rectangle r = redraw.getBounds();
 			g.drawImage(bufferImage, r.x, r.y, r.width, r.height, r.x, r.y, r.width, r.height, this);
+			DrawUtils.drawRect(g, new Rectangle(r.x, r.y, r.width - r.x, r.height - r.y));
 			lastPoint = cPoint;
 		} else {
 			LogManager.log(sniperInstance.getID(), "WARNING: Screenshot is null when trying to render. Trying again.", Level.WARNING);
@@ -318,6 +322,19 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		globalBuffer.dispose();
 		selectBuffer.dispose();
 		spyglassBuffer.dispose();
+	}
+
+	public void addRectangle(Rectangle2D addTo, Rectangle2D toAdd) {
+		Double newX = Math.min(addTo.getX(), toAdd.getX());
+		Double newY = Math.min(addTo.getY(), toAdd.getY());
+
+		if(newX == 0)
+			newX = toAdd.getX();
+		if(newY == 0)
+			newY = toAdd.getY();
+
+		Rectangle2D.union(addTo, toAdd, addTo);
+		addTo.setRect(newX, newY, addTo.getWidth(), addTo.getHeight());
 	}
 
 	@Override
