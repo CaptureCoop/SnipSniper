@@ -272,7 +272,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		Rectangle rr = redraw.getBounds();
 		globalBuffer.drawImage(screenshotTinted, rr.x, rr.y, rr.width, rr.height, rr.x, rr.y, rr.width, rr.height, this);
 
-		redraw = new Area();
+		redraw.reset();
 
 		if(screenshot != null) {
 			if((screenshotTinted != null && !hasSaved && bounds != null) || SystemUtils.IS_OS_LINUX) {
@@ -293,44 +293,29 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			}
 
 			if(area != null && cPoint != null && startedCapture) {
-				//selectBuffer.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
 				selectBuffer.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
 			}
 
-			if(spyglassRectangle != null) {
-				//globalBuffer.drawImage(screenshotTinted, spyglassRectangle.x, spyglassRectangle.y, spyglassRectangle.width, spyglassRectangle.height, spyglassRectangle.x, spyglassRectangle.y, spyglassRectangle.width, spyglassRectangle.height, this);
-				redraw.add(new Area(spyglassRectangle));
-			}
-
-			if(area != null) {
-				globalBuffer.drawImage(selectBufferImage, area.x, area.y, area.width, area.height, area.x, area.y, area.width, area.height, this);
-				System.out.println(area + spyglassRectangle);
+			if(cPoint != null && startPoint != null) {
+				area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
 				redraw.add(new Area(area));
 			}
 
-			if(cPoint != null && startPoint != null)
-				area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
-
-			if(cPoint != null) {
-				globalBuffer.drawImage(spyglassBufferImage, cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), this);
-				spyglassRectangle = new Rectangle(cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), spyglassBufferImage.getWidth() + cPoint.x, spyglassBufferImage.getHeight() + cPoint.y);
+			if(cPoint != null && area != null) {
+				globalBuffer.drawImage(selectBufferImage, area.x, area.y, area.width, area.height, area.x, area.y, area.width, area.height, this);
+				spyglassRectangle = new Rectangle(cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), cPoint.x, cPoint.y);
+				globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
+				redraw.add(new Area(spyglassRectangle));
 			}
 
-
 			Rectangle r = redraw.getBounds();
-			if(r.x < 0) r.x = 0;
-			if(r.y < 0) r.y = 0;
-			//System.out.println(r);
 			g.drawImage(bufferImage, r.x, r.y, r.width, r.height, r.x, r.y, r.width, r.height, this);
-			//DrawUtils.drawRect(g, r);
-
 			lastPoint = cPoint;
 		} else {
 			LogManager.log(sniperInstance.getID(), "WARNING: Screenshot is null when trying to render. Trying again.", Level.WARNING);
 			repaint();
 		}
 
-		//g.dispose();
 		globalBuffer.dispose();
 		selectBuffer.dispose();
 		spyglassBuffer.dispose();
