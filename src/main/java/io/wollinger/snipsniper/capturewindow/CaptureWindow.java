@@ -228,7 +228,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	}
 	
 	private Rectangle selectArea;
-	private Point lastPoint = null;
 	private boolean hasSaved = false;
 	private BufferedImage globalBufferImage;
 	private BufferedImage selectBufferImage;
@@ -252,7 +251,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		}
 
 		if(spyglassBufferImage == null) {
-			spyglassBufferImage = new BufferedImage(getHeight()/3, getHeight()/3, BufferedImage.TYPE_INT_ARGB);
+			spyglassBufferImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
 		}
 
 		Graphics2D globalBuffer = (Graphics2D) globalBufferImage.getGraphics();
@@ -345,7 +344,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				g.drawImage(globalBufferImage, lastRect.x, lastRect.y, lastRect.width, lastRect.height, lastRect.x, lastRect.y, lastRect.width, lastRect.height, this);
 				lastRect = allBounds.getBounds();
 			}
-			lastPoint = cPoint;
 		} else {
 			LogManager.log(sniperInstance.getID(), "WARNING: Screenshot is null when trying to render. Trying again.", Level.WARNING);
 			repaint();
