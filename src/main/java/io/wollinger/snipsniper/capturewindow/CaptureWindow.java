@@ -252,7 +252,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		}
 
 		if(spyglassBufferImage == null) {
-			spyglassBufferImage = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
+			spyglassBufferImage = new BufferedImage(getHeight()/3, getHeight()/3, BufferedImage.TYPE_INT_ARGB);
 		}
 
 		Graphics2D globalBuffer = (Graphics2D) globalBufferImage.getGraphics();
@@ -375,9 +375,9 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				if(pixelX < globalBufferImage.getWidth() && pixelY < globalBufferImage.getHeight() && pixelX >= 0 && pixelY >= 0) {
 					g.setColor(new Color(globalBufferImage.getRGB(pixelX, pixelY)));
 					g.fillRect(rect.x, rect.y, rect.width, rect.height);
-					g.setColor(Color.BLACK);
-					g.drawRect(rect.x, rect.y, rect.width, rect.height);
 				}
+				g.setColor(Color.BLACK);
+				g.drawRect(rect.x, rect.y, rect.width, rect.height);
 			}
 		}
 
