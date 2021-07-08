@@ -6,6 +6,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -16,10 +17,7 @@ import javax.swing.JFrame;
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
-import io.wollinger.snipsniper.utils.ConfigHelper;
-import io.wollinger.snipsniper.utils.Icons;
-import io.wollinger.snipsniper.utils.LogManager;
-import io.wollinger.snipsniper.utils.Utils;
+import io.wollinger.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
 
 public class CaptureWindow extends JFrame implements WindowListener{
@@ -233,8 +231,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	boolean hasSaved = false;
 	BufferedImage bufferImage;
 	BufferedImage selectBufferImage;
-	BufferedImage spyglassBufferImage = new BufferedImage(512, 512, BufferedImage.TYPE_INT_RGB);
+	BufferedImage spyglassBufferImage;
 	Rectangle spyglassRectangle;
+
+	Area redraw = new Area();
 
 	public void paint(Graphics g) {
 		boolean directDraw = sniperInstance.cfg.getBool(ConfigHelper.PROFILE.directDraw);
@@ -244,6 +244,14 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			//We are only setting this once, since the size of bounds should not really change
 			bufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
 			selectBufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
+		}
+
+		if(spyglassBufferImage == null) {
+			spyglassBufferImage = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
+			Graphics gaga = spyglassBufferImage.getGraphics();
+			gaga.setColor(new Color(200, 200, 200, 100));
+			gaga.fillRect(0,0, spyglassBufferImage.getWidth(), spyglassBufferImage.getHeight());
+			gaga.dispose();
 		}
 
 		Graphics2D globalBuffer = (Graphics2D) bufferImage.getGraphics();
@@ -261,6 +269,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			spyglassBuffer = (Graphics2D) g;
 		}
 
+		Rectangle rr = redraw.getBounds();
+		globalBuffer.drawImage(screenshotTinted, rr.x, rr.y, rr.width, rr.height, rr.x, rr.y, rr.width, rr.height, this);
+
+		redraw = new Area();
+
 		if(screenshot != null) {
 			if((screenshotTinted != null && !hasSaved && bounds != null) || SystemUtils.IS_OS_LINUX) {
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
@@ -269,6 +282,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				}
 
 				globalBuffer.drawImage(screenshotTinted, 0,0, bounds.width,bounds.height, this);
+				redraw.add(new Area(bounds));
 				//area = bounds; //If we are drawing the background we need to set the area to the bounds, so that all of it is beeing drawn, not just the selected area
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 					LogManager.log(sniperInstance.getID(), "Rendered tinted background. More Info: ", Level.INFO);
@@ -279,15 +293,20 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			}
 
 			if(area != null && cPoint != null && startedCapture) {
-				selectBuffer.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
+				//selectBuffer.drawImage(screenshotTinted, area.x, area.y, area.width, area.height,area.x, area.y, area.width, area.height, this);
 				selectBuffer.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
 			}
 
-			if(spyglassRectangle != null)
-				globalBuffer.drawImage(screenshotTinted, spyglassRectangle.x, spyglassRectangle.y, spyglassRectangle.width, spyglassRectangle.height, spyglassRectangle.x, spyglassRectangle.y, spyglassRectangle.width, spyglassRectangle.height, this);
+			if(spyglassRectangle != null) {
+				//globalBuffer.drawImage(screenshotTinted, spyglassRectangle.x, spyglassRectangle.y, spyglassRectangle.width, spyglassRectangle.height, spyglassRectangle.x, spyglassRectangle.y, spyglassRectangle.width, spyglassRectangle.height, this);
+				redraw.add(new Area(spyglassRectangle));
+			}
 
-			if(area != null)
+			if(area != null) {
 				globalBuffer.drawImage(selectBufferImage, area.x, area.y, area.width, area.height, area.x, area.y, area.width, area.height, this);
+				System.out.println(area + spyglassRectangle);
+				redraw.add(new Area(area));
+			}
 
 			if(cPoint != null && startPoint != null)
 				area = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
@@ -297,7 +316,13 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				spyglassRectangle = new Rectangle(cPoint.x - spyglassBufferImage.getWidth(), cPoint.y - spyglassBufferImage.getHeight(), spyglassBufferImage.getWidth() + cPoint.x, spyglassBufferImage.getHeight() + cPoint.y);
 			}
 
-			g.drawImage(bufferImage, 0, 0, bounds.width, bounds.height, this);
+
+			Rectangle r = redraw.getBounds();
+			if(r.x < 0) r.x = 0;
+			if(r.y < 0) r.y = 0;
+			//System.out.println(r);
+			g.drawImage(bufferImage, r.x, r.y, r.width, r.height, r.x, r.y, r.width, r.height, this);
+			//DrawUtils.drawRect(g, r);
 
 			lastPoint = cPoint;
 		} else {
