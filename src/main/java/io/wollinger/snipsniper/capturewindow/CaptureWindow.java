@@ -334,6 +334,9 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 		final int ROWS = 32;
 		final int ROW_SIZE = image.getWidth() / ROWS;
+		final int THICKNESS = 3;
+
+		g.setRenderingHints(qualityHints);
 
 		g.fillRect(0, 0, image.getWidth(), image.getHeight());
 
@@ -350,6 +353,15 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				}
 			}
 		}
+
+		Stroke oldStroke = g.getStroke();
+		g.setStroke(new BasicStroke(THICKNESS));
+		g.drawLine(image.getWidth()/2, 0, image.getWidth()/2, image.getHeight());
+		g.drawLine(0, image.getHeight()/2, image.getWidth(), image.getHeight()/2);
+		g.setStroke(new BasicStroke(THICKNESS*2));
+		g.drawOval(0,0,image.getWidth(),image.getHeight());
+		g.setStroke(oldStroke);
+
 		g.dispose();
 	}
 
