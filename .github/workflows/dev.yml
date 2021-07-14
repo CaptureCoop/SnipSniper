@@ -29,22 +29,24 @@ jobs:
         java-version: '16'
         distribution: 'adopt'
     - name: Custom make file
-      run: ./make.bat full
+      run: ./make.bat jar #change to full for all versions
       
     - uses: actions/upload-artifact@v2
       name: Uploading jar
       with:
         name: jar-standalone
         path: release/SnipSniper.jar
+
+    # Uncomment these lines to upload the windows versions
+
+    #- uses: actions/upload-artifact@v2
+    #  name: Uploading Windows Portable
+    #  with:
+    #    name: win-portable
+    #    path: release/SnipSniper_Portable_Win
         
-    - uses: actions/upload-artifact@v2
-      name: Uploading Windows Portable
-      with:
-        name: win-portable
-        path: release/SnipSniper_Portable_Win
-        
-    - uses: actions/upload-artifact@v2
-      name: Uploading Windows Installer
-      with:
-        name: win-installer
-        path: release/SnipSniper_Installer_Win.exe
+    #- uses: actions/upload-artifact@v2
+    #  name: Uploading Windows Installer
+    #  with:
+    #    name: win-installer
+    #    path: release/SnipSniper_Installer_Win.exe
