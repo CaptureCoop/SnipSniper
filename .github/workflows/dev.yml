@@ -23,21 +23,26 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build -Dtype=dev
-    - name: Set up JDK 16 (for jpackage)
-      uses: actions/setup-java@v2
-      with:
-        java-version: '16'
-        distribution: 'adopt'
-    - name: Custom make file
-      run: ./make.bat jar #change to full for all versions
-      
+
     - uses: actions/upload-artifact@v2
       name: Uploading jar
       with:
-        name: jar-standalone
-        path: release/SnipSniper.jar
+        name: jar
+        path: build/libs/SnipSniper.jar
 
-    # Uncomment these lines to upload the windows versions
+    #- name: Set up JDK 16 (for jpackage)
+    #  uses: actions/setup-java@v2
+    #  with:
+    #    java-version: '16'
+    #    distribution: 'adopt'
+    #- name: Custom make file
+    #  run: ./make.bat full
+    #
+    #- uses: actions/upload-artifact@v2
+    #  name: Uploading jar
+    #  with:
+    #    name: jar-standalone
+    #    path: release/SnipSniper.jar
 
     #- uses: actions/upload-artifact@v2
     #  name: Uploading Windows Portable
