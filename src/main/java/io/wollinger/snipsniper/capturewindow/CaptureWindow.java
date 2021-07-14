@@ -355,21 +355,50 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	}
 
 	private void generateSpyglass(BufferedImage image) {
+		final int ROWS = sniperInstance.cfg.getInt(ConfigHelper.PROFILE.spyglassZoom);
+		final int THICKNESS = sniperInstance.cfg.getInt(ConfigHelper.PROFILE.spyglassThickness);
+
+		if(sniperInstance.cfg.getBool(ConfigHelper.PROFILE.spyglassPixelByPixel))
+			generateSpyglassPixelByPixel(image, ROWS, THICKNESS);
+		else
+			generateSpyglassDirect(image, ROWS, THICKNESS);
+	}
+
+	private void generateSpyglassDirect(BufferedImage image, int rows, int thickness) {
 		Graphics2D g = (Graphics2D) image.getGraphics();
 
-		final int ROWS = 32;
-		final int ROW_SIZE = image.getWidth() / ROWS;
-		final int THICKNESS = 3;
+		g.drawImage(globalBufferImage, 0, 0, image.getWidth(), image.getHeight(), cPointLive.x - rows/2, cPointLive.y - rows/2, cPointLive.x + rows/2, cPointLive.y + rows/2, this);
+
+		g.setColor(Color.BLACK);
+		int space = image.getWidth() / rows;
+		for(int i = 0; i < rows; i++) {
+			g.drawLine(i * space, 0, i * space, image.getHeight());
+			g.drawLine(0, i * space, image.getWidth(), i * space);
+		}
+
+		Stroke oldStroke = g.getStroke();
+		g.setStroke(new BasicStroke(thickness));
+		g.drawLine(image.getWidth()/2, 0, image.getWidth()/2, image.getHeight());
+		g.drawLine(0, image.getHeight()/2, image.getWidth(), image.getHeight()/2);
+		g.setStroke(new BasicStroke(thickness*2));
+		g.drawOval(0,0,image.getWidth(),image.getHeight());
+		g.setStroke(oldStroke);
+	}
+
+	private void generateSpyglassPixelByPixel(BufferedImage image, int rows, int thickness) {
+		Graphics2D g = (Graphics2D) image.getGraphics();
+
+		final int ROW_SIZE = image.getWidth() / rows;
 
 		g.setRenderingHints(qualityHints);
 
 		g.fillRect(0, 0, image.getWidth(), image.getHeight());
 
-		for(int y = 0; y < ROWS; y++) {
-			for(int x = 0; x < ROWS; x++) {
+		for(int y = 0; y < rows; y++) {
+			for(int x = 0; x < rows; x++) {
 				Rectangle rect = new Rectangle(x * ROW_SIZE, y * ROW_SIZE, ROW_SIZE, ROW_SIZE);
-				int pixelX = cPointLive.x + x - ROWS / 2;
-				int pixelY = cPointLive.y + y - ROWS / 2;
+				int pixelX = cPointLive.x + x - rows / 2;
+				int pixelY = cPointLive.y + y - rows / 2;
 				if(pixelX < globalBufferImage.getWidth() && pixelY < globalBufferImage.getHeight() && pixelX >= 0 && pixelY >= 0) {
 					g.setColor(new Color(globalBufferImage.getRGB(pixelX, pixelY)));
 					g.fillRect(rect.x, rect.y, rect.width, rect.height);
@@ -380,10 +409,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		}
 
 		Stroke oldStroke = g.getStroke();
-		g.setStroke(new BasicStroke(THICKNESS));
+		g.setStroke(new BasicStroke(thickness));
 		g.drawLine(image.getWidth()/2, 0, image.getWidth()/2, image.getHeight());
 		g.drawLine(0, image.getHeight()/2, image.getWidth(), image.getHeight()/2);
-		g.setStroke(new BasicStroke(THICKNESS*2));
+		g.setStroke(new BasicStroke(thickness*2));
 		g.drawOval(0,0,image.getWidth(),image.getHeight());
 		g.setStroke(oldStroke);
 
