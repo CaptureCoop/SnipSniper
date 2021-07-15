@@ -80,5 +80,6 @@ type,
 version, 
 build, 
 builddate, 
+githash, 
 } 
 } 

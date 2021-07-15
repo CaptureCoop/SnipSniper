@@ -39,10 +39,11 @@ public class btnAbout extends MenuItem{
 			frame.setSize(512,256);
 			frame.setTitle("About");
 			frame.setResizable(true);
+			frame.setIconImage(Icons.icon_taskbar);
 
 			JPanel panel = new JPanel(new GridLayout(1,0));
 
-			ImageIcon icon =new ImageIcon(Icons.icon_taskbar.getScaledInstance(100,100,Image.SCALE_DEFAULT));
+			ImageIcon icon = new ImageIcon(Icons.icon_taskbar.getScaledInstance(100,100,Image.SCALE_DEFAULT));
 			JLabel label = new JLabel(icon);
 			label.addMouseListener(new MouseAdapter() {
 				int index = 0;
@@ -60,6 +61,7 @@ public class btnAbout extends MenuItem{
 
 				public void setNewImage(BufferedImage image) {
 					label.setIcon(new ImageIcon(image.getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
+					frame.setIconImage(image);
 				}
 			});
 			panel.add(label);
@@ -118,6 +120,7 @@ public class btnAbout extends MenuItem{
 		html = html.replace("%VERSION%", SnipSniper.getVersion());
 		html = html.replace("%TYPE%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.type));
 		html = html.replace("%BUILDDATE%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.builddate));
+		html = html.replaceAll("%HASH%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.githash));
 		html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming"));
 		html = html.replace("%ABOUT_CD%", LangManager.getItem("about_cd"));
 		html = html.replace("%ABOUT_MATH%", LangManager.getItem("about_math"));
