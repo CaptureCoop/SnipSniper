@@ -25,6 +25,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	private Sniper sniperInstance;
 	private Config config;
 	private final RenderingHints qualityHints;
+	private CaptureWindowListener listener;
 
 	Point startPoint; //Mouse position given by event *1
 	Point startPointTotal; //Mouse position given by MouseInfo.getPointerInfo (Different then the above in some scenarios) *2
@@ -62,7 +63,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		setIconImage(Icons.icon_taskbar);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-		CaptureWindowListener listener = new CaptureWindowListener(this);
+		listener = new CaptureWindowListener(this);
 		addWindowListener(this);
 		addMouseListener(listener);
 		addMouseMotionListener(listener);
@@ -239,6 +240,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	private RectangleCollection allBounds = new RectangleCollection();
 
 	private Rectangle lastRect;
+	private boolean spyglassToggle = false;
 
 	public void paint(Graphics g) {
 		boolean directDraw = config.getBool(ConfigHelper.PROFILE.directDraw);
@@ -310,36 +312,48 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			}
 
 			if(cPointLive != null && config.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
-				Rectangle spyglassRectangle = null;
+				boolean displaySpyglass = true;
+				boolean isHotkey = listener.isPressed(config.getInt(ConfigHelper.PROFILE.spyglassHotkey));
+				switch(config.getString(ConfigHelper.PROFILE.spyglassMode)) {
+					case "hold":
+						if(!isHotkey) displaySpyglass = false;
+						break;
+					case "toggle":
+						if(isHotkey) spyglassToggle = !spyglassToggle;
+						displaySpyglass = spyglassToggle;
+						break;
+				}
 
-				GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
-				for (GraphicsDevice gd : localGE.getScreenDevices()) {
-					for (GraphicsConfiguration graphicsConfiguration : gd.getConfigurations()) {
-						Rectangle rect = graphicsConfiguration.getBounds();
-						Point point = MouseInfo.getPointerInfo().getLocation();
-						if(rect.contains(point)) {
-							if(point.x - spyglassBufferImage.getWidth() < rect.x) {
-								spyglassRectangle = new Rectangle(cPointLive.x, cPointLive.y - spyglassBufferImage.getHeight(), cPointLive.x + spyglassBufferImage.getWidth(), cPointLive.y);
-							} else {
-								spyglassRectangle = new Rectangle(cPointLive.x - spyglassBufferImage.getWidth(), cPointLive.y - spyglassBufferImage.getHeight(), cPointLive.x, cPointLive.y);
-							}
+				if(displaySpyglass) {
+					Rectangle spyglassRectangle = null;
+					GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
+					for (GraphicsDevice gd : localGE.getScreenDevices()) {
+						for (GraphicsConfiguration graphicsConfiguration : gd.getConfigurations()) {
+							Rectangle rect = graphicsConfiguration.getBounds();
+							Point point = MouseInfo.getPointerInfo().getLocation();
+							if (rect.contains(point)) {
+								if (point.x - spyglassBufferImage.getWidth() < rect.x) {
+									spyglassRectangle = new Rectangle(cPointLive.x, cPointLive.y - spyglassBufferImage.getHeight(), cPointLive.x + spyglassBufferImage.getWidth(), cPointLive.y);
+								} else {
+									spyglassRectangle = new Rectangle(cPointLive.x - spyglassBufferImage.getWidth(), cPointLive.y - spyglassBufferImage.getHeight(), cPointLive.x, cPointLive.y);
+								}
 
-							if(point.y - spyglassBufferImage.getHeight() < rect.y) {
-								spyglassRectangle = new Rectangle(spyglassRectangle.x, cPointLive.y, spyglassRectangle.width, cPointLive.y + spyglassBufferImage.getHeight());
+								if (point.y - spyglassBufferImage.getHeight() < rect.y) {
+									spyglassRectangle = new Rectangle(spyglassRectangle.x, cPointLive.y, spyglassRectangle.width, cPointLive.y + spyglassBufferImage.getHeight());
+								}
 							}
 						}
 					}
-				}
 
-
-				if(spyglassRectangle != null) {
-					generateSpyglass(spyglassBufferImage);
-					Shape oldClip = globalBuffer.getClip();
-					Ellipse2D.Double shape = new Ellipse2D.Double(spyglassRectangle.x, spyglassRectangle.y, spyglassBufferImage.getWidth(), spyglassBufferImage.getHeight());
-					globalBuffer.setClip(shape);
-					globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
-					globalBuffer.setClip(oldClip);
-					allBounds.addRectangle(spyglassRectangle);
+					if(spyglassRectangle != null) {
+						generateSpyglass(spyglassBufferImage);
+						Shape oldClip = globalBuffer.getClip();
+						Ellipse2D.Double shape = new Ellipse2D.Double(spyglassRectangle.x, spyglassRectangle.y, spyglassBufferImage.getWidth(), spyglassBufferImage.getHeight());
+						globalBuffer.setClip(shape);
+						globalBuffer.drawImage(spyglassBufferImage, spyglassRectangle.x, spyglassRectangle.y, this);
+						globalBuffer.setClip(oldClip);
+						allBounds.addRectangle(spyglassRectangle);
+					}
 				}
 			}
 
