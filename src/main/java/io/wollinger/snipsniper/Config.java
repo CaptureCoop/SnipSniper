@@ -152,7 +152,15 @@ public class Config {
 		return null;
 	}
 
-	public void set (Enum key, String value) {
+	public void set(Enum key, int value) {
+		set(key.toString(), value + "");
+	}
+
+	public void set(Enum key, boolean value) {
+		set(key.toString(), value + "");
+	}
+
+	public void set(Enum key, String value) {
 		set(key.toString(), value);
 	}
 

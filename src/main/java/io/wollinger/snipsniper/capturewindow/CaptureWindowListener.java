@@ -9,7 +9,8 @@ import java.awt.event.MouseMotionListener;
 
 public class CaptureWindowListener implements KeyListener, MouseListener, MouseMotionListener{
 	CaptureWindow wndInstance;
-	
+	private boolean[] keys = new boolean[4096];
+
 	public CaptureWindowListener(CaptureWindow wndInstance) {
 		this.wndInstance = wndInstance;
 	}
@@ -61,13 +62,26 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	
 	@Override
 	public void keyPressed(KeyEvent keyEvent) {
+		keys[keyEvent.getKeyCode()] = true;
 		if(keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE)
 			wndInstance.getSniperInstance().killCaptureWindow();
 	}
 
 	@Override
-	public void keyReleased(KeyEvent keyEvent) { }
+	public void keyReleased(KeyEvent keyEvent) {
+		keys[keyEvent.getKeyCode()] = false;
+	}
 
 	@Override
 	public void keyTyped(KeyEvent keyEvent) { }
+
+	public boolean isPressed(int keyCode) {
+		return keys[keyCode];
+	}
+
+	public boolean isPressedOnce(int keyCode) {
+		boolean returnValue = keys[keyCode];
+		keys[keyCode] = false;
+		return returnValue;
+	}
 }

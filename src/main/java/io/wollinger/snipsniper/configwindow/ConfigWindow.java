@@ -318,6 +318,94 @@ public class ConfigWindow extends JFrame {
         row6.add(openEditor);
         options.add(row6);
 
+        JPanel row7 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row7.add(createJLabel("Use Spyglass", JLabel.RIGHT, JLabel.CENTER));
+        JComboBox<Object> spyglassDropdownEnabled = new JComboBox<>(new String[]{"Disabled", "Enabled", "Hold", "Toggle"});
+        JComboBox<Object> spyglassDropdownHotkey = new JComboBox<>(new String[]{"Control", "Shift"});
+        String startMode = config.getString(ConfigHelper.PROFILE.spyglassMode);
+        boolean startEnabled = config.getBool(ConfigHelper.PROFILE.enableSpyglass);
+        spyglassDropdownHotkey.setVisible(false);
+        if(!startMode.equals("none") && startEnabled) {
+            switch(startMode) {
+                case "hold":
+                    spyglassDropdownEnabled.setSelectedIndex(2);
+                    break;
+                case "toggle":
+                    spyglassDropdownEnabled.setSelectedIndex(3);
+                    break;
+            }
+            spyglassDropdownHotkey.setVisible(true);
+        } else if(startMode.equals("none") && startEnabled){
+            spyglassDropdownEnabled.setSelectedIndex(1);
+        } else {
+            spyglassDropdownEnabled.setSelectedIndex(0);
+        }
+
+        switch(config.getInt(ConfigHelper.PROFILE.spyglassHotkey)) {
+            case KeyEvent.VK_CONTROL: spyglassDropdownHotkey.setSelectedIndex(0); break;
+            case KeyEvent.VK_SHIFT: spyglassDropdownHotkey.setSelectedIndex(1); break;
+        }
+        spyglassDropdownEnabled.addItemListener(e -> {
+            boolean enableSpyglass;
+            String spyglassMode;
+            switch(spyglassDropdownEnabled.getSelectedIndex()) {
+                case 0:
+                    spyglassDropdownHotkey.setVisible(false);
+                    enableSpyglass = false; spyglassMode = "none";
+                    break;
+                case 1:
+                    spyglassDropdownHotkey.setVisible(false);
+                    enableSpyglass = true; spyglassMode = "none";
+                    break;
+                case 2:
+                    spyglassDropdownHotkey.setVisible(true);
+                    enableSpyglass = true; spyglassMode = "hold";
+                    break;
+                case 3:
+                    spyglassDropdownHotkey.setVisible(true);
+                    enableSpyglass = true; spyglassMode = "toggle";
+                    break;
+                default:
+                    enableSpyglass = false; spyglassMode = "none";
+            }
+            config.set(ConfigHelper.PROFILE.enableSpyglass, enableSpyglass);
+            config.set(ConfigHelper.PROFILE.spyglassMode, spyglassMode);
+        });
+        spyglassDropdownHotkey.addItemListener(e -> {
+            switch(spyglassDropdownHotkey.getSelectedIndex()) {
+                case 0: config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_CONTROL); break;
+                case 1: config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_SHIFT); break;
+            }
+        });
+
+        JPanel row7_1 = new JPanel(getGridLayoutWithMargin(0, 2, 0));
+        row7_1.add(spyglassDropdownEnabled);
+        row7_1.add(spyglassDropdownHotkey);
+        row7.add(row7_1);
+        options.add(row7);
+
+        JPanel row8 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row8.add(createJLabel("Spyglass zoom", JLabel.RIGHT, JLabel.CENTER));
+        JComboBox<Object> spyglassZoomDropdown = new JComboBox<>(new String[]{"8x8", "16x16", "32x32", "64x64"});
+        switch(config.getInt(ConfigHelper.PROFILE.spyglassZoom)) {
+            case 8: spyglassZoomDropdown.setSelectedIndex(0); break;
+            case 16: spyglassZoomDropdown.setSelectedIndex(1); break;
+            case 32: spyglassZoomDropdown.setSelectedIndex(2); break;
+            case 64: spyglassZoomDropdown.setSelectedIndex(3); break;
+        }
+        spyglassZoomDropdown.addItemListener(e -> {
+            int zoom = 16;
+            switch(spyglassZoomDropdown.getSelectedIndex()) {
+                case 0: zoom = 8; break;
+                case 1: zoom = 16; break;
+                case 2: zoom = 32; break;
+                case 3: zoom = 64; break;
+            }
+            config.set(ConfigHelper.PROFILE.spyglassZoom, zoom);
+        });
+        row8.add(spyglassZoomDropdown);
+        options.add(row8);
+
         //END ELEMENTS
 
         JButton saveAndClose = new JButton("Save and close");
@@ -344,11 +432,11 @@ public class ConfigWindow extends JFrame {
 
         GridLayout layout = new GridLayout(0,4);
         layout.setHgap(hGap);
-        JPanel row7 = new JPanel(layout);
-        row7.add(new JPanel());
-        row7.add(saveButton);
-        row7.add(saveAndClose);
-        options.add(row7);
+        JPanel saveRow= new JPanel(layout);
+        saveRow.add(new JPanel());
+        saveRow.add(saveButton);
+        saveRow.add(saveAndClose);
+        options.add(saveRow);
 
         snipConfigPanel.add(options);
 
