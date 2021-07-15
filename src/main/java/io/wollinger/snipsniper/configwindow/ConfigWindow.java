@@ -346,28 +346,30 @@ public class ConfigWindow extends JFrame {
             case KeyEvent.VK_SHIFT: spyglassDropdownHotkey.setSelectedIndex(1); break;
         }
         spyglassDropdownEnabled.addItemListener(e -> {
+            boolean enableSpyglass;
+            String spyglassMode;
             switch(spyglassDropdownEnabled.getSelectedIndex()) {
                 case 0:
                     spyglassDropdownHotkey.setVisible(false);
-                    config.set(ConfigHelper.PROFILE.enableSpyglass, false);
-                    config.set(ConfigHelper.PROFILE.spyglassMode, "none");
+                    enableSpyglass = false; spyglassMode = "none";
                     break;
                 case 1:
                     spyglassDropdownHotkey.setVisible(false);
-                    config.set(ConfigHelper.PROFILE.enableSpyglass, true);
-                    config.set(ConfigHelper.PROFILE.spyglassMode, "none");
+                    enableSpyglass = true; spyglassMode = "none";
                     break;
                 case 2:
                     spyglassDropdownHotkey.setVisible(true);
-                    config.set(ConfigHelper.PROFILE.enableSpyglass, true);
-                    config.set(ConfigHelper.PROFILE.spyglassMode, "hold");
+                    enableSpyglass = true; spyglassMode = "hold";
                     break;
                 case 3:
                     spyglassDropdownHotkey.setVisible(true);
-                    config.set(ConfigHelper.PROFILE.enableSpyglass, true);
-                    config.set(ConfigHelper.PROFILE.spyglassMode, "toggle");
+                    enableSpyglass = true; spyglassMode = "toggle";
                     break;
+                default:
+                    enableSpyglass = false; spyglassMode = "none";
             }
+            config.set(ConfigHelper.PROFILE.enableSpyglass, enableSpyglass);
+            config.set(ConfigHelper.PROFILE.spyglassMode, spyglassMode);
         });
         spyglassDropdownHotkey.addItemListener(e -> {
             switch(spyglassDropdownHotkey.getSelectedIndex()) {
@@ -381,6 +383,28 @@ public class ConfigWindow extends JFrame {
         row7_1.add(spyglassDropdownHotkey);
         row7.add(row7_1);
         options.add(row7);
+
+        JPanel row8 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
+        row8.add(createJLabel("Spyglass zoom", JLabel.RIGHT, JLabel.CENTER));
+        JComboBox<Object> spyglassZoomDropdown = new JComboBox<>(new String[]{"8x8", "16x16", "32x32", "64x64"});
+        switch(config.getInt(ConfigHelper.PROFILE.spyglassZoom)) {
+            case 8: spyglassZoomDropdown.setSelectedIndex(0); break;
+            case 16: spyglassZoomDropdown.setSelectedIndex(1); break;
+            case 32: spyglassZoomDropdown.setSelectedIndex(2); break;
+            case 64: spyglassZoomDropdown.setSelectedIndex(3); break;
+        }
+        spyglassZoomDropdown.addItemListener(e -> {
+            int zoom = 16;
+            switch(spyglassZoomDropdown.getSelectedIndex()) {
+                case 0: zoom = 8; break;
+                case 1: zoom = 16; break;
+                case 2: zoom = 32; break;
+                case 3: zoom = 64; break;
+            }
+            config.set(ConfigHelper.PROFILE.spyglassZoom, zoom);
+        });
+        row8.add(spyglassZoomDropdown);
+        options.add(row8);
 
         //END ELEMENTS
 

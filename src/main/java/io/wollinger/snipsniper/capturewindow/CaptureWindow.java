@@ -313,13 +313,12 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 			if(cPointLive != null && config.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
 				boolean displaySpyglass = true;
-				boolean isHotkey = listener.isPressed(config.getInt(ConfigHelper.PROFILE.spyglassHotkey));
 				switch(config.getString(ConfigHelper.PROFILE.spyglassMode)) {
 					case "hold":
-						if(!isHotkey) displaySpyglass = false;
+						if(!listener.isPressed(config.getInt(ConfigHelper.PROFILE.spyglassHotkey))) displaySpyglass = false;
 						break;
 					case "toggle":
-						if(isHotkey) spyglassToggle = !spyglassToggle;
+						if(listener.isPressedOnce(config.getInt(ConfigHelper.PROFILE.spyglassHotkey))) spyglassToggle = !spyglassToggle;
 						displaySpyglass = spyglassToggle;
 						break;
 				}
