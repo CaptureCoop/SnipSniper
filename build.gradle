@@ -39,7 +39,7 @@ task preBuild {
     String type = System.getProperty("type")
     if(type == null) type = "dev"
 
-    if(!grgit.status().clean)
+    if(!grgit.status().clean && System.getenv("GITHUB_RUN_NUMBER") == null)
         type = "dirty"
 
     File f = new File(rootProject.projectDir.getAbsolutePath() + "//src//main//resources//cfg//buildinfo.cfg")
