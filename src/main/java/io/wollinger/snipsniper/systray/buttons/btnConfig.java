@@ -10,14 +10,7 @@ public class btnConfig extends MenuItem{
 
 	public btnConfig(Sniper sniperInstance) {
 		setLabel(LangManager.getItem("menu_config"));
-		addActionListener(listener -> {
-			if(sniperInstance.cfgWnd == null) {
-				sniperInstance.cfgWnd = new ConfigWindow(sniperInstance.cfg, ConfigWindow.PAGE.snipPanel);
-				sniperInstance.cfgWnd.addCustomWindowListener(() -> sniperInstance.cfgWnd = null);
-			} else {
-				sniperInstance.cfgWnd.requestFocus();
-			}
-		});
+		addActionListener(listener -> sniperInstance.openConfigWindow());
 		
 	}
 }

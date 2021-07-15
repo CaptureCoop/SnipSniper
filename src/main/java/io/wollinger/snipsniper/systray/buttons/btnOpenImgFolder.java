@@ -15,7 +15,7 @@ public class btnOpenImgFolder extends MenuItem{
 		setLabel(LangManager.getItem("menu_open_image_folder"));
 		addActionListener(listener -> {
 			try {
-				Desktop.getDesktop().open(new File(sniperInstance.cfg.getString(ConfigHelper.PROFILE.pictureFolder)));
+				Desktop.getDesktop().open(new File(sniperInstance.getConfig().getString(ConfigHelper.PROFILE.pictureFolder)));
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

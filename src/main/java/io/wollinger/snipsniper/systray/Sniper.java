@@ -10,14 +10,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.utils.*;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
@@ -34,12 +31,12 @@ import org.jnativehook.mouse.NativeMouseListener;
 public class Sniper implements NativeKeyListener, NativeMouseListener {
 	public int profileID; //0 = default
 	
-	CaptureWindow cWnd;
-	public ConfigWindow cfgWnd;
-	public Config cfg;
-	public TrayIcon trayIcon;
+	private CaptureWindow captureWindow;
+	private ConfigWindow configWindow;
+	private Config config;
+	private TrayIcon trayIcon;
 	
-	Sniper instance;
+	private Sniper instance;
 	
 	private final Menu createProfilesMenu = new Menu(LangManager.getItem("menu_create_profile"));
 	private final Menu removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile"));
@@ -47,7 +44,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	public Sniper(int profileID) {
 		instance = this;
 		this.profileID = profileID;
-		cfg = new Config("profile" + profileID + ".cfg", "CFG" + profileID, "profile_defaults.cfg");
+		config = new Config("profile" + profileID + ".cfg", "CFG" + profileID, "profile_defaults.cfg");
 
 		LogManager.log(getID(), "Loading profile " + profileID, Level.INFO);
 
@@ -94,8 +91,8 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 					@Override
 					public void mouseClicked(MouseEvent mouseEvent) {
 						if (mouseEvent.getButton() == 1) {
-							if (cWnd == null && SnipSniper.isIdle()) {
-								cWnd = new CaptureWindow(instance);
+							if (captureWindow == null && SnipSniper.isIdle()) {
+								captureWindow = new CaptureWindow(instance);
 								SnipSniper.setIdle(false);
 							}
 						}
@@ -158,7 +155,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		GlobalScreen.removeNativeKeyListener(this);
 		GlobalScreen.removeNativeMouseListener(this);
 		SystemTray.getSystemTray().remove(trayIcon);
-		cfg.deleteFile();
+		config.deleteFile();
 		trayIcon = null;
 	}
 
@@ -166,7 +163,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		if(!SnipSniper.hasProfile(id)) {
 			LogManager.log(getID(), "Creating profile " + (id + 1), Level.INFO);
 			SnipSniper.setProfile(id, new Sniper(id + 1));
-			SnipSniper.getProfile(id).cfg.save();
+			SnipSniper.getProfile(id).config.save();
 		}
 	}
 
@@ -179,26 +176,26 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	}
 
 	public void killCaptureWindow() {
-		if(cWnd != null) {
+		if(captureWindow != null) {
 			if(SystemTray.isSupported()) trayIcon.setImage(Icons.icons[profileID]);
 			SnipSniper.setIdle(true);
-			cWnd.screenshot = null;
-			cWnd.screenshotTinted = null;
-			cWnd.isRunning = false;
-			cWnd.dispose();
-			cWnd = null;
+			captureWindow.screenshot = null;
+			captureWindow.screenshotTinted = null;
+			captureWindow.isRunning = false;
+			captureWindow.dispose();
+			captureWindow = null;
 			System.gc();
 		}
 	}
 
 	public void checkNativeKey(String identifier, int pressedKey) {
-		String hotkey = cfg.getString(ConfigHelper.PROFILE.hotkey);
+		String hotkey = config.getString(ConfigHelper.PROFILE.hotkey);
 		if(!hotkey.equals("NONE")) {
 			if(hotkey.startsWith(identifier)) {
 				int key = Integer.parseInt(hotkey.replace(identifier, ""));
 				if(pressedKey == key) {
-					if(cWnd == null && SnipSniper.isIdle()) {
-						cWnd = new CaptureWindow(instance);
+					if(captureWindow == null && SnipSniper.isIdle()) {
+						captureWindow = new CaptureWindow(instance);
 						SnipSniper.setIdle(false);
 					}
 				}
@@ -208,6 +205,23 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 	public String getID() {
 		return "PROFILE " + profileID;
+	}
+
+	public Config getConfig() {
+		return config;
+	}
+
+	public TrayIcon getTrayIcon() {
+		return trayIcon;
+	}
+
+	public void openConfigWindow() {
+		if(configWindow == null) {
+			configWindow = new ConfigWindow(config, ConfigWindow.PAGE.snipPanel);
+			configWindow.addCustomWindowListener(() -> configWindow = null);
+		} else {
+			configWindow.requestFocus();
+		}
 	}
 
 	@Override

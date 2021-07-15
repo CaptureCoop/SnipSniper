@@ -14,6 +14,7 @@ import java.util.logging.Level;
 
 import javax.swing.JFrame;
 
+import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.systray.Sniper;
@@ -21,32 +22,34 @@ import io.wollinger.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
 
 public class CaptureWindow extends JFrame implements WindowListener{
-	Sniper sniperInstance;
+	private Sniper sniperInstance;
+	private Config config;
 	private final RenderingHints qualityHints;
 
-	Point startPoint;
-	Point startPointTotal;
-	Point cPoint;
-	Point cPointAlt;
-	Point cPointLive;
+	Point startPoint; //Mouse position given by event *1
+	Point startPointTotal; //Mouse position given by MouseInfo.getPointerInfo (Different then the above in some scenarios) *2
+	Point cPoint; //See *1
+	Point cPointTotal; //See *2
+	Point cPointLive; //Live position, cPoint and cPointTotal are only set once dragging mouse. cPointLive is always set
 	private Rectangle bounds = null;
 	
 	public BufferedImage screenshot = null;
 	public BufferedImage screenshotTinted = null;
-	
+
 	public boolean startedCapture = false;
 	public boolean isRunning = true;
 
 	public CaptureWindow(Sniper sniperInstance) {
 		this.sniperInstance = sniperInstance;
+		config = sniperInstance.getConfig();
 
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-		if(SystemTray.isSupported()) sniperInstance.trayIcon.setImage(Icons.alt_icons[sniperInstance.profileID]);
-		if(sniperInstance.cfg.getInt(ConfigHelper.PROFILE.snipeDelay) != 0) {
+		if(SystemTray.isSupported()) sniperInstance.getTrayIcon().setImage(Icons.alt_icons[sniperInstance.profileID]);
+		if(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) != 0) {
 			try {
-				Thread.sleep(sniperInstance.cfg.getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L);
+				Thread.sleep(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L);
 			} catch (InterruptedException e) {
 				LogManager.log(sniperInstance.getID(), "There was an error with the delay! Message: " + e.getMessage(), Level.SEVERE);
 				LogManager.log(sniperInstance.getID(), "More info: " + Arrays.toString(e.getStackTrace()), Level.SEVERE);
@@ -82,7 +85,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	public void loop() {
 		Thread thread = new Thread(() -> {
-			final double nsPerTick = 1000000000D / sniperInstance.cfg.getInt(ConfigHelper.PROFILE.maxFPS);
+			final double nsPerTick = 1000000000D / config.getInt(ConfigHelper.PROFILE.maxFPS);
 			long lastTime = System.nanoTime();
 			long lastTimer = System.currentTimeMillis();
 			double delta = 0;
@@ -179,11 +182,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		isRunning = false;
 		dispose();
 
-		int borderSize = sniperInstance.cfg.getInt(ConfigHelper.PROFILE.borderSize);
+		int borderSize = config.getInt(ConfigHelper.PROFILE.borderSize);
 		Rectangle captureArea = calcRectangle();
 
 		if (captureArea.width == 0 || captureArea.height == 0) {
-			sniperInstance.trayIcon.displayMessage("Error: Screenshot width or height is 0!", "ERROR", MessageType.ERROR);
+			sniperInstance.getTrayIcon().displayMessage("Error: Screenshot width or height is 0!", "ERROR", MessageType.ERROR);
 			sniperInstance.killCaptureWindow();
 			return;
 		}
@@ -191,7 +194,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		BufferedImage croppedBuffer = screenshot.getSubimage(captureArea.x, captureArea.y, captureArea.width, captureArea.height);
 		finalImg = new BufferedImage(croppedBuffer.getWidth() + borderSize *2, croppedBuffer.getHeight() + borderSize *2, BufferedImage.TYPE_INT_RGB);
 		Graphics g = finalImg.getGraphics();
-		g.setColor(sniperInstance.cfg.getColor(ConfigHelper.PROFILE.borderColor));
+		g.setColor(config.getColor(ConfigHelper.PROFILE.borderColor));
 		g.fillRect(0, 0, finalImg.getWidth(),finalImg.getHeight());
 		g.drawImage(croppedBuffer, borderSize, borderSize, croppedBuffer.getWidth(), croppedBuffer.getHeight(), this);
 		g.dispose();
@@ -199,29 +202,29 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		String finalLocation = null;
 		boolean inClipboard = false;
 
-		if(sniperInstance.cfg.getBool(ConfigHelper.PROFILE.saveToDisk)) {
-			finalLocation = Utils.saveImage(sniperInstance.getID(), finalImg, "", sniperInstance.cfg);
+		if(config.getBool(ConfigHelper.PROFILE.saveToDisk)) {
+			finalLocation = Utils.saveImage(sniperInstance.getID(), finalImg, "", config);
 		}
 
-		if(sniperInstance.cfg.getBool(ConfigHelper.PROFILE.copyToClipboard)) {
+		if(config.getBool(ConfigHelper.PROFILE.copyToClipboard)) {
 			Utils.copyToClipboard(sniperInstance.getID(), finalImg);
 			inClipboard = true;
 		}
 
-		int posX = (int) cPointAlt.getX();
-		int posY = (int) cPointAlt.getY();
+		int posX = (int) cPointTotal.getX();
+		int posY = (int) cPointTotal.getY();
 		boolean leftToRight = false;
 
-		if (!(startPointTotal.getX() > cPointAlt.getX())) {
+		if (!(startPointTotal.getX() > cPointTotal.getX())) {
 			posX -= finalImg.getWidth();
 			leftToRight = true;
 		}
-		if (!(startPointTotal.getY() > cPointAlt.getY())) {
+		if (!(startPointTotal.getY() > cPointTotal.getY())) {
 			posY -= finalImg.getHeight();
 			leftToRight = true;
 		}
-		if (sniperInstance.cfg.getBool(ConfigHelper.PROFILE.openEditor)) {
-			new SCEditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", sniperInstance.cfg, leftToRight, finalLocation, inClipboard, false);
+		if (config.getBool(ConfigHelper.PROFILE.openEditor)) {
+			new SCEditorWindow("EDI" + sniperInstance.profileID, finalImg, posX, posY, "SnipSniper Editor", config, leftToRight, finalLocation, inClipboard, false);
 		}
 
 		sniperInstance.killCaptureWindow();
@@ -238,7 +241,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	private Rectangle lastRect;
 
 	public void paint(Graphics g) {
-		boolean directDraw = sniperInstance.cfg.getBool(ConfigHelper.PROFILE.directDraw);
+		boolean directDraw = config.getBool(ConfigHelper.PROFILE.directDraw);
 		//TODO: Direct draw runs horribly on linux. Check out why?
 
 		if(lastRect == null)
@@ -306,7 +309,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				globalBuffer.drawImage(selectBufferImage, selectArea.x, selectArea.y, selectArea.width, selectArea.height, selectArea.x, selectArea.y, selectArea.width, selectArea.height, this);
 			}
 
-			if(cPointLive != null && sniperInstance.cfg.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
+			if(cPointLive != null && config.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
 				Rectangle spyglassRectangle = null;
 
 				GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -355,10 +358,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	}
 
 	private void generateSpyglass(BufferedImage image) {
-		final int ROWS = sniperInstance.cfg.getInt(ConfigHelper.PROFILE.spyglassZoom);
-		final int THICKNESS = sniperInstance.cfg.getInt(ConfigHelper.PROFILE.spyglassThickness);
+		final int ROWS = config.getInt(ConfigHelper.PROFILE.spyglassZoom);
+		final int THICKNESS = config.getInt(ConfigHelper.PROFILE.spyglassThickness);
 
-		if(sniperInstance.cfg.getBool(ConfigHelper.PROFILE.spyglassPixelByPixel))
+		if(config.getBool(ConfigHelper.PROFILE.spyglassPixelByPixel))
 			generateSpyglassPixelByPixel(image, ROWS, THICKNESS);
 		else
 			generateSpyglassDirect(image, ROWS, THICKNESS);
@@ -417,6 +420,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		g.setStroke(oldStroke);
 
 		g.dispose();
+	}
+
+	public Sniper getSniperInstance() {
+		return sniperInstance;
 	}
 
 	@Override
