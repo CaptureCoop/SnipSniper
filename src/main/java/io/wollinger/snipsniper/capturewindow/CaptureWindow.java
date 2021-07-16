@@ -22,16 +22,11 @@ import io.wollinger.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
 
 public class CaptureWindow extends JFrame implements WindowListener{
-	private Sniper sniperInstance;
-	private Config config;
+	private final Sniper sniperInstance;
+	private final Config config;
 	private final RenderingHints qualityHints;
-	private CaptureWindowListener listener;
+	private final CaptureWindowListener listener;
 
-	Point startPoint; //Mouse position given by event *1
-	Point startPointTotal; //Mouse position given by MouseInfo.getPointerInfo (Different then the above in some scenarios) *2
-	Point cPoint; //See *1
-	Point cPointTotal; //See *2
-	Point cPointLive; //Live position, cPoint and cPointTotal are only set once dragging mouse. cPointLive is always set
 	private Rectangle bounds = null;
 	
 	public BufferedImage screenshot = null;
@@ -158,6 +153,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	Rectangle calcRectangle() {
 		int minX = 0, maxX = 0, minY = 0, maxY = 0;
+		Point startPoint = listener.getStartPoint(PointType.NORMAL);
+		Point cPoint = listener.getCurrentPoint(PointType.NORMAL);
 		if(startPoint != null && cPoint != null) {
 			minX = Math.min( startPoint.x, cPoint.x);
 			maxX = Math.max( startPoint.x, cPoint.x);
@@ -212,6 +209,9 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			inClipboard = true;
 		}
 
+		Point startPointTotal = listener.getStartPoint(PointType.TOTAL);
+		Point cPointTotal = listener.getCurrentPoint(PointType.TOTAL);
+
 		int posX = (int) cPointTotal.getX();
 		int posY = (int) cPointTotal.getY();
 		boolean leftToRight = false;
@@ -237,7 +237,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	private BufferedImage selectBufferImage;
 	private BufferedImage spyglassBufferImage;
 
-	private RectangleCollection allBounds = new RectangleCollection();
+	private final RectangleCollection allBounds = new RectangleCollection();
 
 	private Rectangle lastRect;
 	private boolean spyglassToggle = false;
@@ -255,7 +255,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			selectBufferImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
 		}
 
-		if(spyglassBufferImage == null) {
+		if(spyglassBufferImage == null && config.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
 			spyglassBufferImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
 		}
 
@@ -297,6 +297,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				}
 				hasSaved = true;
 			}
+
+			Point cPoint = listener.getCurrentPoint(PointType.NORMAL);
+			Point cPointLive = listener.getCurrentPoint(PointType.LIVE);
+			Point startPoint = listener.getStartPoint(PointType.NORMAL);
 
 			if(selectArea != null && cPoint != null && startedCapture) {
 				selectBuffer.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
@@ -383,6 +387,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	private void generateSpyglassDirect(BufferedImage image, int rows, int thickness) {
 		Graphics2D g = (Graphics2D) image.getGraphics();
 
+		Point cPointLive = listener.getCurrentPoint(PointType.LIVE);
+
 		g.drawImage(globalBufferImage, 0, 0, image.getWidth(), image.getHeight(), cPointLive.x - rows/2, cPointLive.y - rows/2, cPointLive.x + rows/2, cPointLive.y + rows/2, this);
 
 		g.setColor(Color.BLACK);
@@ -405,6 +411,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		Graphics2D g = (Graphics2D) image.getGraphics();
 
 		final int ROW_SIZE = image.getWidth() / rows;
+
+		Point cPointLive = listener.getCurrentPoint(PointType.LIVE);
 
 		g.setRenderingHints(qualityHints);
 

@@ -1,6 +1,6 @@
 package io.wollinger.snipsniper.capturewindow;
 
-import java.awt.MouseInfo;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -8,8 +8,14 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 public class CaptureWindowListener implements KeyListener, MouseListener, MouseMotionListener{
-	CaptureWindow wndInstance;
-	private boolean[] keys = new boolean[4096];
+	private final CaptureWindow wndInstance;
+	private final boolean[] keys = new boolean[4096];
+
+	private Point startPoint; //Mouse position given by event *1
+	private Point startPointTotal; //Mouse position given by MouseInfo.getPointerInfo (Different then the above in some scenarios) *2
+	private Point cPoint; //See *1
+	private Point cPointTotal; //See *2
+	private Point cPointLive; //Live position, cPoint and cPointTotal are only set once dragging mouse. cPointLive is always set
 
 	public CaptureWindowListener(CaptureWindow wndInstance) {
 		this.wndInstance = wndInstance;
@@ -19,13 +25,13 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mouseDragged(MouseEvent mouseEvent) {
-		wndInstance.cPoint = mouseEvent.getPoint();
-		wndInstance.cPointLive = mouseEvent.getPoint();
+		cPoint = mouseEvent.getPoint();
+		cPointLive = mouseEvent.getPoint();
 	}
 	
 	@Override
 	public void mouseMoved(MouseEvent mouseEvent) {
-		wndInstance.cPointLive = mouseEvent.getPoint();
+		cPointLive = mouseEvent.getPoint();
 	}
 
 	//Mouse Listener
@@ -35,7 +41,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	
 	@Override
 	public void mouseEntered(MouseEvent mouseEvent) {
-		wndInstance.cPointLive = mouseEvent.getPoint();
+		cPointLive = mouseEvent.getPoint();
 	}
 
 	@Override
@@ -44,8 +50,8 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
 		if(mouseEvent.getButton() == 1) {
-			wndInstance.startPoint = mouseEvent.getPoint();
-			wndInstance.startPointTotal = MouseInfo.getPointerInfo().getLocation();
+			startPoint = mouseEvent.getPoint();
+			startPointTotal = MouseInfo.getPointerInfo().getLocation();
 			wndInstance.startedCapture = true;
 		}
 	}
@@ -53,7 +59,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
 		if(mouseEvent.getButton() == 1) {
-			wndInstance.cPointTotal = MouseInfo.getPointerInfo().getLocation();
+			cPointTotal = MouseInfo.getPointerInfo().getLocation();
 			wndInstance.capture();
 		}
 	}
@@ -83,5 +89,22 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 		boolean returnValue = keys[keyCode];
 		keys[keyCode] = false;
 		return returnValue;
+	}
+
+	public Point getStartPoint(PointType type) {
+		switch(type) {
+			case NORMAL: return startPoint;
+			case TOTAL: return startPointTotal;
+		}
+		return null;
+	}
+
+	public Point getCurrentPoint(PointType type) {
+		switch(type) {
+			case NORMAL: return cPoint;
+			case TOTAL: return cPointTotal;
+			case LIVE: return cPointLive;
+		}
+		return null;
 	}
 }
