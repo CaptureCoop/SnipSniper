@@ -1,7 +1,6 @@
 package io.wollinger.snipsniper.systray.buttons;
 
 import io.wollinger.snipsniper.SnipSniper;
-import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.LangManager;
@@ -14,18 +13,17 @@ import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 
 public class btnAbout extends MenuItem{
-	private final Sniper sniper;
 
 	private static String html;
 
 	//LOGO USES AGENCY FB BOLD
-	public btnAbout(Sniper sniper) {
-		this.sniper = sniper;
+	public btnAbout() {
 		setLabel(LangManager.getItem("menu_about"));
 
 		try {
@@ -43,24 +41,39 @@ public class btnAbout extends MenuItem{
 
 			JPanel panel = new JPanel(new GridLayout(1,0));
 
-			ImageIcon icon = new ImageIcon(Icons.icon_taskbar.getScaledInstance(100,100,Image.SCALE_DEFAULT));
+			int iconSize = 100;
+			ImageIcon icon = new ImageIcon(Icons.icon_taskbar.getScaledInstance(iconSize,iconSize,Image.SCALE_DEFAULT));
 			JLabel label = new JLabel(icon);
 			label.addMouseListener(new MouseAdapter() {
 				int index = 0;
 
+				BufferedImage[] icons = {Icons.icon_taskbar, Icons.icon_editor, Icons.icon_viewer, Icons.icon_console};
+				HashMap<String, Image> cache = new HashMap<>();
+
 				@Override
-				public void mouseClicked(MouseEvent e) {
-					super.mouseClicked(e);
-					switch(index) {
-						case 0: setNewImage(Icons.icon_editor); index++; break;
-						case 1: setNewImage(Icons.icon_viewer); index++; break;
-						case 2: setNewImage(Icons.icon_console); index++; break;
-						case 3: setNewImage(Icons.icon_taskbar); index = 0; break;
-					}
+				public void mouseReleased(MouseEvent mouseEvent) {
+					super.mouseClicked(mouseEvent);
+
+					if(index >= icons.length - 1) index = 0;
+					else index++;
+					setNewImage(index, iconSize);
 				}
 
-				public void setNewImage(BufferedImage image) {
-					label.setIcon(new ImageIcon(image.getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
+				@Override
+				public void mousePressed(MouseEvent mouseEvent) {
+					setNewImage(index, (int) (iconSize / 1.2F));
+				}
+
+				public void setNewImage(int index, int size) {
+					Image image;
+					String key = index + "_" + size; //We cache those because we really like clicking the icons really fast :^)
+					if(cache.containsKey(key)) {
+						image = cache.get(key);
+					} else {
+						image = icons[index].getScaledInstance(size, size, Image.SCALE_DEFAULT);
+						cache.put(key, image);
+					}
+					label.setIcon(new ImageIcon(image));
 					frame.setIconImage(image);
 				}
 			});
@@ -125,5 +138,5 @@ public class btnAbout extends MenuItem{
 		html = html.replace("%ABOUT_CD%", LangManager.getItem("about_cd"));
 		html = html.replace("%ABOUT_MATH%", LangManager.getItem("about_math"));
 	}
-	
+
 }

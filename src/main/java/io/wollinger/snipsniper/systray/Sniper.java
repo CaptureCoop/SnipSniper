@@ -78,7 +78,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 				popup.add(consoleItem);
 			}
 
-			popup.add(new btnAbout(this));
+			popup.add(new btnAbout());
 
 			popup.add(new btnExit());
 
