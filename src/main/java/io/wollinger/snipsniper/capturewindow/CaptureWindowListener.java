@@ -53,6 +53,8 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 			startPoint = mouseEvent.getPoint();
 			startPointTotal = MouseInfo.getPointerInfo().getLocation();
 			wndInstance.startedCapture = true;
+		} else if (mouseEvent.getButton() == 3) {
+			wndInstance.getSniperInstance().killCaptureWindow();
 		}
 	}
 
