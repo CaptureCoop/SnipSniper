@@ -10,7 +10,7 @@
     "lang_zh": "Chinese",
 
     "menu_open_image_folder": "Open image folder",
-    "menu_config": "Config",
+    "menu_config": "Settings",
     "menu_create_profile": "Create profile",
     "menu_remove_profile": "Remove profile",
     "menu_profile": "Profile",
@@ -21,7 +21,7 @@
     "about_cd": "Creative director",
     "about_math": "Math",
 
-    "config_label_config": "Config",
+    "config_label_config": "Settings",
     "config_label_hotkey": "Capture hotkey",
     "config_label_saveimages": "Save images on capture",
     "config_label_copyclipboard": "Copy images to clipboard on capture",

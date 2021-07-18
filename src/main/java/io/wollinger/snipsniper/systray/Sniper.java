@@ -54,23 +54,8 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			PopupMenu popup = new PopupMenu();
 
 			popup.add(new btnOpenImgFolder(this));
+			popup.addSeparator();
 			popup.add(new btnConfig(this));
-
-			popup.add(createProfilesMenu);
-
-			popup.add(removeProfilesMenu);
-
-			Menu languageMenu = new Menu(LangManager.getItem("menu_languages"));
-			for (String language : LangManager.languages) {
-				MenuItem mi = new MenuItem(LangManager.getItem("lang_" + language));
-				mi.addActionListener(e -> {
-					SnipSniper.getConfig().set(ConfigHelper.MAIN.language, language);
-					SnipSniper.getConfig().save();
-					SnipSniper.resetProfiles();
-				});
-				languageMenu.add(mi);
-			}
-			popup.add(languageMenu);
 
 			if (SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 				MenuItem consoleItem = new MenuItem("Console");
@@ -79,7 +64,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			}
 
 			popup.add(new btnAbout());
-
+			popup.addSeparator();
 			popup.add(new btnExit());
 
 			try {
