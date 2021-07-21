@@ -9,7 +9,8 @@ public class InfoButton extends JButton {
     private JFrame window;
 
     public InfoButton(String info) {
-        this.info = info;
+        this.info = "Coming soon";
+        //this.info = info;
         setText("?");
 
         addMouseListener(new MouseAdapter() {
@@ -62,8 +63,13 @@ public class InfoButton extends JButton {
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setLocation((int) (getLocationOnScreen().getX() + getWidth()), (int) (getLocationOnScreen().getY()));
-        window.add(new JLabel(info));
-        window.setIconImage(Icons.icon_questionmark);
+        window.getContentPane().setBackground(Color.WHITE);
+        window.setUndecorated(true);
+        JLabel content = new JLabel("<html><p style=\"width:256px;\">" + info + "</p></html>");
+        content.setVerticalAlignment(JLabel.TOP);
+        window.add(content);
+        window.setMinimumSize(new Dimension(256, 128));
+        window.getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
         window.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) { }
