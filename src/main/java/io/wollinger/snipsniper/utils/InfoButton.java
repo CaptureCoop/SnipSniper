@@ -39,8 +39,8 @@ public class InfoButton extends JButton {
 
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
-        g.fillRect(0,0, getWidth(), getHeight());
+        g.setColor(new Color(0,0,0,0));
+        g.drawRect(0, 0, getWidth(), getHeight());
     }
 
     public void closeWindow() {
