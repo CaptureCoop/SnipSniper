@@ -1,20 +1,76 @@
 package io.wollinger.snipsniper.utils;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 
 public class InfoButton extends JButton {
-    private String info;
+    private final String info;
+    JFrame window;
 
     public InfoButton(String info) {
         this.info = info;
         setText("?");
-        addActionListener(new ActionListener() {
+
+        addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(info);
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                new java.util.Timer().schedule(new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        Rectangle rect = new Rectangle((int) getLocationOnScreen().getX(), (int) getLocationOnScreen().getY(), getBounds().width, getBounds().height);
+                        if(rect.contains(MouseInfo.getPointerInfo().getLocation())) {
+                            openWindow();
+                        }
+                    }
+                }, 1000);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                closeWindow();
             }
         });
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        g.fillRect(0,0, getWidth(), getHeight());
+    }
+
+    public void closeWindow() {
+        if(window != null) {
+            window.dispose();
+            window = null;
+        }
+    }
+
+    public void openWindow() {
+        if(window != null) {
+            window.requestFocus();
+            return;
+        }
+        window = new JFrame();
+        window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        window.setLocation((int) (getLocationOnScreen().getX() + getWidth()), (int) (getLocationOnScreen().getY()));
+        window.add(new JLabel(info));
+        window.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) { }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) { }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                if(keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE)
+                    window.dispose();
+            }
+        });
+        window.setVisible(true);
+        window.pack();
     }
 }
