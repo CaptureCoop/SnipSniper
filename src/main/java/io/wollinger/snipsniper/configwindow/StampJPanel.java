@@ -1,6 +1,5 @@
 package io.wollinger.snipsniper.configwindow;
 
-import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.sceditor.stamps.IStamp;
 import io.wollinger.snipsniper.utils.Vector2Int;
 

@@ -6,7 +6,7 @@ import java.awt.event.*;
 
 public class InfoButton extends JButton {
     private final String info;
-    JFrame window;
+    private JFrame window;
 
     public InfoButton(String info) {
         this.info = info;
