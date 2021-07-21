@@ -491,6 +491,8 @@ public class ConfigWindow extends JFrame {
         gbc.gridwidth = 2;
         gbc.weightx = 1F;
         options.add(dropdown, gbc);
+        gbc.gridx = 2;
+        options.add(new JButton("P"), gbc);
         //BEGIN ELEMENTS
 
         gbc.gridx = 0;
@@ -503,6 +505,8 @@ public class ConfigWindow extends JFrame {
         smartPixelCheckBox.addActionListener(e -> config.set(ConfigHelper.PROFILE.smartPixel, smartPixelCheckBox.isSelected() + ""));
         gbc.gridx = 1;
         options.add(smartPixelCheckBox, gbc);
+        gbc.gridx = 2;
+        options.add(new JButton("?"), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -521,6 +525,8 @@ public class ConfigWindow extends JFrame {
         hsvSlider.setValue(config.getInt(ConfigHelper.PROFILE.hsvColorSwitchSpeed));
         gbc.gridx = 1;
         options.add(hsvSlider, gbc);
+        gbc.gridx = 2;
+        options.add(new JButton("?"), gbc);
 
         gbc.gridy = 3;
         gbc.gridx = 1;
@@ -558,6 +564,8 @@ public class ConfigWindow extends JFrame {
         previewBGToggle.addChangeListener(e -> row3_stampPreview.setBackgroundEnabled(previewBGToggle.isSelected()));
         previewToggleAndLabel.add(previewBGToggle);
         options.add(previewToggleAndLabel, gbc);
+        gbc.gridx = 2;
+        options.add(new JButton("?"), gbc);
         gbc.gridx = 0;
         gbc.insets.top = 0;
         gbc.gridy = 5;
