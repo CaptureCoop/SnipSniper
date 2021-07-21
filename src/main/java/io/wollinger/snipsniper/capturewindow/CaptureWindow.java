@@ -265,8 +265,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		Graphics2D selectBuffer = (Graphics2D) selectBufferImage.getGraphics();
 		selectBuffer.setRenderingHints(qualityHints);
 
-		Graphics2D spyglassBuffer = (Graphics2D) spyglassBufferImage.getGraphics();
-		spyglassBuffer.setRenderingHints(qualityHints);
+		Graphics2D spyglassBuffer = null;
+		if(spyglassBufferImage != null) {
+			spyglassBuffer = (Graphics2D) spyglassBufferImage.getGraphics();
+			spyglassBuffer.setRenderingHints(qualityHints);
+		}
 
 		if(directDraw) {
 			globalBuffer = (Graphics2D) g;
@@ -382,7 +385,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 		globalBuffer.dispose();
 		selectBuffer.dispose();
-		spyglassBuffer.dispose();
+		if(spyglassBuffer != null) spyglassBuffer.dispose();
 	}
 
 	private void generateSpyglass(BufferedImage image) {
