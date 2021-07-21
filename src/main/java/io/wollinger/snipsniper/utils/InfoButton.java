@@ -19,9 +19,11 @@ public class InfoButton extends JButton {
                 new java.util.Timer().schedule(new java.util.TimerTask() {
                     @Override
                     public void run() {
-                        Rectangle rect = new Rectangle((int) getLocationOnScreen().getX(), (int) getLocationOnScreen().getY(), getBounds().width, getBounds().height);
-                        if(rect.contains(MouseInfo.getPointerInfo().getLocation())) {
-                            openWindow();
+                        if(isShowing()) {
+                            Rectangle rect = new Rectangle((int) getLocationOnScreen().getX(), (int) getLocationOnScreen().getY(), getBounds().width, getBounds().height);
+                            if (rect.contains(MouseInfo.getPointerInfo().getLocation())) {
+                                openWindow();
+                            }
                         }
                     }
                 }, 1000);
