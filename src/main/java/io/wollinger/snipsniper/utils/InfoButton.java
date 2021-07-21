@@ -39,8 +39,12 @@ public class InfoButton extends JButton {
 
     @Override
     public void paint(Graphics g) {
-        g.setColor(new Color(0,0,0,0));
+        g.setColor(new Color(0, 0, 0, 0));
         g.drawRect(0, 0, getWidth(), getHeight());
+        int size = 16;
+        g.setColor(new Color(120, 255, 255, 255));
+        g.fillOval(0,0, getWidth()-1, getHeight()-1);
+        g.drawImage(Icons.icon_questionmark, getWidth() /2 - size / 2, getHeight() / 2 - size / 2, size, size, this);
     }
 
     public void closeWindow() {
@@ -59,6 +63,7 @@ public class InfoButton extends JButton {
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setLocation((int) (getLocationOnScreen().getX() + getWidth()), (int) (getLocationOnScreen().getY()));
         window.add(new JLabel(info));
+        window.setIconImage(Icons.icon_questionmark);
         window.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) { }
