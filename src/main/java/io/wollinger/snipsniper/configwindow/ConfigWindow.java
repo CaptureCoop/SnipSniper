@@ -493,7 +493,10 @@ public class ConfigWindow extends JFrame {
         gbc.weightx = 1F;
         options.add(dropdown, gbc);
         gbc.gridx = 2;
-        options.add(new JButton("P"), gbc);
+        JPanel profilePlusMinus = new JPanel(new GridLayout(0, 2));
+        profilePlusMinus.add(new JButton("+"));
+        profilePlusMinus.add(new JButton("-"));
+        options.add(profilePlusMinus, gbc);
         //BEGIN ELEMENTS
 
         gbc.gridx = 0;

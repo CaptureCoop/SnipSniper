@@ -42,10 +42,11 @@ public class InfoButton extends JButton {
     public void paint(Graphics g) {
         g.setColor(new Color(0, 0, 0, 0));
         g.drawRect(0, 0, getWidth(), getHeight());
-        int size = 16;
+        int iconSize = 16;
+        int circleSize = iconSize + 4;
         g.setColor(new Color(120, 255, 255, 255));
-        g.fillOval(0,0, getWidth()-1, getHeight()-1);
-        g.drawImage(Icons.icon_questionmark, getWidth() /2 - size / 2, getHeight() / 2 - size / 2, size, size, this);
+        g.fillOval(getWidth() /2 - circleSize / 2, getHeight() / 2 - circleSize / 2, circleSize, circleSize);
+        g.drawImage(Icons.icon_questionmark, getWidth() /2 - iconSize / 2, getHeight() / 2 - iconSize / 2, iconSize, iconSize, this);
     }
 
     public void closeWindow() {
