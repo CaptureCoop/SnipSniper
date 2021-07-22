@@ -33,7 +33,7 @@ public final class SnipSniper {
 	private static String profilesFolder;
 	private static String logFolder;
 
-	private final static int PROFILE_COUNT = 7;
+	private final static int PROFILE_COUNT = 8;
 
 	private static final Sniper[] profiles = new Sniper[PROFILE_COUNT];
 
@@ -216,16 +216,21 @@ public final class SnipSniper {
 			}
 		}
 
-		Sniper mainProfile;
+		for(Sniper sniper : profiles) {
+			if(sniper != null)
+				sniper.kill();
+		}
+
 		Arrays.fill(profiles, null);
 
-		mainProfile = new Sniper(0);
-		mainProfile.getConfig().save();
+		profiles[0] = new Sniper(0);
+		profiles[0].getConfig().save();
 
-		if(!SystemTray.isSupported()) new ConfigWindow(mainProfile.getConfig(), ConfigWindow.PAGE.snipPanel);
-		for (int i = 0; i < PROFILE_COUNT; i++) {
-			if (new File(profilesFolder + "profile" + (i + 1) + ".cfg").exists()) {
-				profiles[i] = new Sniper(i + 1);
+		if(!SystemTray.isSupported()) new ConfigWindow(profiles[0].getConfig(), ConfigWindow.PAGE.snipPanel);
+		for (int i = 1; i < PROFILE_COUNT; i++) {
+			int index = i;
+			if (new File(profilesFolder + "profile" + (index) + ".cfg").exists()) {
+				profiles[i] = new Sniper(index);
 			}
 		}
 	}
@@ -281,8 +286,16 @@ public final class SnipSniper {
 		return profilesFolder;
 	}
 
-	public static int getProfileCount() {
+	public static int getProfileCountMax() {
 		return PROFILE_COUNT;
+	}
+
+	public static int getProfileCount() {
+		int amount = 0;
+		for(int i = 0; i < profiles.length; i++)
+			if(profiles[i] != null)
+				amount++;
+		return amount;
 	}
 
 	public static String getLogFolder() {

@@ -29,7 +29,7 @@ public class Icons {
 			icon_viewer = ImageIO.read(SnipSniper.class.getResource("/res/SnSnVi.png"));
 			icon_config = ImageIO.read(SnipSniper.class.getResource("/res/SnSnCo.png"));
 			icon_console = ImageIO.read(SnipSniper.class.getResource("/res/SnSnCs.png"));
-			icon_questionmark = ImageIO.read(SnipSniper.class.getResource("/res/SnSnQm_512x512.png "));
+			icon_questionmark = ImageIO.read(SnipSniper.class.getResource("/res/SnSnQm_512x512.png"));
 
 			stamp_preview_dark = ImageIO.read(SnipSniper.class.getResource("/res/stamp_preview_dark.png"));
 			stamp_preview_light = ImageIO.read(SnipSniper.class.getResource("/res/stamp_preview_light.png"));

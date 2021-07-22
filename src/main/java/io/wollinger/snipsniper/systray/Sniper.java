@@ -37,9 +37,6 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	private TrayIcon trayIcon;
 	
 	private Sniper instance;
-	
-	private final Menu createProfilesMenu = new Menu(LangManager.getItem("menu_create_profile"));
-	private final Menu removeProfilesMenu = new Menu(LangManager.getItem("menu_remove_profile"));
 
 	public Sniper(int profileID) {
 		instance = this;
@@ -84,22 +81,16 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 					}
 
 					@Override
-					public void mouseEntered(MouseEvent mouseEvent) {
-					}
+					public void mouseEntered(MouseEvent mouseEvent) { }
 
 					@Override
-					public void mouseExited(MouseEvent mouseEvent) {
-					}
+					public void mouseExited(MouseEvent mouseEvent) { }
 
 					@Override
-					public void mousePressed(MouseEvent mouseEvent) {
-					}
+					public void mousePressed(MouseEvent mouseEvent) { }
 
 					@Override
-					public void mouseReleased(MouseEvent mouseEvent) {
-						if (mouseEvent.getButton() == MouseEvent.BUTTON3)
-							refreshProfiles();
-					}
+					public void mouseReleased(MouseEvent mouseEvent) { }
 
 				});
 
@@ -114,50 +105,11 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		GlobalScreen.addNativeMouseListener(this);
 	}
 
-	//This refreshes the buttons so that they only show profiles that exist/don't exist respectively.
-	void refreshProfiles() {
-		LogManager.log(getID(), "Refreshing profiles in task tray", Level.INFO);
-		createProfilesMenu.removeAll();
-		removeProfilesMenu.removeAll();
-		
-		for(int i = 0; i < SnipSniper.getProfileCount(); i++) {
-			int index = i;
-			
-			if(!SnipSniper.hasProfile(index)) {
-				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
-				mi.addActionListener(listener -> addProfile(index));
-				createProfilesMenu.add(mi);
-			} else if(SnipSniper.hasProfile(index)) {
-				MenuItem mi = new MenuItem(LangManager.getItem("menu_profile") + " " + (i + 1));
-				mi.addActionListener(listener -> removeProfile(index));
-				removeProfilesMenu.add(mi);
-			}
-		}
-
-	}
-
 	public void kill() {
 		GlobalScreen.removeNativeKeyListener(this);
 		GlobalScreen.removeNativeMouseListener(this);
 		SystemTray.getSystemTray().remove(trayIcon);
-		config.deleteFile();
 		trayIcon = null;
-	}
-
-	public void addProfile(int id) {
-		if(!SnipSniper.hasProfile(id)) {
-			LogManager.log(getID(), "Creating profile " + (id + 1), Level.INFO);
-			SnipSniper.setProfile(id, new Sniper(id + 1));
-			SnipSniper.getProfile(id).config.save();
-		}
-	}
-
-	public void removeProfile(int id) {
-		if(SnipSniper.hasProfile(id)) {
-			LogManager.log(getID(), "Removing profile " + (id + 1), Level.INFO);
-			SnipSniper.getProfile(id).kill();
-			SnipSniper.removeProfile(id);
-		}
 	}
 
 	public void killCaptureWindow() {

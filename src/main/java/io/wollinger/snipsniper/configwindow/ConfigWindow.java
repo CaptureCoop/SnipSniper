@@ -5,6 +5,7 @@ import com.formdev.flatlaf.FlatIntelliJLaf;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.sceditor.stamps.*;
+import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.layout.Grid;
 import net.miginfocom.swing.MigLayout;
@@ -84,6 +85,7 @@ public class ConfigWindow extends JFrame {
     }
 
     public void refreshConfigFiles() {
+        configFiles.clear();
         File profileFolder = new File(SnipSniper.getProfilesFolder());
         File[] files = profileFolder.listFiles();
         if(files != null) {
@@ -494,8 +496,44 @@ public class ConfigWindow extends JFrame {
         options.add(dropdown, gbc);
         gbc.gridx = 2;
         JPanel profilePlusMinus = new JPanel(new GridLayout(0, 2));
-        profilePlusMinus.add(new JButton("+"));
-        profilePlusMinus.add(new JButton("-"));
+        JButton profileAddButton = new JButton("+");
+        if(SnipSniper.getProfileCount() == SnipSniper.getProfileCountMax())
+            profileAddButton.setEnabled(false);
+        profileAddButton.addActionListener(actionEvent -> {
+            for(int i = 0; i < SnipSniper.getProfileCountMax(); i++) {
+                if(SnipSniper.getProfile(i) == null) {
+                    SnipSniper.setProfile(i, new Sniper(i));
+                    Config newProfileConfig = SnipSniper.getProfile(i).getConfig();
+                    newProfileConfig.save();
+
+                    refreshConfigFiles();
+                    editorConfigPanel.removeAll();
+                    tabPane.setComponentAt(1, setupEditorPane(newProfileConfig));
+                    lastSelectedConfig = newProfileConfig;
+                    break;
+                }
+            }
+        });
+        profilePlusMinus.add(profileAddButton);
+        JButton profileRemoveButton = new JButton("-");
+        if(dropdown.getSelectedItem().equals("profile0"))
+            profileRemoveButton.setEnabled(false);
+        profileRemoveButton.addActionListener(actionEvent -> {
+            if(!dropdown.getSelectedItem().equals("profile0")) {
+                config.deleteFile();
+                SnipSniper.resetProfiles();
+                refreshConfigFiles();
+                editorConfigPanel.removeAll();
+                int newIndex = dropdown.getSelectedIndex() - 1;
+                if(newIndex < 0)
+                    newIndex = dropdown.getSelectedIndex() + 1;
+                Config newConfig = new Config(dropdown.getItemAt(newIndex) + ".cfg", "CFGT", "profile_defaults.cfg");
+                tabPane.setComponentAt(1, setupEditorPane(newConfig));
+                lastSelectedConfig = newConfig;
+            }
+
+        });
+        profilePlusMinus.add(profileRemoveButton);
         options.add(profilePlusMinus, gbc);
         //BEGIN ELEMENTS
 
