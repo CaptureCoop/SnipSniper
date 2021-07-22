@@ -6,6 +6,7 @@ import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -68,8 +69,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 				trayIcon = new TrayIcon(Icons.icons[profileID], "SnipSniper (Profile " + profileID + ")", popup);
 				trayIcon.setImageAutoSize(true);
 
-				trayIcon.addMouseListener(new MouseListener() {
-
+				trayIcon.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent mouseEvent) {
 						if (mouseEvent.getButton() == 1) {
@@ -79,19 +79,6 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 							}
 						}
 					}
-
-					@Override
-					public void mouseEntered(MouseEvent mouseEvent) { }
-
-					@Override
-					public void mouseExited(MouseEvent mouseEvent) { }
-
-					@Override
-					public void mousePressed(MouseEvent mouseEvent) { }
-
-					@Override
-					public void mouseReleased(MouseEvent mouseEvent) { }
-
 				});
 
 				tray.add(trayIcon);

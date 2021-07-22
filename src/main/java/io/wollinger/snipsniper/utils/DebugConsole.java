@@ -28,10 +28,7 @@ public class DebugConsole extends JFrame {
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         add(scrollPane);
 
-        content.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent keyEvent) { }
-
+        content.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 if(keyEvent.getKeyCode() == KeyEvent.VK_PLUS || keyEvent.getKeyCode() == KeyEvent.VK_ADD)
@@ -40,9 +37,6 @@ public class DebugConsole extends JFrame {
                     fontSize--;
                 content.setFont(new Font(content.getFont().getName(), Font.PLAIN, fontSize));
             }
-
-            @Override
-            public void keyReleased(KeyEvent keyEvent) { }
         });
 
         addMouseWheelListener(e -> {
