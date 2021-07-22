@@ -9,8 +9,11 @@ public class InfoButton extends JButton {
     private JFrame window;
 
     public InfoButton(String info) {
-        this.info = "Coming soon";
-        //this.info = info;
+        if(info == null) {
+            this.info = "No text provided";
+        } else {
+            this.info = info;
+        }
         setText("?");
 
         addMouseListener(new MouseAdapter() {
