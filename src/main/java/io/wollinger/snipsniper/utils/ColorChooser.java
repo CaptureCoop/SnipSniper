@@ -3,8 +3,8 @@ package io.wollinger.snipsniper.utils;
 import io.wollinger.snipsniper.Config;
 
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -30,29 +30,11 @@ public class ColorChooser extends JFrame{
 		this.configKey = configKey;
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowListener() {
+        addWindowListener(new WindowAdapter() {
             @Override
-            public void windowOpened(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowClosing(WindowEvent windowEvent) {
+            public void windowClosing(WindowEvent e) {
                 close();
             }
-
-            @Override
-            public void windowClosed(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowIconified(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowDeiconified(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowActivated(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowDeactivated(WindowEvent windowEvent) { }
         });
 
         setTitle(title);

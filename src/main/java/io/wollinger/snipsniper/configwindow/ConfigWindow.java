@@ -49,29 +49,11 @@ public class ConfigWindow extends JFrame {
         setTitle(LangManager.getItem("config_label_config"));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setIconImage(Icons.icon_config);
-        addWindowListener(new WindowListener() {
+        addWindowListener(new WindowAdapter() {
             @Override
-            public void windowOpened(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowClosing(WindowEvent windowEvent) {
+            public void windowClosing(WindowEvent e) {
                 close();
             }
-
-            @Override
-            public void windowClosed(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowIconified(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowDeiconified(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowActivated(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowDeactivated(WindowEvent windowEvent) { }
         });
 
         refreshConfigFiles();
