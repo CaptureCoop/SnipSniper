@@ -25,10 +25,6 @@ public class ConfigWindow extends JFrame {
     private JPanel viewerConfigPanel;
     private JPanel globalConfigPanel;
 
-    //TODO:
-    //Add "Create" and "Delete" options in profile dropdown? ask moritz
-    //Add generic function that handles creation of the profile dropdown
-
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
     private final ArrayList<File> configFiles = new ArrayList<>();
     private Config lastSelectedConfig;
