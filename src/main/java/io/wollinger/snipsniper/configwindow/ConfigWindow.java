@@ -132,300 +132,108 @@ public class ConfigWindow extends JFrame {
         JOptionPane.showMessageDialog(this, msg,LangManager.getItem("config_sanitation_error"), JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public JComponent setupSnipPane(Config configOriginal) {
-        snipConfigPanel.removeAll();
-        snipConfigPanel.setLayout(new MigLayout("align 50% 0%"));
-
-        final boolean[] allowSaving = {true};
-        final int maxBorder = 999;
-        final ColorChooser[] colorChooser = {null};
-
-        Config config;
-        boolean disablePage = false;
-        boolean chooseProfile = false;
-        if (configOriginal != null && !configOriginal.getFilename().equals("editor.cfg")) {
-            config = new Config(configOriginal);
-        } else {
-            config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
-            disablePage = true;
-            chooseProfile = true;
+    public JComponent setupPaneDynamic(Config config, PAGE page) {
+        switch(page) {
+            case snipPanel: return setupSnipPane(config);
+            case editorPanel: return setupEditorPane(config);
+            case viewerPanel: return setupViewerPane(config);
+            case globalPanel: return setupGlobalPane();
         }
+        return null;
+    }
 
-
-        JPanel options = new JPanel(new GridLayout(0,1));
-
-        int hGap = 20;
-
-        JPanel configDropdownRow = new JPanel(getGridLayoutWithMargin(0, 1, hGap));
+    public JComponent setupProfileDropdown(JPanel panelToAdd, JPanel parentPanel, Config configOriginal, Config config, PAGE page, int pageIndex) {
+        //Returns the dropdown, however dont add it manually
         ArrayList<String> profiles = new ArrayList<>();
-        if(chooseProfile)
+        if(configOriginal == null)
             profiles.add("Select a profile");
         for(File file : configFiles) {
-            if(file.getName().contains("profile"))
+            if(file.getName().contains("profile") || file.getName().contains("editor"))
                 profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
         }
         JComboBox<Object> dropdown = new JComboBox<>(profiles.toArray());
-        if(chooseProfile)
+        if(configOriginal == null)
             dropdown.setSelectedIndex(0);
         else
             dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
         dropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                snipConfigPanel.removeAll();
+                parentPanel.removeAll();
                 Config newConfig = new Config(e.getItem() + ".cfg", "CFGT", "profile_defaults.cfg");
-                tabPane.setComponentAt(0, setupSnipPane(newConfig));
+                tabPane.setComponentAt(pageIndex, setupPaneDynamic(newConfig, page));
                 lastSelectedConfig = newConfig;
             }
         });
-        configDropdownRow.add(dropdown);
-        options.add(configDropdownRow);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1F;
+        panelToAdd.add(dropdown, gbc);
+        gbc.gridx = 2;
+        JPanel profilePlusMinus = new JPanel(new GridLayout(0, 2));
+        JButton profileAddButton = new JButton("+");
+        if(SnipSniper.getProfileCount() == SnipSniper.getProfileCountMax())
+            profileAddButton.setEnabled(false);
+        profileAddButton.addActionListener(actionEvent -> {
+            for(int i = 0; i < SnipSniper.getProfileCountMax(); i++) {
+                if(SnipSniper.getProfile(i) == null) {
+                    SnipSniper.setProfile(i, new Sniper(i));
+                    Config newProfileConfig = SnipSniper.getProfile(i).getConfig();
+                    newProfileConfig.save();
 
-        //BEGIN ELEMENTS
-
-        JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row0.add(createJLabel(LangManager.getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER));
-        JPanel row0_1 = new JPanel(new GridLayout(0,2));
-        HotKeyButton hotKeyButton = new HotKeyButton(config.getString(ConfigHelper.PROFILE.hotkey));
-        hotKeyButton.addDoneCapturingListener(e -> {
-            if(hotKeyButton.hotkey != -1) {
-                String hotkeyModifier = "KB";
-                if (!hotKeyButton.isKeyboard)
-                    hotkeyModifier = "M";
-                config.set(ConfigHelper.PROFILE.hotkey, hotkeyModifier + hotKeyButton.hotkey);
-            } else {
-                config.set(ConfigHelper.PROFILE.hotkey, "NONE");
-            }
-        });
-        row0_1.add(hotKeyButton);
-        JButton deleteHotKey = new JButton(LangManager.getItem("config_label_delete"));
-        deleteHotKey.addActionListener(e -> {
-            hotKeyButton.setText(LangManager.getItem("config_label_none"));
-            hotKeyButton.hotkey = -1;
-            config.set(ConfigHelper.PROFILE.hotkey, "NONE");
-        });
-        row0_1.add(deleteHotKey);
-        row0.add(row0_1);
-        options.add(row0);
-
-        JPanel row1 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row1.add(createJLabel(LangManager.getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER));
-        JCheckBox saveToDisk = new JCheckBox();
-        saveToDisk.setSelected(config.getBool(ConfigHelper.PROFILE.saveToDisk));
-        saveToDisk.addActionListener(e -> config.set(ConfigHelper.PROFILE.saveToDisk, saveToDisk.isSelected() + ""));
-        row1.add(saveToDisk);
-        options.add(row1);
-
-        JPanel row2 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row2.add(createJLabel(LangManager.getItem("config_label_copyclipboard"), JLabel.RIGHT, JLabel.CENTER));
-        JCheckBox copyToClipboard = new JCheckBox();
-        copyToClipboard.setSelected(config.getBool(ConfigHelper.PROFILE.copyToClipboard));
-        copyToClipboard.addActionListener(e -> config.set(ConfigHelper.PROFILE.copyToClipboard, copyToClipboard.isSelected() + ""));
-        row2.add(copyToClipboard);
-        options.add(row2);
-
-        JPanel row3 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row3.add(createJLabel(LangManager.getItem("config_label_bordersize"), JLabel.RIGHT, JLabel.CENTER));
-        JPanel row3_2 = new JPanel(new GridLayout(0,2));
-        JSpinner borderSize = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.borderSize), 0.0, maxBorder, 1.0)); //TODO: Extend JSpinner class to notify user of too large number
-        borderSize.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderSize, (int)((double) borderSize.getValue()) + ""));
-        row3_2.add(borderSize);
-        JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
-        PBRColor borderColor = new PBRColor(config.getColor(ConfigHelper.PROFILE.borderColor));
-        borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, Utils.rgb2hex((Color)e.getSource())));
-        colorBtn.setBackground(borderColor.getColor());
-        colorBtn.setForeground(Utils.getContrastColor(borderColor.getColor()));
-        colorBtn.addActionListener(e -> {
-            if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
-                int x = (int)((getLocation().getX() + getWidth()/2));
-                int y = (int)((getLocation().getY() + getHeight()/2));
-                colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y);
-                colorChooser[0].addWindowListener(() -> {
-                    colorBtn.setBackground(borderColor.getColor());
-                    colorBtn.setForeground(Utils.getContrastColor(borderColor.getColor()));
-                });
-            }
-        });
-        row3_2.add(colorBtn);
-        row3.add(row3_2);
-        options.add(row3);
-
-        JPanel row4 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row4.add(createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER));
-        //TODO: Add to wiki: if you just enter a word like "images" it will create the folder next to the jar.
-        JTextField pictureLocation = new JTextField(config.getRawString(ConfigHelper.PROFILE.pictureFolder));
-        pictureLocation.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) { }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                String saveLocationFinal = pictureLocation.getText();
-                if(!saveLocationFinal.endsWith("/"))
-                    saveLocationFinal += "/";
-
-                saveLocationFinal = Utils.replaceVars(saveLocationFinal);
-
-                File saveLocationCheck = new File(saveLocationFinal);
-                if(!saveLocationCheck.exists()) {
-                    allowSaving[0] = false;
-                    Object[] options = {"Okay" , LangManager.getItem("config_sanitation_createdirectory") };
-                    int msgBox = JOptionPane.showOptionDialog(null,LangManager.getItem("config_sanitation_directory_notexist"), LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
-                    if(msgBox == 1) {
-                        allowSaving[0] = new File(saveLocationFinal).mkdirs();
-
-                        if(!allowSaving[0]) {
-                            msgError(LangManager.getItem("config_sanitation_failed_createdirectory"));
-                        } else {
-                            config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationFinal);
-                        }
-                    }
-                } else {
-                    allowSaving[0] = true;
-                    config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationFinal);
+                    refreshConfigFiles();
+                    parentPanel.removeAll();
+                    tabPane.setComponentAt(pageIndex, setupPaneDynamic(newProfileConfig, page));
+                    lastSelectedConfig = newProfileConfig;
+                    break;
                 }
             }
         });
-        row4.add(pictureLocation);
-        options.add(row4);
-
-        JPanel row5 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row5.add(createJLabel(LangManager.getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER));
-        JPanel row5_2 = new JPanel(new GridLayout(0,2));
-        JSpinner snipeDelay = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.snipeDelay), 0.0, 100, 1.0));
-        snipeDelay.addChangeListener(e -> config.set(ConfigHelper.PROFILE.snipeDelay, (int)((double) snipeDelay.getValue()) + ""));
-        row5_2.add(snipeDelay);
-        row5.add(row5_2);
-        options.add(row5);
-
-        JPanel row6 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row6.add(createJLabel(LangManager.getItem("config_label_openeditor"), JLabel.RIGHT, JLabel.CENTER));
-        JCheckBox openEditor = new JCheckBox();
-        openEditor.setSelected(config.getBool(ConfigHelper.PROFILE.openEditor));
-        openEditor.addActionListener(e -> config.set(ConfigHelper.PROFILE.openEditor, openEditor.isSelected() + ""));
-
-        row6.add(openEditor);
-        options.add(row6);
-
-        JPanel row7 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row7.add(createJLabel("Use Spyglass", JLabel.RIGHT, JLabel.CENTER));
-        JComboBox<Object> spyglassDropdownEnabled = new JComboBox<>(new String[]{"Disabled", "Enabled", "Hold", "Toggle"});
-        JComboBox<Object> spyglassDropdownHotkey = new JComboBox<>(new String[]{"Control", "Shift"});
-        String startMode = config.getString(ConfigHelper.PROFILE.spyglassMode);
-        boolean startEnabled = config.getBool(ConfigHelper.PROFILE.enableSpyglass);
-        spyglassDropdownHotkey.setVisible(false);
-        if(!startMode.equals("none") && startEnabled) {
-            switch(startMode) {
-                case "hold":
-                    spyglassDropdownEnabled.setSelectedIndex(2);
-                    break;
-                case "toggle":
-                    spyglassDropdownEnabled.setSelectedIndex(3);
-                    break;
+        profilePlusMinus.add(profileAddButton);
+        JButton profileRemoveButton = new JButton("-");
+        if(dropdown.getSelectedItem().equals("profile0"))
+            profileRemoveButton.setEnabled(false);
+        profileRemoveButton.addActionListener(actionEvent -> {
+            if(!dropdown.getSelectedItem().equals("profile0")) {
+                config.deleteFile();
+                SnipSniper.resetProfiles();
+                refreshConfigFiles();
+                parentPanel.removeAll();
+                int newIndex = dropdown.getSelectedIndex() - 1;
+                if(newIndex < 0)
+                    newIndex = dropdown.getSelectedIndex() + 1;
+                Config newConfig = new Config(dropdown.getItemAt(newIndex) + ".cfg", "CFGT", "profile_defaults.cfg");
+                tabPane.setComponentAt(pageIndex, setupPaneDynamic(newConfig, page));
+                lastSelectedConfig = newConfig;
             }
-            spyglassDropdownHotkey.setVisible(true);
-        } else if(startMode.equals("none") && startEnabled){
-            spyglassDropdownEnabled.setSelectedIndex(1);
+
+        });
+        profilePlusMinus.add(profileRemoveButton);
+        panelToAdd.add(profilePlusMinus, gbc);
+        return dropdown;
+    }
+
+    public JComponent setupSnipPane(Config configOriginal) {
+        snipConfigPanel.removeAll();
+
+        Config config;
+        boolean disablePage = false;
+        if (configOriginal != null) {
+            config = new Config(configOriginal);
         } else {
-            spyglassDropdownEnabled.setSelectedIndex(0);
+            config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
+            disablePage = true;
         }
 
-        switch(config.getInt(ConfigHelper.PROFILE.spyglassHotkey)) {
-            case KeyEvent.VK_CONTROL: spyglassDropdownHotkey.setSelectedIndex(0); break;
-            case KeyEvent.VK_SHIFT: spyglassDropdownHotkey.setSelectedIndex(1); break;
-        }
-        spyglassDropdownEnabled.addItemListener(e -> {
-            boolean enableSpyglass;
-            String spyglassMode;
-            switch(spyglassDropdownEnabled.getSelectedIndex()) {
-                case 0:
-                    spyglassDropdownHotkey.setVisible(false);
-                    enableSpyglass = false; spyglassMode = "none";
-                    break;
-                case 1:
-                    spyglassDropdownHotkey.setVisible(false);
-                    enableSpyglass = true; spyglassMode = "none";
-                    break;
-                case 2:
-                    spyglassDropdownHotkey.setVisible(true);
-                    enableSpyglass = true; spyglassMode = "hold";
-                    break;
-                case 3:
-                    spyglassDropdownHotkey.setVisible(true);
-                    enableSpyglass = true; spyglassMode = "toggle";
-                    break;
-                default:
-                    enableSpyglass = false; spyglassMode = "none";
-            }
-            config.set(ConfigHelper.PROFILE.enableSpyglass, enableSpyglass);
-            config.set(ConfigHelper.PROFILE.spyglassMode, spyglassMode);
-        });
-        spyglassDropdownHotkey.addItemListener(e -> {
-            switch(spyglassDropdownHotkey.getSelectedIndex()) {
-                case 0: config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_CONTROL); break;
-                case 1: config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_SHIFT); break;
-            }
-        });
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        JPanel options = new JPanel(new GridBagLayout());
 
-        JPanel row7_1 = new JPanel(getGridLayoutWithMargin(0, 2, 0));
-        row7_1.add(spyglassDropdownEnabled);
-        row7_1.add(spyglassDropdownHotkey);
-        row7.add(row7_1);
-        options.add(row7);
+        JComponent dropdown = setupProfileDropdown(options, snipConfigPanel, configOriginal, config, PAGE.snipPanel, indexSnip);
 
-        JPanel row8 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row8.add(createJLabel("Spyglass zoom", JLabel.RIGHT, JLabel.CENTER));
-        JComboBox<Object> spyglassZoomDropdown = new JComboBox<>(new String[]{"8x8", "16x16", "32x32", "64x64"});
-        switch(config.getInt(ConfigHelper.PROFILE.spyglassZoom)) {
-            case 8: spyglassZoomDropdown.setSelectedIndex(0); break;
-            case 16: spyglassZoomDropdown.setSelectedIndex(1); break;
-            case 32: spyglassZoomDropdown.setSelectedIndex(2); break;
-            case 64: spyglassZoomDropdown.setSelectedIndex(3); break;
-        }
-        spyglassZoomDropdown.addItemListener(e -> {
-            int zoom = 16;
-            switch(spyglassZoomDropdown.getSelectedIndex()) {
-                case 0: zoom = 8; break;
-                case 1: zoom = 16; break;
-                case 2: zoom = 32; break;
-                case 3: zoom = 64; break;
-            }
-            config.set(ConfigHelper.PROFILE.spyglassZoom, zoom);
-        });
-        row8.add(spyglassZoomDropdown);
-        options.add(row8);
 
-        //END ELEMENTS
-
-        JButton saveAndClose = new JButton("Save and close");
-        saveAndClose.addActionListener(e -> {
-            if(allowSaving[0] && configOriginal != null) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                for(CustomWindowListener listener : listeners)
-                    listener.windowClosed();
-                close();
-            }
-        });
-
-        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-        saveButton.addActionListener(e -> {
-            if(allowSaving[0] && configOriginal != null) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                //This prevents a bug where the other tabs have an outdated config
-                tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
-                tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
-            }
-        });
-
-        GridLayout layout = new GridLayout(0,4);
-        layout.setHgap(hGap);
-        JPanel saveRow= new JPanel(layout);
-        saveRow.add(new JPanel());
-        saveRow.add(saveButton);
-        saveRow.add(saveAndClose);
-        options.add(saveRow);
 
         snipConfigPanel.add(options);
 
@@ -447,76 +255,12 @@ public class ConfigWindow extends JFrame {
             disablePage = true;
         }
 
-        JPanel options = new JPanel(new GridBagLayout());
-
-        ArrayList<String> profiles = new ArrayList<>();
-        if(configOriginal == null)
-            profiles.add("Select a profile");
-        for(File file : configFiles) {
-            if(file.getName().contains("profile") || file.getName().contains("editor"))
-                profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
-        }
-        JComboBox<Object> dropdown = new JComboBox<>(profiles.toArray());
-        if(configOriginal == null)
-            dropdown.setSelectedIndex(0);
-        else
-            dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
-        dropdown.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                editorConfigPanel.removeAll();
-                Config newConfig = new Config(e.getItem() + ".cfg", "CFGT", "profile_defaults.cfg");
-                tabPane.setComponentAt(1, setupEditorPane(newConfig));
-                lastSelectedConfig = newConfig;
-            }
-        });
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridy = 0;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.weightx = 1F;
-        options.add(dropdown, gbc);
-        gbc.gridx = 2;
-        JPanel profilePlusMinus = new JPanel(new GridLayout(0, 2));
-        JButton profileAddButton = new JButton("+");
-        if(SnipSniper.getProfileCount() == SnipSniper.getProfileCountMax())
-            profileAddButton.setEnabled(false);
-        profileAddButton.addActionListener(actionEvent -> {
-            for(int i = 0; i < SnipSniper.getProfileCountMax(); i++) {
-                if(SnipSniper.getProfile(i) == null) {
-                    SnipSniper.setProfile(i, new Sniper(i));
-                    Config newProfileConfig = SnipSniper.getProfile(i).getConfig();
-                    newProfileConfig.save();
 
-                    refreshConfigFiles();
-                    editorConfigPanel.removeAll();
-                    tabPane.setComponentAt(1, setupEditorPane(newProfileConfig));
-                    lastSelectedConfig = newProfileConfig;
-                    break;
-                }
-            }
-        });
-        profilePlusMinus.add(profileAddButton);
-        JButton profileRemoveButton = new JButton("-");
-        if(dropdown.getSelectedItem().equals("profile0"))
-            profileRemoveButton.setEnabled(false);
-        profileRemoveButton.addActionListener(actionEvent -> {
-            if(!dropdown.getSelectedItem().equals("profile0")) {
-                config.deleteFile();
-                SnipSniper.resetProfiles();
-                refreshConfigFiles();
-                editorConfigPanel.removeAll();
-                int newIndex = dropdown.getSelectedIndex() - 1;
-                if(newIndex < 0)
-                    newIndex = dropdown.getSelectedIndex() + 1;
-                Config newConfig = new Config(dropdown.getItemAt(newIndex) + ".cfg", "CFGT", "profile_defaults.cfg");
-                tabPane.setComponentAt(1, setupEditorPane(newConfig));
-                lastSelectedConfig = newConfig;
-            }
+        JPanel options = new JPanel(new GridBagLayout());
 
-        });
-        profilePlusMinus.add(profileRemoveButton);
-        options.add(profilePlusMinus, gbc);
+        JComponent dropdown = setupProfileDropdown(options, editorConfigPanel, configOriginal, config, PAGE.editorPanel, indexEditor);
         //BEGIN ELEMENTS
 
         gbc.gridx = 0;
