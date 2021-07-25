@@ -18,13 +18,13 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 
-public class btnAbout extends MenuItem{
+public class btnAbout extends JMenuItem{
 
 	private static String html;
 
 	//LOGO USES AGENCY FB BOLD
 	public btnAbout() {
-		setLabel(LangManager.getItem("menu_about"));
+		setText(LangManager.getItem("menu_about"));
 
 		try {
 			loadHTML();
@@ -80,12 +80,8 @@ public class btnAbout extends MenuItem{
 			panel.add(label);
 
 			JPanel rightSide = new JPanel(new GridLayout(2, 0));
-			try {
-				Image splash = ImageIO.read(this.getClass().getResource("/splash.png")).getScaledInstance((int)(512F/2.2F),(int)(185F/2.2F),Image.SCALE_DEFAULT);
-				rightSide.add(new JLabel(new ImageIcon(splash)));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
+			rightSide.add(new JLabel(new ImageIcon(Icons.splash.getScaledInstance((int)(Icons.splash.getWidth()/2.2F),(int)(Icons.splash.getHeight()/2.2F),Image.SCALE_DEFAULT))));
 
 			JEditorPane about = new JEditorPane("text/html", html);
 			about.setEditable(false);

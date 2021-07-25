@@ -1,5 +1,6 @@
 package io.wollinger.snipsniper.utils;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
@@ -21,6 +22,8 @@ public class Icons {
 	public static BufferedImage stamp_preview_dark;
 	public static BufferedImage stamp_preview_light;
 
+	public static BufferedImage splash;
+
 	public static void loadResources() {
 		try {
 			icon = ImageIO.read(SnipSniper.class.getResource("/res/icon.png"));
@@ -40,6 +43,8 @@ public class Icons {
 				icons[i] = ImageIO.read(SnipSniper.class.getResource("/res/icon" + i + ".png"));
 				alt_icons[i] = ImageIO.read(SnipSniper.class.getResource("/res/alt_icon" + i + ".png"));
 			}
+
+			splash = ImageIO.read(Icons.class.getResource("/splash.png"));
 		} catch (Exception e) {
 			LogManager.log("ICON", "There was an error loading the icons! Message: " + e.getMessage(), Level.SEVERE);
 			SnipSniper.exit(false);

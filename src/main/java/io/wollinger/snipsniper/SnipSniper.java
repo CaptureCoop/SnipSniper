@@ -202,7 +202,7 @@ public final class SnipSniper {
 				}
 			}
 
-			new SCViewerWindow("VIEW", file);
+			new SCViewerWindow("VIEW", file, null);
 		} else {
 			resetProfiles();
 		}

@@ -38,7 +38,7 @@ public class SCViewerWindow extends SnipScopeWindow {
 
     private JMenuItem saveItem;
 
-    public SCViewerWindow(String id, File file) {
+    public SCViewerWindow(String id, File file, Config config) {
         super(id);
         currentFile = file;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -52,8 +52,10 @@ public class SCViewerWindow extends SnipScopeWindow {
             image = Utils.getDragPasteImage(Icons.icon_viewer, "Drop image here!");
         }
 
-        config = new Config("viewer.cfg", "CFG VIEWER", "profile_defaults.cfg");
-        config.save();
+        if(config == null) {
+            config = new Config("viewer.cfg", "CFG VIEWER", "profile_defaults.cfg");
+            config.save();
+        }
 
         setRequireMovementKeyForZoom(false);
 
