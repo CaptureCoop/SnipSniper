@@ -2,10 +2,7 @@ package io.wollinger.snipsniper.capturewindow;
 
 import java.awt.*;
 import java.awt.TrayIcon.MessageType;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -63,10 +60,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		addMouseListener(listener);
 		addMouseMotionListener(listener);
 		addKeyListener(listener);
-		addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent focusEvent) { }
-
+		addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent focusEvent) {
 				setSize();

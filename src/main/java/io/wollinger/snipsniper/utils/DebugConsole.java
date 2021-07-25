@@ -2,10 +2,7 @@ package io.wollinger.snipsniper.utils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class DebugConsole extends JFrame {
@@ -31,10 +28,7 @@ public class DebugConsole extends JFrame {
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         add(scrollPane);
 
-        content.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent keyEvent) { }
-
+        content.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 if(keyEvent.getKeyCode() == KeyEvent.VK_PLUS || keyEvent.getKeyCode() == KeyEvent.VK_ADD)
@@ -43,9 +37,6 @@ public class DebugConsole extends JFrame {
                     fontSize--;
                 content.setFont(new Font(content.getFont().getName(), Font.PLAIN, fontSize));
             }
-
-            @Override
-            public void keyReleased(KeyEvent keyEvent) { }
         });
 
         addMouseWheelListener(e -> {
@@ -56,31 +47,13 @@ public class DebugConsole extends JFrame {
             content.setFont(new Font(content.getFont().getName(), Font.PLAIN, fontSize));
         });
 
-        addWindowListener(new WindowListener() {
+        addWindowListener(new WindowAdapter() {
             @Override
-            public void windowOpened(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowClosing(WindowEvent windowEvent) {
+            public void windowClosing(WindowEvent e) {
                 for(CustomWindowListener listener : listeners)
                     listener.windowClosed();
                 dispose();
             }
-
-            @Override
-            public void windowClosed(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowIconified(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowDeiconified(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowActivated(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowDeactivated(WindowEvent windowEvent) { }
         });
 
         setVisible(true);
