@@ -1,20 +1,25 @@
 package io.wollinger.snipsniper.scviewer;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.configwindow.ConfigWindow;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.snipscope.SnipScopeRenderer;
 import io.wollinger.snipsniper.snipscope.SnipScopeWindow;
 import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.Utils;
+import org.apache.commons.lang3.SystemUtils;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +35,8 @@ public class SCViewerWindow extends SnipScopeWindow {
     private final List<String> extensions = Arrays.asList(".png", ".jpg", ".jpeg");
 
     private boolean locked = false;
+
+    private JMenuItem saveItem;
 
     public SCViewerWindow(String id, File file) {
         super(id);
@@ -75,6 +82,32 @@ public class SCViewerWindow extends SnipScopeWindow {
         setLocationAuto();
         if(config.getBool(ConfigHelper.PROFILE.openViewerInFullscreen))
             setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
+
+        if(SystemUtils.IS_OS_WINDOWS) {
+            JMenuBar topBar = new JMenuBar();
+            JMenuItem rotateItem = new JMenuItem("\uD83D\uDD04");
+            rotateItem.addActionListener(e -> rotateImage());
+            topBar.add(rotateItem);
+            saveItem = new JMenuItem("Save");
+            saveItem.addActionListener(e -> {
+                try {
+                    ImageIO.write(getImage(), "png", currentFile);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                saveItem.setEnabled(false);
+            });
+            topBar.add(saveItem);
+            saveItem.setEnabled(false);
+            setJMenuBar(topBar);
+        }
+    }
+
+    public void rotateImage() {
+        setImage(Utils.rotateClockwise90(getImage()));
+        if(currentFile != null)
+            saveItem.setEnabled(true);
+        repaint();
     }
 
     public void refreshTitle() {
