@@ -193,10 +193,11 @@ public class ConfigWindow extends JFrame {
         });
         profilePlusMinus.add(profileAddButton);
         JButton profileRemoveButton = new JButton("-");
-        if(dropdown.getSelectedItem().equals("profile0"))
+        System.out.println(dropdown.getSelectedItem());
+        if(dropdown.getSelectedItem().equals("profile0") || dropdown.getSelectedItem().equals("editor"))
             profileRemoveButton.setEnabled(false);
         profileRemoveButton.addActionListener(actionEvent -> {
-            if(!dropdown.getSelectedItem().equals("profile0")) {
+            if(!dropdown.getSelectedItem().equals("profile0") || !dropdown.getSelectedItem().equals("editor")) {
                 config.deleteFile();
                 SnipSniper.resetProfiles();
                 refreshConfigFiles();
