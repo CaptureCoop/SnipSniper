@@ -46,10 +46,7 @@ public class InfoButton extends JButton {
         g.setColor(new Color(0, 0, 0, 0));
         g.drawRect(0, 0, getWidth(), getHeight());
         int iconSize = 16;
-        int circleSize = iconSize + 4;
-        g.setColor(new Color(120, 255, 255, 255));
-        g.fillOval(getWidth() /2 - circleSize / 2, getHeight() / 2 - circleSize / 2, circleSize, circleSize);
-        g.drawImage(Icons.icon_questionmark, getWidth() /2 - iconSize / 2, getHeight() / 2 - iconSize / 2, iconSize, iconSize, this);
+        g.drawImage(Icons.icon_questionmark.getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH), getWidth() /2 - iconSize / 2, getHeight() / 2 - iconSize / 2, iconSize, iconSize, this);
     }
 
     public void closeWindow() {
