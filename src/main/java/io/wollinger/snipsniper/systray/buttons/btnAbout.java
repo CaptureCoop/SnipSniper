@@ -1,7 +1,9 @@
 package io.wollinger.snipsniper.systray.buttons;
 
 import io.wollinger.snipsniper.SnipSniper;
+import io.wollinger.snipsniper.systray.PopupMenuButton;
 import io.wollinger.snipsniper.utils.ConfigHelper;
+import io.wollinger.snipsniper.utils.Function;
 import io.wollinger.snipsniper.utils.Icons;
 import io.wollinger.snipsniper.utils.LangManager;
 
@@ -18,13 +20,13 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 
-public class btnAbout extends JMenuItem{
+public class btnAbout extends PopupMenuButton {
 
 	private static String html;
 
 	//LOGO USES AGENCY FB BOLD
-	public btnAbout() {
-		setText(LangManager.getItem("menu_about"));
+	public btnAbout(String title, BufferedImage icon, JFrame popup, Function function) {
+		super(title, icon, popup, function);
 
 		try {
 			loadHTML();
@@ -32,82 +34,85 @@ public class btnAbout extends JMenuItem{
 			e.printStackTrace();
 		}
 
-		this.addActionListener(listener -> {
-			JFrame frame = new JFrame();
-			frame.setSize(512,256);
-			frame.setTitle("About");
-			frame.setResizable(true);
-			frame.setIconImage(Icons.icon_taskbar);
+		setFunction(new Function() {
+			@Override
+			public void run() {
+				JFrame frame = new JFrame();
+				frame.setSize(512,256);
+				frame.setTitle("About");
+				frame.setResizable(true);
+				frame.setIconImage(Icons.icon_taskbar);
 
-			JPanel panel = new JPanel(new GridLayout(1,0));
+				JPanel panel = new JPanel(new GridLayout(1,0));
 
-			int iconSize = 100;
-			ImageIcon icon = new ImageIcon(Icons.icon_taskbar.getScaledInstance(iconSize,iconSize,Image.SCALE_DEFAULT));
-			JLabel label = new JLabel(icon);
-			label.addMouseListener(new MouseAdapter() {
-				int index = 0;
+				int iconSize = 100;
+				ImageIcon icon = new ImageIcon(Icons.icon_taskbar.getScaledInstance(iconSize,iconSize,Image.SCALE_DEFAULT));
+				JLabel label = new JLabel(icon);
+				label.addMouseListener(new MouseAdapter() {
+					int index = 0;
 
-				BufferedImage[] icons = {Icons.icon_taskbar, Icons.icon_editor, Icons.icon_viewer, Icons.icon_console};
-				HashMap<String, Image> cache = new HashMap<>();
+					BufferedImage[] icons = {Icons.icon_taskbar, Icons.icon_editor, Icons.icon_viewer, Icons.icon_console};
+					HashMap<String, Image> cache = new HashMap<>();
 
-				@Override
-				public void mouseReleased(MouseEvent mouseEvent) {
-					super.mouseClicked(mouseEvent);
+					@Override
+					public void mouseReleased(MouseEvent mouseEvent) {
+						super.mouseClicked(mouseEvent);
 
-					if(index >= icons.length - 1) index = 0;
-					else index++;
-					setNewImage(index, iconSize);
-				}
-
-				@Override
-				public void mousePressed(MouseEvent mouseEvent) {
-					setNewImage(index, (int) (iconSize / 1.2F));
-				}
-
-				public void setNewImage(int index, int size) {
-					Image image;
-					String key = index + "_" + size; //We cache those because we really like clicking the icons really fast :^)
-					if(cache.containsKey(key)) {
-						image = cache.get(key);
-					} else {
-						image = icons[index].getScaledInstance(size, size, Image.SCALE_DEFAULT);
-						cache.put(key, image);
-					}
-					label.setIcon(new ImageIcon(image));
-					frame.setIconImage(image);
-				}
-			});
-			panel.add(label);
-
-			JPanel rightSide = new JPanel(new GridLayout(2, 0));
-
-			rightSide.add(new JLabel(new ImageIcon(Icons.splash.getScaledInstance((int)(Icons.splash.getWidth()/2.2F),(int)(Icons.splash.getHeight()/2.2F),Image.SCALE_DEFAULT))));
-
-			JEditorPane about = new JEditorPane("text/html", html);
-			about.setEditable(false);
-			about.setOpaque(false);
-			about.setSelectionColor(new Color(0,0,0,0));
-			about.setSelectedTextColor(Color.black);
-			about.addHyperlinkListener(hle -> {
-				if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.getEventType())) {
-					try {
-						Desktop.getDesktop().browse(new URI(hle.getURL().toString()));
-					} catch (IOException | URISyntaxException e) {
-						e.printStackTrace();
+						if(index >= icons.length - 1) index = 0;
+						else index++;
+						setNewImage(index, iconSize);
 					}
 
-				}
-			});
-			rightSide.add(about);
+					@Override
+					public void mousePressed(MouseEvent mouseEvent) {
+						setNewImage(index, (int) (iconSize / 1.2F));
+					}
 
-			panel.add(rightSide);
+					public void setNewImage(int index, int size) {
+						Image image;
+						String key = index + "_" + size; //We cache those because we really like clicking the icons really fast :^)
+						if(cache.containsKey(key)) {
+							image = cache.get(key);
+						} else {
+							image = icons[index].getScaledInstance(size, size, Image.SCALE_DEFAULT);
+							cache.put(key, image);
+						}
+						label.setIcon(new ImageIcon(image));
+						frame.setIconImage(image);
+					}
+				});
+				panel.add(label);
 
-			frame.add(panel);
+				JPanel rightSide = new JPanel(new GridLayout(2, 0));
 
-			Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-			frame.setLocation((int)((size.getWidth()/2) - frame.getWidth()/2), (int)((size.getHeight()/2) - frame.getHeight()/2));
+				rightSide.add(new JLabel(new ImageIcon(Icons.splash.getScaledInstance((int)(Icons.splash.getWidth()/2.2F),(int)(Icons.splash.getHeight()/2.2F),Image.SCALE_DEFAULT))));
 
-			frame.setVisible(true);
+				JEditorPane about = new JEditorPane("text/html", html);
+				about.setEditable(false);
+				about.setOpaque(false);
+				about.setSelectionColor(new Color(0,0,0,0));
+				about.setSelectedTextColor(Color.black);
+				about.addHyperlinkListener(hle -> {
+					if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.getEventType())) {
+						try {
+							Desktop.getDesktop().browse(new URI(hle.getURL().toString()));
+						} catch (IOException | URISyntaxException e) {
+							e.printStackTrace();
+						}
+
+					}
+				});
+				rightSide.add(about);
+
+				panel.add(rightSide);
+
+				frame.add(panel);
+
+				Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+				frame.setLocation((int)((size.getWidth()/2) - frame.getWidth()/2), (int)((size.getHeight()/2) - frame.getHeight()/2));
+
+				frame.setVisible(true);
+			}
 		});
 	}
 

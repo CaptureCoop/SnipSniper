@@ -3,7 +3,8 @@ package io.wollinger.snipsniper.systray;
 import java.awt.*;
 import java.awt.event.*;
 
-import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 
 import io.wollinger.snipsniper.SnipSniper;
@@ -19,7 +20,6 @@ import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.capturewindow.CaptureWindow;
 import io.wollinger.snipsniper.configwindow.ConfigWindow;
 import io.wollinger.snipsniper.systray.buttons.btnAbout;
-import io.wollinger.snipsniper.systray.buttons.btnOpenImgFolder;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseListener;
 
@@ -34,7 +34,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	private TrayIcon trayIcon;
 	
 	private Sniper instance;
-	private JPopupMenu popup;
+	private JFrame popup;
 
 	public Sniper(int profileID) {
 		instance = this;
@@ -46,48 +46,43 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		if(SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
 
-			popup = new JPopupMenu();
-			popup.setLayout(new BoxLayout(popup,BoxLayout.PAGE_AXIS));
+			popup = new JFrame();
+			popup.setUndecorated(true);
+			popup.setLayout(new BoxLayout(popup.getContentPane(),BoxLayout.PAGE_AXIS));
 			JLabel title = new JLabel(new ImageIcon(Icons.splash.getScaledInstance((int)(Icons.splash.getWidth()/3F),(int)(Icons.splash.getHeight()/3F), Image.SCALE_DEFAULT)));
 			title.setText("Profile " + profileID);
 			title.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 			title.setVerticalTextPosition(JLabel.BOTTOM);
 			title.setHorizontalTextPosition(JLabel.CENTER);
 			popup.add(title);
-			JMenuItem viewer = new JMenuItem("Viewer");
-			viewer.setIcon(getPopupIcon(Icons.icon_viewer));
-			viewer.addActionListener(e -> new SCViewerWindow("VIEWERWND", null, config));
-			popup.add(viewer);
-			JMenuItem editor = new JMenuItem("Editor");
-			editor.setIcon(getPopupIcon(Icons.icon_editor));
-			editor.addActionListener(e -> new SCEditorWindow("EDITORWND", null, -1, -1, "SnipSniper Editor", config, true, null, false, true));
-			popup.add(editor);
-			popup.addSeparator();
-			JMenuItem btnOpenImage = new btnOpenImgFolder(this);
-			btnOpenImage.setIcon(getPopupIcon(Icons.icon_questionmark));
-			popup.add(btnOpenImage);
-			JMenuItem btnConfig = new JMenuItem(LangManager.getItem("menu_config"));
-			btnConfig.addActionListener(listener -> openConfigWindow());
-			btnConfig.setIcon(getPopupIcon(Icons.icon_config));
-			popup.add(btnConfig);
+			popup.add(new PopupMenuButton("Viewer", Icons.icon_viewer, popup, () -> new SCViewerWindow("VIEWERWND", null, config)));
+			popup.add(new PopupMenuButton("Editor", Icons.icon_editor, popup, () -> new SCEditorWindow("EDITORWND", null, -1, -1, "SnipSniper Editor", config, true, null, false, true)));
+			popup.add(new JSeparator());
+			popup.add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), Icons.icon_questionmark, popup, () -> {
+				try {
+					Desktop.getDesktop().open(new File(getConfig().getString(ConfigHelper.PROFILE.pictureFolder)));
+				} catch (IOException ioException) {
+					ioException.printStackTrace();
+				}
+			}));
+			popup.add(new PopupMenuButton(LangManager.getItem("menu_config"), Icons.icon_config, popup, () -> openConfigWindow()));
 
 			if (SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
-				JMenuItem consoleItem = new JMenuItem("Console");
-				consoleItem.addActionListener(e -> SnipSniper.openDebugConsole());
-				consoleItem.setIcon(getPopupIcon(Icons.icon_console));
-				popup.add(consoleItem);
+				popup.add(new PopupMenuButton("Console", Icons.icon_console, popup, () -> SnipSniper.openDebugConsole()));
 			}
 
-			JMenuItem about = new btnAbout();
-			about.setIcon(getPopupIcon(Icons.icon_taskbar));
-			popup.add(about);
-			popup.addSeparator();
-			JMenuItem btnClose = new JMenuItem("Close");
-			btnClose.addActionListener(e -> popup.setVisible(false));
-			popup.add(btnClose);
-			JMenuItem btnExit = new JMenuItem(LangManager.getItem("menu_quit"));
-			btnExit.addActionListener(listener -> SnipSniper.exit(false));
-			popup.add(btnExit);
+			popup.add(new btnAbout(LangManager.getItem("menu_about"), Icons.icon_taskbar, popup, null));
+			popup.add(new JSeparator());
+			popup.add(new PopupMenuButton(LangManager.getItem("menu_quit"), Icons.icon_questionmark, popup, () -> SnipSniper.exit(false)));
+
+			popup.setIconImage(Icons.icon_taskbar);
+			popup.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					super.focusLost(e);
+					popup.setVisible(false);
+				}
+			});
 
 			try {
 				trayIcon = new TrayIcon(Icons.icons[profileID], "SnipSniper (Profile " + profileID + ")");
@@ -106,9 +101,12 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 					private void showPopup(MouseEvent mouseEvent) {
 						if (mouseEvent.isPopupTrigger()) {
-							popup.setLocation(mouseEvent.getX(), mouseEvent.getY());
-							popup.setInvoker(popup);
 							popup.setVisible(true);
+							popup.pack();
+							int taskbarHeight = Toolkit.getDefaultToolkit().getScreenInsets(popup.getGraphicsConfiguration()).bottom;
+							int screenHeight = popup.getGraphicsConfiguration().getBounds().height;
+							popup.setLocation(mouseEvent.getX(), screenHeight - popup.getHeight() - taskbarHeight);
+							popup.requestFocus();
 						}
 					}
 
@@ -132,10 +130,6 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 		GlobalScreen.addNativeKeyListener(this);
 		GlobalScreen.addNativeMouseListener(this);
-	}
-
-	public ImageIcon getPopupIcon(BufferedImage image) {
-		return new ImageIcon(image.getScaledInstance(16,16,Image.SCALE_DEFAULT));
 	}
 
 	public void kill() {
