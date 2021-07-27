@@ -59,7 +59,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			popup.add(new PopupMenuButton("Viewer", Icons.icon_viewer, popup, () -> new SCViewerWindow("VIEWERWND", null, config)));
 			popup.add(new PopupMenuButton("Editor", Icons.icon_editor, popup, () -> new SCEditorWindow("EDITORWND", null, -1, -1, "SnipSniper Editor", config, true, null, false, true)));
 			popup.add(new JSeparator());
-			popup.add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), Icons.icon_questionmark, popup, () -> {
+			popup.add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), Icons.icon_folder, popup, () -> {
 				try {
 					Desktop.getDesktop().open(new File(getConfig().getString(ConfigHelper.PROFILE.pictureFolder)));
 				} catch (IOException ioException) {
@@ -74,7 +74,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 			popup.add(new btnAbout(LangManager.getItem("menu_about"), Icons.icon_taskbar, popup, null));
 			popup.add(new JSeparator());
-			popup.add(new PopupMenuButton(LangManager.getItem("menu_quit"), Icons.icon_questionmark, popup, () -> SnipSniper.exit(false)));
+			popup.add(new PopupMenuButton(LangManager.getItem("menu_quit"), Icons.icon_exit, popup, () -> SnipSniper.exit(false)));
 
 			popup.setIconImage(Icons.icon_taskbar);
 			popup.addFocusListener(new FocusAdapter() {
