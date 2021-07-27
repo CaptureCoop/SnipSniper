@@ -1,5 +1,6 @@
 package io.wollinger.snipsniper.sceditor;
 
+import io.wollinger.snipsniper.colorchooser.ColorChooser;
 import io.wollinger.snipsniper.sceditor.stamps.IStamp;
 import io.wollinger.snipsniper.snipscope.SnipScopeListener;
 import io.wollinger.snipsniper.utils.*;

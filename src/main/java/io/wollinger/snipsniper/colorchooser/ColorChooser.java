@@ -1,6 +1,10 @@
-package io.wollinger.snipsniper.utils;
+package io.wollinger.snipsniper.colorchooser;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.utils.CustomWindowListener;
+import io.wollinger.snipsniper.utils.Icons;
+import io.wollinger.snipsniper.utils.SSColor;
+import io.wollinger.snipsniper.utils.Utils;
 
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
@@ -84,7 +88,10 @@ public class ColorChooser extends JFrame{
         
         colorPanel.add(jcc);
 
-        JPanel gradientPanel = null;
+        ColorChooserGradientPanel gradientPanel = null;
+        if(useGradient) {
+            gradientPanel = new ColorChooserGradientPanel(this);
+        }
 
         if(gradientPanel != null)
             mainPanel.add(gradientPanel);

@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.SnipSniper;
+import io.wollinger.snipsniper.colorchooser.ColorChooser;
 import io.wollinger.snipsniper.sceditor.stamps.*;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
