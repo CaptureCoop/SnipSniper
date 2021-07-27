@@ -117,7 +117,10 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 							Rectangle screenRect = gc.getBounds();
 
 							if(screenRect.x != 0 || screenRect.y != 0) {
-								popup.setLocation(mouseEvent.getX(), mouseEvent.getY() - popup.getHeight());
+								//This currently only allows non-default screens to work if taskbar is on bottom. Find better way!!
+								//TODO: ^^^^^^^^^^^^^^^^^^
+								//IDEA: Take half of the screens width to determine if we are left right bottom or top and then calculate position based on that, if possible
+								popup.setLocation(mouseEvent.getX(), mouseEvent.getY() - popup.getHeight() - insets.bottom);
 								if(!Utils.containsRectangleFully(screenRect, popup.getBounds())) {
 									//Fallback
 									//TODO: Find prettier way
