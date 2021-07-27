@@ -16,6 +16,7 @@ public class Icons {
 	public static BufferedImage icon_config;
 	public static BufferedImage icon_console;
 	public static BufferedImage icon_questionmark;
+	public static BufferedImage icon_folder;
 	public static BufferedImage[] icons;
 	public static BufferedImage[] alt_icons;
 
@@ -33,6 +34,7 @@ public class Icons {
 			icon_config = ImageIO.read(SnipSniper.class.getResource("/res/SnSnCo.png"));
 			icon_console = ImageIO.read(SnipSniper.class.getResource("/res/SnSnCs.png"));
 			icon_questionmark = ImageIO.read(SnipSniper.class.getResource("/res/SnSnQm_512x512.png"));
+			icon_folder = ImageIO.read(SnipSniper.class.getResource("/res/SnSnFo_512x512.png"));
 
 			stamp_preview_dark = ImageIO.read(SnipSniper.class.getResource("/res/stamp_preview_dark.png"));
 			stamp_preview_light = ImageIO.read(SnipSniper.class.getResource("/res/stamp_preview_light.png"));
