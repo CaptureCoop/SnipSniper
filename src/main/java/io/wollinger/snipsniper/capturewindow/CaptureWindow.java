@@ -186,7 +186,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		BufferedImage croppedBuffer = screenshot.getSubimage(captureArea.x, captureArea.y, captureArea.width, captureArea.height);
 		finalImg = new BufferedImage(croppedBuffer.getWidth() + borderSize *2, croppedBuffer.getHeight() + borderSize *2, BufferedImage.TYPE_INT_RGB);
 		Graphics g = finalImg.getGraphics();
-		g.setColor(config.getColor(ConfigHelper.PROFILE.borderColor));
+		g.setColor(config.getColor(ConfigHelper.PROFILE.borderColor).getPrimaryColor());
 		g.fillRect(0, 0, finalImg.getWidth(),finalImg.getHeight());
 		g.drawImage(croppedBuffer, borderSize, borderSize, croppedBuffer.getWidth(), croppedBuffer.getHeight(), this);
 		g.dispose();

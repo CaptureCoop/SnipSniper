@@ -107,7 +107,7 @@ public class RectangleStamp implements IStamp {
 
     @Override
     public void reset() {
-        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampRectangleDefaultColor));
+        color = config.getColor(ConfigHelper.PROFILE.editorStampRectangleDefaultColor);
 
         width = config.getInt(ConfigHelper.PROFILE.editorStampRectangleWidth);
         height = config.getInt(ConfigHelper.PROFILE.editorStampRectangleHeight);

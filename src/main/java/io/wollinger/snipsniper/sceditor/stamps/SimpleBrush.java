@@ -87,7 +87,7 @@ public class SimpleBrush implements IStamp {
 
     @Override
     public void reset() {
-        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampSimpleBrushDefaultColor));
+        color = config.getColor(ConfigHelper.PROFILE.editorStampSimpleBrushDefaultColor);
         size = config.getInt(ConfigHelper.PROFILE.editorStampSimpleBrushSize);
         speed = config.getInt(ConfigHelper.PROFILE.editorStampSimpleBrushSizeSpeed);
     }

@@ -127,7 +127,7 @@ public class TextStamp implements IStamp{
         text = "";
         state = TextState.IDLE;
         doSaveNextRender = false;
-        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampTextDefaultColor));
+        color = config.getColor(ConfigHelper.PROFILE.editorStampTextDefaultColor);
         fontSize = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultFontSize);
         fontSizeSpeed = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultSpeed);
     }

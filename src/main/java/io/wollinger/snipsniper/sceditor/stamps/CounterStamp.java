@@ -143,7 +143,7 @@ public class CounterStamp implements IStamp{
     @Override
     public void reset() {
         count = 1;
-        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampCounterDefaultColor));
+        color = config.getColor(ConfigHelper.PROFILE.editorStampCounterDefaultColor);
         width = config.getInt(ConfigHelper.PROFILE.editorStampCounterWidth);
         height = config.getInt(ConfigHelper.PROFILE.editorStampCounterHeight);
 

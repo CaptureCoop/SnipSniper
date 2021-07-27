@@ -109,7 +109,7 @@ public class CircleStamp implements IStamp{
 
     @Override
     public void reset() {
-        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampCircleDefaultColor));
+        color = config.getColor(ConfigHelper.PROFILE.editorStampCircleDefaultColor);
         width = config.getInt(ConfigHelper.PROFILE.editorStampCircleWidth);
         height = config.getInt(ConfigHelper.PROFILE.editorStampCircleHeight);
 

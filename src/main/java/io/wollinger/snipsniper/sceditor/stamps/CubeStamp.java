@@ -118,7 +118,7 @@ public class CubeStamp implements IStamp{
 
     @Override
     public void reset() {
-        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampCubeDefaultColor));
+        color = config.getColor(ConfigHelper.PROFILE.editorStampCubeDefaultColor);
         width = config.getInt(ConfigHelper.PROFILE.editorStampCubeWidth);
         height = config.getInt(ConfigHelper.PROFILE.editorStampCubeHeight);
 

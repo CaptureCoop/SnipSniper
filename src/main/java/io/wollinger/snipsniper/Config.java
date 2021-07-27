@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 import io.wollinger.snipsniper.utils.LogManager;
+import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Utils;
 
 public class Config {
@@ -142,13 +143,13 @@ public class Config {
 		return false;
 	}
 
-	public Color getColor(Enum key) {
+	public SSColor getColor(Enum key) {
 		return getColor(key.toString());
 	}
 
-	public Color getColor(String key) {
+	public SSColor getColor(String key) {
 		if(getString(key) != null)
-			return Utils.hex2rgb(getString(key));
+			return SSColor.fromSaveString(getString(key));
 		return null;
 	}
 
