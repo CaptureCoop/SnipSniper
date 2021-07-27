@@ -23,7 +23,7 @@ public class ColorChooser extends JFrame{
 
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
 
-	public ColorChooser(Config config, String title, SSColor color, String configKey, int x, int y) {
+	public ColorChooser(Config config, String title, SSColor color, String configKey, int x, int y, boolean useGradient) {
         instance = this;
         this.config = config;
 		this.color = color;
@@ -40,7 +40,7 @@ public class ColorChooser extends JFrame{
         setTitle(title);
         setIconImage(Icons.icon_taskbar);
 		setAlwaysOnTop(true);
-		init(x, y);
+		init(x, y, useGradient);
 	}
 	
 	public void close() {
@@ -58,7 +58,7 @@ public class ColorChooser extends JFrame{
         close();
     }
 	
-	void init(int x, int y) {
+	void init(int x, int y, boolean useGradient) {
 		jcc = new JColorChooser();
 		jcc.setColor(color.getPrimaryColor());
         AbstractColorChooserPanel[] panels = jcc.getChooserPanels();
@@ -84,6 +84,10 @@ public class ColorChooser extends JFrame{
         
         colorPanel.add(jcc);
 
+        JPanel gradientPanel = null;
+
+        if(gradientPanel != null)
+            mainPanel.add(gradientPanel);
         mainPanel.add(colorPanel);
         mainPanel.add(submitButtonPanel);
         

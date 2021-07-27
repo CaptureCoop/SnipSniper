@@ -305,7 +305,7 @@ public class ConfigWindow extends JFrame {
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
                 int x = (int)((getLocation().getX() + getWidth()/2));
                 int y = (int)((getLocation().getY() + getHeight()/2));
-                colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y);
+                colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y, true);
                 colorChooser[0].addWindowListener(() -> {
                     colorBtn.setBackground(borderColor.getPrimaryColor());
                     colorBtn.setForeground(Utils.getContrastColor(borderColor.getPrimaryColor()));
@@ -684,7 +684,7 @@ public class ConfigWindow extends JFrame {
         startColorPBR.addChangeListener(whenChange);
         colorButton.setBackground(startColorPBR.getPrimaryColor());
         colorButton.setForeground(Utils.getContrastColor(startColorPBR.getPrimaryColor()));
-        colorButton.addActionListener(e -> new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2)));
+        colorButton.addActionListener(e -> new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2), true));
         return colorButton;
     }
 

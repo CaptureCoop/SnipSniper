@@ -93,7 +93,7 @@ public class SCEditorListener extends SnipScopeListener {
             openColorChooser = false;
             int x = (int)((scEditorWindow.getLocation().getX() + scEditorWindow.getWidth()/2));
             int y = (int)((scEditorWindow.getLocation().getY() + scEditorWindow.getHeight()/2));
-            new ColorChooser(scEditorWindow.getConfig(), "Marker Color", scEditorWindow.getSelectedStamp().getColor(), scEditorWindow.getSelectedStamp().getID() + "DefaultColor", x, y);
+            new ColorChooser(scEditorWindow.getConfig(), "Marker Color", scEditorWindow.getSelectedStamp().getColor(), scEditorWindow.getSelectedStamp().getID() + "DefaultColor", x, y, true);
         }
 
         if(openSaveAsWindow) {
