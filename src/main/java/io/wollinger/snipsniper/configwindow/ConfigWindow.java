@@ -298,7 +298,7 @@ public class ConfigWindow extends JFrame {
         borderSizePanel.add(borderSize);
         JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
         SSColor borderColor = new SSColor(config.getColor(ConfigHelper.PROFILE.borderColor));
-        borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, Utils.rgb2hex((Color)e.getSource())));
+        borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, Utils.rgb2hex(((SSColor)e.getSource()).getPrimaryColor())));
         colorBtn.setBackground(borderColor.getPrimaryColor());
         colorBtn.setForeground(Utils.getContrastColor(borderColor.getPrimaryColor()));
         colorBtn.addActionListener(e -> {
