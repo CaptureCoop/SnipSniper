@@ -297,8 +297,8 @@ public class ConfigWindow extends JFrame {
         borderSize.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderSize, (int)((double) borderSize.getValue()) + ""));
         borderSizePanel.add(borderSize);
         JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
-        SSColor borderColor = new SSColor(config.getColor(ConfigHelper.PROFILE.borderColor));
-        borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, Utils.rgb2hex(((SSColor)e.getSource()).getPrimaryColor())));
+        SSColor borderColor = SSColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor));
+        borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, ((SSColor)e.getSource()).toSaveString()));
         colorBtn.setBackground(borderColor.getPrimaryColor());
         colorBtn.setForeground(Utils.getContrastColor(borderColor.getPrimaryColor()));
         colorBtn.addActionListener(e -> {
@@ -675,16 +675,15 @@ public class ConfigWindow extends JFrame {
 
     private JButton setupColorButton(String title, Config config, Enum configKey, ChangeListener whenChange) {
         JButton colorButton = new JButton(title);
-        Color startColor = config.getColor(configKey);
-        SSColor startColorPBR = new SSColor(startColor);
+        SSColor startColorPBR = SSColor.fromSaveString(config.getString(configKey));
         startColorPBR.addChangeListener(e -> {
-            config.set(configKey, Utils.rgb2hex(startColorPBR.getPrimaryColor()));
+            config.set(configKey, startColorPBR.toSaveString());
             colorButton.setBackground(startColorPBR.getPrimaryColor());
             colorButton.setForeground(Utils.getContrastColor(startColorPBR.getPrimaryColor()));
         });
         startColorPBR.addChangeListener(whenChange);
-        colorButton.setBackground(startColor);
-        colorButton.setForeground(Utils.getContrastColor(startColor));
+        colorButton.setBackground(startColorPBR.getPrimaryColor());
+        colorButton.setForeground(Utils.getContrastColor(startColorPBR.getPrimaryColor()));
         colorButton.addActionListener(e -> new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2)));
         return colorButton;
     }
