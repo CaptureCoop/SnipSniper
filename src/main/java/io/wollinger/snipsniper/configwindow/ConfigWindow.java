@@ -189,7 +189,6 @@ public class ConfigWindow extends JFrame {
         });
         profilePlusMinus.add(profileAddButton);
         JButton profileRemoveButton = new JButton("-");
-        System.out.println(dropdown.getSelectedItem());
         if(dropdown.getSelectedItem().equals("profile0") || dropdown.getSelectedItem().equals("editor"))
             profileRemoveButton.setEnabled(false);
         profileRemoveButton.addActionListener(actionEvent -> {
