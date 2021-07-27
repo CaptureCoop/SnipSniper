@@ -88,9 +88,9 @@ public class ColorChooser extends JFrame{
         
         colorPanel.add(jcc);
 
-        ColorChooserGradientPanel gradientPanel = null;
+        ColorChooserPreviewPanel gradientPanel = null;
         if(useGradient) {
-            gradientPanel = new ColorChooserGradientPanel(this);
+            gradientPanel = new ColorChooserPreviewPanel(this);
         }
 
         if(gradientPanel != null)
