@@ -3,7 +3,7 @@ package io.wollinger.snipsniper.sceditor.stamps;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -23,7 +23,7 @@ public class RectangleStamp implements IStamp {
 
     private int thickness;
 
-    private PBRColor color;
+    private SSColor color;
 
     public RectangleStamp(Config config) {
         this.config = config;
@@ -88,7 +88,7 @@ public class RectangleStamp implements IStamp {
             strokeThickness = 1;
         g2.setStroke(new BasicStroke(strokeThickness));
         Color oldColor = g2.getColor();
-        g2.setColor(color.getColor());
+        g2.setColor(color.getPrimaryColor());
         Rectangle rectangle = new Rectangle((int)(position.getX() - ((double)width*difference[0]) / 2), (int)(position.getY() - ((double)height*difference[1]) / 2), (int)((double)width*difference[0]), (int)((double)height*difference[1]));
         g2.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         g2.setColor(oldColor);
@@ -107,7 +107,7 @@ public class RectangleStamp implements IStamp {
 
     @Override
     public void reset() {
-        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampRectangleDefaultColor));
+        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampRectangleDefaultColor));
 
         width = config.getInt(ConfigHelper.PROFILE.editorStampRectangleWidth);
         height = config.getInt(ConfigHelper.PROFILE.editorStampRectangleHeight);
@@ -137,12 +137,12 @@ public class RectangleStamp implements IStamp {
     }
 
     @Override
-    public void setColor(PBRColor color) {
+    public void setColor(SSColor color) {
         this.color = color;
     }
 
     @Override
-    public PBRColor getColor() {
+    public SSColor getColor() {
         return color;
     }
 }

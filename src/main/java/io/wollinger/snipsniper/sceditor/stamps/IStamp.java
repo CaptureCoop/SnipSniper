@@ -1,7 +1,7 @@
 package io.wollinger.snipsniper.sceditor.stamps;
 
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -21,6 +21,6 @@ public interface IStamp {
 
     String getID();
 
-    void setColor(PBRColor color);
-    PBRColor getColor();
+    void setColor(SSColor color);
+    SSColor getColor();
 }

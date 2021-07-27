@@ -3,7 +3,7 @@ package io.wollinger.snipsniper.sceditor.stamps;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -21,7 +21,7 @@ public class CircleStamp implements IStamp{
     private int speedHeight;
     private int speed;
 
-    private PBRColor color;
+    private SSColor color;
 
     private final Config config;
 
@@ -88,7 +88,7 @@ public class CircleStamp implements IStamp{
         Stroke oldStroke = g2.getStroke();
         g2.setStroke(new BasicStroke(thickness));
         Color oldColor = g2.getColor();
-        g2.setColor(color.getColor());
+        g2.setColor(color.getPrimaryColor());
         Rectangle rectangle = new Rectangle(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
         g2.drawOval(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         g2.setColor(oldColor);
@@ -109,7 +109,7 @@ public class CircleStamp implements IStamp{
 
     @Override
     public void reset() {
-        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampCircleDefaultColor));
+        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampCircleDefaultColor));
         width = config.getInt(ConfigHelper.PROFILE.editorStampCircleWidth);
         height = config.getInt(ConfigHelper.PROFILE.editorStampCircleHeight);
 
@@ -138,12 +138,12 @@ public class CircleStamp implements IStamp{
     }
 
     @Override
-    public void setColor(PBRColor color) {
+    public void setColor(SSColor color) {
         this.color = color;
     }
 
     @Override
-    public PBRColor getColor() {
+    public SSColor getColor() {
         return color;
     }
 }

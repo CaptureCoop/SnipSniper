@@ -7,7 +7,6 @@ import io.wollinger.snipsniper.SnipSniper;
 import io.wollinger.snipsniper.sceditor.stamps.*;
 import io.wollinger.snipsniper.systray.Sniper;
 import io.wollinger.snipsniper.utils.*;
-import net.miginfocom.layout.Grid;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -298,18 +297,18 @@ public class ConfigWindow extends JFrame {
         borderSize.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderSize, (int)((double) borderSize.getValue()) + ""));
         borderSizePanel.add(borderSize);
         JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
-        PBRColor borderColor = new PBRColor(config.getColor(ConfigHelper.PROFILE.borderColor));
+        SSColor borderColor = new SSColor(config.getColor(ConfigHelper.PROFILE.borderColor));
         borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, Utils.rgb2hex((Color)e.getSource())));
-        colorBtn.setBackground(borderColor.getColor());
-        colorBtn.setForeground(Utils.getContrastColor(borderColor.getColor()));
+        colorBtn.setBackground(borderColor.getPrimaryColor());
+        colorBtn.setForeground(Utils.getContrastColor(borderColor.getPrimaryColor()));
         colorBtn.addActionListener(e -> {
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
                 int x = (int)((getLocation().getX() + getWidth()/2));
                 int y = (int)((getLocation().getY() + getHeight()/2));
                 colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y);
                 colorChooser[0].addWindowListener(() -> {
-                    colorBtn.setBackground(borderColor.getColor());
-                    colorBtn.setForeground(Utils.getContrastColor(borderColor.getColor()));
+                    colorBtn.setBackground(borderColor.getPrimaryColor());
+                    colorBtn.setForeground(Utils.getContrastColor(borderColor.getPrimaryColor()));
                 });
             }
         });
@@ -677,11 +676,11 @@ public class ConfigWindow extends JFrame {
     private JButton setupColorButton(String title, Config config, Enum configKey, ChangeListener whenChange) {
         JButton colorButton = new JButton(title);
         Color startColor = config.getColor(configKey);
-        PBRColor startColorPBR = new PBRColor(startColor);
+        SSColor startColorPBR = new SSColor(startColor);
         startColorPBR.addChangeListener(e -> {
-            config.set(configKey, Utils.rgb2hex(startColorPBR.getColor()));
-            colorButton.setBackground(startColorPBR.getColor());
-            colorButton.setForeground(Utils.getContrastColor(startColorPBR.getColor()));
+            config.set(configKey, Utils.rgb2hex(startColorPBR.getPrimaryColor()));
+            colorButton.setBackground(startColorPBR.getPrimaryColor());
+            colorButton.setForeground(Utils.getContrastColor(startColorPBR.getPrimaryColor()));
         });
         startColorPBR.addChangeListener(whenChange);
         colorButton.setBackground(startColor);

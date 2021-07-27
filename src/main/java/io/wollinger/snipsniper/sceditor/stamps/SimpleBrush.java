@@ -14,7 +14,7 @@ public class SimpleBrush implements IStamp {
     private int size;
     private int speed;
 
-    private PBRColor color;
+    private SSColor color;
 
     public SimpleBrush(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -41,7 +41,7 @@ public class SimpleBrush implements IStamp {
         int newSize = (int) ((double)size * difference[0]);
 
         Color oldColor = g.getColor();
-        g.setColor(new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), 255));
+        g.setColor(new Color(color.getPrimaryColor().getRed(), color.getPrimaryColor().getGreen(), color.getPrimaryColor().getBlue(), 255));
         g.fillOval(position.getX() - newSize / 2, position.getY() - newSize / 2, newSize, newSize);
         g.setColor(oldColor);
 
@@ -54,7 +54,7 @@ public class SimpleBrush implements IStamp {
                 g2.setRenderingHints(scEditorWindow.getQualityHints());
                 Stroke oldStroke = g2.getStroke();
                 oldColor = g2.getColor();
-                g2.setColor(new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), 255));
+                g2.setColor(new Color(color.getPrimaryColor().getRed(), color.getPrimaryColor().getGreen(), color.getPrimaryColor().getBlue(), 255));
                 g2.setStroke(new BasicStroke(newSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
                 double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());
@@ -87,7 +87,7 @@ public class SimpleBrush implements IStamp {
 
     @Override
     public void reset() {
-        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampSimpleBrushDefaultColor));
+        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampSimpleBrushDefaultColor));
         size = config.getInt(ConfigHelper.PROFILE.editorStampSimpleBrushSize);
         speed = config.getInt(ConfigHelper.PROFILE.editorStampSimpleBrushSizeSpeed);
     }
@@ -108,12 +108,12 @@ public class SimpleBrush implements IStamp {
     }
 
     @Override
-    public void setColor(PBRColor color) {
+    public void setColor(SSColor color) {
         this.color = color;
     }
 
     @Override
-    public PBRColor getColor() {
+    public SSColor getColor() {
         return color;
     }
 }

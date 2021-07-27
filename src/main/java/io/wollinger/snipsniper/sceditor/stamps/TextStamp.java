@@ -4,7 +4,7 @@ import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -15,7 +15,7 @@ public class TextStamp implements IStamp{
     private final Config config;
     private final SCEditorWindow scEditorWindow;
 
-    private PBRColor color;
+    private SSColor color;
     private int fontSize;
     private int fontSizeSpeed;
     private String text;
@@ -96,7 +96,7 @@ public class TextStamp implements IStamp{
         Font oldFont = g.getFont();
         Color oldColor = g.getColor();
         g.setFont(new Font("Arial", fontMode, drawFontSize));
-        g.setColor(color.getColor());
+        g.setColor(color.getPrimaryColor());
         g.drawString(textToDraw, renderPos.getX(), renderPos.getY());
         g.setFont(oldFont);
         g.setColor(oldColor);
@@ -127,7 +127,7 @@ public class TextStamp implements IStamp{
         text = "";
         state = TextState.IDLE;
         doSaveNextRender = false;
-        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampTextDefaultColor));
+        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampTextDefaultColor));
         fontSize = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultFontSize);
         fontSizeSpeed = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultSpeed);
     }
@@ -148,12 +148,12 @@ public class TextStamp implements IStamp{
     }
 
     @Override
-    public void setColor(PBRColor color) {
+    public void setColor(SSColor color) {
         this.color = color;
     }
 
     @Override
-    public PBRColor getColor() {
+    public SSColor getColor() {
         return color;
     }
 }

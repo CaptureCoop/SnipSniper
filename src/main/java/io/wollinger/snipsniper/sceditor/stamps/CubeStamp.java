@@ -4,7 +4,7 @@ import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -22,7 +22,7 @@ public class CubeStamp implements IStamp{
     private int speedWidth;
     private int speedHeight;
 
-    private PBRColor color;
+    private SSColor color;
 
     public CubeStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -84,7 +84,7 @@ public class CubeStamp implements IStamp{
                         Color c = new Color(scEditorWindow.getImage().getRGB(posX, posY));
                         int total = c.getRed() + c.getGreen() + c.getBlue();
                         int alpha = (int)((205F/765F) * total + 25);
-                        Color oC = color.getColor();
+                        Color oC = color.getPrimaryColor();
                         g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
                         g.drawLine(posX, posY, posX, posY);
                     }
@@ -93,12 +93,12 @@ public class CubeStamp implements IStamp{
         } else {
             Color oldColor = g.getColor();
             if(!isCensor)
-                g.setColor(color.getColor());
+                g.setColor(color.getPrimaryColor());
             else
                 g.setColor(Color.BLACK); //TODO: Add to config
 
             if(isSmartPixel && !isCensor)
-                g.setColor(new PBRColor(color.getColor(), 150).getColor());
+                g.setColor(new SSColor(color.getPrimaryColor(), 150).getPrimaryColor());
 
             g.fillRect(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
             g.setColor(oldColor);
@@ -118,7 +118,7 @@ public class CubeStamp implements IStamp{
 
     @Override
     public void reset() {
-        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampCubeDefaultColor));
+        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampCubeDefaultColor));
         width = config.getInt(ConfigHelper.PROFILE.editorStampCubeWidth);
         height = config.getInt(ConfigHelper.PROFILE.editorStampCubeHeight);
 
@@ -145,12 +145,12 @@ public class CubeStamp implements IStamp{
     }
 
     @Override
-    public void setColor(PBRColor color) {
+    public void setColor(SSColor color) {
         this.color = color;
     }
 
     @Override
-    public PBRColor getColor() {
+    public SSColor getColor() {
         return color;
     }
 }

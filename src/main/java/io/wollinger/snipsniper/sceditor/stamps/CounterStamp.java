@@ -3,7 +3,7 @@ package io.wollinger.snipsniper.sceditor.stamps;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -23,7 +23,7 @@ public class CounterStamp implements IStamp{
     private int speedHeight;
     private int speed;
 
-    private PBRColor color;
+    private SSColor color;
 
     private float fontSizeModifier;
     private int count;
@@ -85,9 +85,9 @@ public class CounterStamp implements IStamp{
             final int y = position.getY() - drawHeight / 2;
 
             Color oldFillColor = g.getColor();
-            g.setColor(color.getColor());
+            g.setColor(color.getPrimaryColor());
             if (solidColor) {
-                g.setColor(new PBRColor(color.getColor(), 255).getColor());
+                g.setColor(new SSColor(color.getPrimaryColor(), 255).getPrimaryColor());
             }
             g.fillOval(x, y, drawWidth, drawHeight);
             g.setColor(oldFillColor);
@@ -143,7 +143,7 @@ public class CounterStamp implements IStamp{
     @Override
     public void reset() {
         count = 1;
-        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampCounterDefaultColor));
+        color = new SSColor(config.getColor(ConfigHelper.PROFILE.editorStampCounterDefaultColor));
         width = config.getInt(ConfigHelper.PROFILE.editorStampCounterWidth);
         height = config.getInt(ConfigHelper.PROFILE.editorStampCounterHeight);
 
@@ -173,12 +173,12 @@ public class CounterStamp implements IStamp{
     }
 
     @Override
-    public void setColor(PBRColor color) {
+    public void setColor(SSColor color) {
         this.color = color;
     }
 
     @Override
-    public PBRColor getColor() {
+    public SSColor getColor() {
         return color;
     }
 }

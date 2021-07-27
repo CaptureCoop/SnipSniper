@@ -161,8 +161,8 @@ public class SCEditorListener extends SnipScopeListener {
 
         if(input.isKeyPressed(KeyEvent.VK_ALT)) {
             IStamp stamp = scEditorWindow.getSelectedStamp();
-            Color oldColor = stamp.getColor().getColor();
-            final int alpha = stamp.getColor().getColor().getAlpha();
+            Color oldColor = stamp.getColor().getPrimaryColor();
+            final int alpha = stamp.getColor().getPrimaryColor().getAlpha();
             float[] hsv = new float[3];
             Color.RGBtoHSB(oldColor.getRed(),oldColor.getGreen(),oldColor.getBlue(),hsv);
 
@@ -173,7 +173,7 @@ public class SCEditorListener extends SnipScopeListener {
                 hsv[0] -= speed;
 
             Color newColor = Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
-            stamp.setColor(new PBRColor(newColor, alpha));
+            stamp.setColor(new SSColor(newColor, alpha));
             scEditorWindow.repaint();
             return;
         }

@@ -17,13 +17,13 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 public class ColorChooser extends JFrame{
     private final ColorChooser instance;
     private JColorChooser jcc;
-	private final PBRColor color;
+	private final SSColor color;
 	private final String configKey;
     private final Config config;
 
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
 
-	public ColorChooser(Config config, String title, PBRColor color, String configKey, int x, int y) {
+	public ColorChooser(Config config, String title, SSColor color, String configKey, int x, int y) {
         instance = this;
         this.config = config;
 		this.color = color;
@@ -52,7 +52,7 @@ public class ColorChooser extends JFrame{
 
 	public void save() {
         if(configKey != null) {
-            config.set(configKey, Utils.rgb2hex(color.getColor()));
+            config.set(configKey, Utils.rgb2hex(color.getPrimaryColor()));
             config.save();
         }
         close();
@@ -60,7 +60,7 @@ public class ColorChooser extends JFrame{
 	
 	void init(int x, int y) {
 		jcc = new JColorChooser();
-		jcc.setColor(color.getColor());
+		jcc.setColor(color.getPrimaryColor());
         AbstractColorChooserPanel[] panels = jcc.getChooserPanels();
         jcc.setPreviewPanel(new JPanel());
         for (AbstractColorChooserPanel colorPanel : panels) {
@@ -73,7 +73,7 @@ public class ColorChooser extends JFrame{
         JPanel submitButtonPanel = new JPanel();
         JButton submit = new JButton("Okay");
         submit.addActionListener(e -> {
-            color.setColor(jcc.getColor());
+            color.setPrimaryColor(jcc.getColor());
             instance.close();
         });
 
