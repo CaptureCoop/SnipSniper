@@ -48,6 +48,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 			popup = new JFrame();
 			popup.setUndecorated(true);
+			popup.getRootPane().setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 			popup.setLayout(new BoxLayout(popup.getContentPane(),BoxLayout.PAGE_AXIS));
 			JLabel title = new JLabel(new ImageIcon(Icons.splash.getScaledInstance((int)(Icons.splash.getWidth()/3F),(int)(Icons.splash.getHeight()/3F), Image.SCALE_DEFAULT)));
 			title.setText("Profile " + profileID);
@@ -78,8 +79,8 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			popup.setIconImage(Icons.icon_taskbar);
 			popup.addFocusListener(new FocusAdapter() {
 				@Override
-				public void focusLost(FocusEvent e) {
-					super.focusLost(e);
+				public void focusLost(FocusEvent focusEvent) {
+					super.focusLost(focusEvent);
 					popup.setVisible(false);
 				}
 			});
@@ -103,9 +104,38 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 						if (mouseEvent.isPopupTrigger()) {
 							popup.setVisible(true);
 							popup.pack();
-							int taskbarHeight = Toolkit.getDefaultToolkit().getScreenInsets(popup.getGraphicsConfiguration()).bottom;
-							int screenHeight = popup.getGraphicsConfiguration().getBounds().height;
-							popup.setLocation(mouseEvent.getX(), screenHeight - popup.getHeight() - taskbarHeight);
+
+							//We do this in order to know which monitor the mouse position is on, before actually placing the popup jframe
+							JFrame testGC = new JFrame();
+							testGC.setUndecorated(true);
+							testGC.setLocation(mouseEvent.getX(), mouseEvent.getY());
+							testGC.setVisible(true);
+							GraphicsConfiguration gc = testGC.getGraphicsConfiguration();
+							testGC.dispose();
+
+							Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(gc);
+							Rectangle screenRect = gc.getBounds();
+
+							if(screenRect.x != 0 || screenRect.y != 0) {
+								popup.setLocation(mouseEvent.getX(), mouseEvent.getY() - popup.getHeight());
+								if(!Utils.containsRectangleFully(screenRect, popup.getBounds())) {
+									//Fallback
+									//TODO: Find prettier way
+									popup.setLocation((int)screenRect.getWidth() / 2 - popup.getWidth() / 2, (int)screenRect.getHeight() / 2 - popup.getHeight() / 2);
+								}
+							} else {
+								if (insets.bottom != 0)
+									popup.setLocation(mouseEvent.getX(), screenRect.height - popup.getHeight() - insets.bottom);
+
+								if (insets.top != 0)
+									popup.setLocation(mouseEvent.getX(), insets.top);
+
+								if (insets.left != 0)
+									popup.setLocation(insets.left, mouseEvent.getY() - popup.getHeight());
+
+								if (insets.right != 0)
+									popup.setLocation(screenRect.width - popup.getWidth() - insets.right, mouseEvent.getY() - popup.getHeight());
+							}
 							popup.requestFocus();
 						}
 					}

@@ -298,6 +298,12 @@ public class Utils {
 		return content.toString();
 	}
 
+	public static boolean containsRectangleFully(Rectangle rectangle, Rectangle contains) {
+		if ((contains.x+contains.width) < (rectangle.x+rectangle.width) && (contains.x) > (rectangle.x) && (contains.y) > (rectangle.y) && (contains.y+contains.height) < (rectangle.y+rectangle.height))
+			return true;
+		return false;
+	}
+
 	public static Rectangle fixRectangle(Rectangle rect) {
 		Rectangle newRect = new Rectangle();
 		newRect.x = Math.min(rect.x, rect.width);
