@@ -96,7 +96,6 @@ public class ColorChooser extends JFrame{
         mainPanel.add(submitButtonPanel);
         
         add(mainPanel);
-        setResizable(false);
         setFocusable(true);
         
         setAlwaysOnTop(true);

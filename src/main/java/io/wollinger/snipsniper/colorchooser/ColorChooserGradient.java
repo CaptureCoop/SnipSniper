@@ -7,9 +7,8 @@ import io.wollinger.snipsniper.utils.Vector2Float;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 public class ColorChooserGradient extends JPanel {
     private final SSColor color;
@@ -22,6 +21,8 @@ public class ColorChooserGradient extends JPanel {
 
     private int pointControlled = -1; //-1 -> None, 0 -> Point1, 1 -> Point2
     private int lastPointControlled = 0; //As above, however it is not reset upon mouseReleased but set
+
+    BufferedImage previewBuffer;
 
     public ColorChooserGradient(ColorChooser colorChooser) {
         color = colorChooser.getColor();
@@ -97,14 +98,25 @@ public class ColorChooserGradient extends JPanel {
             lastStartY = startY;
             lastSize = size;
 
+            if(previewBuffer == null || previewBuffer.getWidth() != size || previewBuffer.getHeight() != size) {
+                previewBuffer = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
+            }
+
+            //TODO: Weird bug when resizing window, smaller to larger destroys gradient preview
+            //TODO: Found it! Render the preview as its own BufferedImage that we resize whenever you stop resizing the window :) that will fix it!
             if(color.getSecondaryColor() == null) {
                 color.setSecondaryColor(color.getPrimaryColor().brighter());
             }
 
-            if(color.isValidGradient()) g2d.setPaint(color.getGradientPaint(size, size));
-            else g2d.setColor(color.getPrimaryColor());
+            Graphics2D previewGraphics = (Graphics2D) previewBuffer.getGraphics();
 
-            g2d.fillRect(startX, startY, size, size);
+            if(color.isValidGradient()) previewGraphics.setPaint(color.getGradientPaint(size, size));
+            else previewGraphics.setColor(color.getPrimaryColor());
+
+            previewGraphics.fillRect(0, 0, size, size);
+
+            previewGraphics.dispose();
+            g2d.drawImage(previewBuffer, startX, startY, size, size, this);
 
             point1Rect = new Rectangle((startX-offset / 2) + (int) (lastSize * color.getPoint1().getX()), (int) (lastSize * color.getPoint1().getY()), offset, offset);
             point2Rect = new Rectangle((startX-offset / 2) + (int) (lastSize * color.getPoint2().getX()), (int) (lastSize * color.getPoint2().getY()), offset, offset);
