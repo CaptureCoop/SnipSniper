@@ -61,10 +61,20 @@ public class SSColor {
 
 	public void setPoint1(Vector2Float point) {
 		point1 = new Vector2Float(point);
+		point1.limit(0f, 1f);
 	}
 
 	public void setPoint2(Vector2Float point) {
 		point2 = new Vector2Float(point);
+		point2.limit(0f, 1f);
+	}
+
+	public Vector2Float getPoint1() {
+		return point1;
+	}
+
+	public Vector2Float getPoint2() {
+		return point2;
 	}
 
 	public GradientPaint getGradientPaint(int width, int height) {
