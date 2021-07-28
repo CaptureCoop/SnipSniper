@@ -20,6 +20,7 @@ public class ColorChooserGradient extends JPanel {
     private Rectangle point2Rect;
 
     private int pointControlled = -1; //-1 -> None, 0 -> Point1, 1 -> Point2
+    private int lastPointControlled = -1; //As above, however it is not reset upon mouseReleased but set
 
     public ColorChooserGradient() {
         addMouseListener(new MouseAdapter() {
@@ -28,8 +29,10 @@ public class ColorChooserGradient extends JPanel {
                 super.mousePressed(mouseEvent);
                 if(point1Rect != null && point1Rect.contains(mouseEvent.getPoint())) {
                     pointControlled = 0;
+                    lastPointControlled = 0;
                 } else if(point2Rect != null && point2Rect.contains(mouseEvent.getPoint())) {
                     pointControlled = 1;
+                    lastPointControlled = 1;
                 }
             }
 
@@ -86,7 +89,12 @@ public class ColorChooserGradient extends JPanel {
             point2Rect = new Rectangle((startX-offset / 2) + (int) (lastSize * color.getPoint2().getX()), (int) (lastSize * color.getPoint2().getY()), offset, offset);
 
             g2d.setColor(Color.GREEN);
+            if(lastPointControlled == 0)
+                g2d.setColor(Color.WHITE);
             g2d.fillRect((int) point1Rect.getX(), (int) point1Rect.getY(), (int) point1Rect.getWidth(), (int) point1Rect.getHeight());
+            g2d.setColor(Color.GREEN);
+            if(lastPointControlled == 1)
+                g2d.setColor(Color.WHITE);
             g2d.fillRect((int) point2Rect.getX(), (int) point2Rect.getY(), (int) point2Rect.getWidth(), (int) point2Rect.getHeight());
 
             g2d.dispose();
