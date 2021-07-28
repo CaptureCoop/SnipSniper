@@ -99,7 +99,7 @@ public class ColorChooserGradient extends JPanel {
             lastSize = size;
 
             if(previewBuffer == null || previewBuffer.getWidth() != size || previewBuffer.getHeight() != size) {
-                previewBuffer = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
+                previewBuffer = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
             }
 
             //TODO: Weird bug when resizing window, smaller to larger destroys gradient preview
@@ -109,6 +109,11 @@ public class ColorChooserGradient extends JPanel {
             }
 
             Graphics2D previewGraphics = (Graphics2D) previewBuffer.getGraphics();
+
+            Composite oldComposite = previewGraphics.getComposite();
+            previewGraphics.setComposite(AlphaComposite.Clear);
+            previewGraphics.fillRect(0, 0, size, size);
+            previewGraphics.setComposite(oldComposite);
 
             if(color.isValidGradient()) previewGraphics.setPaint(color.getGradientPaint(size, size));
             else previewGraphics.setColor(color.getPrimaryColor());
