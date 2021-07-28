@@ -33,9 +33,11 @@ public class ColorChooserGradient extends JPanel {
                 if(point1Rect != null && point1Rect.contains(mouseEvent.getPoint())) {
                     pointControlled = 0;
                     lastPointControlled = 0;
+                    colorChooser.getJcc().setColor(color.getPrimaryColor());
                 } else if(point2Rect != null && point2Rect.contains(mouseEvent.getPoint())) {
                     pointControlled = 1;
                     lastPointControlled = 1;
+                    colorChooser.getJcc().setColor(color.getSecondaryColor());
                 }
             }
 
