@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 public class ColorChooserGradient extends JPanel {
-    private SSColor color;
+    private final SSColor color;
     private int lastStartX;
     private int lastStartY;
     private int lastSize;
@@ -104,7 +104,7 @@ public class ColorChooserGradient extends JPanel {
             DrawUtils.drawRect(g2d, point1Rect);
             if(lastPointControlled == 0) {
                 Stroke oldStroke = g2d.getStroke();
-                g2d.setStroke(new BasicStroke(offset/3));
+                g2d.setStroke(new BasicStroke(offset/3f));
                 DrawUtils.drawRect(g2d, point1Rect);
                 g2d.setStroke(oldStroke);
             }
@@ -115,7 +115,7 @@ public class ColorChooserGradient extends JPanel {
             DrawUtils.drawRect(g2d, point2Rect);
             if(lastPointControlled ==1) {
                 Stroke oldStroke = g2d.getStroke();
-                g2d.setStroke(new BasicStroke(offset/3));
+                g2d.setStroke(new BasicStroke(offset/3f));
                 DrawUtils.drawRect(g2d, point2Rect);
                 g2d.setStroke(oldStroke);
             }

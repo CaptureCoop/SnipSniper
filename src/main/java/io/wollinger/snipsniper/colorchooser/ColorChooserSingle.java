@@ -3,12 +3,10 @@ package io.wollinger.snipsniper.colorchooser;
 import io.wollinger.snipsniper.utils.SSColor;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class ColorChooserSingle extends JPanel {
-    private SSColor color;
+    private final SSColor color;
 
     public ColorChooserSingle(ColorChooser colorChooser) {
         color = colorChooser.getColor();
