@@ -131,16 +131,19 @@ public class SSColor {
 						newColor.primaryColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
 					else if(index == 1)
 						newColor.secondaryColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-					newColor.point1 = pos;
 				}
+
 
 				if(index == 0) newColor.point1 = pos;
 				else if(index == 1) newColor.point2 = pos;
 			}
 			index++;
 		}
-
 		return newColor;
+	}
+
+	public boolean isValidGradient() {
+		return secondaryColor != null;
 	}
 
 	public String toString() {

@@ -19,16 +19,10 @@ public class ColorChooserPreviewPanel extends JPanel {
         panelSingle.setColor(Color.RED);
 
         panelGradient = new ColorChooserGradient();
-        panelGradient.setColor(new SSColor(Color.BLUE));
+        panelGradient.setColor(SSColor.fromSaveString("#00D350___#003A19"));
 
         tabPane.addTab("Single color", panelSingle);
         tabPane.addTab("Gradient",  panelGradient);
         add(tabPane);
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        //g.fillRect(0,0, getHeight(), getHeight());
     }
 }
