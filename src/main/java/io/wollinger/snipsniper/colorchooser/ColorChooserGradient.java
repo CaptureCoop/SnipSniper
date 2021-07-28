@@ -28,8 +28,17 @@ public class ColorChooserGradient extends JPanel {
         color.addChangeListener(e -> repaint());
         addMouseListener(new MouseAdapter() {
             @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                mousePressedEvent(mouseEvent);
+            }
+
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 super.mousePressed(mouseEvent);
+                mousePressedEvent(mouseEvent);
+            }
+
+            public void mousePressedEvent(MouseEvent mouseEvent) {
                 if(point1Rect != null && point1Rect.contains(mouseEvent.getPoint())) {
                     pointControlled = 0;
                     lastPointControlled = 0;

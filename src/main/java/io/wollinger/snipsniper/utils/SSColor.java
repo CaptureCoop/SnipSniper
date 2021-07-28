@@ -120,7 +120,6 @@ public class SSColor {
 
 		if (point2 != null)
 			string += "_x" + point2.getX() + "_y" + point2.getY();
-		System.out.println(string);
 		return string;
 	}
 
