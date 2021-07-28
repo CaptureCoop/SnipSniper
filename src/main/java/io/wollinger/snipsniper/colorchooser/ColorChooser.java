@@ -17,6 +17,8 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class ColorChooser extends JFrame{
     private final ColorChooser instance;
@@ -76,10 +78,7 @@ public class ColorChooser extends JFrame{
         JPanel colorPanel = new JPanel();
         JPanel submitButtonPanel = new JPanel();
         JButton submit = new JButton("Okay");
-        submit.addActionListener(e -> {
-            color.setPrimaryColor(jcc.getColor());
-            instance.close();
-        });
+        submit.addActionListener(e -> instance.close());
 
         JButton save = new JButton("Save as default");
         save.addActionListener(listener -> instance.save());
@@ -116,6 +115,14 @@ public class ColorChooser extends JFrame{
         setLocation(x - getWidth()/2, y - getHeight()/2);
         setVisible(true);
 	}
+
+	public JColorChooser getJcc() {
+	    return jcc;
+    }
+
+	public SSColor getColor() {
+	    return color;
+    }
 
 	public void addWindowListener(CustomWindowListener listener) {
 	    listeners.add(listener);

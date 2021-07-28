@@ -1,6 +1,8 @@
 package io.wollinger.snipsniper.colorchooser;
 
+import io.wollinger.snipsniper.utils.DrawUtils;
 import io.wollinger.snipsniper.utils.SSColor;
+import io.wollinger.snipsniper.utils.Utils;
 import io.wollinger.snipsniper.utils.Vector2Float;
 
 import javax.swing.*;
@@ -11,7 +13,6 @@ import java.awt.event.MouseMotionAdapter;
 
 public class ColorChooserGradient extends JPanel {
     private SSColor color;
-
     private int lastStartX;
     private int lastStartY;
     private int lastSize;
@@ -20,9 +21,11 @@ public class ColorChooserGradient extends JPanel {
     private Rectangle point2Rect;
 
     private int pointControlled = -1; //-1 -> None, 0 -> Point1, 1 -> Point2
-    private int lastPointControlled = -1; //As above, however it is not reset upon mouseReleased but set
+    private int lastPointControlled = 0; //As above, however it is not reset upon mouseReleased but set
 
-    public ColorChooserGradient() {
+    public ColorChooserGradient(ColorChooser colorChooser) {
+        color = colorChooser.getColor();
+        color.addChangeListener(e -> repaint());
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
@@ -60,8 +63,11 @@ public class ColorChooserGradient extends JPanel {
         });
     }
 
-    public void setColor(SSColor color) {
-        this.color = color;
+    public void setColorAuto(Color newColor) {
+        if(lastPointControlled == 0)
+            color.setPrimaryColor(newColor);
+        else if(lastPointControlled == 1)
+            color.setSecondaryColor(newColor);
     }
 
     @Override
@@ -80,6 +86,10 @@ public class ColorChooserGradient extends JPanel {
             lastStartY = startY;
             lastSize = size;
 
+            if(color.getSecondaryColor() == null) {
+                color.setSecondaryColor(color.getPrimaryColor().brighter());
+            }
+
             if(color.isValidGradient()) g2d.setPaint(color.getGradientPaint(size, size));
             else g2d.setColor(color.getPrimaryColor());
 
@@ -88,14 +98,27 @@ public class ColorChooserGradient extends JPanel {
             point1Rect = new Rectangle((startX-offset / 2) + (int) (lastSize * color.getPoint1().getX()), (int) (lastSize * color.getPoint1().getY()), offset, offset);
             point2Rect = new Rectangle((startX-offset / 2) + (int) (lastSize * color.getPoint2().getX()), (int) (lastSize * color.getPoint2().getY()), offset, offset);
 
-            g2d.setColor(Color.GREEN);
-            if(lastPointControlled == 0)
-                g2d.setColor(Color.WHITE);
-            g2d.fillRect((int) point1Rect.getX(), (int) point1Rect.getY(), (int) point1Rect.getWidth(), (int) point1Rect.getHeight());
-            g2d.setColor(Color.GREEN);
-            if(lastPointControlled == 1)
-                g2d.setColor(Color.WHITE);
-            g2d.fillRect((int) point2Rect.getX(), (int) point2Rect.getY(), (int) point2Rect.getWidth(), (int) point2Rect.getHeight());
+            g2d.setColor(color.getPrimaryColor());
+            DrawUtils.fillRect(g2d, point1Rect);
+            g2d.setColor(Utils.getContrastColor(color.getPrimaryColor()));
+            DrawUtils.drawRect(g2d, point1Rect);
+            if(lastPointControlled == 0) {
+                Stroke oldStroke = g2d.getStroke();
+                g2d.setStroke(new BasicStroke(offset/3));
+                DrawUtils.drawRect(g2d, point1Rect);
+                g2d.setStroke(oldStroke);
+            }
+
+            g2d.setColor(color.getSecondaryColor());
+            DrawUtils.fillRect(g2d, point2Rect);
+            g2d.setColor(Utils.getContrastColor(color.getSecondaryColor()));
+            DrawUtils.drawRect(g2d, point2Rect);
+            if(lastPointControlled ==1) {
+                Stroke oldStroke = g2d.getStroke();
+                g2d.setStroke(new BasicStroke(offset/3));
+                DrawUtils.drawRect(g2d, point2Rect);
+                g2d.setStroke(oldStroke);
+            }
 
             g2d.dispose();
         }

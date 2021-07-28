@@ -1,7 +1,5 @@
 package io.wollinger.snipsniper.colorchooser;
 
-import io.wollinger.snipsniper.utils.SSColor;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,11 +13,16 @@ public class ColorChooserPreviewPanel extends JPanel {
         setLayout(new GridLayout());
         tabPane = new JTabbedPane(JTabbedPane.TOP);
 
-        panelSingle = new ColorChooserSingle(this);
-        panelSingle.setColor(Color.RED);
+        panelSingle = new ColorChooserSingle(colorChooser);
 
-        panelGradient = new ColorChooserGradient();
-        panelGradient.setColor(SSColor.fromSaveString("#00D350___#003A19"));
+        panelGradient = new ColorChooserGradient(colorChooser);
+
+        colorChooser.getJcc().getSelectionModel().addChangeListener(e -> {
+            if(tabPane.getSelectedIndex() == 0)
+                colorChooser.getColor().setPrimaryColor(colorChooser.getJcc().getColor());
+            else if(tabPane.getSelectedIndex() == 1)
+                panelGradient.setColorAuto(colorChooser.getJcc().getColor());
+        });
 
         tabPane.addTab("Single color", panelSingle);
         tabPane.addTab("Gradient",  panelGradient);

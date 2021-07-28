@@ -47,26 +47,24 @@ public class SSColor {
 
 	public void setPrimaryColor(Color color) {
 		primaryColor = color;
-		for(ChangeListener listener : listeners) {
-			listener.stateChanged(new ChangeEvent(this));
-		}
+		alertChangeListeners();
 	}
 
 	public void setSecondaryColor(Color color) {
 		secondaryColor = color;
-		for(ChangeListener listener : listeners) {
-			listener.stateChanged(new ChangeEvent(this));
-		}
+		alertChangeListeners();
 	}
 
 	public void setPoint1(Vector2Float point) {
 		point1 = new Vector2Float(point);
 		point1.limit(0f, 1f);
+		alertChangeListeners();
 	}
 
 	public void setPoint2(Vector2Float point) {
 		point2 = new Vector2Float(point);
 		point2.limit(0f, 1f);
+		alertChangeListeners();
 	}
 
 	public Vector2Float getPoint1() {
@@ -78,14 +76,25 @@ public class SSColor {
 	}
 
 	public GradientPaint getGradientPaint(int width, int height) {
-		if(secondaryColor == null || point1 == null || point2 == null) {
-			LogManager.log("SSColor", "A variable wasnt set as needed. Status: " + this, Level.SEVERE);
+		if(secondaryColor == null) {
+			LogManager.log("SSColor", "Color wasnt set.. Status: " + this, Level.SEVERE);
 			SnipSniper.exit(false);
 		}
+
+		if(point1 == null)
+			point1 = new Vector2Float(0f, 0f);
+		if(point2 == null)
+			point2 = new Vector2Float(1f, 1f);
 
 		Vector2Int point1int = new Vector2Int(point1.getX() * width, point1.getY() * height);
 		Vector2Int point2int = new Vector2Int(point2.getX() * width, point2.getY() * height);
 		return new GradientPaint(point1int.getX(), point1int.getY(), primaryColor, point2int.getX(), point2int.getY(), secondaryColor);
+	}
+
+	private void alertChangeListeners() {
+		for(ChangeListener listener : listeners) {
+			listener.stateChanged(new ChangeEvent(this));
+		}
 	}
 
 	public void addChangeListener(ChangeListener listener) {
@@ -111,6 +120,7 @@ public class SSColor {
 
 		if (point2 != null)
 			string += "_x" + point2.getX() + "_y" + point2.getY();
+		System.out.println(string);
 		return string;
 	}
 
