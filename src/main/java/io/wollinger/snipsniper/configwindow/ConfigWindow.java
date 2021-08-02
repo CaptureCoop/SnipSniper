@@ -297,19 +297,20 @@ public class ConfigWindow extends JFrame {
         JSpinner borderSize = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.borderSize), 0.0, 999, 1.0)); //TODO: Extend JSpinner class to notify user of too large number
         borderSize.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderSize, (int)((double) borderSize.getValue()) + ""));
         borderSizePanel.add(borderSize);
-        JButton colorBtn = new JButton(LangManager.getItem("config_label_color"));
+
         SSColor borderColor = SSColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor));
+        GradientJButton colorBtn = new GradientJButton(LangManager.getItem("config_label_color"), borderColor);
         borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, ((SSColor)e.getSource()).toSaveString()));
-        colorBtn.setBackground(borderColor.getPrimaryColor());
-        colorBtn.setForeground(Utils.getContrastColor(borderColor.getPrimaryColor()));
+        //colorBtn.setBackground(borderColor.getPrimaryColor());
+        //colorBtn.setForeground(Utils.getContrastColor(borderColor.getPrimaryColor()));
         colorBtn.addActionListener(e -> {
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
                 int x = (int)((getLocation().getX() + getWidth()/2));
                 int y = (int)((getLocation().getY() + getHeight()/2));
                 colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y, true);
                 colorChooser[0].addWindowListener(() -> {
-                    colorBtn.setBackground(borderColor.getPrimaryColor());
-                    colorBtn.setForeground(Utils.getContrastColor(borderColor.getPrimaryColor()));
+                    //colorBtn.setBackground(borderColor.getPrimaryColor());
+                    //colorBtn.setForeground(Utils.getContrastColor(borderColor.getPrimaryColor()));
                 });
             }
         });
