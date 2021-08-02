@@ -43,7 +43,6 @@ public class ColorChooser extends JFrame{
 
         setTitle(title);
         setIconImage(Icons.icon_taskbar);
-		setAlwaysOnTop(true);
 		init(x, y, useGradient);
 	}
 	
