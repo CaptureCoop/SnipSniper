@@ -21,10 +21,10 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 public class ColorChooser extends JFrame{
     private final ColorChooser instance;
     private JColorChooser jcc;
-	private final SSColor color;
+    private final SSColor color; //TODO: Copy color instead of using it directly, and then copy the values upon clicking "Okay/safe"
 	private final String configKey;
     private final Config config;
-
+    //TODO: Save color as single color if gradient is not selected
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
 
 	public ColorChooser(Config config, String title, SSColor color, String configKey, int x, int y, boolean useGradient) {
