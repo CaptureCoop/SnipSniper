@@ -17,10 +17,7 @@ public class GradientJButton extends JButton {
     @Override
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        if(color.isValidGradient())
-            g2.setPaint(color.getGradientPaint(getWidth(), getHeight()));
-        else
-            g2.setColor(color.getPrimaryColor());
+        g2.setPaint(color.getGradientPaint(getWidth(), getHeight()));
         g2.fillRect(0, 0, getWidth(), getHeight());
         g.setColor(Color.BLACK);
         g2.drawRect(0, 0, getWidth()-1, getHeight()-1);

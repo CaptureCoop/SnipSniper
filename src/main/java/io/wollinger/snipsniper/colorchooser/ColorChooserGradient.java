@@ -115,8 +115,7 @@ public class ColorChooserGradient extends JPanel {
             previewGraphics.fillRect(0, 0, size, size);
             previewGraphics.setComposite(oldComposite);
 
-            if(color.isValidGradient()) previewGraphics.setPaint(color.getGradientPaint(size, size));
-            else previewGraphics.setColor(color.getPrimaryColor());
+            previewGraphics.setPaint(color.getGradientPaint(size, size));
 
             previewGraphics.fillRect(0, 0, size, size);
 
