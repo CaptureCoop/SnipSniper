@@ -65,11 +65,13 @@ public class CubeStamp implements IStamp{
         }
     }
 
-    public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         boolean isSmartPixel = config.getBool(ConfigHelper.PROFILE.smartPixel);
 
         int drawWidth = (int) ((double)width * difference[0]);
         int drawHeight = (int) ((double)height * difference[1]);
+
+        Graphics2D g = (Graphics2D) g_;
 
         if(isSmartPixel && isSaveRender && !isCensor && scEditorWindow != null) {
             Vector2Int pos = new Vector2Int(position.getX() + drawWidth / 2, position.getY() + drawHeight / 2);
@@ -92,17 +94,24 @@ public class CubeStamp implements IStamp{
             }
         } else {
             Color oldColor = g.getColor();
+            int x = position.getX() - drawWidth / 2;
+            int y = position.getY() - drawHeight / 2;
             if(!isCensor)
-                g.setColor(color.getPrimaryColor());
+                g.setPaint(color.getGradientPaint(width, height, x, y));
             else
                 g.setColor(Color.BLACK); //TODO: Add to config
 
-            if(isSmartPixel && !isCensor)
-                g.setColor(new SSColor(color.getPrimaryColor(), 150).getPrimaryColor());
+            if(isSmartPixel && !isCensor) {
+                SSColor smartPixelPreview = new SSColor(color);
+                smartPixelPreview.setPrimaryColor(smartPixelPreview.getPrimaryColor(), 150);
+                smartPixelPreview.setSecondaryColor(smartPixelPreview.getSecondaryColor(), 150);
+                g.setPaint(smartPixelPreview.getGradientPaint(width, height, x, y));
+            }
 
-            g.fillRect(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
+            g.fillRect(x, y, drawWidth, drawHeight);
             g.setColor(oldColor);
         }
+        g.dispose();
         return new Rectangle(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
     }
 
