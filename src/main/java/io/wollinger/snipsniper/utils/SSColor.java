@@ -52,9 +52,25 @@ public class SSColor {
 		return secondaryColor;
 	}
 
+	public void setPrimaryColor(Color color, int alpha) {
+		if(color == null) {
+			setPrimaryColor(null);
+			return;
+		}
+		setPrimaryColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
+	}
+
 	public void setPrimaryColor(Color color) {
 		primaryColor = color;
 		alertChangeListeners();
+	}
+
+	public void setSecondaryColor(Color color, int alpha) {
+		if(color == null) {
+			setSecondaryColor(null);
+			return;
+		}
+		setSecondaryColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
 	}
 
 	public void setSecondaryColor(Color color) {
@@ -90,10 +106,9 @@ public class SSColor {
 		return point2;
 	}
 
-	public GradientPaint getGradientPaint(int width, int height) {
+	public Paint getGradientPaint(int width, int height, int posX, int posY) {
 		if(secondaryColor == null) {
-			LogManager.log("SSColor", "Color wasnt set.. Status: " + this, Level.SEVERE);
-			SnipSniper.exit(false);
+			return primaryColor;
 		}
 
 		if(point1 == null)
@@ -103,7 +118,11 @@ public class SSColor {
 
 		Vector2Int point1int = new Vector2Int(point1.getX() * width, point1.getY() * height);
 		Vector2Int point2int = new Vector2Int(point2.getX() * width, point2.getY() * height);
-		return new GradientPaint(point1int.getX(), point1int.getY(), primaryColor, point2int.getX(), point2int.getY(), secondaryColor);
+		return new GradientPaint(point1int.getX() + posX, point1int.getY() + posY, primaryColor, point2int.getX() + posX, point2int.getY() + posY, secondaryColor);
+	}
+
+	public Paint getGradientPaint(int width, int height) {
+		return getGradientPaint(width, height, 0, 0);
 	}
 
 	private void alertChangeListeners() {
@@ -124,17 +143,13 @@ public class SSColor {
 		if(point1 != null)
 			string += "_x" + point1.getX() + "_y" + point1.getY();
 
-		if(secondaryColor != null || point2 != null)
-			string += "___";
-
 		if(secondaryColor != null) {
-			string += Utils.rgb2hex(secondaryColor);
+			string += "___" + Utils.rgb2hex(secondaryColor);
 			if(secondaryColor.getAlpha() != 255)
 				string += "_a" + secondaryColor.getAlpha();
+			if (point2 != null)
+				string += "_x" + point2.getX() + "_y" + point2.getY();
 		}
-
-		if (point2 != null)
-			string += "_x" + point2.getX() + "_y" + point2.getY();
 		return string;
 	}
 
@@ -148,7 +163,6 @@ public class SSColor {
 			float defaultPos = 0;
 			if(index != 0) defaultPos = 1;
 			Vector2Float pos = new Vector2Float(defaultPos, defaultPos);
-
 			for(String str : part.split("_")) {
 				switch(str.charAt(0)) {
 					case '#': color = Utils.hex2rgb(str); break;
@@ -177,10 +191,11 @@ public class SSColor {
 	}
 
 	public void loadFromSSColor(SSColor otherColor) {
-		setPrimaryColor(otherColor.getPrimaryColor());
-		setSecondaryColor(otherColor.getSecondaryColor());
-		setPoint1(otherColor.getPoint1());
-		setPoint2(otherColor.getPoint2());
+		primaryColor = otherColor.primaryColor;
+		secondaryColor = otherColor.secondaryColor;
+		point1 = otherColor.point1;
+		point2 = otherColor.point2;
+		alertChangeListeners();
 	}
 
 	public boolean isValidGradient() {
