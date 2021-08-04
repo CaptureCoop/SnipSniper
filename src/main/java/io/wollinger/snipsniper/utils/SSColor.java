@@ -13,6 +13,7 @@ public class SSColor {
 	private Color secondaryColor;
 	private Vector2Float point1;
 	private Vector2Float point2;
+	private boolean isGradient = false;
 
 	private final ArrayList<ChangeListener> listeners = new ArrayList<>();
 
@@ -27,13 +28,15 @@ public class SSColor {
 	public SSColor(SSColor color) {
 		primaryColor = color.primaryColor;
 		secondaryColor = color.secondaryColor;
+		isGradient = color.isGradient;
 		if(color.point1 != null) point1 = new Vector2Float(color.point1);
 		if(color.point2 != null) point2 = new Vector2Float(color.point2);
 	}
 
-	public SSColor(Color primaryColor, Color secondaryColor) {
+	public SSColor(Color primaryColor, Color secondaryColor, boolean isGradient) {
 		this.primaryColor = primaryColor;
 		this.secondaryColor = secondaryColor;
+		this.isGradient = isGradient;
 	}
 
 	public SSColor(Color c, int alpha) {
@@ -107,9 +110,12 @@ public class SSColor {
 	}
 
 	public Paint getGradientPaint(int width, int height, int posX, int posY) {
-		if(secondaryColor == null) {
+		if(!isGradient) {
 			return primaryColor;
 		}
+
+		if(secondaryColor == null)
+			secondaryColor = primaryColor;
 
 		if(point1 == null)
 			point1 = new Vector2Float(0f, 0f);
@@ -143,6 +149,8 @@ public class SSColor {
 		if(point1 != null)
 			string += "_x" + point1.getX() + "_y" + point1.getY();
 
+		string += "_G" + isGradient();
+
 		if(secondaryColor != null) {
 			string += "___" + Utils.rgb2hex(secondaryColor);
 			if(secondaryColor.getAlpha() != 255)
@@ -169,6 +177,7 @@ public class SSColor {
 					case 'a': alpha = Integer.parseInt(str.substring(1)); break;
 					case 'x': pos.setX(Float.parseFloat(str.substring(1))); break;
 					case 'y': pos.setY(Float.parseFloat(str.substring(1))); break;
+					case 'G': newColor.isGradient = Boolean.parseBoolean(str.substring(1)); break;
 				}
 
 				if(alpha == -1 && color != null)
@@ -195,7 +204,16 @@ public class SSColor {
 		secondaryColor = otherColor.secondaryColor;
 		point1 = otherColor.point1;
 		point2 = otherColor.point2;
+		isGradient = otherColor.isGradient;
 		alertChangeListeners();
+	}
+
+	public void setIsGradient(boolean bool) {
+		isGradient = bool;
+	}
+
+	public boolean isGradient() {
+		return isGradient;
 	}
 
 	public boolean isValidGradient() {
@@ -203,6 +221,6 @@ public class SSColor {
 	}
 
 	public String toString() {
-		return Utils.formatArgs("SSColor primaryColor: {0} secondaryColor: {1} point1: {2} point2: {3}", primaryColor, secondaryColor, point1, point2);
+		return Utils.formatArgs("SSColor primaryColor: {0} secondaryColor: {1} point1: {2} point2: {3} isGradient: {4}", primaryColor, secondaryColor, point1, point2, isGradient);
 	}
 }

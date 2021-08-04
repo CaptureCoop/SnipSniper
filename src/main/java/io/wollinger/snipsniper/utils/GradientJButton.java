@@ -23,7 +23,7 @@ public class GradientJButton extends JButton {
         g2.drawRect(0, 0, getWidth()-1, getHeight()-1);
         g2.setFont(new Font("TimesRoman", Font.PLAIN, getHeight()));
         if(color.isValidGradient())
-            g2.setPaint(new SSColor(Utils.getContrastColor(color.getPrimaryColor()), Utils.getContrastColor(color.getSecondaryColor())).getGradientPaint(getWidth(), getHeight()));
+            g2.setPaint(new SSColor(Utils.getContrastColor(color.getPrimaryColor()), Utils.getContrastColor(color.getSecondaryColor()), true).getGradientPaint(getWidth(), getHeight()));
         else
             g2.setColor(Utils.getContrastColor(color.getPrimaryColor()));
         g2.drawString(title, getWidth()/2 - g2.getFontMetrics().stringWidth(title)/2, getHeight()-getHeight()/4);

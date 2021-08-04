@@ -29,14 +29,13 @@ public class ColorChooserPreviewPanel extends JPanel {
         tabPane.addTab("Single color", panelSingle);
         tabPane.addTab("Gradient",  panelGradient);
 
-        if(colorChooser.getColor().isValidGradient())
+        if(colorChooser.getColor().isGradient())
             tabPane.setSelectedIndex(1);
 
         tabPane.addChangeListener(e -> {
-            if(tabPane.getSelectedIndex() == 0) {
-                colorChooser.getColor().setPoint1(null);
-                colorChooser.getColor().setPoint2(null);
-                colorChooser.getColor().setSecondaryColor(null);
+            switch(tabPane.getSelectedIndex()) {
+                case 0: colorChooser.getColor().setIsGradient(false); break;
+                case 1: colorChooser.getColor().setIsGradient(true); break;
             }
         });
         add(tabPane);
