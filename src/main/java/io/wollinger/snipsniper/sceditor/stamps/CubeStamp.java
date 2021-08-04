@@ -9,6 +9,7 @@ import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 public class CubeStamp implements IStamp{
     private final Config config;
@@ -23,6 +24,8 @@ public class CubeStamp implements IStamp{
     private int speedHeight;
 
     private SSColor color;
+
+    private BufferedImage smartPixelBuffer;
 
     public CubeStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -77,16 +80,29 @@ public class CubeStamp implements IStamp{
             Vector2Int pos = new Vector2Int(position.getX() + drawWidth / 2, position.getY() + drawHeight / 2);
             Vector2Int size = new Vector2Int(-drawWidth, -drawHeight);
 
+            if(color.isGradient()) {
+                if(smartPixelBuffer == null || width != smartPixelBuffer.getWidth() || height != smartPixelBuffer.getHeight()) {
+                    smartPixelBuffer = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+                }
+                Graphics2D smartPixelBufferGraphics = (Graphics2D) smartPixelBuffer.getGraphics();
+                smartPixelBufferGraphics.setColor(new Color(0, 0, 0, 0));
+                smartPixelBufferGraphics.fillRect(0, 0, smartPixelBuffer.getWidth(), smartPixelBuffer.getHeight());
+                smartPixelBufferGraphics.setPaint(color.getGradientPaint(smartPixelBuffer.getWidth(), smartPixelBuffer.getHeight()));
+                smartPixelBufferGraphics.fillRect(0, 0, smartPixelBuffer.getWidth(), smartPixelBuffer.getHeight());
+                smartPixelBufferGraphics.dispose();
+            }
+
             for (int y = 0; y < -size.getY(); y++) {
                 for (int x = 0; x < -size.getX(); x++) {
                     int posX = pos.getX() - x;
                     int posY = pos.getY() - y;
                     if(posX >= 0 && posY >= 0 && posX < scEditorWindow.getImage().getWidth() && posY < scEditorWindow.getImage().getHeight()) {
-
                         Color c = new Color(scEditorWindow.getImage().getRGB(posX, posY));
                         int total = c.getRed() + c.getGreen() + c.getBlue();
                         int alpha = (int)((205F/765F) * total + 25);
                         Color oC = color.getPrimaryColor();
+                        if(color.isGradient())
+                            oC = new Color(smartPixelBuffer.getRGB(x, y));
                         g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
                         g.drawLine(posX, posY, posX, posY);
                     }
