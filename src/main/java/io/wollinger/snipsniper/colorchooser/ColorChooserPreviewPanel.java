@@ -1,6 +1,8 @@
 package io.wollinger.snipsniper.colorchooser;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class ColorChooserPreviewPanel extends JPanel {
@@ -26,6 +28,17 @@ public class ColorChooserPreviewPanel extends JPanel {
 
         tabPane.addTab("Single color", panelSingle);
         tabPane.addTab("Gradient",  panelGradient);
+
+        if(colorChooser.getColor().isValidGradient())
+            tabPane.setSelectedIndex(1);
+
+        tabPane.addChangeListener(e -> {
+            if(tabPane.getSelectedIndex() == 0) {
+                colorChooser.getColor().setPoint1(null);
+                colorChooser.getColor().setPoint2(null);
+                colorChooser.getColor().setSecondaryColor(null);
+            }
+        });
         add(tabPane);
     }
 }

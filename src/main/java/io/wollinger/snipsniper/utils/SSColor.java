@@ -53,33 +53,33 @@ public class SSColor {
 	}
 
 	public void setPrimaryColor(Color color) {
-		if(color != null) {
-			primaryColor = color;
-			alertChangeListeners();
-		}
+		primaryColor = color;
+		alertChangeListeners();
 	}
 
 	public void setSecondaryColor(Color color) {
-		if(color != null) {
-			secondaryColor = color;
-			alertChangeListeners();
-		}
+		secondaryColor = color;
+		alertChangeListeners();
 	}
 
 	public void setPoint1(Vector2Float point) {
 		if(point != null) {
 			point1 = new Vector2Float(point);
 			point1.limit(0f, 1f);
-			alertChangeListeners();
+		} else {
+			point1 = null;
 		}
+		alertChangeListeners();
 	}
 
 	public void setPoint2(Vector2Float point) {
 		if(point != null) {
 			point2 = new Vector2Float(point);
 			point2.limit(0f, 1f);
-			alertChangeListeners();
+		} else {
+			point2 = null;
 		}
+		alertChangeListeners();
 	}
 
 	public Vector2Float getPoint1() {
