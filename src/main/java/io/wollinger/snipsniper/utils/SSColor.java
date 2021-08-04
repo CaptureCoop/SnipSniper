@@ -24,6 +24,13 @@ public class SSColor {
 		this.primaryColor = color;
 	}
 
+	public SSColor(SSColor color) {
+		primaryColor = color.primaryColor;
+		secondaryColor = color.secondaryColor;
+		if(color.point1 != null) point1 = new Vector2Float(color.point1);
+		if(color.point2 != null) point2 = new Vector2Float(color.point2);
+	}
+
 	public SSColor(Color primaryColor, Color secondaryColor) {
 		this.primaryColor = primaryColor;
 		this.secondaryColor = secondaryColor;
@@ -46,25 +53,33 @@ public class SSColor {
 	}
 
 	public void setPrimaryColor(Color color) {
-		primaryColor = color;
-		alertChangeListeners();
+		if(color != null) {
+			primaryColor = color;
+			alertChangeListeners();
+		}
 	}
 
 	public void setSecondaryColor(Color color) {
-		secondaryColor = color;
-		alertChangeListeners();
+		if(color != null) {
+			secondaryColor = color;
+			alertChangeListeners();
+		}
 	}
 
 	public void setPoint1(Vector2Float point) {
-		point1 = new Vector2Float(point);
-		point1.limit(0f, 1f);
-		alertChangeListeners();
+		if(point != null) {
+			point1 = new Vector2Float(point);
+			point1.limit(0f, 1f);
+			alertChangeListeners();
+		}
 	}
 
 	public void setPoint2(Vector2Float point) {
-		point2 = new Vector2Float(point);
-		point2.limit(0f, 1f);
-		alertChangeListeners();
+		if(point != null) {
+			point2 = new Vector2Float(point);
+			point2.limit(0f, 1f);
+			alertChangeListeners();
+		}
 	}
 
 	public Vector2Float getPoint1() {
@@ -159,6 +174,13 @@ public class SSColor {
 			index++;
 		}
 		return newColor;
+	}
+
+	public void loadFromSSColor(SSColor otherColor) {
+		setPrimaryColor(otherColor.getPrimaryColor());
+		setSecondaryColor(otherColor.getSecondaryColor());
+		setPoint1(otherColor.getPoint1());
+		setPoint2(otherColor.getPoint2());
 	}
 
 	public boolean isValidGradient() {

@@ -7,6 +7,8 @@ import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Utils;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -21,7 +23,8 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 public class ColorChooser extends JFrame{
     private final ColorChooser instance;
     private JColorChooser jcc;
-    private final SSColor color; //TODO: Copy color instead of using it directly, and then copy the values upon clicking "Okay/safe"
+    private SSColor colorToChange;
+    private final SSColor color;
 	private final String configKey;
     private final Config config;
     //TODO: Save color as single color if gradient is not selected
@@ -30,14 +33,15 @@ public class ColorChooser extends JFrame{
 	public ColorChooser(Config config, String title, SSColor color, String configKey, int x, int y, boolean useGradient) {
         instance = this;
         this.config = config;
-		this.color = color;
+        colorToChange = color;
+		this.color = new SSColor(color);
 		this.configKey = configKey;
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                close();
+                close(false);
             }
         });
 
@@ -46,8 +50,11 @@ public class ColorChooser extends JFrame{
 		init(x, y, useGradient);
 	}
 	
-	public void close() {
-		for(CustomWindowListener listener : listeners) {
+	public void close(boolean doSave) {
+		if(doSave) {
+            colorToChange.loadFromSSColor(color);
+		}
+	    for(CustomWindowListener listener : listeners) {
 		    listener.windowClosed();
         }
 		dispose();
@@ -58,7 +65,7 @@ public class ColorChooser extends JFrame{
             config.set(configKey, Utils.rgb2hex(color.getPrimaryColor()));
             config.save();
         }
-        close();
+        close(true);
     }
 	
 	void init(int x, int y, boolean useGradient) {
@@ -75,7 +82,12 @@ public class ColorChooser extends JFrame{
         JPanel colorPanel = new JPanel();
         JPanel submitButtonPanel = new JPanel();
         JButton submit = new JButton("Okay");
-        submit.addActionListener(e -> instance.close());
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                instance.close(true);
+            }
+        });
 
         JButton save = new JButton("Save as default");
         save.addActionListener(listener -> instance.save());

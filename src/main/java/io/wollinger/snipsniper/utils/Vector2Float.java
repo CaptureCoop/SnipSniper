@@ -17,8 +17,13 @@ public class Vector2Float {
     }
 
     public Vector2Float(Vector2Float vector) {
-        x = vector.x;
-        y = vector.y;
+        if(vector != null) {
+            x = vector.x;
+            y = vector.y;
+        } else {
+            x = 0;
+            y = 0;
+        }
     }
 
     public Vector2Float(Point point) {

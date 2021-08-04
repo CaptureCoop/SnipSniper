@@ -11,6 +11,7 @@ import io.wollinger.snipsniper.utils.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
@@ -301,17 +302,12 @@ public class ConfigWindow extends JFrame {
         SSColor borderColor = SSColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor));
         GradientJButton colorBtn = new GradientJButton(LangManager.getItem("config_label_color"), borderColor);
         borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, ((SSColor)e.getSource()).toSaveString()));
-        //colorBtn.setBackground(borderColor.getPrimaryColor());
-        //colorBtn.setForeground(Utils.getContrastColor(borderColor.getPrimaryColor()));
         colorBtn.addActionListener(e -> {
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
                 int x = (int)((getLocation().getX() + getWidth()/2));
                 int y = (int)((getLocation().getY() + getHeight()/2));
                 colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y, true);
-                colorChooser[0].addWindowListener(() -> {
-                    //colorBtn.setBackground(borderColor.getPrimaryColor());
-                    //colorBtn.setForeground(Utils.getContrastColor(borderColor.getPrimaryColor()));
-                });
+                colorChooser[0].addWindowListener(() -> { colorChooser[0] = null; });
             }
         });
         borderSizePanel.add(colorBtn, gbc);
