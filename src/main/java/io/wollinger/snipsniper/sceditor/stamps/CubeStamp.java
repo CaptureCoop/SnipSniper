@@ -4,11 +4,12 @@ import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 public class CubeStamp implements IStamp{
     private final Config config;
@@ -22,7 +23,9 @@ public class CubeStamp implements IStamp{
     private int speedWidth;
     private int speedHeight;
 
-    private PBRColor color;
+    private SSColor color;
+
+    private BufferedImage smartPixelBuffer;
 
     public CubeStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -65,26 +68,41 @@ public class CubeStamp implements IStamp{
         }
     }
 
-    public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         boolean isSmartPixel = config.getBool(ConfigHelper.PROFILE.smartPixel);
 
         int drawWidth = (int) ((double)width * difference[0]);
         int drawHeight = (int) ((double)height * difference[1]);
 
+        Graphics2D g = (Graphics2D) g_;
+
         if(isSmartPixel && isSaveRender && !isCensor && scEditorWindow != null) {
             Vector2Int pos = new Vector2Int(position.getX() + drawWidth / 2, position.getY() + drawHeight / 2);
             Vector2Int size = new Vector2Int(-drawWidth, -drawHeight);
+
+            if(color.isGradient()) {
+                if(smartPixelBuffer == null || width != smartPixelBuffer.getWidth() || height != smartPixelBuffer.getHeight()) {
+                    smartPixelBuffer = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+                }
+                Graphics2D smartPixelBufferGraphics = (Graphics2D) smartPixelBuffer.getGraphics();
+                smartPixelBufferGraphics.setColor(new Color(0, 0, 0, 0));
+                smartPixelBufferGraphics.fillRect(0, 0, smartPixelBuffer.getWidth(), smartPixelBuffer.getHeight());
+                smartPixelBufferGraphics.setPaint(color.getGradientPaint(smartPixelBuffer.getWidth(), smartPixelBuffer.getHeight()));
+                smartPixelBufferGraphics.fillRect(0, 0, smartPixelBuffer.getWidth(), smartPixelBuffer.getHeight());
+                smartPixelBufferGraphics.dispose();
+            }
 
             for (int y = 0; y < -size.getY(); y++) {
                 for (int x = 0; x < -size.getX(); x++) {
                     int posX = pos.getX() - x;
                     int posY = pos.getY() - y;
                     if(posX >= 0 && posY >= 0 && posX < scEditorWindow.getImage().getWidth() && posY < scEditorWindow.getImage().getHeight()) {
-
                         Color c = new Color(scEditorWindow.getImage().getRGB(posX, posY));
                         int total = c.getRed() + c.getGreen() + c.getBlue();
                         int alpha = (int)((205F/765F) * total + 25);
-                        Color oC = color.getColor();
+                        Color oC = color.getPrimaryColor();
+                        if(color.isGradient())
+                            oC = new Color(smartPixelBuffer.getRGB(x, y));
                         g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
                         g.drawLine(posX, posY, posX, posY);
                     }
@@ -92,17 +110,24 @@ public class CubeStamp implements IStamp{
             }
         } else {
             Color oldColor = g.getColor();
+            int x = position.getX() - drawWidth / 2;
+            int y = position.getY() - drawHeight / 2;
             if(!isCensor)
-                g.setColor(color.getColor());
+                g.setPaint(color.getGradientPaint(drawWidth, drawHeight, x, y));
             else
                 g.setColor(Color.BLACK); //TODO: Add to config
 
-            if(isSmartPixel && !isCensor)
-                g.setColor(new PBRColor(color.getColor(), 150).getColor());
+            if(isSmartPixel && !isCensor) {
+                SSColor smartPixelPreview = new SSColor(color);
+                smartPixelPreview.setPrimaryColor(smartPixelPreview.getPrimaryColor(), 150);
+                smartPixelPreview.setSecondaryColor(smartPixelPreview.getSecondaryColor(), 150);
+                g.setPaint(smartPixelPreview.getGradientPaint(drawWidth, drawHeight, x, y));
+            }
 
-            g.fillRect(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
+            g.fillRect(x, y, drawWidth, drawHeight);
             g.setColor(oldColor);
         }
+        g.dispose();
         return new Rectangle(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
     }
 
@@ -118,7 +143,7 @@ public class CubeStamp implements IStamp{
 
     @Override
     public void reset() {
-        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampCubeDefaultColor));
+        color = config.getColor(ConfigHelper.PROFILE.editorStampCubeDefaultColor);
         width = config.getInt(ConfigHelper.PROFILE.editorStampCubeWidth);
         height = config.getInt(ConfigHelper.PROFILE.editorStampCubeHeight);
 
@@ -145,12 +170,12 @@ public class CubeStamp implements IStamp{
     }
 
     @Override
-    public void setColor(PBRColor color) {
+    public void setColor(SSColor color) {
         this.color = color;
     }
 
     @Override
-    public PBRColor getColor() {
+    public SSColor getColor() {
         return color;
     }
 }

@@ -3,7 +3,7 @@ package io.wollinger.snipsniper.sceditor.stamps;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -23,7 +23,7 @@ public class RectangleStamp implements IStamp {
 
     private int thickness;
 
-    private PBRColor color;
+    private SSColor color;
 
     public RectangleStamp(Config config) {
         this.config = config;
@@ -87,11 +87,18 @@ public class RectangleStamp implements IStamp {
         if(strokeThickness <= 0)
             strokeThickness = 1;
         g2.setStroke(new BasicStroke(strokeThickness));
-        Color oldColor = g2.getColor();
-        g2.setColor(color.getColor());
-        Rectangle rectangle = new Rectangle((int)(position.getX() - ((double)width*difference[0]) / 2), (int)(position.getY() - ((double)height*difference[1]) / 2), (int)((double)width*difference[0]), (int)((double)height*difference[1]));
+
+        int drawWidth = (int) ((double)width * difference[0]);
+        int drawHeight = (int) ((double)height * difference[1]);
+
+        int x = (int)(position.getX() - drawWidth / 2);
+        int y = (int)(position.getY() - drawHeight / 2);
+
+        Paint oldColor = g2.getPaint();
+        g2.setPaint(color.getGradientPaint(drawWidth, drawHeight, x, y));
+        Rectangle rectangle = new Rectangle(x, y, drawWidth, drawHeight);
         g2.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-        g2.setColor(oldColor);
+        g2.setPaint(oldColor);
         g2.setStroke(oldStroke);
         g2.dispose();
         return rectangle;
@@ -107,7 +114,7 @@ public class RectangleStamp implements IStamp {
 
     @Override
     public void reset() {
-        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampRectangleDefaultColor));
+        color = config.getColor(ConfigHelper.PROFILE.editorStampRectangleDefaultColor);
 
         width = config.getInt(ConfigHelper.PROFILE.editorStampRectangleWidth);
         height = config.getInt(ConfigHelper.PROFILE.editorStampRectangleHeight);
@@ -137,12 +144,12 @@ public class RectangleStamp implements IStamp {
     }
 
     @Override
-    public void setColor(PBRColor color) {
+    public void setColor(SSColor color) {
         this.color = color;
     }
 
     @Override
-    public PBRColor getColor() {
+    public SSColor getColor() {
         return color;
     }
 }

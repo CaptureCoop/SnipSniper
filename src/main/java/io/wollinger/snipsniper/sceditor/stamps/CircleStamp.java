@@ -3,7 +3,7 @@ package io.wollinger.snipsniper.sceditor.stamps;
 import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -21,7 +21,7 @@ public class CircleStamp implements IStamp{
     private int speedHeight;
     private int speed;
 
-    private PBRColor color;
+    private SSColor color;
 
     private final Config config;
 
@@ -87,11 +87,13 @@ public class CircleStamp implements IStamp{
         Graphics2D g2 = (Graphics2D)g;
         Stroke oldStroke = g2.getStroke();
         g2.setStroke(new BasicStroke(thickness));
-        Color oldColor = g2.getColor();
-        g2.setColor(color.getColor());
-        Rectangle rectangle = new Rectangle(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
+        Paint oldPaint = g2.getPaint();
+        int x = position.getX() - drawWidth / 2;
+        int y = position.getY() - drawHeight / 2;
+        g2.setPaint(color.getGradientPaint(drawWidth, drawHeight, x, y));
+        Rectangle rectangle = new Rectangle(x, y, drawWidth, drawHeight);
         g2.drawOval(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-        g2.setColor(oldColor);
+        g2.setPaint(oldPaint);
         g2.setStroke(oldStroke);
         g2.dispose();
         return rectangle;
@@ -109,7 +111,7 @@ public class CircleStamp implements IStamp{
 
     @Override
     public void reset() {
-        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampCircleDefaultColor));
+        color = config.getColor(ConfigHelper.PROFILE.editorStampCircleDefaultColor);
         width = config.getInt(ConfigHelper.PROFILE.editorStampCircleWidth);
         height = config.getInt(ConfigHelper.PROFILE.editorStampCircleHeight);
 
@@ -138,12 +140,12 @@ public class CircleStamp implements IStamp{
     }
 
     @Override
-    public void setColor(PBRColor color) {
+    public void setColor(SSColor color) {
         this.color = color;
     }
 
     @Override
-    public PBRColor getColor() {
+    public SSColor getColor() {
         return color;
     }
 }

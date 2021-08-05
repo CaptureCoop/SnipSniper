@@ -246,18 +246,11 @@ public class Utils {
 	}
 
 	public static String rgb2hex(Color color) {
-		String additional = "";
-		if(color.getAlpha() != 255)
-			additional = "_" + color.getAlpha();
-		return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()) + additional;
+		return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
 	}
 
 	public static Color hex2rgb(String colorStr) {
-		String[] values = colorStr.split("_");
-		int alpha = 255;
-		if(values.length > 1)
-			alpha = Integer.parseInt(values[1]);
-	    return new Color(Integer.valueOf(values[0].substring(1, 3), 16), Integer.valueOf( values[0].substring(3, 5), 16), Integer.valueOf(values[0].substring(5, 7), 16), alpha);
+	    return new Color(Integer.valueOf(colorStr.substring(1, 3), 16), Integer.valueOf( colorStr.substring(3, 5), 16), Integer.valueOf(colorStr.substring(5, 7), 16));
 	}
 
 	public static synchronized BufferedImage copyImage(BufferedImage source){

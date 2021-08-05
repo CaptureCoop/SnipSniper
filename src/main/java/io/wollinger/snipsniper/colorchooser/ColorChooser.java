@@ -1,8 +1,14 @@
-package io.wollinger.snipsniper.utils;
+package io.wollinger.snipsniper.colorchooser;
 
 import io.wollinger.snipsniper.Config;
+import io.wollinger.snipsniper.utils.CustomWindowListener;
+import io.wollinger.snipsniper.utils.Icons;
+import io.wollinger.snipsniper.utils.SSColor;
+import io.wollinger.snipsniper.utils.Utils;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -17,34 +23,38 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 public class ColorChooser extends JFrame{
     private final ColorChooser instance;
     private JColorChooser jcc;
-	private final PBRColor color;
+    private SSColor colorToChange;
+    private final SSColor color;
 	private final String configKey;
     private final Config config;
-
+    //TODO: Save color as single color if gradient is not selected
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
 
-	public ColorChooser(Config config, String title, PBRColor color, String configKey, int x, int y) {
+	public ColorChooser(Config config, String title, SSColor color, String configKey, int x, int y, boolean useGradient) {
         instance = this;
         this.config = config;
-		this.color = color;
+        colorToChange = color;
+		this.color = new SSColor(color);
 		this.configKey = configKey;
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                close();
+                close(false);
             }
         });
 
         setTitle(title);
         setIconImage(Icons.icon_taskbar);
-		setAlwaysOnTop(true);
-		init(x, y);
+		init(x, y, useGradient);
 	}
 	
-	public void close() {
-		for(CustomWindowListener listener : listeners) {
+	public void close(boolean doSave) {
+		if(doSave) {
+            colorToChange.loadFromSSColor(color);
+		}
+	    for(CustomWindowListener listener : listeners) {
 		    listener.windowClosed();
         }
 		dispose();
@@ -52,15 +62,15 @@ public class ColorChooser extends JFrame{
 
 	public void save() {
         if(configKey != null) {
-            config.set(configKey, Utils.rgb2hex(color.getColor()));
+            config.set(configKey, Utils.rgb2hex(color.getPrimaryColor()));
             config.save();
         }
-        close();
+        close(true);
     }
 	
-	void init(int x, int y) {
+	void init(int x, int y, boolean useGradient) {
 		jcc = new JColorChooser();
-		jcc.setColor(color.getColor());
+		jcc.setColor(color.getPrimaryColor());
         AbstractColorChooserPanel[] panels = jcc.getChooserPanels();
         jcc.setPreviewPanel(new JPanel());
         for (AbstractColorChooserPanel colorPanel : panels) {
@@ -72,9 +82,11 @@ public class ColorChooser extends JFrame{
         JPanel colorPanel = new JPanel();
         JPanel submitButtonPanel = new JPanel();
         JButton submit = new JButton("Okay");
-        submit.addActionListener(e -> {
-            color.setColor(jcc.getColor());
-            instance.close();
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                instance.close(true);
+            }
         });
 
         JButton save = new JButton("Save as default");
@@ -84,11 +96,17 @@ public class ColorChooser extends JFrame{
         
         colorPanel.add(jcc);
 
+        ColorChooserPreviewPanel gradientPanel = null;
+        if(useGradient) {
+            gradientPanel = new ColorChooserPreviewPanel(this);
+        }
+
+        if(gradientPanel != null)
+            mainPanel.add(gradientPanel);
         mainPanel.add(colorPanel);
         mainPanel.add(submitButtonPanel);
         
         add(mainPanel);
-        setResizable(false);
         setFocusable(true);
         
         setAlwaysOnTop(true);
@@ -105,6 +123,14 @@ public class ColorChooser extends JFrame{
         setLocation(x - getWidth()/2, y - getHeight()/2);
         setVisible(true);
 	}
+
+	public JColorChooser getJcc() {
+	    return jcc;
+    }
+
+	public SSColor getColor() {
+	    return color;
+    }
 
 	public void addWindowListener(CustomWindowListener listener) {
 	    listeners.add(listener);

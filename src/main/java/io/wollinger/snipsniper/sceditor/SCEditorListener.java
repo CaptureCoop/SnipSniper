@@ -1,5 +1,6 @@
 package io.wollinger.snipsniper.sceditor;
 
+import io.wollinger.snipsniper.colorchooser.ColorChooser;
 import io.wollinger.snipsniper.sceditor.stamps.IStamp;
 import io.wollinger.snipsniper.snipscope.SnipScopeListener;
 import io.wollinger.snipsniper.utils.*;
@@ -93,7 +94,7 @@ public class SCEditorListener extends SnipScopeListener {
             openColorChooser = false;
             int x = (int)((scEditorWindow.getLocation().getX() + scEditorWindow.getWidth()/2));
             int y = (int)((scEditorWindow.getLocation().getY() + scEditorWindow.getHeight()/2));
-            new ColorChooser(scEditorWindow.getConfig(), "Marker Color", scEditorWindow.getSelectedStamp().getColor(), scEditorWindow.getSelectedStamp().getID() + "DefaultColor", x, y);
+            new ColorChooser(scEditorWindow.getConfig(), "Marker Color", scEditorWindow.getSelectedStamp().getColor(), scEditorWindow.getSelectedStamp().getID() + "DefaultColor", x, y, true);
         }
 
         if(openSaveAsWindow) {
@@ -161,8 +162,8 @@ public class SCEditorListener extends SnipScopeListener {
 
         if(input.isKeyPressed(KeyEvent.VK_ALT)) {
             IStamp stamp = scEditorWindow.getSelectedStamp();
-            Color oldColor = stamp.getColor().getColor();
-            final int alpha = stamp.getColor().getColor().getAlpha();
+            Color oldColor = stamp.getColor().getPrimaryColor();
+            final int alpha = stamp.getColor().getPrimaryColor().getAlpha();
             float[] hsv = new float[3];
             Color.RGBtoHSB(oldColor.getRed(),oldColor.getGreen(),oldColor.getBlue(),hsv);
 
@@ -173,7 +174,7 @@ public class SCEditorListener extends SnipScopeListener {
                 hsv[0] -= speed;
 
             Color newColor = Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
-            stamp.setColor(new PBRColor(newColor, alpha));
+            stamp.setColor(new SSColor(newColor, alpha));
             scEditorWindow.repaint();
             return;
         }

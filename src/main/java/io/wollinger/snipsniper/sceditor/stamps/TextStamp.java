@@ -4,7 +4,7 @@ import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.sceditor.SCEditorWindow;
 import io.wollinger.snipsniper.utils.ConfigHelper;
 import io.wollinger.snipsniper.utils.InputContainer;
-import io.wollinger.snipsniper.utils.PBRColor;
+import io.wollinger.snipsniper.utils.SSColor;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -15,7 +15,7 @@ public class TextStamp implements IStamp{
     private final Config config;
     private final SCEditorWindow scEditorWindow;
 
-    private PBRColor color;
+    private SSColor color;
     private int fontSize;
     private int fontSizeSpeed;
     private String text;
@@ -67,11 +67,13 @@ public class TextStamp implements IStamp{
     }
 
     @Override
-    public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         if(input == null) {
             input = new InputContainer();
             input.setMousePosition(position.getX(), position.getY());
         }
+
+        Graphics2D g = (Graphics2D) g_;
 
         livePosition = new Vector2Int(input.getMouseX(), input.getMouseY()); //Update method only gets called upon keypress
 
@@ -94,12 +96,13 @@ public class TextStamp implements IStamp{
         int drawFontSize = (int) ((double)fontSize * difference[1]);
 
         Font oldFont = g.getFont();
-        Color oldColor = g.getColor();
+        Paint oldColor = g.getPaint();
         g.setFont(new Font("Arial", fontMode, drawFontSize));
-        g.setColor(color.getColor());
+        int width = g.getFontMetrics().stringWidth(textToDraw);
+        g.setPaint(color.getGradientPaint(width, drawFontSize, renderPos.getX(), renderPos.getY()));
         g.drawString(textToDraw, renderPos.getX(), renderPos.getY());
         g.setFont(oldFont);
-        g.setColor(oldColor);
+        g.setPaint(oldColor);
         
         if(isSaveRender) {
             reset();
@@ -127,7 +130,7 @@ public class TextStamp implements IStamp{
         text = "";
         state = TextState.IDLE;
         doSaveNextRender = false;
-        color = new PBRColor(config.getColor(ConfigHelper.PROFILE.editorStampTextDefaultColor));
+        color = config.getColor(ConfigHelper.PROFILE.editorStampTextDefaultColor);
         fontSize = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultFontSize);
         fontSizeSpeed = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultSpeed);
     }
@@ -148,12 +151,12 @@ public class TextStamp implements IStamp{
     }
 
     @Override
-    public void setColor(PBRColor color) {
+    public void setColor(SSColor color) {
         this.color = color;
     }
 
     @Override
-    public PBRColor getColor() {
+    public SSColor getColor() {
         return color;
     }
 }
