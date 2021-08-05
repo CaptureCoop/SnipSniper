@@ -33,6 +33,14 @@ public class SSColor {
 		if(color.point2 != null) point2 = new Vector2Float(color.point2);
 	}
 
+	public SSColor(SSColor color, int alpha) {
+		primaryColor = new Color(color.primaryColor.getRed(), color.primaryColor.getGreen(), color.primaryColor.getBlue(), alpha);
+		if(color.secondaryColor != null) secondaryColor = new Color(color.secondaryColor.getRed(), color.secondaryColor.getGreen(), color.secondaryColor.getBlue(), alpha);
+		isGradient = color.isGradient;
+		if(color.point1 != null) point1 = new Vector2Float(color.point1);
+		if(color.point2 != null) point2 = new Vector2Float(color.point2);
+	}
+
 	public SSColor(Color primaryColor, Color secondaryColor, boolean isGradient) {
 		this.primaryColor = primaryColor;
 		this.secondaryColor = secondaryColor;
