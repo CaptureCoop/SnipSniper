@@ -87,11 +87,18 @@ public class RectangleStamp implements IStamp {
         if(strokeThickness <= 0)
             strokeThickness = 1;
         g2.setStroke(new BasicStroke(strokeThickness));
-        Color oldColor = g2.getColor();
-        g2.setColor(color.getPrimaryColor());
-        Rectangle rectangle = new Rectangle((int)(position.getX() - ((double)width*difference[0]) / 2), (int)(position.getY() - ((double)height*difference[1]) / 2), (int)((double)width*difference[0]), (int)((double)height*difference[1]));
+
+        int drawWidth = (int) ((double)width * difference[0]);
+        int drawHeight = (int) ((double)height * difference[1]);
+
+        int x = (int)(position.getX() - drawWidth / 2);
+        int y = (int)(position.getY() - drawHeight / 2);
+
+        Paint oldColor = g2.getPaint();
+        g2.setPaint(color.getGradientPaint(drawWidth, drawHeight, x, y));
+        Rectangle rectangle = new Rectangle(x, y, drawWidth, drawHeight);
         g2.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-        g2.setColor(oldColor);
+        g2.setPaint(oldColor);
         g2.setStroke(oldStroke);
         g2.dispose();
         return rectangle;
