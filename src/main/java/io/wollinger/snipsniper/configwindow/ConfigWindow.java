@@ -671,17 +671,13 @@ public class ConfigWindow extends JFrame {
         constraints.gridx = 0;
     }
 
-    private JButton setupColorButton(String title, Config config, Enum configKey, ChangeListener whenChange) {
-        JButton colorButton = new JButton(title);
+    private GradientJButton setupColorButton(String title, Config config, Enum configKey, ChangeListener whenChange) {
         SSColor startColorPBR = SSColor.fromSaveString(config.getString(configKey));
+        GradientJButton colorButton = new GradientJButton(title, startColorPBR);
         startColorPBR.addChangeListener(e -> {
             config.set(configKey, startColorPBR.toSaveString());
-            colorButton.setBackground(startColorPBR.getPrimaryColor());
-            colorButton.setForeground(Utils.getContrastColor(startColorPBR.getPrimaryColor()));
         });
         startColorPBR.addChangeListener(whenChange);
-        colorButton.setBackground(startColorPBR.getPrimaryColor());
-        colorButton.setForeground(Utils.getContrastColor(startColorPBR.getPrimaryColor()));
         colorButton.addActionListener(e -> new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2), true));
         return colorButton;
     }
@@ -693,8 +689,7 @@ public class ConfigWindow extends JFrame {
         if(stamp instanceof CubeStamp) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
-            JButton colorButton = setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCubeDefaultColor, e -> previewPanel.setStamp(new CubeStamp(config, null)));
-            panel.add(colorButton, gbc);
+            panel.add(setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCubeDefaultColor, e -> previewPanel.setStamp(new CubeStamp(config, null))), gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
             gbc.gridx = 0;
@@ -708,8 +703,7 @@ public class ConfigWindow extends JFrame {
         } else if(stamp instanceof CounterStamp) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER));
             gbc.gridx = 1;
-            JButton colorButton = setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCounterDefaultColor, e -> previewPanel.setStamp(new CounterStamp(config)));
-            panel.add(colorButton);
+            panel.add(setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCounterDefaultColor, e -> previewPanel.setStamp(new CounterStamp(config))));
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
             gbc.gridx = 0;
@@ -752,8 +746,7 @@ public class ConfigWindow extends JFrame {
         } else if(stamp instanceof CircleStamp) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
-            JButton colorButton = setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCircleDefaultColor, e -> previewPanel.setStamp(new CircleStamp(config)));
-            panel.add(colorButton, gbc);
+            panel.add(setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCircleDefaultColor, e -> previewPanel.setStamp(new CircleStamp(config))), gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
 
@@ -768,8 +761,7 @@ public class ConfigWindow extends JFrame {
         } else if(stamp instanceof SimpleBrush) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
-            JButton colorButton = setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampSimpleBrushDefaultColor, e -> previewPanel.setStamp(new SimpleBrush(config, null)));
-            panel.add(colorButton, gbc);
+            panel.add(setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampSimpleBrushDefaultColor, e -> previewPanel.setStamp(new SimpleBrush(config, null))), gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton("text"), gbc);
 
@@ -780,8 +772,7 @@ public class ConfigWindow extends JFrame {
         } else if(stamp instanceof TextStamp) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
-            JButton colorButton = setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampTextDefaultColor, e -> previewPanel.setStamp(new TextStamp(config, null)));
-            panel.add(colorButton, gbc);
+            panel.add(setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampTextDefaultColor, e -> previewPanel.setStamp(new TextStamp(config, null))), gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton("text"), gbc);
 
@@ -792,8 +783,7 @@ public class ConfigWindow extends JFrame {
         } else if(stamp instanceof RectangleStamp) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
-            JButton colorButton = setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampRectangleDefaultColor, e -> previewPanel.setStamp(new RectangleStamp(config)));
-            panel.add(colorButton, gbc);
+            panel.add(setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampRectangleDefaultColor, e -> previewPanel.setStamp(new RectangleStamp(config))), gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton("text"), gbc);
 

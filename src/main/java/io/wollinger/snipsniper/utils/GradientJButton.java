@@ -2,6 +2,8 @@ package io.wollinger.snipsniper.utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
 
 public class GradientJButton extends JButton {
     private SSColor color;
@@ -17,16 +19,25 @@ public class GradientJButton extends JButton {
     @Override
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g2.setPaint(color.getGradientPaint(getWidth(), getHeight()));
         g2.fillRect(0, 0, getWidth(), getHeight());
-        g.setColor(Color.BLACK);
+        g2.setColor(Color.BLACK);
         g2.drawRect(0, 0, getWidth()-1, getHeight()-1);
-        g2.setFont(new Font("TimesRoman", Font.PLAIN, getHeight()));
-        if(color.isValidGradient())
-            g2.setPaint(new SSColor(Utils.getContrastColor(color.getPrimaryColor()), Utils.getContrastColor(color.getSecondaryColor()), true).getGradientPaint(getWidth(), getHeight()));
-        else
-            g2.setColor(Utils.getContrastColor(color.getPrimaryColor()));
-        g2.drawString(title, getWidth()/2 - g2.getFontMetrics().stringWidth(title)/2, getHeight()-getHeight()/4);
+        int drawHeight = (int)(getHeight() / 1.5F);
+        g2.setFont(new Font(getFont().getFontName(), Font.PLAIN, drawHeight));
+
+        FontRenderContext frc = g2.getFontRenderContext();
+        GlyphVector gv = g2.getFont().createGlyphVector(frc, getText());
+        Shape shape = gv.getOutline();
+
+        g2.translate(getWidth()/2 - g2.getFontMetrics().stringWidth(title)/2, getHeight()/2 + drawHeight / 3);
+        g2.setStroke(new BasicStroke(2));
+        g2.draw(shape);
+        g2.setColor(Color.WHITE);
+        g2.fill(shape);
+
         g2.dispose();
         super.paint(g2);
     }
