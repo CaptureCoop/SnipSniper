@@ -113,7 +113,7 @@ public class CubeStamp implements IStamp{
             int x = position.getX() - drawWidth / 2;
             int y = position.getY() - drawHeight / 2;
             if(!isCensor)
-                g.setPaint(color.getGradientPaint(width, height, x, y));
+                g.setPaint(color.getGradientPaint(drawWidth, drawHeight, x, y));
             else
                 g.setColor(Color.BLACK); //TODO: Add to config
 
@@ -121,7 +121,7 @@ public class CubeStamp implements IStamp{
                 SSColor smartPixelPreview = new SSColor(color);
                 smartPixelPreview.setPrimaryColor(smartPixelPreview.getPrimaryColor(), 150);
                 smartPixelPreview.setSecondaryColor(smartPixelPreview.getSecondaryColor(), 150);
-                g.setPaint(smartPixelPreview.getGradientPaint(width, height, x, y));
+                g.setPaint(smartPixelPreview.getGradientPaint(drawWidth, drawHeight, x, y));
             }
 
             g.fillRect(x, y, drawWidth, drawHeight);

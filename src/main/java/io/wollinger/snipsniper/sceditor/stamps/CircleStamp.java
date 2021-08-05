@@ -90,7 +90,7 @@ public class CircleStamp implements IStamp{
         Paint oldPaint = g2.getPaint();
         int x = position.getX() - drawWidth / 2;
         int y = position.getY() - drawHeight / 2;
-        g2.setPaint(color.getGradientPaint(width, height, x, y));
+        g2.setPaint(color.getGradientPaint(drawWidth, drawHeight, x, y));
         Rectangle rectangle = new Rectangle(x, y, drawWidth, drawHeight);
         g2.drawOval(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         g2.setPaint(oldPaint);
