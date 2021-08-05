@@ -37,13 +37,18 @@ public class SimpleBrush implements IStamp {
     }
 
     @Override
-    public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         int newSize = (int) ((double)size * difference[0]);
+        Graphics2D g = (Graphics2D) g_;
 
-        Color oldColor = g.getColor();
-        g.setColor(new Color(color.getPrimaryColor().getRed(), color.getPrimaryColor().getGreen(), color.getPrimaryColor().getBlue(), 255));
+        Paint oldColor = g.getColor();
+        Rectangle bounds = g.getClipBounds();
+        if(bounds == null && scEditorWindow != null)
+            bounds = new Rectangle(0, 0, scEditorWindow.getImage().getWidth(), scEditorWindow.getImage().getHeight());
+
+        Paint paint = new SSColor(color, 255).getGradientPaint((int)bounds.getWidth(), (int)bounds.getHeight());
+        g.setPaint(paint);
         g.fillOval(position.getX() - newSize / 2, position.getY() - newSize / 2, newSize, newSize);
-        g.setColor(oldColor);
 
         if(scEditorWindow != null && !input.isKeyPressed(scEditorWindow.getMovementKey())) {
             Vector2Int p0 = scEditorWindow.getPointOnImage(input.getMousePathPoint(0));
@@ -53,8 +58,7 @@ public class SimpleBrush implements IStamp {
                 Graphics2D g2 = (Graphics2D) scEditorWindow.getImage().getGraphics();
                 g2.setRenderingHints(scEditorWindow.getQualityHints());
                 Stroke oldStroke = g2.getStroke();
-                oldColor = g2.getColor();
-                g2.setColor(new Color(color.getPrimaryColor().getRed(), color.getPrimaryColor().getGreen(), color.getPrimaryColor().getBlue(), 255));
+                g2.setPaint(paint);
                 g2.setStroke(new BasicStroke(newSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
                 double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());
@@ -68,7 +72,7 @@ public class SimpleBrush implements IStamp {
                 }
 
                 g2.setStroke(oldStroke);
-                g.setColor(oldColor);
+                g.setPaint(oldColor);
                 g2.dispose();
             }
         }
