@@ -67,11 +67,13 @@ public class TextStamp implements IStamp{
     }
 
     @Override
-    public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         if(input == null) {
             input = new InputContainer();
             input.setMousePosition(position.getX(), position.getY());
         }
+
+        Graphics2D g = (Graphics2D) g_;
 
         livePosition = new Vector2Int(input.getMouseX(), input.getMouseY()); //Update method only gets called upon keypress
 
@@ -94,12 +96,13 @@ public class TextStamp implements IStamp{
         int drawFontSize = (int) ((double)fontSize * difference[1]);
 
         Font oldFont = g.getFont();
-        Color oldColor = g.getColor();
+        Paint oldColor = g.getPaint();
         g.setFont(new Font("Arial", fontMode, drawFontSize));
-        g.setColor(color.getPrimaryColor());
+        int width = g.getFontMetrics().stringWidth(textToDraw);
+        g.setPaint(color.getGradientPaint(width, drawFontSize, renderPos.getX(), renderPos.getY()));
         g.drawString(textToDraw, renderPos.getX(), renderPos.getY());
         g.setFont(oldFont);
-        g.setColor(oldColor);
+        g.setPaint(oldColor);
         
         if(isSaveRender) {
             reset();
