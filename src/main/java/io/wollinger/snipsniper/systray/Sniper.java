@@ -36,6 +36,8 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	private Sniper instance;
 	private JFrame popup;
 
+	private final static int TASKBAR_HEIGHT = 40;
+
 	public Sniper(int profileID) {
 		instance = this;
 		this.profileID = profileID;
@@ -129,15 +131,15 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 							} else {
 								if (insets.bottom != 0)
 									popup.setLocation(mouseEvent.getX(), screenRect.height - popup.getHeight() - insets.bottom);
-
-								if (insets.top != 0)
+								else if (insets.top != 0)
 									popup.setLocation(mouseEvent.getX(), insets.top);
-
-								if (insets.left != 0)
+								else if (insets.left != 0)
 									popup.setLocation(insets.left, mouseEvent.getY() - popup.getHeight());
-
-								if (insets.right != 0)
+								else if (insets.right != 0)
 									popup.setLocation(screenRect.width - popup.getWidth() - insets.right, mouseEvent.getY() - popup.getHeight());
+								else
+									popup.setLocation(mouseEvent.getX(), screenRect.height - popup.getHeight() - TASKBAR_HEIGHT);
+									/* If "Let taskbar scroll down when not in use" is enabled insets is all 0, use 40 for now, should work fine */
 							}
 							popup.requestFocus();
 						}
