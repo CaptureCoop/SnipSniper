@@ -1,4 +1,4 @@
-package io.wollinger.snipsniper.snipscope;
+package io.wollinger.snipsniper.snipscope.ui;
 
 import io.wollinger.snipsniper.utils.Vector2Int;
 
