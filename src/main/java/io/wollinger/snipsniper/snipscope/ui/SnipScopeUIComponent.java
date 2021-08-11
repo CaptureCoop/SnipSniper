@@ -4,14 +4,14 @@ import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
 
-public class SnipScopeComponent {
+public class SnipScopeUIComponent {
 
     private PositionType positionType = PositionType.PIXEL;
     private Vector2Int size = new Vector2Int(0, 0);
 
     enum PositionType {PIXEL, PERCENTAGE};
 
-    public SnipScopeComponent() {
+    public SnipScopeUIComponent() {
 
     }
 
