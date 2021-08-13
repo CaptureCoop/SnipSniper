@@ -27,5 +27,17 @@
   "systray/alt_icon6.png",
   "systray/alt_icon7.png",
   "preview/code_dark.png",
-  "preview/code_light.png"
+  "preview/code_light.png",
+  "buttons/stamp_cube.png",
+  "buttons/stamp_cube_hover.png",
+  "buttons/stamp_counter.png",
+  "buttons/stamp_counter_hover.png",
+  "buttons/stamp_circle.png",
+  "buttons/stamp_circle_hover.png",
+  "buttons/stamp_simplebrush.png",
+  "buttons/stamp_simplebrush_hover.png",
+  "buttons/stamp_rectangle.png",
+  "buttons/stamp_rectangle_hover.png",
+  "buttons/stamp_text.png",
+  "buttons/stamp_text_hover.png"
 ]
