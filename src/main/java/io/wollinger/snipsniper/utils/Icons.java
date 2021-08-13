@@ -1,57 +1,34 @@
 package io.wollinger.snipsniper.utils;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
 
 import io.wollinger.snipsniper.SnipSniper;
+import org.json.JSONArray;
 
 public class Icons {
-	
-	public static BufferedImage icon;
-	public static BufferedImage icon_taskbar;
-	public static BufferedImage icon_editor;
-	public static BufferedImage icon_viewer;
-	public static BufferedImage icon_config;
-	public static BufferedImage icon_console;
-	public static BufferedImage icon_questionmark;
-	public static BufferedImage icon_folder;
-	public static BufferedImage icon_exit;
-	public static BufferedImage[] icons;
-	public static BufferedImage[] alt_icons;
 
-	public static BufferedImage stamp_preview_dark;
-	public static BufferedImage stamp_preview_light;
-
-	public static BufferedImage splash;
+	private static HashMap<String, BufferedImage> images = new HashMap<>();
 
 	public static void loadResources() {
 		try {
-			icon = ImageIO.read(SnipSniper.class.getResource("/res/icon.png"));
-			icon_taskbar = ImageIO.read(SnipSniper.class.getResource("/res/SnSn.png"));
-			icon_editor = ImageIO.read(SnipSniper.class.getResource("/res/SnSnEd.png"));
-			icon_viewer = ImageIO.read(SnipSniper.class.getResource("/res/SnSnVi.png"));
-			icon_config = ImageIO.read(SnipSniper.class.getResource("/res/SnSnCo.png"));
-			icon_console = ImageIO.read(SnipSniper.class.getResource("/res/SnSnCs.png"));
-			icon_questionmark = ImageIO.read(SnipSniper.class.getResource("/res/SnSnQm_512x512.png"));
-			icon_folder = ImageIO.read(SnipSniper.class.getResource("/res/SnSnFo_512x512.png"));
-			icon_exit = ImageIO.read(SnipSniper.class.getResource("/res/SnSnEx_512x512.png"));
-
-			stamp_preview_dark = ImageIO.read(SnipSniper.class.getResource("/res/stamp_preview_dark.png"));
-			stamp_preview_light = ImageIO.read(SnipSniper.class.getResource("/res/stamp_preview_light.png"));
-
-			icons = new BufferedImage[8];
-			alt_icons = new BufferedImage[8];
-			for(int i = 0; i < 8; i++) {
-				icons[i] = ImageIO.read(SnipSniper.class.getResource("/res/icon" + i + ".png"));
-				alt_icons[i] = ImageIO.read(SnipSniper.class.getResource("/res/alt_icon" + i + ".png"));
+			JSONArray list = new JSONArray(Utils.loadFileFromJar("img.json"));
+			for(int i = 0; i < list.length(); i++) {
+				images.put(list.getString(i), ImageIO.read(SnipSniper.class.getResource("/img/" + list.getString(i))));
 			}
-
-			splash = ImageIO.read(Icons.class.getResource("/splash.png"));
-		} catch (Exception e) {
-			LogManager.log("ICON", "There was an error loading the icons! Message: " + e.getMessage(), Level.SEVERE);
-			SnipSniper.exit(false);
+		} catch (IOException ioException) {
+			ioException.printStackTrace();
 		}
+	}
+
+	public static BufferedImage getImage(String path) {
+		if(!images.containsKey(path)) {
+			LogManager.log("ICONS", "Could not find image under path " + path + "!", Level.SEVERE);
+			return null;
+		}
+		return images.get(path);
 	}
 }

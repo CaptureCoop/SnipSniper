@@ -41,17 +41,17 @@ public class btnAbout extends PopupMenuButton {
 				frame.setSize(512,256);
 				frame.setTitle("About");
 				frame.setResizable(true);
-				frame.setIconImage(Icons.icon_taskbar);
+				frame.setIconImage(Icons.getImage("icons/snipsniper.png"));
 
 				JPanel panel = new JPanel(new GridLayout(1,0));
 
 				int iconSize = 100;
-				ImageIcon icon = new ImageIcon(Icons.icon_taskbar.getScaledInstance(iconSize,iconSize,Image.SCALE_DEFAULT));
+				ImageIcon icon = new ImageIcon(Icons.getImage("icons/snipsniper.png").getScaledInstance(iconSize,iconSize,Image.SCALE_DEFAULT));
 				JLabel label = new JLabel(icon);
 				label.addMouseListener(new MouseAdapter() {
 					int index = 0;
 
-					BufferedImage[] icons = {Icons.icon_taskbar, Icons.icon_editor, Icons.icon_viewer, Icons.icon_console};
+					BufferedImage[] icons = {Icons.getImage("icons/snipsniper.png"), Icons.getImage("icons/editor.png"), Icons.getImage("icons/viewer.png"), Icons.getImage("icons/console.png")};
 					HashMap<String, Image> cache = new HashMap<>();
 
 					@Override
@@ -85,7 +85,8 @@ public class btnAbout extends PopupMenuButton {
 
 				JPanel rightSide = new JPanel(new GridLayout(2, 0));
 
-				rightSide.add(new JLabel(new ImageIcon(Icons.splash.getScaledInstance((int)(Icons.splash.getWidth()/2.2F),(int)(Icons.splash.getHeight()/2.2F),Image.SCALE_DEFAULT))));
+				BufferedImage splash = Icons.getImage("splash.png");
+				rightSide.add(new JLabel(new ImageIcon(splash.getScaledInstance((int)(splash.getWidth()/2.2F),(int)(splash.getHeight()/2.2F),Image.SCALE_DEFAULT))));
 
 				JEditorPane about = new JEditorPane("text/html", html);
 				about.setEditable(false);

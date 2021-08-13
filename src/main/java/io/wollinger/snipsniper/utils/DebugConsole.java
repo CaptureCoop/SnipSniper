@@ -16,7 +16,7 @@ public class DebugConsole extends JFrame {
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         setSize((int)(size.getWidth()/2), (int)(size.getHeight()/2));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setIconImage(Icons.icon_console);
+        setIconImage(Icons.getImage("icons/console.png"));
         content.setOpaque(true);
         content.setContentType("text/html");
         content.setEditable(false);

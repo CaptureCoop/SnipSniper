@@ -56,7 +56,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         stamps[5] = new RectangleStamp(config);
 
         if(image == null)
-            image = Utils.getDragPasteImage(Icons.icon_editor, "Drop image here or use CTRL + V to paste one!");
+            image = Utils.getDragPasteImage(Icons.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
 
         renderer = new SCEditorRenderer(this);
         listener = new SCEditorListener(this);
@@ -65,7 +65,7 @@ public class SCEditorWindow extends SnipScopeWindow {
 
         listener.resetHistory();
 
-        setIconImage(Icons.icon_editor);
+        setIconImage(Icons.getImage("icons/editor.png"));
 
         setFocusTraversalKeysEnabled(false);
         setVisible(true);

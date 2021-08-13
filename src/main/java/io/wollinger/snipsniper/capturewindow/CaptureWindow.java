@@ -39,7 +39,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-		if(SystemTray.isSupported()) sniperInstance.getTrayIcon().setImage(Icons.alt_icons[sniperInstance.profileID]);
+		if(SystemTray.isSupported()) sniperInstance.getTrayIcon().setImage(Icons.getImage("systray/alt_icon" + sniperInstance.profileID + ".png"));
 		if(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) != 0) {
 			try {
 				Thread.sleep(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L);
@@ -52,7 +52,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		screenshot();
 
 		setUndecorated(true);
-		setIconImage(Icons.icon_taskbar);
+		setIconImage(Icons.getImage(""));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		listener = new CaptureWindowListener(this);

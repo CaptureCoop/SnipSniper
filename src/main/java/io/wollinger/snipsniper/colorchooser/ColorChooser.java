@@ -46,7 +46,7 @@ public class ColorChooser extends JFrame{
         });
 
         setTitle(title);
-        setIconImage(Icons.icon_taskbar);
+        setIconImage(Icons.getImage("icons/snipsniper.png"));
 		init(x, y, useGradient);
 	}
 	

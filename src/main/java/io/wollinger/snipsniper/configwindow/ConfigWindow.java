@@ -45,7 +45,7 @@ public class ConfigWindow extends JFrame {
         setSize(512, 512);
         setTitle(LangManager.getItem("config_label_config"));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setIconImage(Icons.icon_config);
+        setIconImage(Icons.getImage("icons/config.png"));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -86,28 +86,28 @@ public class ConfigWindow extends JFrame {
 
         snipConfigPanel = new JPanel();
         tabPane.addTab("SnipSniper Settings",  setupSnipPane(config));
-        tabPane.setIconAt(index, new ImageIcon(Icons.icon_taskbar.getScaledInstance(iconSize, iconSize, 0)));
+        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)));
         if(page == PAGE.snipPanel)
             enableIndex = index;
         index++;
 
         editorConfigPanel = new JPanel();
         tabPane.addTab("Editor Settings", setupEditorPane(config));
-        tabPane.setIconAt(index, new ImageIcon(Icons.icon_editor.getScaledInstance(iconSize,iconSize,0)));
+        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/editor.png").getScaledInstance(iconSize,iconSize,0)));
         if(page == PAGE.editorPanel)
             enableIndex = index;
         index++;
 
         viewerConfigPanel = new JPanel();
         tabPane.addTab("Viewer Settings", setupViewerPane(config));
-        tabPane.setIconAt(index, new ImageIcon(Icons.icon_viewer.getScaledInstance(iconSize,iconSize,0)));
+        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/viewer.png").getScaledInstance(iconSize,iconSize,0)));
         if(page == PAGE.viewerPanel)
             enableIndex = index;
         index++;
 
         globalConfigPanel = new JPanel();
         tabPane.addTab("Global Settings", setupGlobalPane());
-        tabPane.setIconAt(index, new ImageIcon(Icons.icon_config.getScaledInstance(iconSize, iconSize, 0)));
+        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/config.png").getScaledInstance(iconSize, iconSize, 0)));
         if(page == PAGE.globalPanel)
             enableIndex = index;
 
@@ -579,9 +579,9 @@ public class ConfigWindow extends JFrame {
         StampJPanel row3_stampPreview = new StampJPanel();
         String theme = SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme);
         if(theme.equals("light")) {
-            row3_stampPreview.setBackground(Icons.stamp_preview_light);
+            row3_stampPreview.setBackground(Icons.getImage("preview/code_light.png"));
         } else if(theme.equals("dark")) {
-            row3_stampPreview.setBackground(Icons.stamp_preview_dark);
+            row3_stampPreview.setBackground(Icons.getImage("preview/code_dark.png"));
         }
         IStamp stamp = new CubeStamp(config, null);
         row3_stampPreview.setStamp(stamp);

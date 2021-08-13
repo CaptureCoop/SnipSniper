@@ -43,13 +43,13 @@ public class SCViewerWindow extends SnipScopeWindow {
         currentFile = file;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         refreshTitle();
-        setIconImage(Icons.icon_viewer);
+        setIconImage(Icons.getImage("icons/viewer.png"));
         BufferedImage image;
         if(file != null) {
             refreshFolder();
             image = getImageFromFile(currentFile);
         } else {
-            image = Utils.getDragPasteImage(Icons.icon_viewer, "Drop image here!");
+            image = Utils.getDragPasteImage(Icons.getImage("icons/viewer.png"), "Drop image here!");
         }
 
         if(config == null) {

@@ -3,6 +3,7 @@ package io.wollinger.snipsniper.systray;
 import java.awt.*;
 import java.awt.event.*;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -52,33 +53,34 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			popup.setUndecorated(true);
 			popup.getRootPane().setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 			popup.setLayout(new BoxLayout(popup.getContentPane(),BoxLayout.PAGE_AXIS));
-			JLabel title = new JLabel(new ImageIcon(Icons.splash.getScaledInstance((int)(Icons.splash.getWidth()/3F),(int)(Icons.splash.getHeight()/3F), Image.SCALE_DEFAULT)));
+			BufferedImage splash = Icons.getImage("splash.png");
+			JLabel title = new JLabel(new ImageIcon(splash.getScaledInstance((int)(splash.getWidth()/3F),(int)(splash.getHeight()/3F), Image.SCALE_DEFAULT)));
 			title.setText("Profile " + profileID);
 			title.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 			title.setVerticalTextPosition(JLabel.BOTTOM);
 			title.setHorizontalTextPosition(JLabel.CENTER);
 			popup.add(title);
-			popup.add(new PopupMenuButton("Viewer", Icons.icon_viewer, popup, () -> new SCViewerWindow("VIEWERWND", null, config)));
-			popup.add(new PopupMenuButton("Editor", Icons.icon_editor, popup, () -> new SCEditorWindow("EDITORWND", null, -1, -1, "SnipSniper Editor", config, true, null, false, true)));
+			popup.add(new PopupMenuButton("Viewer", Icons.getImage("icons/viewer.png"), popup, () -> new SCViewerWindow("VIEWERWND", null, config)));
+			popup.add(new PopupMenuButton("Editor", Icons.getImage("icons/editor.png"), popup, () -> new SCEditorWindow("EDITORWND", null, -1, -1, "SnipSniper Editor", config, true, null, false, true)));
 			popup.add(new JSeparator());
-			popup.add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), Icons.icon_folder, popup, () -> {
+			popup.add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), Icons.getImage("icons/folder.png"), popup, () -> {
 				try {
 					Desktop.getDesktop().open(new File(getConfig().getString(ConfigHelper.PROFILE.pictureFolder)));
 				} catch (IOException ioException) {
 					ioException.printStackTrace();
 				}
 			}));
-			popup.add(new PopupMenuButton(LangManager.getItem("menu_config"), Icons.icon_config, popup, () -> openConfigWindow()));
+			popup.add(new PopupMenuButton(LangManager.getItem("menu_config"), Icons.getImage("icons/config.png"), popup, () -> openConfigWindow()));
 
 			if (SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
-				popup.add(new PopupMenuButton("Console", Icons.icon_console, popup, () -> SnipSniper.openDebugConsole()));
+				popup.add(new PopupMenuButton("Console", Icons.getImage("icons/console.png"), popup, () -> SnipSniper.openDebugConsole()));
 			}
 
-			popup.add(new btnAbout(LangManager.getItem("menu_about"), Icons.icon_taskbar, popup, null));
+			popup.add(new btnAbout(LangManager.getItem("menu_about"), Icons.getImage("icons/snipsniper.png"), popup, null));
 			popup.add(new JSeparator());
-			popup.add(new PopupMenuButton(LangManager.getItem("menu_quit"), Icons.icon_exit, popup, () -> SnipSniper.exit(false)));
+			popup.add(new PopupMenuButton(LangManager.getItem("menu_quit"), Icons.getImage("icons/redx.png"), popup, () -> SnipSniper.exit(false)));
 
-			popup.setIconImage(Icons.icon_taskbar);
+			popup.setIconImage(Icons.getImage("icons/snipsniper.png"));
 			popup.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusLost(FocusEvent focusEvent) {
@@ -88,7 +90,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			});
 
 			try {
-				trayIcon = new TrayIcon(Icons.icons[profileID], "SnipSniper (Profile " + profileID + ")");
+				trayIcon = new TrayIcon(Icons.getImage("systray/icon" + profileID + ".png"), "SnipSniper (Profile " + profileID + ")");
 				trayIcon.setImageAutoSize(true);
 
 				trayIcon.addMouseListener(new MouseAdapter() {
@@ -176,7 +178,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 	public void killCaptureWindow() {
 		if(captureWindow != null) {
-			if(SystemTray.isSupported()) trayIcon.setImage(Icons.icons[profileID]);
+			if(SystemTray.isSupported()) trayIcon.setImage(Icons.getImage("systray/icon" + profileID + ".png"));
 			SnipSniper.setIdle(true);
 			captureWindow.screenshot = null;
 			captureWindow.screenshotTinted = null;
