@@ -1,5 +1,6 @@
 package io.wollinger.snipsniper.snipscope;
 
+import io.wollinger.snipsniper.snipscope.ui.SnipScopeUIComponent;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
@@ -14,6 +15,7 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
     public SnipScopeListener(SnipScopeWindow snipScopeWindow) {
         this.snipScopeWindow = snipScopeWindow;
         input = snipScopeWindow.getInputContainer();
+        //TODO: Why is this here? Can we move this?
         snipScopeWindow.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
                 snipScopeWindow.resizeTrigger();
@@ -49,11 +51,18 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
     public void mouseClicked(MouseEvent mouseEvent) { }
 
     @Override
-    public void mousePressed(MouseEvent mouseEvent) { }
+    public void mousePressed(MouseEvent mouseEvent) {
+        for(SnipScopeUIComponent component : snipScopeWindow.getUiComponents()) {
+            component.mousePressed(mouseEvent);
+        }
+    }
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
         lastPoint = null;
+        for(SnipScopeUIComponent component : snipScopeWindow.getUiComponents()) {
+            component.mouseReleased(mouseEvent);
+        }
     }
 
     @Override
@@ -66,6 +75,10 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
+        for(SnipScopeUIComponent component : snipScopeWindow.getUiComponents()) {
+            component.mouseDragged(mouseEvent);
+        }
+
         if (input.isKeyPressed(snipScopeWindow.getMovementKey())) {
             if(lastPoint == null) lastPoint = mouseEvent.getPoint();
             double x = lastPoint.getX() - mouseEvent.getPoint().getX();
@@ -78,7 +91,11 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
     }
 
     @Override
-    public void mouseMoved(MouseEvent mouseEvent) { }
+    public void mouseMoved(MouseEvent mouseEvent) {
+        for(SnipScopeUIComponent component : snipScopeWindow.getUiComponents()) {
+            component.mouseMoved(mouseEvent);
+        }
+    }
 
     //Mouse wheel listener
 

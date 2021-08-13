@@ -4,10 +4,8 @@ import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.configwindow.ConfigWindow;
 import io.wollinger.snipsniper.sceditor.stamps.*;
 import io.wollinger.snipsniper.snipscope.SnipScopeWindow;
-import io.wollinger.snipsniper.utils.ConfigHelper;
-import io.wollinger.snipsniper.utils.Icons;
-import io.wollinger.snipsniper.utils.LogManager;
-import io.wollinger.snipsniper.utils.Utils;
+import io.wollinger.snipsniper.snipscope.ui.SnipScopeUIComponent;
+import io.wollinger.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
 
 import javax.swing.*;
@@ -67,10 +65,7 @@ public class SCEditorWindow extends SnipScopeWindow {
 
         listener.resetHistory();
 
-        //if (isStandalone)
-            setIconImage(Icons.icon_editor);
-        //else
-        //    setIconImage(Icons.icon_taskbar);
+        setIconImage(Icons.icon_editor);
 
         setFocusTraversalKeysEnabled(false);
         setVisible(true);

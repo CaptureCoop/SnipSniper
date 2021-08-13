@@ -3,32 +3,30 @@ package io.wollinger.snipsniper.snipscope.ui;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class SnipScopeUIComponent {
 
-    private PositionType positionType = PositionType.PIXEL;
+    private Vector2Int position = new Vector2Int(0, 0);
     private Vector2Int size = new Vector2Int(0, 0);
 
-    enum PositionType {PIXEL, PERCENTAGE};
+    public void render(Graphics2D g) { }
 
-    public SnipScopeUIComponent() {
+    public void mouseMoved(MouseEvent mouseEvent) { }
 
+    public void mouseDragged(MouseEvent mouseEvent) { }
+
+    public void mousePressed(MouseEvent mouseEvent) { }
+
+    public void mouseReleased(MouseEvent mouseEvent) { }
+
+    public Vector2Int getPosition() {
+        return position;
     }
 
-    public void updateSize(int windowWidth, int windowHeight) {
-
-    }
-
-    public void render (Graphics2D g) {
-
-    }
-
-    public void setPositionType(PositionType type) {
-        positionType = type;
-    }
-
-    public PositionType getPositionType() {
-        return positionType;
+    public void setPosition(int x, int y) {
+        position.setX(x);
+        position.setY(y);
     }
 
     public Vector2Int getSize() {
@@ -40,20 +38,6 @@ public class SnipScopeUIComponent {
         size.setY(height);
     }
 
-    public void setSize(Vector2Int vector2Int) {
-        size.setX(vector2Int.getX());
-        size.setY(vector2Int.getY());
-    }
-
-    public void setSize(Dimension dimension) {
-        size.setX((int) dimension.getWidth());
-        size.setY((int) dimension.getHeight());
-    }
-
-    public Dimension getSizeDimension() {
-        return new Dimension(size.getX(), size.getY());
-    }
-
     public int getWidth() {
         return size.getX();
     }
@@ -62,4 +46,7 @@ public class SnipScopeUIComponent {
         return size.getY();
     }
 
+    public boolean contains(Point point) {
+        return new Rectangle(position.getX(), position.getY(), size.getX(), size.getY()).contains(point);
+    }
 }

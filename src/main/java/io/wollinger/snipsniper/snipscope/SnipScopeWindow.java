@@ -1,5 +1,6 @@
 package io.wollinger.snipsniper.snipscope;
 
+import io.wollinger.snipsniper.snipscope.ui.SnipScopeUIComponent;
 import io.wollinger.snipsniper.utils.InputContainer;
 import io.wollinger.snipsniper.utils.Utils;
 import io.wollinger.snipsniper.utils.Vector2Int;
@@ -8,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class SnipScopeWindow extends JFrame {
     private String id;
@@ -24,6 +26,8 @@ public class SnipScopeWindow extends JFrame {
 
     private int movementKey = KeyEvent.VK_SPACE;
     private boolean requireMovementKeyForZoom = true;
+
+    private ArrayList<SnipScopeUIComponent> uiComponents = new ArrayList<>();
 
     public SnipScopeWindow(String id) {
         this.id = id;
@@ -121,6 +125,14 @@ public class SnipScopeWindow extends JFrame {
     public void setImage(BufferedImage image) {
         this.image = image;
         optimalImageDimension = Utils.getScaledDimension(image, renderer.getSize());
+    }
+
+    public void addUIComponent(SnipScopeUIComponent component) {
+        uiComponents.add(component);
+    }
+
+    public ArrayList<SnipScopeUIComponent> getUiComponents() {
+        return uiComponents;
     }
 
     public void setRequireMovementKeyForZoom(boolean value) {

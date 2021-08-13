@@ -1,5 +1,6 @@
 package io.wollinger.snipsniper.snipscope;
 
+import io.wollinger.snipsniper.snipscope.ui.SnipScopeUIComponent;
 import io.wollinger.snipsniper.utils.Vector2Int;
 
 import javax.swing.*;
@@ -33,6 +34,9 @@ public class SnipScopeRenderer extends JPanel {
             lastRectangle = new Rectangle(x, y, (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom));
             g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height , this);
         }
+
+        for(SnipScopeUIComponent component : snipScopeWindow.getUiComponents())
+            component.render((Graphics2D) g);
     }
 
 }
