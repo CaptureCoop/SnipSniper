@@ -34,9 +34,11 @@ public class SnipScopeRenderer extends JPanel {
             lastRectangle = new Rectangle(x, y, (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom));
             g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height , this);
         }
+    }
 
+    public void renderUI(Graphics2D g) {
         for(SnipScopeUIComponent component : snipScopeWindow.getUiComponents())
-            component.render((Graphics2D) g);
+            component.render(g);
     }
 
 }

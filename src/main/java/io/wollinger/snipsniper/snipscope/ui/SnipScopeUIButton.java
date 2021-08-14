@@ -15,20 +15,14 @@ public class SnipScopeUIButton extends SnipScopeUIComponent{
 
     private ArrayList<Function> onPress = new ArrayList<>();
     private boolean isHovering = false;
-    private boolean isPressed = false;
+    private boolean isHeld = false;
+    private boolean selected = false;
     private Vector2Int lastPosition = new Vector2Int();
 
     public SnipScopeUIButton(BufferedImage icon, BufferedImage iconHovering, BufferedImage iconPressed) {
         this.icon = icon;
         this.iconHovering = iconHovering;
         this.iconPressed = iconPressed;
-    }
-
-    public SnipScopeUIButton(BufferedImage icon, BufferedImage iconHovering, BufferedImage iconPressed, Function onPress) {
-        this.icon = icon;
-        this.iconHovering = iconHovering;
-        this.iconPressed = iconPressed;
-        this.onPress.add(onPress);
     }
 
     @Override
@@ -45,13 +39,13 @@ public class SnipScopeUIButton extends SnipScopeUIComponent{
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
         if(isHovering)
-            isPressed = true;
+            isHeld = true;
     }
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
-        if(isPressed) {
-            isPressed = false;
+        if(isHeld) {
+            isHeld = false;
             if(contains(lastPosition.toPoint())) {
                 for (Function function : onPress) {
                     function.run();
@@ -60,12 +54,15 @@ public class SnipScopeUIButton extends SnipScopeUIComponent{
         }
     }
 
+    public void setSelected(boolean bool) {
+        selected = bool;
+    }
 
     @Override
     public void render(Graphics2D g) {
         BufferedImage toRender = icon;
 
-        if(isPressed)
+        if(isHeld || selected)
             toRender = iconPressed;
         else if(isHovering)
             toRender = iconHovering;

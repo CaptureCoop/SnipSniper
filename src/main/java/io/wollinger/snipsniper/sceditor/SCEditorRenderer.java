@@ -60,5 +60,7 @@ public class SCEditorRenderer extends SnipScopeRenderer {
         previewGraphics.dispose();
 
         g.drawImage(preview, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height, this);
+
+        renderUI((Graphics2D) g);
     }
 }
