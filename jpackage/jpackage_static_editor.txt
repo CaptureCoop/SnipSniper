@@ -1,2 +1,2 @@
-main-class=io.wollinger.snipsniper.main.MainStaticEditor
+main-class=MainStaticEditor
 icon=src/main/resources/res/SnSnEd.ico
