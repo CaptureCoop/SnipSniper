@@ -277,9 +277,10 @@ public class Utils {
 
 	public static String loadFileFromJar(String file) throws IOException {
 		StringBuilder content = new StringBuilder();
-		InputStream inputStream = ClassLoader.getSystemResourceAsStream(file);
+		String path = "org/snipsniper/resources/" + file;
+		InputStream inputStream = ClassLoader.getSystemResourceAsStream(path);
 		if(inputStream == null)
-			throw new FileNotFoundException(Utils.formatArgs("Could not load file {0} from jar!", file));
+			throw new FileNotFoundException(Utils.formatArgs("Could not load file {0} from jar!", path));
 		InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 		BufferedReader in = new BufferedReader(streamReader);
 

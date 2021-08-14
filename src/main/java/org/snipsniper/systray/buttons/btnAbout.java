@@ -118,7 +118,7 @@ public class btnAbout extends PopupMenuButton {
 
 	public void loadHTML() throws IOException {
 		StringBuilder htmlTemp = new StringBuilder();
-		InputStream inputStream = ClassLoader.getSystemResourceAsStream("about.html");
+		InputStream inputStream = ClassLoader.getSystemResourceAsStream("org/snipsniper/resources/about.html");
 		if(inputStream == null)
 			throw new FileNotFoundException("Could not load about.html inside jar!");
 		InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);

@@ -46,7 +46,7 @@ public class Config {
 			if(new File(SnipSniper.getProfilesFolder() + filename).exists())
 				loadFile(SnipSniper.getProfilesFolder() + filename, settings, false);
 			
-			loadFile("/cfg/" + defaultFile, defaults, true);
+			loadFile("/org/snipsniper/resources/cfg/" + defaultFile, defaults, true);
 		} catch (NumberFormatException | IOException e) {
 			LogManager.log(id, "There was an error loading the config. Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();

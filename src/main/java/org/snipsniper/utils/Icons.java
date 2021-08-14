@@ -17,7 +17,7 @@ public class Icons {
 		try {
 			JSONArray list = new JSONArray(Utils.loadFileFromJar("img.json"));
 			for(int i = 0; i < list.length(); i++) {
-				images.put(list.getString(i), ImageIO.read(SnipSniper.class.getResource("/img/" + list.getString(i))));
+				images.put(list.getString(i), ImageIO.read(SnipSniper.class.getResource("/org/snipsniper/resources/img/" + list.getString(i))));
 			}
 		} catch (IOException ioException) {
 			ioException.printStackTrace();
