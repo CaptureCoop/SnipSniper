@@ -48,14 +48,14 @@ goto done
 :create_install
 echo Creating installer
 if "%2"=="debug" set debug=--add-launcher SnipSniperDebug=jpackage\jpackage_static_debug.txt
-jpackage @jpackage\jpackage_defaults.txt --main-class io.wollinger.snipsniper.main.MainStatic --app-version @build/SSVersion.txt --type exe --add-launcher SnipSniperEditor=jpackage\jpackage_static_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_static_viewer.txt %debug% --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut
+jpackage @jpackage\jpackage_defaults.txt --main-class MainStatic --app-version @build/SSVersion.txt --type exe --add-launcher SnipSniperEditor=jpackage\jpackage_static_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_static_viewer.txt %debug% --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut
 rename release\SnipSniper*.exe "SnipSniper_Installer_Win.exe"
 goto :EOF
 
 :create_portable
 echo Creating portable
 if "%2"=="debug" set debug=--add-launcher SnipSniperDebug=jpackage\jpackage_portable_debug.txt
-jpackage @jpackage\jpackage_defaults.txt --main-class io.wollinger.snipsniper.main.MainPortable --app-version @build/SSVersion.txt --type app-image --add-launcher SnipSniperEditor=jpackage\jpackage_portable_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_portable_viewer.txt %debug%
+jpackage @jpackage\jpackage_defaults.txt --main-class MainPortable --app-version @build/SSVersion.txt --type app-image --add-launcher SnipSniperEditor=jpackage\jpackage_portable_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_portable_viewer.txt %debug%
 rename release\SnipSniper "SnipSniper_Portable_Win"
 goto :EOF
 
