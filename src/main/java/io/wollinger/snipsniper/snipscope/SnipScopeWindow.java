@@ -131,6 +131,14 @@ public class SnipScopeWindow extends JFrame {
         uiComponents.add(component);
     }
 
+    public boolean isPointOnUiComponents(Point point) {
+        for(SnipScopeUIComponent component : uiComponents) {
+            if(component.contains(point))
+                return true;
+        }
+        return false;
+    }
+
     public ArrayList<SnipScopeUIComponent> getUiComponents() {
         return uiComponents;
     }

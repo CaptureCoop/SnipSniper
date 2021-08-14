@@ -43,6 +43,10 @@ public class InputContainer {
         return mouseY;
     }
 
+    public Point getMousePoint() {
+        return new Point(mouseX, mouseY);
+    }
+
     public Point getMousePathPoint(int i) {
         if(mousePath.size() > i)
             return mousePath.get(i);

@@ -116,7 +116,8 @@ public class SCEditorListener extends SnipScopeListener {
     public void mousePressed(MouseEvent mouseEvent) {
         super.mousePressed(mouseEvent);
 
-        scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.getButton(), true);
+        if(!scEditorWindow.isPointOnUiComponents(mouseEvent.getPoint()))
+            scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.getButton(), true);
 
         if(mouseEvent.getButton() == 3) {
             if(scEditorWindow.isDirty)
@@ -131,13 +132,19 @@ public class SCEditorListener extends SnipScopeListener {
     public void mouseReleased(MouseEvent mouseEvent) {
         super.mouseReleased(mouseEvent);
 
-        scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.getButton(), false);
+        if(!scEditorWindow.isPointOnUiComponents(mouseEvent.getPoint())) {
+            scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.getButton(), false);
 
-        scEditorWindow.getInputContainer().clearMousePath();
-        if(!scEditorWindow.getInputContainer().isKeyPressed(scEditorWindow.getMovementKey())) {
-            switch(mouseEvent.getButton()) {
-                case 1: save(scEditorWindow.getImage().getGraphics(), false); break;
-                case 2: save(scEditorWindow.getImage().getGraphics(), true); break;
+            scEditorWindow.getInputContainer().clearMousePath();
+            if (!scEditorWindow.getInputContainer().isKeyPressed(scEditorWindow.getMovementKey())) {
+                switch (mouseEvent.getButton()) {
+                    case 1:
+                        save(scEditorWindow.getImage().getGraphics(), false);
+                        break;
+                    case 2:
+                        save(scEditorWindow.getImage().getGraphics(), true);
+                        break;
+                }
             }
         }
         scEditorWindow.repaint();
