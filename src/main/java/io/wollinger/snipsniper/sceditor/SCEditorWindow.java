@@ -4,6 +4,7 @@ import io.wollinger.snipsniper.Config;
 import io.wollinger.snipsniper.configwindow.ConfigWindow;
 import io.wollinger.snipsniper.sceditor.stamps.*;
 import io.wollinger.snipsniper.snipscope.SnipScopeWindow;
+import io.wollinger.snipsniper.snipscope.ui.SnipScopeUIButton;
 import io.wollinger.snipsniper.snipscope.ui.SnipScopeUIComponent;
 import io.wollinger.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.SystemUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -33,6 +35,8 @@ public class SCEditorWindow extends SnipScopeWindow {
     private final RenderingHints qualityHints;
 
     public static final String FILENAME_MODIFIER = "_edited";
+
+    private ArrayList<SnipScopeUIButton> stampButtons = new ArrayList<>();
 
     public SCEditorWindow(String id, BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         super(id);
@@ -114,6 +118,35 @@ public class SCEditorWindow extends SnipScopeWindow {
             configItem.addActionListener(e -> new ConfigWindow(config, ConfigWindow.PAGE.editorPanel));
             topBar.add(configItem);
             setJMenuBar(topBar);
+        }
+
+        String[] buttonStrings = {"cube", "counter", "circle", "simplebrush", "text", "rectangle"};
+        int i = 0;
+        for(String str : buttonStrings) {
+            SnipScopeUIButton button = new SnipScopeUIButton(Icons.getImage("buttons/stamp_" + str + ".png"), Icons.getImage("buttons/stamp_" + str + "_hover.png"), Icons.getImage("buttons/stamp_" + str + "_sel.png"));
+            int selectedStamp = i;
+            button.addOnPress(() -> setSelectedStamp(selectedStamp));
+            i++;
+            addUIComponent(button);
+            stampButtons.add(button);
+        }
+        autoSizeStampButtons();
+    }
+
+    @Override
+    public void resizeTrigger() {
+        super.resizeTrigger();
+        autoSizeStampButtons();
+    }
+
+    public void autoSizeStampButtons() {
+        int size = getHeight() / 10;
+        int index = 0;
+        int margin = 20;
+        for(SnipScopeUIButton btn : stampButtons) {
+            btn.setSize(size, size);
+            btn.setPosition(size * index, size);
+            index++;
         }
     }
 
