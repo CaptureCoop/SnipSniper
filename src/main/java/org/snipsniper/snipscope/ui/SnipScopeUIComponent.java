@@ -9,16 +9,27 @@ public class SnipScopeUIComponent {
 
     private Vector2Int position = new Vector2Int(0, 0);
     private Vector2Int size = new Vector2Int(0, 0);
+    private boolean enabled = true;
 
-    public void render(Graphics2D g) { }
+    public boolean render(Graphics2D g) {
+        return enabled;
+    }
 
-    public void mouseMoved(MouseEvent mouseEvent) { }
+    public boolean mouseMoved(MouseEvent mouseEvent) {
+        return enabled;
+    }
 
-    public void mouseDragged(MouseEvent mouseEvent) { }
+    public boolean mouseDragged(MouseEvent mouseEvent) {
+        return enabled;
+    }
 
-    public void mousePressed(MouseEvent mouseEvent) { }
+    public boolean mousePressed(MouseEvent mouseEvent) {
+        return enabled;
+    }
 
-    public void mouseReleased(MouseEvent mouseEvent) { }
+    public boolean mouseReleased(MouseEvent mouseEvent) {
+        return enabled;
+    }
 
     public Vector2Int getPosition() {
         return position;
@@ -46,7 +57,16 @@ public class SnipScopeUIComponent {
         return size.getY();
     }
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
     public boolean contains(Point point) {
+        if(!enabled) return false;
         return new Rectangle(position.getX(), position.getY(), size.getX(), size.getY()).contains(point);
     }
 }

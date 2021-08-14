@@ -41,6 +41,9 @@ public class SCEditorListener extends SnipScopeListener {
         super.keyPressed(keyEvent);
         keyEvent.consume();
 
+        if(input.isKeyPressed(KeyEvent.VK_PERIOD))
+            scEditorWindow.setEzMode(!scEditorWindow.isEzMode());
+
         if(input.isKeyPressed(KeyEvent.VK_C))
             openColorChooser = true;
 

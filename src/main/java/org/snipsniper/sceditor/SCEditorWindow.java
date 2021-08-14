@@ -38,6 +38,7 @@ public class SCEditorWindow extends SnipScopeWindow {
 
     public static final String FILENAME_MODIFIER = "_edited";
 
+    private boolean ezMode = false;
     private ArrayList<SnipScopeUIButton> stampButtons = new ArrayList<>();
 
     public SCEditorWindow(String id, BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
@@ -122,6 +123,7 @@ public class SCEditorWindow extends SnipScopeWindow {
             setJMenuBar(topBar);
         }
 
+        ezMode = config.getBool("ezMode");
         String[] buttonStrings = {"cube", "counter", "circle", "simplebrush", "text", "rectangle"};
         int i = 0;
         for(String str : buttonStrings) {
@@ -136,6 +138,7 @@ public class SCEditorWindow extends SnipScopeWindow {
             });
             if(i == 0) button.setSelected(true);
             i++;
+            button.setEnabled(ezMode);
             addUIComponent(button);
             stampButtons.add(button);
         }
@@ -149,6 +152,7 @@ public class SCEditorWindow extends SnipScopeWindow {
     }
 
     public void autoSizeStampButtons() {
+        if(!ezMode) return;
         int size = getHeight() / 10;
         int index = 0;
         int margin = size/4;
@@ -231,5 +235,17 @@ public class SCEditorWindow extends SnipScopeWindow {
 
     public String toString() {
         return Utils.formatArgs("SCEditorWindow ID:[{0}] Pos:[{1}] Path:[{2}]", getID(), getLocation(), saveLocation);
+    }
+
+    public void setEzMode(boolean value) {
+        ezMode = value;
+        for(SnipScopeUIButton btn : stampButtons)
+            btn.setEnabled(ezMode);
+        if(ezMode)
+            autoSizeStampButtons();
+    }
+
+    public boolean isEzMode() {
+        return ezMode;
     }
 }

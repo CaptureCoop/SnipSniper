@@ -26,24 +26,31 @@ public class SnipScopeUIButton extends SnipScopeUIComponent{
     }
 
     @Override
-    public void mouseMoved(MouseEvent mouseEvent) {
+    public boolean mouseMoved(MouseEvent mouseEvent) {
+        if(!super.mouseMoved(mouseEvent)) return false;
         isHovering = contains(mouseEvent.getPoint());
         lastPosition = new Vector2Int(mouseEvent.getPoint());
+        return true;
     }
 
     @Override
-    public void mouseDragged(MouseEvent mouseEvent) {
+    public boolean mouseDragged(MouseEvent mouseEvent) {
+        if(!super.mouseDragged(mouseEvent)) return false;
         lastPosition = new Vector2Int(mouseEvent.getPoint());
+        return true;
     }
 
     @Override
-    public void mousePressed(MouseEvent mouseEvent) {
+    public boolean mousePressed(MouseEvent mouseEvent) {
+        if(!super.mousePressed(mouseEvent)) return false;
         if(isHovering)
             isHeld = true;
+        return true;
     }
 
     @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
+    public boolean mouseReleased(MouseEvent mouseEvent) {
+        if(!super.mouseReleased(mouseEvent)) return false;
         if(isHeld) {
             isHeld = false;
             if(contains(lastPosition.toPoint())) {
@@ -52,14 +59,12 @@ public class SnipScopeUIButton extends SnipScopeUIComponent{
                 }
             }
         }
-    }
-
-    public void setSelected(boolean bool) {
-        selected = bool;
+        return true;
     }
 
     @Override
-    public void render(Graphics2D g) {
+    public boolean render(Graphics2D g) {
+        if(!super.render(g)) return false;
         BufferedImage toRender = icon;
 
         if(isHeld || selected)
@@ -68,6 +73,11 @@ public class SnipScopeUIButton extends SnipScopeUIComponent{
             toRender = iconHovering;
 
         g.drawImage(toRender, getPosition().getX(), getPosition().getY(), getWidth(), getHeight(), null);
+        return true;
+    }
+
+    public void setSelected(boolean bool) {
+        selected = bool;
     }
 
     public void addOnPress(Function function) {
