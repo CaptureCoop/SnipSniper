@@ -149,10 +149,10 @@ public class SCEditorWindow extends SnipScopeWindow {
     public void autoSizeStampButtons() {
         int size = getHeight() / 10;
         int index = 0;
-        int margin = 20;
+        int margin = size/4;
         for(SnipScopeUIButton btn : stampButtons) {
             btn.setSize(size, size);
-            btn.setPosition(size * index, size);
+            btn.setPosition((size * index) + margin * index, size);
             index++;
         }
     }
