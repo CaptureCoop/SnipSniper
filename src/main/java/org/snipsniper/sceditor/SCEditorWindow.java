@@ -154,7 +154,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         int margin = size/4;
         for(SnipScopeUIButton btn : stampButtons) {
             btn.setSize(size, size);
-            btn.setPosition((size * index) + margin * index, size);
+            btn.setPosition((size * index) + margin * (index + 1), margin);
             index++;
         }
     }
