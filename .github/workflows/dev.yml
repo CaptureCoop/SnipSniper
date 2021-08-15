@@ -32,8 +32,8 @@ jobs:
 
     - name: Get filename with version and build
       run:  |
-        echo "VERSION=" >> version.txt
-        java -jar build/libs/SnipSniper.jar -version >> version.txt
-        cat version.txt >> $GITHUB_ENV
+        echo 'VERSION<<EOF' >> $GITHUB_ENV
+        java -jar build/libs/SnipSniper.jar -version >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
     - name: Test output
       run: echo "${{env.VERSION}}"
