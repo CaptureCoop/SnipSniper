@@ -35,5 +35,12 @@ jobs:
         echo 'VERSION<<EOF' >> $GITHUB_ENV
         java -jar build/libs/SnipSniper.jar -version >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
-    - name: Test output
-      run: echo "${{env.VERSION}}"
+    - name: Rename jar
+      run: mv build/libs/SnipSniper.jar " "build/libs/${{env.VERSION}}.jar"
+    - name: Upload to website
+      uses: fjogeleit/http-request-action@master
+      with:
+        url: https://snipsniper.org/upload.php
+        method: "POST"
+        data: '{"password": "${{ secrets.WEBSITE_UPLOAD }}"}'
+        files: '{ "file": "build/libs/${{env.VERSION}}.jar" }'
