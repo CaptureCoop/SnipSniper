@@ -237,6 +237,9 @@ public class ConfigWindow extends JFrame {
             disablePage = true;
         }
 
+        if(configOriginal.getFilename().contains("viewer") || configOriginal.getFilename().contains("editor"))
+            disablePage = true;
+
         GridBagConstraints gbc = new GridBagConstraints();
         JPanel options = new JPanel(new GridBagLayout());
 
@@ -536,6 +539,9 @@ public class ConfigWindow extends JFrame {
             config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
             disablePage = true;
         }
+
+        if(configOriginal.getFilename().contains("viewer"))
+            disablePage = true;
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
