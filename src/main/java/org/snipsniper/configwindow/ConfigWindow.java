@@ -141,18 +141,19 @@ public class ConfigWindow extends JFrame {
     public JComponent setupProfileDropdown(JPanel panelToAdd, JPanel parentPanel, Config configOriginal, Config config, PAGE page, int pageIndex) {
         //Returns the dropdown, however dont add it manually
         ArrayList<DropdownItem> profiles = new ArrayList<>();
-        if(configOriginal == null)
-            profiles.add(new DropdownItem("Select a profile", "select_profile"));
         for(File file : configFiles) {
             if(file.getName().contains("viewer")) {
-                profiles.add(new DropdownItem("Standalone Viewer", file.getName()));
+                profiles.add(0, new DropdownItem("Standalone Viewer", file.getName()));
             } else if(file.getName().contains("editor")) {
-                profiles.add(new DropdownItem("Standalone Editor", file.getName()));
+                profiles.add(0, new DropdownItem("Standalone Editor", file.getName()));
             } else if(file.getName().contains("profile")) {
                 String nr = file.getName().replaceAll(Config.DOT_EXTENSION, "").replace("profile", "");
                 profiles.add(new DropdownItem("Profile " + nr, file.getName()));
             }
         }
+
+        if(configOriginal == null)
+            profiles.add(0, new DropdownItem("Select a profile", "select_profile"));
 
         DropdownItem[] items = new DropdownItem[profiles.size()];
         for(int i = 0; i < profiles.size(); i++)
@@ -232,13 +233,12 @@ public class ConfigWindow extends JFrame {
         boolean disablePage = false;
         if (configOriginal != null) {
             config = new Config(configOriginal);
+            if(configOriginal.getFilename().contains("viewer") || configOriginal.getFilename().contains("editor"))
+                disablePage = true;
         } else {
             config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
             disablePage = true;
         }
-
-        if(configOriginal.getFilename().contains("viewer") || configOriginal.getFilename().contains("editor"))
-            disablePage = true;
 
         GridBagConstraints gbc = new GridBagConstraints();
         JPanel options = new JPanel(new GridBagLayout());
@@ -535,13 +535,12 @@ public class ConfigWindow extends JFrame {
         boolean disablePage = false;
         if (configOriginal != null) {
             config = new Config(configOriginal);
+            if(configOriginal.getFilename().contains("viewer"))
+                disablePage = true;
         } else {
             config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
             disablePage = true;
         }
-
-        if(configOriginal.getFilename().contains("viewer"))
-            disablePage = true;
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
