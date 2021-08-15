@@ -59,7 +59,6 @@ public final class SnipSniper {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException e) {
 			LogManager.log(ID, "There was an issue setting up NativeHook! Message: " + e.getMessage(), Level.SEVERE);
-			e.printStackTrace();
 		}
 
 		BUILDINFO = new Config("buildinfo.cfg", "BUILDINFO", "buildinfo.cfg");
