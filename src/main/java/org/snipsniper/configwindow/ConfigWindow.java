@@ -140,22 +140,33 @@ public class ConfigWindow extends JFrame {
 
     public JComponent setupProfileDropdown(JPanel panelToAdd, JPanel parentPanel, Config configOriginal, Config config, PAGE page, int pageIndex) {
         //Returns the dropdown, however dont add it manually
-        ArrayList<String> profiles = new ArrayList<>();
+        ArrayList<DropdownItem> profiles = new ArrayList<>();
         if(configOriginal == null)
-            profiles.add("Select a profile");
+            profiles.add(new DropdownItem("Select a profile", "select_profile"));
         for(File file : configFiles) {
-            if(file.getName().contains("profile") || file.getName().contains("editor"))
-                profiles.add(file.getName().replaceAll(Config.DOT_EXTENSION, ""));
+            if(file.getName().contains("viewer")) {
+                profiles.add(new DropdownItem("Standalone Viewer", file.getName()));
+            } else if(file.getName().contains("editor")) {
+                profiles.add(new DropdownItem("Standalone Editor", file.getName()));
+            } else if(file.getName().contains("profile")) {
+                String nr = file.getName().replaceAll(Config.DOT_EXTENSION, "").replace("profile", "");
+                profiles.add(new DropdownItem("Profile " + nr, file.getName()));
+            }
         }
-        JComboBox<Object> dropdown = new JComboBox<>(profiles.toArray());
+
+        DropdownItem[] items = new DropdownItem[profiles.size()];
+        for(int i = 0; i < profiles.size(); i++)
+            items[i] = profiles.get(i);
+
+        JComboBox<DropdownItem> dropdown = new JComboBox<>(items);
         if(configOriginal == null)
             dropdown.setSelectedIndex(0);
         else
-            dropdown.setSelectedItem(config.getFilename().replaceAll(Config.DOT_EXTENSION, ""));
+            DropdownItem.setSelected(dropdown, config.getFilename());
         dropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 parentPanel.removeAll();
-                Config newConfig = new Config(e.getItem() + ".cfg", "CFGT", "profile_defaults.cfg");
+                Config newConfig = new Config(((DropdownItem)e.getItem()).getID(), "CFGT", "profile_defaults.cfg");
                 tabPane.setComponentAt(pageIndex, setupPaneDynamic(newConfig, page));
                 lastSelectedConfig = newConfig;
             }
