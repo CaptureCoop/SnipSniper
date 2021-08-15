@@ -55,16 +55,18 @@ public final class SnipSniper {
 
 		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
 
-		try {
-			GlobalScreen.registerNativeHook();
-		} catch (NativeHookException e) {
-			LogManager.log(ID, "There was an issue setting up NativeHook! Message: " + e.getMessage(), Level.SEVERE);
-		}
+
 
 		BUILDINFO = new Config("buildinfo.cfg", "BUILDINFO", "buildinfo.cfg");
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
+
+		try {
+			GlobalScreen.registerNativeHook();
+		} catch (NativeHookException e) {
+			LogManager.log(ID, "There was an issue setting up NativeHook! Message: " + e.getMessage(), Level.SEVERE);
+		}
 
 		LogManager.setEnabled(true);
 
