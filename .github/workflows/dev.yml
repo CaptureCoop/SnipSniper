@@ -36,7 +36,7 @@ jobs:
         java -jar build/libs/SnipSniper.jar -version >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
     - name: Rename jar
-      run: mv build/libs/SnipSniper.jar " "build/libs/${{env.VERSION}}.jar"
+      run: mv build/libs/SnipSniper.jar" "build/libs/${{env.VERSION}}.jar"
     - name: Upload to website
       uses: fjogeleit/http-request-action@master
       with:
