@@ -40,5 +40,5 @@ jobs:
       with:
         url: https://snipsniper.org/upload.php
         method: "POST"
-        data: '{"password": "${{ secrets.WEBSITE_UPLOAD }}"}'
+        data: '{"password": "${{ secrets.WEBSITE_UPLOAD }}", "version": "${{env.VERSION}}"}'
         files: '{ "file": "build/libs/SnipSniper.jar" }'
