@@ -11,6 +11,7 @@ import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.utils.*;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
@@ -140,6 +141,7 @@ public class ConfigWindow extends JFrame {
 
     public JComponent setupProfileDropdown(JPanel panelToAdd, JPanel parentPanel, Config configOriginal, Config config, PAGE page, int pageIndex) {
         //Returns the dropdown, however dont add it manually
+        //TODO: Refresh other dropdowns when creating new profile?
         ArrayList<DropdownItem> profiles = new ArrayList<>();
         for(File file : configFiles) {
             if(file.getName().contains("viewer")) {
@@ -813,12 +815,86 @@ public class ConfigWindow extends JFrame {
         }
     }
 
-    public JComponent setupViewerPane(Config config) {
+    public JComponent setupViewerPane(Config configOriginal) {
         viewerConfigPanel.removeAll();
-        viewerConfigPanel.setLayout(new BoxLayout(viewerConfigPanel, BoxLayout.PAGE_AXIS));
-        JLabel label = new JLabel("<html><h1>Coming soon</h1></html>");
-        label.setHorizontalAlignment(JLabel.CENTER);
-        viewerConfigPanel.add(label);
+
+        Config config;
+        boolean disablePage = false;
+        if (configOriginal != null) {
+            config = new Config(configOriginal);
+            if(configOriginal.getFilename().contains("viewer"))
+                disablePage = true;
+        } else {
+            config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
+            disablePage = true;
+        }
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+
+        JPanel options = new JPanel(new GridBagLayout());
+
+        JComponent dropdown = setupProfileDropdown(options, viewerConfigPanel, configOriginal, config, PAGE.viewerPanel, indexViewer);
+        //BEGIN ELEMENTS
+
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(0, 10, 0, 10);
+
+        options.add(createJLabel("Close viewer when opening editor", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        JCheckBox closeViewerOnEditor = new JCheckBox();
+        closeViewerOnEditor.setSelected(config.getBool(ConfigHelper.PROFILE.closeViewerOnOpenEditor));
+        closeViewerOnEditor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.closeViewerOnOpenEditor, closeViewerOnEditor.isSelected()));
+        options.add(closeViewerOnEditor, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
+
+        gbc.gridx = 0;
+        options.add(createJLabel("Open viewer in fullscreen", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        JCheckBox openViewerFullscreen = new JCheckBox();
+        openViewerFullscreen.setSelected(config.getBool(ConfigHelper.PROFILE.openViewerInFullscreen));
+        openViewerFullscreen.addChangeListener(e -> config.set(ConfigHelper.PROFILE.openViewerInFullscreen, openViewerFullscreen.isSelected()));
+        options.add(openViewerFullscreen, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
+
+        //END ELEMENTS
+
+        JButton saveAndClose = new JButton("Save and close");
+        saveAndClose.addActionListener(e -> {
+            if(configOriginal != null) {
+                configOriginal.loadFromConfig(config);
+                configOriginal.save();
+                for (CustomWindowListener listener : listeners)
+                    listener.windowClosed();
+                close();
+            }
+        });
+
+        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
+        saveButton.addActionListener(e -> {
+            if(configOriginal != null) {
+                configOriginal.loadFromConfig(config);
+                configOriginal.save();
+                //This prevents a bug where the other tabs have an outdated config
+                tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
+                tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
+            }
+        });
+
+        gbc.gridx = 0;
+        gbc.insets.top = 20;
+        options.add(saveButton, gbc);
+        gbc.gridx = 1;
+        options.add(saveAndClose, gbc);
+
+        viewerConfigPanel.add(options);
+
+        if(disablePage)
+            setEnabledAll(options, false, dropdown);
+
         return generateScrollPane(viewerConfigPanel);
     }
 

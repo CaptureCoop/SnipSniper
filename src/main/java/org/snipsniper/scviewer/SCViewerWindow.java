@@ -49,8 +49,10 @@ public class SCViewerWindow extends SnipScopeWindow {
         }
 
         if(config == null) {
-            config = new Config("viewer.cfg", "CFG VIEWER", "profile_defaults.cfg");
-            config.save();
+            this.config = new Config("viewer.cfg", "CFG VIEWER", "profile_defaults.cfg");
+            this.config.save();
+        } else {
+            this.config = config;
         }
 
         setRequireMovementKeyForZoom(false);
@@ -78,7 +80,7 @@ public class SCViewerWindow extends SnipScopeWindow {
         setVisible(true);
         setSizeAuto();
         setLocationAuto();
-        if(config.getBool(ConfigHelper.PROFILE.openViewerInFullscreen))
+        if(this.config.getBool(ConfigHelper.PROFILE.openViewerInFullscreen))
             setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
 
         if(SystemUtils.IS_OS_WINDOWS) {
@@ -154,10 +156,7 @@ public class SCViewerWindow extends SnipScopeWindow {
 
     public void openEditor() {
         if(currentFile != null) {
-            Config config = SCEditorWindow.getStandaloneEditorConfig();
-            config.save();
-
-            SCEditorWindow editor = new SCEditorWindow("EDIT", getImage(), (int) getLocation().getX(), (int) getLocation().getY(), "SnipSniper Editor", config, false, currentFile.getAbsolutePath(), false, true);
+            SCEditorWindow editor = new SCEditorWindow("EDIT", getImage(), (int) getLocation().getX(), (int) getLocation().getY(), "SnipSniper Editor", config, false, currentFile.getAbsolutePath(), false, false);
             editor.setSize(getSize());
             if (config.getBool(ConfigHelper.PROFILE.closeViewerOnOpenEditor))
                 dispose();
