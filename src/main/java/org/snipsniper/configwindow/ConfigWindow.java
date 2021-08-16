@@ -822,7 +822,7 @@ public class ConfigWindow extends JFrame {
         boolean disablePage = false;
         if (configOriginal != null) {
             config = new Config(configOriginal);
-            if(configOriginal.getFilename().contains("viewer"))
+            if(configOriginal.getFilename().contains("editor"))
                 disablePage = true;
         } else {
             config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
