@@ -7,8 +7,6 @@ import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Utils;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 public class ColorChooser extends JFrame{
     private final ColorChooser instance;
     private JColorChooser jcc;
-    private SSColor colorToChange;
+    private final SSColor colorToChange;
     private final SSColor color;
 	private final String configKey;
     private final Config config;
@@ -82,12 +80,7 @@ public class ColorChooser extends JFrame{
         JPanel colorPanel = new JPanel();
         JPanel submitButtonPanel = new JPanel();
         JButton submit = new JButton("Okay");
-        submit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                instance.close(true);
-            }
-        });
+        submit.addActionListener(e -> instance.close(true));
 
         JButton save = new JButton("Save as default");
         save.addActionListener(listener -> instance.save());

@@ -320,7 +320,7 @@ public class ConfigWindow extends JFrame {
                 int x = (int)((getLocation().getX() + getWidth()/2));
                 int y = (int)((getLocation().getY() + getHeight()/2));
                 colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y, true);
-                colorChooser[0].addWindowListener(() -> { colorChooser[0] = null; });
+                colorChooser[0].addWindowListener(() -> colorChooser[0] = null);
             }
         });
         borderSizePanel.add(colorBtn, gbc);
@@ -689,9 +689,7 @@ public class ConfigWindow extends JFrame {
     private GradientJButton setupColorButton(String title, Config config, Enum configKey, ChangeListener whenChange) {
         SSColor startColorPBR = SSColor.fromSaveString(config.getString(configKey));
         GradientJButton colorButton = new GradientJButton(title, startColorPBR);
-        startColorPBR.addChangeListener(e -> {
-            config.set(configKey, startColorPBR.toSaveString());
-        });
+        startColorPBR.addChangeListener(e -> config.set(configKey, startColorPBR.toSaveString()));
         startColorPBR.addChangeListener(whenChange);
         colorButton.addActionListener(e -> new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2), true));
         return colorButton;

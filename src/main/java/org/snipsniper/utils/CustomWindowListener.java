@@ -1,5 +1,5 @@
 package org.snipsniper.utils;
 
 public interface CustomWindowListener {
-    public void windowClosed();
+    void windowClosed();
 }

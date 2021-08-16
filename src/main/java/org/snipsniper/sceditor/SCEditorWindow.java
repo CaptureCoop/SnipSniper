@@ -38,8 +38,8 @@ public class SCEditorWindow extends SnipScopeWindow {
 
     public static final String FILENAME_MODIFIER = "_edited";
 
-    private boolean ezMode = false;
-    private ArrayList<SnipScopeUIButton> stampButtons = new ArrayList<>();
+    private boolean ezMode;
+    private final ArrayList<SnipScopeUIButton> stampButtons = new ArrayList<>();
 
     public SCEditorWindow(String id, BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         super(id);
@@ -131,8 +131,7 @@ public class SCEditorWindow extends SnipScopeWindow {
             int selectedStamp = i;
             button.addOnPress(() -> {
                 for(SnipScopeUIButton btn : stampButtons) {
-                    if (button == btn) btn.setSelected(true);
-                    else btn.setSelected(false);
+                    btn.setSelected(button == btn);
                 }
                 setSelectedStamp(selectedStamp);
             });

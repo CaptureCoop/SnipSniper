@@ -1,19 +1,16 @@
 package org.snipsniper.scviewer;
 
 import org.snipsniper.snipscope.SnipScopeListener;
-import org.snipsniper.utils.InputContainer;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 public class SCViewerListener extends SnipScopeListener {
     private final SCViewerWindow scViewerWindow;
-    private final InputContainer input;
 
     public SCViewerListener(SCViewerWindow snipScopeWindow) {
         super(snipScopeWindow);
         scViewerWindow = snipScopeWindow;
-        input = scViewerWindow.getInputContainer();
     }
 
     @Override

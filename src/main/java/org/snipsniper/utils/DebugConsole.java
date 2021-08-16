@@ -6,10 +6,9 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 public class DebugConsole extends JFrame {
-
-    private JTextPane content = new JTextPane();
+    private final JTextPane content = new JTextPane();
+    private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
     private int fontSize = 20;
-    private ArrayList<CustomWindowListener> listeners = new ArrayList<>();
 
     public DebugConsole () {
         setTitle("Debug Console");

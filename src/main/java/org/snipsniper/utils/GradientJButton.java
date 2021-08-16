@@ -6,8 +6,8 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 
 public class GradientJButton extends JButton {
-    private SSColor color;
-    private String title;
+    private final SSColor color;
+    private final String title;
 
     public GradientJButton(String title, SSColor color) {
         super(title);

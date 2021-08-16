@@ -48,7 +48,7 @@ public class Utils {
 	}
 
 	public static Color getContrastColor(Color color) {
-		double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
+		double y = (299f * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
 		return y >= 128 ? Color.black : Color.white;
 	}
 
@@ -269,7 +269,7 @@ public class Utils {
 
 		Graphics2D graphics2D = dest.createGraphics();
 		graphics2D.translate((height - width) / 2, (height - width) / 2);
-		graphics2D.rotate(Math.PI / 2, height / 2, width / 2);
+		graphics2D.rotate(Math.PI / 2, height / 2f, width / 2f);
 		graphics2D.drawRenderedImage(src, null);
 
 		return dest;
@@ -293,9 +293,7 @@ public class Utils {
 	}
 
 	public static boolean containsRectangleFully(Rectangle rectangle, Rectangle contains) {
-		if ((contains.x+contains.width) < (rectangle.x+rectangle.width) && (contains.x) > (rectangle.x) && (contains.y) > (rectangle.y) && (contains.y+contains.height) < (rectangle.y+rectangle.height))
-			return true;
-		return false;
+		return (contains.x + contains.width) < (rectangle.x + rectangle.width) && (contains.x) > (rectangle.x) && (contains.y) > (rectangle.y) && (contains.y + contains.height) < (rectangle.y + rectangle.height);
 	}
 
 	public static Rectangle fixRectangle(Rectangle rect) {

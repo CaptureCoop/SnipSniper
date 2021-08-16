@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class SnipScopeWindow extends JFrame {
-    private String id;
+    private final String id;
     private BufferedImage image;
 
     private Dimension optimalImageDimension;
@@ -27,7 +27,7 @@ public class SnipScopeWindow extends JFrame {
     private int movementKey = KeyEvent.VK_SPACE;
     private boolean requireMovementKeyForZoom = true;
 
-    private ArrayList<SnipScopeUIComponent> uiComponents = new ArrayList<>();
+    private final ArrayList<SnipScopeUIComponent> uiComponents = new ArrayList<>();
 
     public SnipScopeWindow(String id) {
         this.id = id;

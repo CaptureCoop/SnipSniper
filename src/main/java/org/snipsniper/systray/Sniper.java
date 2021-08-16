@@ -31,10 +31,10 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	
 	private CaptureWindow captureWindow;
 	private ConfigWindow configWindow;
-	private Config config;
+	private final Config config;
 	private TrayIcon trayIcon;
 	
-	private Sniper instance;
+	private final Sniper instance;
 	private JFrame popup;
 
 	private final static int TASKBAR_HEIGHT = 40;
