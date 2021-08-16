@@ -71,13 +71,7 @@ public class InfoButton extends JButton {
         window.add(content);
         window.setMinimumSize(new Dimension(256, 128));
         window.getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-        window.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent keyEvent) { }
-
-            @Override
-            public void keyPressed(KeyEvent keyEvent) { }
-
+        window.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent keyEvent) {
                 if(keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE)
