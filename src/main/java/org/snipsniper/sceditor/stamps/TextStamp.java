@@ -29,7 +29,7 @@ public class TextStamp implements IStamp{
     private Vector2Int livePosition = new Vector2Int();
     private boolean doSaveNextRender = false;
 
-    enum TextState {IDLE, TYPING}
+    public enum TextState {IDLE, TYPING}
 
     public TextStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -123,6 +123,10 @@ public class TextStamp implements IStamp{
         } else if(pressed && state == TextState.TYPING) {
             doSaveNextRender = true;
         }
+    }
+
+    public TextState getState() {
+        return state;
     }
 
     @Override

@@ -4,11 +4,13 @@ import org.snipsniper.LogManager;
 import org.snipsniper.colorchooser.ColorChooser;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.sceditor.stamps.IStamp;
+import org.snipsniper.sceditor.stamps.TextStamp;
 import org.snipsniper.snipscope.SnipScopeListener;
 import org.snipsniper.utils.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.soap.Text;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -45,7 +47,12 @@ public class SCEditorListener extends SnipScopeListener {
         if(input.isKeyPressed(KeyEvent.VK_PERIOD))
             scEditorWindow.setEzMode(!scEditorWindow.isEzMode());
 
-        if(input.isKeyPressed(KeyEvent.VK_C))
+        TextStamp.TextState textState = TextStamp.TextState.TYPING;
+        for(IStamp stamp : scEditorWindow.getStamps())
+            if(stamp instanceof TextStamp)
+                textState = ((TextStamp) stamp).getState();
+
+        if(input.isKeyPressed(KeyEvent.VK_C) && textState == TextStamp.TextState.IDLE)
             openColorChooser = true;
 
         if(input.isKeyPressed(KeyEvent.VK_ENTER))
