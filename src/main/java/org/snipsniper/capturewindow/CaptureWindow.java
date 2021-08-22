@@ -46,8 +46,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			try {
 				Thread.sleep(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L);
 			} catch (InterruptedException e) {
-				LogManager.log(sniperInstance.getID(), "There was an error with the delay! Message: " + e.getMessage(), Level.SEVERE);
-				LogManager.log(sniperInstance.getID(), "More info: " + Arrays.toString(e.getStackTrace()), Level.SEVERE);
+				LogManager.log("There was an error with the delay! Message: " + e.getMessage(), LogLevel.ERROR);
+				LogManager.log("More info: " + Arrays.toString(e.getStackTrace()), LogLevel.ERROR);
 			}
 		}
 		
@@ -129,7 +129,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		try {
 			screenshot = new Robot().createScreenCapture(screenshotRect);
 		} catch (AWTException e) {
-			LogManager.log(sniperInstance.getID(), "Couldn't take screenshot. Message: " + e.getMessage(), Level.SEVERE);
+			LogManager.log("Couldn't take screenshot. Message: " + e.getMessage(), LogLevel.ERROR);
 			e.printStackTrace();
 		}
 		screenshotTinted = Utils.copyImage(screenshot);
@@ -282,17 +282,17 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		if(screenshot != null) {
 			if((screenshotTinted != null && !hasSaved && bounds != null) || SystemUtils.IS_OS_LINUX) {
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
-					LogManager.log(sniperInstance.getID(), "About to render image: " + screenshotTinted, Level.INFO);
-					LogManager.log(sniperInstance.getID(), "Frame Visible: " + isVisible(), Level.INFO);
+					LogManager.log("About to render image: " + screenshotTinted, LogLevel.INFO);
+					LogManager.log("Frame Visible: " + isVisible(), LogLevel.INFO);
 				}
 
 				globalBuffer.drawImage(screenshotTinted, 0,0, bounds.width,bounds.height, this);
 				allBounds.addRectangle(bounds);
 
 				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
-					LogManager.log(sniperInstance.getID(), "Rendered tinted background. More Info: ", Level.INFO);
-					LogManager.log(sniperInstance.getID(), "Image rendered:        " + screenshotTinted.toString(), Level.INFO);
-					LogManager.log(sniperInstance.getID(), "Frame Visible: " + isVisible(), Level.INFO);
+					LogManager.log("Rendered tinted background. More Info: ", LogLevel.INFO);
+					LogManager.log("Image rendered:        " + screenshotTinted.toString(), LogLevel.INFO);
+					LogManager.log("Frame Visible: " + isVisible(), LogLevel.INFO);
 				}
 				hasSaved = true;
 			}
@@ -375,7 +375,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				lastRect = allBounds.getBounds();
 			}
 		} else {
-			LogManager.log(sniperInstance.getID(), "WARNING: Screenshot is null when trying to render. Trying again.", Level.WARNING);
+			LogManager.log("WARNING: Screenshot is null when trying to render. Trying again.", LogLevel.WARNING);
 			repaint();
 		}
 

@@ -3,6 +3,7 @@ package org.snipsniper;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 import org.apache.commons.lang3.StringUtils;
+import org.snipsniper.utils.LogLevel;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,24 +18,27 @@ public class LogManager {
 
     private static File logFile;
     public static String htmlLog = "";
-    private static final int MAX_ID_LENGTH = 10;
+    private static final int MAX_LEVEL_LENGTH = LogLevel.WARNING.toString().length();
     private static boolean enabled = false;
 
-    public static void log(String id, String message, Level level) {
+    public static void log(String message, LogLevel level) {
         if(!enabled)
             return;
 
-        String msg = "%DATETIME% [%PROFILE%]%INSERTSPACE% [%TYPE%]: %MESSAGE%";
+        String msg = "%DATETIME% [%TYPE%]%INSERTSPACE% [%CLASS%]: %MESSAGE%";
 
-        if(id.length() <= MAX_ID_LENGTH) {
-            msg = msg.replace("%INSERTSPACE%", StringUtils.repeat(" ", MAX_ID_LENGTH - id.length()));
+        String levelString = level.toString();
+
+        if(levelString.length() <= MAX_LEVEL_LENGTH) {
+            msg = msg.replace("%INSERTSPACE%", StringUtils.repeat(" ", MAX_LEVEL_LENGTH - levelString.length()));
         } else {
-            id = id.substring(0, Math.min(id.length(), MAX_ID_LENGTH));
+            levelString = levelString.substring(0, Math.min(levelString.length(), MAX_LEVEL_LENGTH));
             msg = msg.replace("%INSERTSPACE%", "");
         }
 
-        msg = msg.replace("%PROFILE%", id);
-        msg = msg.replace("%TYPE%", level.toString());
+        msg = msg.replace("%CLASS%", Thread.currentThread().getStackTrace()[2].getClassName() + ":" + Thread.currentThread().getStackTrace()[2].getLineNumber());
+        msg = msg.replace("%INSERTSPACE%", "");
+        msg = msg.replace("%TYPE%", levelString);
         msg = msg.replace("%MESSAGE%", message);
         final LocalDateTime time = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss:SS");
@@ -42,9 +46,9 @@ public class LogManager {
 
         System.out.println(msg);
         String color = "white";
-        if(level == Level.WARNING)
+        if(level == LogLevel.WARNING)
             color = "yellow";
-        else if(level == Level.SEVERE)
+        else if(level == LogLevel.ERROR)
             color = "red";
         htmlLog += "<p style='margin-top:0'><font color='" + color + "'>" + escapeHtml4(msg).replaceAll(" ", "&nbsp;") + "</font></p>";
 
@@ -61,7 +65,7 @@ public class LogManager {
                 logFile = new File(SnipSniper.getLogFolder() + filename);
                 try {
                     if (logFile.createNewFile())
-                        LogManager.log(id, "Created new logfile at: " + logFile.getAbsolutePath(), Level.INFO);
+                        LogManager.log("Created new logfile at: " + logFile.getAbsolutePath(), LogLevel.INFO);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

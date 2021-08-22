@@ -11,6 +11,7 @@ import java.util.logging.Level;
 
 import org.snipsniper.SnipSniper;
 import org.snipsniper.LogManager;
+import org.snipsniper.utils.LogLevel;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Utils;
 
@@ -26,7 +27,7 @@ public class Config {
 
 	public Config (Config config) {
 		//Copies config
-		LogManager.log(config.id, "Copying config for <" + config.filename + ">", Level.INFO);
+		LogManager.log("Copying config for <" + config.filename + ">", LogLevel.INFO);
 		loadFromConfig(config);
 	}
 
@@ -41,7 +42,7 @@ public class Config {
 	public Config (String filename, String id, String defaultFile) {
 		this.filename = filename;
 		this.id = id;
-		LogManager.log(id, "Creating config object for <" + filename + ">.", Level.INFO);
+		LogManager.log("Creating config object for <" + filename + ">.", LogLevel.INFO);
 		try {
 			String filePath = SnipSniper.getProfilesFolder() + filename;
 			String defaultPath = "/org/snipsniper/resources/cfg/" + defaultFile;
@@ -52,7 +53,7 @@ public class Config {
 
 			loadFile(defaultPath, defaults, true);
 		} catch (NumberFormatException | IOException e) {
-			LogManager.log(id, "There was an error loading the config. Message: " + e.getMessage(), Level.SEVERE);
+			LogManager.log("There was an error loading the config. Message: " + e.getMessage(), LogLevel.ERROR);
 			e.printStackTrace();
 		}
 	}
@@ -92,7 +93,7 @@ public class Config {
 		else if(defaults.containsKey(key))
 			returnVal = defaults.get(key);
 		else
-			LogManager.log(id, "No value found for <" + key + "> in Config <" + SnipSniper.getProfilesFolder() + filename + ">.", Level.SEVERE);
+			LogManager.log("No value found for <" + key + "> in Config <" + SnipSniper.getProfilesFolder() + filename + ">.", LogLevel.ERROR);
 		return returnVal;
 	}
 
@@ -171,7 +172,7 @@ public class Config {
 	public void deleteFile() {
 		File file = new File(SnipSniper.getProfilesFolder() + "/" + filename);
 		if(!file.delete())
-			LogManager.log(id, "Could not delete profile config!", Level.WARNING);
+			LogManager.log("Could not delete profile config!", LogLevel.WARNING);
 	}
 	
 	private void saveFile(ConfigContainer container) {
@@ -182,7 +183,7 @@ public class Config {
 
 			writer.close();
 		} catch (IOException e) {
-			LogManager.log(id, "There was an error saving the config! Message: " + e.getMessage(), Level.SEVERE);
+			LogManager.log("There was an error saving the config! Message: " + e.getMessage(), LogLevel.ERROR);
 			e.printStackTrace();
 		}
 	}

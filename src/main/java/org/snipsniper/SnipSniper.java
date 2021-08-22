@@ -47,8 +47,6 @@ public final class SnipSniper {
 
 	private static DebugConsole debugConsole;
 
-	private final static String ID = "MAIN";
-
 	public static void start(String[] args, boolean saveInDocuments, boolean isEditorOnly, boolean isViewerOnly) {
 		if(!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
 			System.out.println("SnipSniper is currently only available for Windows and Linux (In development, use with caution). Sorry!");
@@ -67,7 +65,7 @@ public final class SnipSniper {
 		try {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException e) {
-			LogManager.log(ID, "There was an issue setting up NativeHook! Message: " + e.getMessage(), Level.SEVERE);
+			LogManager.log("There was an issue setting up NativeHook! Message: " + e.getMessage(), LogLevel.ERROR);
 		}
 
 		LogManager.setEnabled(true);
@@ -81,7 +79,7 @@ public final class SnipSniper {
 			File tempProfileFolder = new File(profilesFolder);
 			File tempLogFolder = new File(logFolder);
 			if ((!tempProfileFolder.exists() && !tempProfileFolder.mkdirs()) || (!tempLogFolder.exists() && !tempLogFolder.mkdirs())){
-				LogManager.log(ID, "Could not create required folders! Exiting...", Level.SEVERE);
+				LogManager.log("Could not create required folders! Exiting...", LogLevel.ERROR);
 				exit(false);
 			}
 		}
@@ -94,7 +92,7 @@ public final class SnipSniper {
 		if(cmdline.isDebug())
 			config.set(ConfigHelper.MAIN.debug, "true");
 
-		LogManager.log(ID, "Loading resources", Level.INFO);
+		LogManager.log("Loading resources", LogLevel.INFO);
 		Icons.loadResources();
 
 		System.setProperty("sun.java2d.uiScale", "1.0");
@@ -118,42 +116,42 @@ public final class SnipSniper {
 
 		LangManager.load();
 
-		LogManager.log(ID, "Launching SnipSniper Version " + getVersion(), Level.INFO);
+		LogManager.log("Launching SnipSniper Version " + getVersion(), LogLevel.INFO);
 		if(SystemUtils.IS_OS_LINUX) {
-			LogManager.log(ID, "=================================================================================", Level.WARNING);
-			LogManager.log(ID, "= SnipSniper Linux is still in development and may not work properly or at all. =", Level.WARNING);
-			LogManager.log(ID, "=                        !!!!! USE WITH CAUTION !!!!                            =", Level.WARNING);
-			LogManager.log(ID, "=================================================================================", Level.WARNING);
+			LogManager.log("=================================================================================", LogLevel.WARNING);
+			LogManager.log("= SnipSniper Linux is still in development and may not work properly or at all. =", LogLevel.WARNING);
+			LogManager.log("=                        !!!!! USE WITH CAUTION !!!!                            =", LogLevel.WARNING);
+			LogManager.log("=================================================================================", LogLevel.WARNING);
 		}
 
 		if(config.getBool(ConfigHelper.MAIN.debug)) {
-			LogManager.log(ID, "========================================", Level.INFO);
-			LogManager.log(ID, "= SnipSniper is running in debug mode! =", Level.INFO);
-			LogManager.log(ID, "========================================", Level.INFO);
+			LogManager.log("========================================", LogLevel.INFO);
+			LogManager.log("= SnipSniper is running in debug mode! =", LogLevel.INFO);
+			LogManager.log("========================================", LogLevel.INFO);
 		}
 
-		LogManager.log(ID, "Launching language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> using encoding <" + Charset.defaultCharset() + ">!", Level.INFO);
+		LogManager.log("Launching language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> using encoding <" + Charset.defaultCharset() + ">!", LogLevel.INFO);
 
 		if(!LangManager.languages.contains(SnipSniper.config.getString(ConfigHelper.MAIN.language))) {
-			LogManager.log(ID, "Language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> not found. Available languages: " + LangManager.languages.toString(), Level.SEVERE);
+			LogManager.log("Language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> not found. Available languages: " + LangManager.languages.toString(), LogLevel.ERROR);
 			exit(false);
 		}
 
 		String wantedEncoding = SnipSniper.config.getString(ConfigHelper.MAIN.encoding);
 		if(SnipSniper.config.getBool(ConfigHelper.MAIN.enforceEncoding) && !Charset.defaultCharset().toString().equals(wantedEncoding)) {
 			if(!Charset.availableCharsets().containsKey(wantedEncoding)) {
-				LogManager.log(ID, "Charset \"" + wantedEncoding + "\" missing. Language \"" + SnipSniper.config.getString(ConfigHelper.MAIN.language)+ "\" not available", Level.SEVERE);
+				LogManager.log("Charset \"" + wantedEncoding + "\" missing. Language \"" + SnipSniper.config.getString(ConfigHelper.MAIN.language)+ "\" not available", LogLevel.ERROR);
 				JOptionPane.showMessageDialog(null, Utils.formatArgs(LangManager.getItem(LangManager.languages.get(0), "error_charset_not_available"), wantedEncoding, SnipSniper.config.getString(ConfigHelper.MAIN.language)));
 				exit(false);
 			}
-			LogManager.log(ID, "Charset <" + wantedEncoding + "> needed! Restarting with correct charset...", Level.WARNING);
+			LogManager.log("Charset <" + wantedEncoding + "> needed! Restarting with correct charset...", LogLevel.WARNING);
 			try {
 				if(cmdline.isRestartedInstance()) {
 					JOptionPane.showMessageDialog(null, "Charset change failed. Please try using a different Java Version! (Java 1.8 / 8)");
 					exit(false);
 				}
 				if(!Utils.restartApplication(wantedEncoding, args))
-					LogManager.log(ID, "Restart failed. Possibly not running in jar. Starting with charset <" + Charset.defaultCharset() + ">", Level.WARNING);
+					LogManager.log("Restart failed. Possibly not running in jar. Starting with charset <" + Charset.defaultCharset() + ">", LogLevel.WARNING);
 			} catch (Exception exception) {
 				exception.printStackTrace();
 			}
@@ -162,11 +160,13 @@ public final class SnipSniper {
 		config.save();
 
 		if(isDemo) {
-			LogManager.log(ID, "============================================================", Level.INFO);
-			LogManager.log(ID, "= SnipSniper is running in DEMO mode                       =", Level.INFO);
-			LogManager.log(ID, "= This means that no files will be created and/or modified =", Level.INFO);
-			LogManager.log(ID, "============================================================", Level.INFO);
+			LogManager.log("============================================================", LogLevel.INFO);
+			LogManager.log("= SnipSniper is running in DEMO mode                       =", LogLevel.INFO);
+			LogManager.log("= This means that no files will be created and/or modified =", LogLevel.INFO);
+			LogManager.log("============================================================", LogLevel.INFO);
 		}
+
+		LogManager.log("This is a test message", LogLevel.ERROR);
 
 		if(cmdline.isEditorOnly() || isEditorOnly) {
 			Config config = SCEditorWindow.getStandaloneEditorConfig();
@@ -231,9 +231,8 @@ public final class SnipSniper {
 
 		if(!SystemTray.isSupported()) new ConfigWindow(profiles[0].getConfig(), ConfigWindow.PAGE.snipPanel);
 		for (int i = 1; i < PROFILE_COUNT; i++) {
-			int index = i;
-			if (new File(profilesFolder + "profile" + (index) + ".cfg").exists()) {
-				profiles[i] = new Sniper(index);
+			if (new File(profilesFolder + "profile" + (i) + ".cfg").exists()) {
+				profiles[i] = new Sniper(i);
 			}
 		}
 	}
@@ -250,7 +249,7 @@ public final class SnipSniper {
 		try {
 			folderToUseString = URLDecoder.decode(SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().getFile(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			LogManager.log(ID, "Could not set profiles folder. Error: " + e.getMessage(), Level.SEVERE);
+			LogManager.log("Could not set profiles folder. Error: " + e.getMessage(), LogLevel.ERROR);
 			exit(false);
 		}
 
@@ -268,7 +267,7 @@ public final class SnipSniper {
 	}
 
 	public static void exit(boolean exitForRestart) {
-		LogManager.log(ID, "Exit requested. Goodbye!", Level.INFO);
+		LogManager.log("Exit requested. Goodbye!", LogLevel.INFO);
 		if(config.getBool(ConfigHelper.MAIN.debug)) {
 			if (!exitForRestart && Desktop.isDesktopSupported()) {
 				try {
@@ -295,8 +294,8 @@ public final class SnipSniper {
 
 	public static int getProfileCount() {
 		int amount = 0;
-		for(int i = 0; i < profiles.length; i++)
-			if(profiles[i] != null)
+		for (Sniper profile : profiles)
+			if (profile != null)
 				amount++;
 		return amount;
 	}

@@ -47,7 +47,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 		this.profileID = profileID;
 		config = new Config("profile" + profileID + ".cfg", "CFG" + profileID, "profile_defaults.cfg");
 
-		LogManager.log(getID(), "Loading profile " + profileID, Level.INFO);
+		LogManager.log("Loading profile " + profileID, LogLevel.INFO);
 
 		if(SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
@@ -163,7 +163,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 				tray.add(trayIcon);
 			} catch (AWTException e) {
-				LogManager.log(getID(), "There was an issue setting up the Tray Icon! Message: " + e.getMessage(), Level.SEVERE);
+				LogManager.log("There was an issue setting up the Tray Icon! Message: " + e.getMessage(), LogLevel.ERROR);
 				e.printStackTrace();
 			}
 		}

@@ -42,7 +42,7 @@ public class ConfigWindow extends JFrame {
     private final int indexGlobal = 3;
 
     public ConfigWindow(Config config, PAGE page) {
-        LogManager.log(id, "Creating config window", Level.INFO);
+        LogManager.log("Creating config window", LogLevel.INFO);
 
         setSize(512, 512);
         setTitle(LangManager.getItem("config_label_config"));

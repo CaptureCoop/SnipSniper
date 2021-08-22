@@ -9,6 +9,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.Icons;
 import org.snipsniper.LogManager;
+import org.snipsniper.utils.LogLevel;
 import org.snipsniper.utils.Utils;
 
 import javax.swing.*;
@@ -48,12 +49,12 @@ public class SCEditorWindow extends SnipScopeWindow {
         this.saveLocation = saveLocation;
         this.inClipboard = inClipboard;
 
-        LogManager.log(id, "Starting new editor window. (" + this + ")", Level.INFO);
+        LogManager.log("Starting new editor window. (" + this + ")", LogLevel.INFO);
 
         qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-        LogManager.log(id, "Loading stamps", Level.INFO);
+        LogManager.log("Loading stamps", LogLevel.INFO);
 
         stamps[0] = new CubeStamp(config, this);
         stamps[1] = new CounterStamp(config);
@@ -81,7 +82,7 @@ public class SCEditorWindow extends SnipScopeWindow {
             int borderSize = config.getInt(ConfigHelper.PROFILE.borderSize);
             if (!isLeftToRight) borderSize = -borderSize;
             setLocation((x - X_OFFSET) + borderSize, y - getInsets().top + borderSize);
-            LogManager.log(getID(), "Setting location to " + getLocation(), Level.INFO);
+            LogManager.log("Setting location to " + getLocation(), LogLevel.INFO);
         }
 
         if(!isStandalone) {
@@ -174,7 +175,7 @@ public class SCEditorWindow extends SnipScopeWindow {
     }
 
     public void refreshTitle() {
-        LogManager.log(getID(), "Refreshing title", Level.INFO);
+        LogManager.log("Refreshing title", LogLevel.INFO);
         String newTitle = title;
         if(saveLocation != null && !saveLocation.isEmpty())
             newTitle += " (" + saveLocation + ")";
@@ -186,7 +187,7 @@ public class SCEditorWindow extends SnipScopeWindow {
 
     public void setImage(BufferedImage image, boolean resetHistory, boolean isNewImage) {
         super.setImage(image);
-        LogManager.log(getID(), "Setting new Image", Level.INFO);
+        LogManager.log("Setting new Image", LogLevel.INFO);
 
         if(listener != null && resetHistory) {
             listener.resetHistory();

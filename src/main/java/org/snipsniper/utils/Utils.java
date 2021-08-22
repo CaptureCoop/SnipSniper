@@ -192,20 +192,20 @@ public class Utils {
 			if(config.getBool(ConfigHelper.PROFILE.saveToDisk)) {
 				if(!path.exists()) {
 					if(!path.mkdirs()) {
-						LogManager.log(profileID, "Failed saving, directory missing & could not create it!", Level.WARNING);
+						LogManager.log("Failed saving, directory missing & could not create it!", LogLevel.WARNING);
 						return null;
 					}
 				}
 				if(file.createNewFile()) {
 					ImageIO.write(finalImg, "png", file);
-					LogManager.log(profileID, "Saved image on disk. Location: " + file, Level.INFO);
+					LogManager.log("Saved image on disk. Location: " + file, LogLevel.INFO);
 					return file.getAbsolutePath();
 				}
 			}
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Could not save image to \"" + file + "\"!" , "Error", JOptionPane.INFORMATION_MESSAGE);
-			LogManager.log(profileID, "Failed Saving. Wanted Location: " + file, Level.WARNING);
-			LogManager.log(profileID, "Detailed Error: " + e.getMessage(), Level.WARNING);
+			LogManager.log("Failed Saving. Wanted Location: " + file, LogLevel.WARNING);
+			LogManager.log("Detailed Error: " + e.getMessage(), LogLevel.WARNING);
 			e.printStackTrace();
 			return null;
 		}
@@ -215,7 +215,15 @@ public class Utils {
 	public static void copyToClipboard(String id, BufferedImage img) {
 		ImageSelection imgSel = new ImageSelection(img);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
-		LogManager.log(id, "Copied Image to clipboard", Level.INFO);
+		LogManager.log("Copied Image to clipboard", LogLevel.INFO);
+	}
+
+	public static String getStackTrace() {
+		String string = "";
+		for(StackTraceElement stackTrace : new Throwable().getStackTrace())
+			string += stackTrace.toString() + "\n";
+
+		return string;
 	}
 
 	public static String constructFilename(String modifier) {

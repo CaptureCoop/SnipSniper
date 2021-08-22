@@ -33,7 +33,7 @@ public class SCEditorListener extends SnipScopeListener {
     }
 
     public void resetHistory() {
-        LogManager.log(scEditorWindow.getID(), "Reset editor history", Level.INFO);
+        LogManager.log("Reset editor history", LogLevel.INFO);
         history.clear();
         history.add(Utils.copyImage(scEditorWindow.getImage()));
     }

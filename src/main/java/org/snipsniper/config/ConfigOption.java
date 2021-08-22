@@ -1,6 +1,7 @@
 package org.snipsniper.config;
 
 import org.snipsniper.LogManager;
+import org.snipsniper.utils.LogLevel;
 
 import java.util.logging.Level;
 
@@ -45,7 +46,7 @@ public class ConfigOption {
             case COMMENT: return "#" + value;
             case NEWLINE: return "";
         }
-        LogManager.log("CFGOPTION", "NO TYPE SET! KEY: " + key + " VALUE: " + value, Level.SEVERE);
+        LogManager.log("NO TYPE SET! KEY: " + key + " VALUE: " + value, LogLevel.ERROR);
         return null;
     }
 
