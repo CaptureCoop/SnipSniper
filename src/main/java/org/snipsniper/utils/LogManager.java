@@ -57,7 +57,7 @@ public class LogManager {
             if (logFile == null) {
                 LocalDateTime now = LocalDateTime.now();
                 String filename = now.toString().replace(".", "_").replace(":", "_");
-                filename += ".txt";
+                filename += ".log";
 
                 logFile = new File(SnipSniper.getLogFolder() + filename);
                 try {
