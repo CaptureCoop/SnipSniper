@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ConfigContainer {
-    private ArrayList<ConfigOption> list = new ArrayList<>();
-    private HashMap<String, ConfigOption> map = new HashMap<>();
+    private final ArrayList<ConfigOption> list = new ArrayList<>();
+    private final HashMap<String, ConfigOption> map = new HashMap<>();
 
     public void set(String key, String value) {
         ConfigOption option = new ConfigOption(key, value);

@@ -19,7 +19,7 @@ public class ConfigOption {
         if(comment.startsWith("#"))
             value = comment.substring(1);
         else
-            value = comment + ""; //Avoid reference
+            value = comment; //Avoid reference
         type = TYPE.COMMENT;
     }
 

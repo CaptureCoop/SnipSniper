@@ -117,7 +117,7 @@ public class Config {
 			String value = getString(key);
 			if(Utils.isDouble(value))
 				return (int) Double.parseDouble(value);
-			else Integer.parseInt(getString(key));
+			else return Integer.parseInt(getString(key));
 		}
 		return -1;
 	}

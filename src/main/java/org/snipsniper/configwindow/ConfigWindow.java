@@ -68,7 +68,7 @@ public class ConfigWindow extends JFrame {
         File[] files = profileFolder.listFiles();
         if(files != null) {
             for (File file : files) {
-                if (Utils.getFileExtension(file).equals(".cfg"))
+                if (Utils.getFileExtension(file).equals(Config.DOT_EXTENSION))
                     configFiles.add(file);
             }
         }
