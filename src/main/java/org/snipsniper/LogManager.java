@@ -1,8 +1,7 @@
-package org.snipsniper.utils;
+package org.snipsniper;
 
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
-import org.snipsniper.SnipSniper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;

@@ -1,6 +1,6 @@
 package org.snipsniper.config;
 
-import org.snipsniper.utils.LogManager;
+import org.snipsniper.LogManager;
 
 import java.util.logging.Level;
 

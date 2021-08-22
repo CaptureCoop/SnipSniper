@@ -1,4 +1,7 @@
-package org.snipsniper.utils;
+package org.snipsniper;
+
+import org.snipsniper.utils.CustomWindowListener;
+import org.snipsniper.utils.Icons;
 
 import javax.swing.*;
 import java.awt.*;

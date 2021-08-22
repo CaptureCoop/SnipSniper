@@ -2,6 +2,8 @@ package org.snipsniper.configwindow;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import org.snipsniper.LangManager;
+import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.colorchooser.ColorChooser;

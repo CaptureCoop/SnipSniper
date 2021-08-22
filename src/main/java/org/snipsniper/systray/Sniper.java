@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import org.snipsniper.LangManager;
+import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.sceditor.SCEditorWindow;

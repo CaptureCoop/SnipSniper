@@ -5,7 +5,7 @@ import org.snipsniper.systray.PopupMenuButton;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.Function;
 import org.snipsniper.utils.Icons;
-import org.snipsniper.utils.LangManager;
+import org.snipsniper.LangManager;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;

@@ -11,6 +11,7 @@ import java.util.logging.Level;
 
 import javax.swing.JFrame;
 
+import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;

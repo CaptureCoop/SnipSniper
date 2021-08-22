@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
 
+import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
 import org.json.JSONArray;
 

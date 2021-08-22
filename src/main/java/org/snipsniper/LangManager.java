@@ -1,9 +1,11 @@
-package org.snipsniper.utils;
+package org.snipsniper;
 
+import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;

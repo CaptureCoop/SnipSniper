@@ -8,7 +8,7 @@ import org.snipsniper.snipscope.ui.SnipScopeUIButton;
 import org.apache.commons.lang3.SystemUtils;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.Icons;
-import org.snipsniper.utils.LogManager;
+import org.snipsniper.LogManager;
 import org.snipsniper.utils.Utils;
 
 import javax.swing.*;

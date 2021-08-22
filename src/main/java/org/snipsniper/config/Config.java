@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 
 import org.snipsniper.SnipSniper;
-import org.snipsniper.utils.LogManager;
+import org.snipsniper.LogManager;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Utils;
 

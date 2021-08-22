@@ -1,5 +1,6 @@
 package org.snipsniper.utils;
 
+import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.apache.commons.lang3.SystemUtils;
