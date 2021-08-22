@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 import org.apache.commons.lang3.StringUtils;
 import org.snipsniper.utils.LogLevel;
+import org.snipsniper.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +23,15 @@ public class LogManager {
     private static boolean enabled = false;
 
     public static void log(String message, LogLevel level) {
+        logInternal(message, level, false);
+    }
+
+    public static void log(String message, LogLevel level, boolean printStackTrace) {
+        logInternal(message, level, printStackTrace);
+    }
+
+    //The reason for this is that this way we can take index 3 of stack trace at all times
+    private static void logInternal(String message, LogLevel level, boolean printStackTrace) {
         if(!enabled)
             return;
 
@@ -36,13 +46,29 @@ public class LogManager {
             msg = msg.replace("%INSERTSPACE%", "");
         }
 
-        msg = msg.replace("%CLASS%", Thread.currentThread().getStackTrace()[2].getClassName() + ":" + Thread.currentThread().getStackTrace()[2].getLineNumber());
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        final int STACKTRACE_START = 3;
+
+        msg = msg.replace("%CLASS%", stackTrace[STACKTRACE_START].getClassName() + "." + stackTrace[STACKTRACE_START].getMethodName() + ":" + stackTrace[STACKTRACE_START].getLineNumber());
         msg = msg.replace("%INSERTSPACE%", "");
         msg = msg.replace("%TYPE%", levelString);
         msg = msg.replace("%MESSAGE%", message);
         final LocalDateTime time = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss:SS");
-        msg = msg.replace("%DATETIME%", "" + formatter.format(time));
+        String dateTimeString = formatter.format(time) + "";
+        msg = msg.replace("%DATETIME%", dateTimeString);
+
+        if(printStackTrace) {
+            int stackSizingHelp = dateTimeString.length() + MAX_LEVEL_LENGTH + 4;
+
+            msg += "%NEWLINE%";
+            for(int i = STACKTRACE_START; i < stackTrace.length; i++) {
+                String trace = stackTrace[i].toString();
+                if(trace.contains("org.snipsniper"))
+                    msg += StringUtils.repeat(" ", stackSizingHelp) + "[" + trace + "]%NEWLINE%";
+            }
+        }
+
 
         System.out.println(msg);
         String color = "white";
@@ -50,7 +76,11 @@ public class LogManager {
             color = "yellow";
         else if(level == LogLevel.ERROR)
             color = "red";
-        htmlLog += "<p style='margin-top:0'><font color='" + color + "'>" + escapeHtml4(msg).replaceAll(" ", "&nbsp;") + "</font></p>";
+
+        String finalMsg = escapeHtml4(msg).replaceAll(" ", "&nbsp;");
+        finalMsg = finalMsg.replaceAll("%NEWLINE%", "<br>");
+
+        htmlLog += "<p style='margin-top:0; white-space: nowrap;'><font color='" + color + "'>" + finalMsg + "</font></p>";
 
         DebugConsole console = SnipSniper.getDebugConsole();
         if(console != null)
