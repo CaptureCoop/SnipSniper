@@ -83,32 +83,6 @@ public class SCEditorWindow extends SnipScopeWindow {
             LogManager.log("Setting location to " + getLocation(), LogLevel.INFO);
         }
 
-        if(!isStandalone) {
-            GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            boolean found = false;
-            GraphicsConfiguration bestMonitor = null;
-            final int SAFETY_OFFSET_X = 10 + config.getInt(ConfigHelper.PROFILE.borderSize); //This prevents this setup not working if you do a screenshot on the top left, which would cause the location not to be in any bounds
-            for (GraphicsDevice gd : localGE.getScreenDevices()) {
-                for (GraphicsConfiguration graphicsConfiguration : gd.getConfigurations()) {
-                    if(!found) {
-                        Rectangle bounds = graphicsConfiguration.getBounds();
-
-                        Point testLocation = new Point((int) (getLocation().getX() + SAFETY_OFFSET_X), (int) getLocation().getY());
-
-                        if (bounds.contains(testLocation))
-                            found = true;
-
-                        if (testLocation.getX() > bounds.getX() && testLocation.getX() < (bounds.getX() + bounds.getWidth()) && bestMonitor == null) {
-                            bestMonitor = graphicsConfiguration;
-                        }
-                    }
-                }
-            }
-
-            if(!found && bestMonitor != null) {
-                setLocation((int) getLocation().getX(), bestMonitor.getBounds().y);
-            }
-        }
         refreshTitle();
         setSizeAuto();
         if(x < 0 && y < 0)
@@ -141,6 +115,33 @@ public class SCEditorWindow extends SnipScopeWindow {
             stampButtons.add(button);
         }
         autoSizeStampButtons();
+
+        if(!isStandalone) {
+            GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            boolean found = false;
+            GraphicsConfiguration bestMonitor = null;
+            final int SAFETY_OFFSET_X = 10 + config.getInt(ConfigHelper.PROFILE.borderSize); //This prevents this setup not working if you do a screenshot on the top left, which would cause the location not to be in any bounds
+            for (GraphicsDevice gd : localGE.getScreenDevices()) {
+                for (GraphicsConfiguration graphicsConfiguration : gd.getConfigurations()) {
+                    if(!found) {
+                        Rectangle bounds = graphicsConfiguration.getBounds();
+
+                        Point testLocation = new Point((int) (getLocation().getX() + SAFETY_OFFSET_X), (int) getLocation().getY());
+
+                        if (bounds.contains(testLocation))
+                            found = true;
+
+                        if (testLocation.getX() > bounds.getX() && testLocation.getX() < (bounds.getX() + bounds.getWidth()) && bestMonitor == null) {
+                            bestMonitor = graphicsConfiguration;
+                        }
+                    }
+                }
+            }
+
+            if(!found && bestMonitor != null) {
+                setLocation((int) getLocation().getX(), bestMonitor.getBounds().y);
+            }
+        }
     }
 
     @Override
