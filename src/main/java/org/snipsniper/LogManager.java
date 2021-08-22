@@ -70,6 +70,7 @@ public class LogManager {
                 if(trace.contains("org.snipsniper"))
                     msg += StringUtils.repeat(" ", stackSizingHelp) + "[" + trace + "]%NEWLINE%";
             }
+            msg += "%NEWLINE%";
         }
 
         System.out.println(msg);

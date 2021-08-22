@@ -27,7 +27,7 @@ public class Icons {
 
 	public static BufferedImage getImage(String path) {
 		if(!images.containsKey(path)) {
-			LogManager.log("Could not find image under path " + path + "!", LogLevel.ERROR);
+			LogManager.log("Could not find image under path " + path + "!", LogLevel.ERROR, true);
 			return null;
 		}
 		return images.get(path);

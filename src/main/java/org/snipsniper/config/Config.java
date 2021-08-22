@@ -53,7 +53,7 @@ public class Config {
 
 			loadFile(defaultPath, defaults, true);
 		} catch (NumberFormatException | IOException e) {
-			LogManager.log("There was an error loading the config. Message: " + e.getMessage(), LogLevel.ERROR);
+			LogManager.log("There was an error loading the config. Message: " + e.getMessage(), LogLevel.ERROR, true);
 			e.printStackTrace();
 		}
 	}
@@ -93,7 +93,7 @@ public class Config {
 		else if(defaults.containsKey(key))
 			returnVal = defaults.get(key);
 		else
-			LogManager.log("No value found for <" + key + "> in Config <" + SnipSniper.getProfilesFolder() + filename + ">.", LogLevel.ERROR);
+			LogManager.log("No value found for <" + key + "> in Config <" + SnipSniper.getProfilesFolder() + filename + ">.", LogLevel.ERROR, true);
 		return returnVal;
 	}
 
@@ -183,7 +183,7 @@ public class Config {
 
 			writer.close();
 		} catch (IOException e) {
-			LogManager.log("There was an error saving the config! Message: " + e.getMessage(), LogLevel.ERROR);
+			LogManager.log("There was an error saving the config! Message: " + e.getMessage(), LogLevel.ERROR, true);
 			e.printStackTrace();
 		}
 	}

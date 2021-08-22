@@ -163,7 +163,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 
 				tray.add(trayIcon);
 			} catch (AWTException e) {
-				LogManager.log("There was an issue setting up the Tray Icon! Message: " + e.getMessage(), LogLevel.ERROR);
+				LogManager.log("There was an issue setting up the Tray Icon! Message: " + e.getMessage(), LogLevel.ERROR, true);
 				e.printStackTrace();
 			}
 		}
