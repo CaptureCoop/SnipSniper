@@ -189,7 +189,7 @@ public final class SnipSniper {
 				}
 			}
 
-			new SCEditorWindow("EDITOR", img, -1, -1, "SnipSniper Editor", config, false, path, false, true);
+			new SCEditorWindow(img, -1, -1, "SnipSniper Editor", config, false, path, false, true);
 		} else if(cmdline.isViewerOnly() || isViewerOnly) {
 			File file = null;
 			if(cmdline.getViewerFile() != null && !cmdline.getViewerFile().isEmpty())
@@ -203,7 +203,7 @@ public final class SnipSniper {
 				}
 			}
 
-			new SCViewerWindow("VIEW", file, null);
+			new SCViewerWindow(file, null);
 		} else {
 			resetProfiles();
 		}

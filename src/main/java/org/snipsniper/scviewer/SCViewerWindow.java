@@ -34,8 +34,7 @@ public class SCViewerWindow extends SnipScopeWindow {
 
     private JMenuItem saveItem;
 
-    public SCViewerWindow(String id, File file, Config config) {
-        super(id);
+    public SCViewerWindow(File file, Config config) {
         currentFile = file;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         refreshTitle();
@@ -156,7 +155,7 @@ public class SCViewerWindow extends SnipScopeWindow {
 
     public void openEditor() {
         if(currentFile != null) {
-            SCEditorWindow editor = new SCEditorWindow("EDIT", getImage(), (int) getLocation().getX(), (int) getLocation().getY(), "SnipSniper Editor", config, false, currentFile.getAbsolutePath(), false, false);
+            SCEditorWindow editor = new SCEditorWindow(getImage(), (int) getLocation().getX(), (int) getLocation().getY(), "SnipSniper Editor", config, false, currentFile.getAbsolutePath(), false, false);
             editor.setSize(getSize());
             if (config.getBool(ConfigHelper.PROFILE.closeViewerOnOpenEditor))
                 dispose();

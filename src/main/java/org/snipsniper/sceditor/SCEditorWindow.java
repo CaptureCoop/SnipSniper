@@ -42,8 +42,7 @@ public class SCEditorWindow extends SnipScopeWindow {
     private boolean ezMode;
     private final ArrayList<SnipScopeUIButton> stampButtons = new ArrayList<>();
 
-    public SCEditorWindow(String id, BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
-        super(id);
+    public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         this.config = config;
         this.title = title;
         this.saveLocation = saveLocation;
@@ -169,9 +168,9 @@ public class SCEditorWindow extends SnipScopeWindow {
         Graphics g = finalImg.getGraphics();
         g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), this);
         g.dispose();
-        Utils.saveImage(getID(), finalImg, FILENAME_MODIFIER, config);
+        Utils.saveImage(finalImg, FILENAME_MODIFIER, config);
         if(config.getBool(ConfigHelper.PROFILE.copyToClipboard))
-            Utils.copyToClipboard(getID(),finalImg);
+            Utils.copyToClipboard(finalImg);
     }
 
     public void refreshTitle() {
@@ -234,7 +233,7 @@ public class SCEditorWindow extends SnipScopeWindow {
     }
 
     public String toString() {
-        return Utils.formatArgs("SCEditorWindow ID:[{0}] Pos:[{1}] Path:[{2}]", getID(), getLocation(), saveLocation);
+        return Utils.formatArgs("SCEditorWindow Pos:[{1}] Path:[{2}]", getLocation(), saveLocation);
     }
 
     public void setEzMode(boolean value) {

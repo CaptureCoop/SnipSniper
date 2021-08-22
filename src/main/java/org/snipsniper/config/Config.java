@@ -19,7 +19,6 @@ public class Config {
 	private final ConfigContainer settings = new ConfigContainer();
 	private final ConfigContainer defaults = new ConfigContainer();
 
-	private String id;
 	private String filename;
 
 	public static final String EXTENSION = "cfg";
@@ -33,7 +32,6 @@ public class Config {
 
 	public void loadFromConfig(Config config) {
 		this.filename = config.filename;
-		this.id = config.id;
 
 		settings.loadFromContainer(config.settings);
 		defaults.loadFromContainer(config.defaults);
@@ -41,7 +39,6 @@ public class Config {
 
 	public Config (String filename, String id, String defaultFile) {
 		this.filename = filename;
-		this.id = id;
 		LogManager.log("Creating config object for <" + filename + ">.", LogLevel.INFO);
 		try {
 			String filePath = SnipSniper.getProfilesFolder() + filename;

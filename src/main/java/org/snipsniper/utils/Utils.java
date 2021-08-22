@@ -167,7 +167,7 @@ public class Utils {
 		return dateString;
 	}
 
-	public static String saveImage(String profileID, BufferedImage finalImg, String modifier, Config config) {
+	public static String saveImage(BufferedImage finalImg, String modifier, Config config) {
 		File file;
 		String filename = Utils.constructFilename(modifier);
 		String savePath = config.getString(ConfigHelper.PROFILE.pictureFolder);
@@ -212,7 +212,7 @@ public class Utils {
 		return null;
 	}
 
-	public static void copyToClipboard(String id, BufferedImage img) {
+	public static void copyToClipboard(BufferedImage img) {
 		ImageSelection imgSel = new ImageSelection(img);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
 		LogManager.log("Copied Image to clipboard", LogLevel.INFO);
