@@ -25,7 +25,6 @@ public class ColorChooser extends JFrame{
     private final SSColor color;
 	private final String configKey;
     private final Config config;
-    //TODO: Save color as single color if gradient is not selected
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
 
 	public ColorChooser(Config config, String title, SSColor color, String configKey, int x, int y, boolean useGradient) {
@@ -49,12 +48,12 @@ public class ColorChooser extends JFrame{
 	}
 	
 	public void close(boolean doSave) {
-		if(doSave) {
+		if(doSave)
             colorToChange.loadFromSSColor(color);
-		}
-	    for(CustomWindowListener listener : listeners) {
+
+	    for(CustomWindowListener listener : listeners)
 		    listener.windowClosed();
-        }
+
 		dispose();
 	}
 
@@ -90,9 +89,8 @@ public class ColorChooser extends JFrame{
         colorPanel.add(jcc);
 
         ColorChooserPreviewPanel gradientPanel = null;
-        if(useGradient) {
+        if(useGradient)
             gradientPanel = new ColorChooserPreviewPanel(this);
-        }
 
         if(gradientPanel != null)
             mainPanel.add(gradientPanel);
