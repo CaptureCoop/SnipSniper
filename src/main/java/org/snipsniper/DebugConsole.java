@@ -4,8 +4,12 @@ import org.snipsniper.utils.CustomWindowListener;
 import org.snipsniper.utils.Icons;
 
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class DebugConsole extends JFrame {
@@ -55,6 +59,16 @@ public class DebugConsole extends JFrame {
                 for(CustomWindowListener listener : listeners)
                     listener.windowClosed();
                 dispose();
+            }
+        });
+
+        content.addHyperlinkListener(hle -> {
+            if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.getEventType())) {
+                try {
+                    Desktop.getDesktop().browse(new URI(hle.getURL().toString()));
+                } catch (IOException | URISyntaxException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
