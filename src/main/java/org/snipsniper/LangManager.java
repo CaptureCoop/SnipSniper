@@ -26,7 +26,7 @@ public class LangManager {
                 languages.add(langs.getString(i));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogManager.log("Error loading languages. Message: " + e.getMessage(), LogLevel.ERROR, true);
         }
     }
 
