@@ -17,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class SCEditorListener extends SnipScopeListener {
     private final SCEditorWindow scEditorWindow;

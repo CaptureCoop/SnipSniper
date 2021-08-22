@@ -3,8 +3,6 @@ package org.snipsniper.config;
 import org.snipsniper.LogManager;
 import org.snipsniper.utils.LogLevel;
 
-import java.util.logging.Level;
-
 public class ConfigOption {
     private String key;
     private String value;

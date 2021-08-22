@@ -1,7 +1,6 @@
 package org.snipsniper.utils;
 
 import javax.swing.*;
-import java.util.Objects;
 
 public class DropdownItem {
     private String label;

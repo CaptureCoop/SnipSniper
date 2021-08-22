@@ -7,8 +7,8 @@ import java.awt.event.MouseEvent;
 
 public class SnipScopeUIComponent {
 
-    private Vector2Int position = new Vector2Int(0, 0);
-    private Vector2Int size = new Vector2Int(0, 0);
+    private final Vector2Int position = new Vector2Int(0, 0);
+    private final Vector2Int size = new Vector2Int(0, 0);
     private boolean enabled = true;
 
     public boolean render(Graphics2D g) {

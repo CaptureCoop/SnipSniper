@@ -9,11 +9,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class SnipScopeUIButton extends SnipScopeUIComponent{
-    private BufferedImage icon;
-    private BufferedImage iconPressed;
-    private BufferedImage iconHovering;
+    private final BufferedImage icon;
+    private final BufferedImage iconPressed;
+    private final BufferedImage iconHovering;
 
-    private ArrayList<Function> onPress = new ArrayList<>();
+    private final ArrayList<Function> onPress = new ArrayList<>();
     private boolean isHovering = false;
     private boolean isHeld = false;
     private boolean selected = false;

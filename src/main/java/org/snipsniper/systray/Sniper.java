@@ -6,7 +6,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 
 import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
@@ -45,7 +44,7 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	public Sniper(int profileID) {
 		instance = this;
 		this.profileID = profileID;
-		config = new Config("profile" + profileID + ".cfg", "CFG" + profileID, "profile_defaults.cfg");
+		config = new Config("profile" + profileID + ".cfg", "profile_defaults.cfg");
 
 		LogManager.log("Loading profile " + profileID, LogLevel.INFO);
 

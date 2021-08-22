@@ -1,7 +1,5 @@
 package org.snipsniper;
 
-import org.snipsniper.LogManager;
-import org.snipsniper.SnipSniper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.snipsniper.config.ConfigHelper;
@@ -11,7 +9,6 @@ import org.snipsniper.utils.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
 
 public class LangManager {
     public static ArrayList<String> languages = new ArrayList<>();

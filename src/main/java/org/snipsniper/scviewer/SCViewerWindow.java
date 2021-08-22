@@ -26,7 +26,7 @@ import java.util.List;
 public class SCViewerWindow extends SnipScopeWindow {
     private File currentFile;
     private final ArrayList<String> files = new ArrayList<>();
-    private Config config;
+    private final Config config;
 
     private final List<String> extensions = Arrays.asList(".png", ".jpg", ".jpeg");
 
@@ -48,7 +48,7 @@ public class SCViewerWindow extends SnipScopeWindow {
         }
 
         if(config == null) {
-            this.config = new Config("viewer.cfg", "CFG VIEWER", "profile_defaults.cfg");
+            this.config = new Config("viewer.cfg", "profile_defaults.cfg");
             this.config.save();
         } else {
             this.config = config;

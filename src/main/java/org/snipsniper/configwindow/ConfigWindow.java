@@ -19,7 +19,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class ConfigWindow extends JFrame {
     private JTabbedPane tabPane;
@@ -31,8 +30,6 @@ public class ConfigWindow extends JFrame {
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
     private final ArrayList<File> configFiles = new ArrayList<>();
     private Config lastSelectedConfig;
-
-    private final String id = "CFGW";
 
     public enum PAGE {snipPanel, editorPanel, viewerPanel, globalPanel}
 
@@ -171,7 +168,7 @@ public class ConfigWindow extends JFrame {
         dropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 parentPanel.removeAll();
-                Config newConfig = new Config(((DropdownItem)e.getItem()).getID(), "CFGT", "profile_defaults.cfg");
+                Config newConfig = new Config(((DropdownItem)e.getItem()).getID(), "profile_defaults.cfg");
                 tabPane.setComponentAt(pageIndex, setupPaneDynamic(newConfig, page));
                 lastSelectedConfig = newConfig;
             }
@@ -216,7 +213,7 @@ public class ConfigWindow extends JFrame {
                 int newIndex = dropdown.getSelectedIndex() - 1;
                 if(newIndex < 0)
                     newIndex = dropdown.getSelectedIndex() + 1;
-                Config newConfig = new Config(dropdown.getItemAt(newIndex) + ".cfg", "CFGT", "profile_defaults.cfg");
+                Config newConfig = new Config(dropdown.getItemAt(newIndex) + ".cfg", "profile_defaults.cfg");
                 tabPane.setComponentAt(pageIndex, setupPaneDynamic(newConfig, page));
                 lastSelectedConfig = newConfig;
             }
@@ -240,7 +237,7 @@ public class ConfigWindow extends JFrame {
             if(configOriginal.getFilename().contains("viewer") || configOriginal.getFilename().contains("editor"))
                 disablePage = true;
         } else {
-            config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
+            config = new Config("disabled_cfg.cfg", "profile_defaults.cfg");
             disablePage = true;
         }
 
@@ -542,7 +539,7 @@ public class ConfigWindow extends JFrame {
             if(configOriginal.getFilename().contains("viewer"))
                 disablePage = true;
         } else {
-            config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
+            config = new Config("disabled_cfg.cfg", "profile_defaults.cfg");
             disablePage = true;
         }
 
@@ -827,7 +824,7 @@ public class ConfigWindow extends JFrame {
             if(configOriginal.getFilename().contains("editor"))
                 disablePage = true;
         } else {
-            config = new Config("disabled_cfg.cfg", "CFGT", "profile_defaults.cfg");
+            config = new Config("disabled_cfg.cfg", "profile_defaults.cfg");
             disablePage = true;
         }
 

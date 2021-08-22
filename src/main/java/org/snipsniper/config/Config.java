@@ -37,7 +37,7 @@ public class Config {
 		defaults.loadFromContainer(config.defaults);
 	}
 
-	public Config (String filename, String id, String defaultFile) {
+	public Config (String filename, String defaultFile) {
 		this.filename = filename;
 		LogManager.log("Creating config object for <" + filename + ">.", LogLevel.INFO);
 		try {

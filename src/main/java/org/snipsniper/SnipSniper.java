@@ -55,7 +55,7 @@ public final class SnipSniper {
 
 		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
 
-		BUILDINFO = new Config("buildinfo.cfg", "BUILDINFO", "buildinfo.cfg");
+		BUILDINFO = new Config("buildinfo.cfg", "buildinfo.cfg");
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
@@ -82,7 +82,7 @@ public final class SnipSniper {
 			}
 		}
 
-		config = new Config("main.cfg", "CFG MAIN", "main_defaults.cfg");
+		config = new Config("main.cfg", "main_defaults.cfg");
 		String language = cmdline.getLanguage();
 		if(language != null && !language.isEmpty())
 			config.set(ConfigHelper.MAIN.language, language);
@@ -163,8 +163,6 @@ public final class SnipSniper {
 			LogManager.log("= This means that no files will be created and/or modified =", LogLevel.INFO);
 			LogManager.log("============================================================", LogLevel.INFO);
 		}
-
-		LogManager.log("This is a test message", LogLevel.ERROR);
 
 		if(cmdline.isEditorOnly() || isEditorOnly) {
 			Config config = SCEditorWindow.getStandaloneEditorConfig();

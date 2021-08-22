@@ -5,7 +5,6 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 import org.apache.commons.lang3.StringUtils;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.LogLevel;
-import org.snipsniper.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +13,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.logging.Level;
 
 public class LogManager {
 
@@ -37,40 +34,40 @@ public class LogManager {
         if(!enabled)
             return;
 
-        String msg = "%DATETIME% [%TYPE%]%INSERTSPACE% [%CLASS%]: %MESSAGE%";
+        StringBuilder msg = new StringBuilder("%DATETIME% [%TYPE%]%INSERTSPACE% [%CLASS%]: %MESSAGE%");
 
         String levelString = level.toString();
 
         if(levelString.length() <= MAX_LEVEL_LENGTH) {
-            msg = msg.replace("%INSERTSPACE%", StringUtils.repeat(" ", MAX_LEVEL_LENGTH - levelString.length()));
+            msg = new StringBuilder(msg.toString().replace("%INSERTSPACE%", StringUtils.repeat(" ", MAX_LEVEL_LENGTH - levelString.length())));
         } else {
             levelString = levelString.substring(0, Math.min(levelString.length(), MAX_LEVEL_LENGTH));
-            msg = msg.replace("%INSERTSPACE%", "");
+            msg = new StringBuilder(msg.toString().replace("%INSERTSPACE%", ""));
         }
 
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         final int STACKTRACE_START = 3;
         StackTraceElement currentStackTrace = stackTrace[STACKTRACE_START];
 
-        msg = msg.replace("%CLASS%", currentStackTrace.getClassName() + "." + currentStackTrace.getMethodName() + ":" + currentStackTrace.getLineNumber());
-        msg = msg.replace("%INSERTSPACE%", "");
-        msg = msg.replace("%TYPE%", levelString);
-        msg = msg.replace("%MESSAGE%", message);
+        msg = new StringBuilder(msg.toString().replace("%CLASS%", currentStackTrace.getClassName() + "." + currentStackTrace.getMethodName() + ":" + currentStackTrace.getLineNumber()));
+        msg = new StringBuilder(msg.toString().replace("%INSERTSPACE%", ""));
+        msg = new StringBuilder(msg.toString().replace("%TYPE%", levelString));
+        msg = new StringBuilder(msg.toString().replace("%MESSAGE%", message));
         final LocalDateTime time = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss:SS");
         String dateTimeString = formatter.format(time) + "";
-        msg = msg.replace("%DATETIME%", dateTimeString);
+        msg = new StringBuilder(msg.toString().replace("%DATETIME%", dateTimeString));
 
         if(printStackTrace) {
             int stackSizingHelp = dateTimeString.length() + MAX_LEVEL_LENGTH + 4;
 
-            msg += "%NEWLINE%";
+            msg.append("%NEWLINE%");
             for(int i = STACKTRACE_START; i < stackTrace.length; i++) {
                 String trace = stackTrace[i].toString();
                 if(trace.contains("org.snipsniper"))
-                    msg += StringUtils.repeat(" ", stackSizingHelp) + "[" + trace + "]%NEWLINE%";
+                    msg.append(StringUtils.repeat(" ", stackSizingHelp)).append("[").append(trace).append("]%NEWLINE%");
             }
-            msg += "%NEWLINE%";
+            msg.append("%NEWLINE%");
         }
 
         System.out.println(msg);
@@ -80,12 +77,12 @@ public class LogManager {
         else if(level == LogLevel.ERROR)
             color = "red";
 
-        String finalMsg = escapeHtml4(msg).replaceAll(" ", "&nbsp;");
+        String finalMsg = escapeHtml4(msg.toString()).replaceAll(" ", "&nbsp;");
         finalMsg = finalMsg.replaceAll("%NEWLINE%", "<br>");
         if(SnipSniper.getConfig() != null && finalMsg.contains("org.snipsniper")) {
             String baseTreeLink = "https://github.com/SvenWollinger/SnipSniper/tree/" + SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.githash) + "/src/main/java/";
             String link = baseTreeLink + currentStackTrace.getClassName().replaceAll("\\.", "/") + ".java#L" + currentStackTrace.getLineNumber();
-            finalMsg = finalMsg.replace(":" + currentStackTrace.getLineNumber(), ":" + currentStackTrace.getLineNumber() + " <a href='" + link + "'>@</a>");
+            finalMsg = finalMsg.replace(":" + currentStackTrace.getLineNumber() + "]", ":" + currentStackTrace.getLineNumber() + " <a href='" + link + "'>@</a>]");
         }
         htmlLog += "<p style='margin-top:0; white-space: nowrap;'><font color='" + color + "'>" + finalMsg + "</font></p>";
 
@@ -108,10 +105,10 @@ public class LogManager {
                 }
             }
 
-            msg += "\n";
+            msg.append("\n");
 
             try {
-                Files.write(Paths.get(logFile.getAbsolutePath()), msg.getBytes(), StandardOpenOption.APPEND);
+                Files.write(Paths.get(logFile.getAbsolutePath()), msg.toString().getBytes(), StandardOpenOption.APPEND);
             } catch (IOException e) {
                 e.printStackTrace();
             }

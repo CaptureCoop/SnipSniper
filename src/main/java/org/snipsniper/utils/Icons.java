@@ -2,8 +2,8 @@ package org.snipsniper.utils;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
-import java.util.logging.Level;
 import javax.imageio.ImageIO;
 
 import org.snipsniper.LogManager;
@@ -18,10 +18,16 @@ public class Icons {
 		try {
 			JSONArray list = new JSONArray(Utils.loadFileFromJar("img.json"));
 			for(int i = 0; i < list.length(); i++) {
-				images.put(list.getString(i), ImageIO.read(SnipSniper.class.getResource("/org/snipsniper/resources/img/" + list.getString(i))));
+				URL url = SnipSniper.class.getResource("/org/snipsniper/resources/img/" + list.getString(i));
+				if(url != null) {
+					images.put(list.getString(i), ImageIO.read(url));
+				} else {
+					LogManager.log("Could not load image " + list.getString(i) + ". This should not happen. Exiting...", LogLevel.ERROR);
+					SnipSniper.exit(false);
+				}
 			}
 		} catch (IOException ioException) {
-			ioException.printStackTrace();
+			LogManager.log("Could not load resources. Message: " + ioException.getMessage(), LogLevel.ERROR, true);
 		}
 	}
 

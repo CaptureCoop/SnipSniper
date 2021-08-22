@@ -17,7 +17,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class SCEditorWindow extends SnipScopeWindow {
     private final Config config;
@@ -201,7 +200,7 @@ public class SCEditorWindow extends SnipScopeWindow {
     }
 
     public static Config getStandaloneEditorConfig() {
-        return new Config("editor.cfg", "CFGE", "profile_defaults.cfg");
+        return new Config("editor.cfg", "profile_defaults.cfg");
     }
 
     public void setSaveLocation(String saveLocation) {
