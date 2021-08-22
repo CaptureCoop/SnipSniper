@@ -271,7 +271,7 @@ public final class SnipSniper {
 		if(config.getBool(ConfigHelper.MAIN.debug)) {
 			if (!exitForRestart && Desktop.isDesktopSupported()) {
 				try {
-					Desktop.getDesktop().edit(LogManager.getLogFile());
+					Desktop.getDesktop().open(LogManager.getLogFile());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
