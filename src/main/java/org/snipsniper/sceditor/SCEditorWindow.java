@@ -6,7 +6,7 @@ import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.snipscope.SnipScopeWindow;
 import org.snipsniper.snipscope.ui.SnipScopeUIButton;
 import org.apache.commons.lang3.SystemUtils;
-import org.snipsniper.utils.ConfigHelper;
+import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.Icons;
 import org.snipsniper.utils.LogManager;
 import org.snipsniper.utils.Utils;

@@ -2,7 +2,7 @@ package org.snipsniper.systray.buttons;
 
 import org.snipsniper.SnipSniper;
 import org.snipsniper.systray.PopupMenuButton;
-import org.snipsniper.utils.ConfigHelper;
+import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.Function;
 import org.snipsniper.utils.Icons;
 import org.snipsniper.utils.LangManager;

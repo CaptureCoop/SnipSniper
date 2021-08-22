@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
+import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.systray.Sniper;
 import org.apache.commons.lang3.SystemUtils;

@@ -3,6 +3,7 @@ package org.snipsniper.utils;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.apache.commons.lang3.SystemUtils;
+import org.snipsniper.config.ConfigHelper;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

@@ -1,6 +1,7 @@
 package org.snipsniper.utils;
 
 import org.snipsniper.SnipSniper;
+import org.snipsniper.config.ConfigHelper;
 
 public class CommandLineHelper {
     private String language;

@@ -1,6 +1,7 @@
 package org.snipsniper.sceditor;
 
 import org.snipsniper.colorchooser.ColorChooser;
+import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.sceditor.stamps.IStamp;
 import org.snipsniper.snipscope.SnipScopeListener;
 import org.snipsniper.utils.*;

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import org.snipsniper.SnipSniper;
+import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.scviewer.SCViewerWindow;
 

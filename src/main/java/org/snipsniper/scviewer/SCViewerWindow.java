@@ -4,7 +4,7 @@ import org.snipsniper.config.Config;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.snipscope.SnipScopeRenderer;
 import org.snipsniper.snipscope.SnipScopeWindow;
-import org.snipsniper.utils.ConfigHelper;
+import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.Icons;
 import org.snipsniper.utils.Utils;
 import org.apache.commons.lang3.SystemUtils;
