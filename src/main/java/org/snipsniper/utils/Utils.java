@@ -218,14 +218,6 @@ public class Utils {
 		LogManager.log("Copied Image to clipboard", LogLevel.INFO);
 	}
 
-	public static String getStackTrace() {
-		String string = "";
-		for(StackTraceElement stackTrace : new Throwable().getStackTrace())
-			string += stackTrace.toString() + "\n";
-
-		return string;
-	}
-
 	public static String constructFilename(String modifier) {
 		LocalDateTime now = LocalDateTime.now();
 		String filename = now.toString().replace(".", "_").replace(":", "_");
