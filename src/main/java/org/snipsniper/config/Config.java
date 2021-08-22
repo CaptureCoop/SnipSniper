@@ -59,26 +59,26 @@ public class Config {
 	}
 	
 	void loadFile(String filename, ConfigContainer container, boolean inJar) throws IOException, NumberFormatException {
-			BufferedReader reader;
-			if(!inJar)
-				reader = new BufferedReader(new FileReader(filename));
-			else
-				reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename)));
-			
-			String line = reader.readLine();
-			
-			while (line != null) {
-				if(line.startsWith("#")) {
-					container.set(line);
-				} else if(line.isEmpty() || line.equals(" ")) {
-					container.addNewLine();
-				} else if(line.contains("=")) {
-					String[] args = line.split("=");
-					container.set(args[0], args[1]);
-				}
-				line = reader.readLine();
+		BufferedReader reader;
+		if(!inJar)
+			reader = new BufferedReader(new FileReader(filename));
+		else
+			reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename)));
+
+		String line = reader.readLine();
+
+		while (line != null) {
+			if(line.startsWith("#")) {
+				container.set(line);
+			} else if(line.isEmpty() || line.equals(" ")) {
+				container.addNewLine();
+			} else if(line.contains("=")) {
+				String[] args = line.split("=");
+				container.set(args[0], args[1]);
 			}
-			reader.close();
+			line = reader.readLine();
+		}
+		reader.close();
 
 	}
 
