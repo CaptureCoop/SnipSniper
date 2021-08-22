@@ -53,7 +53,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		screenshot();
 
 		setUndecorated(true);
-		setIconImage(Icons.getImage(""));
+		setIconImage(Icons.getImage("icons/snipsniper.png"));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		listener = new CaptureWindowListener(this);
