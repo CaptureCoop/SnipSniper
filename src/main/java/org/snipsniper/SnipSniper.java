@@ -106,7 +106,7 @@ public final class SnipSniper {
 			JFrame.setDefaultLookAndFeelDecorated( true );
 			JDialog.setDefaultLookAndFeelDecorated( true );
 		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
+			LogManager.log("Error setting look and feel. Message: " + e.getMessage(), LogLevel.ERROR, true);
 		}
 
 		if(config.getBool(ConfigHelper.MAIN.debug))
