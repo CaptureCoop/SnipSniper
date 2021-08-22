@@ -3,6 +3,7 @@ package org.snipsniper;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 import org.apache.commons.lang3.StringUtils;
+import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.LogLevel;
 import org.snipsniper.utils.Utils;
 
@@ -13,6 +14,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 public class LogManager {
@@ -48,8 +50,9 @@ public class LogManager {
 
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         final int STACKTRACE_START = 3;
+        StackTraceElement currentStackTrace = stackTrace[STACKTRACE_START];
 
-        msg = msg.replace("%CLASS%", stackTrace[STACKTRACE_START].getClassName() + "." + stackTrace[STACKTRACE_START].getMethodName() + ":" + stackTrace[STACKTRACE_START].getLineNumber());
+        msg = msg.replace("%CLASS%", currentStackTrace.getClassName() + "." + currentStackTrace.getMethodName() + ":" + currentStackTrace.getLineNumber());
         msg = msg.replace("%INSERTSPACE%", "");
         msg = msg.replace("%TYPE%", levelString);
         msg = msg.replace("%MESSAGE%", message);
@@ -69,7 +72,6 @@ public class LogManager {
             }
         }
 
-
         System.out.println(msg);
         String color = "white";
         if(level == LogLevel.WARNING)
@@ -79,7 +81,11 @@ public class LogManager {
 
         String finalMsg = escapeHtml4(msg).replaceAll(" ", "&nbsp;");
         finalMsg = finalMsg.replaceAll("%NEWLINE%", "<br>");
-
+        if(SnipSniper.getConfig() != null && finalMsg.contains("org.snipsniper")) {
+            String baseTreeLink = "https://github.com/SvenWollinger/SnipSniper/tree/" + SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.githash) + "/src/main/java/";
+            String link = baseTreeLink + currentStackTrace.getClassName().replaceAll("\\.", "/") + ".java#L" + currentStackTrace.getLineNumber();
+            finalMsg = finalMsg.replace(":" + currentStackTrace.getLineNumber(), ":" + currentStackTrace.getLineNumber() + " <a href='" + link + "'>@</a>");
+        }
         htmlLog += "<p style='margin-top:0; white-space: nowrap;'><font color='" + color + "'>" + finalMsg + "</font></p>";
 
         DebugConsole console = SnipSniper.getDebugConsole();
