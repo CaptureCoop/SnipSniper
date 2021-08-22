@@ -10,7 +10,6 @@ import org.snipsniper.utils.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.xml.soap.Text;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
