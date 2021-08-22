@@ -1,6 +1,6 @@
 package org.snipsniper.sceditor;
 
-import org.snipsniper.Config;
+import org.snipsniper.config.Config;
 import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.snipscope.SnipScopeWindow;

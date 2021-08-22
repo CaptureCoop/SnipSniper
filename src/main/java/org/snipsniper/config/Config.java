@@ -1,4 +1,4 @@
-package org.snipsniper;
+package org.snipsniper.config;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,22 +7,22 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.logging.Level;
 
+import org.snipsniper.SnipSniper;
 import org.snipsniper.utils.LogManager;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Utils;
 
 public class Config {
-	private final HashMap <String, String> settings = new HashMap<>();
-	private final HashMap <String, String> defaults = new HashMap<>();
+	private final ConfigContainer settings = new ConfigContainer();
+	private final ConfigContainer defaults = new ConfigContainer();
 
 	private String id;
 	private String filename;
 
 	public static final String EXTENSION = "cfg";
-	public static final String DOT_EXTENSION = ".cfg";
+	public static final String DOT_EXTENSION = "." + EXTENSION;
 
 	public Config (Config config) {
 		//Copies config
@@ -34,8 +34,8 @@ public class Config {
 		this.filename = config.filename;
 		this.id = config.id;
 
-		settings.putAll(copyMap(config.settings));
-		defaults.putAll(copyMap(config.defaults));
+		settings.loadFromContainer(config.settings);
+		defaults.loadFromContainer(config.defaults);
 	}
 
 	public Config (String filename, String id, String defaultFile) {
@@ -43,25 +43,21 @@ public class Config {
 		this.id = id;
 		LogManager.log(id, "Creating config object for <" + filename + ">.", Level.INFO);
 		try {
-			if(new File(SnipSniper.getProfilesFolder() + filename).exists())
-				loadFile(SnipSniper.getProfilesFolder() + filename, settings, false);
-			
-			loadFile("/org/snipsniper/resources/cfg/" + defaultFile, defaults, true);
+			String filePath = SnipSniper.getProfilesFolder() + filename;
+			String defaultPath = "/org/snipsniper/resources/cfg/" + defaultFile;
+			if(new File(filePath).exists())
+				loadFile(filePath, settings, false);
+			else
+				loadFile(defaultPath, settings, true);
+
+			loadFile(defaultPath, defaults, true);
 		} catch (NumberFormatException | IOException e) {
 			LogManager.log(id, "There was an error loading the config. Message: " + e.getMessage(), Level.SEVERE);
 			e.printStackTrace();
 		}
 	}
-
-	private HashMap<String, String> copyMap(HashMap<String, String> mapToCopy) {
-		HashMap<String, String> newMap = new HashMap<>();
-		for (String key : mapToCopy.keySet()) {
-			newMap.put(key, mapToCopy.get(key));
-		}
-		return newMap;
-	}
 	
-	void loadFile(String filename, HashMap<String, String> map, boolean inJar) throws IOException, NumberFormatException {
+	void loadFile(String filename, ConfigContainer container, boolean inJar) throws IOException, NumberFormatException {
 			BufferedReader reader;
 			if(!inJar)
 				reader = new BufferedReader(new FileReader(filename));
@@ -71,9 +67,13 @@ public class Config {
 			String line = reader.readLine();
 			
 			while (line != null) {
-				if(line.contains("=")) {
+				if(line.startsWith("#")) {
+					container.set(line);
+				} else if(line.isEmpty() || line.equals(" ")) {
+					container.addNewLine();
+				} else if(line.contains("=")) {
 					String[] args = line.split("=");
-					map.put(args[0], args[1]);
+					container.set(args[0], args[1]);
 				}
 				line = reader.readLine();
 			}
@@ -165,10 +165,7 @@ public class Config {
 	}
 
 	public void set(String key, String value) {
-		if(!settings.containsKey(key))
-			settings.put(key, value);
-		else
-			settings.replace(key, value);
+		settings.set(key, value);
 	}
 	
 	public void deleteFile() {
@@ -177,13 +174,12 @@ public class Config {
 			LogManager.log(id, "Could not delete profile config!", Level.WARNING);
 	}
 	
-	private void saveFile(HashMap<String, String> map) {
+	private void saveFile(ConfigContainer container) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(SnipSniper.getProfilesFolder() + "/" + filename));
-			for (String key : map.keySet()) {
-				String value = map.get(key);
-				writer.write(key + "=" + value + "\n");
-			}
+			for(ConfigOption option : container.getList())
+				writer.write(option.toString() + "\n");
+
 			writer.close();
 		} catch (IOException e) {
 			LogManager.log(id, "There was an error saving the config! Message: " + e.getMessage(), Level.SEVERE);

@@ -1,6 +1,6 @@
 package org.snipsniper.colorchooser;
 
-import org.snipsniper.Config;
+import org.snipsniper.config.Config;
 import org.snipsniper.utils.CustomWindowListener;
 import org.snipsniper.utils.Icons;
 import org.snipsniper.utils.SSColor;

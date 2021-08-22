@@ -16,7 +16,7 @@ import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-import org.snipsniper.Config;
+import org.snipsniper.config.Config;
 import org.snipsniper.capturewindow.CaptureWindow;
 import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.systray.buttons.btnAbout;

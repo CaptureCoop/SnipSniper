@@ -16,6 +16,7 @@ import javax.swing.*;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import org.snipsniper.config.Config;
 import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.scviewer.SCViewerWindow;

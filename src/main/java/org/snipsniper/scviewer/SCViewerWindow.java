@@ -1,6 +1,6 @@
 package org.snipsniper.scviewer;
 
-import org.snipsniper.Config;
+import org.snipsniper.config.Config;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.snipscope.SnipScopeRenderer;
 import org.snipsniper.snipscope.SnipScopeWindow;

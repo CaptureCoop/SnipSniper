@@ -2,7 +2,7 @@ package org.snipsniper.configwindow;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import org.snipsniper.Config;
+import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.colorchooser.ColorChooser;
 import org.snipsniper.systray.Sniper;
@@ -11,7 +11,6 @@ import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.utils.*;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;

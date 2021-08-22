@@ -1,6 +1,6 @@
 package org.snipsniper.sceditor.stamps;
 
-import org.snipsniper.Config;
+import org.snipsniper.config.Config;
 import org.snipsniper.sceditor.SCEditorWindow;
 
 public class StampUtils {

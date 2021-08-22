@@ -11,7 +11,7 @@ import java.util.logging.Level;
 
 import javax.swing.JFrame;
 
-import org.snipsniper.Config;
+import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.systray.Sniper;

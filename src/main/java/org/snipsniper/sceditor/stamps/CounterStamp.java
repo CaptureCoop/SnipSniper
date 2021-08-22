@@ -1,6 +1,6 @@
 package org.snipsniper.sceditor.stamps;
 
-import org.snipsniper.Config;
+import org.snipsniper.config.Config;
 import org.snipsniper.utils.ConfigHelper;
 import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
