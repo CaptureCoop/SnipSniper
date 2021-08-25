@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import org.jnativehook.keyboard.NativeKeyAdapter;
+import org.jnativehook.mouse.NativeMouseAdapter;
 import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
@@ -16,19 +18,17 @@ import org.snipsniper.scviewer.SCViewerWindow;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
-import org.jnativehook.keyboard.NativeKeyListener;
 
 import org.snipsniper.config.Config;
 import org.snipsniper.capturewindow.CaptureWindow;
 import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.systray.buttons.btnAbout;
 import org.jnativehook.mouse.NativeMouseEvent;
-import org.jnativehook.mouse.NativeMouseListener;
 import org.snipsniper.utils.*;
 
 import javax.swing.*;
 
-public class Sniper implements NativeKeyListener, NativeMouseListener {
+public class Sniper {
 	public int profileID; //0 = default
 	
 	private CaptureWindow captureWindow;
@@ -40,6 +40,9 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 	private JFrame popup;
 
 	private final static int TASKBAR_HEIGHT = 40;
+
+	private final NativeKeyAdapter nativeKeyAdapter;
+	private final NativeMouseAdapter nativeMouseAdapter;
 
 	public Sniper(int profileID) {
 		instance = this;
@@ -167,13 +170,25 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			}
 		}
 
-		GlobalScreen.addNativeKeyListener(this);
-		GlobalScreen.addNativeMouseListener(this);
+		nativeKeyAdapter = new NativeKeyAdapter(){
+			@Override
+			public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
+				checkNativeKey("KB", nativeKeyEvent.getKeyCode());
+			}
+		};
+		nativeMouseAdapter = new NativeMouseAdapter(){
+			@Override
+			public void nativeMousePressed(NativeMouseEvent nativeMouseEvent) {
+				checkNativeKey("M", nativeMouseEvent.getButton());
+			}
+		};
+		GlobalScreen.addNativeKeyListener(nativeKeyAdapter);
+		GlobalScreen.addNativeMouseListener(nativeMouseAdapter);
 	}
 
 	public void kill() {
-		GlobalScreen.removeNativeKeyListener(this);
-		GlobalScreen.removeNativeMouseListener(this);
+		GlobalScreen.removeNativeKeyListener(nativeKeyAdapter);
+		GlobalScreen.removeNativeMouseListener(nativeMouseAdapter);
 		SystemTray.getSystemTray().remove(trayIcon);
 		trayIcon = null;
 	}
@@ -226,27 +241,4 @@ public class Sniper implements NativeKeyListener, NativeMouseListener {
 			configWindow.requestFocus();
 		}
 	}
-
-	@Override
-	public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
-		checkNativeKey("KB", nativeKeyEvent.getKeyCode());
-	}
-
-	@Override
-	public void nativeKeyReleased(NativeKeyEvent nativeKeyEvent) { }
-
-	@Override
-	public void nativeKeyTyped(NativeKeyEvent nativeKeyEvent) { }
-
-
-	@Override
-	public void nativeMouseClicked(NativeMouseEvent nativeMouseEvent) { }
-
-	@Override
-	public void nativeMousePressed(NativeMouseEvent nativeMouseEvent) {
-		checkNativeKey("M", nativeMouseEvent.getButton());
-	}
-
-	@Override
-	public void nativeMouseReleased(NativeMouseEvent nativeMouseEvent) { }
 }
