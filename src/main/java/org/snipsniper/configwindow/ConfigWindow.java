@@ -1000,6 +1000,7 @@ public class ConfigWindow extends JFrame {
         }
 
         if(didThemeChange) {
+            doRestartProfiles = true;
             try {
                 if (config.getString(ConfigHelper.MAIN.theme).equals("dark")) {
                     UIManager.setLookAndFeel(new FlatDarculaLaf());

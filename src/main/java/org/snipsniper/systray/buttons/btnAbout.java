@@ -149,6 +149,13 @@ public class btnAbout extends PopupMenuButton {
 		html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming"));
 		html = html.replace("%ABOUT_CD%", LangManager.getItem("about_cd"));
 		html = html.replace("%ABOUT_MATH%", LangManager.getItem("about_math"));
+		String theme = SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme);
+		String color = "";
+		switch(theme) {
+			case "dark": color = "white"; break;
+			case "light": color = "black"; break;
+		}
+		html = html.replace("%LINK_COLOR%", color);
 	}
 
 }
