@@ -6,8 +6,11 @@ import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.Function;
 import org.snipsniper.utils.Icons;
 import org.snipsniper.LangManager;
+import org.snipsniper.utils.Links;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -44,6 +47,9 @@ public class btnAbout extends PopupMenuButton {
 
 				JPanel panel = new JPanel(new GridLayout(1,0));
 
+				JPanel iconPanel = new JPanel(new GridBagLayout());
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.gridx = 0; gbc.gridy = 0;
 				int iconSize = 100;
 				ImageIcon icon = new ImageIcon(Icons.getImage("icons/snipsniper.png").getScaledInstance(iconSize,iconSize,Image.SCALE_DEFAULT));
 				JLabel label = new JLabel(icon);
@@ -80,7 +86,17 @@ public class btnAbout extends PopupMenuButton {
 						frame.setIconImage(image);
 					}
 				});
-				panel.add(label);
+				iconPanel.add(label, gbc);
+				gbc.gridy = 1;
+				gbc.insets = new Insets(20, 0, 0, 0);
+				JButton buyCoffee = new JButton("Buy us a coffee");
+				buyCoffee.addActionListener(e -> Links.openLink(Links.KOFI));
+				BufferedImage kofiIcon = Icons.getImage("icons/kofi.png");
+				buyCoffee.setIcon(new ImageIcon(kofiIcon.getScaledInstance(kofiIcon.getWidth()/8, kofiIcon.getHeight()/8, Image.SCALE_DEFAULT)));
+				buyCoffee.setHorizontalTextPosition(SwingConstants.LEFT);
+
+				iconPanel.add(buyCoffee, gbc);
+				panel.add(iconPanel);
 
 				JPanel rightSide = new JPanel(new GridLayout(2, 0));
 
@@ -94,12 +110,7 @@ public class btnAbout extends PopupMenuButton {
 				about.setSelectedTextColor(Color.black);
 				about.addHyperlinkListener(hle -> {
 					if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.getEventType())) {
-						try {
-							Desktop.getDesktop().browse(new URI(hle.getURL().toString()));
-						} catch (IOException | URISyntaxException e) {
-							e.printStackTrace();
-						}
-
+						Links.openLink(hle.getURL().toString());
 					}
 				});
 				rightSide.add(about);

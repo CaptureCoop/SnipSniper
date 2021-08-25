@@ -2,6 +2,7 @@ package org.snipsniper;
 
 import org.snipsniper.utils.CustomWindowListener;
 import org.snipsniper.utils.Icons;
+import org.snipsniper.utils.Links;
 import org.snipsniper.utils.LogLevel;
 
 import javax.swing.*;
@@ -65,11 +66,7 @@ public class DebugConsole extends JFrame {
 
         content.addHyperlinkListener(hle -> {
             if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.getEventType())) {
-                try {
-                    Desktop.getDesktop().browse(new URI(hle.getURL().toString()));
-                } catch (IOException | URISyntaxException e) {
-                    LogManager.log("Error with hyperlink listener in debug console. Message: " + e.getMessage(), LogLevel.ERROR);
-                }
+                Links.openLink(hle.getURL().toString());
             }
         });
 
