@@ -114,7 +114,7 @@ public final class SnipSniper {
 
 		LangManager.load();
 
-		LogManager.log("Launching SnipSniper Version " + getVersion(), LogLevel.INFO);
+		LogManager.log("Launching SnipSniper Version " + getVersion() + " (rev-" + BUILDINFO.getString(ConfigHelper.BUILDINFO.githash) + ")", LogLevel.INFO);
 		if(SystemUtils.IS_OS_LINUX) {
 			LogManager.log("=================================================================================", LogLevel.WARNING);
 			LogManager.log("= SnipSniper Linux is still in development and may not work properly or at all. =", LogLevel.WARNING);
