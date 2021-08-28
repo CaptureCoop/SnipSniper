@@ -36,7 +36,7 @@ public class LangManager {
             return langMap.get(language).getJSONObject("strings").getString(key);
 
         LogManager.log("Could not find key <" + key + "> in language file <" + language + ">", LogLevel.ERROR, true);
-        return "null";
+        return "LM<" + key + ">";
     }
 
     public static String getItem(String key) {
