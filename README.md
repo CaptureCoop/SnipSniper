@@ -51,8 +51,6 @@ SnipSniper uses these libraries in order to function properly
 
 * [FlatLaf](https://www.formdev.com/flatlaf/) - FlatLaf is a modern open-source cross-platform Look and Feel for Java Swing desktop applications.
 
-* [MigLayout](https://www.miglayout.com/) - Easy to use yet very powerful Java Swing, JavaFX and SWT layout manager.
-
 License
 ----
 

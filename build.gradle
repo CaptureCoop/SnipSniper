@@ -32,7 +32,6 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'org.json:json:20201115'
     compile 'com.formdev:flatlaf:1.2'
-    compile 'com.miglayout:miglayout:3.7.4'
 }
 
 task preBuild {

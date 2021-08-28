@@ -9,7 +9,6 @@ import org.snipsniper.SnipSniper;
 import org.snipsniper.colorchooser.ColorChooser;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.systray.Sniper;
-import net.miginfocom.swing.MigLayout;
 import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.utils.*;
 
