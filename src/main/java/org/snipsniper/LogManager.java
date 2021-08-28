@@ -70,7 +70,7 @@ public class LogManager {
             msg.append("%NEWLINE%");
         }
 
-        System.out.println(msg);
+        System.out.println(msg.toString().replaceAll("%NEWLINE%", "\n"));
         String color = "white";
         if(level == LogLevel.WARNING)
             color = "yellow";
