@@ -1,6 +1,5 @@
 package org.snipsniper.utils;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
@@ -136,6 +135,15 @@ public class Utils {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static String formatDateArguments(String string) {
+		String returnVal = string;
+		LocalDate currentDate = LocalDate.now();
+		returnVal = returnVal.replaceAll("%day%", String.valueOf(currentDate.getDayOfMonth()));
+		returnVal = returnVal.replaceAll("%month%", String.valueOf(currentDate.getMonthValue()));
+		returnVal = returnVal.replaceAll("%year%", String.valueOf(currentDate.getYear()));
+		return returnVal;
 	}
 
 	public static String getFileExtension(File file) {

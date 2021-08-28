@@ -79,6 +79,7 @@ public class Sniper {
 
 			if (SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 				popup.add(new PopupMenuButton("Console", Icons.getImage("icons/console.png"), popup, () -> SnipSniper.openDebugConsole()));
+				popup.add(new PopupMenuButton("Run folder preview test", Icons.getImage("icons/folder.png"), popup, () -> new FolderPreview("Folder preview test", null)));
 			}
 
 			popup.add(new btnAbout(LangManager.getItem("menu_about"), Icons.getImage("icons/snipsniper.png"), popup, null));
