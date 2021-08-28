@@ -83,28 +83,28 @@ public class ConfigWindow extends JFrame {
         lastSelectedConfig = config;
 
         snipConfigPanel = new JPanel();
-        tabPane.addTab("SnipSniper Settings",  setupSnipPane(config));
+        tabPane.addTab("SnipSniper",  setupSnipPane(config));
         tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)));
         if(page == PAGE.snipPanel)
             enableIndex = index;
         index++;
 
         editorConfigPanel = new JPanel();
-        tabPane.addTab("Editor Settings", setupEditorPane(config));
+        tabPane.addTab("Editor", setupEditorPane(config));
         tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/editor.png").getScaledInstance(iconSize,iconSize,0)));
         if(page == PAGE.editorPanel)
             enableIndex = index;
         index++;
 
         viewerConfigPanel = new JPanel();
-        tabPane.addTab("Viewer Settings", setupViewerPane(config));
+        tabPane.addTab("Viewer", setupViewerPane(config));
         tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/viewer.png").getScaledInstance(iconSize,iconSize,0)));
         if(page == PAGE.viewerPanel)
             enableIndex = index;
         index++;
 
         globalConfigPanel = new JPanel();
-        tabPane.addTab("Global Settings", setupGlobalPane());
+        tabPane.addTab("Global", setupGlobalPane());
         tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/config.png").getScaledInstance(iconSize, iconSize, 0)));
         if(page == PAGE.globalPanel)
             enableIndex = index;
