@@ -395,7 +395,7 @@ public class ConfigWindow extends JFrame {
 
         //BEGIN SPYGLASS
         gbc.gridx = 0;
-        options.add(createJLabel("Use Spyglass", JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(createJLabel(LangManager.getItem("config_label_spyglass"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
 
         JComboBox<Object> spyglassDropdownEnabled = new JComboBox<>(new String[]{LangManager.getItem("config_label_disabled"), LangManager.getItem("config_label_enabled"), LangManager.getItem("config_label_hold"), LangManager.getItem("config_label_toggle")});
@@ -466,7 +466,7 @@ public class ConfigWindow extends JFrame {
 
         //BEGIN SPYGLASS ZOOM
         gbc.gridx = 0;
-        options.add(createJLabel("Spyglass zoom", JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(createJLabel(LangManager.getItem("config_label_spyglasszoom"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JComboBox<Object> spyglassZoomDropdown = new JComboBox<>(new String[]{"8x8", "16x16", "32x32", "64x64"});
         switch(config.getInt(ConfigHelper.PROFILE.spyglassZoom)) {
@@ -493,7 +493,7 @@ public class ConfigWindow extends JFrame {
         //END ELEMENTS
 
         //BEGIN SAVE
-        JButton saveAndClose = new JButton("Save and close");
+        JButton saveAndClose = new JButton(LangManager.getItem("config_label_saveclose"));
         saveAndClose.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
                 configOriginal.loadFromConfig(config);
