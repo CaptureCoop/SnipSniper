@@ -313,7 +313,7 @@ public class ConfigWindow extends JFrame {
         borderSizePanel.add(borderSize);
 
         SSColor borderColor = SSColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor));
-        GradientJButton colorBtn = new GradientJButton(LangManager.getItem("config_label_color"), borderColor);
+        GradientJButton colorBtn = new GradientJButton("Color", borderColor);
         borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, ((SSColor)e.getSource()).toSaveString()));
         colorBtn.addActionListener(e -> {
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
