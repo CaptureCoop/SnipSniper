@@ -125,6 +125,7 @@ public class Utils {
 				System.out.println("Missing lines found for " + language + ".json\n");
 			}
 		}
+		System.out.println("Done. If no issues were reported you are golden :^)");
 	}
 
 	public static void printFile(String filename, String text) {
