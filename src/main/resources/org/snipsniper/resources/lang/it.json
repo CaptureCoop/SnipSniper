@@ -23,6 +23,11 @@
     "about_math": "Matematica",
 
     "config_label_config": "Config",
+    "config_label_language": "Lingua",
+    "config_label_debug": "Modalità di debug",
+    "config_label_theme": "Tema",
+    "config_label_theme_dark": "Buio",
+    "config_label_theme_light": "Leggero",
     "config_label_hotkey": "Tasto di scelta rapida per la cattura",
     "config_label_saveimages": "Salvare le immagini alla cattura",
     "config_label_copyclipboard": "Copia le immagini negli appunti alla cattura",
@@ -35,8 +40,17 @@
     "config_label_delete": "Cancella",
     "config_label_none": "NESSUNO",
     "config_label_save": "Salva",
+    "config_label_saveclose": "Salva e chiudi",
     "config_label_hotkey_listening": "Ascolto...",
     "config_label_mouse": "Mouse",
+    "config_label_disabled": "Disabilitato",
+    "config_label_enabled": "Abilitato",
+    "config_label_hold": "Presa",
+    "config_label_toggle": "Attiva/disattiva",
+    "config_label_control": "Control",
+    "config_label_shift": "Shift",
+    "config_label_spyglass": "Usa il cannocchiale",
+    "config_label_spyglasszoom": "Zoom del cannocchiale",
 
     "config_sanitation_error": "Errore",
     "config_sanitation_border_minmax": "La dimensione del bordo deve essere un numero compreso tra 0 e 999!",
@@ -44,6 +58,8 @@
     "config_sanitation_border_max": "La dimensione del bordo non può essere più di 999!",
     "config_sanitation_delay_less0": "Il ritardo dello snipe non può essere inferiore a 0!",
     "config_sanitation_directory_notexist": "La directory non esiste!",
+    "config_sanitation_createdirectory": "Crea directory",
+    "config_sanitation_failed_createdirectory": "Impossibile creare la directory!",
 
     "error_charset_not_available": "Charset \"{0}\" mancante. Lingua \"{1}\" non disponibile."
   }
