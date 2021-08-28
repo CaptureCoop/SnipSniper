@@ -22,6 +22,11 @@
     "about_math": "Mathematik",
 
     "config_label_config": "Einstellungen",
+    "config_label_language": "Sprache",
+    "config_label_debug": "Debug Modus",
+    "config_label_theme": "Theme",
+    "config_label_theme_dark": "Dunkel",
+    "config_label_theme_light": "Hell",
     "config_label_hotkey": "Aufnahme Taste",
     "config_label_saveimages": "Bild nach dem Aufnehmen abspeichern",
     "config_label_copyclipboard": "Bild nach dem Aufnehmen kopieren",

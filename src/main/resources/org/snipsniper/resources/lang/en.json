@@ -22,6 +22,11 @@
     "about_math": "Math",
 
     "config_label_config": "Settings",
+    "config_label_language": "Language",
+    "config_label_debug": "Debug mode",
+    "config_label_theme": "Theme",
+    "config_label_theme_dark": "Dark",
+    "config_label_theme_light": "Light",
     "config_label_hotkey": "Capture hotkey",
     "config_label_saveimages": "Save images on capture",
     "config_label_copyclipboard": "Copy images to clipboard on capture",

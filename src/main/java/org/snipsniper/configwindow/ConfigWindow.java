@@ -898,11 +898,13 @@ public class ConfigWindow extends JFrame {
     }
 
     public JComponent setupGlobalPane() {
-        globalConfigPanel.setLayout(new MigLayout("align 50% 0%"));
+        globalConfigPanel.removeAll();
 
-        int hGap = 20;
-
-        JPanel options = new JPanel(new GridLayout(0,1));
+        JPanel options = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 10, 0, 10);
 
         Config config = new Config(SnipSniper.getConfig());
 
@@ -917,12 +919,11 @@ public class ConfigWindow extends JFrame {
             }
         });
 
-        JPanel row0 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row0.add(createJLabel("Language", JLabel.RIGHT, JLabel.CENTER));
-        row0.add(languageDropdown);
-        options.add(row0);
+        options.add(createJLabel(LangManager.getItem("config_label_language"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        options.add(languageDropdown, gbc);
 
-        String[] themes = {"Light Mode", "Dark Mode"};
+        String[] themes = {LangManager.getItem("config_label_theme_light"), LangManager.getItem("config_label_theme_dark")};
         JComboBox<Object> themeDropdown = new JComboBox<>(themes);
         int themeIndex = 0; //Light theme
         if(config.getString(ConfigHelper.MAIN.theme).equals("dark"))
@@ -938,18 +939,18 @@ public class ConfigWindow extends JFrame {
             }
         });
 
-        JPanel row1 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row1.add(createJLabel("Theme", JLabel.RIGHT, JLabel.CENTER));
-        row1.add(themeDropdown);
-        options.add(row1);
+        gbc.gridx = 0;
+        options.add(createJLabel(LangManager.getItem("config_label_theme"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        options.add(themeDropdown, gbc);
 
-        JPanel row2 = new JPanel(getGridLayoutWithMargin(0, 2, hGap));
-        row2.add(createJLabel("Debug Mode", JLabel.RIGHT, JLabel.CENTER));
+        gbc.gridx = 0;
+        options.add(createJLabel(LangManager.getItem("config_label_debug"), JLabel.RIGHT, JLabel.CENTER), gbc);
         JCheckBox debugCheckBox = new JCheckBox();
         debugCheckBox.setSelected(config.getBool(ConfigHelper.MAIN.debug));
         debugCheckBox.addActionListener(e -> config.set(ConfigHelper.MAIN.debug, debugCheckBox.isSelected() + ""));
-        row2.add(debugCheckBox);
-        options.add(row2);
+        gbc.gridx = 1;
+        options.add(debugCheckBox, gbc);
 
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
@@ -964,7 +965,7 @@ public class ConfigWindow extends JFrame {
             }
         });
 
-        JButton saveAndClose = new JButton("Save and close");
+        JButton saveAndClose = new JButton(LangManager.getItem("config_label_saveclose"));
         saveAndClose.addActionListener(e -> {
             globalSave(config);
 
@@ -973,13 +974,11 @@ public class ConfigWindow extends JFrame {
             close();
         });
 
-        GridLayout layout = new GridLayout(0,4);
-        layout.setHgap(hGap);
-        JPanel saveRow = new JPanel(layout);
-        saveRow.add(new JPanel());
-        saveRow.add(saveButton);
-        saveRow.add(saveAndClose);
-        options.add(saveRow);
+        gbc.gridx = 0;
+        gbc.insets.top = 20;
+        options.add(saveButton, gbc);
+        gbc.gridx = 1;
+        options.add(saveAndClose, gbc);
 
         globalConfigPanel.add(options);
 
