@@ -398,8 +398,8 @@ public class ConfigWindow extends JFrame {
         options.add(createJLabel("Use Spyglass", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
 
-        JComboBox<Object> spyglassDropdownEnabled = new JComboBox<>(new String[]{"Disabled", "Enabled", "Hold", "Toggle"});
-        JComboBox<Object> spyglassDropdownHotkey = new JComboBox<>(new String[]{"Control", "Shift"});
+        JComboBox<Object> spyglassDropdownEnabled = new JComboBox<>(new String[]{LangManager.getItem("config_label_disabled"), LangManager.getItem("config_label_enabled"), LangManager.getItem("config_label_hold"), LangManager.getItem("config_label_toggle")});
+        JComboBox<Object> spyglassDropdownHotkey = new JComboBox<>(new String[]{LangManager.getItem("config_label_control"), LangManager.getItem("config_label_shift")});
         String startMode = config.getString(ConfigHelper.PROFILE.spyglassMode);
         boolean startEnabled = config.getBool(ConfigHelper.PROFILE.enableSpyglass);
         spyglassDropdownHotkey.setVisible(false);

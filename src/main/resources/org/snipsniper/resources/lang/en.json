@@ -41,6 +41,8 @@
     "config_label_enabled": "Enabled",
     "config_label_hold": "Hold",
     "config_label_toggle": "Toggle",
+    "config_label_control": "Control",
+    "config_label_shift": "Shift",
     "config_label_spyglass": "Use spyglass",
     "config_label_spyglasszoom": "Spyglass zoom",
 
