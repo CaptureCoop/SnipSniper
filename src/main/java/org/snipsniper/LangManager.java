@@ -27,6 +27,10 @@ public class LangManager {
         }
     }
 
+    public static JSONObject getJSON(String language) {
+        return langMap.get(language);
+    }
+
     public static String getItem(String language, String key) {
         if(langMap.get(language).getJSONObject("strings").has(key))
             return langMap.get(language).getJSONObject("strings").getString(key);

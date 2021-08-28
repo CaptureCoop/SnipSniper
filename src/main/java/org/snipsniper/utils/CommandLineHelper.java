@@ -59,6 +59,10 @@ public class CommandLineHelper {
                     viewerOnly = true;
                     if(args.length > index +1) viewerFile = args[index + 1];
                     break;
+                case "-debugLang":
+                    Utils.jsonLang();
+                    doExit = true;
+                    break;
             }
             index++;
         }
