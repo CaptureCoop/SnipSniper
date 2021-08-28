@@ -1,4 +1,4 @@
-package org.snipsniper.config;
+package org.snipsniper.config; 
 public class ConfigHelper { 
    /* 
    This was created using the CreateConfigHelper.bat file at the root folder. Leave formatting as is and use the bat file whenever you make any changes to any config 
@@ -6,9 +6,7 @@ public class ConfigHelper {
 public enum MAIN { 
 language, 
 debug, 
-enforceEncoding, 
-encoding, 
-theme, 
+theme,
 } 
 public enum PROFILE { 
 hotkey, 
@@ -31,6 +29,7 @@ spyglassHotkey,
 maxFPS, 
 smartPixel, 
 hsvColorSwitchSpeed, 
+ezMode, 
 closeViewerOnOpenEditor, 
 openViewerInFullscreen, 
 editorStampCubeDefaultColor, 

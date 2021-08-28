@@ -1,11 +1,12 @@
 @echo off
 setlocal EnableDelayedExpansion
-setlocal enabledelayedexpansion
 
-set javaFile="src\main\java\io\wollinger\snipsniper\utils\ConfigHelper.java"
+set javaFile="src\main\java\org\snipsniper\config\ConfigHelper.java"
 del %javaFile%
 
-echo package io.wollinger.snipsniper.utils; >> %javaFile%
+set configLocation=src\main\resources\org\snipsniper\resources\cfg\
+
+echo package org.snipsniper.config; >> %javaFile%
 echo public class ConfigHelper { >> %javaFile%
 
 echo    /* >> %javaFile%
@@ -14,12 +15,12 @@ echo    */ >> %javaFile%
 
 echo public enum MAIN { >> %javaFile%
 
-for /F "tokens=*" %%A in (src\main\resources\cfg\main_defaults.cfg) do (
+for /F "tokens=*" %%A in (%configLocation%main_defaults.cfg) do (
     for /f "tokens=1 delims==" %%A in ("%%A") Do (
         set tmp= %%A
         set char=!tmp:~0,2!
 
-        IF NOT "!char!"==" <" echo %%A, >> %javaFile%
+        IF NOT "!char!"==" #" echo %%A, >> %javaFile%
     )
 )
 
@@ -27,12 +28,12 @@ echo } >> %javaFile%
 
 echo public enum PROFILE { >> %javaFile%
 
-for /F "tokens=*" %%A in (src\main\resources\cfg\profile_defaults.cfg) do (
+for /F "tokens=*" %%A in (%configLocation%profile_defaults.cfg) do (
     for /f "tokens=1 delims==" %%A in ("%%A") Do (
         set tmp= %%A
         set char=!tmp:~0,2!
 
-        IF NOT "!char!"==" <" echo %%A, >> %javaFile%
+        IF NOT "!char!"==" #" echo %%A, >> %javaFile%
     )
 )
 
@@ -40,12 +41,12 @@ echo } >> %javaFile%
 
 echo public enum BUILDINFO { >> %javaFile%
 
-for /F "tokens=*" %%A in (src\main\resources\cfg\buildinfo.cfg) do (
+for /F "tokens=*" %%A in (%configLocation%buildinfo.cfg) do (
     for /f "tokens=1 delims==" %%A in ("%%A") Do (
         set tmp= %%A
         set char=!tmp:~0,2!
 
-        IF NOT "!char!"==" <" echo %%A, >> %javaFile%
+        IF NOT "!char!"==" #" echo %%A, >> %javaFile%
     )
 )
 

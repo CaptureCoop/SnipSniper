@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -128,31 +127,9 @@ public final class SnipSniper {
 			LogManager.log("========================================", LogLevel.INFO);
 		}
 
-		LogManager.log("Launching language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> using encoding <" + Charset.defaultCharset() + ">!", LogLevel.INFO);
-
 		if(!LangManager.languages.contains(SnipSniper.config.getString(ConfigHelper.MAIN.language))) {
 			LogManager.log("Language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> not found. Available languages: " + LangManager.languages.toString(), LogLevel.ERROR);
 			exit(false);
-		}
-
-		String wantedEncoding = SnipSniper.config.getString(ConfigHelper.MAIN.encoding);
-		if(SnipSniper.config.getBool(ConfigHelper.MAIN.enforceEncoding) && !Charset.defaultCharset().toString().equals(wantedEncoding)) {
-			if(!Charset.availableCharsets().containsKey(wantedEncoding)) {
-				LogManager.log("Charset \"" + wantedEncoding + "\" missing. Language \"" + SnipSniper.config.getString(ConfigHelper.MAIN.language)+ "\" not available", LogLevel.ERROR);
-				JOptionPane.showMessageDialog(null, Utils.formatArgs(LangManager.getItem(LangManager.languages.get(0), "error_charset_not_available"), wantedEncoding, SnipSniper.config.getString(ConfigHelper.MAIN.language)));
-				exit(false);
-			}
-			LogManager.log("Charset <" + wantedEncoding + "> needed! Restarting with correct charset...", LogLevel.WARNING);
-			try {
-				if(cmdline.isRestartedInstance()) {
-					JOptionPane.showMessageDialog(null, "Charset change failed. Please try using a different Java Version! (Java 1.8 / 8)");
-					exit(false);
-				}
-				if(!Utils.restartApplication(wantedEncoding, args))
-					LogManager.log("Restart failed. Possibly not running in jar. Starting with charset <" + Charset.defaultCharset() + ">", LogLevel.WARNING);
-			} catch (Exception exception) {
-				exception.printStackTrace();
-			}
 		}
 
 		config.save();

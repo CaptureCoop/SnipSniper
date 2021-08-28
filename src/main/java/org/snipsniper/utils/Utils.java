@@ -72,7 +72,7 @@ public class Utils {
 	}
 
 	//https://stackoverflow.com/questions/4159802/how-can-i-restart-a-java-application
-	public static boolean restartApplication(String encoding, String... args) throws URISyntaxException, IOException {
+	public static boolean restartApplication(String... args) throws URISyntaxException, IOException {
 		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 		final File currentJar = new File(SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
@@ -81,8 +81,6 @@ public class Utils {
 
 		final ArrayList<String> command = new ArrayList<>();
 		command.add(javaBin);
-		if(encoding != null && !encoding.isEmpty())
-			command.add("-Dfile.encoding=" + encoding);
 		command.add("-jar");
 		command.add(currentJar.getPath());
 		command.add("-r");

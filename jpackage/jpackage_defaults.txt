@@ -1,1 +1,1 @@
---dest release --vendor "Sven Wollinger" --copyright "2021 Sven Wollinger" --description "SnipSniper" --name "SnipSniper" --input build/libs/ --main-jar SnipSniper.jar --icon src/main/resources/res/SnSn.ico --java-options -Dfile.encoding=GB18030
+--dest release --vendor "Sven Wollinger" --copyright "2021 Sven Wollinger" --description "SnipSniper" --name "SnipSniper" --input build/libs/ --main-jar SnipSniper.jar --icon src/main/resources/res/SnSn.ico

@@ -96,7 +96,7 @@ public class SCEditorWindow extends SnipScopeWindow {
             setJMenuBar(topBar);
         }
 
-        ezMode = config.getBool("ezMode");
+        ezMode = config.getBool(ConfigHelper.PROFILE.ezMode);
         String[] buttonStrings = {"cube", "counter", "circle", "simplebrush", "text", "rectangle"};
         int i = 0;
         for(String str : buttonStrings) {
