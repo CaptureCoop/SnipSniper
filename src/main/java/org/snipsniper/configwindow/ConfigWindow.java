@@ -376,6 +376,9 @@ public class ConfigWindow extends JFrame {
         JButton customSaveButton = new JButton(Utils.formatDateArguments(config.getString(ConfigHelper.PROFILE.saveFolderCustom)));
         customSaveButton.addActionListener(e -> {
             FolderPreview preview = new FolderPreview("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom));
+            int x = (int) (getLocation().getX() + getWidth() / 2) - preview.getWidth() / 2;
+            int y = (int) (getLocation().getY() + getHeight() / 2) - preview.getHeight() / 2;
+            preview.setLocation(x, y);
             preview.setOnSave(() -> {
                 config.set(ConfigHelper.PROFILE.saveFolderCustom, preview.getText());
                 customSaveButton.setText(Utils.formatDateArguments(preview.getText()));

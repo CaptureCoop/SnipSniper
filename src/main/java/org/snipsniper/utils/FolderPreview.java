@@ -37,6 +37,7 @@ public class FolderPreview extends JFrame {
             }
         });
         setSize(256, 256);
+        setIconImage(Icons.getImage("icons/folder.png"));
         setupUI();
         setVisible(true);
         requestFocus();
