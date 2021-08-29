@@ -13,7 +13,8 @@ public class FolderPreview extends JFrame {
     private String text = "";
     private FolderPreviewRenderer renderer;
     private JTextField input;
-    JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
+    private JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
+    private JLabel explenation = new JLabel("%day% = 1, %month% = 8, %year% = 2021");
 
     private Function onSave;
     private Function onClose;
@@ -30,7 +31,7 @@ public class FolderPreview extends JFrame {
         text = content;
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
-                Dimension newSize = new Dimension(getRootPane().getWidth(), getContentPane().getHeight() - input.getHeight() - saveButton.getHeight());
+                Dimension newSize = new Dimension(getRootPane().getWidth(), getContentPane().getHeight() - input.getHeight() - saveButton.getHeight() - explenation.getHeight());
                 renderer.setPreferredSize(newSize);
                 renderer.setMinimumSize(newSize);
                 renderer.revalidate();
@@ -74,6 +75,8 @@ public class FolderPreview extends JFrame {
         });
         content.add(input, gbc);
         gbc.gridy = 2;
+        content.add(explenation, gbc);
+        gbc.gridy = 3;
         gbc.fill = GridBagConstraints.VERTICAL;
         saveButton.addActionListener(e -> {
             if(onSave != null) onSave.run();
