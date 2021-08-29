@@ -6,7 +6,7 @@ public class ConfigHelper {
 public enum MAIN { 
 language, 
 debug, 
-theme,
+theme, 
 } 
 public enum PROFILE { 
 hotkey, 
@@ -20,6 +20,7 @@ openEditor,
 directDraw, 
 dateFolders, 
 dateFoldersFormat, 
+saveFolderCustom, 
 enableSpyglass, 
 spyglassMode, 
 spyglassPixelByPixel, 

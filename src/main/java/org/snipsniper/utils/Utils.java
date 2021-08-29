@@ -222,6 +222,10 @@ public class Utils {
 		File file;
 		String filename = Utils.constructFilename(modifier);
 		String savePath = config.getString(ConfigHelper.PROFILE.pictureFolder);
+		String pathCustom = config.getString(ConfigHelper.PROFILE.saveFolderCustom);
+		if(!pathCustom.startsWith("/"))
+			pathCustom = "/" + pathCustom;
+		savePath += Utils.formatDateArguments(pathCustom);
 
 		String savePathModifier = "";
 
