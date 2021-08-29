@@ -30,7 +30,7 @@
     "config_label_theme_light": "Léger",
     "config_label_hotkey": "Touche de raccourci pour la capture",
     "config_label_saveimages": "Sauvegarder les images lors de la captures",
-    "config_label_copyclipboard": "Copie des images dans le presse-papiers lors de la capture",
+    "config_label_copyclipboard": "Copier les images dans le presse-papiers lors de la capture\n",
     "config_label_bordersize": "Taille de la bordure (en px)",
     "config_label_picturelocation": "Emplacement du dossier d'images",
     "config_label_snapdelay": "Délai de déclenchement en secondes",
