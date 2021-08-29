@@ -1,6 +1,5 @@
 package org.snipsniper.utils;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
@@ -138,6 +137,15 @@ public class Utils {
 		}
 	}
 
+	public static String formatDateArguments(String string) {
+		String returnVal = string;
+		LocalDate currentDate = LocalDate.now();
+		returnVal = returnVal.replaceAll("%day%", String.valueOf(currentDate.getDayOfMonth()));
+		returnVal = returnVal.replaceAll("%month%", String.valueOf(currentDate.getMonthValue()));
+		returnVal = returnVal.replaceAll("%year%", String.valueOf(currentDate.getYear()));
+		return returnVal;
+	}
+
 	public static String getFileExtension(File file) {
 		String name = file.getName();
 		int lastIndexOf = name.lastIndexOf(".");
@@ -214,6 +222,10 @@ public class Utils {
 		File file;
 		String filename = Utils.constructFilename(modifier);
 		String savePath = config.getString(ConfigHelper.PROFILE.pictureFolder);
+		String pathCustom = config.getString(ConfigHelper.PROFILE.saveFolderCustom);
+		if(!pathCustom.startsWith("/"))
+			pathCustom = "/" + pathCustom;
+		savePath += Utils.formatDateArguments(pathCustom);
 
 		String savePathModifier = "";
 

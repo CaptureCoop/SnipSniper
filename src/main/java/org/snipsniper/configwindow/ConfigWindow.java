@@ -369,6 +369,29 @@ public class ConfigWindow extends JFrame {
         options.add(new InfoButton(null), gbc);
         //END LOCATION
 
+        //BEGIN CUSTOM MODIFIER
+        gbc.gridx = 0;
+        options.add(createJLabel("Save folder modifier", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        JButton customSaveButton = new JButton(Utils.formatDateArguments(config.getString(ConfigHelper.PROFILE.saveFolderCustom)));
+        customSaveButton.addActionListener(e -> {
+            FolderPreview preview = new FolderPreview("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom));
+            int x = (int) (getLocation().getX() + getWidth() / 2) - preview.getWidth() / 2;
+            int y = (int) (getLocation().getY() + getHeight() / 2) - preview.getHeight() / 2;
+            preview.setLocation(x, y);
+            preview.setOnSave(() -> {
+                String text = preview.getText();
+                if(text.isEmpty())
+                    text = "/";
+                config.set(ConfigHelper.PROFILE.saveFolderCustom, text);
+                customSaveButton.setText(Utils.formatDateArguments(text));
+            });
+        });
+        options.add(customSaveButton, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
+        //END CUSTOM MODIFIER
+
         //BEGIN SNIPE DELAY
         gbc.gridx = 0;
         options.add(createJLabel(LangManager.getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER), gbc);
