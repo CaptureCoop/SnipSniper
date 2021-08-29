@@ -380,8 +380,11 @@ public class ConfigWindow extends JFrame {
             int y = (int) (getLocation().getY() + getHeight() / 2) - preview.getHeight() / 2;
             preview.setLocation(x, y);
             preview.setOnSave(() -> {
-                config.set(ConfigHelper.PROFILE.saveFolderCustom, preview.getText());
-                customSaveButton.setText(Utils.formatDateArguments(preview.getText()));
+                String text = preview.getText();
+                if(text.isEmpty())
+                    text = "/";
+                config.set(ConfigHelper.PROFILE.saveFolderCustom, text);
+                customSaveButton.setText(Utils.formatDateArguments(text));
             });
         });
         options.add(customSaveButton, gbc);
