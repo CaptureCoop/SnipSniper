@@ -24,7 +24,7 @@
 
     "config_label_config": "Config",
     "config_label_language": "Langue",
-    "config_label_debug": "Mode débogage",
+    "config_label_debug": "Mode débugger",
     "config_label_theme": "Thème",
     "config_label_theme_dark": "Sombre",
     "config_label_theme_light": "Léger",
@@ -33,7 +33,7 @@
     "config_label_copyclipboard": "Copier les images dans le presse-papiers lors de la capture\n",
     "config_label_bordersize": "Taille de la bordure (en px)",
     "config_label_picturelocation": "Emplacement du dossier d'images",
-    "config_label_snapdelay": "Délai de déclenchement en secondes",
+    "config_label_snapdelay": "Délai de la capture en secondes",
     "config_label_openeditor": "Ouvrir l'éditeur après la capture",
     "config_label_color": "Couleur",
     "config_label_bordercolor": "Couleur de la bordure",
@@ -49,8 +49,8 @@
     "config_label_toggle": "Basculer",
     "config_label_control": "Control",
     "config_label_shift": "Shift",
-    "config_label_spyglass": "Utiliser une longue-vue",
-    "config_label_spyglasszoom": "Zoom lunette",
+    "config_label_spyglass": "Utiliser spyglass",
+    "config_label_spyglasszoom": "Spyglass zoom",
 
     "config_sanitation_error": "Erreur",
     "config_sanitation_border_minmax": "La taille de la bordure doit être un nombre compris entre 0 et 999 !",
