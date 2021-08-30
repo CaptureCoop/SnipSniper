@@ -1,7 +1,6 @@
 package org.snipsniper.utils;
 
 import org.snipsniper.LangManager;
-import org.snipsniper.config.ConfigHelper;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
