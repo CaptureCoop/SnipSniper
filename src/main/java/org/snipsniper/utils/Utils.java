@@ -14,6 +14,8 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URISyntaxException;
@@ -341,18 +343,11 @@ public class Utils {
 	    return b;
 	}
 
-	public static BufferedImage rotateClockwise90(BufferedImage src) {
-		int width = src.getWidth();
-		int height = src.getHeight();
-
-		BufferedImage dest = new BufferedImage(height, width, src.getType());
-
-		Graphics2D graphics2D = dest.createGraphics();
-		graphics2D.translate((height - width) / 2, (height - width) / 2);
-		graphics2D.rotate(Math.PI / 2, height / 2f, width / 2f);
-		graphics2D.drawRenderedImage(src, null);
-
-		return dest;
+	public static BufferedImage rotateImage(ClockDirection clockDirection, BufferedImage image) {
+		int dir = 1;
+		if(clockDirection == ClockDirection.COUNTERCLOCKWISE)
+			dir = 3;
+		return new AffineTransformOp(AffineTransform.getQuadrantRotateInstance(dir, image.getWidth() / 2, image.getHeight() / 2), AffineTransformOp.TYPE_BILINEAR).filter(image, null);
 	}
 
 	public static String loadFileFromJar(String file) throws IOException {
