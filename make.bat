@@ -53,7 +53,7 @@ goto :EOF
 
 :create_portable
 echo Creating portable
-jpackage @jpackage\jpackage_defaults.txt --main-class org.snipsniper.Main --app-version @build/SSVersion.txt --type app-image --add-launcher SnipSniperEditor=jpackage\jpackage_portable_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_portable_viewer.txt
+jpackage @jpackage\jpackage_defaults.txt --main-class org.snipsniper.Main --app-version @build/SSVersion.txt --type app-image --add-launcher SnipSniperEditor=jpackage\jpackage_portable_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_portable_viewer.txt --java-options "-Dplatform=win -DlaunchType=normal"
 rename release\SnipSniper "SnipSniper_Portable_Win"
 goto :EOF
 
