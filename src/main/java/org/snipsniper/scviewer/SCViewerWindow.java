@@ -1,5 +1,6 @@
 package org.snipsniper.scviewer;
 
+import org.snipsniper.SnipSniper;
 import org.snipsniper.config.Config;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.snipscope.SnipScopeRenderer;
@@ -17,6 +18,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +38,7 @@ public class SCViewerWindow extends SnipScopeWindow {
 
     private JMenuItem saveItem;
 
-    public SCViewerWindow(File file, Config config) {
+    public SCViewerWindow(File file, Config config, boolean isStandalone) {
         currentFile = file;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         refreshTitle();
@@ -105,6 +108,15 @@ public class SCViewerWindow extends SnipScopeWindow {
             saveItem.setEnabled(false);
             setJMenuBar(topBar);
         }
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                if(isStandalone)
+                    SnipSniper.exit(false);
+            }
+        });
     }
 
     public void rotateImage(ClockDirection direction) {

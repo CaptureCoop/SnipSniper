@@ -1,5 +1,6 @@
 package org.snipsniper.sceditor;
 
+import org.snipsniper.SnipSniper;
 import org.snipsniper.config.Config;
 import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.sceditor.stamps.*;
@@ -14,6 +15,8 @@ import org.snipsniper.utils.Utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Map;
@@ -142,6 +145,15 @@ public class SCEditorWindow extends SnipScopeWindow {
                 setLocation((int) getLocation().getX(), bestMonitor.getBounds().y);
             }
         }
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                if(isStandalone)
+                    SnipSniper.exit(false);
+            }
+        });
     }
 
     @Override
