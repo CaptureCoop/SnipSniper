@@ -9,14 +9,10 @@ import org.snipsniper.LangManager;
 import org.snipsniper.utils.Links;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import javax.swing.*;
@@ -65,25 +61,26 @@ public class btnAbout extends PopupMenuButton {
 
 						if(index >= icons.length - 1) index = 0;
 						else index++;
-						setNewImage(index, iconSize);
+						setNewImage(index, iconSize, true);
 					}
 
 					@Override
 					public void mousePressed(MouseEvent mouseEvent) {
-						setNewImage(index, (int) (iconSize / 1.2F));
+						setNewImage(index, (int) (iconSize / 1.2F), false);
 					}
 
-					public void setNewImage(int index, int size) {
+					public void setNewImage(int index, int size, boolean replaceTaskbar) {
 						Image image;
 						String key = index + "_" + size; //We cache those because we really like clicking the icons really fast :^)
 						if(cache.containsKey(key)) {
 							image = cache.get(key);
 						} else {
-							image = icons[index].getScaledInstance(size, size, Image.SCALE_DEFAULT);
+							image = resizeImageButRetainSize(icons[index], iconSize, size);
 							cache.put(key, image);
 						}
 						label.setIcon(new ImageIcon(image));
-						frame.setIconImage(image);
+						if(replaceTaskbar)
+							frame.setIconImage(image);
 					}
 				});
 				iconPanel.add(label, gbc);
@@ -94,6 +91,7 @@ public class btnAbout extends PopupMenuButton {
 				Image coffeeIcon = Icons.getAnimatedImage("icons/coffee.gif");
 				buyCoffee.setIcon(new ImageIcon(coffeeIcon.getScaledInstance(coffeeIcon.getWidth(null) / 8, coffeeIcon.getHeight(null) / 8, Image.SCALE_DEFAULT)));
 				buyCoffee.setHorizontalTextPosition(SwingConstants.LEFT);
+				buyCoffee.setFocusable(false);
 
 				iconPanel.add(buyCoffee, gbc);
 				panel.add(iconPanel);
@@ -127,6 +125,15 @@ public class btnAbout extends PopupMenuButton {
 		});
 	}
 
+	public BufferedImage resizeImageButRetainSize(BufferedImage image, int oldSize, int newSize) {
+		BufferedImage newImage = new BufferedImage(oldSize, oldSize, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = newImage.createGraphics();
+		int difference = oldSize - newSize;
+		g.drawImage(image.getScaledInstance(newSize, newSize,  0), difference / 2, difference / 2, null);
+		g.dispose();
+		return newImage;
+	}
+
 	public void loadHTML() throws IOException {
 		StringBuilder htmlTemp = new StringBuilder();
 		InputStream inputStream = ClassLoader.getSystemResourceAsStream("org/snipsniper/resources/about.html");
@@ -143,7 +150,7 @@ public class btnAbout extends PopupMenuButton {
 		inputStream.close();
 		streamReader.close();
 		html = html.replace("%VERSION%", SnipSniper.getVersion());
-		html = html.replace("%TYPE%", SnipSniper.getReleaseType().toString());
+		html = html.replace("%TYPE%", SnipSniper.getReleaseType().toString().toLowerCase());
 		html = html.replace("%BUILDDATE%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.builddate));
 		html = html.replaceAll("%HASH%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.githash));
 		html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming"));
