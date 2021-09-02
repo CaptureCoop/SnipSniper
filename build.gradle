@@ -12,8 +12,8 @@ group 'org.snipsniper'
 
 compileJava.options.encoding = 'UTF-8'
 
-String projectVersion = "3.5.5"
-String projectBuild = "20210814.1"
+String projectVersion = "3.6.0"
+String projectBuild = "20210903.1"
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
