@@ -47,7 +47,7 @@ public final class SnipSniper {
 	private static DebugConsole debugConsole;
 
 	private static ReleaseType releaseType = ReleaseType.UNKNOWN;
-	private static PlatformType platformType = PlatformType.UNKNOWN;
+	private static PlatformType platformType = PlatformType.JAR;
 
 	public static void start(String[] args, boolean saveInDocuments, boolean isEditorOnly, boolean isViewerOnly) {
 		if(!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
@@ -62,6 +62,8 @@ public final class SnipSniper {
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
+
+		platformType = Utils.getPlatformType(cmdline.getPlatform());
 
 		LogManager.setEnabled(true);
 

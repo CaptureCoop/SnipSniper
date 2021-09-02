@@ -51,7 +51,7 @@ public class Utils {
 			case "win_installed": return PlatformType.WIN_INSTALLED;
 			case "steam": return PlatformType.STEAM;
 		}
-		return PlatformType.UNKNOWN;
+		return PlatformType.JAR; //We are probably running in a jar somehow
 	}
 
 	public static ReleaseType getReleaseType(String string) {
