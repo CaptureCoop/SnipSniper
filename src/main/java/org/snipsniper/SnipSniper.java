@@ -69,8 +69,8 @@ public final class SnipSniper {
 
 		try {
 			GlobalScreen.registerNativeHook();
-		} catch (NativeHookException e) {
-			LogManager.log("There was an issue setting up NativeHook! Message: " + e.getMessage(), LogLevel.ERROR);
+		} catch (NativeHookException nativeHookException) {
+			LogManager.log("There was an issue setting up NativeHook! Message: " + nativeHookException.getMessage(), LogLevel.ERROR);
 		}
 
 		if(saveInDocuments)
@@ -108,8 +108,8 @@ public final class SnipSniper {
 			UIManager.put("ScrollBar.width", 16 );
 			UIManager.put("TabbedPane.showTabSeparators", true);
 
-			JFrame.setDefaultLookAndFeelDecorated( true );
-			JDialog.setDefaultLookAndFeelDecorated( true );
+			JFrame.setDefaultLookAndFeelDecorated(true);
+			JDialog.setDefaultLookAndFeelDecorated(true);
 		} catch (UnsupportedLookAndFeelException e) {
 			LogManager.log("Error setting look and feel. Message: " + e.getMessage(), LogLevel.ERROR, true);
 		}
