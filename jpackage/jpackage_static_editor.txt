@@ -1,2 +1,2 @@
-main-class=MainStaticEditor
+main-class=org.snipsniper.main.MainStaticEditor
 icon=src/main/resources/org/snipsniper/resources/img/icons/editor.ico

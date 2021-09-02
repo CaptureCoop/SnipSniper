@@ -1,2 +1,2 @@
-main-class=MainStaticViewer
+main-class=org.snipsniper.main.MainStaticViewer
 icon=src/main/resources/org/snipsniper/resources/img/icons/viewer.ico

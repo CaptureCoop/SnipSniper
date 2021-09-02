@@ -1,2 +1,2 @@
-main-class=MainPortableEditor
+main-class=org.snipsniper.main.MainPortableEditor
 icon=src/main/resources/org/snipsniper/resources/img/icons/editor.ico
