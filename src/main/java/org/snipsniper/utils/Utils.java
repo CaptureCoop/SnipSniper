@@ -44,6 +44,25 @@ public class Utils {
 		}
 	}
 
+	public static PlatformType getPlatformType(String string) {
+		switch(string.toLowerCase()) {
+			case "jar": return PlatformType.JAR;
+			case "win": return PlatformType.WIN;
+			case "win_installed": return PlatformType.WIN_INSTALLED;
+			case "steam": return PlatformType.STEAM;
+		}
+		return PlatformType.UNKNOWN;
+	}
+
+	public static ReleaseType getReleaseType(String string) {
+		switch (string.toLowerCase()) {
+			case "release": return ReleaseType.RELEASE;
+			case "dev": return ReleaseType.DEV;
+			case "dirty": return ReleaseType.DIRTY;
+		}
+		return ReleaseType.UNKNOWN;
+	}
+
 	public static String replaceVars(String string) {
 		if(string.contains("%username%")) string = string.replace("%username%", System.getProperty("user.name"));
 		if(SystemUtils.IS_OS_WINDOWS) if(string.contains("%userprofile%")) string = string.replace("%userprofile%", System.getenv("USERPROFILE"));

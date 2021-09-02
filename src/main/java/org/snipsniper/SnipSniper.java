@@ -46,6 +46,9 @@ public final class SnipSniper {
 
 	private static DebugConsole debugConsole;
 
+	private static ReleaseType releaseType = ReleaseType.UNKNOWN;
+	private static PlatformType platformType = PlatformType.UNKNOWN;
+
 	public static void start(String[] args, boolean saveInDocuments, boolean isEditorOnly, boolean isViewerOnly) {
 		if(!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
 			System.out.println("SnipSniper is currently only available for Windows and Linux (In development, use with caution). Sorry!");
@@ -55,6 +58,7 @@ public final class SnipSniper {
 		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
 
 		BUILDINFO = new Config("buildinfo.cfg", "buildinfo.cfg");
+		releaseType = Utils.getReleaseType(BUILDINFO.getString(ConfigHelper.BUILDINFO.type));
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
@@ -305,14 +309,6 @@ public final class SnipSniper {
 		profiles[id] = sniper;
 	}
 
-	public static boolean hasProfile(int id) {
-		return profiles[id] != null;
-	}
-
-	public static void removeProfile(int id) {
-		profiles[id] = null;
-	}
-
 	public static DebugConsole getDebugConsole() {
 		return debugConsole;
 	}
@@ -332,5 +328,13 @@ public final class SnipSniper {
 			debugConsole.dispose();
 			debugConsole = null;
 		}
+	}
+
+	public static ReleaseType getReleaseType() {
+		return releaseType;
+	}
+
+	public static PlatformType getPlatformType() {
+		return platformType;
 	}
 }
