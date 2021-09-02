@@ -91,8 +91,8 @@ public class btnAbout extends PopupMenuButton {
 				gbc.insets = new Insets(20, 0, 0, 0);
 				JButton buyCoffee = new JButton("Buy us a coffee");
 				buyCoffee.addActionListener(e -> Links.openLink(Links.KOFI));
-				BufferedImage kofiIcon = Icons.getImage("icons/kofi.png");
-				buyCoffee.setIcon(new ImageIcon(kofiIcon.getScaledInstance(kofiIcon.getWidth()/8, kofiIcon.getHeight()/8, Image.SCALE_DEFAULT)));
+				Image coffeeIcon = Icons.getAnimatedImage("icons/coffee.gif");
+				buyCoffee.setIcon(new ImageIcon(coffeeIcon.getScaledInstance(coffeeIcon.getWidth(null) / 8, coffeeIcon.getHeight(null) / 8, Image.SCALE_DEFAULT)));
 				buyCoffee.setHorizontalTextPosition(SwingConstants.LEFT);
 
 				iconPanel.add(buyCoffee, gbc);
