@@ -1,3 +1,0 @@
-main-class=MainStatic
-icon=src/main/resources/res/SnSnCs.ico
-arguments=-debug

@@ -1,2 +1,2 @@
 main-class=MainPortableViewer
-icon=src/main/resources/res/SnSnVi.ico
+icon=src/main/resources/org/snipsniper/resources/img/icons/viewer.ico
