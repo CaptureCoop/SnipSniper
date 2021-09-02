@@ -11,6 +11,7 @@ public class CommandLineHelper {
     private String editorFile;
     private boolean viewerOnly = false;
     private String viewerFile;
+    private String platform;
 
     public CommandLineHelper() {
 
@@ -32,7 +33,7 @@ public class CommandLineHelper {
                     break;
                 case "-version":
                 case "-v":
-                    System.out.println(SnipSniper.getVersion() + "-" + SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.type) + " rev-" + SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.githash));
+                    System.out.println(SnipSniper.getVersion() + "-" + SnipSniper.getReleaseType().toString().toLowerCase() + " rev-" + SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.githash));
                     doExit = true;
                     break;
                 case "-demo":
@@ -53,16 +54,21 @@ public class CommandLineHelper {
                     break;
                 case "-editor":
                     editorOnly = true;
-                    if(args.length > index +1) editorFile = args[index + 1];
+                    if(args.length > index + 1) editorFile = args[index + 1];
                     break;
                 case "-viewer":
                     viewerOnly = true;
-                    if(args.length > index +1) viewerFile = args[index + 1];
+                    if(args.length > index + 1) viewerFile = args[index + 1];
                     break;
                 case "-debugLang":
                     Utils.jsonLang();
                     doExit = true;
                     break;
+                case "-platform":
+                    if(args.length > index + 1) platform = args[index + 1];
+                    else System.out.println("Missing argument after " + arg + "!");
+                    break;
+
             }
             index++;
         }
@@ -104,6 +110,10 @@ public class CommandLineHelper {
 
     public String getViewerFile() {
         return viewerFile;
+    }
+
+    public String getPlatform() {
+        return platform;
     }
 
 }

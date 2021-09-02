@@ -1,3 +1,0 @@
-main-class=MainPortable
-icon=src/main/resources/res/SnSnCs.ico
-arguments=-debug

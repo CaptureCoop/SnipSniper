@@ -5,7 +5,7 @@ plugins {
 }
 
 application {
-    mainClassName = "org.snipsniper.main.MainPortable"
+    mainClassName = "org.snipsniper.Main"
 }
 
 group 'org.snipsniper'
@@ -60,7 +60,7 @@ build.dependsOn preBuild
 jar {
     manifest {
         attributes(
-                'Main-Class': 'org.snipsniper.main.MainPortable'
+                'Main-Class': 'org.snipsniper.Main'
         )
     }
     //https://stackoverflow.com/questions/52816630/unable-to-create-a-jar-of-my-jda-project-because-of-pom-dependency

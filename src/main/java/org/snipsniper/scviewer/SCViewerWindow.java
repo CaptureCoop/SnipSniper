@@ -5,6 +5,7 @@ import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.snipscope.SnipScopeRenderer;
 import org.snipsniper.snipscope.SnipScopeWindow;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.utils.ClockDirection;
 import org.snipsniper.utils.Icons;
 import org.snipsniper.utils.Utils;
 import org.apache.commons.lang3.SystemUtils;
@@ -84,9 +85,13 @@ public class SCViewerWindow extends SnipScopeWindow {
 
         if(SystemUtils.IS_OS_WINDOWS) {
             JMenuBar topBar = new JMenuBar();
-            JMenuItem rotateItem = new JMenuItem("\uD83D\uDD04");
-            rotateItem.addActionListener(e -> rotateImage());
-            topBar.add(rotateItem);
+            JMenuItem rotateCClockwise = new JMenuItem("↶");
+            rotateCClockwise.addActionListener(e -> rotateImage(ClockDirection.COUNTERCLOCKWISE));
+            topBar.add(rotateCClockwise);
+            JMenuItem rotateClockwise = new JMenuItem("↷");
+            rotateClockwise.addActionListener(e -> rotateImage(ClockDirection.CLOCKWISE));
+            topBar.add(rotateClockwise);
+
             saveItem = new JMenuItem("Save");
             saveItem.addActionListener(e -> {
                 try {
@@ -102,8 +107,8 @@ public class SCViewerWindow extends SnipScopeWindow {
         }
     }
 
-    public void rotateImage() {
-        setImage(Utils.rotateClockwise90(getImage()));
+    public void rotateImage(ClockDirection direction) {
+        setImage(Utils.rotateImage(direction, getImage()));
         if(currentFile != null)
             saveItem.setEnabled(true);
         repaint();

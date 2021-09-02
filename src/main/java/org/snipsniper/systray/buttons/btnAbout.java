@@ -143,7 +143,7 @@ public class btnAbout extends PopupMenuButton {
 		inputStream.close();
 		streamReader.close();
 		html = html.replace("%VERSION%", SnipSniper.getVersion());
-		html = html.replace("%TYPE%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.type));
+		html = html.replace("%TYPE%", SnipSniper.getReleaseType().toString());
 		html = html.replace("%BUILDDATE%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.builddate));
 		html = html.replaceAll("%HASH%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.githash));
 		html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming"));

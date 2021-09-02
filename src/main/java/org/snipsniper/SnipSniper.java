@@ -46,7 +46,11 @@ public final class SnipSniper {
 
 	private static DebugConsole debugConsole;
 
-	public static void start(String[] args, boolean saveInDocuments, boolean isEditorOnly, boolean isViewerOnly) {
+	private static LaunchType launchType = LaunchType.NORMAL;
+	private static ReleaseType releaseType = ReleaseType.UNKNOWN;
+	private static PlatformType platformType = PlatformType.JAR;
+
+	public static void start(String[] args) {
 		if(!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
 			System.out.println("SnipSniper is currently only available for Windows and Linux (In development, use with caution). Sorry!");
 			System.exit(0);
@@ -55,19 +59,23 @@ public final class SnipSniper {
 		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
 
 		BUILDINFO = new Config("buildinfo.cfg", "buildinfo.cfg");
+		releaseType = Utils.getReleaseType(BUILDINFO.getString(ConfigHelper.BUILDINFO.type));
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
+
+		platformType = Utils.getPlatformType(System.getProperty("platform"));
+		launchType = Utils.getLaunchType(System.getProperty("launchType"));
 
 		LogManager.setEnabled(true);
 
 		try {
 			GlobalScreen.registerNativeHook();
-		} catch (NativeHookException e) {
-			LogManager.log("There was an issue setting up NativeHook! Message: " + e.getMessage(), LogLevel.ERROR);
+		} catch (NativeHookException nativeHookException) {
+			LogManager.log("There was an issue setting up NativeHook! Message: " + nativeHookException.getMessage(), LogLevel.ERROR);
 		}
 
-		if(saveInDocuments)
+		if(platformType == PlatformType.STEAM || platformType == PlatformType.WIN_INSTALLED)
 			SnipSniper.setSaveLocationToDocuments();
 		else
 			setSaveLocationToJar();
@@ -102,8 +110,8 @@ public final class SnipSniper {
 			UIManager.put("ScrollBar.width", 16 );
 			UIManager.put("TabbedPane.showTabSeparators", true);
 
-			JFrame.setDefaultLookAndFeelDecorated( true );
-			JDialog.setDefaultLookAndFeelDecorated( true );
+			JFrame.setDefaultLookAndFeelDecorated(true);
+			JDialog.setDefaultLookAndFeelDecorated(true);
 		} catch (UnsupportedLookAndFeelException e) {
 			LogManager.log("Error setting look and feel. Message: " + e.getMessage(), LogLevel.ERROR, true);
 		}
@@ -141,14 +149,14 @@ public final class SnipSniper {
 			LogManager.log("============================================================", LogLevel.INFO);
 		}
 
-		if(cmdline.isEditorOnly() || isEditorOnly) {
+		if(cmdline.isEditorOnly() || launchType == LaunchType.EDITOR) {
 			Config config = SCEditorWindow.getStandaloneEditorConfig();
 			config.save();
 
 			boolean fileExists;
 			BufferedImage img = null;
 			String path = "";
-			if((cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty()) || (isEditorOnly && args.length > 0)) {
+			if((cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty()) || (launchType == LaunchType.EDITOR && args.length > 0)) {
 				try {
 					if(cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty())
 						path = cmdline.getEditorFile();
@@ -165,12 +173,12 @@ public final class SnipSniper {
 			}
 
 			new SCEditorWindow(img, -1, -1, "SnipSniper Editor", config, false, path, false, true);
-		} else if(cmdline.isViewerOnly() || isViewerOnly) {
+		} else if(cmdline.isViewerOnly() || launchType == LaunchType.VIEWER) {
 			File file = null;
 			if(cmdline.getViewerFile() != null && !cmdline.getViewerFile().isEmpty())
 				file = new File(cmdline.getViewerFile());
 
-			if(isViewerOnly) {
+			if(launchType == LaunchType.VIEWER) {
 				if(args.length > 0) {
 					file = new File(args[0]);
 					if(!file.exists())
@@ -305,14 +313,6 @@ public final class SnipSniper {
 		profiles[id] = sniper;
 	}
 
-	public static boolean hasProfile(int id) {
-		return profiles[id] != null;
-	}
-
-	public static void removeProfile(int id) {
-		profiles[id] = null;
-	}
-
 	public static DebugConsole getDebugConsole() {
 		return debugConsole;
 	}
@@ -332,5 +332,13 @@ public final class SnipSniper {
 			debugConsole.dispose();
 			debugConsole = null;
 		}
+	}
+
+	public static ReleaseType getReleaseType() {
+		return releaseType;
+	}
+
+	public static PlatformType getPlatformType() {
+		return platformType;
 	}
 }

@@ -13,12 +13,12 @@ if %1==installer goto create_install
 if %1==jar goto create_jar
 
 :help
-echo Available parameters (debug is optional and adds Debug Binaries for console output)
+echo Available parameters
 echo make clean
 echo make open
-echo make full ^<debug^>
-echo make portable ^<debug^>
-echo make installer ^<debug^>
+echo make full
+echo make portable
+echo make installer
 echo make jar
 goto done
 
@@ -47,15 +47,13 @@ goto done
 
 :create_install
 echo Creating installer
-if "%2"=="debug" set debug=--add-launcher SnipSniperDebug=jpackage\jpackage_static_debug.txt
-jpackage @jpackage\jpackage_defaults.txt --main-class org.snipsniper.main.MainStatic --app-version @build/SSVersion.txt --type exe --add-launcher SnipSniperEditor=jpackage\jpackage_static_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_static_viewer.txt %debug% --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut
+jpackage @jpackage\jpackage_defaults.txt --main-class org.snipsniper.Main --app-version @build/SSVersion.txt --type exe --add-launcher SnipSniperEditor=jpackage\jpackage_static_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_static_viewer.txt --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut --java-options "-Dplatform=win_installed -DlaunchType=normal"
 rename release\SnipSniper*.exe "SnipSniper_Installer_Win.exe"
 goto :EOF
 
 :create_portable
 echo Creating portable
-if "%2"=="debug" set debug=--add-launcher SnipSniperDebug=jpackage\jpackage_portable_debug.txt
-jpackage @jpackage\jpackage_defaults.txt --main-class org.snipsniper.main.MainPortable --app-version @build/SSVersion.txt --type app-image --add-launcher SnipSniperEditor=jpackage\jpackage_portable_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_portable_viewer.txt %debug%
+jpackage @jpackage\jpackage_defaults.txt --main-class org.snipsniper.Main --app-version @build/SSVersion.txt --type app-image --add-launcher SnipSniperEditor=jpackage\jpackage_portable_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_portable_viewer.txt
 rename release\SnipSniper "SnipSniper_Portable_Win"
 goto :EOF
 

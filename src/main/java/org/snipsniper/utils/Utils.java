@@ -14,6 +14,8 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URISyntaxException;
@@ -42,6 +44,39 @@ public class Utils {
 		} catch (NumberFormatException e) {
 			return false;
 		}
+	}
+
+	public static PlatformType getPlatformType(String string) {
+		if(string == null || string.isEmpty())
+			return PlatformType.JAR;
+
+		switch(string.toLowerCase()) {
+			case "jar": return PlatformType.JAR;
+			case "win": return PlatformType.WIN;
+			case "win_installed": return PlatformType.WIN_INSTALLED;
+			case "steam": return PlatformType.STEAM;
+		}
+
+		return PlatformType.UNKNOWN;
+	}
+
+	public static ReleaseType getReleaseType(String string) {
+		switch (string.toLowerCase()) {
+			case "release": return ReleaseType.RELEASE;
+			case "dev": return ReleaseType.DEV;
+			case "dirty": return ReleaseType.DIRTY;
+		}
+		return ReleaseType.UNKNOWN;
+	}
+
+	public static LaunchType getLaunchType(String string) {
+		if(string == null || string.isEmpty())
+			return LaunchType.NORMAL;
+		switch (string.toLowerCase()) {
+			case "editor": return LaunchType.EDITOR;
+			case "viewer": return LaunchType.VIEWER;
+		}
+		return LaunchType.NORMAL;
 	}
 
 	public static String replaceVars(String string) {
@@ -318,18 +353,11 @@ public class Utils {
 	    return b;
 	}
 
-	public static BufferedImage rotateClockwise90(BufferedImage src) {
-		int width = src.getWidth();
-		int height = src.getHeight();
-
-		BufferedImage dest = new BufferedImage(height, width, src.getType());
-
-		Graphics2D graphics2D = dest.createGraphics();
-		graphics2D.translate((height - width) / 2, (height - width) / 2);
-		graphics2D.rotate(Math.PI / 2, height / 2f, width / 2f);
-		graphics2D.drawRenderedImage(src, null);
-
-		return dest;
+	public static BufferedImage rotateImage(ClockDirection clockDirection, BufferedImage image) {
+		int dir = 1;
+		if(clockDirection == ClockDirection.COUNTERCLOCKWISE)
+			dir = 3;
+		return new AffineTransformOp(AffineTransform.getQuadrantRotateInstance(dir, image.getWidth() / 2, image.getHeight() / 2), AffineTransformOp.TYPE_BILINEAR).filter(image, null);
 	}
 
 	public static String loadFileFromJar(String file) throws IOException {
