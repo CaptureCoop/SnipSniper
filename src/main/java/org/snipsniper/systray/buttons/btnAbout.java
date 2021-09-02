@@ -94,6 +94,7 @@ public class btnAbout extends PopupMenuButton {
 				Image coffeeIcon = Icons.getAnimatedImage("icons/coffee.gif");
 				buyCoffee.setIcon(new ImageIcon(coffeeIcon.getScaledInstance(coffeeIcon.getWidth(null) / 8, coffeeIcon.getHeight(null) / 8, Image.SCALE_DEFAULT)));
 				buyCoffee.setHorizontalTextPosition(SwingConstants.LEFT);
+				buyCoffee.setFocusable(false);
 
 				iconPanel.add(buyCoffee, gbc);
 				panel.add(iconPanel);
