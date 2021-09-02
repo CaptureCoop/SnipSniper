@@ -45,13 +45,17 @@ public class Utils {
 	}
 
 	public static PlatformType getPlatformType(String string) {
+		if(string == null || string.isEmpty())
+			return PlatformType.JAR;
+
 		switch(string.toLowerCase()) {
 			case "jar": return PlatformType.JAR;
 			case "win": return PlatformType.WIN;
 			case "win_installed": return PlatformType.WIN_INSTALLED;
 			case "steam": return PlatformType.STEAM;
 		}
-		return PlatformType.JAR; //We are probably running in a jar somehow
+
+		return PlatformType.UNKNOWN;
 	}
 
 	public static ReleaseType getReleaseType(String string) {

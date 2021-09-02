@@ -11,7 +11,7 @@ public class CommandLineHelper {
     private String editorFile;
     private boolean viewerOnly = false;
     private String viewerFile;
-    private String platform = "";
+    private String platform;
 
     public CommandLineHelper() {
 
@@ -67,7 +67,6 @@ public class CommandLineHelper {
                 case "-platform":
                     if(args.length > index + 1) platform = args[index + 1];
                     else System.out.println("Missing argument after " + arg + "!");
-                    doExit = true;
                     break;
 
             }
