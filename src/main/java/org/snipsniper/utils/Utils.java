@@ -69,6 +69,16 @@ public class Utils {
 		return ReleaseType.UNKNOWN;
 	}
 
+	public static LaunchType getLaunchType(String string) {
+		if(string == null || string.isEmpty())
+			return LaunchType.NORMAL;
+		switch (string.toLowerCase()) {
+			case "editor": return LaunchType.EDITOR;
+			case "viewer": return LaunchType.VIEWER;
+		}
+		return LaunchType.NORMAL;
+	}
+
 	public static String replaceVars(String string) {
 		if(string.contains("%username%")) string = string.replace("%username%", System.getProperty("user.name"));
 		if(SystemUtils.IS_OS_WINDOWS) if(string.contains("%userprofile%")) string = string.replace("%userprofile%", System.getenv("USERPROFILE"));

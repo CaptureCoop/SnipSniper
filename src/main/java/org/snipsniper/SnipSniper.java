@@ -46,10 +46,11 @@ public final class SnipSniper {
 
 	private static DebugConsole debugConsole;
 
+	private static LaunchType launchType = LaunchType.NORMAL;
 	private static ReleaseType releaseType = ReleaseType.UNKNOWN;
 	private static PlatformType platformType = PlatformType.JAR;
 
-	public static void start(String[] args, boolean saveInDocuments, boolean isEditorOnly, boolean isViewerOnly) {
+	public static void start(String[] args) {
 		if(!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
 			System.out.println("SnipSniper is currently only available for Windows and Linux (In development, use with caution). Sorry!");
 			System.exit(0);
@@ -63,7 +64,8 @@ public final class SnipSniper {
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
 
-		platformType = Utils.getPlatformType(cmdline.getPlatform());
+		platformType = Utils.getPlatformType(System.getProperty("platform"));
+		launchType = Utils.getLaunchType(System.getProperty("launchType"));
 
 		LogManager.setEnabled(true);
 
@@ -73,7 +75,7 @@ public final class SnipSniper {
 			LogManager.log("There was an issue setting up NativeHook! Message: " + nativeHookException.getMessage(), LogLevel.ERROR);
 		}
 
-		if(saveInDocuments)
+		if(platformType == PlatformType.STEAM || platformType == PlatformType.WIN_INSTALLED)
 			SnipSniper.setSaveLocationToDocuments();
 		else
 			setSaveLocationToJar();
@@ -147,14 +149,14 @@ public final class SnipSniper {
 			LogManager.log("============================================================", LogLevel.INFO);
 		}
 
-		if(cmdline.isEditorOnly() || isEditorOnly) {
+		if(cmdline.isEditorOnly() || launchType == LaunchType.EDITOR) {
 			Config config = SCEditorWindow.getStandaloneEditorConfig();
 			config.save();
 
 			boolean fileExists;
 			BufferedImage img = null;
 			String path = "";
-			if((cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty()) || (isEditorOnly && args.length > 0)) {
+			if((cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty()) || (launchType == LaunchType.EDITOR && args.length > 0)) {
 				try {
 					if(cmdline.getEditorFile() != null && !cmdline.getEditorFile().isEmpty())
 						path = cmdline.getEditorFile();
@@ -171,12 +173,12 @@ public final class SnipSniper {
 			}
 
 			new SCEditorWindow(img, -1, -1, "SnipSniper Editor", config, false, path, false, true);
-		} else if(cmdline.isViewerOnly() || isViewerOnly) {
+		} else if(cmdline.isViewerOnly() || launchType == LaunchType.VIEWER) {
 			File file = null;
 			if(cmdline.getViewerFile() != null && !cmdline.getViewerFile().isEmpty())
 				file = new File(cmdline.getViewerFile());
 
-			if(isViewerOnly) {
+			if(launchType == LaunchType.VIEWER) {
 				if(args.length > 0) {
 					file = new File(args[0]);
 					if(!file.exists())
