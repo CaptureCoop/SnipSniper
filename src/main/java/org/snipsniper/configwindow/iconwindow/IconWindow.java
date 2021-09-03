@@ -47,6 +47,7 @@ public class IconWindow extends JFrame {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 0;
         final int MAX_X = 4;
         String[] list = Icons.getListAsString();
         for(int i = 0; i < list.length; i++) {
