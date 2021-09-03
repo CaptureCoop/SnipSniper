@@ -1,6 +1,8 @@
-package org.snipsniper.utils;
+package org.snipsniper.configwindow.folderpreview;
 
 import org.snipsniper.LangManager;
+import org.snipsniper.utils.Function;
+import org.snipsniper.utils.Icons;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

@@ -6,6 +6,7 @@ import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.colorchooser.ColorChooser;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.configwindow.folderpreview.FolderPreview;
 import org.snipsniper.systray.Sniper;
 import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.utils.*;
