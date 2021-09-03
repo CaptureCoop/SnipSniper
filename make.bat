@@ -47,13 +47,13 @@ goto done
 
 :create_install
 echo Creating installer
-jpackage @jpackage\jpackage_defaults.txt --main-class org.snipsniper.Main --app-version @build/SSVersion.txt --type exe --add-launcher SnipSniperEditor=jpackage\jpackage_static_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_static_viewer.txt --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut --java-options "-Dplatform=win_installed -DlaunchType=normal"
+jpackage @jpackage\jpackage_defaults.txt --main-class org.snipsniper.Main --app-version @version.txt --type exe --add-launcher SnipSniperEditor=jpackage\jpackage_static_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_static_viewer.txt --license-file LICENSE --win-dir-chooser --win-menu --win-shortcut --java-options "-Dplatform=win_installed -DlaunchType=normal"
 rename release\SnipSniper*.exe "SnipSniper_Installer_Win.exe"
 goto :EOF
 
 :create_portable
 echo Creating portable
-jpackage @jpackage\jpackage_defaults.txt --main-class org.snipsniper.Main --app-version @build/SSVersion.txt --type app-image --add-launcher SnipSniperEditor=jpackage\jpackage_portable_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_portable_viewer.txt --java-options "-Dplatform=win -DlaunchType=normal"
+jpackage @jpackage\jpackage_defaults.txt --main-class org.snipsniper.Main --app-version @version.txt --type app-image --add-launcher SnipSniperEditor=jpackage\jpackage_portable_editor.txt --add-launcher SnipSniperViewer=jpackage\jpackage_portable_viewer.txt --java-options "-Dplatform=win -DlaunchType=normal"
 rename release\SnipSniper "SnipSniper_Portable_Win"
 goto :EOF
 

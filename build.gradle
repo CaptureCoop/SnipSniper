@@ -51,7 +51,7 @@ task preBuild {
     f.append("\ngithash=" + grgit.head().abbreviatedId)
 
     new File(rootProject.projectDir.getAbsolutePath() + "//build//").mkdirs()
-    File versionFile = new File(rootProject.projectDir.getAbsolutePath() + "//build//SSVersion.txt")
+    File versionFile = new File(rootProject.projectDir.getAbsolutePath() + "//version.txt")
     versionFile.createNewFile()
     versionFile.write(projectVersion)
 }
