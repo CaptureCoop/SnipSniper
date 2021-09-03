@@ -13,6 +13,7 @@ import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.configwindow.iconwindow.IconWindow;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.scviewer.SCViewerWindow;
 
@@ -79,6 +80,12 @@ public class Sniper {
 
 			if (SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
 				popup.add(new PopupMenuButton("Console", Icons.getImage("icons/console.png"), popup, () -> SnipSniper.openDebugConsole()));
+				popup.add(new PopupMenuButton("Icon Window Test", Icons.getImage("icons/folder.png"), popup, new Function() {
+					@Override
+					public void run() {
+						new IconWindow();
+					}
+				}));
 			}
 
 			popup.add(new btnAbout(LangManager.getItem("menu_about"), Icons.getImage("icons/snipsniper.png"), popup, null));
