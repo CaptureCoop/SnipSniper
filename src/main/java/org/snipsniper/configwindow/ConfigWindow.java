@@ -1,7 +1,5 @@
 package org.snipsniper.configwindow;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
@@ -14,12 +12,21 @@ import org.snipsniper.utils.*;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class ConfigWindow extends JFrame {
+    private final ConfigWindow instance;
+
     private JTabbedPane tabPane;
     private JPanel snipConfigPanel;
     private JPanel editorConfigPanel;
@@ -38,6 +45,7 @@ public class ConfigWindow extends JFrame {
     private final int indexGlobal = 3;
 
     public ConfigWindow(Config config, PAGE page) {
+        instance = this;
         LogManager.log("Creating config window", LogLevel.INFO);
 
         setSize(512, 512);
@@ -926,9 +934,88 @@ public class ConfigWindow extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(0, 10, 0, 10);
 
         Config config = new Config(SnipSniper.getConfig());
+
+        gbc.gridwidth = 2;
+        gbc.insets.bottom = 20;
+        JPanel importExportPanel = new JPanel(new GridLayout(0, 2));
+        JButton importConfigs = new JButton("Import Configs");
+        importConfigs.addActionListener(e -> {
+            int dialogResult = JOptionPane.showConfirmDialog (instance, "This will overwrite all current configs. Do you want to continue?","Warning", JOptionPane.YES_NO_OPTION);
+            if(dialogResult == JOptionPane.NO_OPTION){
+                return;
+            }
+            for(File file : new File(SnipSniper.getProfilesFolder()).listFiles())
+                file.delete();
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileNameExtensionFilter("ZIP File", "zip"));
+            int option = fileChooser.showOpenDialog(instance);
+            if(option == JFileChooser.APPROVE_OPTION) {
+                try {
+                    byte[] buffer = new byte[4096];
+                    FileInputStream fis = new FileInputStream(fileChooser.getSelectedFile());
+                    BufferedInputStream bis = new BufferedInputStream(fis);
+                    ZipInputStream zis = new ZipInputStream(bis);
+                    ZipEntry ze;
+
+                    while ((ze = zis.getNextEntry()) != null) {
+                        Path filePath = Paths.get(SnipSniper.getProfilesFolder()).resolve(ze.getName());
+                        try (FileOutputStream fos = new FileOutputStream(filePath.toFile());
+                            BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length)) {
+                            int len;
+                            while ((len = zis.read(buffer)) > 0) {
+                                bos.write(buffer, 0, len);
+                            }
+                        }
+                    }
+                    fis.close();
+                    bis.close();
+                    zis.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            refreshConfigFiles();
+            SnipSniper.refreshGlobalConfigFromDisk();
+            SnipSniper.refreshTheme();
+            SnipSniper.resetProfiles();
+            new ConfigWindow(null, PAGE.globalPanel);
+            close();
+        });
+        JButton exportButton = new JButton("Export Configs");
+        exportButton.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileFilter(new FileNameExtensionFilter("ZIP File","zip"));
+            chooser.setSelectedFile(new File("configs.zip"));
+            int option = chooser.showSaveDialog(instance);
+            if (option == JFileChooser.APPROVE_OPTION) {
+                String path = chooser.getSelectedFile().getAbsolutePath();
+                if(!path.endsWith(".zip")) path += ".zip";
+                File zip = new File(path);
+                try {
+                    ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip));
+                    for(File configFile : new File(SnipSniper.getProfilesFolder()).listFiles()) {
+                        ZipEntry zipEntry = new ZipEntry(configFile.getName());
+                        out.putNextEntry(zipEntry);
+
+                        byte[] data = new String(Files.readAllBytes(Paths.get(configFile.getAbsolutePath()))).getBytes();
+                        out.write(data, 0, data.length);
+                        out.closeEntry();
+                    }
+
+                    out.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        importExportPanel.add(importConfigs);
+        importExportPanel.add(exportButton);
+        options.add(importExportPanel, gbc);
+        gbc.gridwidth = 1;
+        gbc.insets.bottom = 0;
 
         ArrayList<String> translatedLanguages = new ArrayList<>();
         for(String lang : LangManager.languages)
@@ -941,6 +1028,8 @@ public class ConfigWindow extends JFrame {
             }
         });
 
+        gbc.insets = new Insets(0, 10, 0, 10);
+        gbc.gridx = 0;
         options.add(createJLabel(LangManager.getItem("config_label_language"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         options.add(languageDropdown, gbc);
@@ -1020,21 +1109,14 @@ public class ConfigWindow extends JFrame {
             doRestartProfiles = true;
         }
 
-        if(didThemeChange) {
-            doRestartProfiles = true;
-            try {
-                if (config.getString(ConfigHelper.MAIN.theme).equals("dark")) {
-                    UIManager.setLookAndFeel(new FlatDarculaLaf());
-                } else if(config.getString(ConfigHelper.MAIN.theme).equals("light")) {
-                    UIManager.setLookAndFeel(new FlatIntelliJLaf());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
         SnipSniper.getConfig().loadFromConfig(config);
         config.save();
+
+        if(didThemeChange) {
+            doRestartProfiles = true;
+            SnipSniper.refreshTheme();
+        }
+
         if(doRestartProfiles)
             SnipSniper.resetProfiles();
     }

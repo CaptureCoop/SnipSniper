@@ -5,7 +5,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -227,9 +229,10 @@ public final class SnipSniper {
 
 	public static void setSaveLocationToJar() {
 		String folderToUseString = null;
+
 		try {
-			folderToUseString = URLDecoder.decode(SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().getFile(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+			folderToUseString = URLDecoder.decode(Paths.get(SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().toURI()).toString(), "UTF-8");
+		} catch (UnsupportedEncodingException | URISyntaxException e) {
 			LogManager.log("Could not set profiles folder. Error: " + e.getMessage(), LogLevel.ERROR);
 			exit(false);
 		}
@@ -241,7 +244,7 @@ public final class SnipSniper {
 			else
 				jarFolder = folderToUseString;
 
-			mainFolder = jarFolder + "SnipSniper";
+			mainFolder = jarFolder + "/SnipSniper";
 			profilesFolder = mainFolder + "/cfg/";
 			logFolder = mainFolder + "/logs/";
 		}
@@ -281,6 +284,10 @@ public final class SnipSniper {
 		return amount;
 	}
 
+	public static void refreshGlobalConfigFromDisk() {
+		config = new Config("main.cfg", "main_defaults.cfg");
+	}
+
 	public static String getLogFolder() {
 		return logFolder;
 	}
@@ -315,6 +322,18 @@ public final class SnipSniper {
 
 	public static DebugConsole getDebugConsole() {
 		return debugConsole;
+	}
+
+	public static void refreshTheme() {
+		try {
+			if (config.getString(ConfigHelper.MAIN.theme).equals("dark")) {
+				UIManager.setLookAndFeel(new FlatDarculaLaf());
+			} else if(config.getString(ConfigHelper.MAIN.theme).equals("light")) {
+				UIManager.setLookAndFeel(new FlatIntelliJLaf());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void openDebugConsole() {
