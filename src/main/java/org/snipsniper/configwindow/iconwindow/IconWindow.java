@@ -76,8 +76,7 @@ public class IconWindow extends JFrame {
             fileChooser.setFileFilter(new FileNameExtensionFilter("Image", "png"));
             int option = fileChooser.showOpenDialog(instance);
             if(option == JFileChooser.APPROVE_OPTION) {
-                //TODO: Copy image
-                onSelectIcon.run("custom");
+                onSelectIcon.run("custom", fileChooser.getSelectedFile().getAbsolutePath());
                 dispose();
             }
         });

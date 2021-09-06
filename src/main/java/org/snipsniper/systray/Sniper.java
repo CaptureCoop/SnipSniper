@@ -100,7 +100,7 @@ public class Sniper {
 				String icon = config.getString(ConfigHelper.PROFILE.icon);
 				switch(icon) {
 					case "none": image = Icons.getImage("systray/icon" + profileID + ".png"); break;
-					case "custom": break; //TODO: Handle;
+					case "custom": image = new ImageIcon(SnipSniper.getImageFolder() + "/" + config.getFilename().replace(Config.EXTENSION, "png")).getImage(); break;
 					default:
 						if(icon.endsWith(".gif")) {
 							image = Icons.getAnimatedImage(icon);

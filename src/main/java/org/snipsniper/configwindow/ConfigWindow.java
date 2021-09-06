@@ -21,6 +21,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -265,7 +266,20 @@ public class ConfigWindow extends JFrame {
         options.add(createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JButton iconButton = new JButton("Set Icon");
-        iconButton.addActionListener(e -> new IconWindow(args -> config.set(ConfigHelper.PROFILE.icon, args[0])));
+        iconButton.addActionListener(e -> new IconWindow(args -> {
+            if(args[0].equals("custom")) {
+                try {
+                    //You might think we should only do this if you save, but i dont care.
+                    //It doesnt get used if you dont save :^)
+                    Files.copy(new File(args[1]).toPath(), new File(SnipSniper.getImageFolder() + "/" + config.getFilename().replace(Config.EXTENSION, "png")).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    config.set(ConfigHelper.PROFILE.icon, args[0]);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            } else {
+                config.set(ConfigHelper.PROFILE.icon, args[0]);
+            }
+        }));
         options.add(iconButton, gbc);
         //END ICON
 

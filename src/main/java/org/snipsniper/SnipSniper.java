@@ -35,6 +35,7 @@ public final class SnipSniper {
 	private static String mainFolder;
 	private static String profilesFolder;
 	private static String logFolder;
+	private static String imgFolder;
 
 	private final static int PROFILE_COUNT = 8;
 
@@ -85,7 +86,8 @@ public final class SnipSniper {
 		if(!isDemo) {
 			File tempProfileFolder = new File(profilesFolder);
 			File tempLogFolder = new File(logFolder);
-			if ((!tempProfileFolder.exists() && !tempProfileFolder.mkdirs()) || (!tempLogFolder.exists() && !tempLogFolder.mkdirs())){
+			File tempImgFolder = new File(imgFolder);
+			if ((!tempProfileFolder.exists() && !tempProfileFolder.mkdirs()) || (!tempLogFolder.exists() && !tempLogFolder.mkdirs()) || (!tempImgFolder.exists() && !tempImgFolder.mkdirs())){
 				LogManager.log("Could not create required folders! Exiting...", LogLevel.ERROR);
 				exit(false);
 			}
@@ -225,6 +227,7 @@ public final class SnipSniper {
 		SnipSniper.mainFolder = jarFolder + "/.SnipSniper";
 		SnipSniper.profilesFolder = mainFolder + "/cfg/";
 		SnipSniper.logFolder = mainFolder + "/logs/";
+		SnipSniper.imgFolder = mainFolder + "/img/";
 	}
 
 	public static void setSaveLocationToJar() {
@@ -247,6 +250,7 @@ public final class SnipSniper {
 			mainFolder = jarFolder + "/SnipSniper";
 			profilesFolder = mainFolder + "/cfg/";
 			logFolder = mainFolder + "/logs/";
+			imgFolder = mainFolder + "/img/";
 		}
 	}
 
@@ -290,6 +294,10 @@ public final class SnipSniper {
 
 	public static String getLogFolder() {
 		return logFolder;
+	}
+
+	public static String getImageFolder() {
+		return imgFolder;
 	}
 
 	public static Config getConfig() {
