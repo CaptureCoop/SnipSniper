@@ -5,15 +5,18 @@ import org.snipsniper.utils.IDJButton;
 import org.snipsniper.utils.Icons;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
 public class IconWindow extends JFrame {
+    private IconWindow instance;
     private ArrayList<String> imageList = new ArrayList<>();
     private ArrayList<JButton> buttonList = new ArrayList<>();
 
     public IconWindow(Function onSelectIcon) {
+        instance = this;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(512, 256);
         addMouseListener(new MouseAdapter() {
@@ -75,7 +78,14 @@ public class IconWindow extends JFrame {
         customButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: Add open dialogue
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileFilter(new FileNameExtensionFilter("Image", "png"));
+                int option = fileChooser.showOpenDialog(instance);
+                if(option == JFileChooser.APPROVE_OPTION) {
+                    //TODO: Copy image
+                    onSelectIcon.run("custom");
+                    dispose();
+                }
             }
         });
         content.add(customButton, gbc);
