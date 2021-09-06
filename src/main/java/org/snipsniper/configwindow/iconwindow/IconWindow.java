@@ -53,7 +53,10 @@ public class IconWindow extends JFrame {
             if(list[i].contains("icons")) {
                 int size = getRootPane().getWidth()/5;
                 IDJButton button = new IDJButton(list[i]);
-                button.addActionListener(e -> onSelectIcon.run(button.getID()));
+                button.addActionListener(actionEvent -> {
+                    onSelectIcon.run(button.getID());
+                    dispose();
+                });
                 if (list[i].endsWith(".png"))
                     button.setIcon(new ImageIcon(Icons.getImage(list[i]).getScaledInstance(size, size, 0)));
                 else if (list[i].endsWith(".gif"))

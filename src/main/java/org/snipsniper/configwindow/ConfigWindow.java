@@ -7,6 +7,7 @@ import org.snipsniper.SnipSniper;
 import org.snipsniper.colorchooser.ColorChooser;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.configwindow.folderpreview.FolderPreview;
+import org.snipsniper.configwindow.iconwindow.IconWindow;
 import org.snipsniper.systray.Sniper;
 import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.utils.*;
@@ -256,11 +257,20 @@ public class ConfigWindow extends JFrame {
 
         //BEGIN ELEMENTS
 
-        //BEGIN HOTKEY
+        //BEGIN ICON
         gbc.gridx = 0;
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 10, 0, 10);
+        options.add(createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        JButton iconButton = new JButton("Set Icon");
+        iconButton.addActionListener(e -> new IconWindow(args -> config.set(ConfigHelper.PROFILE.icon, args[0])));
+        options.add(iconButton, gbc);
+        //END ICON
+
+        //BEGIN HOTKEY
+        gbc.gridx = 0;
         options.add(createJLabel(LangManager.getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JPanel hotkeyPanel = new JPanel(new GridLayout(0, 2));
@@ -527,10 +537,13 @@ public class ConfigWindow extends JFrame {
         JButton saveAndClose = new JButton(LangManager.getItem("config_label_saveclose"));
         saveAndClose.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
+                boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
                 for(CustomWindowListener listener : listeners)
                     listener.windowClosed();
+                if(didIconChange)
+                    SnipSniper.resetProfiles();
                 close();
             }
         });
@@ -538,11 +551,14 @@ public class ConfigWindow extends JFrame {
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
+                boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
                 //This prevents a bug where the other tabs have an outdated config
                 tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
                 tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
+                if(didIconChange)
+                    SnipSniper.resetProfiles();
             }
         });
 
