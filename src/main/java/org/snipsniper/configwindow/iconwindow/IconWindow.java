@@ -1,20 +1,19 @@
 package org.snipsniper.configwindow.iconwindow;
 
+import org.snipsniper.utils.Function;
+import org.snipsniper.utils.IDJButton;
 import org.snipsniper.utils.Icons;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class IconWindow extends JFrame {
     private ArrayList<String> imageList = new ArrayList<>();
     private ArrayList<JButton> buttonList = new ArrayList<>();
 
-    public IconWindow() {
+    public IconWindow(Function onSelectIcon) {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(512, 256);
         addMouseListener(new MouseAdapter() {
@@ -51,9 +50,10 @@ public class IconWindow extends JFrame {
         final int MAX_X = 4;
         String[] list = Icons.getListAsString();
         for(int i = 0; i < list.length; i++) {
-            if(list[i].contains("icons") || list[i].contains("systray")) {
+            if(list[i].contains("icons")) {
                 int size = getRootPane().getWidth()/5;
-                JButton button = new JButton();
+                IDJButton button = new IDJButton(list[i]);
+                button.addActionListener(e -> onSelectIcon.run(button.getID()));
                 if (list[i].endsWith(".png"))
                     button.setIcon(new ImageIcon(Icons.getImage(list[i]).getScaledInstance(size, size, 0)));
                 else if (list[i].endsWith(".gif"))

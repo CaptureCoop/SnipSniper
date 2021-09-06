@@ -105,7 +105,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         for(String str : buttonStrings) {
             SnipScopeUIButton button = new SnipScopeUIButton(Icons.getImage("buttons/stamp_" + str + ".png"), Icons.getImage("buttons/stamp_" + str + "_hover.png"), Icons.getImage("buttons/stamp_" + str + "_sel.png"));
             int selectedStamp = i;
-            button.addOnPress(() -> {
+            button.addOnPress(args -> {
                 for(SnipScopeUIButton btn : stampButtons) {
                     btn.setSelected(button == btn);
                 }

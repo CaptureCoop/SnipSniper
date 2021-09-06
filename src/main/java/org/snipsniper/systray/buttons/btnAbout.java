@@ -34,7 +34,7 @@ public class btnAbout extends PopupMenuButton {
 
 		setFunction(new Function() {
 			@Override
-			public void run() {
+			public void run(String... args) {
 				JFrame frame = new JFrame();
 				frame.setSize(512,256);
 				frame.setTitle("About");

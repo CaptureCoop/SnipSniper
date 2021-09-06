@@ -388,7 +388,7 @@ public class ConfigWindow extends JFrame {
             int x = (int) (getLocation().getX() + getWidth() / 2) - preview.getWidth() / 2;
             int y = (int) (getLocation().getY() + getHeight() / 2) - preview.getHeight() / 2;
             preview.setLocation(x, y);
-            preview.setOnSave(() -> {
+            preview.setOnSave(args -> {
                 String text = preview.getText();
                 if(text.isEmpty())
                     text = "/";
