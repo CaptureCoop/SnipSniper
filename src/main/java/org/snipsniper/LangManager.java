@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LangManager {
+    public static String DEFAULT_LANGUAGE = "en";
+    public static String MISSING_STRING_CHAR = "~";
     public static ArrayList<String> languages = new ArrayList<>();
     private static final HashMap<String, JSONObject> langMap = new HashMap<>();
 
@@ -34,6 +36,8 @@ public class LangManager {
     public static String getItem(String language, String key) {
         if(langMap.get(language).getJSONObject("strings").has(key))
             return langMap.get(language).getJSONObject("strings").getString(key);
+        else if (langMap.get(DEFAULT_LANGUAGE).getJSONObject("strings").has(key))
+            return MISSING_STRING_CHAR + langMap.get(DEFAULT_LANGUAGE).getJSONObject("strings").getString(key);
 
         LogManager.log("Could not find key <" + key + "> in language file <" + language + ">", LogLevel.ERROR, true);
         return "LM<" + key + ">";
