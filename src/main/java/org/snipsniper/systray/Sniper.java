@@ -96,7 +96,22 @@ public class Sniper {
 			});
 
 			try {
-				trayIcon = new TrayIcon(Icons.getImage("systray/icon" + profileID + ".png"), "SnipSniper (Profile " + profileID + ")");
+				Image image = null;
+				String icon = config.getString(ConfigHelper.PROFILE.icon);
+				switch(icon) {
+					case "none": image = Icons.getImage("systray/icon" + profileID + ".png"); break;
+					case "custom": break; //TODO: Handle;
+					default:
+						if(icon.endsWith(".gif")) {
+							image = Icons.getAnimatedImage(icon);
+							break;
+						} else {
+							image = Icons.getImage(icon);
+							break;
+						}
+				}
+
+				trayIcon = new TrayIcon(image, "SnipSniper (Profile " + profileID + ")");
 				trayIcon.setImageAutoSize(true);
 
 				trayIcon.addMouseListener(new MouseAdapter() {
