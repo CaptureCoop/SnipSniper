@@ -49,9 +49,9 @@ public class IconWindow extends JFrame {
         gbc.gridx = 0;
         final int MAX_X = 4;
         String[] list = Icons.getListAsString();
+        int size = getRootPane().getWidth()/5;
         for(int i = 0; i < list.length; i++) {
             if(list[i].contains("icons")) {
-                int size = getRootPane().getWidth()/5;
                 IDJButton button = new IDJButton(list[i]);
                 button.addActionListener(actionEvent -> {
                     onSelectIcon.run(button.getID());
@@ -68,6 +68,17 @@ public class IconWindow extends JFrame {
                 buttonList.add(button);
             }
         }
+        JButton customButton = new JButton("Custom");
+        customButton.setPreferredSize(new Dimension(size, size));
+        customButton.setMinimumSize(new Dimension(size, size));
+        customButton.setMaximumSize(new Dimension(size, size));
+        customButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO: Add open dialogue
+            }
+        });
+        content.add(customButton, gbc);
         pack();
         setSize(getWidth(), 256);
     }
