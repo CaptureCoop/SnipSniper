@@ -8,12 +8,9 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class IconWindow extends JFrame {
-    private IconWindow instance;
-    private ArrayList<String> imageList = new ArrayList<>();
-    private ArrayList<JButton> buttonList = new ArrayList<>();
+    private final IconWindow instance;
 
     public IconWindow(Function onSelectIcon) {
         instance = this;
@@ -53,39 +50,35 @@ public class IconWindow extends JFrame {
         final int MAX_X = 4;
         String[] list = Icons.getListAsString();
         int size = getRootPane().getWidth()/5;
-        for(int i = 0; i < list.length; i++) {
-            if(list[i].contains("icons")) {
-                IDJButton button = new IDJButton(list[i]);
+        for (String file : list) {
+            if (file.contains("icons")) {
+                IDJButton button = new IDJButton(file);
                 button.addActionListener(actionEvent -> {
                     onSelectIcon.run(button.getID());
                     dispose();
                 });
-                if (list[i].endsWith(".png"))
-                    button.setIcon(new ImageIcon(Icons.getImage(list[i]).getScaledInstance(size, size, 0)));
-                else if (list[i].endsWith(".gif"))
-                    button.setIcon(new ImageIcon(Icons.getAnimatedImage(list[i]).getScaledInstance(size, size, 0)));
+                if (file.endsWith(".png"))
+                    button.setIcon(new ImageIcon(Icons.getImage(file).getScaledInstance(size, size, 0)));
+                else if (file.endsWith(".gif"))
+                    button.setIcon(new ImageIcon(Icons.getAnimatedImage(file).getScaledInstance(size, size, 0)));
                 content.add(button, gbc);
                 gbc.gridx++;
                 if (gbc.gridx >= MAX_X)
                     gbc.gridx = 0;
-                buttonList.add(button);
             }
         }
         JButton customButton = new JButton("Custom");
         customButton.setPreferredSize(new Dimension(size, size));
         customButton.setMinimumSize(new Dimension(size, size));
         customButton.setMaximumSize(new Dimension(size, size));
-        customButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileFilter(new FileNameExtensionFilter("Image", "png"));
-                int option = fileChooser.showOpenDialog(instance);
-                if(option == JFileChooser.APPROVE_OPTION) {
-                    //TODO: Copy image
-                    onSelectIcon.run("custom");
-                    dispose();
-                }
+        customButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Image", "png"));
+            int option = fileChooser.showOpenDialog(instance);
+            if(option == JFileChooser.APPROVE_OPTION) {
+                //TODO: Copy image
+                onSelectIcon.run("custom");
+                dispose();
             }
         });
         content.add(customButton, gbc);
