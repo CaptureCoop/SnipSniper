@@ -10,6 +10,7 @@ import org.snipsniper.utils.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -142,18 +143,26 @@ public class SCEditorListener extends SnipScopeListener {
     public void mouseReleased(MouseEvent mouseEvent) {
         super.mouseReleased(mouseEvent);
 
-        if(!scEditorWindow.isPointOnUiComponents(mouseEvent.getPoint())) {
-            scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.getButton(), false);
+        if(scEditorWindow.isDefaultImage()) {
+            JFileChooser fileChooser = new JFileChooser();
+            int option = fileChooser.showOpenDialog(scEditorWindow);
+            if(option == JFileChooser.APPROVE_OPTION) {
+                scEditorWindow.setImage(Utils.imageToBufferedImage(new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()).getImage()), true, true);
+            }
+        } else {
+            if (!scEditorWindow.isPointOnUiComponents(mouseEvent.getPoint())) {
+                scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.getButton(), false);
 
-            scEditorWindow.getInputContainer().clearMousePath();
-            if (!scEditorWindow.getInputContainer().isKeyPressed(scEditorWindow.getMovementKey())) {
-                switch (mouseEvent.getButton()) {
-                    case 1:
-                        save(scEditorWindow.getImage().getGraphics(), false);
-                        break;
-                    case 2:
-                        save(scEditorWindow.getImage().getGraphics(), true);
-                        break;
+                scEditorWindow.getInputContainer().clearMousePath();
+                if (!scEditorWindow.getInputContainer().isKeyPressed(scEditorWindow.getMovementKey())) {
+                    switch (mouseEvent.getButton()) {
+                        case 1:
+                            save(scEditorWindow.getImage().getGraphics(), false);
+                            break;
+                        case 2:
+                            save(scEditorWindow.getImage().getGraphics(), true);
+                            break;
+                    }
                 }
             }
         }

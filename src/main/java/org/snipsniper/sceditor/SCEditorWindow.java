@@ -44,6 +44,8 @@ public class SCEditorWindow extends SnipScopeWindow {
     private boolean ezMode;
     private final ArrayList<SnipScopeUIButton> stampButtons = new ArrayList<>();
 
+    private BufferedImage defaultImage;
+
     public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         this.config = config;
         this.title = title;
@@ -64,9 +66,10 @@ public class SCEditorWindow extends SnipScopeWindow {
         stamps[4] = new TextStamp(config, this);
         stamps[5] = new RectangleStamp(config);
 
-        if(image == null)
+        if(image == null) {
             image = Utils.getDragPasteImage(Icons.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
-
+            defaultImage = image;
+        }
         renderer = new SCEditorRenderer(this);
         listener = new SCEditorListener(this);
 
@@ -254,6 +257,10 @@ public class SCEditorWindow extends SnipScopeWindow {
             btn.setEnabled(ezMode);
         if(ezMode)
             autoSizeStampButtons();
+    }
+
+    public boolean isDefaultImage() {
+        return defaultImage == getImage();
     }
 
     public boolean isEzMode() {
