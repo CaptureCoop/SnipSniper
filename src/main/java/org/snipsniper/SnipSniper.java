@@ -84,10 +84,7 @@ public final class SnipSniper {
 			setSaveLocationToJar();
 
 		if(!isDemo) {
-			File tempProfileFolder = new File(profilesFolder);
-			File tempLogFolder = new File(logFolder);
-			File tempImgFolder = new File(imgFolder);
-			if ((!tempProfileFolder.exists() && !tempProfileFolder.mkdirs()) || (!tempLogFolder.exists() && !tempLogFolder.mkdirs()) || (!tempImgFolder.exists() && !tempImgFolder.mkdirs())){
+			if(!FileUtils.mkdirs(profilesFolder, logFolder, imgFolder)) {
 				LogManager.log("Could not create required folders! Exiting...", LogLevel.ERROR);
 				exit(false);
 			}
