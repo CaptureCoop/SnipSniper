@@ -215,10 +215,12 @@ public class ConfigWindow extends JFrame {
         });
         profilePlusMinus.add(profileAddButton);
         JButton profileRemoveButton = new JButton("-");
-        if(dropdown.getSelectedItem().equals("profile0") || dropdown.getSelectedItem().equals("editor"))
+        DropdownItem selectedItem = (DropdownItem) dropdown.getSelectedItem();
+        if(selectedItem.getID().contains("profile0") || selectedItem.getID().contains("editor"))
             profileRemoveButton.setEnabled(false);
         profileRemoveButton.addActionListener(actionEvent -> {
-            if(!dropdown.getSelectedItem().equals("profile0") || !dropdown.getSelectedItem().equals("editor")) {
+            DropdownItem item = (DropdownItem) dropdown.getSelectedItem();
+            if(!item.getID().contains("profile0") || !item.getID().contains("editor")) {
                 config.deleteFile();
                 SnipSniper.resetProfiles();
                 refreshConfigFiles();
@@ -226,7 +228,7 @@ public class ConfigWindow extends JFrame {
                 int newIndex = dropdown.getSelectedIndex() - 1;
                 if(newIndex < 0)
                     newIndex = dropdown.getSelectedIndex() + 1;
-                Config newConfig = new Config(dropdown.getItemAt(newIndex) + ".cfg", "profile_defaults.cfg");
+                Config newConfig = new Config(dropdown.getItemAt(newIndex).getID(), "profile_defaults.cfg");
                 tabPane.setComponentAt(pageIndex, setupPaneDynamic(newConfig, page));
                 lastSelectedConfig = newConfig;
             }
