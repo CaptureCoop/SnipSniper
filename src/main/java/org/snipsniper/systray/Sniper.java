@@ -13,7 +13,6 @@ import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
-import org.snipsniper.configwindow.iconwindow.IconWindow;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.scviewer.SCViewerWindow;
 
@@ -96,7 +95,7 @@ public class Sniper {
 			});
 
 			try {
-				Image image = null;
+				Image image;
 				String icon = config.getString(ConfigHelper.PROFILE.icon);
 				switch(icon) {
 					case "none": image = getDefaultIcon(); break;
