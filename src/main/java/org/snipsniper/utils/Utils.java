@@ -130,6 +130,21 @@ public class Utils {
 		return true;
 	}
 
+	public static ArrayList<String> getFilesInFolders(String path) {
+		ArrayList<String> result = new ArrayList<>();
+		for(File file : new File(path).listFiles()) {
+			if(file.isDirectory())
+				result.addAll(getFilesInFolders(file.getAbsolutePath()));
+			if(!file.isDirectory())
+				result.add(Utils.correctSlashes(file.getAbsolutePath()));
+		}
+		return result;
+	}
+
+	public static String correctSlashes(String string) {
+		return string.replaceAll("\\\\", "/").replaceAll("//", "/");
+	}
+
 	public static void jsonLang() {
 		System.out.println("Creating language debug files under \\lang\\...\n");
 		if(!new File("lang").mkdir() && !new File("lang").exists()) {
