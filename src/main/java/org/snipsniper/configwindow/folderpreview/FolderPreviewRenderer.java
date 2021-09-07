@@ -1,4 +1,7 @@
-package org.snipsniper.utils;
+package org.snipsniper.configwindow.folderpreview;
+
+import org.snipsniper.utils.Icons;
+import org.snipsniper.utils.Utils;
 
 import javax.swing.*;
 import java.awt.*;
