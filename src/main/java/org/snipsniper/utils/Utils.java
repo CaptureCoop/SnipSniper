@@ -334,11 +334,10 @@ public class Utils {
 		final int size = args.length;
 		String newMessage = message;
 		for(int i = 0; i < size; i++) {
-			final String id = "\\{" + i + "}";
 			String replacer = "NULL";
 			if(args[i] != null)
 				replacer = args[i].toString();
-			newMessage = newMessage.replaceAll(id, replacer);
+			newMessage = newMessage.replaceFirst("%c", replacer);
 		}
 		return newMessage;
 	}
@@ -387,7 +386,7 @@ public class Utils {
 		String path = "org/snipsniper/resources/" + file;
 		InputStream inputStream = ClassLoader.getSystemResourceAsStream(path);
 		if(inputStream == null)
-			throw new FileNotFoundException(Utils.formatArgs("Could not load file {0} from jar!", path));
+			throw new FileNotFoundException(Utils.formatArgs("Could not load file %c from jar!", path));
 		InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 		BufferedReader in = new BufferedReader(streamReader);
 

@@ -22,9 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -98,7 +96,7 @@ public class ConfigWindow extends JFrame {
 
         snipConfigPanel = new JPanel();
         tabPane.addTab("SnipSniper",  setupSnipPane(config));
-        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)));
+        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/snipsnipger.png").getScaledInstance(iconSize, iconSize, 0)));
         if(page == PAGE.snipPanel)
             enableIndex = index;
         index++;
@@ -990,8 +988,8 @@ public class ConfigWindow extends JFrame {
 
             File imgFolder = new File(SnipSniper.getImageFolder());
             File cfgFolder = new File(SnipSniper.getProfilesFolder());
-            imgFolder.delete(); imgFolder.mkdirs();
-            cfgFolder.delete(); cfgFolder.mkdirs();
+            FileUtils.delete(imgFolder); FileUtils.mkdirs(imgFolder);
+            FileUtils.delete(cfgFolder); FileUtils.mkdirs(cfgFolder);
 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileFilter(new FileNameExtensionFilter("ZIP File", "zip"));

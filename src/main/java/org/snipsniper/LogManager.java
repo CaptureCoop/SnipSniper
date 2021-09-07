@@ -5,6 +5,7 @@ import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 import org.apache.commons.lang3.StringUtils;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.LogLevel;
+import org.snipsniper.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,10 @@ public class LogManager {
     public static String htmlLog = "";
     private static final int MAX_LEVEL_LENGTH = LogLevel.WARNING.toString().length();
     private static boolean enabled = false;
+
+    public static void log(String message, LogLevel level, Object... args) {
+        logInternal(Utils.formatArgs(message, args), level, false);
+    }
 
     public static void log(String message, LogLevel level) {
         logInternal(message, level, false);

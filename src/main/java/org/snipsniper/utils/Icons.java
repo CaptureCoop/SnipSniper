@@ -57,16 +57,16 @@ public class Icons {
 
 	public static BufferedImage getImage(String path) {
 		if(!images.containsKey(path)) {
-			LogManager.log("Could not find image under path " + path + "!", LogLevel.ERROR, true);
-			return null;
+			LogManager.log("Could not find image under path " + path + "!", LogLevel.ERROR, false);
+			return images.get("missing.png");
 		}
 		return images.get(path);
 	}
 
 	public static Image getAnimatedImage(String path) {
 		if(!animatedImages.containsKey(path)) {
-			LogManager.log("Could not find image under path " + path + "!", LogLevel.ERROR, true);
-			return null;
+			LogManager.log("Could not find image under path " + path + "!", LogLevel.ERROR, false);
+			return images.get("missing.png");
 		}
 		return animatedImages.get(path);
 	}

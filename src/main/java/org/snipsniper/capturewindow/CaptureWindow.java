@@ -357,7 +357,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 					}
 
 					if(spyglassRectangle != null) {
-						String positionText = Utils.formatArgs("X: {0} Y: {1}", cPointLive.x, cPointLive.y);
+						String positionText = Utils.formatArgs("X: %c Y: %c", cPointLive.x, cPointLive.y);
 						Rectangle positionTextRect = globalBuffer.getFont().getStringBounds(positionText, globalBuffer.getFontRenderContext()).getBounds();
 						int pointX = (int) (spyglassRectangle.x + spyglassBufferImage.getWidth() / 2 - positionTextRect.getWidth() / 2);
 						int pointY = (int) (spyglassRectangle.y + spyglassBufferImage.getHeight() + positionTextRect.getHeight());

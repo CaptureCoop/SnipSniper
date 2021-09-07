@@ -250,7 +250,7 @@ public class SCEditorWindow extends SnipScopeWindow {
     }
 
     public String toString() {
-        return Utils.formatArgs("SCEditorWindow Pos:[{1}] Path:[{2}]", getLocation(), saveLocation);
+        return Utils.formatArgs("SCEditorWindow Pos:[%c] Path:[%c]", getLocation(), saveLocation);
     }
 
     public void setEzMode(boolean value) {

@@ -226,6 +226,6 @@ public class SSColor {
 	}
 
 	public String toString() {
-		return Utils.formatArgs("SSColor primaryColor: {0} secondaryColor: {1} point1: {2} point2: {3} isGradient: {4}", primaryColor, secondaryColor, point1, point2, isGradient);
+		return Utils.formatArgs("SSColor primaryColor: %c secondaryColor: %c point1: %c point2: %c isGradient: %c", primaryColor, secondaryColor, point1, point2, isGradient);
 	}
 }
