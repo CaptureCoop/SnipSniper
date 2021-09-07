@@ -271,7 +271,7 @@ public class ConfigWindow extends JFrame {
         options.add(createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JButton iconButton = new JButton("Set Icon");
-        iconButton.addActionListener(e -> new IconWindow(args -> {
+        iconButton.addActionListener(e -> new IconWindow("Custom Profile Icon", args -> {
             if(args[0].equals("custom")) {
                 runOnSave.add(args1 -> {
                     try {

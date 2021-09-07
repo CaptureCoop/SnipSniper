@@ -12,10 +12,12 @@ import java.awt.event.*;
 public class IconWindow extends JFrame {
     private final IconWindow instance;
 
-    public IconWindow(Function onSelectIcon) {
+    public IconWindow(String title, Function onSelectIcon) {
         instance = this;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(512, 256);
+        setTitle(title);
+        setIconImage(Icons.getImage("icons/folder.png"));
         addMouseListener(new MouseAdapter() {
             boolean listenForExit = false;
             @Override
