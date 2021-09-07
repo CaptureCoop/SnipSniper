@@ -211,7 +211,7 @@ public class Sniper {
 
 	public void killCaptureWindow() {
 		if(captureWindow != null) {
-			if(SystemTray.isSupported()) trayIcon.setImage(Icons.getImage("systray/icon" + profileID + ".png"));
+			if(SystemTray.isSupported() && getIconString().equals("none")) trayIcon.setImage(Icons.getImage("systray/icon" + profileID + ".png"));
 			SnipSniper.setIdle(true);
 			captureWindow.screenshot = null;
 			captureWindow.screenshotTinted = null;
@@ -235,6 +235,10 @@ public class Sniper {
 				}
 			}
 		}
+	}
+
+	public String getIconString() {
+		return config.getString(ConfigHelper.PROFILE.icon);
 	}
 
 	public String getID() {
