@@ -47,6 +47,8 @@ SnipSniper uses these libraries in order to function properly
 
 * [Apache Commons lang3](http://commons.apache.org/proper/commons-lang/) - Provides highly reusable static utility methods.
 
+* [Apache Commons Text](https://commons.apache.org/proper/commons-text/) -  Apache Commons Text is a library focused on algorithms working on strings.
+
 * [org.json](https://www.json.org/) - JSON is a light-weight, language independent, data interchange format.
 
 * [FlatLaf](https://www.formdev.com/flatlaf/) - FlatLaf is a modern open-source cross-platform Look and Feel for Java Swing desktop applications.

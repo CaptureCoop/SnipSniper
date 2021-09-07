@@ -1,6 +1,6 @@
 package org.snipsniper;
 
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 
 import org.apache.commons.lang3.StringUtils;
 import org.snipsniper.config.ConfigHelper;
