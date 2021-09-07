@@ -99,16 +99,20 @@ public class Sniper {
 				Image image = null;
 				String icon = config.getString(ConfigHelper.PROFILE.icon);
 				switch(icon) {
-					case "none": image = Icons.getImage("systray/icon" + profileID + ".png"); break;
+					case "none": image = getDefaultIcon(); break;
 					case "custom": image = new ImageIcon(SnipSniper.getImageFolder() + "/" + config.getFilename().replace(Config.EXTENSION, "png")).getImage(); break;
 					default:
 						if(icon.endsWith(".gif")) {
 							image = Icons.getAnimatedImage(icon);
-							break;
 						} else {
 							image = Icons.getImage(icon);
-							break;
 						}
+						break;
+				}
+
+				if(image == null) {
+					LogManager.log("Tray Icon is null, setting default.", LogLevel.ERROR);
+					image = getDefaultIcon();
 				}
 
 				image.flush();
@@ -201,6 +205,10 @@ public class Sniper {
 		};
 		GlobalScreen.addNativeKeyListener(nativeKeyAdapter);
 		GlobalScreen.addNativeMouseListener(nativeMouseAdapter);
+	}
+
+	private Image getDefaultIcon() {
+		return Icons.getImage("systray/icon" + profileID + ".png");
 	}
 
 	public void kill() {
