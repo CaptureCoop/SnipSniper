@@ -37,6 +37,7 @@ public class SCViewerWindow extends SnipScopeWindow {
     private boolean locked = false;
 
     private JMenuItem saveItem;
+    private BufferedImage defaultImage;
 
     public SCViewerWindow(File file, Config config, boolean isStandalone) {
         currentFile = file;
@@ -49,6 +50,7 @@ public class SCViewerWindow extends SnipScopeWindow {
             image = getImageFromFile(currentFile);
         } else {
             image = Utils.getDragPasteImage(Icons.getImage("icons/viewer.png"), "Drop image here!");
+            defaultImage = image;
         }
 
         if(config == null) {
@@ -67,11 +69,7 @@ public class SCViewerWindow extends SnipScopeWindow {
                 try {
                     evt.acceptDrop(DnDConstants.ACTION_COPY);
                     List droppedFiles = (List) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                    currentFile = (File) droppedFiles.get(0);
-                    setImage(getImageFromFile(currentFile));
-                    refreshFolder();
-                    refreshTitle();
-                    repaint();
+                    setImage((File) droppedFiles.get(0));
                 } catch (UnsupportedFlavorException | IOException e) {
                     e.printStackTrace();
                 }
@@ -117,6 +115,7 @@ public class SCViewerWindow extends SnipScopeWindow {
                     SnipSniper.exit(false);
             }
         });
+        setEnableInteraction(!isDefaultImage());
     }
 
     public void rotateImage(ClockDirection direction) {
@@ -165,9 +164,7 @@ public class SCViewerWindow extends SnipScopeWindow {
         }
         File newFile = new File(files.get(index));
         if(!currentFile.getAbsolutePath().equals(newFile.getAbsolutePath())) {
-            currentFile = newFile;
-            setImage(getImageFromFile(currentFile));
-            refreshTitle();
+            setImage(newFile);
         }
         locked = false;
         resetZoom();
@@ -180,6 +177,16 @@ public class SCViewerWindow extends SnipScopeWindow {
             if (config.getBool(ConfigHelper.PROFILE.closeViewerOnOpenEditor))
                 dispose();
         }
+    }
+
+    public void setImage(File file) {
+        BufferedImage newImage = Utils.imageToBufferedImage(new ImageIcon(file.getAbsolutePath()).getImage());
+        super.setImage(newImage);
+        currentFile = new File(file.getAbsolutePath());
+        setEnableInteraction(!isDefaultImage());
+        refreshTitle();
+        refreshFolder();
+        repaint();
     }
 
     public BufferedImage getImageFromFile(File file) {
@@ -198,8 +205,8 @@ public class SCViewerWindow extends SnipScopeWindow {
         return null;
     }
 
-    public boolean isLocked() {
-        return locked;
+    public boolean isDefaultImage() {
+        return getImage() == defaultImage;
     }
 
 }
