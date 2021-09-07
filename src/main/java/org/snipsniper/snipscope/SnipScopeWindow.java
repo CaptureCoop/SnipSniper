@@ -28,6 +28,8 @@ public class SnipScopeWindow extends JFrame {
 
     private final ArrayList<SnipScopeUIComponent> uiComponents = new ArrayList<>();
 
+    private boolean enableInteraction = true;
+
     public void init(BufferedImage image, SnipScopeRenderer renderer, SnipScopeListener listener) {
         this.image = image;
         this.renderer = renderer;
@@ -194,4 +196,11 @@ public class SnipScopeWindow extends JFrame {
         return inputContainer;
     }
 
+    public void setEnableInteraction(boolean enabled) {
+        enableInteraction = enabled;
+    }
+
+    public boolean isEnableInteraction() {
+        return enableInteraction;
+    }
 }

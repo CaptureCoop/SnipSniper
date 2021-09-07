@@ -157,6 +157,7 @@ public class SCEditorWindow extends SnipScopeWindow {
                     SnipSniper.exit(false);
             }
         });
+        setEnableInteraction(!isDefaultImage());
     }
 
     @Override
@@ -202,6 +203,7 @@ public class SCEditorWindow extends SnipScopeWindow {
     public void setImage(BufferedImage image, boolean resetHistory, boolean isNewImage) {
         super.setImage(image);
         LogManager.log("Setting new Image", LogLevel.INFO);
+        setEnableInteraction(!isDefaultImage());
 
         if(listener != null && resetHistory) {
             listener.resetHistory();

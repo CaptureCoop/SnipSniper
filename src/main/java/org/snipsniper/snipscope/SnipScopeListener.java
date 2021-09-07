@@ -30,6 +30,8 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
+        if(!snipScopeWindow.isEnableInteraction()) return;
+
         input.setKey(keyEvent.getKeyCode(), true);
 
         switch(keyEvent.getKeyCode()) {
@@ -42,6 +44,8 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
+        if(!snipScopeWindow.isEnableInteraction()) return;
+
         input.setKey(keyEvent.getKeyCode(), false);
     }
 
@@ -52,6 +56,8 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
+        if(!snipScopeWindow.isEnableInteraction()) return;
+
         for(SnipScopeUIComponent component : snipScopeWindow.getUiComponents()) {
             component.mousePressed(mouseEvent);
         }
@@ -59,6 +65,8 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
+        if(!snipScopeWindow.isEnableInteraction()) return;
+
         lastPoint = null;
         for(SnipScopeUIComponent component : snipScopeWindow.getUiComponents()) {
             component.mouseReleased(mouseEvent);
@@ -75,6 +83,8 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
+        if(!snipScopeWindow.isEnableInteraction()) return;
+
         for(SnipScopeUIComponent component : snipScopeWindow.getUiComponents()) {
             component.mouseDragged(mouseEvent);
         }
@@ -92,6 +102,8 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
+        if(!snipScopeWindow.isEnableInteraction()) return;
+
         for(SnipScopeUIComponent component : snipScopeWindow.getUiComponents()) {
             component.mouseMoved(mouseEvent);
         }
@@ -101,6 +113,8 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
+        if(!snipScopeWindow.isEnableInteraction()) return;
+
         if(!snipScopeWindow.isRequireMovementKeyForZoom() || input.isKeyPressed(snipScopeWindow.getMovementKey())) {
             float oldZoom = snipScopeWindow.getZoom();
             switch (mouseWheelEvent.getWheelRotation()) {

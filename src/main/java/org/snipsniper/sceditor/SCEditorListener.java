@@ -10,7 +10,6 @@ import org.snipsniper.utils.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -43,6 +42,7 @@ public class SCEditorListener extends SnipScopeListener {
     public void keyPressed(KeyEvent keyEvent) {
         super.keyPressed(keyEvent);
         keyEvent.consume();
+        if(!scEditorWindow.isEnableInteraction()) return;
 
         if(input.isKeyPressed(KeyEvent.VK_PERIOD))
             scEditorWindow.setEzMode(!scEditorWindow.isEzMode());
@@ -99,6 +99,7 @@ public class SCEditorListener extends SnipScopeListener {
     @Override
     public void keyReleased(KeyEvent keyEvent) {
         super.keyReleased(keyEvent);
+        if(!scEditorWindow.isEnableInteraction()) return;
 
         if(openColorChooser) {
             //This fixes an issue with the ALT key getting "stuck" since the key up event is not being received if the color window is in the front.
@@ -126,6 +127,7 @@ public class SCEditorListener extends SnipScopeListener {
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
         super.mousePressed(mouseEvent);
+        if(!scEditorWindow.isEnableInteraction()) return;
 
         if(!scEditorWindow.isPointOnUiComponents(mouseEvent.getPoint()))
             scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.getButton(), true);
@@ -149,23 +151,26 @@ public class SCEditorListener extends SnipScopeListener {
             if(option == JFileChooser.APPROVE_OPTION) {
                 scEditorWindow.setImage(Utils.imageToBufferedImage(new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()).getImage()), true, true);
             }
-        } else {
-            if (!scEditorWindow.isPointOnUiComponents(mouseEvent.getPoint())) {
-                scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.getButton(), false);
+        }
 
-                scEditorWindow.getInputContainer().clearMousePath();
-                if (!scEditorWindow.getInputContainer().isKeyPressed(scEditorWindow.getMovementKey())) {
-                    switch (mouseEvent.getButton()) {
-                        case 1:
-                            save(scEditorWindow.getImage().getGraphics(), false);
-                            break;
-                        case 2:
-                            save(scEditorWindow.getImage().getGraphics(), true);
-                            break;
-                    }
+        if(!scEditorWindow.isEnableInteraction()) return;
+
+        if (!scEditorWindow.isPointOnUiComponents(mouseEvent.getPoint())) {
+            scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.getButton(), false);
+
+            scEditorWindow.getInputContainer().clearMousePath();
+            if (!scEditorWindow.getInputContainer().isKeyPressed(scEditorWindow.getMovementKey())) {
+                switch (mouseEvent.getButton()) {
+                    case 1:
+                        save(scEditorWindow.getImage().getGraphics(), false);
+                        break;
+                    case 2:
+                        save(scEditorWindow.getImage().getGraphics(), true);
+                        break;
                 }
             }
         }
+
         scEditorWindow.repaint();
     }
 
@@ -183,6 +188,7 @@ public class SCEditorListener extends SnipScopeListener {
     @Override
     public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
         super.mouseWheelMoved(mouseWheelEvent);
+        if(!scEditorWindow.isEnableInteraction()) return;
 
         InputContainer input = scEditorWindow.getInputContainer();
 
@@ -213,6 +219,7 @@ public class SCEditorListener extends SnipScopeListener {
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
         super.mouseMoved(mouseEvent);
+        if(!scEditorWindow.isEnableInteraction()) return;
 
         scEditorWindow.getInputContainer().setMousePosition(mouseEvent.getX(), mouseEvent.getY());
         scEditorWindow.repaint();
@@ -221,6 +228,7 @@ public class SCEditorListener extends SnipScopeListener {
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
         super.mouseDragged(mouseEvent);
+        if(!scEditorWindow.isEnableInteraction()) return;
 
         scEditorWindow.getInputContainer().addMousePathPoint(mouseEvent.getPoint());
 
