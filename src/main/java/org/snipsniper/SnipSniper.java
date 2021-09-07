@@ -300,6 +300,10 @@ public final class SnipSniper {
 		return imgFolder;
 	}
 
+	public static String getMainFolder() {
+		return Utils.correctSlashes(mainFolder);
+	}
+
 	public static Config getConfig() {
 		return config;
 	}
