@@ -987,8 +987,12 @@ public class ConfigWindow extends JFrame {
             if(dialogResult == JOptionPane.NO_OPTION){
                 return;
             }
-            for(File file : new File(SnipSniper.getProfilesFolder()).listFiles())
-                file.delete();
+
+            File imgFolder = new File(SnipSniper.getImageFolder());
+            File cfgFolder = new File(SnipSniper.getProfilesFolder());
+            imgFolder.delete(); imgFolder.mkdirs();
+            cfgFolder.delete(); cfgFolder.mkdirs();
+
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileFilter(new FileNameExtensionFilter("ZIP File", "zip"));
             int option = fileChooser.showOpenDialog(instance);
@@ -1001,7 +1005,7 @@ public class ConfigWindow extends JFrame {
                     ZipEntry ze;
 
                     while ((ze = zis.getNextEntry()) != null) {
-                        Path filePath = Paths.get(SnipSniper.getProfilesFolder()).resolve(ze.getName());
+                        Path filePath = Paths.get(SnipSniper.getMainFolder()).resolve(ze.getName());
                         try (FileOutputStream fos = new FileOutputStream(filePath.toFile());
                             BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length)) {
                             int len;
@@ -1046,13 +1050,10 @@ public class ConfigWindow extends JFrame {
                                 filename = filename.substring(1);
                             ZipEntry zipEntry = new ZipEntry(filename);
                             out.putNextEntry(zipEntry);
-                            byte[] data = new String(Files.readAllBytes(Paths.get(file))).getBytes();
-                            out.write(data, 0, data.length);
+                            Files.copy(new File(file).toPath(), out);
                             out.closeEntry();
                         }
                     }
-
-
                     out.close();
                 } catch (IOException ex) {
                     ex.printStackTrace();
