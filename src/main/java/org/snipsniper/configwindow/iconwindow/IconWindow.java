@@ -50,6 +50,13 @@ public class IconWindow extends JFrame {
         final int MAX_X = 4;
         String[] list = Icons.getListAsString();
         int size = getRootPane().getWidth()/5;
+        JButton defaultButton = new JButton("Default");
+        defaultButton.addActionListener(e -> {
+            onSelectIcon.run("none");
+            dispose();
+        });
+        content.add(defaultButton, gbc);
+        gbc.gridx++;
         for (String file : list) {
             if (file.contains("icons")) {
                 IDJButton button = new IDJButton(file);

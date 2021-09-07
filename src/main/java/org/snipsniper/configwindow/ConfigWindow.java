@@ -22,7 +22,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -239,6 +242,8 @@ public class ConfigWindow extends JFrame {
 
         final ColorChooser[] colorChooser = {null};
         final boolean[] allowSaving = {true};
+        AtomicBoolean restartProfiles = new AtomicBoolean(false);
+        ArrayList<Function> runOnSave = new ArrayList<>();
 
         Config config;
         boolean disablePage = false;
@@ -268,17 +273,16 @@ public class ConfigWindow extends JFrame {
         JButton iconButton = new JButton("Set Icon");
         iconButton.addActionListener(e -> new IconWindow(args -> {
             if(args[0].equals("custom")) {
-                try {
-                    //You might think we should only do this if you save, but i dont care.
-                    //It doesnt get used if you dont save :^)
-                    Files.copy(new File(args[1]).toPath(), new File(SnipSniper.getImageFolder() + "/" + config.getFilename().replace(Config.EXTENSION, "png")).toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    config.set(ConfigHelper.PROFILE.icon, args[0]);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            } else {
-                config.set(ConfigHelper.PROFILE.icon, args[0]);
+                runOnSave.add(args1 -> {
+                    try {
+                        Files.copy(new File(args[1]).toPath(), new File(SnipSniper.getImageFolder() + "/" + config.getFilename().replace(Config.EXTENSION, "png")).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
             }
+            config.set(ConfigHelper.PROFILE.icon, args[0]);
+            restartProfiles.set(true);
         }));
         options.add(iconButton, gbc);
         //END ICON
@@ -551,12 +555,14 @@ public class ConfigWindow extends JFrame {
         JButton saveAndClose = new JButton(LangManager.getItem("config_label_saveclose"));
         saveAndClose.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
-                boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
+                //boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
+                for(Function function : runOnSave)
+                    function.run();
                 for(CustomWindowListener listener : listeners)
                     listener.windowClosed();
-                if(didIconChange)
+                if(restartProfiles.get())
                     SnipSniper.resetProfiles();
                 close();
             }
@@ -565,13 +571,15 @@ public class ConfigWindow extends JFrame {
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
-                boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
+                //boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
                 //This prevents a bug where the other tabs have an outdated config
                 tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
                 tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
-                if(didIconChange)
+                for(Function function : runOnSave)
+                    function.run();
+                if(restartProfiles.get())
                     SnipSniper.resetProfiles();
             }
         });
