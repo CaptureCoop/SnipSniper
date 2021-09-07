@@ -81,7 +81,6 @@ editorStampRectangleThickness,
 public enum BUILDINFO { 
 type, 
 version, 
-build, 
 builddate, 
 githash, 
 } 

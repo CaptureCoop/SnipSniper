@@ -269,7 +269,7 @@ public final class SnipSniper {
 	}
 
 	public static String getVersion() {
-		return BUILDINFO.getString(ConfigHelper.BUILDINFO.version) + "." + BUILDINFO.getString(ConfigHelper.BUILDINFO.build);
+		return BUILDINFO.getString(ConfigHelper.BUILDINFO.version);
 	}
 
 	public static String getProfilesFolder() {
