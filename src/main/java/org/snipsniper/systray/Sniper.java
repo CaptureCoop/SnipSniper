@@ -111,6 +111,7 @@ public class Sniper {
 						}
 				}
 
+				image.flush();
 				trayIcon = new TrayIcon(image, "SnipSniper (Profile " + profileID + ")");
 				trayIcon.setImageAutoSize(true);
 
