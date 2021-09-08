@@ -72,6 +72,7 @@ public class SCEditorListener extends SnipScopeListener {
             case KeyEvent.VK_4: scEditorWindow.setSelectedStamp(3); break;
             case KeyEvent.VK_5: scEditorWindow.setSelectedStamp(4); break;
             case KeyEvent.VK_6: scEditorWindow.setSelectedStamp(5); break;
+            case KeyEvent.VK_7: scEditorWindow.setSelectedStamp(6); break;
         }
 
         if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_S)) {

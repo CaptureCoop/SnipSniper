@@ -77,6 +77,9 @@ editorStampRectangleHeightMinimum,
 editorStampRectangleWidthSpeed, 
 editorStampRectangleHeightSpeed, 
 editorStampRectangleThickness, 
+editorStampEraserDistance, 
+editorStampEraserSize, 
+editorStampEraserSizeSpeed, 
 } 
 public enum BUILDINFO { 
 type, 

@@ -27,10 +27,11 @@ public class SCEditorWindow extends SnipScopeWindow {
     private final String title;
     private String saveLocation;
     private boolean inClipboard;
+    private BufferedImage originalImage;
 
     final static int X_OFFSET = 8;
 
-    private final IStamp[] stamps = new IStamp[6];
+    private final IStamp[] stamps = new IStamp[7];
     private int selectedStamp = 0;
 
     private final SCEditorListener listener;
@@ -66,6 +67,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         stamps[3] = new SimpleBrush(config, this);
         stamps[4] = new TextStamp(config, this);
         stamps[5] = new RectangleStamp(config);
+        stamps[6] = new EraserStamp(this, config);
 
         if(image == null) {
             image = Utils.getDragPasteImage(Icons.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
@@ -74,6 +76,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         renderer = new SCEditorRenderer(this);
         listener = new SCEditorListener(this);
 
+        originalImage = Utils.copyImage(image);
         init(image, renderer, listener);
 
         listener.resetHistory();
@@ -215,6 +218,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         if(isNewImage) {
             resetZoom();
             renderer.resetPreview();
+            originalImage = Utils.copyImage(image);
         }
     }
 
@@ -268,5 +272,9 @@ public class SCEditorWindow extends SnipScopeWindow {
 
     public boolean isEzMode() {
         return ezMode;
+    }
+
+    public BufferedImage getOriginalImage() {
+        return originalImage;
     }
 }
