@@ -13,6 +13,7 @@ import org.snipsniper.SnipSniper;
 import org.snipsniper.LogManager;
 import org.snipsniper.utils.LogLevel;
 import org.snipsniper.utils.SSColor;
+import org.snipsniper.utils.StringUtils;
 import org.snipsniper.utils.Utils;
 
 public class Config {
@@ -101,7 +102,7 @@ public class Config {
 	public String getString(String key) {
 		String str = getRawString(key);
 		if(str != null) {
-			str = Utils.replaceVars(str);
+			str = StringUtils.replaceVars(str);
 		}
 		return str;
 	}

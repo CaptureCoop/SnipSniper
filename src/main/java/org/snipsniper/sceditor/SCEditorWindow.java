@@ -11,6 +11,7 @@ import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.Icons;
 import org.snipsniper.LogManager;
 import org.snipsniper.utils.LogLevel;
+import org.snipsniper.utils.StringUtils;
 import org.snipsniper.utils.Utils;
 
 import javax.swing.*;
@@ -250,7 +251,7 @@ public class SCEditorWindow extends SnipScopeWindow {
     }
 
     public String toString() {
-        return Utils.formatArgs("SCEditorWindow Pos:[%c] Path:[%c]", getLocation(), saveLocation);
+        return StringUtils.format("SCEditorWindow Pos:[%c] Path:[%c]", getLocation(), saveLocation);
     }
 
     public void setEzMode(boolean value) {

@@ -378,7 +378,7 @@ public class ConfigWindow extends JFrame {
                 if(!saveLocationFinal.endsWith("/"))
                     saveLocationFinal += "/";
 
-                saveLocationFinal = Utils.replaceVars(saveLocationFinal);
+                saveLocationFinal = StringUtils.replaceVars(saveLocationFinal);
 
                 File saveLocationCheck = new File(saveLocationFinal);
                 if(!saveLocationCheck.exists()) {
@@ -410,7 +410,7 @@ public class ConfigWindow extends JFrame {
         gbc.gridx = 0;
         options.add(createJLabel("Save folder modifier", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
-        JButton customSaveButton = new JButton(Utils.formatDateArguments(config.getString(ConfigHelper.PROFILE.saveFolderCustom)));
+        JButton customSaveButton = new JButton(StringUtils.formatDateArguments(config.getString(ConfigHelper.PROFILE.saveFolderCustom)));
         customSaveButton.addActionListener(e -> {
             FolderPreview preview = new FolderPreview("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom));
             int x = (int) (getLocation().getX() + getWidth() / 2) - preview.getWidth() / 2;
@@ -421,7 +421,7 @@ public class ConfigWindow extends JFrame {
                 if(text.isEmpty())
                     text = "/";
                 config.set(ConfigHelper.PROFILE.saveFolderCustom, text);
-                customSaveButton.setText(Utils.formatDateArguments(text));
+                customSaveButton.setText(StringUtils.formatDateArguments(text));
             });
         });
         options.add(customSaveButton, gbc);

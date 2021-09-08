@@ -298,7 +298,7 @@ public final class SnipSniper {
 	}
 
 	public static String getMainFolder() {
-		return Utils.correctSlashes(mainFolder);
+		return StringUtils.correctSlashes(mainFolder);
 	}
 
 	public static Config getConfig() {

@@ -5,7 +5,6 @@ import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
-import org.apache.commons.lang3.SystemUtils;
 import org.snipsniper.config.ConfigHelper;
 
 import javax.imageio.ImageIO;
@@ -14,8 +13,6 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URISyntaxException;
@@ -79,20 +76,9 @@ public class Utils {
 		return LaunchType.NORMAL;
 	}
 
-	public static String replaceVars(String string) {
-		if(string.contains("%username%")) string = string.replace("%username%", System.getProperty("user.name"));
-		if(SystemUtils.IS_OS_WINDOWS) if(string.contains("%userprofile%")) string = string.replace("%userprofile%", System.getenv("USERPROFILE"));
-		if(SystemUtils.IS_OS_LINUX) if(string.contains("%userprofile%")) string = string.replace("%userprofile%", System.getProperty("user.home"));
-		return string;
-	}
-
 	public static Color getContrastColor(Color color) {
 		double y = (299f * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
 		return y >= 128 ? Color.black : Color.white;
-	}
-
-	public static void printArgs(PrintStream out, final String message, final Object... args) {
-		out.println(formatArgs(message, args));
 	}
 
 	public static BufferedImage getDragPasteImage(BufferedImage icon, String text) {
@@ -136,13 +122,9 @@ public class Utils {
 			if(file.isDirectory())
 				result.addAll(getFilesInFolders(file.getAbsolutePath()));
 			if(!file.isDirectory())
-				result.add(Utils.correctSlashes(file.getAbsolutePath()));
+				result.add(StringUtils.correctSlashes(file.getAbsolutePath()));
 		}
 		return result;
-	}
-
-	public static String correctSlashes(String string) {
-		return string.replaceAll("\\\\", "/").replaceAll("//", "/");
 	}
 
 	public static void jsonLang() {
@@ -185,15 +167,6 @@ public class Utils {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static String formatDateArguments(String string) {
-		String returnVal = string;
-		LocalDate currentDate = LocalDate.now();
-		returnVal = returnVal.replaceAll("%day%", String.valueOf(currentDate.getDayOfMonth()));
-		returnVal = returnVal.replaceAll("%month%", String.valueOf(currentDate.getMonthValue()));
-		returnVal = returnVal.replaceAll("%year%", String.valueOf(currentDate.getYear()));
-		return returnVal;
 	}
 
 	public static String getFileExtension(File file) {
@@ -261,13 +234,6 @@ public class Utils {
 		return image;
 	}
 
-	public static String getDateWithProperZero(int date) {
-		String dateString = date + "";
-		if(date < 10)
-			dateString = "0" + date;
-		return dateString;
-	}
-
 	public static String saveImage(BufferedImage finalImg, String modifier, Config config) {
 		File file;
 		String filename = Utils.constructFilename(modifier);
@@ -275,15 +241,15 @@ public class Utils {
 		String pathCustom = config.getString(ConfigHelper.PROFILE.saveFolderCustom);
 		if(!pathCustom.startsWith("/"))
 			pathCustom = "/" + pathCustom;
-		savePath += Utils.formatDateArguments(pathCustom);
+		savePath += StringUtils.formatDateArguments(pathCustom);
 
 		String savePathModifier = "";
 
 		if(config.getBool(ConfigHelper.PROFILE.dateFolders)) {
 			LocalDate currentDate = LocalDate.now();
 
-			String dayString = getDateWithProperZero(currentDate.getDayOfMonth());
-			String monthString = getDateWithProperZero(currentDate.getMonthValue());
+			String dayString = StringUtils.getDateWithProperZero(currentDate.getDayOfMonth());
+			String monthString = StringUtils.getDateWithProperZero(currentDate.getMonthValue());
 
 			savePathModifier = "\\" + config.getString(ConfigHelper.PROFILE.dateFoldersFormat);
 			savePathModifier = savePathModifier.replaceAll("%day%", dayString);
@@ -328,18 +294,6 @@ public class Utils {
 		String filename = now.toString().replace(".", "_").replace(":", "_");
 		filename += modifier + ".png";
 		return filename;
-	}
-
-	public static String formatArgs(final String message, final Object ...args) {
-		final int size = args.length;
-		String newMessage = message;
-		for(int i = 0; i < size; i++) {
-			String replacer = "NULL";
-			if(args[i] != null)
-				replacer = args[i].toString();
-			newMessage = newMessage.replaceFirst("%c", replacer);
-		}
-		return newMessage;
 	}
 	
 	public static BufferedImage resizeImage(BufferedImage original, int width, int height) {
@@ -386,7 +340,7 @@ public class Utils {
 		String path = "org/snipsniper/resources/" + file;
 		InputStream inputStream = ClassLoader.getSystemResourceAsStream(path);
 		if(inputStream == null)
-			throw new FileNotFoundException(Utils.formatArgs("Could not load file %c from jar!", path));
+			throw new FileNotFoundException(StringUtils.format("Could not load file %c from jar!", path));
 		InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 		BufferedReader in = new BufferedReader(streamReader);
 

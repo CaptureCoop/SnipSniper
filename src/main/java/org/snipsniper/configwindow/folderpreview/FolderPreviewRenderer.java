@@ -1,7 +1,7 @@
 package org.snipsniper.configwindow.folderpreview;
 
 import org.snipsniper.utils.Icons;
-import org.snipsniper.utils.Utils;
+import org.snipsniper.utils.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +25,7 @@ public class FolderPreviewRenderer extends JPanel {
     @Override
     public void paint(Graphics g) {
         String content = folderPreview.getText().replaceAll("\\\\", "/");
-        content = Utils.formatDateArguments(content);
+        content = StringUtils.formatDateArguments(content);
         String[] parts = content.split("/");
         ArrayList<String> partsFinal = new ArrayList<>();
         for(String str : parts) {
