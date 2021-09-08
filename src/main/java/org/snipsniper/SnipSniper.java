@@ -29,8 +29,9 @@ import org.jnativehook.NativeHookException;
 import org.snipsniper.utils.*;
 
 public final class SnipSniper {
-	public static Config BUILDINFO;
-	
+	private static Version version;
+	private static Config config;
+
 	private static String jarFolder;
 	private static String mainFolder;
 	private static String profilesFolder;
@@ -45,13 +46,7 @@ public final class SnipSniper {
 
 	private static boolean isDemo = false;
 
-	private static Config config;
-
 	private static DebugConsole debugConsole;
-
-	private static LaunchType launchType = LaunchType.NORMAL;
-	private static ReleaseType releaseType = ReleaseType.UNKNOWN;
-	private static PlatformType platformType = PlatformType.JAR;
 
 	public static void start(String[] args) {
 		if(!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
@@ -61,14 +56,20 @@ public final class SnipSniper {
 
 		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
 
-		BUILDINFO = new Config("buildinfo.cfg", "buildinfo.cfg");
-		releaseType = Utils.getReleaseType(BUILDINFO.getString(ConfigHelper.BUILDINFO.type));
+		LaunchType launchType = Utils.getLaunchType(System.getProperty("launchType"));
+
+		Config buildinfo = new Config("buildinfo.cfg", "buildinfo.cfg");
+		ReleaseType releaseType = Utils.getReleaseType(buildinfo.getString(ConfigHelper.BUILDINFO.type));
+		PlatformType platformType = Utils.getPlatformType(System.getProperty("platform"));
+		String digits = buildinfo.getString(ConfigHelper.BUILDINFO.version);
+		String buildDate = buildinfo.getString(ConfigHelper.BUILDINFO.builddate);
+		String githash = buildinfo.getString(ConfigHelper.BUILDINFO.githash);
+
+		version = new Version(digits, releaseType, platformType, buildDate, githash);
+
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
-
-		platformType = Utils.getPlatformType(System.getProperty("platform"));
-		launchType = Utils.getLaunchType(System.getProperty("launchType"));
 
 		LogManager.setEnabled(true);
 
@@ -122,7 +123,7 @@ public final class SnipSniper {
 
 		LangManager.load();
 
-		LogManager.log("Launching SnipSniper Version " + getVersion() + " (rev-" + BUILDINFO.getString(ConfigHelper.BUILDINFO.githash) + ")", LogLevel.INFO);
+		LogManager.log("Launching SnipSniper Version " + getVersion() + " (rev-" + version.getGithash() + ")", LogLevel.INFO);
 		if(SystemUtils.IS_OS_LINUX) {
 			LogManager.log("=================================================================================", LogLevel.WARNING);
 			LogManager.log("= SnipSniper Linux is still in development and may not work properly or at all. =", LogLevel.WARNING);
@@ -265,8 +266,8 @@ public final class SnipSniper {
 		System.exit(0);
 	}
 
-	public static String getVersion() {
-		return BUILDINFO.getString(ConfigHelper.BUILDINFO.version);
+	public static Version getVersion() {
+		return version;
 	}
 
 	public static String getProfilesFolder() {
@@ -360,13 +361,5 @@ public final class SnipSniper {
 			debugConsole.dispose();
 			debugConsole = null;
 		}
-	}
-
-	public static ReleaseType getReleaseType() {
-		return releaseType;
-	}
-
-	public static PlatformType getPlatformType() {
-		return platformType;
 	}
 }

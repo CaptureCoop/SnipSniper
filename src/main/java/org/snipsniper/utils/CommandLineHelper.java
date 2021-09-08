@@ -1,7 +1,6 @@
 package org.snipsniper.utils;
 
 import org.snipsniper.SnipSniper;
-import org.snipsniper.config.ConfigHelper;
 
 public class CommandLineHelper {
     private String language;
@@ -33,7 +32,7 @@ public class CommandLineHelper {
                     break;
                 case "-version":
                 case "-v":
-                    System.out.println(SnipSniper.getVersion() + "-" + SnipSniper.getReleaseType().toString().toLowerCase() + " rev-" + SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.githash));
+                    System.out.println(SnipSniper.getVersion().getDigits() + "-" + SnipSniper.getVersion().getReleaseType().toString().toLowerCase() + " rev-" + SnipSniper.getVersion().getGithash());
                     doExit = true;
                     break;
                 case "-demo":

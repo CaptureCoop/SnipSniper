@@ -7,6 +7,7 @@ import org.snipsniper.utils.Function;
 import org.snipsniper.utils.Icons;
 import org.snipsniper.LangManager;
 import org.snipsniper.utils.Links;
+import org.snipsniper.utils.Version;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -52,8 +53,8 @@ public class btnAbout extends PopupMenuButton {
 				label.addMouseListener(new MouseAdapter() {
 					int index = 0;
 
-					BufferedImage[] icons = {Icons.getImage("icons/snipsniper.png"), Icons.getImage("icons/editor.png"), Icons.getImage("icons/viewer.png"), Icons.getImage("icons/console.png")};
-					HashMap<String, Image> cache = new HashMap<>();
+					final BufferedImage[] icons = {Icons.getImage("icons/snipsniper.png"), Icons.getImage("icons/editor.png"), Icons.getImage("icons/viewer.png"), Icons.getImage("icons/console.png")};
+					final HashMap<String, Image> cache = new HashMap<>();
 
 					@Override
 					public void mouseReleased(MouseEvent mouseEvent) {
@@ -149,10 +150,11 @@ public class btnAbout extends PopupMenuButton {
 
 		inputStream.close();
 		streamReader.close();
-		html = html.replace("%VERSION%", SnipSniper.getVersion());
-		html = html.replace("%TYPE%", SnipSniper.getReleaseType().toString().toLowerCase());
-		html = html.replace("%BUILDDATE%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.builddate));
-		html = html.replaceAll("%HASH%", SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.githash));
+		Version v = SnipSniper.getVersion();
+		html = html.replace("%VERSION%", v.getDigits());
+		html = html.replace("%TYPE%", v.getReleaseType().toString().toLowerCase());
+		html = html.replace("%BUILDDATE%", v.getBuildDate());
+		html = html.replaceAll("%HASH%", v.getGithash());
 		html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming"));
 		html = html.replace("%ABOUT_CD%", LangManager.getItem("about_cd"));
 		html = html.replace("%ABOUT_MATH%", LangManager.getItem("about_math"));

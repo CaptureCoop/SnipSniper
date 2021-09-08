@@ -84,7 +84,7 @@ public class LogManager {
         String finalMsg = escapeHtml4(msg.toString()).replaceAll(" ", "&nbsp;");
         finalMsg = finalMsg.replaceAll("%NEWLINE%", "<br>");
         if(SnipSniper.getConfig() != null && finalMsg.contains("org.snipsniper")) {
-            String baseTreeLink = "https://github.com/SvenWollinger/SnipSniper/tree/" + SnipSniper.BUILDINFO.getString(ConfigHelper.BUILDINFO.githash) + "/src/main/java/";
+            String baseTreeLink = "https://github.com/SvenWollinger/SnipSniper/tree/" + SnipSniper.getVersion().getGithash() + "/src/main/java/";
             String link = baseTreeLink + currentStackTrace.getClassName().replaceAll("\\.", "/") + ".java#L" + currentStackTrace.getLineNumber();
             finalMsg = finalMsg.replace(":" + currentStackTrace.getLineNumber() + "]", ":" + currentStackTrace.getLineNumber() + " <a href='" + link + "'>@</a>]");
         }

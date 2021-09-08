@@ -5,13 +5,21 @@ import java.util.Arrays;
 public class Version {
     private static final int MAX_DIGITS = 3;
     private final int[] digits;
+    private ReleaseType releaseType = ReleaseType.UNKNOWN;
+    private PlatformType platformType = PlatformType.UNKNOWN;
+    private String buildDate = "UNKNOWN";
+    private String githash = "UNKNOWN";
 
-    public Version(String version) {
-        digits = new int[MAX_DIGITS];
-        String[] parts = StringUtils.removeWhitespace(version).split("\\.");
-        for(int i = 0; i < MAX_DIGITS; i++) {
-            digits[i] = Integer.parseInt(parts[i]);
-        }
+    public Version(String digits) {
+        this.digits = digitsFromString(digits);
+    }
+
+    public Version(String digits, ReleaseType releaseType, PlatformType platformType, String buildDate, String githash) {
+        this.digits = digitsFromString(digits);
+        this.releaseType = releaseType;
+        this.platformType = platformType;
+        this.buildDate = buildDate;
+        this.githash = githash;
     }
 
     public boolean isNewerThen(Version other) {
@@ -27,10 +35,34 @@ public class Version {
         } else {
             return false;
         }
-
     }
 
-    public String toString() {
+    public int[] digitsFromString(String string) {
+        int[] ints = new int[MAX_DIGITS];
+        String[] parts = StringUtils.removeWhitespace(string).split("\\.");
+        for(int i = 0; i < MAX_DIGITS; i++) {
+            ints[i] = Integer.parseInt(parts[i]);
+        }
+        return ints;
+    }
+
+    public String getDigits() {
         return StringUtils.format("%c.%c.%c", digits[0], digits[1], digits[2]);
+    }
+
+    public ReleaseType getReleaseType() {
+        return releaseType;
+    }
+
+    public PlatformType getPlatformType() {
+        return platformType;
+    }
+
+    public String getBuildDate() {
+        return buildDate;
+    }
+
+    public String getGithash() {
+        return githash;
     }
 }
