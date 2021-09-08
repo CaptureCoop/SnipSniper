@@ -96,7 +96,7 @@ public class ConfigWindow extends JFrame {
 
         snipConfigPanel = new JPanel();
         tabPane.addTab("SnipSniper",  setupSnipPane(config));
-        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/snipsnipger.png").getScaledInstance(iconSize, iconSize, 0)));
+        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)));
         if(page == PAGE.snipPanel)
             enableIndex = index;
         index++;
