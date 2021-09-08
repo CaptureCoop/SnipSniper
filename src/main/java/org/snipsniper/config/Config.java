@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.logging.Level;
 
 import org.snipsniper.SnipSniper;
 import org.snipsniper.LogManager;
@@ -42,7 +41,7 @@ public class Config {
 		this.filename = filename;
 		LogManager.log("Creating config object for <" + filename + ">.", LogLevel.INFO);
 		try {
-			String filePath = SnipSniper.getProfilesFolder() + filename;
+			String filePath = SnipSniper.getConfigFolder() + filename;
 			String defaultPath = "/org/snipsniper/resources/cfg/" + defaultFile;
 			if(new File(filePath).exists())
 				loadFile(filePath, settings, false);
@@ -91,7 +90,7 @@ public class Config {
 		else if(defaults.containsKey(key))
 			returnVal = defaults.get(key);
 		else
-			LogManager.log("No value found for <" + key + "> in Config <" + SnipSniper.getProfilesFolder() + filename + ">.", LogLevel.ERROR, true);
+			LogManager.log("No value found for <" + key + "> in Config <" + SnipSniper.getConfigFolder() + filename + ">.", LogLevel.ERROR, true);
 		return returnVal;
 	}
 
@@ -168,14 +167,14 @@ public class Config {
 	}
 	
 	public void deleteFile() {
-		File file = new File(SnipSniper.getProfilesFolder() + "/" + filename);
+		File file = new File(SnipSniper.getConfigFolder() + "/" + filename);
 		if(!file.delete())
 			LogManager.log("Could not delete profile config!", LogLevel.WARNING);
 	}
 	
 	private void saveFile(ConfigContainer container) {
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(SnipSniper.getProfilesFolder() + "/" + filename));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(SnipSniper.getConfigFolder() + "/" + filename));
 			for(ConfigOption option : container.getList())
 				writer.write(option.toString() + "\n");
 

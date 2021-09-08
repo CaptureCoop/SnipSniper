@@ -34,7 +34,7 @@ public final class SnipSniper {
 
 	private static String jarFolder;
 	private static String mainFolder;
-	private static String profilesFolder;
+	private static String configFolder;
 	private static String logFolder;
 	private static String imgFolder;
 
@@ -85,7 +85,7 @@ public final class SnipSniper {
 			setSaveLocationToJar();
 
 		if(!isDemo) {
-			if(!FileUtils.mkdirs(profilesFolder, logFolder, imgFolder)) {
+			if(!FileUtils.mkdirs(configFolder, logFolder, imgFolder)) {
 				LogManager.log("Could not create required folders! Exiting...", LogLevel.ERROR);
 				exit(false);
 			}
@@ -214,7 +214,7 @@ public final class SnipSniper {
 
 		if(!SystemTray.isSupported()) new ConfigWindow(profiles[0].getConfig(), ConfigWindow.PAGE.snipPanel);
 		for (int i = 1; i < PROFILE_COUNT; i++) {
-			if (new File(profilesFolder + "profile" + (i) + ".cfg").exists()) {
+			if (new File(configFolder + "profile" + (i) + ".cfg").exists()) {
 				profiles[i] = new Sniper(i);
 			}
 		}
@@ -223,7 +223,7 @@ public final class SnipSniper {
 	public static void setSaveLocationToDocuments() {
 		SnipSniper.jarFolder = System.getProperty("user.home");
 		SnipSniper.mainFolder = jarFolder + "/.SnipSniper";
-		SnipSniper.profilesFolder = mainFolder + "/cfg/";
+		SnipSniper.configFolder = mainFolder + "/cfg/";
 		SnipSniper.logFolder = mainFolder + "/logs/";
 		SnipSniper.imgFolder = mainFolder + "/img/";
 	}
@@ -246,7 +246,7 @@ public final class SnipSniper {
 				jarFolder = folderToUseString;
 
 			mainFolder = jarFolder + "/SnipSniper";
-			profilesFolder = mainFolder + "/cfg/";
+			configFolder = mainFolder + "/cfg/";
 			logFolder = mainFolder + "/logs/";
 			imgFolder = mainFolder + "/img/";
 		}
@@ -270,8 +270,8 @@ public final class SnipSniper {
 		return version;
 	}
 
-	public static String getProfilesFolder() {
-		return profilesFolder;
+	public static String getConfigFolder() {
+		return configFolder;
 	}
 
 	public static int getProfileCountMax() {

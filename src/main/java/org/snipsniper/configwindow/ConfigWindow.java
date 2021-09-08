@@ -75,8 +75,8 @@ public class ConfigWindow extends JFrame {
 
     public void refreshConfigFiles() {
         configFiles.clear();
-        File profileFolder = new File(SnipSniper.getProfilesFolder());
-        File[] files = profileFolder.listFiles();
+        File cfgFolder = new File(SnipSniper.getConfigFolder());
+        File[] files = cfgFolder.listFiles();
         if(files != null) {
             for (File file : files) {
                 if (Utils.getFileExtension(file).equals(Config.DOT_EXTENSION))
@@ -571,7 +571,6 @@ public class ConfigWindow extends JFrame {
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
-                //boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
                 //This prevents a bug where the other tabs have an outdated config
@@ -987,7 +986,7 @@ public class ConfigWindow extends JFrame {
             }
 
             File imgFolder = new File(SnipSniper.getImageFolder());
-            File cfgFolder = new File(SnipSniper.getProfilesFolder());
+            File cfgFolder = new File(SnipSniper.getConfigFolder());
             FileUtils.delete(imgFolder); FileUtils.mkdirs(imgFolder);
             FileUtils.delete(cfgFolder); FileUtils.mkdirs(cfgFolder);
 
