@@ -8,7 +8,7 @@ import org.snipsniper.utils.Version;
 public class VersionTest {
     @Test
     public void test() {
-        assertTrue(new Version("1.0.0").isNewerThen(new Version("0.9.5")));
-        assertFalse(new Version("1.5.10").isNewerThen(new Version("1.5.10")));
+        assertTrue(new Version("1.0.0").isNewerThan(new Version("0.9.5")));
+        assertFalse(new Version("1.5.10").isNewerThan(new Version("1.5.10")));
     }
 }

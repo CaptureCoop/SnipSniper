@@ -22,7 +22,7 @@ public class Version {
         this.githash = githash;
     }
 
-    public boolean isNewerThen(Version other) {
+    public boolean isNewerThan(Version other) {
         int[] otherArr = other.digits;
         if(Arrays.equals(digits, otherArr)) return false;
         if(digits[0] > otherArr[0]) {
