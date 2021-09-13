@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 
 public class Links {
     public static String KOFI = "https://ko-fi.com/SvenWollinger";
+    public static String VERSION_TXT = "https://raw.githubusercontent.com/SvenWollinger/SnipSniper/master/version.txt";
 
     public static URI getURI(String link) {
         try {

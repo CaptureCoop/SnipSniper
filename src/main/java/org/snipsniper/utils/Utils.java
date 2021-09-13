@@ -15,7 +15,9 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -55,6 +57,32 @@ public class Utils {
 		}
 
 		return PlatformType.UNKNOWN;
+	}
+
+	public static String getTextFromWebsite(String url) {
+		try {
+			return getTextFromWebsite(new URL(url));
+		} catch (MalformedURLException malformedURLException) {
+			LogManager.log("Issue forming url: " + url, LogLevel.ERROR);
+		}
+		return null;
+	}
+
+	public static String getTextFromWebsite(URL url) {
+		StringBuilder result = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+
+			String line;
+			while ((line = in.readLine()) != null) {
+				result.append(line);
+			}
+			in.close();
+
+		} catch (Exception e) {
+			LogManager.log("Error requesting text from website (" + url.toString() + "): " + e.getMessage(), LogLevel.ERROR);
+		}
+		return result.toString();
 	}
 
 	public static ReleaseType getReleaseType(String string) {
