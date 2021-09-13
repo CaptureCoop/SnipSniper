@@ -7,6 +7,7 @@ import org.snipsniper.snipscope.SnipScopeRenderer;
 import org.snipsniper.snipscope.SnipScopeWindow;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.ClockDirection;
+import org.snipsniper.utils.FileUtils;
 import org.snipsniper.utils.Icons;
 import org.snipsniper.utils.Utils;
 import org.apache.commons.lang3.SystemUtils;
@@ -140,7 +141,7 @@ public class SCViewerWindow extends SnipScopeWindow {
         ArrayList<File> folder = new ArrayList<>(Arrays.asList(path.listFiles()));
         files.clear();
         for(File cFile : folder) {
-            if(extensions.contains(Utils.getFileExtension(cFile).toLowerCase()))
+            if(extensions.contains(FileUtils.getFileExtension(cFile).toLowerCase()))
                 files.add(cFile.getAbsolutePath());
         }
     }
@@ -191,7 +192,7 @@ public class SCViewerWindow extends SnipScopeWindow {
 
     public BufferedImage getImageFromFile(File file) {
         if(file.exists()) {
-            if(!extensions.contains(Utils.getFileExtension(file).toLowerCase()))
+            if(!extensions.contains(FileUtils.getFileExtension(file).toLowerCase()))
                 return null;
 
             BufferedImage image = null;

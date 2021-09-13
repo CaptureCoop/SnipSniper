@@ -10,10 +10,7 @@ import java.io.InputStreamReader;
 
 import org.snipsniper.SnipSniper;
 import org.snipsniper.LogManager;
-import org.snipsniper.utils.LogLevel;
-import org.snipsniper.utils.SSColor;
-import org.snipsniper.utils.StringUtils;
-import org.snipsniper.utils.Utils;
+import org.snipsniper.utils.*;
 
 public class Config {
 	private final ConfigContainer settings = new ConfigContainer();
@@ -113,7 +110,7 @@ public class Config {
 	public int getInt(String key) {
 		if(getString(key) != null) {
 			String value = getString(key);
-			if(Utils.isDouble(value))
+			if(MathUtils.isDouble(value))
 				return (int) Double.parseDouble(value);
 			else return Integer.parseInt(getString(key));
 		}

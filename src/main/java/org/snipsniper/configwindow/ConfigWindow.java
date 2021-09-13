@@ -79,7 +79,7 @@ public class ConfigWindow extends JFrame {
         File[] files = cfgFolder.listFiles();
         if(files != null) {
             for (File file : files) {
-                if (Utils.getFileExtension(file).equals(Config.DOT_EXTENSION))
+                if (FileUtils.getFileExtension(file).equals(Config.DOT_EXTENSION))
                     configFiles.add(file);
             }
         }
@@ -1034,7 +1034,7 @@ public class ConfigWindow extends JFrame {
                 if(!path.endsWith(".zip")) path += ".zip";
                 File zip = new File(path);
                 String mainFolder = SnipSniper.getMainFolder();
-                ArrayList<String> files = Utils.getFilesInFolders(mainFolder);
+                ArrayList<String> files = FileUtils.getFilesInFolders(mainFolder);
                 try {
                     ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip));
                     for(String file : files) {

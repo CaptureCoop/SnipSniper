@@ -26,24 +26,6 @@ import java.util.Collections;
 import java.util.Iterator;
 
 public class Utils {
-	
-	public static boolean isInteger(String string) {
-	    try {
-	        Integer.valueOf(string);
-	        return true;
-	    } catch (NumberFormatException e) {
-	        return false;
-	    }
-	}
-
-	public static boolean isDouble(String string) {
-		try {
-			Double.valueOf(string);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
 
 	public static PlatformType getPlatformType(String string) {
 		if(string == null || string.isEmpty())
@@ -144,17 +126,6 @@ public class Utils {
 		return true;
 	}
 
-	public static ArrayList<String> getFilesInFolders(String path) {
-		ArrayList<String> result = new ArrayList<>();
-		for(File file : new File(path).listFiles()) {
-			if(file.isDirectory())
-				result.addAll(getFilesInFolders(file.getAbsolutePath()));
-			if(!file.isDirectory())
-				result.add(StringUtils.correctSlashes(file.getAbsolutePath()));
-		}
-		return result;
-	}
-
 	public static void jsonLang() {
 		System.out.println("Creating language debug files under \\lang\\...\n");
 		if(!new File("lang").mkdir() && !new File("lang").exists()) {
@@ -164,7 +135,7 @@ public class Utils {
 		LangManager.load();
 
 		JSONObject en = LangManager.getJSON("en");
-		printFile("lang/en.json", en.toString());
+		FileUtils.printFile("lang/en.json", en.toString());
 
 		for(String language : LangManager.languages) {
 			boolean successfull = true;
@@ -180,30 +151,11 @@ public class Utils {
 				}
 			}
 			if(!successfull) {
-				printFile("lang/" + language + ".json", LangManager.getJSON(language).toString());
+				FileUtils.printFile("lang/" + language + ".json", LangManager.getJSON(language).toString());
 				System.out.println("Missing lines found for " + language + ".json\n");
 			}
 		}
 		System.out.println("Done. If no issues were reported you are golden :^)");
-	}
-
-	public static void printFile(String filename, String text) {
-		try {
-			PrintWriter out = new PrintWriter(filename);
-			out.print(text);
-			out.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static String getFileExtension(File file) {
-		String name = file.getName();
-		int lastIndexOf = name.lastIndexOf(".");
-		if (lastIndexOf == -1) {
-			return ""; // empty extension
-		}
-		return name.substring(lastIndexOf);
 	}
 
 	public static Image getImageFromClipboard() {
