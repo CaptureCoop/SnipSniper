@@ -1057,6 +1057,41 @@ public class ConfigWindow extends JFrame {
         importExportPanel.add(importConfigs);
         importExportPanel.add(exportButton);
         options.add(importExportPanel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.insets.bottom = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        final String STATE_WAITING = "waiting";
+        final String STATE_DOUPDATE = "update";
+        final String STATE_IDLE = "idle";
+        IDJButton updateButton = new IDJButton("Check for update", STATE_WAITING);
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(updateButton.getID().equals(STATE_WAITING)) {
+                    updateButton.setText("Checking for update...");
+                    Version onlineVersion = new Version(Utils.getTextFromWebsite(Links.VERSION_TXT));
+                    Version currentVersion = SnipSniper.getVersion();
+                    if (onlineVersion.equals(currentVersion) || currentVersion.isNewerThan(onlineVersion)) {
+                        updateButton.setText("Up to date!");
+                        updateButton.setID(STATE_IDLE);
+                    } else if (onlineVersion.isNewerThan(currentVersion)) {
+                        updateButton.setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Click here to update</p></html>", onlineVersion.getDigits()));
+                        updateButton.setID(STATE_DOUPDATE);
+                    } else {
+                        updateButton.setText("Error. Check console.");
+                        LogManager.log("Issue checking for updates. Our Version: %c, Online version: %c", LogLevel.ERROR, currentVersion.getDigits(), onlineVersion.getDigits());
+                        updateButton.setID(STATE_IDLE);
+                    }
+                } else if(updateButton.getID().equals(STATE_DOUPDATE)) {
+                    //TODO: Do Update
+                }
+            }
+        });
+        options.add(updateButton, gbc);
+        gbc.insets.bottom = 20;
+        options.add(createJLabel("Current Version: " + SnipSniper.getVersion().getDigits(), JLabel.CENTER, JLabel.CENTER), gbc);
         gbc.gridwidth = 1;
         gbc.insets.bottom = 0;
 
