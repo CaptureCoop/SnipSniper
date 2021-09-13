@@ -20,12 +20,12 @@ The Screenshot Tool
 SnipSniper currently works fully on Windows and is in development for Linux, which means that a few features might not be complete yet on Linux.
 
 Download SnipSniper:
-- [Latest stable release](https://github.com/SvenWollinger/SnipSniper/releases/latest/)
-- [Latest development build](https://github.com/SvenWollinger/SnipSniper/actions/workflows/dev.yml)
+- [Latest stable release](https://github.com/CaptureCoop/SnipSniper/releases/latest/)
+- [Latest development build](https://github.com/CaptureCoop/SnipSniper/actions/workflows/dev.yml)
 
 There are dedicated Windows Versions available, but of course the classic standalone jar also works perfectly fine.
 
-On Windows we also offer our own installer, available [here](https://github.com/SvenWollinger/SnipSniperInstaller/releases/latest/download/SnipSniperInstaller.jar)
+On Windows we also offer our own installer, available [here](https://github.com/CaptureCoop/SnipSniperInstaller/releases/latest/download/SnipSniperInstaller.jar)
 
 ### Building
 
