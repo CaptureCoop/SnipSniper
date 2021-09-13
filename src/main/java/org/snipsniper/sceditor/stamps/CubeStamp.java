@@ -69,7 +69,7 @@ public class CubeStamp implements IStamp{
     }
 
     public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
-        boolean isSmartPixel = config.getBool(ConfigHelper.PROFILE.smartPixel);
+        boolean isSmartPixel = config.getBool(ConfigHelper.PROFILE.editorStampCubeSmartPixel);
 
         int drawWidth = (int) ((double)width * difference[0]);
         int drawHeight = (int) ((double)height * difference[1]);

@@ -621,19 +621,6 @@ public class ConfigWindow extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(0, 10, 0, 10);
-        options.add(createJLabel("Smart Pixel", JLabel.RIGHT, JLabel.CENTER), gbc);
-        JCheckBox smartPixelCheckBox = new JCheckBox();
-        smartPixelCheckBox.setSelected(config.getBool(ConfigHelper.PROFILE.smartPixel));
-        smartPixelCheckBox.addActionListener(e -> config.set(ConfigHelper.PROFILE.smartPixel, smartPixelCheckBox.isSelected() + ""));
-        gbc.gridx = 1;
-        options.add(smartPixelCheckBox, gbc);
-        gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
         options.add(createJLabel("HSV color switch speed", JLabel.RIGHT, JLabel.CENTER), gbc);
         JLabel hsvPercentage = new JLabel(config.getInt(ConfigHelper.PROFILE.hsvColorSwitchSpeed) + "%");
         hsvPercentage.setHorizontalAlignment(JLabel.CENTER);
@@ -652,12 +639,12 @@ public class ConfigWindow extends JFrame {
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
 
-        gbc.gridy = 3;
+        gbc.gridy = 2;
         gbc.gridx = 1;
         options.add(hsvPercentage, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         gbc.insets.top = 20;
         JPanel row3_stampConfig = new JPanel(new GridBagLayout());
         StampJPanel row3_stampPreview = new StampJPanel();
@@ -692,7 +679,7 @@ public class ConfigWindow extends JFrame {
         options.add(new InfoButton(null), gbc);
         gbc.gridx = 0;
         gbc.insets.top = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 4;
         options.add(row3_stampConfig, gbc);
         gbc.gridx = 1;
         options.add(row3_stampPreview, gbc);
@@ -721,7 +708,7 @@ public class ConfigWindow extends JFrame {
             }
         });
 
-        gbc.gridy = 6;
+        gbc.gridy = 5;
         gbc.gridx = 0;
         gbc.insets.top = 20;
         options.add(saveButton, gbc);
@@ -772,6 +759,16 @@ public class ConfigWindow extends JFrame {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
             panel.add(setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCubeDefaultColor, e -> previewPanel.setStamp(new CubeStamp(config, null))), gbc);
+            gbc.gridx = 2;
+            panel.add(new InfoButton(null), gbc);
+            gbc.gridx = 0;
+
+            panel.add(createJLabel("Smart Pixel", JLabel.RIGHT, JLabel.CENTER), gbc);
+            gbc.gridx = 1;
+            JCheckBox smartPixelCheckBox = new JCheckBox();
+            smartPixelCheckBox.setSelected(config.getBool(ConfigHelper.PROFILE.editorStampCubeSmartPixel));
+            smartPixelCheckBox.addActionListener(e -> config.set(ConfigHelper.PROFILE.editorStampCubeSmartPixel, smartPixelCheckBox.isSelected() + ""));
+            panel.add(smartPixelCheckBox, gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
             gbc.gridx = 0;
