@@ -1076,7 +1076,7 @@ public class ConfigWindow extends JFrame {
                     updateButton.setText("Up to date!");
                     updateButton.setID(STATE_IDLE);
                 } else if (onlineVersion.isNewerThan(currentVersion)) {
-                    if(SnipSniper.getVersion().getPlatformType() == PlatformType.JAR) {
+                    if(SnipSniper.getVersion().getPlatformType() == PlatformType.STEAM) {
                         updateButton.setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Check Steam to update!</p></html>", onlineVersion.getDigits()));
                         updateButton.setID(STATE_IDLE);
                     } else {
