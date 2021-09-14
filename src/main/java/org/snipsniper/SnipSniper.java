@@ -302,6 +302,10 @@ public final class SnipSniper {
 		return StringUtils.correctSlashes(mainFolder);
 	}
 
+	public static String getJarFolder() {
+		return StringUtils.correctSlashes(jarFolder);
+	}
+
 	public static Config getConfig() {
 		return config;
 	}

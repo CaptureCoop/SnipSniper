@@ -22,9 +22,14 @@ public class Version {
         this.githash = githash;
     }
 
+    public boolean equals(Version other) {
+        return (Arrays.equals(digits, other.digits));
+    }
+
     public boolean isNewerThan(Version other) {
+        if(equals(other)) return false;
+
         int[] otherArr = other.digits;
-        if(Arrays.equals(digits, otherArr)) return false;
         if(digits[0] > otherArr[0]) {
             return true;
         } else if(digits[0] == otherArr[0]) {
