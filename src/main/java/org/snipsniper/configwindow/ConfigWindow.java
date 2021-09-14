@@ -1102,7 +1102,10 @@ public class ConfigWindow extends JFrame {
                         SnipSniper.exit(false);
                         break;
                     case WIN:
-                        FileUtils.copyFromJar(pathInJar, "SnipUpdater.jar");
+                        String loc = "SnipUpdater.jar";
+                        FileUtils.copyFromJar(pathInJar, loc);
+                        Utils.executeProcess(false, "java", "-jar", loc, "-url", Links.STABLE_PORTABLE, "-gui", "-extract", "-exec", "SnipSniper.exe");
+                        SnipSniper.exit(false);
                         break;
                     case WIN_INSTALLED:
                         String locJar = System.getProperty("java.io.tmpdir") + "//SnipUpdater.jar";
