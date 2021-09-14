@@ -18,6 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -1085,7 +1086,25 @@ public class ConfigWindow extends JFrame {
                         updateButton.setID(STATE_IDLE);
                     }
                 } else if(updateButton.getID().equals(STATE_DOUPDATE)) {
-                    //TODO: Do Update
+                    PlatformType type = SnipSniper.getVersion().getPlatformType();
+                    if(type == PlatformType.UNKNOWN) return;
+
+                    String pathInJar = "org/snipsniper/resources/SnipUpdater.jar";
+
+                    switch(type) {
+                        case JAR:
+                            String location = SnipSniper.getJarFolder() + "//SnipUpdater.jar";
+                            FileUtils.copyFromJar(pathInJar, location);
+                            Utils.executeProcess(false, "java", "-jar", location, "-url", Links.STABLE_JAR, "-gui", "-exec", "SnipSniper.jar");
+                            SnipSniper.exit(false);
+                            break;
+                        case WIN:
+                            FileUtils.copyFromJar(pathInJar, "SnipUpdater.jar");
+                            break;
+                        case WIN_INSTALLED:
+                            FileUtils.copyFromJar(pathInJar, System.getProperty("java.io.tmpdir") + "//SnipSniper.jar");
+                            break;
+                    }
                 }
             }
         });

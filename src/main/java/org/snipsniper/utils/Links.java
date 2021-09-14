@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 public class Links {
     public static String KOFI = "https://ko-fi.com/SvenWollinger";
     public static String VERSION_TXT = "https://raw.githubusercontent.com/SvenWollinger/SnipSniper/master/version.txt";
+    public static String STABLE_JAR = "https://github.com/CaptureCoop/SnipSniper/releases/download/3.7.0/SnipSniper.jar";
 
     public static URI getURI(String link) {
         try {

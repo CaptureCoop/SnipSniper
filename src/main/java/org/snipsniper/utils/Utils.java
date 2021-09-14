@@ -315,6 +315,16 @@ public class Utils {
 		return dest;
 	}
 
+	public static void executeProcess(boolean waitTillDone, String... args) {
+		try {
+			Process process = new ProcessBuilder(args).start();
+			if(waitTillDone)
+				process.waitFor();
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static String loadFileFromJar(String file) throws IOException {
 		StringBuilder content = new StringBuilder();
 		String path = "org/snipsniper/resources/" + file;

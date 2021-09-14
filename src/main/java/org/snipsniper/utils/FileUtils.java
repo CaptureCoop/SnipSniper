@@ -2,9 +2,9 @@ package org.snipsniper.utils;
 
 import org.snipsniper.LogManager;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 public class FileUtils {
@@ -101,5 +101,16 @@ public class FileUtils {
             return ""; // empty extension
         }
         return name.substring(lastIndexOf);
+    }
+
+    public static boolean copyFromJar(String jarPath, String path) {
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream(jarPath);
+        if(inputStream == null) return false;
+        try {
+            Files.copy(inputStream, new File(path).getCanonicalFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            return false;
+        }
+        return true;
     }
 }
