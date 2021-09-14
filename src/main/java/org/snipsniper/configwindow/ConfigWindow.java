@@ -1067,47 +1067,49 @@ public class ConfigWindow extends JFrame {
         final String STATE_DOUPDATE = "update";
         final String STATE_IDLE = "idle";
         IDJButton updateButton = new IDJButton("Check for update", STATE_WAITING);
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(updateButton.getID().equals(STATE_WAITING)) {
-                    updateButton.setText("Checking for update...");
-                    Version onlineVersion = new Version(Utils.getTextFromWebsite(Links.VERSION_TXT));
-                    Version currentVersion = SnipSniper.getVersion();
-                    if (onlineVersion.equals(currentVersion) || currentVersion.isNewerThan(onlineVersion)) {
-                        updateButton.setText("Up to date!");
+        updateButton.addActionListener(e -> {
+            if(updateButton.getID().equals(STATE_WAITING)) {
+                updateButton.setText("Checking for update...");
+                Version onlineVersion = new Version(Utils.getTextFromWebsite(Links.VERSION_TXT));
+                Version currentVersion = SnipSniper.getVersion();
+                if (onlineVersion.equals(currentVersion) || currentVersion.isNewerThan(onlineVersion)) {
+                    updateButton.setText("Up to date!");
+                    updateButton.setID(STATE_IDLE);
+                } else if (onlineVersion.isNewerThan(currentVersion)) {
+                    if(SnipSniper.getVersion().getPlatformType() == PlatformType.JAR) {
+                        updateButton.setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Check Steam to update!</p></html>", onlineVersion.getDigits()));
                         updateButton.setID(STATE_IDLE);
-                    } else if (onlineVersion.isNewerThan(currentVersion)) {
+                    } else {
                         updateButton.setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Click here to update</p></html>", onlineVersion.getDigits()));
                         updateButton.setID(STATE_DOUPDATE);
-                    } else {
-                        updateButton.setText("Error. Check console.");
-                        LogManager.log("Issue checking for updates. Our Version: %c, Online version: %c", LogLevel.ERROR, currentVersion.getDigits(), onlineVersion.getDigits());
-                        updateButton.setID(STATE_IDLE);
                     }
-                } else if(updateButton.getID().equals(STATE_DOUPDATE)) {
-                    PlatformType type = SnipSniper.getVersion().getPlatformType();
-                    if(type == PlatformType.UNKNOWN) return;
+                } else {
+                    updateButton.setText("Error. Check console.");
+                    LogManager.log("Issue checking for updates. Our Version: %c, Online version: %c", LogLevel.ERROR, currentVersion.getDigits(), onlineVersion.getDigits());
+                    updateButton.setID(STATE_IDLE);
+                }
+            } else if(updateButton.getID().equals(STATE_DOUPDATE)) {
+                PlatformType type = SnipSniper.getVersion().getPlatformType();
+                if(type == PlatformType.UNKNOWN) return;
 
-                    String pathInJar = "org/snipsniper/resources/SnipUpdater.jar";
+                String pathInJar = "org/snipsniper/resources/SnipUpdater.jar";
 
-                    switch(type) {
-                        case JAR:
-                            String location = SnipSniper.getJarFolder() + "//SnipUpdater.jar";
-                            FileUtils.copyFromJar(pathInJar, location);
-                            Utils.executeProcess(false, "java", "-jar", location, "-url", Links.STABLE_JAR, "-gui", "-exec", "SnipSniper.jar");
-                            SnipSniper.exit(false);
-                            break;
-                        case WIN:
-                            FileUtils.copyFromJar(pathInJar, "SnipUpdater.jar");
-                            break;
-                        case WIN_INSTALLED:
-                            String locJar = System.getProperty("java.io.tmpdir") + "//SnipUpdater.jar";
-                            FileUtils.copyFromJar(pathInJar, locJar);
-                            Utils.executeProcess(false, "java", "-jar", locJar, "-url", Links.STABLE_INSTALLER, "-gui", "-exec", "SnipSniper_Installer_Win.exe");
-                            SnipSniper.exit(false);
-                            break;
-                    }
+                switch(type) {
+                    case JAR:
+                        String location = SnipSniper.getJarFolder() + "//SnipUpdater.jar";
+                        FileUtils.copyFromJar(pathInJar, location);
+                        Utils.executeProcess(false, "java", "-jar", location, "-url", Links.STABLE_JAR, "-gui", "-exec", "SnipSniper.jar");
+                        SnipSniper.exit(false);
+                        break;
+                    case WIN:
+                        FileUtils.copyFromJar(pathInJar, "SnipUpdater.jar");
+                        break;
+                    case WIN_INSTALLED:
+                        String locJar = System.getProperty("java.io.tmpdir") + "//SnipUpdater.jar";
+                        FileUtils.copyFromJar(pathInJar, locJar);
+                        Utils.executeProcess(false, "java", "-jar", locJar, "-url", Links.STABLE_INSTALLER, "-gui", "-exec", "SnipSniper_Installer_Win.exe");
+                        SnipSniper.exit(false);
+                        break;
                 }
             }
         });
