@@ -18,13 +18,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -243,7 +241,6 @@ public class ConfigWindow extends JFrame {
 
         final ColorChooser[] colorChooser = {null};
         final boolean[] allowSaving = {true};
-        AtomicBoolean restartProfiles = new AtomicBoolean(false);
         ArrayList<Function> runOnSave = new ArrayList<>();
 
         Config config;
@@ -283,7 +280,6 @@ public class ConfigWindow extends JFrame {
                 });
             }
             config.set(ConfigHelper.PROFILE.icon, args[0]);
-            restartProfiles.set(true);
         }));
         options.add(iconButton, gbc);
         //END ICON
@@ -563,8 +559,8 @@ public class ConfigWindow extends JFrame {
                     function.run();
                 for(CustomWindowListener listener : listeners)
                     listener.windowClosed();
-                if(restartProfiles.get())
-                    SnipSniper.resetProfiles();
+
+                SnipSniper.resetProfiles();
                 close();
             }
         });
@@ -579,8 +575,7 @@ public class ConfigWindow extends JFrame {
                 tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
                 for(Function function : runOnSave)
                     function.run();
-                if(restartProfiles.get())
-                    SnipSniper.resetProfiles();
+                SnipSniper.resetProfiles();
             }
         });
 
@@ -694,6 +689,7 @@ public class ConfigWindow extends JFrame {
                 configOriginal.save();
                 for (CustomWindowListener listener : listeners)
                     listener.windowClosed();
+                SnipSniper.resetProfiles();
                 close();
             }
         });
@@ -706,6 +702,7 @@ public class ConfigWindow extends JFrame {
                 //This prevents a bug where the other tabs have an outdated config
                 tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
                 tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
+                SnipSniper.resetProfiles();
             }
         });
 
@@ -934,6 +931,7 @@ public class ConfigWindow extends JFrame {
                 configOriginal.save();
                 for (CustomWindowListener listener : listeners)
                     listener.windowClosed();
+                SnipSniper.resetProfiles();
                 close();
             }
         });
@@ -946,6 +944,7 @@ public class ConfigWindow extends JFrame {
                 //This prevents a bug where the other tabs have an outdated config
                 tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
                 tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
+                SnipSniper.resetProfiles();
             }
         });
 
