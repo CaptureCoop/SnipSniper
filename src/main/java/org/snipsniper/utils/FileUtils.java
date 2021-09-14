@@ -103,6 +103,15 @@ public class FileUtils {
         return name.substring(lastIndexOf);
     }
 
+    public static String getCanonicalPath(String path) {
+        try {
+            return new File(path).getCanonicalPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static boolean copyFromJar(String jarPath, String path) {
         InputStream inputStream = ClassLoader.getSystemResourceAsStream(jarPath);
         if(inputStream == null) return false;

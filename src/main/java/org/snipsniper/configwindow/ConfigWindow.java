@@ -1093,24 +1093,22 @@ public class ConfigWindow extends JFrame {
                 if(type == PlatformType.UNKNOWN) return;
 
                 String pathInJar = "org/snipsniper/resources/SnipUpdater.jar";
+                String updaterLocation = System.getProperty("java.io.tmpdir") + "//SnipUpdater.jar";
 
                 switch(type) {
                     case JAR:
-                        String location = SnipSniper.getJarFolder() + "//SnipUpdater.jar";
-                        FileUtils.copyFromJar(pathInJar, location);
-                        Utils.executeProcess(false, "java", "-jar", location, "-url", Links.STABLE_JAR, "-gui", "-exec", "SnipSniper.jar");
+                        FileUtils.copyFromJar(pathInJar, updaterLocation);
+                        Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", Links.STABLE_JAR, "-gui", "-exec", "SnipSniper.jar", "-dir", SnipSniper.getJarFolder());
                         SnipSniper.exit(false);
                         break;
                     case WIN:
-                        String loc = "SnipUpdater.jar";
-                        FileUtils.copyFromJar(pathInJar, loc);
-                        Utils.executeProcess(false, "java", "-jar", loc, "-url", Links.STABLE_PORTABLE, "-gui", "-extract", "-exec", "SnipSniper.exe");
+                        FileUtils.copyFromJar(pathInJar, updaterLocation);
+                        Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", Links.STABLE_PORTABLE, "-gui", "-extract", "-exec", "SnipSniper.exe", "-dir", FileUtils.getCanonicalPath("."));
                         SnipSniper.exit(false);
                         break;
                     case WIN_INSTALLED:
-                        String locJar = System.getProperty("java.io.tmpdir") + "//SnipUpdater.jar";
-                        FileUtils.copyFromJar(pathInJar, locJar);
-                        Utils.executeProcess(false, "java", "-jar", locJar, "-url", Links.STABLE_INSTALLER, "-gui", "-exec", "SnipSniper_Installer_Win.exe");
+                        FileUtils.copyFromJar(pathInJar, updaterLocation);
+                        Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", Links.STABLE_INSTALLER, "-gui", "-exec", "SnipSniper_Installer_Win.exe");
                         SnipSniper.exit(false);
                         break;
                 }
