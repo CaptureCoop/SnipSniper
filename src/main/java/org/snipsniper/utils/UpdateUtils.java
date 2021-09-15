@@ -16,7 +16,7 @@ public class UpdateUtils {
                 FileUtils.copyFromJar(pathInJar, updaterLocation);
                 String jarLink = Links.STABLE_JAR;
                 ReleaseType relType = Utils.getReleaseType(SnipSniper.getConfig().getString(ConfigHelper.MAIN.updateChannel));
-                if(relType == ReleaseType.DEV) jarLink = Links.DEV_JAR + "?cache=" + System.currentTimeMillis(); //Avoid caching
+                if(relType == ReleaseType.DEV) jarLink = Links.DEV_JAR;
                 Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", jarLink, "-gui", "-exec", "SnipSniper.jar", "-dir", SnipSniper.getJarFolder());
                 SnipSniper.exit(false);
                 break;
