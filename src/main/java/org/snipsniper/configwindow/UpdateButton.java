@@ -16,7 +16,7 @@ public class UpdateButton extends IDJButton {
         addActionListener(e -> {
             if(getID().equals(STATE_WAITING)) {
                 setText("Checking for update...");
-                Version onlineVersion = new Version(Utils.getTextFromWebsite(Links.VERSION_TXT));
+                Version onlineVersion = new Version(Utils.getTextFromWebsite(Links.STABLE_VERSION_TXT));
                 Version currentVersion = SnipSniper.getVersion();
                 if (onlineVersion.equals(currentVersion) || currentVersion.isNewerThan(onlineVersion)) {
                     setText("Up to date!");
