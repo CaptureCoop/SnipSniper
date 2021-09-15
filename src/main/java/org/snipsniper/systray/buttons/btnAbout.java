@@ -109,9 +109,11 @@ public class btnAbout extends PopupMenuButton {
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						super.mouseClicked(e);
-						SnipSniper.getConfig().set(ConfigHelper.MAIN.updateChannel, updateChannel.toString().toLowerCase());
-						SnipSniper.getConfig().save();
-						JOptionPane.showMessageDialog(frame, "New update channel: " + updateChannel.toString().toLowerCase());
+						if(SnipSniper.getVersion().getPlatformType() == PlatformType.JAR) {
+							SnipSniper.getConfig().set(ConfigHelper.MAIN.updateChannel, updateChannel.toString().toLowerCase());
+							SnipSniper.getConfig().save();
+							JOptionPane.showMessageDialog(frame, "New update channel: " + updateChannel.toString().toLowerCase());
+						}
 					}
 				});
 				rightSide.add(splashLabel);

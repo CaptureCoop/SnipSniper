@@ -16,7 +16,21 @@ public class UpdateButton extends IDJButton {
         setText("Check for update");
         addActionListener(e -> {
             ReleaseType updateChannel = Utils.getReleaseType(SnipSniper.getConfig().getString(ConfigHelper.MAIN.updateChannel));
-            if(updateChannel == ReleaseType.RELEASE) {
+            if(updateChannel == ReleaseType.DEV && SnipSniper.getVersion().getPlatformType() == PlatformType.JAR) {
+                if(getID().equals(STATE_WAITING)) {
+                    setText("Checking for update...");
+                    String newestHash = Utils.getShortGitHash(Utils.getHashFromAPI(Links.API_LATEST_COMMIT));
+                    if(newestHash.equals(SnipSniper.getVersion().getGithash())) {
+                        setText("Up to date!");
+                        setID(STATE_IDLE);
+                    } else {
+                        setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Click here to update</p></html>", newestHash));
+                        setID(STATE_DOUPDATE);
+                    }
+                } else if(getID().equals(STATE_DOUPDATE)) {
+                    UpdateUtils.update();
+                }
+            } else {
                 if(getID().equals(STATE_WAITING)) {
                     setText("Checking for update...");
                     Version onlineVersion = new Version(Utils.getTextFromWebsite(Links.STABLE_VERSION_TXT));
@@ -36,20 +50,6 @@ public class UpdateButton extends IDJButton {
                         setText("Error. Check console.");
                         LogManager.log("Issue checking for updates. Our Version: %c, Online version: %c", LogLevel.ERROR, currentVersion.getDigits(), onlineVersion.getDigits());
                         setID(STATE_IDLE);
-                    }
-                } else if(getID().equals(STATE_DOUPDATE)) {
-                    UpdateUtils.update();
-                }
-            } else {
-                if(getID().equals(STATE_WAITING)) {
-                    setText("Checking for update...");
-                    String newestHash = Utils.getShortGitHash(Utils.getHashFromAPI(Links.API_LATEST_COMMIT));
-                    if(newestHash.equals(SnipSniper.getVersion().getGithash())) {
-                        setText("Up to date!");
-                        setID(STATE_IDLE);
-                    } else {
-                        setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Click here to update</p></html>", newestHash));
-                        setID(STATE_DOUPDATE);
                     }
                 } else if(getID().equals(STATE_DOUPDATE)) {
                     UpdateUtils.update();
