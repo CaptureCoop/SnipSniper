@@ -1,6 +1,7 @@
 package org.snipsniper.utils;
 
 import org.snipsniper.SnipSniper;
+import org.snipsniper.config.ConfigHelper;
 
 public class UpdateUtils {
     public static void update() {
@@ -13,7 +14,10 @@ public class UpdateUtils {
         switch(type) {
             case JAR:
                 FileUtils.copyFromJar(pathInJar, updaterLocation);
-                Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", Links.STABLE_JAR, "-gui", "-exec", "SnipSniper.jar", "-dir", SnipSniper.getJarFolder());
+                String jarLink = Links.STABLE_JAR;
+                ReleaseType relType = Utils.getReleaseType(SnipSniper.getConfig().getString(ConfigHelper.MAIN.updateChannel));
+                if(relType == ReleaseType.DEV) jarLink = Links.DEV_JAR;
+                Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", jarLink, "-gui", "-exec", "SnipSniper.jar", "-dir", SnipSniper.getJarFolder());
                 SnipSniper.exit(false);
                 break;
             case WIN:
