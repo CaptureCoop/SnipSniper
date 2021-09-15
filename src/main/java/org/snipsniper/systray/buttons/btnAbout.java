@@ -3,11 +3,8 @@ package org.snipsniper.systray.buttons;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.systray.PopupMenuButton;
 import org.snipsniper.config.ConfigHelper;
-import org.snipsniper.utils.Function;
-import org.snipsniper.utils.Icons;
+import org.snipsniper.utils.*;
 import org.snipsniper.LangManager;
-import org.snipsniper.utils.Links;
-import org.snipsniper.utils.Version;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -20,8 +17,8 @@ import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 
 public class btnAbout extends PopupMenuButton {
-
 	private static String html;
+	private ReleaseType updateChannel = ReleaseType.RELEASE;
 
 	//LOGO USES AGENCY FB BOLD
 	public btnAbout(String title, BufferedImage icon, JFrame popup, Function function) {
@@ -36,6 +33,7 @@ public class btnAbout extends PopupMenuButton {
 		setFunction(new Function() {
 			@Override
 			public void run(String... args) {
+				updateChannel = ReleaseType.RELEASE;
 				JFrame frame = new JFrame();
 				frame.setSize(512,256);
 				frame.setTitle("About");
@@ -62,6 +60,12 @@ public class btnAbout extends PopupMenuButton {
 
 						if(index >= icons.length - 1) index = 0;
 						else index++;
+
+						if(index == 0)
+							updateChannel = ReleaseType.RELEASE;
+						else if(index == 3)
+							updateChannel = ReleaseType.DEV;
+
 						setNewImage(index, iconSize, true);
 					}
 
@@ -100,7 +104,17 @@ public class btnAbout extends PopupMenuButton {
 				JPanel rightSide = new JPanel(new GridLayout(2, 0));
 
 				BufferedImage splash = Icons.getImage("splash.png");
-				rightSide.add(new JLabel(new ImageIcon(splash.getScaledInstance((int)(splash.getWidth()/2.2F),(int)(splash.getHeight()/2.2F),Image.SCALE_DEFAULT))));
+				JLabel splashLabel = new JLabel(new ImageIcon(splash.getScaledInstance((int)(splash.getWidth()/2.2F),(int)(splash.getHeight()/2.2F),Image.SCALE_DEFAULT)));
+				splashLabel.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						super.mouseClicked(e);
+						SnipSniper.getConfig().set(ConfigHelper.MAIN.updateChannel, updateChannel.toString().toLowerCase());
+						SnipSniper.getConfig().save();
+						JOptionPane.showMessageDialog(frame, "New update channel: " + updateChannel.toString().toLowerCase());
+					}
+				});
+				rightSide.add(splashLabel);
 
 				JEditorPane about = new JEditorPane("text/html", html);
 				about.setEditable(false);
