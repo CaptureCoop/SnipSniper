@@ -11,6 +11,7 @@ public class Links {
     public static String STABLE_JAR = "https://github.com/CaptureCoop/SnipSniper/releases/download/3.7.0/SnipSniper.jar";
     public static String STABLE_INSTALLER = "https://github.com/CaptureCoop/SnipSniper/releases/download/3.7.0/SnipSniper_Installer_Win.exe";
     public static String STABLE_PORTABLE = "https://github.com/CaptureCoop/SnipSniper/releases/download/3.7.0/SnipSniper_Portable_Win.zip";
+    public static String API_LATEST_COMMIT = "https://api.github.com/repos/capturecoop/SnipSniper/commits/master?per_page=1\n";
 
     public static URI getURI(String link) {
         try {
