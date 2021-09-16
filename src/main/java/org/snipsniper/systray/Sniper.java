@@ -66,7 +66,7 @@ public class Sniper {
 			title.setHorizontalTextPosition(JLabel.CENTER);
 			popup.add(title);
 			popup.add(new PopupMenuButton("Viewer", Icons.getImage("icons/viewer.png"), popup, args -> new SCViewerWindow(null, config, false)));
-			popup.add(new PopupMenuButton("Editor", Icons.getImage("icons/editor.png"), popup, args -> new SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, true)));
+			popup.add(new PopupMenuButton("Editor", Icons.getImage("icons/editor.png"), popup, args -> new SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false)));
 			popup.add(new JSeparator());
 			popup.add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), Icons.getImage("icons/folder.png"), popup, args -> {
 				try {
