@@ -177,6 +177,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         window.setLocation(posX, posY);
         window.setOnSubmit(args -> {
             setImage(window.getImage(), true, true);
+            isDirty = true;
             repaint();
         });
     }
