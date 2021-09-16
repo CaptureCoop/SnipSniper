@@ -8,11 +8,8 @@ import org.snipsniper.snipscope.SnipScopeWindow;
 import org.snipsniper.snipscope.ui.SnipScopeUIButton;
 import org.apache.commons.lang3.SystemUtils;
 import org.snipsniper.config.ConfigHelper;
-import org.snipsniper.utils.Icons;
+import org.snipsniper.utils.*;
 import org.snipsniper.LogManager;
-import org.snipsniper.utils.LogLevel;
-import org.snipsniper.utils.StringUtils;
-import org.snipsniper.utils.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -103,6 +100,9 @@ public class SCEditorWindow extends SnipScopeWindow {
             JMenuItem configItem = new JMenuItem("Config");
             configItem.addActionListener(e -> new ConfigWindow(config, ConfigWindow.PAGE.editorPanel));
             topBar.add(configItem);
+            JMenuItem newItem = new JMenuItem("New");
+            newItem.addActionListener(e -> {openNewImageWindow();});
+            topBar.add(newItem);
             setJMenuBar(topBar);
         }
 
@@ -168,6 +168,17 @@ public class SCEditorWindow extends SnipScopeWindow {
     public void resizeTrigger() {
         super.resizeTrigger();
         autoSizeStampButtons();
+    }
+
+    public void openNewImageWindow() {
+        NewImageWindow window = new NewImageWindow();
+        int posX = (int) (getLocation().getX() + getWidth() / 2) - window.getWidth() / 2;
+        int posY = (int) (getLocation().getY() + getHeight() / 2) - window.getHeight() / 2;
+        window.setLocation(posX, posY);
+        window.setOnSubmit(args -> {
+            setImage(window.getImage(), true, true);
+            repaint();
+        });
     }
 
     public void autoSizeStampButtons() {

@@ -7,6 +7,7 @@ public enum MAIN {
 language, 
 debug, 
 theme, 
+updateChannel, 
 } 
 public enum PROFILE { 
 hotkey, 

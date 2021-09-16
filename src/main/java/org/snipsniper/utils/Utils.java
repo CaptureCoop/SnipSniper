@@ -50,6 +50,14 @@ public class Utils {
 		return null;
 	}
 
+	public static String getHashFromAPI(String link) {
+		return new JSONObject(Utils.getTextFromWebsite(link)).getString("sha");
+	}
+
+	public static String getShortGitHash(String longHash) {
+		return longHash.substring(0, 7);
+	}
+
 	public static String getTextFromWebsite(URL url) {
 		StringBuilder result = new StringBuilder();
 		try {

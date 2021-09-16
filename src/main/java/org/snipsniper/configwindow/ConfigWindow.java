@@ -1064,9 +1064,17 @@ public class ConfigWindow extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
 
         options.add(new UpdateButton(), gbc);
+        String version = SnipSniper.getVersion().getDigits();
+        ReleaseType releaseType = Utils.getReleaseType(SnipSniper.getConfig().getString(ConfigHelper.MAIN.updateChannel));
+        if(releaseType == ReleaseType.DEV)
+            version = SnipSniper.getVersion().getGithash();
+        options.add(createJLabel("Current Version: " + version, JLabel.CENTER, JLabel.CENTER), gbc);
+        gbc.gridx = 0;
         gbc.insets.bottom = 20;
-        options.add(createJLabel("Current Version: " + SnipSniper.getVersion().getDigits(), JLabel.CENTER, JLabel.CENTER), gbc);
+
+        options.add(createJLabel("Update Channel: " + releaseType.toString().toLowerCase(), JLabel.CENTER, JLabel.CENTER), gbc);
         gbc.gridwidth = 1;
+
         gbc.insets.bottom = 0;
 
         ArrayList<String> translatedLanguages = new ArrayList<>();

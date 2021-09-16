@@ -2,6 +2,7 @@ package org.snipsniper.utils;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class InputContainer {
     private final boolean[] keys = new boolean[9182];
@@ -9,6 +10,10 @@ public class InputContainer {
     private int mouseY;
 
     private final ArrayList<Point> mousePath = new ArrayList<>();
+
+    public void resetKeys() {
+        Arrays.fill(keys, false);
+    }
 
     public void setKey(int keyCode, boolean pressed) {
         keys[keyCode] = pressed;

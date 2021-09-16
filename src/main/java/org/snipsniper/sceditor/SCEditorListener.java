@@ -25,6 +25,7 @@ public class SCEditorListener extends SnipScopeListener {
     private final ArrayList<BufferedImage> history = new ArrayList<>();
     private boolean openColorChooser = false;
     private boolean openSaveAsWindow = false;
+    private boolean openNewImageWindow = false;
 
     public SCEditorListener(SCEditorWindow snipScopeWindow) {
         super(snipScopeWindow);
@@ -42,6 +43,13 @@ public class SCEditorListener extends SnipScopeListener {
     public void keyPressed(KeyEvent keyEvent) {
         super.keyPressed(keyEvent);
         keyEvent.consume();
+        //Hack for CTRL + N to work before isEnableInteraction is true
+        //This means that even just pressing n allows you to create a new image
+        //But thats not really bad, since N is not used for anything else in this context before
+        //actually loading an image
+        if(!scEditorWindow.isEnableInteraction() && keyEvent.getKeyCode() == KeyEvent.VK_N)
+            openNewImageWindow = true;
+
         if(!scEditorWindow.isEnableInteraction()) return;
 
         if(input.isKeyPressed(KeyEvent.VK_PERIOD))
@@ -57,6 +65,9 @@ public class SCEditorListener extends SnipScopeListener {
 
         if(input.isKeyPressed(KeyEvent.VK_ENTER))
             openSaveAsWindow = true;
+
+        if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_N))
+            openNewImageWindow = true;
 
         if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
             scEditorWindow.setSaveLocation("");
@@ -100,11 +111,20 @@ public class SCEditorListener extends SnipScopeListener {
     @Override
     public void keyReleased(KeyEvent keyEvent) {
         super.keyReleased(keyEvent);
+        if(openNewImageWindow) {
+            //We do this here since creating a new image should not be blocked just because
+            //the default image is still in there
+            scEditorWindow.openNewImageWindow();
+            openNewImageWindow = false;
+            scEditorWindow.getInputContainer().resetKeys();
+        }
+
         if(!scEditorWindow.isEnableInteraction()) return;
 
         if(openColorChooser) {
             //This fixes an issue with the ALT key getting "stuck" since the key up event is not being received if the color window is in the front.
             openColorChooser = false;
+            scEditorWindow.getInputContainer().resetKeys();
             int x = (int)((scEditorWindow.getLocation().getX() + scEditorWindow.getWidth()/2));
             int y = (int)((scEditorWindow.getLocation().getY() + scEditorWindow.getHeight()/2));
             new ColorChooser(scEditorWindow.getConfig(), "Marker Color", scEditorWindow.getSelectedStamp().getColor(), scEditorWindow.getSelectedStamp().getID() + "DefaultColor", x, y, true);
@@ -112,6 +132,7 @@ public class SCEditorListener extends SnipScopeListener {
 
         if(openSaveAsWindow) {
             openSaveAsWindow = false;
+            scEditorWindow.getInputContainer().resetKeys();
             JFileChooser chooser = new JFileChooser();
             chooser.setSelectedFile(new File(Utils.constructFilename(SCEditorWindow.FILENAME_MODIFIER)));
             if(chooser.showSaveDialog(chooser) == JFileChooser.APPROVE_OPTION){
