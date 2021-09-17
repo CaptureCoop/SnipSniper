@@ -19,7 +19,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class SCEditorWindow extends SnipScopeWindow {
+public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     private final Config config;
     private final String title;
     private String saveLocation;
@@ -44,6 +44,8 @@ public class SCEditorWindow extends SnipScopeWindow {
     private final ArrayList<SnipScopeUIButton> stampButtons = new ArrayList<>();
 
     private BufferedImage defaultImage;
+
+    private ArrayList<IClosable> cWindows = new ArrayList<>();
 
     public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         this.config = config;
@@ -98,7 +100,7 @@ public class SCEditorWindow extends SnipScopeWindow {
         if(SystemUtils.IS_OS_WINDOWS) {
             JMenuBar topBar = new JMenuBar();
             JMenuItem configItem = new JMenuItem("Config");
-            configItem.addActionListener(e -> new ConfigWindow(config, ConfigWindow.PAGE.editorPanel));
+            configItem.addActionListener(e -> cWindows.add(new ConfigWindow(config, ConfigWindow.PAGE.editorPanel)));
             topBar.add(configItem);
             JMenuItem newItem = new JMenuItem("New");
             newItem.addActionListener(e -> {openNewImageWindow();});
@@ -159,6 +161,7 @@ public class SCEditorWindow extends SnipScopeWindow {
                 super.windowClosing(e);
                 if(isStandalone)
                     SnipSniper.exit(false);
+                close();
             }
         });
         setEnableInteraction(!isDefaultImage());
@@ -172,6 +175,7 @@ public class SCEditorWindow extends SnipScopeWindow {
 
     public void openNewImageWindow() {
         NewImageWindow window = new NewImageWindow();
+        cWindows.add(window);
         int posX = (int) (getLocation().getX() + getWidth() / 2) - window.getWidth() / 2;
         int posY = (int) (getLocation().getY() + getHeight() / 2) - window.getHeight() / 2;
         window.setLocation(posX, posY);
@@ -288,5 +292,15 @@ public class SCEditorWindow extends SnipScopeWindow {
 
     public BufferedImage getOriginalImage() {
         return originalImage;
+    }
+
+    public void addClosableWindow(IClosable wnd) {
+        cWindows.add(wnd);
+    }
+
+    @Override
+    public void close() {
+        for(IClosable wnd : cWindows)
+            wnd.close();
     }
 }

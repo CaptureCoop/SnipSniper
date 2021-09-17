@@ -26,7 +26,6 @@ public class NewImageWindow extends JFrame implements IClosable{
             public void windowClosing(WindowEvent windowEvent) {
                 super.windowClosing(windowEvent);
                 close();
-                dispose();
             }
         });
         GridBagConstraints gbc = new GridBagConstraints();
@@ -92,5 +91,6 @@ public class NewImageWindow extends JFrame implements IClosable{
     public void close() {
         for(IClosable wnd : cWindows)
             wnd.close();
+        dispose();
     }
 }
