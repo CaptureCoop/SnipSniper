@@ -5,18 +5,30 @@ import org.snipsniper.utils.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
-public class NewImageWindow extends JFrame {
+public class NewImageWindow extends JFrame implements IClosable{
     private final NewImageWindow instance;
     private BufferedImage image;
     private Function onSubmit;
+    private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
     public NewImageWindow() {
         instance = this;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new GridBagLayout());
         setIconImage(Icons.getImage("icons/editor.png"));
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                super.windowClosing(windowEvent);
+                close();
+                dispose();
+            }
+        });
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 5, 0, 5);
         gbc.gridwidth = 2;
@@ -43,7 +55,7 @@ public class NewImageWindow extends JFrame {
         add(pickResolution, gbc);
         SSColor color = new SSColor(Color.WHITE);
         GradientJButton colorButton= new GradientJButton("Color", color);
-        colorButton.addActionListener(e -> new ColorChooser(null, "Color", color, null, (int) getLocation().getX() + getWidth() / 2, (int) getLocation().getY() + getHeight() / 2, true));
+        colorButton.addActionListener(e -> cWindows.add(new ColorChooser(null, "Color", color, null, (int) getLocation().getX() + getWidth() / 2, (int) getLocation().getY() + getHeight() / 2, true)));
         add(colorButton, gbc);
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {
@@ -74,5 +86,11 @@ public class NewImageWindow extends JFrame {
 
     public BufferedImage getImage() {
         return image;
+    }
+
+    @Override
+    public void close() {
+        for(IClosable wnd : cWindows)
+            wnd.close();
     }
 }

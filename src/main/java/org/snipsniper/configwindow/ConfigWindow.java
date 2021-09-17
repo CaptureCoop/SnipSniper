@@ -47,7 +47,7 @@ public class ConfigWindow extends JFrame implements IClosable{
     private final int indexViewer = 2;
     private final int indexGlobal = 3;
 
-    private static ArrayList<IClosable> cWindows = new ArrayList<>();
+    private ArrayList<IClosable> cWindows = new ArrayList<>();
 
     public ConfigWindow(Config config, PAGE page) {
         instance = this;
