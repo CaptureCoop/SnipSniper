@@ -1,10 +1,7 @@
 package org.snipsniper.colorchooser;
 
 import org.snipsniper.config.Config;
-import org.snipsniper.utils.CustomWindowListener;
-import org.snipsniper.utils.Icons;
-import org.snipsniper.utils.SSColor;
-import org.snipsniper.utils.Utils;
+import org.snipsniper.utils.*;
 
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
@@ -18,7 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 
-public class ColorChooser extends JFrame{
+public class ColorChooser extends JFrame implements IClosable {
     private final ColorChooser instance;
     private JColorChooser jcc;
     private final SSColor colorToChange;
@@ -125,5 +122,10 @@ public class ColorChooser extends JFrame{
 
 	public void addWindowListener(CustomWindowListener listener) {
 	    listeners.add(listener);
+    }
+
+    @Override
+    public void close() {
+        dispose();
     }
 }

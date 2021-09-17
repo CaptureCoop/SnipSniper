@@ -27,7 +27,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-public class ConfigWindow extends JFrame {
+public class ConfigWindow extends JFrame implements IClosable{
     private final ConfigWindow instance;
 
     private JTabbedPane tabPane;
@@ -46,6 +46,8 @@ public class ConfigWindow extends JFrame {
     private final int indexEditor = 1;
     private final int indexViewer = 2;
     private final int indexGlobal = 3;
+
+    private static ArrayList<IClosable> cWindows = new ArrayList<>();
 
     public ConfigWindow(Config config, PAGE page) {
         instance = this;
@@ -355,6 +357,7 @@ public class ConfigWindow extends JFrame {
                 int y = (int)((getLocation().getY() + getHeight()/2));
                 colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y, true);
                 colorChooser[0].addWindowListener(() -> colorChooser[0] = null);
+                cWindows.add(colorChooser[0]);
             }
         });
         borderSizePanel.add(colorBtn, gbc);
@@ -745,7 +748,7 @@ public class ConfigWindow extends JFrame {
         GradientJButton colorButton = new GradientJButton(title, startColorPBR);
         startColorPBR.addChangeListener(e -> config.set(configKey, startColorPBR.toSaveString()));
         startColorPBR.addChangeListener(whenChange);
-        colorButton.addActionListener(e -> new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2), true));
+        colorButton.addActionListener(e -> cWindows.add(new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2), true)));
         return colorButton;
     }
 
@@ -1219,9 +1222,12 @@ public class ConfigWindow extends JFrame {
         return layout;
     }
 
+    @Override
     public void close() {
         for(CustomWindowListener listener : listeners)
             listener.windowClosed();
+        for(IClosable wnd : cWindows)
+            wnd.close();
         dispose();
     }
 
