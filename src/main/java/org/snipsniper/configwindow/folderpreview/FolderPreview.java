@@ -2,6 +2,7 @@ package org.snipsniper.configwindow.folderpreview;
 
 import org.snipsniper.LangManager;
 import org.snipsniper.utils.Function;
+import org.snipsniper.utils.IClosable;
 import org.snipsniper.utils.Icons;
 
 import javax.swing.*;
@@ -10,29 +11,29 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 
-public class FolderPreview extends JFrame {
-    private String text = "";
+public class FolderPreview extends JFrame implements IClosable {
+    private String text;
     private FolderPreviewRenderer renderer;
     private JTextField input;
-    private JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-    private JLabel explenation = new JLabel("%day% = 1, %month% = 8, %year% = 2021");
+    private final JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
+    private final JLabel explanation = new JLabel("%day% = 1, %month% = 8, %year% = 2021");
 
     private Function onSave;
     private Function onClose;
 
     public FolderPreview(String title, String content) {
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle(title);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
-                if(onClose != null) onClose.run();
+                close();
             }
         });
         text = content;
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
-                Dimension newSize = new Dimension(getRootPane().getWidth(), getContentPane().getHeight() - input.getHeight() - saveButton.getHeight() - explenation.getHeight());
+                Dimension newSize = new Dimension(getRootPane().getWidth(), getContentPane().getHeight() - input.getHeight() - saveButton.getHeight() - explanation.getHeight());
                 renderer.setPreferredSize(newSize);
                 renderer.setMinimumSize(newSize);
                 renderer.revalidate();
@@ -76,7 +77,7 @@ public class FolderPreview extends JFrame {
         });
         content.add(input, gbc);
         gbc.gridy = 2;
-        content.add(explenation, gbc);
+        content.add(explanation, gbc);
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.VERTICAL;
         saveButton.addActionListener(e -> {
@@ -101,4 +102,9 @@ public class FolderPreview extends JFrame {
         return text;
     }
 
+    @Override
+    public void close() {
+        if(onClose != null) onClose.run();
+        dispose();
+    }
 }

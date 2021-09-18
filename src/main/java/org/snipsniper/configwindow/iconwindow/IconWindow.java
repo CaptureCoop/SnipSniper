@@ -1,6 +1,7 @@
 package org.snipsniper.configwindow.iconwindow;
 
 import org.snipsniper.utils.Function;
+import org.snipsniper.utils.IClosable;
 import org.snipsniper.utils.IDJButton;
 import org.snipsniper.utils.Icons;
 
@@ -9,16 +10,23 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 
-public class IconWindow extends JFrame {
+public class IconWindow extends JFrame implements IClosable {
     private final IconWindow instance;
 
     public IconWindow(String title, JFrame parent, Function onSelectIcon) {
         instance = this;
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(512, 256);
         setTitle(title);
         setIconImage(Icons.getImage("icons/folder.png"));
         setLocation((int)parent.getLocation().getX() + parent.getWidth() / 2 - getWidth() / 2, (int)parent.getLocation().getY() + parent.getHeight() / 2 - getHeight() / 2);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                close();
+            }
+        });
         addMouseListener(new MouseAdapter() {
             boolean listenForExit = false;
             @Override
@@ -93,5 +101,10 @@ public class IconWindow extends JFrame {
         content.add(customButton, gbc);
         pack();
         setSize(getWidth(), 256);
+    }
+
+    @Override
+    public void close() {
+        dispose();
     }
 }

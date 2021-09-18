@@ -18,7 +18,7 @@ public class NewImageWindow extends JFrame implements IClosable{
 
     public NewImageWindow() {
         instance = this;
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setLayout(new GridBagLayout());
         setIconImage(Icons.getImage("icons/editor.png"));
         addWindowListener(new WindowAdapter() {

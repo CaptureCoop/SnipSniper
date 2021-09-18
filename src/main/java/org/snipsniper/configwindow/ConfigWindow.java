@@ -271,7 +271,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JButton iconButton = new JButton("Set Icon");
-        iconButton.addActionListener(e -> new IconWindow("Custom Profile Icon", this, args -> {
+        iconButton.addActionListener(e -> cWindows.add(new IconWindow("Custom Profile Icon", this, args -> {
             if(args[0].equals("custom")) {
                 runOnSave.add(args1 -> {
                     try {
@@ -282,7 +282,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 });
             }
             config.set(ConfigHelper.PROFILE.icon, args[0]);
-        }));
+        })));
         options.add(iconButton, gbc);
         //END ICON
 
@@ -413,6 +413,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         JButton customSaveButton = new JButton(StringUtils.formatDateArguments(config.getString(ConfigHelper.PROFILE.saveFolderCustom)));
         customSaveButton.addActionListener(e -> {
             FolderPreview preview = new FolderPreview("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom));
+            cWindows.add(preview);
             int x = (int) (getLocation().getX() + getWidth() / 2) - preview.getWidth() / 2;
             int y = (int) (getLocation().getY() + getHeight() / 2) - preview.getHeight() / 2;
             preview.setLocation(x, y);
