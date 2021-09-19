@@ -5,6 +5,8 @@ import javax.swing.*;
 public class IDJButton extends JButton {
     private String id;
 
+    public IDJButton() { }
+
     public IDJButton(String text, String id) {
         setText(text);
         this.id = id;

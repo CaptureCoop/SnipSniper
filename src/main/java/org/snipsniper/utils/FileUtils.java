@@ -84,6 +84,22 @@ public class FileUtils {
         return result;
     }
 
+    public static boolean exists(String... files) {
+        File[] f = new File[files.length];
+        for(int i = 0; i < files.length; i++)
+            f[i] = new File(files[i]);
+        return exists(f);
+    }
+
+    public static boolean exists(File... files) {
+        boolean allExist = true;
+        for(File file : files) {
+            if(!file.exists())
+                allExist = false;
+        }
+        return allExist;
+    }
+
     public static void printFile(String filename, String text) {
         try {
             PrintWriter out = new PrintWriter(filename);
@@ -113,11 +129,15 @@ public class FileUtils {
     }
 
     public static boolean copyFromJar(String jarPath, String path) {
+        if(jarPath.startsWith("\\") || jarPath.startsWith("//"))
+            LogManager.log("jarPath is starting with slashes, this generally does not work inside the jar!", LogLevel.WARNING);
+
         InputStream inputStream = ClassLoader.getSystemResourceAsStream(jarPath);
         if(inputStream == null) return false;
         try {
             Files.copy(inputStream, new File(path).getCanonicalFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
+            LogManager.log("Issue copying from jar! Message: " + ex.getMessage(), LogLevel.ERROR);
             return false;
         }
         return true;
