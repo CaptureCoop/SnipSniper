@@ -614,6 +614,7 @@ public class ConfigWindow extends JFrame implements IClosable{
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 10, 0, 10);
 
         JPanel options = new JPanel(new GridBagLayout());
 
@@ -757,6 +758,8 @@ public class ConfigWindow extends JFrame implements IClosable{
     private void setupStampConfigPanel(JPanel panel, IStamp stamp, StampJPanel previewPanel, Config config) {
         panel.removeAll();
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 4, 0, 4);
 
         if(stamp instanceof CubeStamp) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
@@ -783,9 +786,9 @@ public class ConfigWindow extends JFrame implements IClosable{
             setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCubeWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null);
             setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCubeHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null);
         } else if(stamp instanceof CounterStamp) {
-            panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER));
+            panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
-            panel.add(setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCounterDefaultColor, e -> previewPanel.setStamp(new CounterStamp(config))));
+            panel.add(setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCounterDefaultColor, e -> previewPanel.setStamp(new CounterStamp(config))), gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
             gbc.gridx = 0;
