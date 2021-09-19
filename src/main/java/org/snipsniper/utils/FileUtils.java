@@ -8,6 +8,27 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 public class FileUtils {
+
+    public static boolean deleteRecursively(String folder) {
+        return deleteRecursively(new File(folder));
+    }
+
+    public static boolean deleteRecursively(File folder) {
+        if(!folder.isDirectory()) {
+            FileUtils.delete(folder);
+            return true;
+        }
+
+        for(File file : FileUtils.listFiles(folder)) {
+            if(file.isDirectory()) {
+                deleteRecursively(file);
+            }
+            FileUtils.delete(file);
+        }
+        FileUtils.delete(folder);
+        return true;
+    }
+
     public static boolean delete(String file) {
         return delete(new File(file));
     }

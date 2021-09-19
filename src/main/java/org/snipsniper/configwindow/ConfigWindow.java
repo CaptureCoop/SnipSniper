@@ -1160,9 +1160,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 } else if(autostartButton.getID().equals("remove")) {
                     autostartButton.setID("add");
                     autostartButton.setText("Add to autostart");
-                    //TODO: Add a recursive delete to FileUtils
-                    FileUtils.delete(startup + linkMain);
-                    FileUtils.delete(startup);
+                    FileUtils.deleteRecursively(startup);
                 }
             });
             
