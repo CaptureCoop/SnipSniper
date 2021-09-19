@@ -1,0 +1,1 @@
+start javaw -jar %0\..\SnipSniper.jar %*
