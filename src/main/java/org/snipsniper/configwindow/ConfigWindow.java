@@ -1,5 +1,6 @@
 package org.snipsniper.configwindow;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
@@ -1126,6 +1127,47 @@ public class ConfigWindow extends JFrame implements IClosable{
         debugCheckBox.addActionListener(e -> config.set(ConfigHelper.MAIN.debug, debugCheckBox.isSelected() + ""));
         gbc.gridx = 1;
         options.add(debugCheckBox, gbc);
+
+
+        if(SystemUtils.IS_OS_WINDOWS && SnipSniper.getVersion().getPlatformType() == PlatformType.JAR) {
+            gbc.gridx = 0;
+            options.add(createJLabel("Autostart", JLabel.RIGHT, JLabel.CENTER), gbc);
+            gbc.gridx = 1;
+
+            final String userHome = System.getProperty("user.home");
+            final String startup = userHome + "/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/SnipSniper/";
+            final String batchMain = "SnipSniper.bat";
+            final String linkMain = "SnipSniper.lnk";
+            final String icoMain = "SnipSniper.ico";
+
+            IDJButton autostartButton = new IDJButton();
+            if (FileUtils.exists(startup + linkMain)) {
+                autostartButton.setText("Remove from autostart");
+                autostartButton.setID("remove");
+            } else {
+                autostartButton.setText("Add to autostart");
+                autostartButton.setID("add");
+            }
+
+            autostartButton.addActionListener(e -> {
+                if(autostartButton.getID().equals("add")) {
+                    autostartButton.setID("remove");
+                    autostartButton.setText("Remove from autostart");
+                    FileUtils.mkdirs(startup);
+                    FileUtils.copyFromJar("org/snipsniper/resources/batch/" + batchMain, SnipSniper.getJarFolder() + "/" + batchMain);
+                    FileUtils.copyFromJar("org/snipsniper/resources/img/icons/" + icoMain.toLowerCase(), SnipSniper.getJarFolder() + "/" + icoMain);
+                    ShellLinkUtils.createShellLink(startup + linkMain, SnipSniper.getJarFolder() + batchMain, SnipSniper.getJarFolder() + "/" + icoMain);
+                } else if(autostartButton.getID().equals("remove")) {
+                    autostartButton.setID("add");
+                    autostartButton.setText("Add to autostart");
+                    //TODO: Add a recursive delete to FileUtils
+                    FileUtils.delete(startup + linkMain);
+                    FileUtils.delete(startup);
+                }
+            });
+            
+            options.add(autostartButton, gbc);
+        }
 
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
