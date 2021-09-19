@@ -133,7 +133,10 @@ public class FileUtils {
             LogManager.log("jarPath is starting with slashes, this generally does not work inside the jar!", LogLevel.WARNING);
 
         InputStream inputStream = ClassLoader.getSystemResourceAsStream(jarPath);
-        if(inputStream == null) return false;
+        if(inputStream == null) {
+            LogManager.log("InputStream is null! Copying failed!", LogLevel.ERROR);
+            return false;
+        }
         try {
             Files.copy(inputStream, new File(path).getCanonicalFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
