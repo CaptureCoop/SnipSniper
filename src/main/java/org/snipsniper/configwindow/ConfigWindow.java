@@ -1081,6 +1081,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridwidth = 1;
 
         gbc.insets.bottom = 0;
+        gbc.fill = GridBagConstraints.BOTH;
 
         ArrayList<String> translatedLanguages = new ArrayList<>();
         for(String lang : LangManager.languages)
