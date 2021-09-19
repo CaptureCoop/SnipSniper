@@ -53,6 +53,8 @@ SnipSniper uses these libraries in order to function properly
 
 * [FlatLaf](https://www.formdev.com/flatlaf/) - FlatLaf is a modern open-source cross-platform Look and Feel for Java Swing desktop applications.
 
+* [mslinks](https://mvnrepository.com/artifact/com.erigir/mslinks/0.0.2+5) - Used for creating Shortcuts.
+
 License
 ----
 
