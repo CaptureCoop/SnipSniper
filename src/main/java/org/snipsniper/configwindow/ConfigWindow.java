@@ -188,7 +188,6 @@ public class ConfigWindow extends JFrame implements IClosable{
         });
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         gbc.weightx = 1F;
@@ -622,7 +621,6 @@ public class ConfigWindow extends JFrame implements IClosable{
         //BEGIN ELEMENTS
 
         gbc.gridx = 0;
-        gbc.gridy = 1;
         options.add(createJLabel("HSV color switch speed", JLabel.RIGHT, JLabel.CENTER), gbc);
         JLabel hsvPercentage = new JLabel(config.getInt(ConfigHelper.PROFILE.hsvColorSwitchSpeed) + "%");
         hsvPercentage.setHorizontalAlignment(JLabel.CENTER);
@@ -641,12 +639,12 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
 
-        gbc.gridy = 2;
+        gbc.gridx = 0;
+        options.add(new JPanel(), gbc); //Avoid shifting around things
         gbc.gridx = 1;
         options.add(hsvPercentage, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
         gbc.insets.top = 20;
         JPanel row3_stampConfig = new JPanel(new GridBagLayout());
         StampJPanel row3_stampPreview = new StampJPanel();
@@ -681,7 +679,6 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(new InfoButton(null), gbc);
         gbc.gridx = 0;
         gbc.insets.top = 0;
-        gbc.gridy = 4;
         options.add(row3_stampConfig, gbc);
         gbc.gridx = 1;
         options.add(row3_stampPreview, gbc);
@@ -712,7 +709,6 @@ public class ConfigWindow extends JFrame implements IClosable{
             }
         });
 
-        gbc.gridy = 5;
         gbc.gridx = 0;
         gbc.insets.top = 20;
         options.add(saveButton, gbc);
