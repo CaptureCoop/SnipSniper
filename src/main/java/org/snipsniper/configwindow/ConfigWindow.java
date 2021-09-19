@@ -1132,7 +1132,7 @@ public class ConfigWindow extends JFrame implements IClosable{
 
         if(SystemUtils.IS_OS_WINDOWS && SnipSniper.getVersion().getPlatformType() == PlatformType.JAR) {
             gbc.gridx = 0;
-            options.add(createJLabel("Autostart", JLabel.RIGHT, JLabel.CENTER), gbc);
+            options.add(createJLabel("Start with Windows", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
 
             final String userHome = System.getProperty("user.home");
@@ -1141,31 +1141,21 @@ public class ConfigWindow extends JFrame implements IClosable{
             final String linkMain = "SnipSniper.lnk";
             final String icoMain = "SnipSniper.ico";
 
-            IDJButton autostartButton = new IDJButton();
-            if (FileUtils.exists(startup + linkMain)) {
-                autostartButton.setText("Remove from autostart");
-                autostartButton.setID("remove");
-            } else {
-                autostartButton.setText("Add to autostart");
-                autostartButton.setID("add");
-            }
+            JCheckBox autostartCheckbox = new JCheckBox();
+            autostartCheckbox.setSelected(FileUtils.exists(startup + linkMain));
 
-            autostartButton.addActionListener(e -> {
-                if(autostartButton.getID().equals("add")) {
-                    autostartButton.setID("remove");
-                    autostartButton.setText("Remove from autostart");
+            autostartCheckbox.addActionListener(e -> {
+                if(autostartCheckbox.isSelected()) {
                     FileUtils.mkdirs(startup);
                     FileUtils.copyFromJar("org/snipsniper/resources/batch/" + batchMain, SnipSniper.getJarFolder() + "/" + batchMain);
                     FileUtils.copyFromJar("org/snipsniper/resources/img/icons/" + icoMain.toLowerCase(), SnipSniper.getJarFolder() + "/" + icoMain);
                     ShellLinkUtils.createShellLink(startup + linkMain, SnipSniper.getJarFolder() + batchMain, SnipSniper.getJarFolder() + "/" + icoMain);
-                } else if(autostartButton.getID().equals("remove")) {
-                    autostartButton.setID("add");
-                    autostartButton.setText("Add to autostart");
+                } else {
                     FileUtils.deleteRecursively(startup);
                 }
             });
             
-            options.add(autostartButton, gbc);
+            options.add(autostartCheckbox, gbc);
         }
 
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
