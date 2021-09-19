@@ -132,9 +132,12 @@ public class FileUtils {
         if(jarPath.startsWith("\\") || jarPath.startsWith("//"))
             LogManager.log("jarPath is starting with slashes, this generally does not work inside the jar!", LogLevel.WARNING);
 
+        if(FileUtils.exists(path))
+            FileUtils.delete(path);
+
         InputStream inputStream = ClassLoader.getSystemResourceAsStream(jarPath);
         if(inputStream == null) {
-            LogManager.log("InputStream is null! Copying failed!", LogLevel.ERROR);
+            LogManager.log("InputStream is null! Copying failed! jarPath: %c, path: %c", LogLevel.ERROR, jarPath, path);
             return false;
         }
         try {
