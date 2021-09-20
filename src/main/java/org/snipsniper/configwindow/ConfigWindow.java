@@ -370,6 +370,8 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JTextField pictureLocation = new JTextField(config.getRawString(ConfigHelper.PROFILE.pictureFolder));
+        pictureLocation.setPreferredSize(new Dimension(200, pictureLocation.getHeight()));
+        pictureLocation.setMaximumSize(new Dimension(200, pictureLocation.getHeight()));
         pictureLocation.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent focusEvent) {
