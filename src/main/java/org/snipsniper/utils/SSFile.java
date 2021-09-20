@@ -18,6 +18,7 @@ public class SSFile {
             this.path = path.replace(LOCAL_IDENTIFIER, "");
         } else {
             this.path = path;
+            location = LOCATION.JAR;
         }
     }
 

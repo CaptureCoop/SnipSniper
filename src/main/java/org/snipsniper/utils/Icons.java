@@ -70,4 +70,12 @@ public class Icons {
 		}
 		return animatedImages.get(path);
 	}
+
+	public static boolean hasImage(String path) {
+		if(animatedImages.containsKey(path))
+			return true;
+		else if(images.containsKey(path))
+			return true;
+		return false;
+	}
 }

@@ -103,10 +103,15 @@ public class Sniper {
 				} else {
 					switch (iconFile.getLocation()) {
 						case JAR:
+							if(!Icons.hasImage(iconFile.getPath())) {
+								image = getDefaultIcon();
+								LogManager.log("Couldnt find jar icon. Path: " + iconFile.getPath(), LogLevel.ERROR);
+								break;
+							}
 							if(icon.endsWith(".gif")) {
-								image = Icons.getAnimatedImage(icon);
+								image = Icons.getAnimatedImage(iconFile.getPath());
 							} else {
-								image = Icons.getImage(icon);
+								image = Icons.getImage(iconFile.getPath());
 							}
 							break;
 						case LOCAL:
