@@ -37,7 +37,7 @@ public class FileUtils {
         if(!file.exists()) return true;
 
         if(!file.delete()) {
-            LogManager.log("File (%c) could not be deleted!", LogLevel.WARNING, file);
+            LogManager.log("File (%c) could not be deleted!", LogLevel.WARNING, file.getAbsolutePath());
             return false;
         }
         return true;

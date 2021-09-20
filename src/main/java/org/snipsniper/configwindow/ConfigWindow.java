@@ -271,18 +271,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JButton iconButton = new JButton("Set Icon");
-        iconButton.addActionListener(e -> cWindows.add(new IconWindow("Custom Profile Icon", this, args -> {
-            if(args[0].equals("custom")) {
-                runOnSave.add(args1 -> {
-                    try {
-                        Files.copy(new File(args[1]).toPath(), new File(SnipSniper.getImageFolder() + "/" + config.getFilename().replace(Config.EXTENSION, "png")).toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                });
-            }
-            config.set(ConfigHelper.PROFILE.icon, args[0]);
-        })));
+        iconButton.addActionListener(e -> cWindows.add(new IconWindow("Custom Profile Icon", this, args -> config.set(ConfigHelper.PROFILE.icon, args[0]))));
         options.add(iconButton, gbc);
         //END ICON
 

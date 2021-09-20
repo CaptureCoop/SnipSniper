@@ -95,18 +95,28 @@ public class Sniper {
 			});
 
 			try {
-				Image image;
+				Image image = null;
 				String icon = config.getString(ConfigHelper.PROFILE.icon);
-				switch(icon) {
-					case "none": image = getDefaultIcon(); break;
-					case "custom": image = new ImageIcon(SnipSniper.getImageFolder() + "/" + config.getFilename().replace(Config.EXTENSION, "png")).getImage(); break;
-					default:
-						if(icon.endsWith(".gif")) {
-							image = Icons.getAnimatedImage(icon);
-						} else {
-							image = Icons.getImage(icon);
-						}
-						break;
+				SSFile iconFile = new SSFile(icon);
+				if(icon.equals("none")) {
+					image = getDefaultIcon();
+				} else {
+					switch (iconFile.getLocation()) {
+						case JAR:
+							if(icon.endsWith(".gif")) {
+								image = Icons.getAnimatedImage(icon);
+							} else {
+								image = Icons.getImage(icon);
+							}
+							break;
+						case LOCAL:
+							String path = SnipSniper.getImageFolder() + "/" + iconFile.getPath();
+							if(!FileUtils.exists(path))
+								LogManager.log("Couldnt find icon. Path: " + path, LogLevel.ERROR);
+							else
+								image = Utils.getImageFromDisk(SnipSniper.getImageFolder() + "/" + iconFile.getPath());
+							break;
+					}
 				}
 
 				if(image == null) {
