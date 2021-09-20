@@ -23,7 +23,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build -Dtype=release
+      run: ./gradlew build -Dtype=stable
     - name: Set up JDK 16 (for jpackage)
       uses: actions/setup-java@v2
       with:
