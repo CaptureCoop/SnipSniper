@@ -81,7 +81,7 @@ public class Sniper {
 				popup.add(new PopupMenuButton("Console", Icons.getImage("icons/console.png"), popup, args -> SnipSniper.openDebugConsole()));
 			}
 
-			popup.add(new btnAbout(LangManager.getItem("menu_about"), Icons.getImage("icons/snipsniper.png"), popup, null));
+			popup.add(new btnAbout(LangManager.getItem("menu_about"), Icons.getImage("icons/about.png"), popup, null));
 			popup.add(new JSeparator());
 			popup.add(new PopupMenuButton(LangManager.getItem("menu_quit"), Icons.getImage("icons/redx.png"), popup, args -> SnipSniper.exit(false)));
 
