@@ -19,6 +19,8 @@ public class InfoButton extends JButton {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
+                if(!isEnabled())
+                    return;
                 super.mouseEntered(e);
                 new java.util.Timer().schedule(new java.util.TimerTask() {
                     @Override
@@ -43,6 +45,8 @@ public class InfoButton extends JButton {
 
     @Override
     public void paint(Graphics g) {
+        if(!isEnabled())
+            return;
         g.setColor(new Color(0, 0, 0, 0));
         g.drawRect(0, 0, getWidth(), getHeight());
         int iconSize = 16;

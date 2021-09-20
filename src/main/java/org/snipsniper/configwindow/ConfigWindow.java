@@ -665,6 +665,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         previewToggleAndLabel.add(previewBGToggle);
         options.add(previewToggleAndLabel, gbc);
         gbc.gridx = 2;
+        options.add(new JPanel(),gbc);
         options.add(new InfoButton(null), gbc);
         gbc.gridx = 0;
         gbc.insets.top = 0;
