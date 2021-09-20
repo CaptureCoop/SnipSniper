@@ -973,12 +973,11 @@ public class ConfigWindow extends JFrame implements IClosable{
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = 1;
+        gbc.insets.bottom = 20;
 
         Config config = new Config(SnipSniper.getConfig());
 
-        gbc.gridwidth = 2;
-        gbc.insets.bottom = 20;
-        JPanel importExportPanel = new JPanel(new GridLayout(0, 2));
         JButton importConfigs = new JButton("Import Configs");
         importConfigs.addActionListener(e -> {
             int dialogResult = JOptionPane.showConfirmDialog (instance, "This will overwrite all current configs. Do you want to continue?","Warning", JOptionPane.YES_NO_OPTION);
@@ -1058,11 +1057,10 @@ public class ConfigWindow extends JFrame implements IClosable{
                 }
             }
         });
-        importExportPanel.add(importConfigs);
-        importExportPanel.add(exportButton);
-        options.add(importExportPanel, gbc);
+        options.add(importConfigs, gbc);
+        gbc.gridx = 1;
+        options.add(exportButton, gbc);
 
-        gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 10, 0, 10);
         String version = SnipSniper.getVersion().getDigits();
