@@ -1062,25 +1062,17 @@ public class ConfigWindow extends JFrame implements IClosable{
         importExportPanel.add(exportButton);
         options.add(importExportPanel, gbc);
 
+        gbc.gridwidth = 1;
         gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.insets.bottom = 0;
-        gbc.fill = GridBagConstraints.NONE;
-
-        options.add(new UpdateButton(), gbc);
+        gbc.insets = new Insets(0, 10, 0, 10);
         String version = SnipSniper.getVersion().getDigits();
         ReleaseType releaseType = Utils.getReleaseType(SnipSniper.getConfig().getString(ConfigHelper.MAIN.updateChannel));
         if(releaseType == ReleaseType.DEV)
             version = SnipSniper.getVersion().getGithash();
-        options.add(createJLabel("Current Version: " + version, JLabel.CENTER, JLabel.CENTER), gbc);
-        gbc.gridx = 0;
-        gbc.insets.bottom = 20;
-
-        options.add(createJLabel("Update Channel: " + releaseType.toString().toLowerCase(), JLabel.CENTER, JLabel.CENTER), gbc);
-        gbc.gridwidth = 1;
-
-        gbc.insets.bottom = 0;
-        gbc.fill = GridBagConstraints.BOTH;
+        String channel = releaseType.toString().toLowerCase();
+        options.add(createJLabel(StringUtils.format("Current Version: %c (%c)", version, channel), JLabel.CENTER, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        options.add(new UpdateButton(), gbc);
 
         ArrayList<String> translatedLanguages = new ArrayList<>();
         for(String lang : LangManager.languages)
@@ -1093,7 +1085,6 @@ public class ConfigWindow extends JFrame implements IClosable{
             }
         });
 
-        gbc.insets = new Insets(0, 10, 0, 10);
         gbc.gridx = 0;
         options.add(createJLabel(LangManager.getItem("config_label_language"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
