@@ -151,15 +151,25 @@ public class ConfigWindow extends JFrame implements IClosable{
         return null;
     }
 
-    public JComponent setupProfileDropdown(JPanel panelToAdd, JPanel parentPanel, Config configOriginal, Config config, PAGE page, int pageIndex) {
+    public JComponent setupProfileDropdown(JPanel panelToAdd, JPanel parentPanel, Config configOriginal, Config config, PAGE page, int pageIndex, String... blacklist) {
         //Returns the dropdown, however dont add it manually
         //TODO: Refresh other dropdowns when creating new profile?
         ArrayList<DropdownItem> profiles = new ArrayList<>();
         for(File file : configFiles) {
             if(file.getName().contains("viewer")) {
-                profiles.add(0, new DropdownItem("Standalone Viewer", file.getName()));
+                boolean add = true;
+                for(String str : blacklist)
+                    if(str.contains("viewer"))
+                        add = false;
+                if(add)
+                    profiles.add(0, new DropdownItem("Standalone Viewer", file.getName()));
             } else if(file.getName().contains("editor")) {
-                profiles.add(0, new DropdownItem("Standalone Editor", file.getName()));
+                boolean add = true;
+                for(String str : blacklist)
+                    if(str.contains("editor"))
+                        add = false;
+                if(add)
+                    profiles.add(0, new DropdownItem("Standalone Editor", file.getName()));
             } else if(file.getName().contains("profile")) {
                 String nr = file.getName().replaceAll(Config.DOT_EXTENSION, "").replace("profile", "");
                 profiles.add(new DropdownItem("Profile " + nr, file.getName()));
@@ -259,7 +269,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         GridBagConstraints gbc = new GridBagConstraints();
         JPanel options = new JPanel(new GridBagLayout());
 
-        JComponent dropdown = setupProfileDropdown(options, snipConfigPanel, configOriginal, config, PAGE.snipPanel, indexSnip);
+        JComponent dropdown = setupProfileDropdown(options, snipConfigPanel, configOriginal, config, PAGE.snipPanel, indexSnip, "editor", "viewer");
 
         //BEGIN ELEMENTS
 
@@ -606,7 +616,7 @@ public class ConfigWindow extends JFrame implements IClosable{
 
         JPanel options = new JPanel(new GridBagLayout());
 
-        JComponent dropdown = setupProfileDropdown(options, editorConfigPanel, configOriginal, config, PAGE.editorPanel, indexEditor);
+        JComponent dropdown = setupProfileDropdown(options, editorConfigPanel, configOriginal, config, PAGE.editorPanel, indexEditor, "viewer");
         //BEGIN ELEMENTS
 
         gbc.gridx = 0;
@@ -890,7 +900,7 @@ public class ConfigWindow extends JFrame implements IClosable{
 
         JPanel options = new JPanel(new GridBagLayout());
 
-        JComponent dropdown = setupProfileDropdown(options, viewerConfigPanel, configOriginal, config, PAGE.viewerPanel, indexViewer);
+        JComponent dropdown = setupProfileDropdown(options, viewerConfigPanel, configOriginal, config, PAGE.viewerPanel, indexViewer, "editor");
         //BEGIN ELEMENTS
 
         gbc.gridx = 0;
