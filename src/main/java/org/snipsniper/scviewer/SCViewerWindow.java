@@ -64,7 +64,7 @@ public class SCViewerWindow extends SnipScopeWindow {
         setRequireMovementKeyForZoom(false);
 
         SCViewerListener listener = new SCViewerListener(this);
-        SnipScopeRenderer renderer = new SnipScopeRenderer(this);
+        SCViewerRenderer renderer = new SCViewerRenderer(this);
         renderer.setDropTarget(new DropTarget() {
             public synchronized void drop(DropTargetDropEvent evt) {
                 try {
