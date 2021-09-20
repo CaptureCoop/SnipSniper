@@ -18,7 +18,7 @@ import javax.swing.event.HyperlinkEvent;
 
 public class btnAbout extends PopupMenuButton {
 	private static String html;
-	private ReleaseType updateChannel = ReleaseType.RELEASE;
+	private ReleaseType updateChannel = ReleaseType.STABLE;
 
 	//LOGO USES AGENCY FB BOLD
 	public btnAbout(String title, BufferedImage icon, JFrame popup, Function function) {
@@ -33,7 +33,7 @@ public class btnAbout extends PopupMenuButton {
 		setFunction(new Function() {
 			@Override
 			public void run(String... args) {
-				updateChannel = ReleaseType.RELEASE;
+				updateChannel = ReleaseType.STABLE;
 				JFrame frame = new JFrame();
 				frame.setSize(512,256);
 				frame.setTitle("About");
@@ -62,7 +62,7 @@ public class btnAbout extends PopupMenuButton {
 						else index++;
 
 						if(index == 0)
-							updateChannel = ReleaseType.RELEASE;
+							updateChannel = ReleaseType.STABLE;
 						else if(index == 3)
 							updateChannel = ReleaseType.DEV;
 

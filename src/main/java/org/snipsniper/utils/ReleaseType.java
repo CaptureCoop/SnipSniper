@@ -1,7 +1,7 @@
 package org.snipsniper.utils;
 
 public enum ReleaseType {
-    RELEASE,
+    STABLE,
     DEV,
     DIRTY,
     UNKNOWN

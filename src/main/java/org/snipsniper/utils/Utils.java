@@ -79,7 +79,7 @@ public class Utils {
 
 	public static ReleaseType getReleaseType(String string) {
 		switch (string.toLowerCase()) {
-			case "release": return ReleaseType.RELEASE;
+			case "stable": return ReleaseType.STABLE;
 			case "dev": return ReleaseType.DEV;
 			case "dirty": return ReleaseType.DIRTY;
 		}

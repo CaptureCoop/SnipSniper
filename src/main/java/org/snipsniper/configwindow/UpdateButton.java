@@ -33,7 +33,7 @@ public class UpdateButton extends IDJButton {
                         setID(STATE_IDLE);
                         setIcon(new ImageIcon(checkmark));
                     } else {
-                        setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Click here to update</p></html>", newestHash));
+                        setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p></html>", newestHash));
                         setID(STATE_DOUPDATE);
                         setIcon(new ImageIcon(download));
                     }
@@ -53,12 +53,11 @@ public class UpdateButton extends IDJButton {
                         if(SnipSniper.getVersion().getPlatformType() == PlatformType.STEAM) {
                             setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Check Steam to update!</p></html>", onlineVersion.getDigits()));
                             setID(STATE_IDLE);
-                            setIcon(new ImageIcon(download));
                         } else {
-                            setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Click here to update</p></html>", onlineVersion.getDigits()));
+                            setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p></html>", onlineVersion.getDigits()));
                             setID(STATE_DOUPDATE);
-                            setIcon(new ImageIcon(download));
                         }
+                        setIcon(new ImageIcon(download));
                     } else {
                         setText("Error. Check console.");
                         LogManager.log("Issue checking for updates. Our Version: %c, Online version: %c", LogLevel.ERROR, currentVersion.getDigits(), onlineVersion.getDigits());
