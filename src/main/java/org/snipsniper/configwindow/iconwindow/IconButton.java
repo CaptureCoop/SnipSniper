@@ -4,8 +4,6 @@ import org.snipsniper.SnipSniper;
 import org.snipsniper.utils.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -22,7 +20,6 @@ public class IconButton extends IDJButton {
         this.location = location;
         addActionListener(e -> {
             if(onRedX && location == SSFile.LOCATION.LOCAL) {
-                setIcon(null);
                 FileUtils.delete(SnipSniper.getImageFolder() + "/" + new SSFile(getID()).getPath());
                 onDelete.run();
             } else {
