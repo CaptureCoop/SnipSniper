@@ -178,6 +178,10 @@ public class Utils {
 		return null;
 	}
 
+	public static Image getImageFromDisk(String path) {
+		return new ImageIcon(path).getImage();
+	}
+
 	public static Dimension getScaledDimension(BufferedImage image, Dimension boundary) {
 		return Utils.getScaledDimension(new Dimension(image.getWidth(), image.getHeight()), boundary);
 	}

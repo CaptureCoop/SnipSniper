@@ -95,18 +95,24 @@ public class Sniper {
 			});
 
 			try {
-				Image image;
+				Image image = null;
 				String icon = config.getString(ConfigHelper.PROFILE.icon);
-				switch(icon) {
-					case "none": image = getDefaultIcon(); break;
-					case "custom": image = new ImageIcon(SnipSniper.getImageFolder() + "/" + config.getFilename().replace(Config.EXTENSION, "png")).getImage(); break;
-					default:
-						if(icon.endsWith(".gif")) {
-							image = Icons.getAnimatedImage(icon);
-						} else {
-							image = Icons.getImage(icon);
-						}
-						break;
+				SSFile iconFile = new SSFile(icon);
+				if(icon.equals("none")) {
+					image = getDefaultIcon();
+				} else {
+					switch (iconFile.getLocation()) {
+						case JAR:
+							if(icon.endsWith(".gif")) {
+								image = Icons.getAnimatedImage(icon);
+							} else {
+								image = Icons.getImage(icon);
+							}
+							break;
+						case LOCAL:
+							image = new ImageIcon(SnipSniper.getImageFolder() + "/" + iconFile.getPath()).getImage();
+							break;
+					}
 				}
 
 				if(image == null) {
