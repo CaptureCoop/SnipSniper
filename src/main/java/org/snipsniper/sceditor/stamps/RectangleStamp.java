@@ -100,7 +100,6 @@ public class RectangleStamp implements IStamp {
         g2.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         g2.setPaint(oldColor);
         g2.setStroke(oldStroke);
-        g2.dispose();
         return rectangle;
     }
 

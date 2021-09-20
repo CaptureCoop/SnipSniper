@@ -95,7 +95,6 @@ public class CircleStamp implements IStamp{
         g2.drawOval(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         g2.setPaint(oldPaint);
         g2.setStroke(oldStroke);
-        g2.dispose();
         return rectangle;
     }
 

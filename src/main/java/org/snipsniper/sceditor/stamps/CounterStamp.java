@@ -114,7 +114,6 @@ public class CounterStamp implements IStamp{
                 g2.setStroke(new BasicStroke(drawHeight / config.getFloat(ConfigHelper.PROFILE.editorStampCounterBorderModifier)));
                 g2.drawOval(x, y, drawWidth, drawHeight);
                 g2.setStroke(oldStroke);
-                g2.dispose();
                 g.setColor(oldColor);
             }
         }

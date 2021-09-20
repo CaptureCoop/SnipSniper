@@ -127,7 +127,6 @@ public class CubeStamp implements IStamp{
             g.fillRect(x, y, drawWidth, drawHeight);
             g.setColor(oldColor);
         }
-        g.dispose();
         return new Rectangle(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
     }
 

@@ -76,7 +76,6 @@ public class SimpleBrush implements IStamp {
 
                 g2.setStroke(oldStroke);
                 g.setPaint(oldColor);
-                g2.dispose();
             }
         }
         return new Rectangle(position.getX() - newSize / 2, position.getY() - newSize / 2, newSize, newSize);
