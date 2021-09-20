@@ -198,6 +198,10 @@ public class Utils {
 		return Utils.getScaledDimension(new Dimension(image.getWidth(), image.getHeight()), boundary);
 	}
 
+	public static Color getDisabledColor() {
+		return new Color(128,128,128, 100);
+	}
+
 	//https://stackoverflow.com/a/10245583
 	public static Dimension getScaledDimension(Dimension imgSize, Dimension boundary) {
 		int original_width = imgSize.width;
