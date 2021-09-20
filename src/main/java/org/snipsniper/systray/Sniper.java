@@ -110,7 +110,11 @@ public class Sniper {
 							}
 							break;
 						case LOCAL:
-							image = new ImageIcon(SnipSniper.getImageFolder() + "/" + iconFile.getPath()).getImage();
+							String path = SnipSniper.getImageFolder() + "/" + iconFile.getPath();
+							if(!FileUtils.exists(path))
+								LogManager.log("Couldnt find icon. Path: " + path, LogLevel.ERROR);
+							else
+								image = new ImageIcon(SnipSniper.getImageFolder() + "/" + iconFile.getPath()).getImage();
 							break;
 					}
 				}

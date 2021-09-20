@@ -4,7 +4,7 @@ import org.snipsniper.SnipSniper;
 import org.snipsniper.utils.*;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -13,11 +13,14 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
+
 public class IconWindow extends JFrame implements IClosable {
     private final IconWindow instance;
+    private Function onSelectIcon;
 
     public IconWindow(String title, JFrame parent, Function onSelectIcon) {
         instance = this;
+        this.onSelectIcon = onSelectIcon;
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(512, 256);
         setTitle(title);
@@ -57,7 +60,13 @@ public class IconWindow extends JFrame implements IClosable {
         add(scrollPane);
         setResizable(false);
         setVisible(true);
+        populateButtons(content);
+        pack();
+        setSize(getWidth(), 256);
+    }
 
+    public void populateButtons(JPanel content) {
+        content.removeAll();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
@@ -78,10 +87,14 @@ public class IconWindow extends JFrame implements IClosable {
         content.add(defaultButton, gbc);
         gbc.gridx++;
         for (SSFile file : list) {
-            IDJButton button = new IDJButton(file.getPathWithLocation());
-            button.addActionListener(actionEvent -> {
+            IconButton button = new IconButton(file.getPathWithLocation(), file.getLocation());
+            button.setOnSelect(args -> {
                 onSelectIcon.run(button.getID());
                 dispose();
+            });
+
+            button.setOnDelete(args -> {
+                populateButtons(content);
             });
 
             switch(file.getLocation()) {
@@ -107,22 +120,35 @@ public class IconWindow extends JFrame implements IClosable {
         customButton.setMaximumSize(new Dimension(size, size));
         customButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileFilter(new FileNameExtensionFilter("Image", "png"));
+            FileFilter fileFilter = new FileFilter() {
+                @Override
+                public boolean accept(File f) {
+                    if(f.isDirectory())
+                        return true;
+                    return StringUtils.endsWith(f.getName(), ".png", ".gif", ".jpg", ".jpeg");
+                }
+
+                @Override
+                public String getDescription() {
+                    return "Images";
+                }
+            };
+            fileChooser.addChoosableFileFilter(fileFilter);
+            fileChooser.setFileFilter(fileFilter);
             int option = fileChooser.showOpenDialog(instance);
             if(option == JFileChooser.APPROVE_OPTION) {
                 try {
                     File file = fileChooser.getSelectedFile();
                     Files.copy(file.toPath(), new File(SnipSniper.getImageFolder() + "/" + file.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    new IconWindow(title, parent, onSelectIcon);
-                    dispose();
+                    populateButtons(content);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
         });
         content.add(customButton, gbc);
-        pack();
-        setSize(getWidth(), 256);
+        content.revalidate();
+        content.repaint();
     }
 
     @Override

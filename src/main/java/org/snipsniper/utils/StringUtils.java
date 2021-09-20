@@ -37,6 +37,13 @@ public class StringUtils {
         return string.replaceAll("\\\\", "/").replaceAll("//", "/");
     }
 
+    public static boolean endsWith(String original, String... text) {
+        for(String str : text)
+            if(original.endsWith(str))
+                return true;
+        return false;
+    }
+
     public static String format(final String message, final Object ...args) {
         final int size = args.length;
         String newMessage = message;
