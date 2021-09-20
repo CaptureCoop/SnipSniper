@@ -114,7 +114,7 @@ public class Sniper {
 							if(!FileUtils.exists(path))
 								LogManager.log("Couldnt find icon. Path: " + path, LogLevel.ERROR);
 							else
-								image = new ImageIcon(SnipSniper.getImageFolder() + "/" + iconFile.getPath()).getImage();
+								image = Utils.getImageFromDisk(SnipSniper.getImageFolder() + "/" + iconFile.getPath());
 							break;
 					}
 				}

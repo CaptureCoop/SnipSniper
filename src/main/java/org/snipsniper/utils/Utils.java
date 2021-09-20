@@ -19,6 +19,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -179,7 +181,17 @@ public class Utils {
 	}
 
 	public static Image getImageFromDisk(String path) {
-		return new ImageIcon(path).getImage();
+		String filePath = path;
+		if(filePath.endsWith(".gif")) {
+			try {
+				File newFile = new File(System.getProperty("java.io.tmpdir") + "/snipsniper_temp_" + System.currentTimeMillis() + ".gif");
+				Files.copy(new File(filePath).toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				filePath = newFile.getAbsolutePath();
+			} catch (IOException ioException) {
+				LogManager.log("Issue running getImageFromDisk with gif. Message: " + ioException.getMessage(), LogLevel.ERROR);
+			}
+		}
+		return new ImageIcon(filePath).getImage();
 	}
 
 	public static Dimension getScaledDimension(BufferedImage image, Dimension boundary) {
