@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
 
 public class GradientJButton extends JButton {
     private final SSColor color;
@@ -22,6 +23,8 @@ public class GradientJButton extends JButton {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g2.setPaint(color.getGradientPaint(getWidth(), getHeight()));
+        if(!isEnabled())
+            g2.setPaint(Utils.getDisabledColor());
         g2.fillRect(0, 0, getWidth(), getHeight());
         g2.setColor(Color.BLACK);
         g2.drawRect(0, 0, getWidth()-1, getHeight()-1);
@@ -32,11 +35,18 @@ public class GradientJButton extends JButton {
         GlyphVector gv = g2.getFont().createGlyphVector(frc, getText());
         Shape shape = gv.getOutline();
 
+        AffineTransform oldTransform = g2.getTransform();
         g2.translate(getWidth()/2 - g2.getFontMetrics().stringWidth(title)/2, getHeight()/2 + drawHeight / 3);
         g2.setStroke(new BasicStroke(2));
         g2.draw(shape);
         g2.setColor(Color.WHITE);
         g2.fill(shape);
+        g2.setTransform(oldTransform);
+
+        if(!isEnabled()) {
+            g2.setColor(Utils.getDisabledColor());
+            g2.fillRect(0, 0, getWidth(), getHeight());
+        }
 
         g2.dispose();
         super.paint(g2);
