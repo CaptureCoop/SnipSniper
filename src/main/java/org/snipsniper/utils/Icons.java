@@ -33,8 +33,11 @@ public class Icons {
 				} else {
 					URL url = Icons.class.getResource("/org/snipsniper/resources/img/" + list.getString(i));
 					if(url != null) {
-						Image img = new ImageIcon().getImage();
+						Image img = new ImageIcon(url).getImage();
 						animatedImages.put(list.getString(i), img);
+					} else {
+						LogManager.log("Could not load image " + list.getString(i) + ". This should not happen. Exiting...", LogLevel.ERROR);
+						SnipSniper.exit(false);
 					}
 				}
 			}
