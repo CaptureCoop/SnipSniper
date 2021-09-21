@@ -57,7 +57,7 @@ public class Utils {
 		if(text == null) {
 			return null;
 		}
-		return new JSONObject().getString("sha");
+		return new JSONObject(text).getString("sha");
 	}
 
 	public static String getShortGitHash(String longHash) {
