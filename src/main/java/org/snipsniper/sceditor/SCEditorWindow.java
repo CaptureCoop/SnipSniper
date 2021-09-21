@@ -45,7 +45,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
     private BufferedImage defaultImage;
 
-    private ArrayList<IClosable> cWindows = new ArrayList<>();
+    private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
     public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         this.config = config;
@@ -103,7 +103,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
             configItem.addActionListener(e -> cWindows.add(new ConfigWindow(config, ConfigWindow.PAGE.editorPanel)));
             topBar.add(configItem);
             JMenuItem newItem = new JMenuItem("New");
-            newItem.addActionListener(e -> {openNewImageWindow();});
+            newItem.addActionListener(e -> openNewImageWindow());
             topBar.add(newItem);
             setJMenuBar(topBar);
         }

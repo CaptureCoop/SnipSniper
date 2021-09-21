@@ -3,8 +3,8 @@ package org.snipsniper.utils;
 import javax.swing.*;
 
 public class DropdownItem {
-    private String label;
-    private String id;
+    private final String label;
+    private final String id;
 
     public DropdownItem(String label, String id) {
         this.label = label;

@@ -28,7 +28,11 @@ public class UpdateButton extends IDJButton {
                 if(getID().equals(STATE_WAITING)) {
                     setText("Checking for update...");
                     String newestHash = Utils.getShortGitHash(Utils.getHashFromAPI(Links.API_LATEST_COMMIT));
-                    if(newestHash.equals(SnipSniper.getVersion().getGithash())) {
+                    if(newestHash == null || newestHash.isEmpty()) {
+                        setText("Error - No connection");
+                        setID(STATE_WAITING);
+                        setIcon(new ImageIcon(roundArrows));
+                    } else if(newestHash.equals(SnipSniper.getVersion().getGithash())) {
                         setText("Up to date!");
                         setID(STATE_IDLE);
                         setIcon(new ImageIcon(checkmark));
@@ -43,9 +47,14 @@ public class UpdateButton extends IDJButton {
             } else {
                 if(getID().equals(STATE_WAITING)) {
                     setText("Checking for update...");
-                    Version onlineVersion = new Version(Utils.getTextFromWebsite(Links.STABLE_VERSION_TXT));
+                    String versionString = Utils.getTextFromWebsite(Links.STABLE_VERSION_TXT);
+                    Version onlineVersion = new Version(versionString);
                     Version currentVersion = SnipSniper.getVersion();
-                    if (onlineVersion.equals(currentVersion) || currentVersion.isNewerThan(onlineVersion)) {
+                    if(versionString == null || versionString.isEmpty()) {
+                        setText("Error - No connection");
+                        setID(STATE_WAITING);
+                        setIcon(new ImageIcon(roundArrows));
+                    } else if (onlineVersion.equals(currentVersion) || currentVersion.isNewerThan(onlineVersion)) {
                         setText("Up to date!");
                         setID(STATE_IDLE);
                         setIcon(new ImageIcon(checkmark));

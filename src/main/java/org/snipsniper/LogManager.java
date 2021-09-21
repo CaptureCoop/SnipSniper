@@ -3,7 +3,6 @@ package org.snipsniper;
 import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 
 import org.apache.commons.lang3.StringUtils;
-import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.LogLevel;
 
 import java.io.File;
@@ -45,7 +44,7 @@ public class LogManager {
         if(levelString.length() <= MAX_LEVEL_LENGTH) {
             msg = new StringBuilder(msg.toString().replace("%INSERTSPACE%", StringUtils.repeat(" ", MAX_LEVEL_LENGTH - levelString.length())));
         } else {
-            levelString = levelString.substring(0, Math.min(levelString.length(), MAX_LEVEL_LENGTH));
+            levelString = levelString.substring(0, MAX_LEVEL_LENGTH);
             msg = new StringBuilder(msg.toString().replace("%INSERTSPACE%", ""));
         }
 

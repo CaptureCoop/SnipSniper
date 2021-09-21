@@ -45,12 +45,11 @@ public class StringUtils {
     }
 
     public static String format(final String message, final Object ...args) {
-        final int size = args.length;
         String newMessage = message;
-        for(int i = 0; i < size; i++) {
+        for (Object arg : args) {
             String replacer = "NULL";
-            if(args[i] != null)
-                replacer = args[i].toString();
+            if (arg != null)
+                replacer = arg.toString();
             newMessage = newMessage.replaceFirst("%c", replacer);
         }
         return newMessage;

@@ -53,10 +53,15 @@ public class Utils {
 	}
 
 	public static String getHashFromAPI(String link) {
-		return new JSONObject(Utils.getTextFromWebsite(link)).getString("sha");
+		String text = Utils.getTextFromWebsite(link);
+		if(text == null) {
+			return null;
+		}
+		return new JSONObject().getString("sha");
 	}
 
 	public static String getShortGitHash(String longHash) {
+		if(longHash == null) return null;
 		return longHash.substring(0, 7);
 	}
 

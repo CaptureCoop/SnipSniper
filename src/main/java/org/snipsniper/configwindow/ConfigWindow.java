@@ -22,7 +22,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -48,7 +47,7 @@ public class ConfigWindow extends JFrame implements IClosable{
     private final int indexViewer = 2;
     private final int indexGlobal = 3;
 
-    private ArrayList<IClosable> cWindows = new ArrayList<>();
+    private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
     public ConfigWindow(Config config, PAGE page) {
         instance = this;
@@ -92,15 +91,13 @@ public class ConfigWindow extends JFrame implements IClosable{
 
         final int iconSize = 16;
         int index = 0;
-        int enableIndex = 0;
+        int enableIndex = index;
 
         lastSelectedConfig = config;
 
         snipConfigPanel = new JPanel();
         tabPane.addTab("SnipSniper",  setupSnipPane(config));
         tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)));
-        if(page == PAGE.snipPanel)
-            enableIndex = index;
         index++;
 
         editorConfigPanel = new JPanel();
@@ -159,15 +156,19 @@ public class ConfigWindow extends JFrame implements IClosable{
             if(file.getName().contains("viewer")) {
                 boolean add = true;
                 for(String str : blacklist)
-                    if(str.contains("viewer"))
+                    if (str.contains("viewer")) {
                         add = false;
+                        break;
+                    }
                 if(add)
                     profiles.add(0, new DropdownItem("Standalone Viewer", file.getName()));
             } else if(file.getName().contains("editor")) {
                 boolean add = true;
                 for(String str : blacklist)
-                    if(str.contains("editor"))
+                    if (str.contains("editor")) {
                         add = false;
+                        break;
+                    }
                 if(add)
                     profiles.add(0, new DropdownItem("Standalone Editor", file.getName()));
             } else if(file.getName().contains("profile")) {
@@ -253,7 +254,6 @@ public class ConfigWindow extends JFrame implements IClosable{
 
         final ColorChooser[] colorChooser = {null};
         final boolean[] allowSaving = {true};
-        ArrayList<Function> runOnSave = new ArrayList<>();
 
         Config config;
         boolean disablePage = false;
@@ -560,8 +560,6 @@ public class ConfigWindow extends JFrame implements IClosable{
                 //boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
-                for(Function function : runOnSave)
-                    function.run();
                 for(CustomWindowListener listener : listeners)
                     listener.windowClosed();
 
@@ -578,8 +576,6 @@ public class ConfigWindow extends JFrame implements IClosable{
                 //This prevents a bug where the other tabs have an outdated config
                 tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
                 tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
-                for(Function function : runOnSave)
-                    function.run();
                 SnipSniper.resetProfiles();
             }
         });

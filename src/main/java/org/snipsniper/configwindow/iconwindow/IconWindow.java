@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class IconWindow extends JFrame implements IClosable {
     private final IconWindow instance;
-    private Function onSelectIcon;
+    private final Function onSelectIcon;
 
     public IconWindow(String title, JFrame parent, Function onSelectIcon) {
         instance = this;
@@ -93,9 +93,7 @@ public class IconWindow extends JFrame implements IClosable {
                 dispose();
             });
 
-            button.setOnDelete(args -> {
-                populateButtons(content);
-            });
+            button.setOnDelete(args -> populateButtons(content));
 
             switch(file.getLocation()) {
                 case JAR:

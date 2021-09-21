@@ -8,9 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class IconButton extends IDJButton {
-    private SSFile.LOCATION location;
+    private final SSFile.LOCATION location;
     private boolean onRedX = false;
-    private int size = 32;
+    private final int size = 32;
 
     Function onSelect;
     Function onDelete;

@@ -6,7 +6,7 @@ import org.snipsniper.snipscope.SnipScopeWindow;
 import java.awt.*;
 
 public class SCViewerRenderer extends SnipScopeRenderer {
-    private RenderingHints qualityHints;
+    private final RenderingHints qualityHints;
 
     public SCViewerRenderer(SnipScopeWindow snipScopeWindow) {
         super(snipScopeWindow);

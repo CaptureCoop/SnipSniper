@@ -14,7 +14,7 @@ public class DebugConsole extends JFrame {
     private final JTextPane content = new JTextPane();
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
     private int fontSize = 20;
-    private int scrollSpeed = 20;
+    private final int scrollSpeed = 20;
     private final boolean[] keys = new boolean[4096];
 
     public DebugConsole () {

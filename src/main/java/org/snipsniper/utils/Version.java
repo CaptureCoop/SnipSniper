@@ -11,7 +11,11 @@ public class Version {
     private String githash = "UNKNOWN";
 
     public Version(String digits) {
-        this.digits = digitsFromString(digits);
+        if(digits != null && !digits.isEmpty()) {
+            this.digits = digitsFromString(digits);
+        } else {
+            this.digits = new int[3];
+        }
     }
 
     public Version(String digits, ReleaseType releaseType, PlatformType platformType, String buildDate, String githash) {

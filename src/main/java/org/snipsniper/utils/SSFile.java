@@ -2,7 +2,7 @@ package org.snipsniper.utils;
 
 public class SSFile {
     private final String path;
-    private LOCATION location;
+    private final LOCATION location;
 
     public enum LOCATION {JAR, LOCAL}
 

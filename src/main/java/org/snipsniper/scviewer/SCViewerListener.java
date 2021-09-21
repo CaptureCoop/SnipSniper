@@ -1,7 +1,6 @@
 package org.snipsniper.scviewer;
 
 import org.snipsniper.snipscope.SnipScopeListener;
-import org.snipsniper.utils.Utils;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;

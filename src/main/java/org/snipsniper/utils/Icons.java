@@ -31,8 +31,11 @@ public class Icons {
 						SnipSniper.exit(false);
 					}
 				} else {
-					Image img = new ImageIcon(Icons.class.getResource("/org/snipsniper/resources/img/" + list.getString(i))).getImage();
-					animatedImages.put(list.getString(i), img);
+					URL url = Icons.class.getResource("/org/snipsniper/resources/img/" + list.getString(i));
+					if(url != null) {
+						Image img = new ImageIcon().getImage();
+						animatedImages.put(list.getString(i), img);
+					}
 				}
 			}
 		} catch (IOException ioException) {
@@ -74,8 +77,6 @@ public class Icons {
 	public static boolean hasImage(String path) {
 		if(animatedImages.containsKey(path))
 			return true;
-		else if(images.containsKey(path))
-			return true;
-		return false;
+		else return images.containsKey(path);
 	}
 }
