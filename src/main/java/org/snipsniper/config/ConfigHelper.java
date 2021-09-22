@@ -8,6 +8,7 @@ language,
 debug, 
 theme, 
 updateChannel, 
+colorChooserType, 
 } 
 public enum PROFILE { 
 hotkey, 

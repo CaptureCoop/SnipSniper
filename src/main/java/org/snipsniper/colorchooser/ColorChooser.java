@@ -1,6 +1,8 @@
 package org.snipsniper.colorchooser;
 
+import org.snipsniper.SnipSniper;
 import org.snipsniper.config.Config;
+import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.*;
 
 import java.awt.Dimension;
@@ -68,7 +70,7 @@ public class ColorChooser extends JFrame implements IClosable {
         AbstractColorChooserPanel[] panels = jcc.getChooserPanels();
         jcc.setPreviewPanel(new JPanel());
         for (AbstractColorChooserPanel colorPanel : panels) {
-            if (!colorPanel.getDisplayName().equals("RGB")) {
+            if (!colorPanel.getDisplayName().equalsIgnoreCase(SnipSniper.getConfig().getString(ConfigHelper.MAIN.colorChooserType))) {
                 jcc.removeChooserPanel(colorPanel);
             }
         }
