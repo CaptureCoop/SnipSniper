@@ -2,12 +2,10 @@ package org.snipsniper.utils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class DropdownItemRenderer extends DefaultListCellRenderer {
-    private HashMap<String, Icon> images = new HashMap<>();
+    private final HashMap<String, Icon> images = new HashMap<>();
 
     public DropdownItemRenderer(DropdownItem[] items) {
         for(DropdownItem item : items)

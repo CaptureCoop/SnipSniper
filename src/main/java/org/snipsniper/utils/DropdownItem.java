@@ -16,7 +16,7 @@ public class DropdownItem {
     public DropdownItem(String label, String id, Image icon) {
         this.label = label;
         this.id = id;
-        this.icon = new ImageIcon(icon.getScaledInstance(16, 16, 0));
+        this.icon = new ImageIcon(Utils.imageToBufferedImage(icon).getScaledInstance(16, 16, 0));
     }
 
     public boolean compare(DropdownItem otherItem) {

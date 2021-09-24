@@ -95,14 +95,11 @@ public class Sniper {
 			});
 
 			try {
-				Image image = null;
 				String icon = config.getString(ConfigHelper.PROFILE.icon);
-				image = Utils.getIconDynamically(icon);
+				Image image = Utils.getIconDynamically(icon);
 
-				if(image == null) {
-					LogManager.log("Tray Icon is null, setting default.", LogLevel.ERROR);
+				if(image == null)
 					image = Utils.getDefaultIcon(profileID);
-				}
 
 				image.flush();
 				trayIcon = new TrayIcon(image, "SnipSniper (Profile " + profileID + ")");
