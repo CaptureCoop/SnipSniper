@@ -561,7 +561,6 @@ public class ConfigWindow extends JFrame implements IClosable{
         JButton saveAndClose = new JButton(LangManager.getItem("config_label_saveclose"));
         saveAndClose.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
-                //boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
                 for(CustomWindowListener listener : listeners)
@@ -575,11 +574,14 @@ public class ConfigWindow extends JFrame implements IClosable{
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
+                boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
                 //This prevents a bug where the other tabs have an outdated config
+
                 tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
                 tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
+                if(didIconChange) tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
                 SnipSniper.resetProfiles();
             }
         });
