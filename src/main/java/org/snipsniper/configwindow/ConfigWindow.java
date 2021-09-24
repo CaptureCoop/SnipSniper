@@ -161,7 +161,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                         break;
                     }
                 if(add)
-                    profiles.add(0, new DropdownItem("Standalone Viewer", file.getName()));
+                    profiles.add(0, new DropdownItem("Standalone Viewer", file.getName(), Icons.getImage("icons/viewer.png")));
             } else if(file.getName().contains("editor")) {
                 boolean add = true;
                 for(String str : blacklist)
@@ -170,10 +170,13 @@ public class ConfigWindow extends JFrame implements IClosable{
                         break;
                     }
                 if(add)
-                    profiles.add(0, new DropdownItem("Standalone Editor", file.getName()));
+                    profiles.add(0, new DropdownItem("Standalone Editor", file.getName(), Icons.getImage("icons/editor.png")));
             } else if(file.getName().contains("profile")) {
                 String nr = file.getName().replaceAll(Config.DOT_EXTENSION, "").replace("profile", "");
-                profiles.add(new DropdownItem("Profile " + nr, file.getName()));
+                Image img = Utils.getIconDynamically(new Config(file.getName(), "profile_defaults.cfg"));
+                if(img == null)
+                    img = Utils.getDefaultIcon(Integer.parseInt(nr));
+                profiles.add(new DropdownItem("Profile " + nr, file.getName(), img));
             }
         }
 
@@ -185,6 +188,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             items[i] = profiles.get(i);
 
         JComboBox<DropdownItem> dropdown = new JComboBox<>(items);
+        dropdown.setRenderer(new DropdownItemRenderer(items));
         if(configOriginal == null)
             dropdown.setSelectedIndex(0);
         else
