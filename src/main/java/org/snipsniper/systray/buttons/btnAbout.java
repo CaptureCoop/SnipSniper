@@ -18,7 +18,7 @@ import javax.swing.event.HyperlinkEvent;
 
 public class btnAbout extends PopupMenuButton {
 	private static String html;
-	private ReleaseType updateChannel = ReleaseType.STABLE;
+	private boolean onC = false;
 
 	//LOGO USES AGENCY FB BOLD
 	public btnAbout(String title, BufferedImage icon, JFrame popup, Function function) {
@@ -33,7 +33,6 @@ public class btnAbout extends PopupMenuButton {
 		setFunction(new Function() {
 			@Override
 			public void run(String... args) {
-				updateChannel = ReleaseType.STABLE;
 				JFrame frame = new JFrame();
 				frame.setSize(512,256);
 				frame.setTitle("About");
@@ -61,10 +60,8 @@ public class btnAbout extends PopupMenuButton {
 						if(index >= icons.length - 1) index = 0;
 						else index++;
 
-						if(index == 0)
-							updateChannel = ReleaseType.STABLE;
-						else if(index == 3)
-							updateChannel = ReleaseType.DEV;
+						if(index == 3)
+							onC = !onC;
 
 						setNewImage(index, iconSize, true);
 					}
@@ -109,10 +106,16 @@ public class btnAbout extends PopupMenuButton {
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						super.mouseClicked(e);
-						if(SnipSniper.getVersion().getPlatformType() == PlatformType.JAR) {
-							SnipSniper.getConfig().set(ConfigHelper.MAIN.updateChannel, updateChannel.toString().toLowerCase());
+						if(SnipSniper.getVersion().getPlatformType() == PlatformType.JAR && onC) {
+							ReleaseType channel = Utils.getReleaseType(SnipSniper.getConfig().getString(ConfigHelper.MAIN.updateChannel));
+							switch(channel) {
+								case STABLE: channel = ReleaseType.DEV; break;
+								case DEV: channel = ReleaseType.STABLE; break;
+							}
+
+							SnipSniper.getConfig().set(ConfigHelper.MAIN.updateChannel, channel.toString().toLowerCase());
 							SnipSniper.getConfig().save();
-							JOptionPane.showMessageDialog(frame, "New update channel: " + updateChannel.toString().toLowerCase());
+							JOptionPane.showMessageDialog(frame, "New update channel: " + channel.toString().toLowerCase());
 						}
 					}
 				});
