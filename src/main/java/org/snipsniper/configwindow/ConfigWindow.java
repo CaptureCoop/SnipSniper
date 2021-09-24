@@ -148,7 +148,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         return null;
     }
 
-    public JComponent setupProfileDropdown(JPanel panelToAdd, JPanel parentPanel, Config configOriginal, Config config, PAGE page, int pageIndex, String... blacklist) {
+    public JComboBox<DropdownItem> setupProfileDropdown(JPanel panelToAdd, JPanel parentPanel, Config configOriginal, Config config, PAGE page, int pageIndex, String... blacklist) {
         //Returns the dropdown, however dont add it manually
         //TODO: Refresh other dropdowns when creating new profile?
         ArrayList<DropdownItem> profiles = new ArrayList<>();
@@ -161,7 +161,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                         break;
                     }
                 if(add)
-                    profiles.add(0, new DropdownItem("Standalone Viewer", file.getName()));
+                    profiles.add(0, new DropdownItem("Standalone Viewer", file.getName(), Icons.getImage("icons/viewer.png")));
             } else if(file.getName().contains("editor")) {
                 boolean add = true;
                 for(String str : blacklist)
@@ -170,10 +170,13 @@ public class ConfigWindow extends JFrame implements IClosable{
                         break;
                     }
                 if(add)
-                    profiles.add(0, new DropdownItem("Standalone Editor", file.getName()));
+                    profiles.add(0, new DropdownItem("Standalone Editor", file.getName(), Icons.getImage("icons/editor.png")));
             } else if(file.getName().contains("profile")) {
-                String nr = file.getName().replaceAll(Config.DOT_EXTENSION, "").replace("profile", "");
-                profiles.add(new DropdownItem("Profile " + nr, file.getName()));
+                int nr = getIDFromFilename(file.getName());
+                Image img = Utils.getIconDynamically(new Config(file.getName(), "profile_defaults.cfg"));
+                if(img == null)
+                    img = Utils.getDefaultIcon(nr);
+                profiles.add(new DropdownItem("Profile " + nr, file.getName(), img));
             }
         }
 
@@ -185,6 +188,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             items[i] = profiles.get(i);
 
         JComboBox<DropdownItem> dropdown = new JComboBox<>(items);
+        dropdown.setRenderer(new DropdownItemRenderer(items));
         if(configOriginal == null)
             dropdown.setSelectedIndex(0);
         else
@@ -249,6 +253,15 @@ public class ConfigWindow extends JFrame implements IClosable{
         return dropdown;
     }
 
+    private int getIDFromFilename(String name) {
+        String idString = name.replaceAll(Config.DOT_EXTENSION, "").replace("profile", "");
+        if(MathUtils.isInteger(idString)) {
+            return Integer.parseInt(idString);
+        }
+        LogManager.log("Issie parsing Filename to id: " + name, LogLevel.ERROR);
+        return -1;
+    }
+
     public JComponent setupSnipPane(Config configOriginal) {
         snipConfigPanel.removeAll();
 
@@ -269,7 +282,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         GridBagConstraints gbc = new GridBagConstraints();
         JPanel options = new JPanel(new GridBagLayout());
 
-        JComponent dropdown = setupProfileDropdown(options, snipConfigPanel, configOriginal, config, PAGE.snipPanel, indexSnip, "editor", "viewer");
+        JComboBox<DropdownItem> dropdown = setupProfileDropdown(options, snipConfigPanel, configOriginal, config, PAGE.snipPanel, indexSnip, "editor", "viewer");
 
         //BEGIN ELEMENTS
 
@@ -281,7 +294,16 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JButton iconButton = new JButton("Set Icon");
-        iconButton.addActionListener(e -> cWindows.add(new IconWindow("Custom Profile Icon", this, args -> config.set(ConfigHelper.PROFILE.icon, args[0]))));
+        Icon icon = ((DropdownItem)dropdown.getSelectedItem()).getIcon();
+        if(icon != null)
+            iconButton.setIcon(icon);
+        iconButton.addActionListener(e -> cWindows.add(new IconWindow("Custom Profile Icon", instance, args -> {
+            config.set(ConfigHelper.PROFILE.icon, args[0]);
+            Image img = Utils.getIconDynamically(config);
+            if(img == null)
+                img = Utils.getDefaultIcon(getIDFromFilename(config.getFilename()));
+            iconButton.setIcon(new ImageIcon(img.getScaledInstance(16, 16, 0)));
+        })));
         options.add(iconButton, gbc);
         //END ICON
 
@@ -557,7 +579,6 @@ public class ConfigWindow extends JFrame implements IClosable{
         JButton saveAndClose = new JButton(LangManager.getItem("config_label_saveclose"));
         saveAndClose.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
-                //boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
                 for(CustomWindowListener listener : listeners)
@@ -571,11 +592,14 @@ public class ConfigWindow extends JFrame implements IClosable{
         JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
         saveButton.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
+                boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
                 //This prevents a bug where the other tabs have an outdated config
+
                 tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
                 tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
+                if(didIconChange) tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
                 SnipSniper.resetProfiles();
             }
         });

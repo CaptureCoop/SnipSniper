@@ -95,39 +95,11 @@ public class Sniper {
 			});
 
 			try {
-				Image image = null;
 				String icon = config.getString(ConfigHelper.PROFILE.icon);
-				SSFile iconFile = new SSFile(icon);
-				if(icon.equals("none")) {
-					image = getDefaultIcon();
-				} else {
-					switch (iconFile.getLocation()) {
-						case JAR:
-							if(!Icons.hasImage(iconFile.getPath())) {
-								image = getDefaultIcon();
-								LogManager.log("Couldnt find jar icon. Path: " + iconFile.getPath(), LogLevel.ERROR);
-								break;
-							}
-							if(icon.endsWith(".gif")) {
-								image = Icons.getAnimatedImage(iconFile.getPath());
-							} else {
-								image = Icons.getImage(iconFile.getPath());
-							}
-							break;
-						case LOCAL:
-							String path = SnipSniper.getImageFolder() + "/" + iconFile.getPath();
-							if(!FileUtils.exists(path))
-								LogManager.log("Couldnt find icon. Path: " + path, LogLevel.ERROR);
-							else
-								image = Utils.getImageFromDisk(SnipSniper.getImageFolder() + "/" + iconFile.getPath());
-							break;
-					}
-				}
+				Image image = Utils.getIconDynamically(icon);
 
-				if(image == null) {
-					LogManager.log("Tray Icon is null, setting default.", LogLevel.ERROR);
-					image = getDefaultIcon();
-				}
+				if(image == null)
+					image = Utils.getDefaultIcon(profileID);
 
 				image.flush();
 				trayIcon = new TrayIcon(image, "SnipSniper (Profile " + profileID + ")");
@@ -219,10 +191,6 @@ public class Sniper {
 		};
 		GlobalScreen.addNativeKeyListener(nativeKeyAdapter);
 		GlobalScreen.addNativeMouseListener(nativeMouseAdapter);
-	}
-
-	private Image getDefaultIcon() {
-		return Icons.getImage("systray/icon" + profileID + ".png");
 	}
 
 	public void kill() {

@@ -236,6 +236,44 @@ public class Utils {
 		return new Dimension(new_width, new_height);
 	}
 
+	public static Image getDefaultIcon(int profileID) {
+		return Icons.getImage("systray/icon" + profileID + ".png");
+	}
+
+	public static Image getIconDynamically(Config config) {
+		return getIconDynamically(config.getString(ConfigHelper.PROFILE.icon));
+	}
+
+	public static Image getIconDynamically(String icon) {
+		SSFile iconFile = new SSFile(icon);
+		Image image = null;
+		if(icon.equals("none")) {
+			return null;
+		} else {
+			switch (iconFile.getLocation()) {
+				case JAR:
+					if(!Icons.hasImage(iconFile.getPath())) {
+						LogManager.log("Couldnt find jar icon. Path: " + iconFile.getPath(), LogLevel.ERROR);
+						return null;
+					}
+					if(icon.endsWith(".gif")) {
+						image = Icons.getAnimatedImage(iconFile.getPath());
+					} else {
+						image = Icons.getImage(iconFile.getPath());
+					}
+					return image;
+				case LOCAL:
+					String path = SnipSniper.getImageFolder() + "/" + iconFile.getPath();
+					if(!FileUtils.exists(path))
+						LogManager.log("Couldnt find icon. Path: " + path, LogLevel.ERROR);
+					else
+						image = Utils.getImageFromDisk(SnipSniper.getImageFolder() + "/" + iconFile.getPath());
+					return image;
+			}
+		}
+		return null;
+	}
+
 	public static BufferedImage imageToBufferedImage(Image img) {
 		if (img instanceof BufferedImage) {
 			return (BufferedImage) img;

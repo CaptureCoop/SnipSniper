@@ -1,14 +1,22 @@
 package org.snipsniper.utils;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class DropdownItem {
     private final String label;
     private final String id;
+    private Icon icon;
 
     public DropdownItem(String label, String id) {
         this.label = label;
         this.id = id;
+    }
+
+    public DropdownItem(String label, String id, Image icon) {
+        this.label = label;
+        this.id = id;
+        this.icon = new ImageIcon(Utils.imageToBufferedImage(icon).getScaledInstance(16, 16, 0));
     }
 
     public boolean compare(DropdownItem otherItem) {
@@ -25,6 +33,10 @@ public class DropdownItem {
 
     public String getID() {
         return id;
+    }
+
+    public Icon getIcon() {
+        return icon;
     }
 
     @Override
