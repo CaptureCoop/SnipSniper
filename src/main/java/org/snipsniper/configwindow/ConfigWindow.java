@@ -221,8 +221,13 @@ public class ConfigWindow extends JFrame implements IClosable{
 
                     refreshConfigFiles();
                     parentPanel.removeAll();
-                    tabPane.setComponentAt(pageIndex, setupPaneDynamic(newProfileConfig, page));
+
+                    tabPane.setComponentAt(indexSnip, setupSnipPane(newProfileConfig));
+                    tabPane.setComponentAt(indexEditor, setupEditorPane(newProfileConfig));
+                    tabPane.setComponentAt(indexViewer, setupViewerPane(newProfileConfig));
+
                     lastSelectedConfig = newProfileConfig;
+
                     break;
                 }
             }
@@ -243,14 +248,74 @@ public class ConfigWindow extends JFrame implements IClosable{
                 if(newIndex < 0)
                     newIndex = dropdown.getSelectedIndex() + 1;
                 Config newConfig = new Config(dropdown.getItemAt(newIndex).getID(), "profile_defaults.cfg");
-                tabPane.setComponentAt(pageIndex, setupPaneDynamic(newConfig, page));
+
+                tabPane.setComponentAt(indexSnip, setupSnipPane(newConfig));
+                tabPane.setComponentAt(indexEditor, setupEditorPane(newConfig));
+                tabPane.setComponentAt(indexViewer, setupViewerPane(newConfig));
+
                 lastSelectedConfig = newConfig;
             }
-
         });
         profilePlusMinus.add(profileRemoveButton);
         panelToAdd.add(profilePlusMinus, gbc);
         return dropdown;
+    }
+
+    //Returns function you can run to update the state
+    private Function setupSaveButtons(JPanel panel, GridBagConstraints gbc, Config config, Config configOriginal, IFunction beforeSave, boolean reloadOtherDropdowns) {
+        final boolean[] allowSaving = {true};
+        final boolean[] isDirty = {false};
+        JButton save = new JButton(LangManager.getItem("config_label_save"));
+        save.addActionListener(e -> {
+            if(allowSaving[0] && configOriginal != null) {
+                if(beforeSave != null)
+                    beforeSave.run();
+                configOriginal.loadFromConfig(config);
+                configOriginal.save();
+                for(CustomWindowListener listener : listeners)
+                    listener.windowClosed();
+
+                SnipSniper.resetProfiles();
+                if(reloadOtherDropdowns) {
+                    tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
+                    tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
+                    tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
+                }
+            }
+        });
+
+        JButton close = new JButton("Close");
+        close.addActionListener(e -> {
+            if(isDirty[0]) {
+                int result = JOptionPane.showConfirmDialog(instance, "Unsaved changes, are you sure you want to cancel?","Warning", JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.NO_OPTION) {
+                    return;
+                }
+            }
+            close();
+        });
+        Function setState = new Function() {
+            @Override
+            public boolean run(ConfigSaveButtonState state) {
+                switch (state) {
+                    case UPDATE_CLEAN_STATE: isDirty[0] = !config.equals(configOriginal); break;
+                    case YES_SAVE: allowSaving[0] = true; break;
+                    case NO_SAVE: allowSaving[0] = false; break;
+                }
+                if(isDirty[0])
+                    close.setText("Cancel");
+                else
+                    close.setText("Close");
+
+                return true;
+            }
+        };
+        gbc.insets.top = 20;
+        gbc.gridx = 0;
+        panel.add(save, gbc);
+        gbc.gridx = 1;
+        panel.add(close, gbc);
+        return setState;
     }
 
     private int getIDFromFilename(String name) {
@@ -266,7 +331,8 @@ public class ConfigWindow extends JFrame implements IClosable{
         snipConfigPanel.removeAll();
 
         final ColorChooser[] colorChooser = {null};
-        final boolean[] allowSaving = {true};
+
+        final Function[] cleanDirtyFunction = {null};
 
         Config config;
         boolean disablePage = false;
@@ -303,6 +369,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             if(img == null)
                 img = Utils.getDefaultIcon(getIDFromFilename(config.getFilename()));
             iconButton.setIcon(new ImageIcon(img.getScaledInstance(16, 16, 0)));
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         })));
         options.add(iconButton, gbc);
         //END ICON
@@ -322,6 +389,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             } else {
                 config.set(ConfigHelper.PROFILE.hotkey, "NONE");
             }
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         hotkeyPanel.add(hotKeyButton);
         JButton deleteHotKey = new JButton(LangManager.getItem("config_label_delete"));
@@ -329,6 +397,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             hotKeyButton.setText(LangManager.getItem("config_label_none"));
             hotKeyButton.hotkey = -1;
             config.set(ConfigHelper.PROFILE.hotkey, "NONE");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         hotkeyPanel.add(deleteHotKey);
         options.add(hotkeyPanel, gbc);
@@ -341,7 +410,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(createJLabel(LangManager.getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER), gbc);
         JCheckBox saveToDisk = new JCheckBox();
         saveToDisk.setSelected(config.getBool(ConfigHelper.PROFILE.saveToDisk));
-        saveToDisk.addActionListener(e -> config.set(ConfigHelper.PROFILE.saveToDisk, saveToDisk.isSelected() + ""));
+        saveToDisk.addActionListener(e -> {
+            config.set(ConfigHelper.PROFILE.saveToDisk, saveToDisk.isSelected() + "");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         gbc.gridx = 1;
         options.add(saveToDisk, gbc);
         gbc.gridx = 2;
@@ -354,7 +426,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridx = 1;
         JCheckBox copyToClipboard = new JCheckBox();
         copyToClipboard.setSelected(config.getBool(ConfigHelper.PROFILE.copyToClipboard));
-        copyToClipboard.addActionListener(e -> config.set(ConfigHelper.PROFILE.copyToClipboard, copyToClipboard.isSelected() + ""));
+        copyToClipboard.addActionListener(e -> {
+            config.set(ConfigHelper.PROFILE.copyToClipboard, copyToClipboard.isSelected() + "");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         options.add(copyToClipboard, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
@@ -366,12 +441,18 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridx = 1;
         JPanel borderSizePanel = new JPanel(new GridLayout(0, 2));
         JSpinner borderSize = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.borderSize), 0.0, 999, 1.0)); //TODO: Extend JSpinner class to notify user of too large number
-        borderSize.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderSize, (int)((double) borderSize.getValue()) + ""));
+        borderSize.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.borderSize, (int)((double) borderSize.getValue()) + "");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         borderSizePanel.add(borderSize);
 
         SSColor borderColor = SSColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor));
         GradientJButton colorBtn = new GradientJButton("Color", borderColor);
-        borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, ((SSColor)e.getSource()).toSaveString()));
+        borderColor.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.borderColor, ((SSColor)e.getSource()).toSaveString());
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         colorBtn.addActionListener(e -> {
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
                 int x = (int)((getLocation().getX() + getWidth()/2));
@@ -405,21 +486,25 @@ public class ConfigWindow extends JFrame implements IClosable{
 
                 File saveLocationCheck = new File(saveLocationFinal);
                 if(!saveLocationCheck.exists()) {
-                    allowSaving[0] = false;
+                    boolean allow = false;
                     Object[] options = {"Okay" , LangManager.getItem("config_sanitation_createdirectory") };
                     int msgBox = JOptionPane.showOptionDialog(null,LangManager.getItem("config_sanitation_directory_notexist"), LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
                     if(msgBox == 1) {
-                        allowSaving[0] = new File(saveLocationFinal).mkdirs();
+                        allow = new File(saveLocationFinal).mkdirs();
 
-                        if(!allowSaving[0]) {
+                        if(!allow) {
                             msgError(LangManager.getItem("config_sanitation_failed_createdirectory"));
                         } else {
                             config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationFinal);
                         }
                     }
+                    if(allow)
+                        cleanDirtyFunction[0].run(ConfigSaveButtonState.YES_SAVE);
+                    else
+                        cleanDirtyFunction[0].run(ConfigSaveButtonState.NO_SAVE);
                 } else {
-                    allowSaving[0] = true;
+                    cleanDirtyFunction[0].run(ConfigSaveButtonState.YES_SAVE);
                     config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationFinal);
                 }
             }
@@ -446,6 +531,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                     text = "/";
                 config.set(ConfigHelper.PROFILE.saveFolderCustom, text);
                 customSaveButton.setText(StringUtils.formatDateArguments(text));
+                cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
             });
         });
         options.add(customSaveButton, gbc);
@@ -458,7 +544,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(createJLabel(LangManager.getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JSpinner snipeDelay = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.snipeDelay), 0.0, 100, 1.0));
-        snipeDelay.addChangeListener(e -> config.set(ConfigHelper.PROFILE.snipeDelay, (int)((double) snipeDelay.getValue()) + ""));
+        snipeDelay.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.snipeDelay, (int)((double) snipeDelay.getValue()) + "");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         options.add(snipeDelay, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
@@ -470,7 +559,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridx = 1;
         JCheckBox openEditor = new JCheckBox();
         openEditor.setSelected(config.getBool(ConfigHelper.PROFILE.openEditor));
-        openEditor.addActionListener(e -> config.set(ConfigHelper.PROFILE.openEditor, openEditor.isSelected() + ""));
+        openEditor.addActionListener(e -> {
+            config.set(ConfigHelper.PROFILE.openEditor, openEditor.isSelected() + "");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         options.add(openEditor, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
@@ -531,12 +623,14 @@ public class ConfigWindow extends JFrame implements IClosable{
             }
             config.set(ConfigHelper.PROFILE.enableSpyglass, enableSpyglass);
             config.set(ConfigHelper.PROFILE.spyglassMode, spyglassMode);
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         spyglassDropdownHotkey.addItemListener(e -> {
             switch(spyglassDropdownHotkey.getSelectedIndex()) {
                 case 0: config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_CONTROL); break;
                 case 1: config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_SHIFT); break;
             }
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
 
         JPanel spyglassPanel = new JPanel(getGridLayoutWithMargin(0, 2, 0));
@@ -568,6 +662,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 case 3: zoom = 64; break;
             }
             config.set(ConfigHelper.PROFILE.spyglassZoom, zoom);
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         options.add(spyglassZoomDropdown, gbc);
         gbc.gridx = 2;
@@ -576,38 +671,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         //END ELEMENTS
 
         //BEGIN SAVE
-        JButton saveAndClose = new JButton(LangManager.getItem("config_label_saveclose"));
-        saveAndClose.addActionListener(e -> {
-            if(allowSaving[0] && configOriginal != null) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                for(CustomWindowListener listener : listeners)
-                    listener.windowClosed();
-
-                SnipSniper.resetProfiles();
-                close();
-            }
-        });
-
-        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-        saveButton.addActionListener(e -> {
-            if(allowSaving[0] && configOriginal != null) {
-                boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                //This prevents a bug where the other tabs have an outdated config
-
-                tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
-                tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
-                if(didIconChange) tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
-                SnipSniper.resetProfiles();
-            }
-        });
-
-        gbc.gridx = 0;
-        options.add(saveButton, gbc);
-        gbc.gridx = 1;
-        options.add(saveAndClose, gbc);
+        cleanDirtyFunction[0] = setupSaveButtons(options, gbc, config, configOriginal, null, true);
         //END SAVE
 
         snipConfigPanel.add(options);
@@ -620,6 +684,8 @@ public class ConfigWindow extends JFrame implements IClosable{
 
     public JComponent setupEditorPane(Config configOriginal) {
         editorConfigPanel.removeAll();
+
+        final Function[] saveButtonUpdate = {null};
 
         Config config;
         boolean disablePage = false;
@@ -652,6 +718,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         hsvSlider.addChangeListener(e -> {
             hsvPercentage.setText(hsvSlider.getValue() + "%");
             config.set(ConfigHelper.PROFILE.hsvColorSwitchSpeed, hsvSlider.getValue() + "");
+            saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
 
         hsvSlider.setValue(config.getInt(ConfigHelper.PROFILE.hsvColorSwitchSpeed));
@@ -677,13 +744,16 @@ public class ConfigWindow extends JFrame implements IClosable{
         }
         IStamp stamp = new CubeStamp(config, null);
         row3_stampPreview.setStamp(stamp);
-        setupStampConfigPanel(row3_stampConfig, stamp, row3_stampPreview, config);
+
+        final Function[] onUpdate = {null};
+
         JComboBox<Object> stampDropdown = new JComboBox<>(StampUtils.getStampsAsString());
         stampDropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 IStamp newStamp = StampUtils.getNewIStampByIndex(stampDropdown.getSelectedIndex(), config, null);
                 row3_stampPreview.setStamp(newStamp);
-                setupStampConfigPanel(row3_stampConfig, newStamp, row3_stampPreview, config);
+                setupStampConfigPanel(row3_stampConfig, newStamp, row3_stampPreview, config, onUpdate[0]);
+                saveButtonUpdate[0].run();
             }
         });
 
@@ -707,35 +777,15 @@ public class ConfigWindow extends JFrame implements IClosable{
 
         //END ELEMENTS
 
-        JButton saveAndClose = new JButton("Save and close");
-        saveAndClose.addActionListener(e -> {
-            if(configOriginal != null) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                for (CustomWindowListener listener : listeners)
-                    listener.windowClosed();
-                SnipSniper.resetProfiles();
-                close();
+        saveButtonUpdate[0] = setupSaveButtons(options, gbc, config, configOriginal, null, true);
+        onUpdate[0] = new Function() {
+            @Override
+            public boolean run() {
+                return saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
             }
-        });
+        };
+        setupStampConfigPanel(row3_stampConfig, stamp, row3_stampPreview, config, onUpdate[0]);
 
-        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-        saveButton.addActionListener(e -> {
-            if(configOriginal != null) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                //This prevents a bug where the other tabs have an outdated config
-                tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
-                tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
-                SnipSniper.resetProfiles();
-            }
-        });
-
-        gbc.gridx = 0;
-        gbc.insets.top = 20;
-        options.add(saveButton, gbc);
-        gbc.gridx = 1;
-        options.add(saveAndClose, gbc);
 
         editorConfigPanel.add(options);
 
@@ -745,20 +795,21 @@ public class ConfigWindow extends JFrame implements IClosable{
         return generateScrollPane(editorConfigPanel);
     }
 
-    private JSpinner setupStampConfigPanelSpinner(Enum configKey, double min, double max, double stepSize, StampJPanel previewPanel, Config config, int stampIndex) {
+    private JSpinner setupStampConfigPanelSpinner(Enum configKey, double min, double max, double stepSize, StampJPanel previewPanel, Config config, int stampIndex, Function onUpdate) {
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(Double.parseDouble(config.getFloat(configKey)+""), min, max, stepSize));
         spinner.addChangeListener(e -> {
-            config.set(configKey, spinner.getValue() + "");
+            config.set(configKey, (int)Double.parseDouble(spinner.getValue().toString()));
             previewPanel.setStamp(StampUtils.getNewIStampByIndex(stampIndex, config, null));
+            onUpdate.run();
         });
         return spinner;
     }
 
-    private void setupStampConfigPanelSpinnerWithLabel(JPanel panel, String title, Enum configKey, double min, double max, double stepSize, StampJPanel previewPanel, Config config, int stampIndex, GridBagConstraints constraints, String infoText) {
+    private void setupStampConfigPanelSpinnerWithLabel(JPanel panel, String title, Enum configKey, double min, double max, double stepSize, StampJPanel previewPanel, Config config, int stampIndex, GridBagConstraints constraints, String infoText, Function onUpdate) {
         constraints.gridx = 0;
         panel.add(createJLabel(title, JLabel.RIGHT, JLabel.CENTER), constraints);
         constraints.gridx = 1;
-        panel.add(setupStampConfigPanelSpinner(configKey, min, max, stepSize,previewPanel, config, stampIndex), constraints);
+        panel.add(setupStampConfigPanelSpinner(configKey, min, max, stepSize,previewPanel, config, stampIndex, onUpdate), constraints);
         constraints.gridx = 2;
         panel.add(new InfoButton(infoText), constraints);
         constraints.gridx = 0;
@@ -773,7 +824,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         return colorButton;
     }
 
-    private void setupStampConfigPanel(JPanel panel, IStamp stamp, StampJPanel previewPanel, Config config) {
+    private void setupStampConfigPanel(JPanel panel, IStamp stamp, StampJPanel previewPanel, Config config, Function onUpdate) {
         panel.removeAll();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
@@ -782,7 +833,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         if(stamp instanceof CubeStamp) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
-            panel.add(setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCubeDefaultColor, e -> previewPanel.setStamp(new CubeStamp(config, null))), gbc);
+            panel.add(setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCubeDefaultColor, e -> {
+                previewPanel.setStamp(new CubeStamp(config, null));
+                onUpdate.run();
+            }), gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
             gbc.gridx = 0;
@@ -791,18 +845,21 @@ public class ConfigWindow extends JFrame implements IClosable{
             gbc.gridx = 1;
             JCheckBox smartPixelCheckBox = new JCheckBox();
             smartPixelCheckBox.setSelected(config.getBool(ConfigHelper.PROFILE.editorStampCubeSmartPixel));
-            smartPixelCheckBox.addActionListener(e -> config.set(ConfigHelper.PROFILE.editorStampCubeSmartPixel, smartPixelCheckBox.isSelected() + ""));
+            smartPixelCheckBox.addActionListener(e -> {
+                config.set(ConfigHelper.PROFILE.editorStampCubeSmartPixel, smartPixelCheckBox.isSelected() + "");
+                onUpdate.run();
+            });
             panel.add(smartPixelCheckBox, gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
             gbc.gridx = 0;
 
-            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampCubeHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampCubeWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampCubeHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCubeWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCubeHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampCubeHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampCubeWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampCubeHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCubeWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCubeHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
         } else if(stamp instanceof CounterStamp) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
@@ -811,13 +868,13 @@ public class ConfigWindow extends JFrame implements IClosable{
             panel.add(new InfoButton(null), gbc);
             gbc.gridx = 0;
 
-            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampCounterWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampCounterHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "General change speed", ConfigHelper.PROFILE.editorStampCounterSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampCounterWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampCounterHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCounterWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCounterHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampCounterWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampCounterHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "General change speed", ConfigHelper.PROFILE.editorStampCounterSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampCounterWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampCounterHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCounterWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCounterHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
 
             panel.add(createJLabel("Solid color", JLabel.RIGHT, JLabel.CENTER), gbc);
             JCheckBox cbSolidColor = new JCheckBox();
@@ -825,6 +882,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             cbSolidColor.addChangeListener(e -> {
                 config.set(ConfigHelper.PROFILE.editorStampCounterSolidColor, cbSolidColor.isSelected() + "");
                 previewPanel.setStamp(new CounterStamp(config));
+                onUpdate.run();
             });
             gbc.gridx = 1;
             panel.add(cbSolidColor, gbc);
@@ -839,13 +897,14 @@ public class ConfigWindow extends JFrame implements IClosable{
             cbBorder.addChangeListener(e -> {
                 config.set(ConfigHelper.PROFILE.editorStampCounterBorderEnabled, cbBorder.isSelected() + "");
                 previewPanel.setStamp(new CounterStamp(config));
+                onUpdate.run();
             });
             panel.add(cbBorder, gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
 
-            setupStampConfigPanelSpinnerWithLabel(panel, "Font size modifier", ConfigHelper.PROFILE.editorStampCounterFontSizeModifier, 0.1, 10, 0.01D, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Border modifier", ConfigHelper.PROFILE.editorStampCounterBorderModifier, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Font size modifier", ConfigHelper.PROFILE.editorStampCounterFontSizeModifier, 0.1, 10, 0.01D, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Border modifier", ConfigHelper.PROFILE.editorStampCounterBorderModifier, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
         } else if(stamp instanceof CircleStamp) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
@@ -853,14 +912,14 @@ public class ConfigWindow extends JFrame implements IClosable{
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
 
-            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampCircleWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampCircleHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "General change speed", ConfigHelper.PROFILE.editorStampCircleSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampCircleWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampCircleHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCircleWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCircleHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Thickness", ConfigHelper.PROFILE.editorStampCircleThickness, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampCircleWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampCircleHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "General change speed", ConfigHelper.PROFILE.editorStampCircleSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampCircleWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampCircleHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampCircleWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampCircleHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Thickness", ConfigHelper.PROFILE.editorStampCircleThickness, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
         } else if(stamp instanceof SimpleBrush) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
@@ -868,9 +927,9 @@ public class ConfigWindow extends JFrame implements IClosable{
             gbc.gridx = 2;
             panel.add(new InfoButton("text"), gbc);
 
-            setupStampConfigPanelSpinnerWithLabel(panel, "Brush size", ConfigHelper.PROFILE.editorStampSimpleBrushSize, 1, 999, 1, previewPanel, config, StampUtils.INDEX_SIMPLE_BRUSH, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Brush size change speed", ConfigHelper.PROFILE.editorStampSimpleBrushSizeSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_SIMPLE_BRUSH, gbc, null);
-            setupStampConfigPanelSpinnerWithLabel(panel, "Line point distance", ConfigHelper.PROFILE.editorStampSimpleBrushDistance, 1, 999, 1, previewPanel, config, StampUtils.INDEX_SIMPLE_BRUSH, gbc, null);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Brush size", ConfigHelper.PROFILE.editorStampSimpleBrushSize, 1, 999, 1, previewPanel, config, StampUtils.INDEX_SIMPLE_BRUSH, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Brush size change speed", ConfigHelper.PROFILE.editorStampSimpleBrushSizeSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_SIMPLE_BRUSH, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Line point distance", ConfigHelper.PROFILE.editorStampSimpleBrushDistance, 1, 999, 1, previewPanel, config, StampUtils.INDEX_SIMPLE_BRUSH, gbc, null, onUpdate);
             panel.add(new JPanel()); //Padding
         } else if(stamp instanceof TextStamp) {
             panel.add(createJLabel("Start color", JLabel.RIGHT, JLabel.CENTER), gbc);
@@ -879,8 +938,8 @@ public class ConfigWindow extends JFrame implements IClosable{
             gbc.gridx = 2;
             panel.add(new InfoButton("text"), gbc);
 
-            setupStampConfigPanelSpinnerWithLabel(panel, "Default font size", ConfigHelper.PROFILE.editorStampTextDefaultFontSize, 1, 999, 1, previewPanel, config, StampUtils.INDEX_TEXT, gbc, "text");
-            setupStampConfigPanelSpinnerWithLabel(panel, "Font size change speed", ConfigHelper.PROFILE.editorStampTextDefaultSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_TEXT, gbc, "text");
+            setupStampConfigPanelSpinnerWithLabel(panel, "Default font size", ConfigHelper.PROFILE.editorStampTextDefaultFontSize, 1, 999, 1, previewPanel, config, StampUtils.INDEX_TEXT, gbc, "text", onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Font size change speed", ConfigHelper.PROFILE.editorStampTextDefaultSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_TEXT, gbc, "text", onUpdate);
             for(int i = 0; i < 6; i++) panel.add(new JPanel(), gbc); //Padding
             //TODO: Draw it in the middle, possibly by giving TextStamp a getTextWidth() function and adding an edgecase to the Stamp Renderer, to move it to the left
         } else if(stamp instanceof RectangleStamp) {
@@ -890,13 +949,13 @@ public class ConfigWindow extends JFrame implements IClosable{
             gbc.gridx = 2;
             panel.add(new InfoButton("text"), gbc);
 
-            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampRectangleWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text");
-            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampRectangleHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text");
-            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampRectangleWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text");
-            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampRectangleHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text");
-            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampRectangleWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text");
-            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampRectangleHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text");
-            setupStampConfigPanelSpinnerWithLabel(panel, "Thickness", ConfigHelper.PROFILE.editorStampRectangleThickness, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text");
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start width", ConfigHelper.PROFILE.editorStampRectangleWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text", onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Start height", ConfigHelper.PROFILE.editorStampRectangleHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text", onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Width change speed", ConfigHelper.PROFILE.editorStampRectangleWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text", onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Height change speed", ConfigHelper.PROFILE.editorStampRectangleHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text", onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum width", ConfigHelper.PROFILE.editorStampRectangleWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text", onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Minimum height", ConfigHelper.PROFILE.editorStampRectangleHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text", onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, "Thickness", ConfigHelper.PROFILE.editorStampRectangleThickness, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, "text", onUpdate);
         } else {
             panel.add(createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER));
             for (int i = 0; i < 15; i++) panel.add(new JLabel());
@@ -905,6 +964,8 @@ public class ConfigWindow extends JFrame implements IClosable{
 
     public JComponent setupViewerPane(Config configOriginal) {
         viewerConfigPanel.removeAll();
+
+        final Function[] saveButtonUpdate = {null};
 
         Config config;
         boolean disablePage = false;
@@ -933,7 +994,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridx = 1;
         JCheckBox closeViewerOnEditor = new JCheckBox();
         closeViewerOnEditor.setSelected(config.getBool(ConfigHelper.PROFILE.closeViewerOnOpenEditor));
-        closeViewerOnEditor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.closeViewerOnOpenEditor, closeViewerOnEditor.isSelected()));
+        closeViewerOnEditor.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.closeViewerOnOpenEditor, closeViewerOnEditor.isSelected());
+            saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         options.add(closeViewerOnEditor, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
@@ -943,42 +1007,17 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridx = 1;
         JCheckBox openViewerFullscreen = new JCheckBox();
         openViewerFullscreen.setSelected(config.getBool(ConfigHelper.PROFILE.openViewerInFullscreen));
-        openViewerFullscreen.addChangeListener(e -> config.set(ConfigHelper.PROFILE.openViewerInFullscreen, openViewerFullscreen.isSelected()));
+        openViewerFullscreen.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.openViewerInFullscreen, openViewerFullscreen.isSelected());
+            saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         options.add(openViewerFullscreen, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
 
         //END ELEMENTS
 
-        JButton saveAndClose = new JButton("Save and close");
-        saveAndClose.addActionListener(e -> {
-            if(configOriginal != null) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                for (CustomWindowListener listener : listeners)
-                    listener.windowClosed();
-                SnipSniper.resetProfiles();
-                close();
-            }
-        });
-
-        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-        saveButton.addActionListener(e -> {
-            if(configOriginal != null) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                //This prevents a bug where the other tabs have an outdated config
-                tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
-                tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
-                SnipSniper.resetProfiles();
-            }
-        });
-
-        gbc.gridx = 0;
-        gbc.insets.top = 20;
-        options.add(saveButton, gbc);
-        gbc.gridx = 1;
-        options.add(saveAndClose, gbc);
+        saveButtonUpdate[0] = setupSaveButtons(options, gbc, config, configOriginal, null, true);
 
         viewerConfigPanel.add(options);
 
@@ -990,6 +1029,8 @@ public class ConfigWindow extends JFrame implements IClosable{
 
     public JComponent setupGlobalPane() {
         globalConfigPanel.removeAll();
+
+        final Function[] saveButtonUpdate = {null};
 
         JPanel options = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -1102,6 +1143,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         languageDropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 config.set(ConfigHelper.MAIN.language, LangManager.languages.get(languageDropdown.getSelectedIndex()));
+                saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
             }
         });
 
@@ -1123,6 +1165,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 } else if(themeDropdown.getSelectedIndex() == 1) {
                     config.set(ConfigHelper.MAIN.theme, "dark");
                 }
+                saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
             }
         });
 
@@ -1135,7 +1178,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(createJLabel(LangManager.getItem("config_label_debug"), JLabel.RIGHT, JLabel.CENTER), gbc);
         JCheckBox debugCheckBox = new JCheckBox();
         debugCheckBox.setSelected(config.getBool(ConfigHelper.MAIN.debug));
-        debugCheckBox.addActionListener(e -> config.set(ConfigHelper.MAIN.debug, debugCheckBox.isSelected() + ""));
+        debugCheckBox.addActionListener(e -> {
+            config.set(ConfigHelper.MAIN.debug, debugCheckBox.isSelected() + "");
+            saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         gbc.gridx = 1;
         options.add(debugCheckBox, gbc);
 
@@ -1168,8 +1214,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             options.add(autostartCheckbox, gbc);
         }
 
-        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-        saveButton.addActionListener(e -> {
+        IFunction beforeSave = args -> {
             boolean restartConfig = !config.getString(ConfigHelper.MAIN.language).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.language));
             boolean didThemeChange = !config.getString(ConfigHelper.MAIN.theme).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme));
 
@@ -1179,22 +1224,9 @@ public class ConfigWindow extends JFrame implements IClosable{
                 new ConfigWindow(lastSelectedConfig, PAGE.globalPanel);
                 close();
             }
-        });
+        };
 
-        JButton saveAndClose = new JButton(LangManager.getItem("config_label_saveclose"));
-        saveAndClose.addActionListener(e -> {
-            globalSave(config);
-
-            for(CustomWindowListener listener : listeners)
-                listener.windowClosed();
-            close();
-        });
-
-        gbc.gridx = 0;
-        gbc.insets.top = 20;
-        options.add(saveButton, gbc);
-        gbc.gridx = 1;
-        options.add(saveAndClose, gbc);
+        saveButtonUpdate[0] = setupSaveButtons(options, gbc, config, SnipSniper.getConfig(), beforeSave, false);
 
         globalConfigPanel.add(options);
 
