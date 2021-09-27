@@ -298,6 +298,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 return true;
             }
         };
+        gbc.insets.top = 20;
         gbc.gridx = 0;
         panel.add(save, gbc);
         gbc.gridx = 1;
