@@ -12,6 +12,10 @@ import org.snipsniper.configwindow.iconwindow.IconWindow;
 import org.snipsniper.systray.Sniper;
 import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.utils.*;
+import org.snipsniper.utils.enums.ConfigSaveButtonState;
+import org.snipsniper.utils.enums.LogLevel;
+import org.snipsniper.utils.enums.PlatformType;
+import org.snipsniper.utils.enums.ReleaseType;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;

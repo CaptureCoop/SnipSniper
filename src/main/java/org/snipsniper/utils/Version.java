@@ -1,5 +1,8 @@
 package org.snipsniper.utils;
 
+import org.snipsniper.utils.enums.PlatformType;
+import org.snipsniper.utils.enums.ReleaseType;
+
 import java.util.Arrays;
 
 public class Version {

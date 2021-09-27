@@ -2,6 +2,8 @@ package org.snipsniper.utils;
 
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.utils.enums.PlatformType;
+import org.snipsniper.utils.enums.ReleaseType;
 
 public class UpdateUtils {
     public static void update() {

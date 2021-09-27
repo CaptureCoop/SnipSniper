@@ -7,6 +7,7 @@ import org.snipsniper.sceditor.stamps.IStamp;
 import org.snipsniper.sceditor.stamps.TextStamp;
 import org.snipsniper.snipscope.SnipScopeListener;
 import org.snipsniper.utils.*;
+import org.snipsniper.utils.enums.LogLevel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

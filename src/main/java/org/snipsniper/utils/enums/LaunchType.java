@@ -1,4 +1,4 @@
-package org.snipsniper.utils;
+package org.snipsniper.utils.enums;
 
 public enum LaunchType {
     NORMAL,

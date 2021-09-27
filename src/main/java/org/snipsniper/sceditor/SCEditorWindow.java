@@ -10,6 +10,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.*;
 import org.snipsniper.LogManager;
+import org.snipsniper.utils.enums.LogLevel;
 
 import javax.swing.*;
 import java.awt.*;

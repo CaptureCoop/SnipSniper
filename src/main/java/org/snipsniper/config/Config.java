@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.LogManager;
 import org.snipsniper.utils.*;
+import org.snipsniper.utils.enums.LogLevel;
 
 public class Config {
 	private final ConfigContainer settings = new ConfigContainer();

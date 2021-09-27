@@ -1,7 +1,7 @@
 package org.snipsniper.config;
 
 import org.snipsniper.LogManager;
-import org.snipsniper.utils.LogLevel;
+import org.snipsniper.utils.enums.LogLevel;
 
 public class ConfigOption {
     private String key;

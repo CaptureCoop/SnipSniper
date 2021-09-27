@@ -4,6 +4,9 @@ import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.*;
+import org.snipsniper.utils.enums.LogLevel;
+import org.snipsniper.utils.enums.PlatformType;
+import org.snipsniper.utils.enums.ReleaseType;
 
 import javax.swing.*;
 import java.awt.*;

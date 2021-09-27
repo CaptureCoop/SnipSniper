@@ -1,6 +1,7 @@
 package org.snipsniper.utils;
 
 import org.snipsniper.LogManager;
+import org.snipsniper.utils.enums.LogLevel;
 
 import java.io.*;
 import java.nio.file.Files;

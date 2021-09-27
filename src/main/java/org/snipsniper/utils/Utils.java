@@ -6,6 +6,10 @@ import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.utils.enums.LaunchType;
+import org.snipsniper.utils.enums.LogLevel;
+import org.snipsniper.utils.enums.PlatformType;
+import org.snipsniper.utils.enums.ReleaseType;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

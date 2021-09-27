@@ -3,7 +3,7 @@ package org.snipsniper;
 import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 
 import org.apache.commons.lang3.StringUtils;
-import org.snipsniper.utils.LogLevel;
+import org.snipsniper.utils.enums.LogLevel;
 
 import java.io.File;
 import java.io.IOException;

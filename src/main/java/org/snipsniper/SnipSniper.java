@@ -27,6 +27,10 @@ import org.apache.commons.lang3.SystemUtils;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.snipsniper.utils.*;
+import org.snipsniper.utils.enums.LaunchType;
+import org.snipsniper.utils.enums.LogLevel;
+import org.snipsniper.utils.enums.PlatformType;
+import org.snipsniper.utils.enums.ReleaseType;
 
 public final class SnipSniper {
 	private static Version version;

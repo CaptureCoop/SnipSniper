@@ -25,6 +25,7 @@ import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.systray.buttons.btnAbout;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.snipsniper.utils.*;
+import org.snipsniper.utils.enums.LogLevel;
 
 import javax.swing.*;
 

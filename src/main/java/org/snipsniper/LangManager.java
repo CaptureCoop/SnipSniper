@@ -3,7 +3,7 @@ package org.snipsniper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.snipsniper.config.ConfigHelper;
-import org.snipsniper.utils.LogLevel;
+import org.snipsniper.utils.enums.LogLevel;
 import org.snipsniper.utils.Utils;
 
 import java.io.IOException;

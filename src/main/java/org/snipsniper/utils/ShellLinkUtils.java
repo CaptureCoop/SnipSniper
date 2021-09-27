@@ -2,6 +2,7 @@ package org.snipsniper.utils;
 
 import com.erigir.mslinks.ShellLink;
 import org.snipsniper.LogManager;
+import org.snipsniper.utils.enums.LogLevel;
 
 import java.io.IOException;
 
