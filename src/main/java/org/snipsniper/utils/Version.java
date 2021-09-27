@@ -77,4 +77,9 @@ public class Version {
     public String getGithash() {
         return githash;
     }
+
+    public String toString() {
+        String form = "%c-%c rev-%c";
+        return StringUtils.format(form, getDigits(), releaseType.toString().toLowerCase(), getGithash());
+    }
 }
