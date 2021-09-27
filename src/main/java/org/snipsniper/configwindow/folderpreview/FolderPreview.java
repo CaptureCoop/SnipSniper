@@ -1,7 +1,7 @@
 package org.snipsniper.configwindow.folderpreview;
 
 import org.snipsniper.LangManager;
-import org.snipsniper.utils.Function;
+import org.snipsniper.utils.IFunction;
 import org.snipsniper.utils.IClosable;
 import org.snipsniper.utils.Icons;
 
@@ -18,8 +18,8 @@ public class FolderPreview extends JFrame implements IClosable {
     private final JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
     private final JLabel explanation = new JLabel("%day% = 1, %month% = 8, %year% = 2021");
 
-    private Function onSave;
-    private Function onClose;
+    private IFunction onSave;
+    private IFunction onClose;
 
     public FolderPreview(String title, String content) {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -90,11 +90,11 @@ public class FolderPreview extends JFrame implements IClosable {
         add(content);
     }
 
-    public void setOnClose(Function function) {
+    public void setOnClose(IFunction function) {
         onClose = function;
     }
 
-    public void setOnSave(Function function) {
+    public void setOnSave(IFunction function) {
         onSave = function;
     }
 

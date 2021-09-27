@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class IconWindow extends JFrame implements IClosable {
     private final IconWindow instance;
-    private final Function onSelectIcon;
+    private final IFunction onSelectIcon;
 
-    public IconWindow(String title, JFrame parent, Function onSelectIcon) {
+    public IconWindow(String title, JFrame parent, IFunction onSelectIcon) {
         instance = this;
         this.onSelectIcon = onSelectIcon;
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

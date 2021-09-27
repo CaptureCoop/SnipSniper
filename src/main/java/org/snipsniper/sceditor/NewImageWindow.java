@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class NewImageWindow extends JFrame implements IClosable{
     private final NewImageWindow instance;
     private BufferedImage image;
-    private Function onSubmit;
+    private IFunction onSubmit;
     private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
     public NewImageWindow() {
@@ -79,7 +79,7 @@ public class NewImageWindow extends JFrame implements IClosable{
         setVisible(true);
     }
 
-    public void setOnSubmit(Function function) {
+    public void setOnSubmit(IFunction function) {
         onSubmit = function;
     }
 

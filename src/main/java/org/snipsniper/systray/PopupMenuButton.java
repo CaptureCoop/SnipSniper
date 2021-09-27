@@ -1,6 +1,6 @@
 package org.snipsniper.systray;
 
-import org.snipsniper.utils.Function;
+import org.snipsniper.utils.IFunction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,9 +9,9 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class PopupMenuButton extends JMenuItem {
-    private Function onClick;
+    private IFunction onClick;
 
-    public PopupMenuButton(String title, BufferedImage icon, JFrame popup, Function function) {
+    public PopupMenuButton(String title, BufferedImage icon, JFrame popup, IFunction function) {
         setText(title);
         setIcon(getPopupIcon(icon));
         onClick = function;
@@ -35,7 +35,7 @@ public class PopupMenuButton extends JMenuItem {
         });
     }
 
-    public void setFunction(Function function) {
+    public void setFunction(IFunction function) {
         onClick = function;
     }
 

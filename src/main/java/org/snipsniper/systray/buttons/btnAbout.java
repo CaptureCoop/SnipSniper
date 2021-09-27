@@ -21,7 +21,7 @@ public class btnAbout extends PopupMenuButton {
 	private boolean onC = false;
 
 	//LOGO USES AGENCY FB BOLD
-	public btnAbout(String title, BufferedImage icon, JFrame popup, Function function) {
+	public btnAbout(String title, BufferedImage icon, JFrame popup, IFunction function) {
 		super(title, icon, popup, function);
 
 		try {
@@ -30,7 +30,7 @@ public class btnAbout extends PopupMenuButton {
 			e.printStackTrace();
 		}
 
-		setFunction(new Function() {
+		setFunction(new IFunction() {
 			@Override
 			public void run(String... args) {
 				JFrame frame = new JFrame();

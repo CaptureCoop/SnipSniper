@@ -12,8 +12,8 @@ public class IconButton extends IDJButton {
     private boolean onRedX = false;
     private final int size = 32;
 
-    Function onSelect;
-    Function onDelete;
+    IFunction onSelect;
+    IFunction onDelete;
 
     public IconButton(String id, SSFile.LOCATION location) {
         super(id);
@@ -37,11 +37,11 @@ public class IconButton extends IDJButton {
         });
     }
 
-    public void setOnSelect(Function function) {
+    public void setOnSelect(IFunction function) {
         onSelect = function;
     }
 
-    public void setOnDelete(Function function) {
+    public void setOnDelete(IFunction function) {
         onDelete = function;
     }
 

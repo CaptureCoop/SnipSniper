@@ -1,5 +1,5 @@
 package org.snipsniper.utils;
 
-public interface Function {
+public interface IFunction {
     void run(String... args);
 }

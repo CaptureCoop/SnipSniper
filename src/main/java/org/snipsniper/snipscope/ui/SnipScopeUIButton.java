@@ -1,6 +1,6 @@
 package org.snipsniper.snipscope.ui;
 
-import org.snipsniper.utils.Function;
+import org.snipsniper.utils.IFunction;
 import org.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
@@ -13,7 +13,7 @@ public class SnipScopeUIButton extends SnipScopeUIComponent{
     private final BufferedImage iconPressed;
     private final BufferedImage iconHovering;
 
-    private final ArrayList<Function> onPress = new ArrayList<>();
+    private final ArrayList<IFunction> onPress = new ArrayList<>();
     private boolean isHovering = false;
     private boolean isHeld = false;
     private boolean selected = false;
@@ -54,7 +54,7 @@ public class SnipScopeUIButton extends SnipScopeUIComponent{
         if(isHeld) {
             isHeld = false;
             if(contains(lastPosition.toPoint())) {
-                for (Function function : onPress) {
+                for (IFunction function : onPress) {
                     function.run();
                 }
             }
@@ -80,7 +80,7 @@ public class SnipScopeUIButton extends SnipScopeUIComponent{
         selected = bool;
     }
 
-    public void addOnPress(Function function) {
+    public void addOnPress(IFunction function) {
         onPress.add(function);
     }
 }
