@@ -10,7 +10,6 @@ public class CommandLineHelper {
     private String editorFile;
     private boolean viewerOnly = false;
     private String viewerFile;
-    private String platform;
 
     public CommandLineHelper() {
 
@@ -63,10 +62,6 @@ public class CommandLineHelper {
                     Utils.jsonLang();
                     doExit = true;
                     break;
-                case "-platform":
-                    if(args.length > index + 1) platform = args[index + 1];
-                    else System.out.println("Missing argument after " + arg + "!");
-                    break;
 
             }
             index++;
@@ -109,10 +104,6 @@ public class CommandLineHelper {
 
     public String getViewerFile() {
         return viewerFile;
-    }
-
-    public String getPlatform() {
-        return platform;
     }
 
 }
