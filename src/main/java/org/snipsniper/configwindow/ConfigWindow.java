@@ -483,31 +483,30 @@ public class ConfigWindow extends JFrame implements IClosable{
         pictureLocation.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent focusEvent) {
-                String saveLocationFinal = pictureLocation.getText();
-                if(!saveLocationFinal.endsWith("/"))
-                    saveLocationFinal += "/";
+                String saveLocationRaw = pictureLocation.getText();
+                if(!saveLocationRaw.endsWith("/"))
+                    saveLocationRaw += "/";
 
-                saveLocationFinal = StringUtils.replaceVars(saveLocationFinal);
+                String saveLocationFinal = StringUtils.replaceVars(saveLocationRaw);
 
                 File saveLocationCheck = new File(saveLocationFinal);
                 if(!saveLocationCheck.exists()) {
-                    boolean allow = false;
-                    Object[] options = {"Okay" , LangManager.getItem("config_sanitation_createdirectory") };
-                    int msgBox = JOptionPane.showOptionDialog(null,LangManager.getItem("config_sanitation_directory_notexist"), LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
-                    if(msgBox == 1) {
-                        allow = new File(saveLocationFinal).mkdirs();
+                    cleanDirtyFunction[0].run(ConfigSaveButtonState.NO_SAVE);
+                    int dialogResult = JOptionPane.showConfirmDialog (instance, LangManager.getItem("config_sanitation_directory_notexist") + " Create?",LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION);
+                    if(dialogResult == JOptionPane.YES_OPTION) {
+                        boolean allow = new File(saveLocationFinal).mkdirs();
 
                         if(!allow) {
                             msgError(LangManager.getItem("config_sanitation_failed_createdirectory"));
+                            cleanDirtyFunction[0].run(ConfigSaveButtonState.NO_SAVE);
                         } else {
-                            config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationFinal);
+                            config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationRaw);
+                            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+                            cleanDirtyFunction[0].run(ConfigSaveButtonState.YES_SAVE);
                         }
+                    } else {
+                        pictureLocation.setText(configOriginal.getRawString(ConfigHelper.PROFILE.pictureFolder));
                     }
-                    if(allow)
-                        cleanDirtyFunction[0].run(ConfigSaveButtonState.YES_SAVE);
-                    else
-                        cleanDirtyFunction[0].run(ConfigSaveButtonState.NO_SAVE);
                 } else {
                     cleanDirtyFunction[0].run(ConfigSaveButtonState.YES_SAVE);
                     config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationFinal);
