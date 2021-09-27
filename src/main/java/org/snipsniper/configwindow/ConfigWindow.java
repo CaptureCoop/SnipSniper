@@ -952,6 +952,8 @@ public class ConfigWindow extends JFrame implements IClosable{
     public JComponent setupViewerPane(Config configOriginal) {
         viewerConfigPanel.removeAll();
 
+        final Function[] saveButtonUpdate = {null};
+
         Config config;
         boolean disablePage = false;
         if (configOriginal != null) {
@@ -979,7 +981,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridx = 1;
         JCheckBox closeViewerOnEditor = new JCheckBox();
         closeViewerOnEditor.setSelected(config.getBool(ConfigHelper.PROFILE.closeViewerOnOpenEditor));
-        closeViewerOnEditor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.closeViewerOnOpenEditor, closeViewerOnEditor.isSelected()));
+        closeViewerOnEditor.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.closeViewerOnOpenEditor, closeViewerOnEditor.isSelected());
+            saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         options.add(closeViewerOnEditor, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
@@ -989,42 +994,17 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridx = 1;
         JCheckBox openViewerFullscreen = new JCheckBox();
         openViewerFullscreen.setSelected(config.getBool(ConfigHelper.PROFILE.openViewerInFullscreen));
-        openViewerFullscreen.addChangeListener(e -> config.set(ConfigHelper.PROFILE.openViewerInFullscreen, openViewerFullscreen.isSelected()));
+        openViewerFullscreen.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.openViewerInFullscreen, openViewerFullscreen.isSelected());
+            saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         options.add(openViewerFullscreen, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
 
         //END ELEMENTS
 
-        JButton saveAndClose = new JButton("Save and close");
-        saveAndClose.addActionListener(e -> {
-            if(configOriginal != null) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                for (CustomWindowListener listener : listeners)
-                    listener.windowClosed();
-                SnipSniper.resetProfiles();
-                close();
-            }
-        });
-
-        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-        saveButton.addActionListener(e -> {
-            if(configOriginal != null) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                //This prevents a bug where the other tabs have an outdated config
-                tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
-                tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
-                SnipSniper.resetProfiles();
-            }
-        });
-
-        gbc.gridx = 0;
-        gbc.insets.top = 20;
-        options.add(saveButton, gbc);
-        gbc.gridx = 1;
-        options.add(saveAndClose, gbc);
+        saveButtonUpdate[0] = setupSaveButtons(options, gbc, config, configOriginal);
 
         viewerConfigPanel.add(options);
 
