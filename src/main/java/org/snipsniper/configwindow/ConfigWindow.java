@@ -253,6 +253,58 @@ public class ConfigWindow extends JFrame implements IClosable{
         return dropdown;
     }
 
+    //Returns function you can run to update the state
+    private Function setupSaveButtons(JPanel panel, GridBagConstraints gbc, Config config, Config configOriginal) {
+        final boolean[] allowSaving = {true};
+        final boolean[] isDirty = {false};
+        JButton save = new JButton(LangManager.getItem("config_label_save"));
+        save.addActionListener(e -> {
+            if(allowSaving[0] && configOriginal != null) {
+                configOriginal.loadFromConfig(config);
+                configOriginal.save();
+                for(CustomWindowListener listener : listeners)
+                    listener.windowClosed();
+
+                SnipSniper.resetProfiles();
+                tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
+                tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
+                tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
+            }
+        });
+
+        JButton close = new JButton("Close");
+        close.addActionListener(e -> {
+            if(isDirty[0]) {
+                int result = JOptionPane.showConfirmDialog(instance, "Unsaved changes, are you sure you want to cancel?","Warning", JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.NO_OPTION) {
+                    return;
+                }
+            }
+            close();
+        });
+        Function setState = new Function() {
+            @Override
+            public boolean run(ConfigSaveButtonState state) {
+                switch (state) {
+                    case UPDATE_CLEAN_STATE: isDirty[0] = !config.equals(configOriginal); break;
+                    case YES_SAVE: allowSaving[0] = true; break;
+                    case NO_SAVE: allowSaving[0] = false; break;
+                }
+                if(isDirty[0])
+                    close.setText("Cancel");
+                else
+                    close.setText("Close");
+
+                return true;
+            }
+        };
+        gbc.gridx = 0;
+        panel.add(save, gbc);
+        gbc.gridx = 1;
+        panel.add(close, gbc);
+        return setState;
+    }
+
     private int getIDFromFilename(String name) {
         String idString = name.replaceAll(Config.DOT_EXTENSION, "").replace("profile", "");
         if(MathUtils.isInteger(idString)) {
@@ -266,7 +318,8 @@ public class ConfigWindow extends JFrame implements IClosable{
         snipConfigPanel.removeAll();
 
         final ColorChooser[] colorChooser = {null};
-        final boolean[] allowSaving = {true};
+
+        final Function[] cleanDirtyFunction = {null};
 
         Config config;
         boolean disablePage = false;
@@ -303,6 +356,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             if(img == null)
                 img = Utils.getDefaultIcon(getIDFromFilename(config.getFilename()));
             iconButton.setIcon(new ImageIcon(img.getScaledInstance(16, 16, 0)));
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         })));
         options.add(iconButton, gbc);
         //END ICON
@@ -322,6 +376,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             } else {
                 config.set(ConfigHelper.PROFILE.hotkey, "NONE");
             }
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         hotkeyPanel.add(hotKeyButton);
         JButton deleteHotKey = new JButton(LangManager.getItem("config_label_delete"));
@@ -329,6 +384,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             hotKeyButton.setText(LangManager.getItem("config_label_none"));
             hotKeyButton.hotkey = -1;
             config.set(ConfigHelper.PROFILE.hotkey, "NONE");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         hotkeyPanel.add(deleteHotKey);
         options.add(hotkeyPanel, gbc);
@@ -341,7 +397,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(createJLabel(LangManager.getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER), gbc);
         JCheckBox saveToDisk = new JCheckBox();
         saveToDisk.setSelected(config.getBool(ConfigHelper.PROFILE.saveToDisk));
-        saveToDisk.addActionListener(e -> config.set(ConfigHelper.PROFILE.saveToDisk, saveToDisk.isSelected() + ""));
+        saveToDisk.addActionListener(e -> {
+            config.set(ConfigHelper.PROFILE.saveToDisk, saveToDisk.isSelected() + "");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         gbc.gridx = 1;
         options.add(saveToDisk, gbc);
         gbc.gridx = 2;
@@ -354,7 +413,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridx = 1;
         JCheckBox copyToClipboard = new JCheckBox();
         copyToClipboard.setSelected(config.getBool(ConfigHelper.PROFILE.copyToClipboard));
-        copyToClipboard.addActionListener(e -> config.set(ConfigHelper.PROFILE.copyToClipboard, copyToClipboard.isSelected() + ""));
+        copyToClipboard.addActionListener(e -> {
+            config.set(ConfigHelper.PROFILE.copyToClipboard, copyToClipboard.isSelected() + "");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         options.add(copyToClipboard, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
@@ -366,12 +428,18 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridx = 1;
         JPanel borderSizePanel = new JPanel(new GridLayout(0, 2));
         JSpinner borderSize = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.borderSize), 0.0, 999, 1.0)); //TODO: Extend JSpinner class to notify user of too large number
-        borderSize.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderSize, (int)((double) borderSize.getValue()) + ""));
+        borderSize.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.borderSize, (int)((double) borderSize.getValue()) + "");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         borderSizePanel.add(borderSize);
 
         SSColor borderColor = SSColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor));
         GradientJButton colorBtn = new GradientJButton("Color", borderColor);
-        borderColor.addChangeListener(e -> config.set(ConfigHelper.PROFILE.borderColor, ((SSColor)e.getSource()).toSaveString()));
+        borderColor.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.borderColor, ((SSColor)e.getSource()).toSaveString());
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         colorBtn.addActionListener(e -> {
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
                 int x = (int)((getLocation().getX() + getWidth()/2));
@@ -405,21 +473,25 @@ public class ConfigWindow extends JFrame implements IClosable{
 
                 File saveLocationCheck = new File(saveLocationFinal);
                 if(!saveLocationCheck.exists()) {
-                    allowSaving[0] = false;
+                    boolean allow = false;
                     Object[] options = {"Okay" , LangManager.getItem("config_sanitation_createdirectory") };
                     int msgBox = JOptionPane.showOptionDialog(null,LangManager.getItem("config_sanitation_directory_notexist"), LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
                     if(msgBox == 1) {
-                        allowSaving[0] = new File(saveLocationFinal).mkdirs();
+                        allow = new File(saveLocationFinal).mkdirs();
 
-                        if(!allowSaving[0]) {
+                        if(!allow) {
                             msgError(LangManager.getItem("config_sanitation_failed_createdirectory"));
                         } else {
                             config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationFinal);
                         }
                     }
+                    if(allow)
+                        cleanDirtyFunction[0].run(ConfigSaveButtonState.YES_SAVE);
+                    else
+                        cleanDirtyFunction[0].run(ConfigSaveButtonState.NO_SAVE);
                 } else {
-                    allowSaving[0] = true;
+                    cleanDirtyFunction[0].run(ConfigSaveButtonState.YES_SAVE);
                     config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationFinal);
                 }
             }
@@ -446,6 +518,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                     text = "/";
                 config.set(ConfigHelper.PROFILE.saveFolderCustom, text);
                 customSaveButton.setText(StringUtils.formatDateArguments(text));
+                cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
             });
         });
         options.add(customSaveButton, gbc);
@@ -458,7 +531,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(createJLabel(LangManager.getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JSpinner snipeDelay = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.snipeDelay), 0.0, 100, 1.0));
-        snipeDelay.addChangeListener(e -> config.set(ConfigHelper.PROFILE.snipeDelay, (int)((double) snipeDelay.getValue()) + ""));
+        snipeDelay.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.snipeDelay, (int)((double) snipeDelay.getValue()) + "");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         options.add(snipeDelay, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
@@ -470,7 +546,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         gbc.gridx = 1;
         JCheckBox openEditor = new JCheckBox();
         openEditor.setSelected(config.getBool(ConfigHelper.PROFILE.openEditor));
-        openEditor.addActionListener(e -> config.set(ConfigHelper.PROFILE.openEditor, openEditor.isSelected() + ""));
+        openEditor.addActionListener(e -> {
+            config.set(ConfigHelper.PROFILE.openEditor, openEditor.isSelected() + "");
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         options.add(openEditor, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
@@ -531,12 +610,14 @@ public class ConfigWindow extends JFrame implements IClosable{
             }
             config.set(ConfigHelper.PROFILE.enableSpyglass, enableSpyglass);
             config.set(ConfigHelper.PROFILE.spyglassMode, spyglassMode);
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         spyglassDropdownHotkey.addItemListener(e -> {
             switch(spyglassDropdownHotkey.getSelectedIndex()) {
                 case 0: config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_CONTROL); break;
                 case 1: config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_SHIFT); break;
             }
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
 
         JPanel spyglassPanel = new JPanel(getGridLayoutWithMargin(0, 2, 0));
@@ -568,6 +649,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 case 3: zoom = 64; break;
             }
             config.set(ConfigHelper.PROFILE.spyglassZoom, zoom);
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         options.add(spyglassZoomDropdown, gbc);
         gbc.gridx = 2;
@@ -576,38 +658,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         //END ELEMENTS
 
         //BEGIN SAVE
-        JButton saveAndClose = new JButton(LangManager.getItem("config_label_saveclose"));
-        saveAndClose.addActionListener(e -> {
-            if(allowSaving[0] && configOriginal != null) {
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                for(CustomWindowListener listener : listeners)
-                    listener.windowClosed();
-
-                SnipSniper.resetProfiles();
-                close();
-            }
-        });
-
-        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-        saveButton.addActionListener(e -> {
-            if(allowSaving[0] && configOriginal != null) {
-                boolean didIconChange = !config.getString(ConfigHelper.PROFILE.icon).equals(configOriginal.getString(ConfigHelper.PROFILE.icon));
-                configOriginal.loadFromConfig(config);
-                configOriginal.save();
-                //This prevents a bug where the other tabs have an outdated config
-
-                tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
-                tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
-                if(didIconChange) tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
-                SnipSniper.resetProfiles();
-            }
-        });
-
-        gbc.gridx = 0;
-        options.add(saveButton, gbc);
-        gbc.gridx = 1;
-        options.add(saveAndClose, gbc);
+        cleanDirtyFunction[0] = setupSaveButtons(options, gbc, config, configOriginal);
         //END SAVE
 
         snipConfigPanel.add(options);
