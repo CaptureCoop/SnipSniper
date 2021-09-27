@@ -1,6 +1,7 @@
 package org.snipsniper.utils;
 
 import org.json.JSONObject;
+import org.snipsniper.ImageManager;
 import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
@@ -241,7 +242,7 @@ public class Utils {
 	}
 
 	public static Image getDefaultIcon(int profileID) {
-		return Icons.getImage("systray/icon" + profileID + ".png");
+		return ImageManager.getImage("systray/icon" + profileID + ".png");
 	}
 
 	public static Image getIconDynamically(Config config) {
@@ -256,14 +257,14 @@ public class Utils {
 		} else {
 			switch (iconFile.getLocation()) {
 				case JAR:
-					if(!Icons.hasImage(iconFile.getPath())) {
+					if(!ImageManager.hasImage(iconFile.getPath())) {
 						LogManager.log("Couldnt find jar icon. Path: " + iconFile.getPath(), LogLevel.ERROR);
 						return null;
 					}
 					if(icon.endsWith(".gif")) {
-						image = Icons.getAnimatedImage(iconFile.getPath());
+						image = ImageManager.getAnimatedImage(iconFile.getPath());
 					} else {
-						image = Icons.getImage(iconFile.getPath());
+						image = ImageManager.getImage(iconFile.getPath());
 					}
 					return image;
 				case LOCAL:

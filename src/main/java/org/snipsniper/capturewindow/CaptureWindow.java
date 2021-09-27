@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 import javax.swing.JFrame;
 
+import org.snipsniper.ImageManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
@@ -41,7 +42,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-		if(SystemTray.isSupported() && sniperInstance.getIconString().equals("none")) sniperInstance.getTrayIcon().setImage(Icons.getImage("systray/alt_icon" + sniperInstance.profileID + ".png"));
+		if(SystemTray.isSupported() && sniperInstance.getIconString().equals("none")) sniperInstance.getTrayIcon().setImage(ImageManager.getImage("systray/alt_icon" + sniperInstance.profileID + ".png"));
 		if(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) != 0) {
 			try {
 				Thread.sleep(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L);
@@ -54,7 +55,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		screenshot();
 
 		setUndecorated(true);
-		setIconImage(Icons.getImage("icons/snipsniper.png"));
+		setIconImage(ImageManager.getImage("icons/snipsniper.png"));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		listener = new CaptureWindowListener(this);

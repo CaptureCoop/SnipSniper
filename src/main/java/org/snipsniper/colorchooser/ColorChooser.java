@@ -1,5 +1,6 @@
 package org.snipsniper.colorchooser;
 
+import org.snipsniper.ImageManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
@@ -42,7 +43,7 @@ public class ColorChooser extends JFrame implements IClosable {
         });
 
         setTitle(title);
-        setIconImage(Icons.getImage("icons/snipsniper.png"));
+        setIconImage(ImageManager.getImage("icons/snipsniper.png"));
 		init(x, y, useGradient);
 	}
 	

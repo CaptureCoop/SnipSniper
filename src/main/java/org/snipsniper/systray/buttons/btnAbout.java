@@ -1,5 +1,6 @@
 package org.snipsniper.systray.buttons;
 
+import org.snipsniper.ImageManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.systray.PopupMenuButton;
 import org.snipsniper.config.ConfigHelper;
@@ -39,7 +40,7 @@ public class btnAbout extends PopupMenuButton {
 				frame.setSize(512,256);
 				frame.setTitle("About");
 				frame.setResizable(true);
-				frame.setIconImage(Icons.getImage("icons/snipsniper.png"));
+				frame.setIconImage(ImageManager.getImage("icons/snipsniper.png"));
 
 				JPanel panel = new JPanel(new GridLayout(1,0));
 
@@ -47,12 +48,12 @@ public class btnAbout extends PopupMenuButton {
 				GridBagConstraints gbc = new GridBagConstraints();
 				gbc.gridx = 0; gbc.gridy = 0;
 				int iconSize = 100;
-				ImageIcon icon = new ImageIcon(Icons.getImage("icons/snipsniper.png").getScaledInstance(iconSize,iconSize,Image.SCALE_DEFAULT));
+				ImageIcon icon = new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(iconSize,iconSize,Image.SCALE_DEFAULT));
 				JLabel label = new JLabel(icon);
 				label.addMouseListener(new MouseAdapter() {
 					int index = 0;
 
-					final BufferedImage[] icons = {Icons.getImage("icons/snipsniper.png"), Icons.getImage("icons/editor.png"), Icons.getImage("icons/viewer.png"), Icons.getImage("icons/console.png")};
+					final BufferedImage[] icons = {ImageManager.getImage("icons/snipsniper.png"), ImageManager.getImage("icons/editor.png"), ImageManager.getImage("icons/viewer.png"), ImageManager.getImage("icons/console.png")};
 					final HashMap<String, Image> cache = new HashMap<>();
 
 					@Override
@@ -92,7 +93,7 @@ public class btnAbout extends PopupMenuButton {
 				gbc.insets = new Insets(20, 0, 0, 0);
 				JButton buyCoffee = new JButton("Buy us a coffee");
 				buyCoffee.addActionListener(e -> Links.openLink(Links.KOFI));
-				Image coffeeIcon = Icons.getAnimatedImage("icons/coffee.gif");
+				Image coffeeIcon = ImageManager.getAnimatedImage("icons/coffee.gif");
 				buyCoffee.setIcon(new ImageIcon(coffeeIcon.getScaledInstance(coffeeIcon.getWidth(null) / 16, coffeeIcon.getHeight(null) / 16, Image.SCALE_DEFAULT)));
 				buyCoffee.setHorizontalTextPosition(SwingConstants.LEFT);
 				buyCoffee.setFocusable(false);
@@ -102,7 +103,7 @@ public class btnAbout extends PopupMenuButton {
 
 				JPanel rightSide = new JPanel(new GridLayout(2, 0));
 
-				BufferedImage splash = Icons.getImage("splash.png");
+				BufferedImage splash = ImageManager.getImage("splash.png");
 				JLabel splashLabel = new JLabel(new ImageIcon(splash.getScaledInstance((int)(splash.getWidth()/2.2F),(int)(splash.getHeight()/2.2F),Image.SCALE_DEFAULT)));
 				splashLabel.addMouseListener(new MouseAdapter() {
 					@Override

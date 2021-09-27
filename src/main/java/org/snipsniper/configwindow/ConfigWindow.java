@@ -1,6 +1,7 @@
 package org.snipsniper.configwindow;
 
 import org.apache.commons.lang3.SystemUtils;
+import org.snipsniper.ImageManager;
 import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
@@ -60,7 +61,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         setSize(512, 512);
         setTitle(LangManager.getItem("config_label_config"));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setIconImage(Icons.getImage("icons/config.png"));
+        setIconImage(ImageManager.getImage("icons/config.png"));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -101,26 +102,26 @@ public class ConfigWindow extends JFrame implements IClosable{
 
         snipConfigPanel = new JPanel();
         tabPane.addTab("SnipSniper",  setupSnipPane(config));
-        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)));
+        tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)));
         index++;
 
         editorConfigPanel = new JPanel();
         tabPane.addTab("Editor", setupEditorPane(config));
-        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/editor.png").getScaledInstance(iconSize,iconSize,0)));
+        tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/editor.png").getScaledInstance(iconSize,iconSize,0)));
         if(page == PAGE.editorPanel)
             enableIndex = index;
         index++;
 
         viewerConfigPanel = new JPanel();
         tabPane.addTab("Viewer", setupViewerPane(config));
-        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/viewer.png").getScaledInstance(iconSize,iconSize,0)));
+        tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/viewer.png").getScaledInstance(iconSize,iconSize,0)));
         if(page == PAGE.viewerPanel)
             enableIndex = index;
         index++;
 
         globalConfigPanel = new JPanel();
         tabPane.addTab("Global", setupGlobalPane());
-        tabPane.setIconAt(index, new ImageIcon(Icons.getImage("icons/config.png").getScaledInstance(iconSize, iconSize, 0)));
+        tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/config.png").getScaledInstance(iconSize, iconSize, 0)));
         if(page == PAGE.globalPanel)
             enableIndex = index;
 
@@ -165,7 +166,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                         break;
                     }
                 if(add)
-                    profiles.add(0, new DropdownItem("Standalone Viewer", file.getName(), Icons.getImage("icons/viewer.png")));
+                    profiles.add(0, new DropdownItem("Standalone Viewer", file.getName(), ImageManager.getImage("icons/viewer.png")));
             } else if(file.getName().contains("editor")) {
                 boolean add = true;
                 for(String str : blacklist)
@@ -174,7 +175,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                         break;
                     }
                 if(add)
-                    profiles.add(0, new DropdownItem("Standalone Editor", file.getName(), Icons.getImage("icons/editor.png")));
+                    profiles.add(0, new DropdownItem("Standalone Editor", file.getName(), ImageManager.getImage("icons/editor.png")));
             } else if(file.getName().contains("profile")) {
                 int nr = getIDFromFilename(file.getName());
                 Image img = Utils.getIconDynamically(new Config(file.getName(), "profile_defaults.cfg"));
@@ -742,9 +743,9 @@ public class ConfigWindow extends JFrame implements IClosable{
         StampJPanel row3_stampPreview = new StampJPanel();
         String theme = SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme);
         if(theme.equals("light")) {
-            row3_stampPreview.setBackground(Icons.getImage("preview/code_light.png"));
+            row3_stampPreview.setBackground(ImageManager.getImage("preview/code_light.png"));
         } else if(theme.equals("dark")) {
-            row3_stampPreview.setBackground(Icons.getImage("preview/code_dark.png"));
+            row3_stampPreview.setBackground(ImageManager.getImage("preview/code_dark.png"));
         }
         IStamp stamp = new CubeStamp(config, null);
         row3_stampPreview.setStamp(stamp);

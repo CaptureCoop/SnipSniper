@@ -7,7 +7,7 @@ import org.snipsniper.snipscope.SnipScopeWindow;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.enums.ClockDirection;
 import org.snipsniper.utils.FileUtils;
-import org.snipsniper.utils.Icons;
+import org.snipsniper.ImageManager;
 import org.snipsniper.utils.Utils;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -43,13 +43,13 @@ public class SCViewerWindow extends SnipScopeWindow {
         currentFile = file;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         refreshTitle();
-        setIconImage(Icons.getImage("icons/viewer.png"));
+        setIconImage(ImageManager.getImage("icons/viewer.png"));
         BufferedImage image;
         if(file != null) {
             refreshFolder();
             image = getImageFromFile(currentFile);
         } else {
-            image = Utils.getDragPasteImage(Icons.getImage("icons/viewer.png"), "Drop image here!");
+            image = Utils.getDragPasteImage(ImageManager.getImage("icons/viewer.png"), "Drop image here!");
             defaultImage = image;
         }
 

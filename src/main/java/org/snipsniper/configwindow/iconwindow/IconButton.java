@@ -1,5 +1,6 @@
 package org.snipsniper.configwindow.iconwindow;
 
+import org.snipsniper.ImageManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.utils.*;
 
@@ -48,7 +49,7 @@ public class IconButton extends IDJButton {
     public void paint(Graphics g) {
         super.paint(g);
         if(location == SSFile.LOCATION.LOCAL) {
-            g.drawImage(Icons.getImage("icons/redx.png"), getWidth() - size, 0, size, size, this);
+            g.drawImage(ImageManager.getImage("icons/redx.png"), getWidth() - size, 0, size, size, this);
         }
     }
 }

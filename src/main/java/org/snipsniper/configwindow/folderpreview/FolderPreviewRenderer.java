@@ -1,6 +1,6 @@
 package org.snipsniper.configwindow.folderpreview;
 
-import org.snipsniper.utils.Icons;
+import org.snipsniper.ImageManager;
 import org.snipsniper.utils.StringUtils;
 
 import javax.swing.*;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class FolderPreviewRenderer extends JPanel {
     private final FolderPreview folderPreview;
-    private final BufferedImage folderIcon = Icons.getImage("icons/folder.png");
+    private final BufferedImage folderIcon = ImageManager.getImage("icons/folder.png");
 
     public FolderPreviewRenderer(FolderPreview folderPreview, int minWidth, int minHeight) {
         this.folderPreview = folderPreview;

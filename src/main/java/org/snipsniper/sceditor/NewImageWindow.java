@@ -1,5 +1,6 @@
 package org.snipsniper.sceditor;
 
+import org.snipsniper.ImageManager;
 import org.snipsniper.colorchooser.ColorChooser;
 import org.snipsniper.utils.*;
 
@@ -20,7 +21,7 @@ public class NewImageWindow extends JFrame implements IClosable{
         instance = this;
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setLayout(new GridBagLayout());
-        setIconImage(Icons.getImage("icons/editor.png"));
+        setIconImage(ImageManager.getImage("icons/editor.png"));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
@@ -61,7 +62,7 @@ public class NewImageWindow extends JFrame implements IClosable{
             String widthString = widthTextField.getText();
             String heightString = heightTextField.getText();
             if(!MathUtils.isInteger(widthString) || !MathUtils.isInteger(heightString)) {
-                JOptionPane.showMessageDialog(instance, "Bad input! Not a valid number.", "Error", JOptionPane.ERROR_MESSAGE, new ImageIcon(Icons.getImage("icons/redx.png").getScaledInstance(32, 32, 0)));
+                JOptionPane.showMessageDialog(instance, "Bad input! Not a valid number.", "Error", JOptionPane.ERROR_MESSAGE, new ImageIcon(ImageManager.getImage("icons/redx.png").getScaledInstance(32, 32, 0)));
             } else {
                 int width = Integer.parseInt(widthString);
                 int height = Integer.parseInt(heightString);

@@ -104,7 +104,7 @@ public final class SnipSniper {
 			config.set(ConfigHelper.MAIN.debug, "true");
 
 		LogManager.log("Loading resources", LogLevel.INFO);
-		Icons.loadResources();
+		ImageManager.loadResources();
 
 		System.setProperty("sun.java2d.uiScale", "1.0");
 		try {

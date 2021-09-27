@@ -3,7 +3,7 @@ package org.snipsniper.configwindow.folderpreview;
 import org.snipsniper.LangManager;
 import org.snipsniper.utils.IFunction;
 import org.snipsniper.utils.IClosable;
-import org.snipsniper.utils.Icons;
+import org.snipsniper.ImageManager;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -40,7 +40,7 @@ public class FolderPreview extends JFrame implements IClosable {
             }
         });
         setSize(256, 256);
-        setIconImage(Icons.getImage("icons/folder.png"));
+        setIconImage(ImageManager.getImage("icons/folder.png"));
         setupUI();
         setVisible(true);
         requestFocus();

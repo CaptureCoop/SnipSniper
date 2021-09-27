@@ -1,5 +1,6 @@
 package org.snipsniper.sceditor;
 
+import org.snipsniper.ImageManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.Config;
 import org.snipsniper.configwindow.ConfigWindow;
@@ -70,7 +71,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         stamps[6] = new EraserStamp(this, config);
 
         if(image == null) {
-            image = Utils.getDragPasteImage(Icons.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
+            image = Utils.getDragPasteImage(ImageManager.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
             defaultImage = image;
         }
         renderer = new SCEditorRenderer(this);
@@ -81,7 +82,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
         listener.resetHistory();
 
-        setIconImage(Icons.getImage("icons/editor.png"));
+        setIconImage(ImageManager.getImage("icons/editor.png"));
 
         setFocusTraversalKeysEnabled(false);
         setVisible(true);
@@ -113,7 +114,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         String[] buttonStrings = {"cube", "counter", "circle", "simplebrush", "text", "rectangle"};
         int i = 0;
         for(String str : buttonStrings) {
-            SnipScopeUIButton button = new SnipScopeUIButton(Icons.getImage("buttons/stamp_" + str + ".png"), Icons.getImage("buttons/stamp_" + str + "_hover.png"), Icons.getImage("buttons/stamp_" + str + "_sel.png"));
+            SnipScopeUIButton button = new SnipScopeUIButton(ImageManager.getImage("buttons/stamp_" + str + ".png"), ImageManager.getImage("buttons/stamp_" + str + "_hover.png"), ImageManager.getImage("buttons/stamp_" + str + "_sel.png"));
             int selectedStamp = i;
             button.addOnPress(args -> {
                 for(SnipScopeUIButton btn : stampButtons) {

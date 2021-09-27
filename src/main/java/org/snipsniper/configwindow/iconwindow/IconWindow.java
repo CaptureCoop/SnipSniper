@@ -1,5 +1,6 @@
 package org.snipsniper.configwindow.iconwindow;
 
+import org.snipsniper.ImageManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.utils.*;
 
@@ -24,7 +25,7 @@ public class IconWindow extends JFrame implements IClosable {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(512, 256);
         setTitle(title);
-        setIconImage(Icons.getImage("icons/folder.png"));
+        setIconImage(ImageManager.getImage("icons/folder.png"));
         setLocation((int)parent.getLocation().getX() + parent.getWidth() / 2 - getWidth() / 2, (int)parent.getLocation().getY() + parent.getHeight() / 2 - getHeight() / 2);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -72,7 +73,7 @@ public class IconWindow extends JFrame implements IClosable {
         gbc.gridx = 0;
         final int MAX_X = 4;
         ArrayList<SSFile> list = new ArrayList<>();
-        for(String file : Icons.getListAsString())
+        for(String file : ImageManager.getListAsString())
             if(file.contains("icons"))
                 list.add(new SSFile(file, SSFile.LOCATION.JAR));
         for(File localFile : FileUtils.listFiles(SnipSniper.getMainFolder() + "/img/")) {
@@ -98,9 +99,9 @@ public class IconWindow extends JFrame implements IClosable {
             switch(file.getLocation()) {
                 case JAR:
                     if(file.getPath().endsWith(".png"))
-                        button.setIcon(new ImageIcon(Icons.getImage(file.getPath()).getScaledInstance(size, size, 0)));
+                        button.setIcon(new ImageIcon(ImageManager.getImage(file.getPath()).getScaledInstance(size, size, 0)));
                     else if(file.getPath().endsWith(".gif"))
-                        button.setIcon(new ImageIcon(Icons.getAnimatedImage(file.getPath()).getScaledInstance(size, size, 0)));
+                        button.setIcon(new ImageIcon(ImageManager.getAnimatedImage(file.getPath()).getScaledInstance(size, size, 0)));
                     break;
                 case LOCAL:
                     button.setIcon(new ImageIcon(Utils.getImageFromDisk(SnipSniper.getImageFolder() + "/" + file.getPath()).getScaledInstance(size, size, 0)));

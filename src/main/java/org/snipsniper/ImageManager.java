@@ -1,4 +1,4 @@
-package org.snipsniper.utils;
+package org.snipsniper;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -8,12 +8,11 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import org.snipsniper.LogManager;
-import org.snipsniper.SnipSniper;
 import org.json.JSONArray;
+import org.snipsniper.utils.Utils;
 import org.snipsniper.utils.enums.LogLevel;
 
-public class Icons {
+public class ImageManager {
 
 	private static final HashMap<String, BufferedImage> images = new HashMap<>();
 	private static final HashMap<String, Image> animatedImages = new HashMap<>();
@@ -32,7 +31,7 @@ public class Icons {
 						SnipSniper.exit(false);
 					}
 				} else {
-					URL url = Icons.class.getResource("/org/snipsniper/resources/img/" + list.getString(i));
+					URL url = ImageManager.class.getResource("/org/snipsniper/resources/img/" + list.getString(i));
 					if(url != null) {
 						Image img = new ImageIcon(url).getImage();
 						animatedImages.put(list.getString(i), img);

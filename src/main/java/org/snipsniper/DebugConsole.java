@@ -1,7 +1,6 @@
 package org.snipsniper;
 
 import org.snipsniper.utils.CustomWindowListener;
-import org.snipsniper.utils.Icons;
 import org.snipsniper.utils.Links;
 
 import javax.swing.*;
@@ -22,7 +21,7 @@ public class DebugConsole extends JFrame {
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         setSize((int)(size.getWidth()/2), (int)(size.getHeight()/2));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setIconImage(Icons.getImage("icons/console.png"));
+        setIconImage(ImageManager.getImage("icons/console.png"));
         content.setOpaque(true);
         content.setContentType("text/html");
         content.setEditable(false);
