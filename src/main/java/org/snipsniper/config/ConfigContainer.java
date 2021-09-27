@@ -64,6 +64,17 @@ public class ConfigContainer {
         map.clear();
     }
 
+    public boolean equals(ConfigContainer other) {
+        boolean isSame = true;
+        for(ConfigOption option : list) {
+            if(option.getKey() != null) {
+                if(!other.get(option.getKey()).equals(option.getValue()))
+                    isSame = false;
+            }
+        }
+        return isSame;
+    }
+
     public ArrayList<ConfigOption> getList() {
         return list;
     }

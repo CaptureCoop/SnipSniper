@@ -191,6 +191,10 @@ public class Config {
 		}
 	}
 
+	public boolean equals(Config other) {
+		return settings.equals(other.settings);
+	}
+
 	public String getFilename() {
 		return filename;
 	}
