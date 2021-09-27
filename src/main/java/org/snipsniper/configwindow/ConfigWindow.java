@@ -240,8 +240,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         profilePlusMinus.add(profileAddButton);
         JButton profileRemoveButton = new JButton("-");
         DropdownItem selectedItem = (DropdownItem) dropdown.getSelectedItem();
-        if(selectedItem.getID().contains("profile0") || selectedItem.getID().contains("editor"))
-            profileRemoveButton.setEnabled(false);
+        if(selectedItem != null) {
+            if (selectedItem.getID().contains("profile0") || selectedItem.getID().contains("editor"))
+                profileRemoveButton.setEnabled(false);
+        }
         profileRemoveButton.addActionListener(actionEvent -> {
             DropdownItem item = (DropdownItem) dropdown.getSelectedItem();
             if(!item.getID().contains("profile0") || !item.getID().contains("editor")) {
@@ -328,7 +330,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         if(MathUtils.isInteger(idString)) {
             return Integer.parseInt(idString);
         }
-        LogManager.log("Issie parsing Filename to id: " + name, LogLevel.ERROR);
+        LogManager.log("Issue parsing Filename to id: " + name, LogLevel.ERROR);
         return -1;
     }
 
@@ -365,9 +367,12 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JButton iconButton = new JButton("Set Icon");
-        Icon icon = ((DropdownItem)dropdown.getSelectedItem()).getIcon();
-        if(icon != null)
-            iconButton.setIcon(icon);
+        DropdownItem item = ((DropdownItem)dropdown.getSelectedItem());
+        if(item != null) {
+            Icon icon = ((DropdownItem)dropdown.getSelectedItem()).getIcon();
+            if(icon != null)
+                iconButton.setIcon(icon);
+        }
         iconButton.addActionListener(e -> cWindows.add(new IconWindow("Custom Profile Icon", instance, args -> {
             config.set(ConfigHelper.PROFILE.icon, args[0]);
             Image img = Utils.getIconDynamically(config);
@@ -505,7 +510,8 @@ public class ConfigWindow extends JFrame implements IClosable{
                             cleanDirtyFunction[0].run(ConfigSaveButtonState.YES_SAVE);
                         }
                     } else {
-                        pictureLocation.setText(configOriginal.getRawString(ConfigHelper.PROFILE.pictureFolder));
+                        if(configOriginal != null)
+                            pictureLocation.setText(configOriginal.getRawString(ConfigHelper.PROFILE.pictureFolder));
                     }
                 } else {
                     cleanDirtyFunction[0].run(ConfigSaveButtonState.YES_SAVE);

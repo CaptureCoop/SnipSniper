@@ -82,7 +82,7 @@ public class Config {
 	}
 
 	public String getRawString(String key) {
-		String returnVal = null;
+		String returnVal = "<NULL> (" + key + ">";
 		if(settings.containsKey(key))
 			returnVal = settings.get(key);
 		else if(defaults.containsKey(key))
