@@ -785,7 +785,7 @@ public class ConfigWindow extends JFrame implements IClosable{
     private JSpinner setupStampConfigPanelSpinner(Enum configKey, double min, double max, double stepSize, StampJPanel previewPanel, Config config, int stampIndex, Function onUpdate) {
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(Double.parseDouble(config.getFloat(configKey)+""), min, max, stepSize));
         spinner.addChangeListener(e -> {
-            config.set(configKey, spinner.getValue() + "");
+            config.set(configKey, (int)Double.parseDouble(spinner.getValue().toString()));
             previewPanel.setStamp(StampUtils.getNewIStampByIndex(stampIndex, config, null));
             onUpdate.run();
         });

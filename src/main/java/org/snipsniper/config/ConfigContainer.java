@@ -68,8 +68,12 @@ public class ConfigContainer {
         boolean isSame = true;
         for(ConfigOption option : list) {
             if(option.getKey() != null) {
-                if(!other.get(option.getKey()).equals(option.getValue()))
+                String value = option.getValue();
+                String otherValue = other.get(option.getKey());
+                if(!otherValue.equals(value)) {
                     isSame = false;
+                    //System.out.println(other.get(option.getKey()) + " = " + option.getValue());
+                }
             }
         }
         return isSame;
