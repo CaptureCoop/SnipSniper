@@ -221,8 +221,13 @@ public class ConfigWindow extends JFrame implements IClosable{
 
                     refreshConfigFiles();
                     parentPanel.removeAll();
-                    tabPane.setComponentAt(pageIndex, setupPaneDynamic(newProfileConfig, page));
+
+                    tabPane.setComponentAt(indexSnip, setupSnipPane(newProfileConfig));
+                    tabPane.setComponentAt(indexEditor, setupEditorPane(newProfileConfig));
+                    tabPane.setComponentAt(indexViewer, setupViewerPane(newProfileConfig));
+
                     lastSelectedConfig = newProfileConfig;
+
                     break;
                 }
             }
@@ -243,10 +248,13 @@ public class ConfigWindow extends JFrame implements IClosable{
                 if(newIndex < 0)
                     newIndex = dropdown.getSelectedIndex() + 1;
                 Config newConfig = new Config(dropdown.getItemAt(newIndex).getID(), "profile_defaults.cfg");
-                tabPane.setComponentAt(pageIndex, setupPaneDynamic(newConfig, page));
+
+                tabPane.setComponentAt(indexSnip, setupSnipPane(newConfig));
+                tabPane.setComponentAt(indexEditor, setupEditorPane(newConfig));
+                tabPane.setComponentAt(indexViewer, setupViewerPane(newConfig));
+
                 lastSelectedConfig = newConfig;
             }
-
         });
         profilePlusMinus.add(profileRemoveButton);
         panelToAdd.add(profilePlusMinus, gbc);
