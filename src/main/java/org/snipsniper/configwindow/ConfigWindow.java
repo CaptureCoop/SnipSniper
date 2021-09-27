@@ -262,21 +262,25 @@ public class ConfigWindow extends JFrame implements IClosable{
     }
 
     //Returns function you can run to update the state
-    private Function setupSaveButtons(JPanel panel, GridBagConstraints gbc, Config config, Config configOriginal) {
+    private Function setupSaveButtons(JPanel panel, GridBagConstraints gbc, Config config, Config configOriginal, IFunction beforeSave, boolean reloadOtherDropdowns) {
         final boolean[] allowSaving = {true};
         final boolean[] isDirty = {false};
         JButton save = new JButton(LangManager.getItem("config_label_save"));
         save.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
+                if(beforeSave != null)
+                    beforeSave.run();
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
                 for(CustomWindowListener listener : listeners)
                     listener.windowClosed();
 
                 SnipSniper.resetProfiles();
-                tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
-                tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
-                tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
+                if(reloadOtherDropdowns) {
+                    tabPane.setComponentAt(indexSnip, setupSnipPane(configOriginal));
+                    tabPane.setComponentAt(indexEditor, setupEditorPane(configOriginal));
+                    tabPane.setComponentAt(indexViewer, setupViewerPane(configOriginal));
+                }
             }
         });
 
@@ -667,7 +671,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         //END ELEMENTS
 
         //BEGIN SAVE
-        cleanDirtyFunction[0] = setupSaveButtons(options, gbc, config, configOriginal);
+        cleanDirtyFunction[0] = setupSaveButtons(options, gbc, config, configOriginal, null, true);
         //END SAVE
 
         snipConfigPanel.add(options);
@@ -773,7 +777,7 @@ public class ConfigWindow extends JFrame implements IClosable{
 
         //END ELEMENTS
 
-        saveButtonUpdate[0] = setupSaveButtons(options, gbc, config, configOriginal);
+        saveButtonUpdate[0] = setupSaveButtons(options, gbc, config, configOriginal, null, true);
         onUpdate[0] = new Function() {
             @Override
             public boolean run() {
@@ -1013,7 +1017,7 @@ public class ConfigWindow extends JFrame implements IClosable{
 
         //END ELEMENTS
 
-        saveButtonUpdate[0] = setupSaveButtons(options, gbc, config, configOriginal);
+        saveButtonUpdate[0] = setupSaveButtons(options, gbc, config, configOriginal, null, true);
 
         viewerConfigPanel.add(options);
 
@@ -1025,6 +1029,8 @@ public class ConfigWindow extends JFrame implements IClosable{
 
     public JComponent setupGlobalPane() {
         globalConfigPanel.removeAll();
+
+        final Function[] saveButtonUpdate = {null};
 
         JPanel options = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -1137,6 +1143,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         languageDropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 config.set(ConfigHelper.MAIN.language, LangManager.languages.get(languageDropdown.getSelectedIndex()));
+                saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
             }
         });
 
@@ -1158,6 +1165,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 } else if(themeDropdown.getSelectedIndex() == 1) {
                     config.set(ConfigHelper.MAIN.theme, "dark");
                 }
+                saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
             }
         });
 
@@ -1170,7 +1178,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         options.add(createJLabel(LangManager.getItem("config_label_debug"), JLabel.RIGHT, JLabel.CENTER), gbc);
         JCheckBox debugCheckBox = new JCheckBox();
         debugCheckBox.setSelected(config.getBool(ConfigHelper.MAIN.debug));
-        debugCheckBox.addActionListener(e -> config.set(ConfigHelper.MAIN.debug, debugCheckBox.isSelected() + ""));
+        debugCheckBox.addActionListener(e -> {
+            config.set(ConfigHelper.MAIN.debug, debugCheckBox.isSelected() + "");
+            saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         gbc.gridx = 1;
         options.add(debugCheckBox, gbc);
 
@@ -1203,8 +1214,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             options.add(autostartCheckbox, gbc);
         }
 
-        JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-        saveButton.addActionListener(e -> {
+        IFunction beforeSave = args -> {
             boolean restartConfig = !config.getString(ConfigHelper.MAIN.language).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.language));
             boolean didThemeChange = !config.getString(ConfigHelper.MAIN.theme).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme));
 
@@ -1214,22 +1224,9 @@ public class ConfigWindow extends JFrame implements IClosable{
                 new ConfigWindow(lastSelectedConfig, PAGE.globalPanel);
                 close();
             }
-        });
+        };
 
-        JButton saveAndClose = new JButton(LangManager.getItem("config_label_saveclose"));
-        saveAndClose.addActionListener(e -> {
-            globalSave(config);
-
-            for(CustomWindowListener listener : listeners)
-                listener.windowClosed();
-            close();
-        });
-
-        gbc.gridx = 0;
-        gbc.insets.top = 20;
-        options.add(saveButton, gbc);
-        gbc.gridx = 1;
-        options.add(saveAndClose, gbc);
+        saveButtonUpdate[0] = setupSaveButtons(options, gbc, config, SnipSniper.getConfig(), beforeSave, false);
 
         globalConfigPanel.add(options);
 
