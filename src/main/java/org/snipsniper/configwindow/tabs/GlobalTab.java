@@ -144,28 +144,13 @@ public class GlobalTab extends JPanel implements ITab{
         gbc.gridx = 1;
         options.add(new UpdateButton(), gbc);
 
-        DropdownItem[] langItems = new DropdownItem[LangManager.languages.size()];
-        Collections.sort(LangManager.languages);
-        int index = 0;
-        for(String lang : LangManager.languages) {
-            String translated = LangManager.getItem(lang, "lang_" + lang);
-            langItems[index] = new DropdownItem(translated, lang, LangManager.getIcon(lang));
-            index++;
-        }
-        JComboBox<DropdownItem> languageDropdown = new JComboBox<>(langItems);
-        languageDropdown.setRenderer(new DropdownItemRenderer(langItems));
-        languageDropdown.setSelectedIndex(LangManager.languages.indexOf(config.getString(ConfigHelper.MAIN.language)));
-        languageDropdown.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                config.set(ConfigHelper.MAIN.language, LangManager.languages.get(languageDropdown.getSelectedIndex()));
-                saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
-            }
-        });
-
         gbc.gridx = 0;
         options.add(configWindow.createJLabel(LangManager.getItem("config_label_language"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
-        options.add(languageDropdown, gbc);
+        options.add(Utils.getLanguageDropdown(config.getString(ConfigHelper.MAIN.language), args -> {
+            config.set(ConfigHelper.MAIN.language, args[0]);
+            saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        }), gbc);
 
         String[] themes = {LangManager.getItem("config_label_theme_light"), LangManager.getItem("config_label_theme_dark")};
         JComboBox<Object> themeDropdown = new JComboBox<>(themes);

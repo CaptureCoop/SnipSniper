@@ -2,14 +2,12 @@ package org.snipsniper.utils;
 
 import org.json.JSONObject;
 import org.snipsniper.ImageManager;
+import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
-import org.snipsniper.utils.enums.LaunchType;
-import org.snipsniper.utils.enums.LogLevel;
-import org.snipsniper.utils.enums.PlatformType;
-import org.snipsniper.utils.enums.ReleaseType;
+import org.snipsniper.utils.enums.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,6 +15,7 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
@@ -255,6 +254,34 @@ public class Utils {
 		g.drawImage(img, 0, 0, null);
 		g.dispose();
 		return image;
+	}
+
+	public static JComboBox<DropdownItem> getLanguageDropdown(String selectedLanguage, IFunction onSelect) {
+		DropdownItem[] langItems = new DropdownItem[LangManager.languages.size()];
+		Collections.sort(LangManager.languages);
+		DropdownItem selectedItem = null;
+		int index = 0;
+		for(String lang : LangManager.languages) {
+			String translated = LangManager.getItem(lang, "lang_" + lang);
+			langItems[index] = new DropdownItem(translated, lang, LangManager.getIcon(lang));
+			if(lang.equals(selectedLanguage))
+				selectedItem = langItems[index];
+			index++;
+		}
+		JComboBox<DropdownItem> languageDropdown = new JComboBox<>(langItems);
+		languageDropdown.setRenderer(new DropdownItemRenderer(langItems));
+		languageDropdown.setSelectedItem(selectedItem);
+		languageDropdown.addItemListener(e -> {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				DropdownItem item = (DropdownItem)languageDropdown.getSelectedItem();
+				String id = null;
+				if(item != null)
+					id = item.getID();
+
+				onSelect.run(id);
+			}
+		});
+		return languageDropdown;
 	}
 
 	public static String saveImage(BufferedImage finalImg, String modifier, Config config) {
