@@ -23,8 +23,6 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class ConfigWindow extends JFrame implements IClosable{
-    private final ConfigWindow instance;
-
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
     private final ArrayList<File> configFiles = new ArrayList<>();
     private Config lastSelectedConfig;
@@ -39,7 +37,6 @@ public class ConfigWindow extends JFrame implements IClosable{
     private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
     public ConfigWindow(Config config, PAGE page) {
-        instance = this;
         LogManager.log("Creating config window", LogLevel.INFO);
 
         setSize(512, 512);
@@ -281,7 +278,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         JButton close = new JButton("Close");
         close.addActionListener(e -> {
             if(isDirty[0]) {
-                int result = JOptionPane.showConfirmDialog(instance, "Unsaved changes, are you sure you want to cancel?","Warning", JOptionPane.YES_NO_OPTION);
+                int result = JOptionPane.showConfirmDialog(this, "Unsaved changes, are you sure you want to cancel?","Warning", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.NO_OPTION) {
                     return;
                 }
