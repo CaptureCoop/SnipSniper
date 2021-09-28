@@ -229,7 +229,12 @@ public class ConfigWindow extends JFrame implements IClosable{
         if(SnipSniper.getProfileCount() == SnipSniper.getProfileCountMax())
             profileAddButton.setEnabled(false);
         profileAddButton.addActionListener(actionEvent -> {
-            //TODO: Check dirty
+            if(tabs[activeTabIndex].isDirty()) {
+                int result = showDirtyWarning();
+                if(result == JOptionPane.NO_OPTION) {
+                    return;
+                }
+            }
             for(int i = 0; i < SnipSniper.getProfileCountMax(); i++) {
                 if(SnipSniper.getProfile(i) == null) {
                     SnipSniper.setProfile(i, new Sniper(i));
@@ -257,7 +262,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 profileRemoveButton.setEnabled(false);
         }
         profileRemoveButton.addActionListener(actionEvent -> {
-            //TODO: Check dirty
+            //No dirty check needs to be performed, we are deleting it anyways
             DropdownItem item = (DropdownItem) dropdown.getSelectedItem();
             if(!item.getID().contains("profile0") || !item.getID().contains("editor")) {
                 config.deleteFile();
