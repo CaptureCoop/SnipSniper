@@ -128,6 +128,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 tabPane.setSelectedIndex(activeTabIndex);
                 int result = showDirtyWarning();
                 if(result == JOptionPane.YES_OPTION) {
+                    setupPaneDynamic(config, tabs[activeTabIndex].getPage());
                     setupPaneDynamic(config, tabs[requestedIndex].getPage());
                     tabPane.setSelectedIndex(requestedIndex);
                     return;
