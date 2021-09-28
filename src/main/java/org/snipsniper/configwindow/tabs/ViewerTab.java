@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ViewerTab extends JPanel implements ITab{
-    private ConfigWindow configWindow;
+    private final ConfigWindow configWindow;
 
     public ViewerTab(ConfigWindow configWindow) {
         this.configWindow = configWindow;
