@@ -9,6 +9,7 @@ import org.snipsniper.scviewer.SCViewerWindow;
 import org.snipsniper.systray.buttons.btnAbout;
 import org.snipsniper.config.Config;
 import org.snipsniper.utils.Utils;
+import org.snipsniper.utils.debug.LangDebugWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,10 +50,11 @@ public class Popup extends JFrame{
         add(new PopupMenuButton(LangManager.getItem("menu_config"), ImageManager.getImage("icons/config.png"), this, args -> sniper.openConfigWindow(), menus));
 
         if (SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
-            PopupMenu fileMenu = new PopupMenu("Debug", ImageManager.getImage("icons/random/kiwi.png"));
-            fileMenu.add(new PopupMenuButton("Console", ImageManager.getImage("icons/console.png"), this, args -> SnipSniper.openDebugConsole(), menus));
-            add(fileMenu);
-            menus.add(fileMenu);
+            PopupMenu debugMenu = new PopupMenu("Debug", ImageManager.getImage("icons/random/kiwi.png"));
+            debugMenu.add(new PopupMenuButton("Console", ImageManager.getImage("icons/console.png"), this, args -> SnipSniper.openDebugConsole(), menus));
+            debugMenu.add(new PopupMenuButton("Language test", ImageManager.getImage("icons/config.png"), this, args -> new LangDebugWindow(), menus));
+            add(debugMenu);
+            menus.add(debugMenu);
         }
 
         add(new btnAbout(LangManager.getItem("menu_about"), ImageManager.getImage("icons/about.png"), this, null, menus));
