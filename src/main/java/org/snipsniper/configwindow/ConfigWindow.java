@@ -288,6 +288,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         Function setState = new Function() {
             @Override
             public boolean run(ConfigSaveButtonState state) {
+                if(configOriginal == null) return false;
                 switch (state) {
                     case UPDATE_CLEAN_STATE: isDirty[0] = !config.equals(configOriginal); break;
                     case YES_SAVE: allowSaving[0] = true; break;
