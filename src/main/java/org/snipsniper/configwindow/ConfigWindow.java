@@ -210,6 +210,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             DropdownItem.setSelected(dropdown, config.getFilename());
         dropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
+                //TODO: Check dirty
                 parentPanel.removeAll();
                 Config newConfig = new Config(((DropdownItem)e.getItem()).getID(), "profile_defaults.cfg");
                 setupPaneDynamic(newConfig, page);
@@ -228,6 +229,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         if(SnipSniper.getProfileCount() == SnipSniper.getProfileCountMax())
             profileAddButton.setEnabled(false);
         profileAddButton.addActionListener(actionEvent -> {
+            //TODO: Check dirty
             for(int i = 0; i < SnipSniper.getProfileCountMax(); i++) {
                 if(SnipSniper.getProfile(i) == null) {
                     SnipSniper.setProfile(i, new Sniper(i));
@@ -255,6 +257,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 profileRemoveButton.setEnabled(false);
         }
         profileRemoveButton.addActionListener(actionEvent -> {
+            //TODO: Check dirty
             DropdownItem item = (DropdownItem) dropdown.getSelectedItem();
             if(!item.getID().contains("profile0") || !item.getID().contains("editor")) {
                 config.deleteFile();
