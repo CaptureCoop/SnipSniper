@@ -224,6 +224,7 @@ public class GlobalTab extends JPanel implements ITab{
                 new ConfigWindow(configWindow.getLastSelectedConfig(), ConfigWindow.PAGE.globalPanel);
                 configWindow.close();
             }
+            saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         };
 
         saveButtonUpdate[0] = configWindow.setupSaveButtons(options, this, gbc, config, SnipSniper.getConfig(), beforeSave, false);
