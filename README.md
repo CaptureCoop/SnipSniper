@@ -55,6 +55,10 @@ SnipSniper uses these libraries in order to function properly
 
 * [mslinks](https://mvnrepository.com/artifact/com.erigir/mslinks/0.0.2+5) - Used for creating Shortcuts.
 
+### Credits
+
+* [Flags](http://www.famfamfam.com/lab/icons/flags/) We use images provided by fafmfamfam.com for country flags
+
 License
 ----
 
