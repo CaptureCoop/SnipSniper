@@ -48,10 +48,8 @@ public class ConfigWindow extends JFrame implements IClosable{
             @Override
             public void windowClosing(WindowEvent e) {
                 if(tabs[activeTabIndex].isDirty()) {
-                    int result = showDirtyWarning();
-                    if(result == JOptionPane.NO_OPTION) {
+                    if(showDirtyWarning() == JOptionPane.NO_OPTION)
                         return;
-                    }
                 }
                 close();
             }
@@ -126,8 +124,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 tabs[activeTabIndex].setDirty(false);
                 int requestedIndex = tabPane.getSelectedIndex();
                 tabPane.setSelectedIndex(activeTabIndex);
-                int result = showDirtyWarning();
-                if(result == JOptionPane.YES_OPTION) {
+                if(showDirtyWarning() == JOptionPane.YES_OPTION) {
                     setupPaneDynamic(config, tabs[activeTabIndex].getPage());
                     setupPaneDynamic(config, tabs[requestedIndex].getPage());
                     tabPane.setSelectedIndex(requestedIndex);
@@ -219,10 +216,8 @@ public class ConfigWindow extends JFrame implements IClosable{
                     dropdown.removeItemListener(dropdownListener[0]);
                     dropdown.setSelectedIndex(activeDropdownIndex);
                     dropdown.addItemListener(dropdownListener[0]);
-                    int result = showDirtyWarning();
-                    if(result == JOptionPane.NO_OPTION) {
+                    if(showDirtyWarning() == JOptionPane.NO_OPTION)
                         return;
-                    }
                     tabs[activeTabIndex].setDirty(false);
                     dropdown.setSelectedIndex(requestedItem);
                 }
@@ -330,10 +325,8 @@ public class ConfigWindow extends JFrame implements IClosable{
         JButton close = new JButton("Close");
         close.addActionListener(e -> {
             if(isDirty[0]) {
-                int result = showDirtyWarning();
-                if (result == JOptionPane.NO_OPTION) {
+                if (showDirtyWarning() == JOptionPane.NO_OPTION)
                     return;
-                }
             }
             close();
         });
