@@ -140,7 +140,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         add(tabPane);
     }
 
-    public JScrollPane generateScrollPane(JComponent component) {
+    public static JScrollPane generateScrollPane(JComponent component) {
         JScrollPane scrollPane = new JScrollPane(component);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
