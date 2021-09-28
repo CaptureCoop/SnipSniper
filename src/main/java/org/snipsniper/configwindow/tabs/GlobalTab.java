@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -143,10 +144,16 @@ public class GlobalTab extends JPanel implements ITab{
         gbc.gridx = 1;
         options.add(new UpdateButton(), gbc);
 
-        ArrayList<String> translatedLanguages = new ArrayList<>();
-        for(String lang : LangManager.languages)
-            translatedLanguages.add(LangManager.getItem(lang, "lang_" + lang));
-        JComboBox<Object> languageDropdown = new JComboBox<>(translatedLanguages.toArray());
+        DropdownItem[] langItems = new DropdownItem[LangManager.languages.size()];
+        Collections.sort(LangManager.languages);
+        int index = 0;
+        for(String lang : LangManager.languages) {
+            String translated = LangManager.getItem(lang, "lang_" + lang);
+            langItems[index] = new DropdownItem(translated, lang, LangManager.getIcon(lang));
+            index++;
+        }
+        JComboBox<DropdownItem> languageDropdown = new JComboBox<>(langItems);
+        languageDropdown.setRenderer(new DropdownItemRenderer(langItems));
         languageDropdown.setSelectedIndex(LangManager.languages.indexOf(config.getString(ConfigHelper.MAIN.language)));
         languageDropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {

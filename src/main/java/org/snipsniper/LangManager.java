@@ -3,9 +3,12 @@ package org.snipsniper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.utils.StringUtils;
 import org.snipsniper.utils.enums.LogLevel;
 import org.snipsniper.utils.Utils;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +44,18 @@ public class LangManager {
 
         LogManager.log("Could not find key <" + key + "> in language file <" + language + ">", LogLevel.ERROR, true);
         return "LM<" + key + ">";
+    }
+
+    public static BufferedImage getIcon(String language) {
+        String file = langMap.get(language).getString("icon");
+        BufferedImage flag = ImageManager.getImage(StringUtils.format("flags/%c.png", file));
+        int size = 16;
+
+        BufferedImage icon = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = icon.createGraphics();
+        g.drawImage(flag, size / 2 - flag.getWidth() / 2, size / 2 - flag.getHeight() / 2, null);
+        g.dispose();
+        return icon;
     }
 
     public static String getItem(String key) {
