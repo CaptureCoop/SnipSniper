@@ -3,6 +3,7 @@ package org.snipsniper.systray.buttons;
 import org.snipsniper.ImageManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.systray.PopupMenuButton;
+import org.snipsniper.systray.PopupMenu;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.*;
 import org.snipsniper.LangManager;
@@ -15,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -24,8 +26,8 @@ public class btnAbout extends PopupMenuButton {
 	private boolean onC = false;
 
 	//LOGO USES AGENCY FB BOLD
-	public btnAbout(String title, BufferedImage icon, JFrame popup, IFunction function) {
-		super(title, icon, popup, function);
+	public btnAbout(String title, BufferedImage icon, JFrame popup, IFunction function, ArrayList<PopupMenu> menusToClose) {
+		super(title, icon, popup, function, menusToClose);
 
 		try {
 			loadHTML();

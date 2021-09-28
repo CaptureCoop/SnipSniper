@@ -7,16 +7,21 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class PopupMenuButton extends JMenuItem {
     private IFunction onClick;
+    private boolean isMenuChild = false;
 
-    public PopupMenuButton(String title, BufferedImage icon, JFrame popup, IFunction function) {
+    public PopupMenuButton(String title, BufferedImage icon, JFrame popup, IFunction function, ArrayList<PopupMenu> closeWhenClicked) {
         setText(title);
         setIcon(getPopupIcon(icon));
         onClick = function;
         addActionListener(e -> {
             popup.setVisible(false);
+            if(closeWhenClicked != null)
+                for(PopupMenu menu : closeWhenClicked)
+                    menu.setPopupMenuVisible(false);
             if(onClick != null)
                 onClick.run();
         });
@@ -25,6 +30,9 @@ public class PopupMenuButton extends JMenuItem {
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
                 setArmed(true);
+                if(!isMenuChild)
+                    for(PopupMenu menu : closeWhenClicked)
+                        menu.setPopupMenuVisible(false);
             }
 
             @Override
@@ -37,6 +45,10 @@ public class PopupMenuButton extends JMenuItem {
 
     public void setFunction(IFunction function) {
         onClick = function;
+    }
+
+    public void setIsMenuChild(boolean value) {
+        isMenuChild = value;
     }
 
     public ImageIcon getPopupIcon(BufferedImage image) {

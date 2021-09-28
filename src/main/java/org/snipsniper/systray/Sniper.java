@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.jnativehook.keyboard.NativeKeyAdapter;
 import org.jnativehook.mouse.NativeMouseAdapter;
@@ -56,6 +57,8 @@ public class Sniper {
 		if(SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
 
+			ArrayList<PopupMenu> menus = new ArrayList<>();
+
 			popup = new JFrame();
 			popup.setUndecorated(true);
 			popup.getRootPane().setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
@@ -67,8 +70,8 @@ public class Sniper {
 			title.setVerticalTextPosition(JLabel.BOTTOM);
 			title.setHorizontalTextPosition(JLabel.CENTER);
 			popup.add(title);
-			popup.add(new PopupMenuButton("Viewer", ImageManager.getImage("icons/viewer.png"), popup, args -> new SCViewerWindow(null, config, false)));
-			popup.add(new PopupMenuButton("Editor", ImageManager.getImage("icons/editor.png"), popup, args -> new SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false)));
+			popup.add(new PopupMenuButton("Viewer", ImageManager.getImage("icons/viewer.png"), popup, args -> new SCViewerWindow(null, config, false), menus));
+			popup.add(new PopupMenuButton("Editor", ImageManager.getImage("icons/editor.png"), popup, args -> new SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false), menus));
 			popup.add(new JSeparator());
 			popup.add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), ImageManager.getImage("icons/folder.png"), popup, args -> {
 				try {
@@ -76,16 +79,19 @@ public class Sniper {
 				} catch (IOException ioException) {
 					ioException.printStackTrace();
 				}
-			}));
-			popup.add(new PopupMenuButton(LangManager.getItem("menu_config"), ImageManager.getImage("icons/config.png"), popup, args -> openConfigWindow()));
+			}, menus));
+			popup.add(new PopupMenuButton(LangManager.getItem("menu_config"), ImageManager.getImage("icons/config.png"), popup, args -> openConfigWindow(), menus));
 
 			if (SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
-				popup.add(new PopupMenuButton("Console", ImageManager.getImage("icons/console.png"), popup, args -> SnipSniper.openDebugConsole()));
+				PopupMenu fileMenu = new PopupMenu("Debug", ImageManager.getImage("icons/random/kiwi.png"));
+				fileMenu.add(new PopupMenuButton("Console", ImageManager.getImage("icons/console.png"), popup, args -> SnipSniper.openDebugConsole(), menus));
+				popup.add(fileMenu);
+				menus.add(fileMenu);
 			}
 
-			popup.add(new btnAbout(LangManager.getItem("menu_about"), ImageManager.getImage("icons/about.png"), popup, null));
+			popup.add(new btnAbout(LangManager.getItem("menu_about"), ImageManager.getImage("icons/about.png"), popup, null, menus));
 			popup.add(new JSeparator());
-			popup.add(new PopupMenuButton(LangManager.getItem("menu_quit"), ImageManager.getImage("icons/redx.png"), popup, args -> SnipSniper.exit(false)));
+			popup.add(new PopupMenuButton(LangManager.getItem("menu_quit"), ImageManager.getImage("icons/redx.png"), popup, args -> SnipSniper.exit(false), menus));
 
 			popup.setIconImage(ImageManager.getImage("icons/snipsniper.png"));
 			popup.addFocusListener(new FocusAdapter() {
