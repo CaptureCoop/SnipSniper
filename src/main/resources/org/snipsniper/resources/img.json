@@ -52,5 +52,14 @@
   "buttons/stamp_text_hover.png",
   "buttons/stamp_rectangle.png",
   "buttons/stamp_rectangle_sel.png",
-  "buttons/stamp_rectangle_hover.png"
+  "buttons/stamp_rectangle_hover.png",
+  "flags/england.png",
+  "flags/de.png",
+  "flags/fr.png",
+  "flags/it.png",
+  "flags/jp.png",
+  "flags/ru.png",
+  "flags/cn.png"
+
+
 ]
