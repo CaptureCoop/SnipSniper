@@ -20,6 +20,7 @@ import java.io.File;
 
 public class GeneralTab extends JPanel implements ITab{
     private final ConfigWindow configWindow;
+    private boolean isDirty;
 
     public GeneralTab(ConfigWindow configWindow) {
         this.configWindow = configWindow;
@@ -373,13 +374,23 @@ public class GeneralTab extends JPanel implements ITab{
         //END ELEMENTS
 
         //BEGIN SAVE
-        cleanDirtyFunction[0] = configWindow.setupSaveButtons(options, gbc, config, configOriginal, null, true);
+        cleanDirtyFunction[0] = configWindow.setupSaveButtons(options, this, gbc, config, configOriginal, null, true);
         //END SAVE
 
         add(options);
 
         if(disablePage)
             configWindow.setEnabledAll(options, false, dropdown);
+    }
+
+    @Override
+    public void setDirty(boolean isDirty) {
+        this.isDirty = isDirty;
+    }
+
+    @Override
+    public boolean isDirty() {
+        return isDirty;
     }
 
 }

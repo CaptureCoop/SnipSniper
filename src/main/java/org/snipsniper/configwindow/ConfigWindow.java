@@ -6,10 +6,7 @@ import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.colorchooser.ColorChooser;
-import org.snipsniper.configwindow.tabs.EditorTab;
-import org.snipsniper.configwindow.tabs.GeneralTab;
-import org.snipsniper.configwindow.tabs.GlobalTab;
-import org.snipsniper.configwindow.tabs.ViewerTab;
+import org.snipsniper.configwindow.tabs.*;
 import org.snipsniper.systray.Sniper;
 import org.snipsniper.utils.*;
 import org.snipsniper.utils.enums.ConfigSaveButtonState;
@@ -253,7 +250,7 @@ public class ConfigWindow extends JFrame implements IClosable{
     }
 
     //Returns function you can run to update the state
-    public Function setupSaveButtons(JPanel panel, GridBagConstraints gbc, Config config, Config configOriginal, IFunction beforeSave, boolean reloadOtherDropdowns) {
+    public Function setupSaveButtons(JPanel panel, ITab tab, GridBagConstraints gbc, Config config, Config configOriginal, IFunction beforeSave, boolean reloadOtherDropdowns) {
         final boolean[] allowSaving = {true};
         final boolean[] isDirty = {false};
         JButton save = new JButton(LangManager.getItem("config_label_save"));
@@ -290,7 +287,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             public boolean run(ConfigSaveButtonState state) {
                 if(configOriginal == null) return false;
                 switch (state) {
-                    case UPDATE_CLEAN_STATE: isDirty[0] = !config.equals(configOriginal); break;
+                    case UPDATE_CLEAN_STATE: isDirty[0] = !config.equals(configOriginal); tab.setDirty(isDirty[0]); break;
                     case YES_SAVE: allowSaving[0] = true; break;
                     case NO_SAVE: allowSaving[0] = false; break;
                 }

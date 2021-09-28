@@ -27,6 +27,7 @@ import java.util.zip.ZipOutputStream;
 
 public class GlobalTab extends JPanel implements ITab{
     private final ConfigWindow configWindow;
+    private boolean isDirty;
 
     public GlobalTab(ConfigWindow configWindow) {
         this.configWindow = configWindow;
@@ -232,9 +233,19 @@ public class GlobalTab extends JPanel implements ITab{
             }
         };
 
-        saveButtonUpdate[0] = configWindow.setupSaveButtons(options, gbc, config, SnipSniper.getConfig(), beforeSave, false);
+        saveButtonUpdate[0] = configWindow.setupSaveButtons(options, this, gbc, config, SnipSniper.getConfig(), beforeSave, false);
 
         add(options);
+    }
+
+    @Override
+    public void setDirty(boolean isDirty) {
+        this.isDirty = isDirty;
+    }
+
+    @Override
+    public boolean isDirty() {
+        return isDirty;
     }
 
     private void globalSave(Config config) {

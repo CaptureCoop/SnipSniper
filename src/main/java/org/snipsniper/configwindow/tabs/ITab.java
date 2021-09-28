@@ -4,4 +4,6 @@ import org.snipsniper.config.Config;
 
 public interface ITab {
     void setup(Config configOriginal);
+    void setDirty(boolean isDirty);
+    boolean isDirty();
 }
