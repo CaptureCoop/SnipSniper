@@ -216,9 +216,9 @@ public class ConfigWindow extends JFrame implements IClosable{
                     refreshConfigFiles();
                     parentPanel.removeAll();
 
-                    generalTab.setup(configOriginal);
-                    editorTab.setup(configOriginal);
-                    viewerTab.setup(configOriginal);
+                    generalTab.setup(newProfileConfig);
+                    editorTab.setup(newProfileConfig);
+                    viewerTab.setup(newProfileConfig);
 
                     lastSelectedConfig = newProfileConfig;
 
@@ -245,9 +245,9 @@ public class ConfigWindow extends JFrame implements IClosable{
                     newIndex = dropdown.getSelectedIndex() + 1;
                 Config newConfig = new Config(dropdown.getItemAt(newIndex).getID(), "profile_defaults.cfg");
 
-                generalTab.setup(configOriginal);
-                editorTab.setup(configOriginal);
-                viewerTab.setup(configOriginal);
+                generalTab.setup(newConfig);
+                editorTab.setup(newConfig);
+                viewerTab.setup(newConfig);
 
                 lastSelectedConfig = newConfig;
             }
