@@ -81,10 +81,10 @@ public class CommandLineHelper {
         System.out.println("-version / -v  = Displays version");
         System.out.println("-demo          = Starts SnipSniper in demo mode (No configs are being created)");
         System.out.println("-language / -l = Sets the language. Useful for demo mode");
-        System.out.println("-debug         = Starts SnipSniper in Debug mode");
         System.out.println("-editor        = Starts the standalone editor (You can enter a path after -editor)");
         System.out.println("-viewer        = Starts the standalone viewer (You can enter a path after -viewer)");
         System.out.println("\nDebug Commands:");
+        System.out.println("-debug         = Starts SnipSniper in Debug mode");
         System.out.println("-debugLang     = Test language files for missing strings");
     }
 
