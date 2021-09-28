@@ -3,20 +3,12 @@ package org.snipsniper.systray;
 import java.awt.*;
 import java.awt.event.*;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import org.jnativehook.keyboard.NativeKeyAdapter;
 import org.jnativehook.mouse.NativeMouseAdapter;
 import org.snipsniper.ImageManager;
-import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
-import org.snipsniper.sceditor.SCEditorWindow;
-import org.snipsniper.scviewer.SCViewerWindow;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -24,12 +16,9 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.snipsniper.config.Config;
 import org.snipsniper.capturewindow.CaptureWindow;
 import org.snipsniper.configwindow.ConfigWindow;
-import org.snipsniper.systray.buttons.btnAbout;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.snipsniper.utils.*;
 import org.snipsniper.utils.enums.LogLevel;
-
-import javax.swing.*;
 
 public class Sniper {
 	public int profileID; //0 = default
@@ -40,9 +29,6 @@ public class Sniper {
 	private TrayIcon trayIcon;
 	
 	private final Sniper instance;
-	private JFrame popup;
-
-	private final static int TASKBAR_HEIGHT = 40;
 
 	private final NativeKeyAdapter nativeKeyAdapter;
 	private final NativeMouseAdapter nativeMouseAdapter;
@@ -55,52 +41,8 @@ public class Sniper {
 		LogManager.log("Loading profile " + profileID, LogLevel.INFO);
 
 		if(SystemTray.isSupported()) {
+			Popup popup = new Popup(this);
 			SystemTray tray = SystemTray.getSystemTray();
-
-			ArrayList<PopupMenu> menus = new ArrayList<>();
-
-			popup = new JFrame();
-			popup.setUndecorated(true);
-			popup.getRootPane().setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
-			popup.setLayout(new BoxLayout(popup.getContentPane(),BoxLayout.PAGE_AXIS));
-			BufferedImage splash = ImageManager.getImage("splash.png");
-			JLabel title = new JLabel(new ImageIcon(splash.getScaledInstance((int)(splash.getWidth()/3F),(int)(splash.getHeight()/3F), Image.SCALE_DEFAULT)));
-			title.setText("Profile " + profileID);
-			title.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-			title.setVerticalTextPosition(JLabel.BOTTOM);
-			title.setHorizontalTextPosition(JLabel.CENTER);
-			popup.add(title);
-			popup.add(new PopupMenuButton("Viewer", ImageManager.getImage("icons/viewer.png"), popup, args -> new SCViewerWindow(null, config, false), menus));
-			popup.add(new PopupMenuButton("Editor", ImageManager.getImage("icons/editor.png"), popup, args -> new SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false), menus));
-			popup.add(new JSeparator());
-			popup.add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), ImageManager.getImage("icons/folder.png"), popup, args -> {
-				try {
-					Desktop.getDesktop().open(new File(getConfig().getString(ConfigHelper.PROFILE.pictureFolder)));
-				} catch (IOException ioException) {
-					ioException.printStackTrace();
-				}
-			}, menus));
-			popup.add(new PopupMenuButton(LangManager.getItem("menu_config"), ImageManager.getImage("icons/config.png"), popup, args -> openConfigWindow(), menus));
-
-			if (SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
-				PopupMenu fileMenu = new PopupMenu("Debug", ImageManager.getImage("icons/random/kiwi.png"));
-				fileMenu.add(new PopupMenuButton("Console", ImageManager.getImage("icons/console.png"), popup, args -> SnipSniper.openDebugConsole(), menus));
-				popup.add(fileMenu);
-				menus.add(fileMenu);
-			}
-
-			popup.add(new btnAbout(LangManager.getItem("menu_about"), ImageManager.getImage("icons/about.png"), popup, null, menus));
-			popup.add(new JSeparator());
-			popup.add(new PopupMenuButton(LangManager.getItem("menu_quit"), ImageManager.getImage("icons/redx.png"), popup, args -> SnipSniper.exit(false), menus));
-
-			popup.setIconImage(ImageManager.getImage("icons/snipsniper.png"));
-			popup.addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusLost(FocusEvent focusEvent) {
-					super.focusLost(focusEvent);
-					popup.setVisible(false);
-				}
-			});
 
 			try {
 				String icon = config.getString(ConfigHelper.PROFILE.icon);
@@ -125,46 +67,8 @@ public class Sniper {
 					}
 
 					private void showPopup(MouseEvent mouseEvent) {
-						if (mouseEvent.isPopupTrigger()) {
-							popup.setVisible(true);
-							popup.pack();
-
-							//We do this in order to know which monitor the mouse position is on, before actually placing the popup jframe
-							JFrame testGC = new JFrame();
-							testGC.setUndecorated(true);
-							testGC.setLocation(mouseEvent.getX(), mouseEvent.getY());
-							testGC.setVisible(true);
-							GraphicsConfiguration gc = testGC.getGraphicsConfiguration();
-							testGC.dispose();
-
-							Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(gc);
-							Rectangle screenRect = gc.getBounds();
-
-							if(screenRect.x != 0 || screenRect.y != 0) {
-								//This currently only allows non-default screens to work if taskbar is on bottom. Find better way!!
-								//TODO: ^^^^^^^^^^^^^^^^^^
-								//IDEA: Take half of the screens width to determine if we are left right bottom or top and then calculate position based on that, if possible
-								popup.setLocation(mouseEvent.getX(), mouseEvent.getY() - popup.getHeight() - insets.bottom);
-								if(!Utils.containsRectangleFully(screenRect, popup.getBounds())) {
-									//Fallback
-									//TODO: Find prettier way
-									popup.setLocation((int)screenRect.getWidth() / 2 - popup.getWidth() / 2, (int)screenRect.getHeight() / 2 - popup.getHeight() / 2);
-								}
-							} else {
-								if (insets.bottom != 0)
-									popup.setLocation(mouseEvent.getX(), screenRect.height - popup.getHeight() - insets.bottom);
-								else if (insets.top != 0)
-									popup.setLocation(mouseEvent.getX(), insets.top);
-								else if (insets.left != 0)
-									popup.setLocation(insets.left, mouseEvent.getY() - popup.getHeight());
-								else if (insets.right != 0)
-									popup.setLocation(screenRect.width - popup.getWidth() - insets.right, mouseEvent.getY() - popup.getHeight());
-								else
-									popup.setLocation(mouseEvent.getX(), screenRect.height - popup.getHeight() - TASKBAR_HEIGHT);
-									/* If "Let taskbar scroll down when not in use" is enabled insets is all 0, use 40 for now, should work fine */
-							}
-							popup.requestFocus();
-						}
+						if (mouseEvent.isPopupTrigger())
+							popup.showPopup(mouseEvent.getX(), mouseEvent.getY());
 					}
 
 					@Override
