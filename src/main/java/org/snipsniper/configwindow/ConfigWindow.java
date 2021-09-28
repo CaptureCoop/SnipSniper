@@ -33,6 +33,7 @@ public class ConfigWindow extends JFrame implements IClosable{
     private GlobalTab globalTab;
     private final ITab[] tabs = new ITab[4];
     private int activeTabIndex;
+    private int activeDropdownIndex = 0;
 
     private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
@@ -207,16 +208,32 @@ public class ConfigWindow extends JFrame implements IClosable{
         if(configOriginal == null)
             dropdown.setSelectedIndex(0);
         else
-            DropdownItem.setSelected(dropdown, config.getFilename());
-        dropdown.addItemListener(e -> {
+            activeDropdownIndex = DropdownItem.setSelected(dropdown, config.getFilename());
+
+        final ItemListener[] dropdownListener = {null};
+        dropdownListener[0] = e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                //TODO: Check dirty
+                int requestedItem = dropdown.getSelectedIndex();
+                if(tabs[activeTabIndex].isDirty()) {
+                    dropdown.removeItemListener(dropdownListener[0]);
+                    dropdown.setSelectedIndex(activeDropdownIndex);
+                    dropdown.addItemListener(dropdownListener[0]);
+                    int result = showDirtyWarning();
+                    if(result == JOptionPane.NO_OPTION) {
+                        return;
+                    }
+                    tabs[activeTabIndex].setDirty(false);
+                    dropdown.setSelectedIndex(requestedItem);
+                }
                 parentPanel.removeAll();
                 Config newConfig = new Config(((DropdownItem)e.getItem()).getID(), "profile_defaults.cfg");
                 setupPaneDynamic(newConfig, page);
                 lastSelectedConfig = newConfig;
+                activeDropdownIndex = dropdown.getSelectedIndex();
             }
-        });
+        };
+        dropdown.addItemListener(dropdownListener[0]);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
