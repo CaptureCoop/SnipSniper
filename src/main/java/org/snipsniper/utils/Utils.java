@@ -2,7 +2,6 @@ package org.snipsniper.utils;
 
 import org.json.JSONObject;
 import org.snipsniper.ImageManager;
-import org.snipsniper.LangManager;
 import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
@@ -30,7 +29,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 
 public class Utils {
 
@@ -145,38 +143,6 @@ public class Utils {
 		builder.start();
 		SnipSniper.exit(true);
 		return true;
-	}
-
-	public static void jsonLang() {
-		System.out.println("Creating language debug files under \\lang\\...\n");
-		if(!new File("lang").mkdir() && !new File("lang").exists()) {
-			System.out.println("Could not create folder. Aborting");
-			return;
-		}
-		LangManager.load();
-
-		JSONObject en = LangManager.getJSON("en");
-		FileUtils.printFile("lang/en.json", en.toString());
-
-		for(String language : LangManager.languages) {
-			boolean successfull = true;
-			JSONObject strings = en.getJSONObject("strings");
-			Iterator<String> keys = strings.keys();
-			while(keys.hasNext()) {
-				String key = keys.next();
-				JSONObject obj = LangManager.getJSON(language).getJSONObject("strings");
-				if(!obj.has(key)) {
-					successfull = false;
-					System.out.println(language + ".json is missing <" + key + ">");
-					obj.put(key, "<MISSING>");
-				}
-			}
-			if(!successfull) {
-				FileUtils.printFile("lang/" + language + ".json", LangManager.getJSON(language).toString());
-				System.out.println("Missing lines found for " + language + ".json\n");
-			}
-		}
-		System.out.println("Done. If no issues were reported you are golden :^)");
 	}
 
 	public static Image getImageFromClipboard() {

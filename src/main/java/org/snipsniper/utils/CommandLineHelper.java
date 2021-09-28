@@ -1,6 +1,7 @@
 package org.snipsniper.utils;
 
 import org.snipsniper.SnipSniper;
+import org.snipsniper.utils.debug.DebugUtils;
 
 public class CommandLineHelper {
     private String language;
@@ -59,7 +60,7 @@ public class CommandLineHelper {
                     if(args.length > index + 1) viewerFile = args[index + 1];
                     break;
                 case "-debugLang":
-                    Utils.jsonLang();
+                    DebugUtils.jsonLang();
                     doExit = true;
                     break;
                 default:
