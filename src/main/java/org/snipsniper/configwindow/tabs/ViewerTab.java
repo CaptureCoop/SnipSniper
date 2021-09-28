@@ -12,6 +12,7 @@ import java.awt.*;
 
 public class ViewerTab extends JPanel implements ITab{
     private final ConfigWindow configWindow;
+    private boolean isDirty;
 
     public ViewerTab(ConfigWindow configWindow) {
         this.configWindow = configWindow;
@@ -20,6 +21,7 @@ public class ViewerTab extends JPanel implements ITab{
     @Override
     public void setup(Config configOriginal) {
         removeAll();
+        isDirty = false;
 
         final Function[] saveButtonUpdate = {null};
 
@@ -73,11 +75,26 @@ public class ViewerTab extends JPanel implements ITab{
 
         //END ELEMENTS
 
-        saveButtonUpdate[0] = configWindow.setupSaveButtons(options, gbc, config, configOriginal, null, true);
+        saveButtonUpdate[0] = configWindow.setupSaveButtons(options, this, gbc, config, configOriginal, null, true);
 
         add(options);
 
         if(disablePage)
             configWindow.setEnabledAll(options, false, dropdown);
+    }
+
+    @Override
+    public ConfigWindow.PAGE getPage() {
+        return ConfigWindow.PAGE.viewerPanel;
+    }
+
+    @Override
+    public void setDirty(boolean isDirty) {
+        this.isDirty = isDirty;
+    }
+
+    @Override
+    public boolean isDirty() {
+        return isDirty;
     }
 }

@@ -20,6 +20,7 @@ import java.io.File;
 
 public class GeneralTab extends JPanel implements ITab{
     private final ConfigWindow configWindow;
+    private boolean isDirty;
 
     public GeneralTab(ConfigWindow configWindow) {
         this.configWindow = configWindow;
@@ -28,6 +29,7 @@ public class GeneralTab extends JPanel implements ITab{
     @Override
     public void setup(Config configOriginal) {
         removeAll();
+        isDirty = false;
 
         final ColorChooser[] colorChooser = {null};
 
@@ -47,7 +49,7 @@ public class GeneralTab extends JPanel implements ITab{
         GridBagConstraints gbc = new GridBagConstraints();
         JPanel options = new JPanel(new GridBagLayout());
 
-        JComboBox<DropdownItem> dropdown = configWindow.setupProfileDropdown(options, this, configOriginal, config, ConfigWindow.PAGE.snipPanel, "editor", "viewer");
+        JComboBox<DropdownItem> dropdown = configWindow.setupProfileDropdown(options, this, configOriginal, config, ConfigWindow.PAGE.generalPanel, "editor", "viewer");
 
         //BEGIN ELEMENTS
 
@@ -373,13 +375,28 @@ public class GeneralTab extends JPanel implements ITab{
         //END ELEMENTS
 
         //BEGIN SAVE
-        cleanDirtyFunction[0] = configWindow.setupSaveButtons(options, gbc, config, configOriginal, null, true);
+        cleanDirtyFunction[0] = configWindow.setupSaveButtons(options, this, gbc, config, configOriginal, null, true);
         //END SAVE
 
         add(options);
 
         if(disablePage)
             configWindow.setEnabledAll(options, false, dropdown);
+    }
+
+    @Override
+    public ConfigWindow.PAGE getPage() {
+        return ConfigWindow.PAGE.generalPanel;
+    }
+
+    @Override
+    public void setDirty(boolean isDirty) {
+        this.isDirty = isDirty;
+    }
+
+    @Override
+    public boolean isDirty() {
+        return isDirty;
     }
 
 }

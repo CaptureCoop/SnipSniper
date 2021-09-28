@@ -17,6 +17,7 @@ import java.awt.event.ItemEvent;
 
 public class EditorTab extends JPanel implements ITab{
     private final ConfigWindow configWindow;
+    private boolean isDirty;
 
     public EditorTab(ConfigWindow configWindow) {
         this.configWindow = configWindow;
@@ -25,6 +26,7 @@ public class EditorTab extends JPanel implements ITab{
     @Override
     public void setup(Config configOriginal) {
         removeAll();
+        isDirty = false;
 
         final Function[] saveButtonUpdate = {null};
 
@@ -118,7 +120,7 @@ public class EditorTab extends JPanel implements ITab{
 
         //END ELEMENTS
 
-        saveButtonUpdate[0] = configWindow.setupSaveButtons(options, gbc, config, configOriginal, null, true);
+        saveButtonUpdate[0] = configWindow.setupSaveButtons(options, this, gbc, config, configOriginal, null, true);
         onUpdate[0] = new Function() {
             @Override
             public boolean run() {
@@ -132,6 +134,21 @@ public class EditorTab extends JPanel implements ITab{
 
         if(disablePage)
             configWindow.setEnabledAll(options, false, dropdown);
+    }
+
+    @Override
+    public ConfigWindow.PAGE getPage() {
+        return ConfigWindow.PAGE.editorPanel;
+    }
+
+    @Override
+    public void setDirty(boolean isDirty) {
+        this.isDirty = isDirty;
+    }
+
+    @Override
+    public boolean isDirty() {
+        return isDirty;
     }
 
     private JSpinner setupStampConfigPanelSpinner(Enum configKey, double min, double max, double stepSize, StampJPanel previewPanel, Config config, int stampIndex, Function onUpdate) {

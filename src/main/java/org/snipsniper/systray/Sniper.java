@@ -248,7 +248,7 @@ public class Sniper {
 
 	public void openConfigWindow() {
 		if(configWindow == null) {
-			configWindow = new ConfigWindow(config, ConfigWindow.PAGE.snipPanel);
+			configWindow = new ConfigWindow(config, ConfigWindow.PAGE.generalPanel);
 			configWindow.addCustomWindowListener(() -> configWindow = null);
 		} else {
 			configWindow.requestFocus();

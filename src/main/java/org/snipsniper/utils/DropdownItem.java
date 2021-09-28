@@ -44,12 +44,13 @@ public class DropdownItem {
         return label;
     }
 
-    public static void setSelected(JComboBox<DropdownItem> comboBox, String id) {
+    public static int setSelected(JComboBox<DropdownItem> comboBox, String id) {
         for(int i = 0; i < comboBox.getItemCount(); i++) {
             if(comboBox.getItemAt(i).compare(id)) {
                 comboBox.setSelectedIndex(i);
-                return;
+                return i;
             }
         }
+        return 0;
     }
 }

@@ -216,7 +216,7 @@ public final class SnipSniper {
 		profiles[0] = new Sniper(0);
 		profiles[0].getConfig().save();
 
-		if(!SystemTray.isSupported()) new ConfigWindow(profiles[0].getConfig(), ConfigWindow.PAGE.snipPanel);
+		if(!SystemTray.isSupported()) new ConfigWindow(profiles[0].getConfig(), ConfigWindow.PAGE.generalPanel);
 		for (int i = 1; i < PROFILE_COUNT; i++) {
 			if (new File(configFolder + "profile" + (i) + ".cfg").exists()) {
 				profiles[i] = new Sniper(i);

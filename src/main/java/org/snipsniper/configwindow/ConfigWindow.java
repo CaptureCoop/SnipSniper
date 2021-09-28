@@ -6,10 +6,8 @@ import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.colorchooser.ColorChooser;
-import org.snipsniper.configwindow.tabs.EditorTab;
-import org.snipsniper.configwindow.tabs.GeneralTab;
-import org.snipsniper.configwindow.tabs.GlobalTab;
-import org.snipsniper.configwindow.tabs.ViewerTab;
+import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.configwindow.tabs.*;
 import org.snipsniper.systray.Sniper;
 import org.snipsniper.utils.*;
 import org.snipsniper.utils.enums.ConfigSaveButtonState;
@@ -27,12 +25,15 @@ public class ConfigWindow extends JFrame implements IClosable{
     private final ArrayList<File> configFiles = new ArrayList<>();
     private Config lastSelectedConfig;
 
-    public enum PAGE {snipPanel, editorPanel, viewerPanel, globalPanel}
+    public enum PAGE {generalPanel, editorPanel, viewerPanel, globalPanel}
 
     private GeneralTab generalTab;
     private EditorTab editorTab;
     private ViewerTab viewerTab;
     private GlobalTab globalTab;
+    private final ITab[] tabs = new ITab[4];
+    private int activeTabIndex;
+    private int activeDropdownIndex = 0;
 
     private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
@@ -46,6 +47,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                if(tabs[activeTabIndex].isDirty()) {
+                    if(showDirtyWarning() == JOptionPane.NO_OPTION)
+                        return;
+                }
                 close();
             }
         });
@@ -77,7 +82,7 @@ public class ConfigWindow extends JFrame implements IClosable{
 
         final int iconSize = 16;
         int index = 0;
-        int enableIndex = index;
+        activeTabIndex = index;
 
         lastSelectedConfig = config;
 
@@ -85,32 +90,52 @@ public class ConfigWindow extends JFrame implements IClosable{
         generalTab.setup(config);
         tabPane.addTab("SnipSniper",  generateScrollPane(generalTab));
         tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)));
+        tabs[index] = generalTab;
         index++;
 
         editorTab = new EditorTab(this);
         editorTab.setup(config);
         tabPane.addTab("Editor",  generateScrollPane(editorTab));
         tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/editor.png").getScaledInstance(iconSize,iconSize,0)));
+        tabs[index] = editorTab;
         if(page == PAGE.editorPanel)
-            enableIndex = index;
+            activeTabIndex = index;
         index++;
 
         viewerTab = new ViewerTab(this);
         viewerTab.setup(config);
         tabPane.addTab("Viewer", generateScrollPane(viewerTab));
         tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/viewer.png").getScaledInstance(iconSize,iconSize,0)));
+        tabs[index] = viewerTab;
         if(page == PAGE.viewerPanel)
-            enableIndex = index;
+            activeTabIndex = index;
         index++;
 
         globalTab = new GlobalTab(this);
         globalTab.setup(config);
         tabPane.addTab("Global", generateScrollPane(globalTab));
         tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/config.png").getScaledInstance(iconSize, iconSize, 0)));
+        tabs[index] = globalTab;
         if(page == PAGE.globalPanel)
-            enableIndex = index;
+            activeTabIndex = index;
 
-        tabPane.setSelectedIndex(enableIndex);
+        tabPane.addChangeListener(e -> {
+            if(tabs[activeTabIndex].isDirty()) {
+                tabs[activeTabIndex].setDirty(false);
+                int requestedIndex = tabPane.getSelectedIndex();
+                tabPane.setSelectedIndex(activeTabIndex);
+                if(showDirtyWarning() == JOptionPane.YES_OPTION) {
+                    setupPaneDynamic(config, tabs[activeTabIndex].getPage());
+                    setupPaneDynamic(config, tabs[requestedIndex].getPage());
+                    tabPane.setSelectedIndex(requestedIndex);
+                    return;
+                }
+                tabs[activeTabIndex].setDirty(true);
+            }
+            activeTabIndex = tabPane.getSelectedIndex();
+        });
+
+        tabPane.setSelectedIndex(activeTabIndex);
 
         add(tabPane);
     }
@@ -130,7 +155,7 @@ public class ConfigWindow extends JFrame implements IClosable{
 
     public void setupPaneDynamic(Config config, PAGE page) {
         switch(page) {
-            case snipPanel: generalTab.setup(config);
+            case generalPanel: generalTab.setup(config);
             case editorPanel: editorTab.setup(config);
             case viewerPanel: viewerTab.setup(config);
             case globalPanel: globalTab.setup(config);
@@ -181,15 +206,30 @@ public class ConfigWindow extends JFrame implements IClosable{
         if(configOriginal == null)
             dropdown.setSelectedIndex(0);
         else
-            DropdownItem.setSelected(dropdown, config.getFilename());
-        dropdown.addItemListener(e -> {
+            activeDropdownIndex = DropdownItem.setSelected(dropdown, config.getFilename());
+
+        final ItemListener[] dropdownListener = {null};
+        dropdownListener[0] = e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
+                int requestedItem = dropdown.getSelectedIndex();
+                if(tabs[activeTabIndex].isDirty()) {
+                    dropdown.removeItemListener(dropdownListener[0]);
+                    dropdown.setSelectedIndex(activeDropdownIndex);
+                    dropdown.addItemListener(dropdownListener[0]);
+                    if(showDirtyWarning() == JOptionPane.NO_OPTION)
+                        return;
+                    tabs[activeTabIndex].setDirty(false);
+                    dropdown.setSelectedIndex(requestedItem);
+                }
                 parentPanel.removeAll();
                 Config newConfig = new Config(((DropdownItem)e.getItem()).getID(), "profile_defaults.cfg");
                 setupPaneDynamic(newConfig, page);
                 lastSelectedConfig = newConfig;
+                activeDropdownIndex = dropdown.getSelectedIndex();
             }
-        });
+        };
+        dropdown.addItemListener(dropdownListener[0]);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
@@ -202,6 +242,12 @@ public class ConfigWindow extends JFrame implements IClosable{
         if(SnipSniper.getProfileCount() == SnipSniper.getProfileCountMax())
             profileAddButton.setEnabled(false);
         profileAddButton.addActionListener(actionEvent -> {
+            if(tabs[activeTabIndex].isDirty()) {
+                int result = showDirtyWarning();
+                if(result == JOptionPane.NO_OPTION) {
+                    return;
+                }
+            }
             for(int i = 0; i < SnipSniper.getProfileCountMax(); i++) {
                 if(SnipSniper.getProfile(i) == null) {
                     SnipSniper.setProfile(i, new Sniper(i));
@@ -229,6 +275,7 @@ public class ConfigWindow extends JFrame implements IClosable{
                 profileRemoveButton.setEnabled(false);
         }
         profileRemoveButton.addActionListener(actionEvent -> {
+            //No dirty check needs to be performed, we are deleting it anyways
             DropdownItem item = (DropdownItem) dropdown.getSelectedItem();
             if(!item.getID().contains("profile0") || !item.getID().contains("editor")) {
                 config.deleteFile();
@@ -253,7 +300,7 @@ public class ConfigWindow extends JFrame implements IClosable{
     }
 
     //Returns function you can run to update the state
-    public Function setupSaveButtons(JPanel panel, GridBagConstraints gbc, Config config, Config configOriginal, IFunction beforeSave, boolean reloadOtherDropdowns) {
+    public Function setupSaveButtons(JPanel panel, ITab tab, GridBagConstraints gbc, Config config, Config configOriginal, IFunction beforeSave, boolean reloadOtherDropdowns) {
         final boolean[] allowSaving = {true};
         final boolean[] isDirty = {false};
         JButton save = new JButton(LangManager.getItem("config_label_save"));
@@ -278,10 +325,8 @@ public class ConfigWindow extends JFrame implements IClosable{
         JButton close = new JButton("Close");
         close.addActionListener(e -> {
             if(isDirty[0]) {
-                int result = JOptionPane.showConfirmDialog(this, "Unsaved changes, are you sure you want to cancel?","Warning", JOptionPane.YES_NO_OPTION);
-                if (result == JOptionPane.NO_OPTION) {
+                if (showDirtyWarning() == JOptionPane.NO_OPTION)
                     return;
-                }
             }
             close();
         });
@@ -290,7 +335,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             public boolean run(ConfigSaveButtonState state) {
                 if(configOriginal == null) return false;
                 switch (state) {
-                    case UPDATE_CLEAN_STATE: isDirty[0] = !config.equals(configOriginal); break;
+                    case UPDATE_CLEAN_STATE: isDirty[0] = !config.equals(configOriginal); tab.setDirty(isDirty[0]); break;
                     case YES_SAVE: allowSaving[0] = true; break;
                     case NO_SAVE: allowSaving[0] = false; break;
                 }
@@ -310,6 +355,10 @@ public class ConfigWindow extends JFrame implements IClosable{
         return setState;
     }
 
+    private int showDirtyWarning() {
+        return JOptionPane.showConfirmDialog(this, "Unsaved changes, are you sure you want to cancel?","Warning", JOptionPane.YES_NO_OPTION);
+    }
+
     public int getIDFromFilename(String name) {
         String idString = name.replaceAll(Config.DOT_EXTENSION, "").replace("profile", "");
         if(MathUtils.isInteger(idString)) {
@@ -319,7 +368,7 @@ public class ConfigWindow extends JFrame implements IClosable{
         return -1;
     }
 
-    public GradientJButton setupColorButton(String title, Config config, Enum configKey, ChangeListener whenChange) {
+    public GradientJButton setupColorButton(String title, Config config, ConfigHelper.PROFILE configKey, ChangeListener whenChange) {
         SSColor startColorPBR = SSColor.fromSaveString(config.getString(configKey));
         GradientJButton colorButton = new GradientJButton(title, startColorPBR);
         startColorPBR.addChangeListener(e -> config.set(configKey, startColorPBR.toSaveString()));
