@@ -21,6 +21,7 @@ public class ViewerTab extends JPanel implements ITab{
     @Override
     public void setup(Config configOriginal) {
         removeAll();
+        isDirty = false;
 
         final Function[] saveButtonUpdate = {null};
 
@@ -80,6 +81,11 @@ public class ViewerTab extends JPanel implements ITab{
 
         if(disablePage)
             configWindow.setEnabledAll(options, false, dropdown);
+    }
+
+    @Override
+    public ConfigWindow.PAGE getPage() {
+        return ConfigWindow.PAGE.viewerPanel;
     }
 
     @Override

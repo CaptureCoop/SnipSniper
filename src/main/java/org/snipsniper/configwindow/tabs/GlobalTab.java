@@ -36,6 +36,7 @@ public class GlobalTab extends JPanel implements ITab{
     @Override
     public void setup(Config configOriginal) {
         removeAll();
+        isDirty = false;
 
         final Function[] saveButtonUpdate = {null};
 
@@ -236,6 +237,11 @@ public class GlobalTab extends JPanel implements ITab{
         saveButtonUpdate[0] = configWindow.setupSaveButtons(options, this, gbc, config, SnipSniper.getConfig(), beforeSave, false);
 
         add(options);
+    }
+
+    @Override
+    public ConfigWindow.PAGE getPage() {
+        return ConfigWindow.PAGE.globalPanel;
     }
 
     @Override
