@@ -10,8 +10,6 @@ import org.snipsniper.utils.Utils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -40,7 +38,6 @@ public class LangDebugWindow extends JFrame {
     private JScrollPane setup() {
         JPanel content = new JPanel();
         content.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
         setupLabels("en", content);
         return ConfigWindow.generateScrollPane(content);
     }
