@@ -46,3 +46,6 @@ All stable or otherwise notable changes will be listed here
 - Changed how tray icon popup menu is positioned
 
 ## [3.5.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.5.0.20210805.1) - 5.08.2021
+### Added
+- Added something to the about window
+- Added Spyglass feature to capture window
