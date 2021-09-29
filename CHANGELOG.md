@@ -135,3 +135,42 @@ All stable or otherwise notable changes will be listed here
 ## [2.4.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/2.4.0.20210428.3) - 28.04.2021
 ### Added
 - Added Standalone editor
+
+## [2.3.14](https://github.com/CaptureCoop/SnipSniper/releases/tag/2.3.14.20210425.1) - 25.04.2021
+### Added
+- Windows versions (Installer & Portable)
+
+### Changed
+- Changed version styling
+
+## [20210423_3](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210423_3) - 23.04.2021
+### Added
+- Added smarter encoding, only restarting if needed
+- Added -language argument
+
+## [20210423_2](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210423_2) - 23.04.2021
+### Added
+- Added language support:
+  - English
+  - German
+  - French
+  - Italian
+  - Japanese
+  - Russian
+  - Chinese
+
+## [20210422_7](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210422_7) - 22.04.2021
+### Changed
+- Translated main interface and config window
+
+## [20210422_6](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210422_6) - 22.04.2021
+### Changed
+- Made Config class modular, causing renamed configs, language is set in main.cfg
+
+## [20210422_4](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210422_4) - 22.04.2021
+### Added
+- Added command line arguments (Run <code>java -jar SnipSniper.jar -help</code> to find out more)
+
+## [20210422_3](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210422_3) - 22.04.2021
+### Changed
+- Fixed bug with editor window appearing over the screen
