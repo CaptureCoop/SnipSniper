@@ -264,3 +264,34 @@ All stable or otherwise notable changes will be listed here
 ## [20201229_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20201229_1) - 29.12.2020
 ### Added
 - Added Smart Pixel Feature
+
+## [20201105_2](https://github.com/CaptureCoop/SnipSniper/releases/tag/20201105_2) - 5.11.2020
+### Changed
+- Fixed issue with editor window position when main monitor is not on the most left side.
+
+## [20200511_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20200511_1) - 11.05.2020
+### Changed
+- Fixed issue regarding loading profiles.
+
+## [20200924_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20200924_1) - 24.09.2020
+#### Unknown changes
+
+## [20200914_2](https://github.com/CaptureCoop/SnipSniper/releases/tag/20200914_2) - 14.09.2020
+### Changed
+- Added new fancy color chooser
+
+## [20200913_4](https://github.com/CaptureCoop/SnipSniper/releases/tag/20200913_4) - 13.09.2020
+### Changed
+- Using game style loop for rendering
+- Changed to separate mouse listener
+
+## [20200911_4](https://github.com/CaptureCoop/SnipSniper/releases/tag/20200911_4) - 11.09.2020
+### Added
+- Added Editor
+
+## [20200905_18](https://github.com/CaptureCoop/SnipSniper/releases/tag/20200905_18) - 05.09.2020
+### Changed
+- Set icon for taskbar
+
+## [20200901_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20200901_1) - 01.09.2020
+### Initial Release
