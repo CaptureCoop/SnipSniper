@@ -51,7 +51,6 @@ All stable or otherwise notable changes will be listed here
 - Added Spyglass feature to Capture window
 - Added ? (InfoButton) button without text for now
 - Added profile create/remove buttons to config window
-- Added profile dropdown to config window
 - Added Language dropdown to config window
 - Added rotate button to Viewer
 - Added a new fancy Popup when right clicking trayicon
@@ -99,9 +98,14 @@ All stable or otherwise notable changes will be listed here
 - Added a few stamps to the config window
 - Editor now has a config button at the top
 
-## [3.2.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.2.0.20210623.1b) - 23.07.2021
+## [3.2.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.2.0.20210623.1b) - 23.06.2021
 ### Added
-- Global Tab in config window, there you can set the language, theme and if debug is enabled.
+- Global Tab in config window, there you can set the language, theme and if debug is enabled
 
 ### Changed
 - Debug Console can be opened from tasktray if debug is enabled
+
+## [3.1.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.1.0.20210621.1b) - 21.06.2021
+### Changed
+- Changed old config window for a newer fancier one with multiple tabs (coming soon) and a profile dropdown
+- Changed from system them to FlatLaf
