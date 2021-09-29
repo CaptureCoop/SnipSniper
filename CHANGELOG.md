@@ -174,3 +174,27 @@ All stable or otherwise notable changes will be listed here
 ## [20210422_3](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210422_3) - 22.04.2021
 ### Changed
 - Fixed bug with editor window appearing over the screen
+
+## [20210422_2](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210422_2) - 22.04.2021
+### Changed
+- You are now able to use mouse buttons for capture hotkeys
+- Editor Window Color Picker now allows you to save default color for that stamp
+- Editor Window now only saves if you have atleast made one change once!
+
+## [20210408_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210408_1) - 8.04.2021
+### Added
+- Added paintbrush stamp
+
+## [20210407_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210407_1) - 7.04.2021
+### Changed
+- Each stamp now saves its own color
+- HSV Color switcher now starts from the correct origin color
+
+## [20210405_7](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_7) - 05.04.2021
+### Added
+- Added Undo function to editor (CTRL + Z)
+
+## [20210405_5](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_5) - 05.04.2021
+### Changed
+- Fixed bug with Smart Pixel when over Counter Stamp
+
