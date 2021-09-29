@@ -150,7 +150,7 @@ public class ConfigWindow extends JFrame implements IClosable{
     }
 
     public void msgError(String msg) {
-        JOptionPane.showMessageDialog(this, msg,LangManager.getItem("config_sanitation_error"), JOptionPane.INFORMATION_MESSAGE);
+        Utils.showPopup(this, msg, LangManager.getItem("config_sanitation_error"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
     }
 
     public void setupPaneDynamic(Config config, PAGE page) {
@@ -360,7 +360,7 @@ public class ConfigWindow extends JFrame implements IClosable{
     }
 
     private int showDirtyWarning() {
-        return JOptionPane.showConfirmDialog(this, "Unsaved changes, are you sure you want to cancel?","Warning", JOptionPane.YES_NO_OPTION);
+        return Utils.showPopup(this, "Unsaved changes, are you sure you want to cancel?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
     }
 
     public int getIDFromFilename(String name) {

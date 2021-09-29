@@ -1,5 +1,6 @@
 package org.snipsniper.configwindow.tabs;
 
+import org.snipsniper.ImageManager;
 import org.snipsniper.LangManager;
 import org.snipsniper.colorchooser.ColorChooser;
 import org.snipsniper.config.Config;
@@ -214,7 +215,7 @@ public class GeneralTab extends JPanel implements ITab{
                 File saveLocationCheck = new File(saveLocationFinal);
                 if(!saveLocationCheck.exists()) {
                     cleanDirtyFunction[0].run(ConfigSaveButtonState.NO_SAVE);
-                    int dialogResult = JOptionPane.showConfirmDialog (configWindow, LangManager.getItem("config_sanitation_directory_notexist") + " Create?",LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION);
+                    int dialogResult = Utils.showPopup(configWindow, LangManager.getItem("config_sanitation_directory_notexist") + " Create?", LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/folder.png"), true);
                     if(dialogResult == JOptionPane.YES_OPTION) {
                         boolean allow = new File(saveLocationFinal).mkdirs();
 

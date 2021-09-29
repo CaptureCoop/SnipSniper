@@ -62,6 +62,13 @@ public class Utils {
 		return new JSONObject(text).getString("sha");
 	}
 
+	public static int showPopup(Component parent, String message, String title, int optionType, int messageType, BufferedImage icon, boolean blockScreenshot) {
+		if(blockScreenshot) SnipSniper.setIdle(false);
+		int result = JOptionPane.showConfirmDialog(parent, message, title, optionType, messageType, new ImageIcon(icon.getScaledInstance(32, 32, 0)));
+		if(blockScreenshot) SnipSniper.setIdle(true);
+		return result;
+	}
+
 	public static String getShortGitHash(String longHash) {
 		if(longHash == null) return null;
 		return longHash.substring(0, 7);
