@@ -11,6 +11,7 @@ updateChannel,
 colorChooserType, 
 } 
 public enum PROFILE { 
+title, 
 hotkey, 
 pictureFolder, 
 saveToDisk, 
