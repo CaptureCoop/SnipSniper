@@ -6,8 +6,8 @@ import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.scviewer.SCViewerWindow;
-import org.snipsniper.systray.buttons.btnAbout;
 import org.snipsniper.config.Config;
+import org.snipsniper.utils.AboutWindow;
 import org.snipsniper.utils.FileUtils;
 import org.snipsniper.utils.Utils;
 import org.snipsniper.utils.debug.LangDebugWindow;
@@ -17,8 +17,6 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Popup extends JFrame{
@@ -52,7 +50,7 @@ public class Popup extends JFrame{
             menus.add(debugMenu);
         }
 
-        add(new btnAbout(LangManager.getItem("menu_about"), ImageManager.getImage("icons/about.png"), this, null, menus));
+        add(new PopupMenuButton(LangManager.getItem("menu_about"), ImageManager.getImage("icons/about.png"), this, args -> new AboutWindow(), menus));
         add(new JSeparator());
         add(new PopupMenuButton(LangManager.getItem("menu_quit"), ImageManager.getImage("icons/redx.png"), this, args -> SnipSniper.exit(false), menus));
 
