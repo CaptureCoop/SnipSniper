@@ -198,3 +198,14 @@ All stable or otherwise notable changes will be listed here
 ### Changed
 - Fixed bug with Smart Pixel when over Counter Stamp
 
+## [20210405_4](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_4) - 05.04.2021
+### Changed
+- Fixed issue with Tab & Alt key not working properly in the editor window
+
+## [20210405_3](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_3) - 05.04.2021
+### Changed
+- Renamed old Circle Stamp to counter stamp and added a new circle stamp, which is hollow
+
+## [20210405_2](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_2) - 05.04.2021
+### Changed
+- Added an orange tint to trayicons waiting to capture
