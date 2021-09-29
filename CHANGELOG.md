@@ -122,3 +122,16 @@ All stable or otherwise notable changes will be listed here
 
 ### Changed
 - Using SnipScope for Editor and Viewer
+
+## [2.5.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/2.5.0.20210505.1) - 5.05.2021
+### Added
+- Added Viewer (Press space to open in editor!)
+
+## [2.4.1](https://github.com/CaptureCoop/SnipSniper/releases/tag/2.4.1.20210502.1) - 2.05.2021
+### Added
+- Added text stamp
+- You can now drop images in editor
+
+## [2.4.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/2.4.0.20210428.3) - 28.04.2021
+### Added
+- Added Standalone editor
