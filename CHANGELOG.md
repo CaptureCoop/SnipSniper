@@ -190,22 +190,77 @@ All stable or otherwise notable changes will be listed here
 - Each stamp now saves its own color
 - HSV Color switcher now starts from the correct origin color
 
-## [20210405_7](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_7) - 05.04.2021
+## [20210405_7](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_7) - 5.04.2021
 ### Added
 - Added Undo function to editor (CTRL + Z)
 
-## [20210405_5](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_5) - 05.04.2021
+## [20210405_5](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_5) - 5.04.2021
 ### Changed
 - Fixed bug with Smart Pixel when over Counter Stamp
 
-## [20210405_4](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_4) - 05.04.2021
+## [20210405_4](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_4) - 5.04.2021
 ### Changed
 - Fixed issue with Tab & Alt key not working properly in the editor window
 
-## [20210405_3](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_3) - 05.04.2021
+## [20210405_3](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_3) - 5.04.2021
 ### Changed
 - Renamed old Circle Stamp to counter stamp and added a new circle stamp, which is hollow
 
-## [20210405_2](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_2) - 05.04.2021
+## [20210405_2](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_2) - 5.04.2021
 ### Changed
 - Added an orange tint to trayicons waiting to capture
+
+## [20210405_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_1) - 5.04.2021
+### Added
+- Added a language system (supporting english and german)
+
+## [20210404_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210404_1) - 4.04.2021
+### Added
+- Added circle stamp! It has a number in the middle and counts up with every stamp!
+
+### Changed
+- Made Stamps modular
+
+## [20210403_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210403_1) - 3.04.2021
+### Changed
+- Fixed two bugs with the HSV/HSV Color switcher.
+  - Color looses all transparency when switching.
+  - Color could not be switched into different "direction" by using another mouse wheel direction.
+
+## [20210402_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210402_1) - 2.04.2021
+### Changed
+- Fixed issue with HSV/HSB Color switcher. Thanks jess!
+
+## [20210401_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210401_1) - 1.04.2021
+### Changed
+- Fixed issue with images not getting saved.
+
+## [20210331_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210331_1) - 31.03.2021
+### Changed
+- Fixed bug with censor mode in editor window.
+
+## [20210330_5](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210330_5) - 30.03.2021
+### Changed
+- Updated about window
+
+## [20210330_4](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210330_4) - 30.03.2021
+### Changed
+- Fixed bug with smart pixel
+
+## [20210330_3](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210330_3) - 30.03.2021
+### Added
+- Added better rendering into buffer to avoid flickering
+- Added variable "directDraw" to avoid the above, which makes it slightly faster.
+
+## [20210330_2](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210330_2) - 30.03.2021
+### Added
+- Added censor button (middle mouse) to editor window.
+
+## [20210330_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20210330_1) - 30.03.2021
+### Changed
+- Fixed issue when launching multiple screenshots
+- Solved lag issue when taking screenshot
+
+## [20201229_1](https://github.com/CaptureCoop/SnipSniper/releases/tag/20201229_1) - 29.12.2020
+### Added
+- Added Smart Pixel Feature
