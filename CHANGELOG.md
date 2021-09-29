@@ -109,3 +109,16 @@ All stable or otherwise notable changes will be listed here
 ### Changed
 - Changed old config window for a newer fancier one with multiple tabs (coming soon) and a profile dropdown
 - Changed from system them to FlatLaf
+
+## [3.0.1](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.0.1.20210516.1b) - 16.05.2021
+### Changed
+- Switching from Viewer to Editor works again
+- Viewer closes on right click now
+- Zoom in Viewer now works without holding the movement button
+
+## [3.0.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.0.0.20210513.1b) - 13.05.2021
+### Added
+- SnipScope: A window system that allows zooming and moving of an image
+
+### Changed
+- Using SnipScope for Editor and Viewer
