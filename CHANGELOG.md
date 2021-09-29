@@ -68,3 +68,12 @@ All stable or otherwise notable changes will be listed here
 ### Removed
 - Removed language dropdown in trayicon
 - Removed profile dropdown in trayicon
+
+## [3.4.5](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.5.20210705.4) - 5.07.2021
+### Changed
+- Using new "Version" system.
+  - 3 Types of Versions: <code>release</code>, <code>dev</code> and <code>dirty</code>
+  - Tracking that and other settings like build date and build nr
+
+## [3.4.3](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.3.20210705.2b) - 5.07.2021
+### 
