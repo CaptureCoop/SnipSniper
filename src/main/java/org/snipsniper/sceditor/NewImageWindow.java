@@ -62,7 +62,7 @@ public class NewImageWindow extends JFrame implements IClosable{
             String widthString = widthTextField.getText();
             String heightString = heightTextField.getText();
             if(!MathUtils.isInteger(widthString) || !MathUtils.isInteger(heightString)) {
-                JOptionPane.showMessageDialog(instance, "Bad input! Not a valid number.", "Error", JOptionPane.ERROR_MESSAGE, new ImageIcon(ImageManager.getImage("icons/redx.png").getScaledInstance(32, 32, 0)));
+                Utils.showPopup(instance, "Bad input! Not a valid number.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
             } else {
                 int width = Integer.parseInt(widthString);
                 int height = Integer.parseInt(heightString);

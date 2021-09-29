@@ -1,5 +1,6 @@
 package org.snipsniper.configwindow.tabs;
 
+import org.snipsniper.ImageManager;
 import org.snipsniper.LangManager;
 import org.snipsniper.colorchooser.ColorChooser;
 import org.snipsniper.config.Config;
@@ -13,9 +14,7 @@ import org.snipsniper.utils.enums.ConfigSaveButtonState;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.File;
 
 public class GeneralTab extends JPanel implements ITab{
@@ -53,11 +52,36 @@ public class GeneralTab extends JPanel implements ITab{
 
         //BEGIN ELEMENTS
 
-        //BEGIN ICON
+        //BEGIN TITLE
         gbc.gridx = 0;
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 10, 0, 10);
+        options.add(configWindow.createJLabel("Title", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        JPanel titleContent = new JPanel(new GridLayout(0, 2));
+        JTextField titleInput = new JTextField(config.getString(ConfigHelper.PROFILE.title));
+        titleInput.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                super.focusLost(e);
+                if(StringUtils.removeWhitespace(titleInput.getText()).isEmpty())
+                    titleInput.setText("none");
+                config.set(ConfigHelper.PROFILE.title, titleInput.getText());
+            }
+        });
+        titleContent.add(titleInput);
+        JButton titleReset = new JButton("Reset");
+        titleReset.addActionListener(e -> {
+            titleInput.setText("none");
+            config.set(ConfigHelper.PROFILE.title, titleInput.getText());
+        });
+        titleContent.add(titleReset);
+        options.add(titleContent, gbc);
+        //END TITLE
+
+        //BEGIN ICON
+        gbc.gridx = 0;
         options.add(configWindow.createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JButton iconButton = new JButton("Set Icon");
@@ -191,7 +215,7 @@ public class GeneralTab extends JPanel implements ITab{
                 File saveLocationCheck = new File(saveLocationFinal);
                 if(!saveLocationCheck.exists()) {
                     cleanDirtyFunction[0].run(ConfigSaveButtonState.NO_SAVE);
-                    int dialogResult = JOptionPane.showConfirmDialog (configWindow, LangManager.getItem("config_sanitation_directory_notexist") + " Create?",LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION);
+                    int dialogResult = Utils.showPopup(configWindow, LangManager.getItem("config_sanitation_directory_notexist") + " Create?", LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/folder.png"), true);
                     if(dialogResult == JOptionPane.YES_OPTION) {
                         boolean allow = new File(saveLocationFinal).mkdirs();
 

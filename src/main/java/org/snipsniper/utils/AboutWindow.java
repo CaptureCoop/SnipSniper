@@ -111,7 +111,7 @@ public class AboutWindow extends JFrame {
 
                     SnipSniper.getConfig().set(ConfigHelper.MAIN.updateChannel, channel.toString().toLowerCase());
                     SnipSniper.getConfig().save();
-                    JOptionPane.showMessageDialog(instance, "New update channel: " + channel.toString().toLowerCase());
+                    Utils.showPopup(instance, "New update channel: " + channel.toString().toLowerCase(), "Channel unlocked!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, ImageManager.getImage("icons/checkmark.png"), true);
                 }
             }
         });

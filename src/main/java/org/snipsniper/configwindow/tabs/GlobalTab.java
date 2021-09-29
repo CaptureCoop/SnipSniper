@@ -1,6 +1,7 @@
 package org.snipsniper.configwindow.tabs;
 
 import org.apache.commons.lang3.SystemUtils;
+import org.snipsniper.ImageManager;
 import org.snipsniper.LangManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.Config;
@@ -51,7 +52,7 @@ public class GlobalTab extends JPanel implements ITab{
 
         JButton importConfigs = new JButton("Import Configs");
         importConfigs.addActionListener(e -> {
-            int dialogResult = JOptionPane.showConfirmDialog (configWindow, "This will overwrite all current configs. Do you want to continue?","Warning", JOptionPane.YES_NO_OPTION);
+            int dialogResult = Utils.showPopup(configWindow, "This will overwrite all current configs. Do you want to continue?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/questionmark.png"), true);
             if(dialogResult == JOptionPane.NO_OPTION){
                 return;
             }
