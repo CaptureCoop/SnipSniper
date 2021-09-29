@@ -11,10 +11,10 @@ All stable or otherwise notable changes will be listed here
 
 
 ## [3.9.1](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.1) - 24.09.2021
-### This release has been removed due to a critical bug, please use [3.9.2](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.2)
+#### This release has been removed due to a critical bug, please use [3.9.2](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.2)
 
 ## [3.9.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.0) - 24.09.2021
-### This release has been removed due to a critical bug, please use [3.9.2](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.2)
+#### This release has been removed due to a critical bug, please use [3.9.2](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.2)
 
 ## [3.7.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.7.0) - 10.09.2021
 ### Added
@@ -76,4 +76,11 @@ All stable or otherwise notable changes will be listed here
   - Tracking that and other settings like build date and build nr
 
 ## [3.4.3](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.3.20210705.2b) - 5.07.2021
-### 
+### Changed
+- Fixed small bug related to the about page
+
+## [3.4.2](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.2.20210705.1b) - 5.07.2021
+#### This release has been deleted
+### Added
+- Added GitHub Actions files
+- Added basic Linux support by disabling windows only functions
