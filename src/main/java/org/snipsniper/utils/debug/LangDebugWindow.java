@@ -92,6 +92,7 @@ public class LangDebugWindow extends JFrame {
             }
             FileUtils.printFile(SnipSniper.getMainFolder() + "//" + lastLanguage + ".json", currentEdit.toString());
             FileUtils.openFolder(SnipSniper.getMainFolder());
+            SnipSniper.resetProfiles();
         });
         gbc.gridwidth = 2;
         gbc.gridx = 0;
