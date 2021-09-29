@@ -1,8 +1,10 @@
 package org.snipsniper.utils;
 
 import org.snipsniper.LogManager;
+import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.enums.LogLevel;
 
+import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -120,6 +122,14 @@ public class FileUtils {
                 allExist = false;
         }
         return allExist;
+    }
+
+    public static void openFolder(String path) {
+        try {
+            Desktop.getDesktop().open(new File(path));
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
 
     public static void printFile(String filename, String text) {

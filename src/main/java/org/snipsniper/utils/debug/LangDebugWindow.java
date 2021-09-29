@@ -85,11 +85,13 @@ public class LangDebugWindow extends JFrame {
         saveButton.addActionListener(e -> {
             for(JTextArea textArea : textAreaList) {
                 String key = keyMap.get(textArea);
-                if(currentEdit.has(key))
-                    currentEdit.remove(key);
-                currentEdit.put(key, textArea.getText());
+                JSONObject toEdit = currentEdit.getJSONObject("strings");
+                if(toEdit.has(key))
+                    toEdit.remove(key);
+                toEdit.put(key, textArea.getText());
             }
             FileUtils.printFile(SnipSniper.getMainFolder() + "//" + lastLanguage + ".json", currentEdit.toString());
+            FileUtils.openFolder(SnipSniper.getMainFolder());
         });
         gbc.gridwidth = 2;
         gbc.gridx = 0;

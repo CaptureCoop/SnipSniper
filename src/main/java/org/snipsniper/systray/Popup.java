@@ -8,6 +8,7 @@ import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.scviewer.SCViewerWindow;
 import org.snipsniper.systray.buttons.btnAbout;
 import org.snipsniper.config.Config;
+import org.snipsniper.utils.FileUtils;
 import org.snipsniper.utils.Utils;
 import org.snipsniper.utils.debug.LangDebugWindow;
 
@@ -40,13 +41,7 @@ public class Popup extends JFrame{
         add(new PopupMenuButton("Viewer", ImageManager.getImage("icons/viewer.png"), this, args -> new SCViewerWindow(null, config, false), menus));
         add(new PopupMenuButton("Editor", ImageManager.getImage("icons/editor.png"), this, args -> new SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false), menus));
         add(new JSeparator());
-        add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), ImageManager.getImage("icons/folder.png"), this, args -> {
-            try {
-                Desktop.getDesktop().open(new File(sniper.getConfig().getString(ConfigHelper.PROFILE.pictureFolder)));
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        }, menus));
+        add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), ImageManager.getImage("icons/folder.png"), this, args -> FileUtils.openFolder(sniper.getConfig().getString(ConfigHelper.PROFILE.pictureFolder)), menus));
         add(new PopupMenuButton(LangManager.getItem("menu_config"), ImageManager.getImage("icons/config.png"), this, args -> sniper.openConfigWindow(), menus));
 
         if (SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
