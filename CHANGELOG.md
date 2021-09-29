@@ -29,3 +29,14 @@ All stable or otherwise notable changes will be listed here
 ### Added
 - Added Kofi Button
 - You can now further customize where screenshots are stored
+- EzMode is now in beta, toggle it with "." in the Editor
+- Uploading to SnipSniper.org/jars/ with every commit
+- GIF Support
+ 
+### Changed
+- S Icon was mirrored, oops! (How did we never notice this)
+- Log files are now saved as .log
+- Better logging, changing format
+
+### Removed
+- Removed ID for classes system
