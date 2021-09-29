@@ -83,4 +83,13 @@ All stable or otherwise notable changes will be listed here
 #### This release has been deleted
 ### Added
 - Added GitHub Actions files
-- Added basic Linux support by disabling windows only functions
+### Changed
+- Tray icons are only created if we are running on a supported platform
+
+## [3.4.1](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.1.20210701.1b) - 1.07.2021
+### Added
+- Added basic linux functionality, bugs are expected!
+
+## [3.4.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.0.20210630.2b) - 30.06.2021
+### Added
+- Added all stamps to the editor tab in the config window
