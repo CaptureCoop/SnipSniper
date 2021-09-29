@@ -1,6 +1,8 @@
 # Changelog
 All stable or otherwise notable changes will be listed here
 
+Notice that any version nr with ** has the deprecated build nr cut off for readability
+
 ## [3.9.2](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.2) - 24.09.2021
 ### Added
 - Added Update Button
@@ -25,7 +27,7 @@ All stable or otherwise notable changes will be listed here
 ### Changed
 - Changed version styling
 
-## [3.6.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.6.0.20210903.1) - 3.09.2021
+## [3.6.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.6.0.20210903.1)** - 3.09.2021
 ### Added
 - Added Kofi Button
 - You can now further customize where screenshots are stored
