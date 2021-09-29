@@ -151,7 +151,7 @@ public class EditorTab extends JPanel implements ITab{
         return isDirty;
     }
 
-    private JSpinner setupStampConfigPanelSpinner(Enum configKey, double min, double max, double stepSize, StampJPanel previewPanel, Config config, int stampIndex, Function onUpdate) {
+    private JSpinner setupStampConfigPanelSpinner(ConfigHelper.PROFILE configKey, double min, double max, double stepSize, StampJPanel previewPanel, Config config, int stampIndex, Function onUpdate) {
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(Double.parseDouble(config.getFloat(configKey)+""), min, max, stepSize));
         spinner.addChangeListener(e -> {
             config.set(configKey, (int)Double.parseDouble(spinner.getValue().toString()));
@@ -161,7 +161,7 @@ public class EditorTab extends JPanel implements ITab{
         return spinner;
     }
 
-    private void setupStampConfigPanelSpinnerWithLabel(JPanel panel, String title, Enum configKey, double min, double max, double stepSize, StampJPanel previewPanel, Config config, int stampIndex, GridBagConstraints constraints, String infoText, Function onUpdate) {
+    private void setupStampConfigPanelSpinnerWithLabel(JPanel panel, String title, ConfigHelper.PROFILE configKey, double min, double max, double stepSize, StampJPanel previewPanel, Config config, int stampIndex, GridBagConstraints constraints, String infoText, Function onUpdate) {
         constraints.gridx = 0;
         panel.add(configWindow.createJLabel(title, JLabel.RIGHT, JLabel.CENTER), constraints);
         constraints.gridx = 1;

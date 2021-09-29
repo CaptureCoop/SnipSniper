@@ -409,13 +409,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			g.drawLine(0, i * space, image.getWidth(), i * space);
 		}
 
-		Stroke oldStroke = g.getStroke();
-		g.setStroke(new BasicStroke(thickness));
-		g.drawLine(image.getWidth()/2, 0, image.getWidth()/2, image.getHeight());
-		g.drawLine(0, image.getHeight()/2, image.getWidth(), image.getHeight()/2);
-		g.setStroke(new BasicStroke(thickness*2));
-		g.drawOval(0,0,image.getWidth(),image.getHeight());
-		g.setStroke(oldStroke);
+		generateSpyglassStroke(g, image, thickness);
 	}
 
 	private void generateSpyglassPixelByPixel(BufferedImage image, int rows, int thickness) {
@@ -443,6 +437,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			}
 		}
 
+		generateSpyglassStroke(g, image, thickness);
+		g.dispose();
+	}
+
+	public void generateSpyglassStroke(Graphics2D g, BufferedImage image, int thickness) {
 		Stroke oldStroke = g.getStroke();
 		g.setStroke(new BasicStroke(thickness));
 		g.drawLine(image.getWidth()/2, 0, image.getWidth()/2, image.getHeight());
@@ -450,8 +449,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		g.setStroke(new BasicStroke(thickness*2));
 		g.drawOval(0,0,image.getWidth(),image.getHeight());
 		g.setStroke(oldStroke);
-
-		g.dispose();
 	}
 
 	public Sniper getSniperInstance() {
