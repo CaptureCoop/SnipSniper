@@ -48,4 +48,23 @@ All stable or otherwise notable changes will be listed here
 ## [3.5.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.5.0.20210805.1) - 5.08.2021
 ### Added
 - Added something to the about window
-- Added Spyglass feature to capture window
+- Added Spyglass feature to Capture window
+- Added ? (InfoButton) button without text for now
+- Added profile create/remove buttons to config window
+- Added profile dropdown to config window
+- Added Language dropdown to config window
+- Added rotate button to Viewer
+- Added a new fancy Popup when right clicking trayicon
+- Added Gradient JButton to go along with the new color chooser
+
+
+### Changed
+- Changed how we render things in Capture window
+- We now use our own color format to save color gradients
+- Revamped color window
+- SmartPixel supports gradients
+- "Open Editor" setting is now always true
+
+### Removed
+- Removed language dropdown in trayicon
+- Removed profile dropdown in trayicon
