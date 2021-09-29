@@ -91,5 +91,17 @@ All stable or otherwise notable changes will be listed here
 - Added basic linux functionality, bugs are expected!
 
 ## [3.4.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.0.20210630.2b) - 30.06.2021
+### Changed
+- All stamps are now available in the editor tab in the config window
+
+## [3.3.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.3.0.20210630.1b) - 30.06.2021
 ### Added
-- Added all stamps to the editor tab in the config window
+- Added a few stamps to the config window
+- Editor now has a config button at the top
+
+## [3.2.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.2.0.20210623.1b) - 23.07.2021
+### Added
+- Global Tab in config window, there you can set the language, theme and if debug is enabled.
+
+### Changed
+- Debug Console can be opened from tasktray if debug is enabled
