@@ -331,6 +331,8 @@ public final class SnipSniper {
 	}
 
 	public static Sniper getProfile(int id) {
+		if(profiles.length < id)
+			return null;
 		return profiles[id];
 	}
 

@@ -144,8 +144,11 @@ public class Sniper {
 		return config.getString(ConfigHelper.PROFILE.icon);
 	}
 
-	public String getID() {
-		return "PROFILE " + profileID;
+	public String getTitle() {
+		String title = config.getString(ConfigHelper.PROFILE.title);
+		if(title.equals("none"))
+			title = "Profile " + profileID;
+		return title;
 	}
 
 	public Config getConfig() {
