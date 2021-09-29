@@ -52,7 +52,7 @@ public class Sniper {
 					image = Utils.getDefaultIcon(profileID);
 
 				image.flush();
-				trayIcon = new TrayIcon(image, "SnipSniper (Profile " + profileID + ")");
+				trayIcon = new TrayIcon(image, "SnipSniper (" + getTitle() + ")");
 				trayIcon.setImageAutoSize(true);
 
 				trayIcon.addMouseListener(new MouseAdapter() {

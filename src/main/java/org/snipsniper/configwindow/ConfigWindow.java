@@ -190,7 +190,11 @@ public class ConfigWindow extends JFrame implements IClosable{
                 Image img = Utils.getIconDynamically(new Config(file.getName(), "profile_defaults.cfg"));
                 if(img == null)
                     img = Utils.getDefaultIcon(nr);
-                profiles.add(new DropdownItem("Profile " + nr, file.getName(), img));
+                String title = "Profile " + nr;
+                Sniper sniper = SnipSniper.getProfile(nr);
+                if(sniper != null)
+                    title = sniper.getTitle();
+                profiles.add(new DropdownItem(title, file.getName(), img));
             }
         }
 

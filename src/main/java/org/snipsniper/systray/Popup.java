@@ -31,7 +31,7 @@ public class Popup extends JFrame{
         setLayout(new BoxLayout(getContentPane(),BoxLayout.PAGE_AXIS));
         BufferedImage splash = ImageManager.getImage("splash.png");
         JLabel title = new JLabel(new ImageIcon(splash.getScaledInstance((int)(splash.getWidth()/3F),(int)(splash.getHeight()/3F), Image.SCALE_DEFAULT)));
-        title.setText("Profile " + sniper.profileID);
+        title.setText(sniper.getTitle());
         title.setAlignmentX(JPanel.CENTER_ALIGNMENT);
         title.setVerticalTextPosition(JLabel.BOTTOM);
         title.setHorizontalTextPosition(JLabel.CENTER);
