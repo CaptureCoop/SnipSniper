@@ -7,7 +7,6 @@ import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.utils.Utils;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 
 public class LangDebugWindow extends JFrame {
@@ -50,6 +49,10 @@ public class LangDebugWindow extends JFrame {
             setupLabels(args[0], content, gbc);
             resetScrollPane();
         }), gbc);
+        gbc.gridx = 0;
+        content.add(getEmptyPanel(), gbc);
+        gbc.gridx = 1;
+        content.add(getEmptyPanel(), gbc);
         gbc.fill = GridBagConstraints.BOTH;
         JSONObject enJSON = LangManager.getJSON("en").getJSONObject("strings");
         enJSON.keySet().forEach(keyStr -> {
@@ -65,6 +68,13 @@ public class LangDebugWindow extends JFrame {
             gbc.insets.left = 0;
         });
         content.validate();
+    }
+
+    public JPanel getEmptyPanel() {
+        JPanel panel = new JPanel();
+        Dimension dim = new Dimension(220, 10);
+        panel.setPreferredSize(dim);
+        return panel;
     }
 
     public JTextArea createLabel(String text, boolean editable) {
