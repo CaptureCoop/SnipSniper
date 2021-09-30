@@ -19,6 +19,8 @@ public class LangManager {
     public static ArrayList<String> languages = new ArrayList<>();
     private static final HashMap<String, JSONObject> langMap = new HashMap<>();
 
+    private LangManager() { }
+
     public static void load() {
         try {
             JSONArray langs = new JSONObject(Utils.loadFileFromJar("lang/languages.json")).getJSONArray("languages");

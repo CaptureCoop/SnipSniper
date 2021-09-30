@@ -18,6 +18,8 @@ public class ImageManager {
 	private static final HashMap<String, Image> animatedImages = new HashMap<>();
 	private static String[] filenameList;
 
+	private ImageManager() { }
+
 	public static void loadResources() {
 		try {
 			JSONArray list = new JSONArray(Utils.loadFileFromJar("img.json"));

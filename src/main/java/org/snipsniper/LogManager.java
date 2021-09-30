@@ -20,6 +20,8 @@ public class LogManager {
     private static final int MAX_LEVEL_LENGTH = LogLevel.WARNING.toString().length();
     private static boolean enabled = false;
 
+    private LogManager() { }
+
     public static void log(String message, LogLevel level, Object... args) {
         logInternal(org.snipsniper.utils.StringUtils.format(message, args), level, false);
     }
