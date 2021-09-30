@@ -37,6 +37,10 @@ public class WikiManager {
     }
 
     public static String getContent(String string) {
+        if(!strings.containsKey(string)) {
+            LogManager.log("Missing string: " + string, LogLevel.ERROR);
+            return "null";
+        }
         return strings.get(string).getString("content");
     }
 }

@@ -79,7 +79,7 @@ public class GeneralTab extends JPanel implements ITab{
         titleContent.add(titleReset);
         options.add(titleContent, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/title.json")), gbc);
         //END TITLE
 
         //BEGIN ICON
@@ -103,7 +103,7 @@ public class GeneralTab extends JPanel implements ITab{
         })));
         options.add(iconButton, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/icon.json")), gbc);
         //END ICON
 
         //BEGIN HOTKEY
@@ -134,7 +134,7 @@ public class GeneralTab extends JPanel implements ITab{
         hotkeyPanel.add(deleteHotKey);
         options.add(hotkeyPanel, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/hotkey.json")), gbc);
         //END HOTKEY
 
         //BEGIN SAVEIMAGES
@@ -149,7 +149,7 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 1;
         options.add(saveToDisk, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/saveimage.json")), gbc);
         //END SAVEIMAGES
 
         //BEGIN COPYCLIPBOARD
@@ -164,7 +164,7 @@ public class GeneralTab extends JPanel implements ITab{
         });
         options.add(copyToClipboard, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/copyimage.json")), gbc);
         //END COPYCLIPBOARD
 
         //BEGIN BORDERSIZE
@@ -197,7 +197,7 @@ public class GeneralTab extends JPanel implements ITab{
         borderSizePanel.add(colorBtn, gbc);
         options.add(borderSizePanel, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/bordersize.json")), gbc);
         //END BORDERSIZE
 
         //BEGIN LOCATION
@@ -243,7 +243,7 @@ public class GeneralTab extends JPanel implements ITab{
         });
         options.add(pictureLocation, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/imagefolder.json")), gbc);
         //END LOCATION
 
         //BEGIN CUSTOM MODIFIER
@@ -268,7 +268,7 @@ public class GeneralTab extends JPanel implements ITab{
         });
         options.add(customSaveButton, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/savefoldermodifier.json")), gbc);
         //END CUSTOM MODIFIER
 
         //BEGIN SNIPE DELAY
@@ -282,7 +282,7 @@ public class GeneralTab extends JPanel implements ITab{
         });
         options.add(snipeDelay, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/snapdelay.json")), gbc);
         //END SNIPE DELAY
 
         //BEGIN OPEN EDITOR
@@ -297,7 +297,7 @@ public class GeneralTab extends JPanel implements ITab{
         });
         options.add(openEditor, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/openeditor.json")), gbc);
         //END OPEN EDITOR
 
         //BEGIN SPYGLASS
@@ -370,7 +370,7 @@ public class GeneralTab extends JPanel implements ITab{
         spyglassPanel.add(spyglassDropdownHotkey);
         options.add(spyglassPanel, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/usespyglass.json")), gbc);
         //END SPYGLASS
 
         //BEGIN SPYGLASS ZOOM
@@ -398,7 +398,7 @@ public class GeneralTab extends JPanel implements ITab{
         });
         options.add(spyglassZoomDropdown, gbc);
         gbc.gridx = 2;
-        options.add(new InfoButton(null), gbc);
+        options.add(new InfoButton(WikiManager.getContent("config/general/spyglasszoom.json")), gbc);
         //END SPYGLASS ZOOM
         //END ELEMENTS
 
