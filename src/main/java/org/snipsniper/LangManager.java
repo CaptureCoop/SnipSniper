@@ -3,13 +3,12 @@ package org.snipsniper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.utils.FileUtils;
 import org.snipsniper.utils.StringUtils;
 import org.snipsniper.utils.enums.LogLevel;
-import org.snipsniper.utils.Utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,9 +22,9 @@ public class LangManager {
 
     public static void load() {
         LogManager.log("Loading language files...", LogLevel.INFO);
-        JSONArray langs = new JSONObject(Utils.loadFileFromJar("lang/languages.json")).getJSONArray("languages");
+        JSONArray langs = new JSONObject(FileUtils.loadFileFromJar("lang/languages.json")).getJSONArray("languages");
         for(int i = 0; i < langs.length(); i++) {
-            String content = Utils.loadFileFromJar("lang/" + langs.getString(i) + ".json");
+            String content = FileUtils.loadFileFromJar("lang/" + langs.getString(i) + ".json");
             langMap.put(langs.getString(i), new JSONObject(content));
             languages.add(langs.getString(i));
         }

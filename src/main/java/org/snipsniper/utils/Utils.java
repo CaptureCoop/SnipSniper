@@ -21,7 +21,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
@@ -400,27 +399,6 @@ public class Utils {
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static String loadFileFromJar(String file) {
-		StringBuilder content = new StringBuilder();
-		try{
-			String path = "org/snipsniper/resources/" + file;
-			InputStream inputStream = ClassLoader.getSystemResourceAsStream(path);
-			if(inputStream == null)
-				throw new FileNotFoundException(StringUtils.format("Could not load file %c from jar!", path));
-			InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-			BufferedReader in = new BufferedReader(streamReader);
-
-			for (String line; (line = in.readLine()) != null;)
-				content.append(line);
-
-			inputStream.close();
-			streamReader.close();
-		} catch (IOException ioException) {
-			LogManager.log("Could not load file: " + file, LogLevel.ERROR);
-		}
-		return content.toString();
 	}
 
 	public static boolean containsRectangleFully(Rectangle rectangle, Rectangle contains) {

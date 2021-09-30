@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.json.JSONArray;
+import org.snipsniper.utils.FileUtils;
 import org.snipsniper.utils.Utils;
 import org.snipsniper.utils.enums.LogLevel;
 
@@ -23,7 +24,7 @@ public class ImageManager {
 	public static void loadResources() {
 		LogManager.log("Loading images...", LogLevel.INFO);
 		try {
-			JSONArray list = new JSONArray(Utils.loadFileFromJar("img.json"));
+			JSONArray list = new JSONArray(FileUtils.loadFileFromJar("img.json"));
 			for(int i = 0; i < list.length(); i++) {
 				if(!list.getString(i).endsWith(".gif")) {
 					URL url = SnipSniper.class.getResource("/org/snipsniper/resources/img/" + list.getString(i));
@@ -52,7 +53,7 @@ public class ImageManager {
 
 	public static String[] getListAsString() {
 		if(filenameList == null) {
-			JSONArray list = new JSONArray(Utils.loadFileFromJar("img.json"));
+			JSONArray list = new JSONArray(FileUtils.loadFileFromJar("img.json"));
 			filenameList = new String[list.length()];
 			for (int i = 0; i < list.length(); i++) {
 				filenameList[i] = list.getString(i);
