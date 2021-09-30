@@ -36,9 +36,23 @@ dependencies {
     compile 'com.erigir:mslinks:0.0.2+5'
 }
 
+void refreshWiki() {
+    exec {
+        workingDir 'src//main//resources//org//snipsniper//resources//wiki//'
+        commandLine 'git', 'checkout', 'master'
+    }
+    exec {
+        workingDir 'src//main//resources//org//snipsniper//resources//wiki//'
+        commandLine 'git', 'submodule', 'update'
+    }
+    exec {
+        workingDir 'src//main//resources//org//snipsniper//resources//wiki//'
+        commandLine 'git', 'pull'
+    }
+}
+
 task preBuild {
-    def refreshSub = 'git submodule update --init --recursive'.execute();
-    refreshSub.waitFor()
+    refreshWiki()
 
     String type = System.getProperty("type")
     if(type == null) type = "dev"
