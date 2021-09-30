@@ -78,6 +78,8 @@ public class GeneralTab extends JPanel implements ITab{
         });
         titleContent.add(titleReset);
         options.add(titleContent, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
         //END TITLE
 
         //BEGIN ICON
@@ -100,6 +102,8 @@ public class GeneralTab extends JPanel implements ITab{
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         })));
         options.add(iconButton, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
         //END ICON
 
         //BEGIN HOTKEY
