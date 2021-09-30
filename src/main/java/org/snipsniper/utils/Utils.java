@@ -402,20 +402,24 @@ public class Utils {
 		}
 	}
 
-	public static String loadFileFromJar(String file) throws IOException {
+	public static String loadFileFromJar(String file) {
 		StringBuilder content = new StringBuilder();
-		String path = "org/snipsniper/resources/" + file;
-		InputStream inputStream = ClassLoader.getSystemResourceAsStream(path);
-		if(inputStream == null)
-			throw new FileNotFoundException(StringUtils.format("Could not load file %c from jar!", path));
-		InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-		BufferedReader in = new BufferedReader(streamReader);
+		try{
+			String path = "org/snipsniper/resources/" + file;
+			InputStream inputStream = ClassLoader.getSystemResourceAsStream(path);
+			if(inputStream == null)
+				throw new FileNotFoundException(StringUtils.format("Could not load file %c from jar!", path));
+			InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+			BufferedReader in = new BufferedReader(streamReader);
 
-		for (String line; (line = in.readLine()) != null;)
-			content.append(line);
+			for (String line; (line = in.readLine()) != null;)
+				content.append(line);
 
-		inputStream.close();
-		streamReader.close();
+			inputStream.close();
+			streamReader.close();
+		} catch (IOException ioException) {
+			LogManager.log("Could not load file: " + file, LogLevel.ERROR);
+		}
 		return content.toString();
 	}
 

@@ -37,6 +37,11 @@ dependencies {
 }
 
 task preBuild {
+    def submoduleUpdate = 'git submodule update'.execute()
+    submoduleUpdate.waitFor()
+    def submodulePull = 'git submodule foreach git pull'.execute()
+    submodulePull.waitFor()
+
     String type = System.getProperty("type")
     if(type == null) type = "dev"
 

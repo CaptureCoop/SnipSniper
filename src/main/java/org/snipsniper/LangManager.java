@@ -19,17 +19,17 @@ public class LangManager {
     public static ArrayList<String> languages = new ArrayList<>();
     private static final HashMap<String, JSONObject> langMap = new HashMap<>();
 
+    private LangManager() { }
+
     public static void load() {
-        try {
-            JSONArray langs = new JSONObject(Utils.loadFileFromJar("lang/languages.json")).getJSONArray("languages");
-            for(int i = 0; i < langs.length(); i++) {
-                String content = Utils.loadFileFromJar("lang/" + langs.getString(i) + ".json");
-                langMap.put(langs.getString(i), new JSONObject(content));
-                languages.add(langs.getString(i));
-            }
-        } catch (IOException e) {
-            LogManager.log("Error loading languages. Message: " + e.getMessage(), LogLevel.ERROR, true);
+        LogManager.log("Loading language files...", LogLevel.INFO);
+        JSONArray langs = new JSONObject(Utils.loadFileFromJar("lang/languages.json")).getJSONArray("languages");
+        for(int i = 0; i < langs.length(); i++) {
+            String content = Utils.loadFileFromJar("lang/" + langs.getString(i) + ".json");
+            langMap.put(langs.getString(i), new JSONObject(content));
+            languages.add(langs.getString(i));
         }
+        LogManager.log("Done!", LogLevel.INFO);
     }
 
     public static JSONObject getJSON(String language) {
@@ -60,6 +60,10 @@ public class LangManager {
 
     public static String getItem(String key) {
         return getItem(SnipSniper.getConfig().getString(ConfigHelper.MAIN.language), key);
+    }
+
+    public static String getLanguage() {
+        return SnipSniper.getConfig().getString(ConfigHelper.MAIN.language);
     }
 
 }

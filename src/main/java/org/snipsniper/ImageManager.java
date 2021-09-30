@@ -18,7 +18,10 @@ public class ImageManager {
 	private static final HashMap<String, Image> animatedImages = new HashMap<>();
 	private static String[] filenameList;
 
+	private ImageManager() { }
+
 	public static void loadResources() {
+		LogManager.log("Loading images...", LogLevel.INFO);
 		try {
 			JSONArray list = new JSONArray(Utils.loadFileFromJar("img.json"));
 			for(int i = 0; i < list.length(); i++) {
@@ -44,18 +47,15 @@ public class ImageManager {
 		} catch (IOException ioException) {
 			LogManager.log("Could not load resources. Message: " + ioException.getMessage(), LogLevel.ERROR, true);
 		}
+		LogManager.log("Done!", LogLevel.INFO);
 	}
 
 	public static String[] getListAsString() {
 		if(filenameList == null) {
-			try {
-				JSONArray list = new JSONArray(Utils.loadFileFromJar("img.json"));
-				filenameList = new String[list.length()];
-				for (int i = 0; i < list.length(); i++) {
-					filenameList[i] = list.getString(i);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			JSONArray list = new JSONArray(Utils.loadFileFromJar("img.json"));
+			filenameList = new String[list.length()];
+			for (int i = 0; i < list.length(); i++) {
+				filenameList[i] = list.getString(i);
 			}
 		}
 		return filenameList;

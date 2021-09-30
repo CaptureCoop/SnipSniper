@@ -103,7 +103,6 @@ public final class SnipSniper {
 		if(cmdline.isDebug())
 			config.set(ConfigHelper.MAIN.debug, "true");
 
-		LogManager.log("Loading resources", LogLevel.INFO);
 		ImageManager.loadResources();
 
 		System.setProperty("sun.java2d.uiScale", "1.0");
@@ -126,6 +125,7 @@ public final class SnipSniper {
 			openDebugConsole();
 
 		LangManager.load();
+		WikiManager.load(LangManager.getLanguage());
 
 		LogManager.log("Launching SnipSniper Version " + getVersion().getDigits() + " (rev-" + version.getGithash() + ")", LogLevel.INFO);
 		if(SystemUtils.IS_OS_LINUX) {
