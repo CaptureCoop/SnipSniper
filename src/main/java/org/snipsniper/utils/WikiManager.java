@@ -35,4 +35,8 @@ public class WikiManager {
             strings.put(string, new JSONObject(Utils.loadFileFromJar(StringUtils.format("wiki/%c/" + string, language))));
         }
     }
+
+    public static String getContent(String string) {
+        return strings.get(string).getString("content");
+    }
 }
