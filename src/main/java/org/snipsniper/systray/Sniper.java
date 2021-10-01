@@ -50,6 +50,8 @@ public class Sniper {
 
 				if(image == null)
 					image = Utils.getDefaultIcon(profileID);
+				else
+					image = image.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
 
 				image.flush();
 				trayIcon = new TrayIcon(image, "SnipSniper (" + getTitle() + ")");
