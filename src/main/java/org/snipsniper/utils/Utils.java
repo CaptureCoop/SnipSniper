@@ -351,15 +351,6 @@ public class Utils {
 		filename += modifier + ".png";
 		return filename;
 	}
-	
-	public static BufferedImage resizeImage(BufferedImage original, int width, int height) {
-		BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = newImage.createGraphics();
-		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g.drawImage(original, 0,0,width, height, null);
-		g.dispose();
-		return newImage;
-	}
 
 	public static String rgb2hex(Color color) {
 		return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
