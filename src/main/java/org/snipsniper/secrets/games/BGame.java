@@ -78,7 +78,7 @@ public class BGame extends JFrame {
     public void loop() {
         while(running) {
             final int ts = getTileSize();
-            this.setMinimumSize(new Dimension(BOARD_WIDTH *ts, BOARD_HEIGHT * ts));
+            setMinimumSize(new Dimension(BOARD_WIDTH *ts, BOARD_HEIGHT * ts));
             if(!isPaused) {
                 input();
                 boolean isHit = false;
@@ -100,7 +100,7 @@ public class BGame extends JFrame {
                     fallSpeedMax-= 10 * rows;
             }
 
-            this.gamePanel.paintImmediately(new Rectangle(0,0,this.getWidth(),this.getHeight()));
+            gamePanel.repaint();
 
             try {
                 Thread.sleep(10);
@@ -162,7 +162,7 @@ public class BGame extends JFrame {
 
         if(cPiece != null) {
             if(isPressed(KeyEvent.VK_SPACE) && dropCooldown == 0) {
-                for(int i = 0; i < this.BOARD_HEIGHT; i++) {
+                for(int i = 0; i < BOARD_HEIGHT; i++) {
                     if(cPiece.moveDown())
                         break;
                 }

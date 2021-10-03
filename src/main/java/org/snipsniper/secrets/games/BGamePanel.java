@@ -13,10 +13,10 @@ public class BGamePanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         final int ts = game.getTileSize();
-        g.clearRect(0, 0, this.getWidth(), this.getHeight());
+        g.clearRect(0, 0, getWidth(), getHeight());
         g.setColor(Color.CYAN);
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        int offsetX = (this.getWidth()/2) - (game.BOARD_WIDTH * ts)/2;
+        g.fillRect(0, 0, getWidth(), getHeight());
+        int offsetX = (getWidth()/2) - (game.BOARD_WIDTH * ts)/2;
         g.setColor(Color.BLACK);
         if(game.getCurrentPiece() != null) {
             BGamePiece cp = game.getCurrentPiece();
@@ -44,9 +44,9 @@ public class BGamePanel extends JPanel {
 
         if(game.isPaused()) {
             g.setColor(new Color(0,0,0,100));
-            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+            g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.WHITE);
-            drawCenteredString(g, "PAUSED", new Rectangle(0,0,this.getWidth(), this.getHeight()), new Font("Monospaced", Font.BOLD, this.getHeight()/20));
+            drawCenteredString(g, "PAUSED", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
         }
     }
 
