@@ -124,7 +124,7 @@ public class IconWindow extends JFrame implements IClosable {
                 public boolean accept(File f) {
                     if(f.isDirectory())
                         return true;
-                    return StringUtils.endsWith(f.getName(), ".png", ".gif", ".jpg", ".jpeg");
+                    return StringUtils.endsWith(f.getName().toLowerCase(), ".png", ".gif", ".jpg", ".jpeg");
                 }
 
                 @Override
