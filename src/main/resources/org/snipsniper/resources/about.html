@@ -3,14 +3,18 @@
         <style>
             body {
                 font-family: "Segoe UI";
+                color:%TEXT_COLOR%;
             }
             a {
-                color:%LINK_COLOR%;
+                color:%TEXT_COLOR%;
+            }
+            #secret {
+                text-decoration: none;
             }
         </style>
     </head>
 <body>
-Version %VERSION%-%TYPE% (<a href="https://github.com/CaptureCoop/SnipSniper/commit/%HASH%">rev-%HASH%</a>)
+Version <a href="secret" id="secret">%VERSION%-%TYPE%</a> (<a href="https://github.com/CaptureCoop/SnipSniper/commit/%HASH%">rev-%HASH%</a>)
     <br/>Built %BUILDDATE%
     <br/>
     <br/>

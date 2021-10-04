@@ -4,6 +4,7 @@ import org.snipsniper.ImageManager;
 import org.snipsniper.LangManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.secrets.games.BGame;
 import org.snipsniper.utils.enums.PlatformType;
 import org.snipsniper.utils.enums.ReleaseType;
 
@@ -16,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AboutWindow extends JFrame {
     private final AboutWindow instance;
@@ -122,9 +124,19 @@ public class AboutWindow extends JFrame {
         about.setOpaque(false);
         about.setSelectionColor(new Color(0,0,0,0));
         about.setSelectedTextColor(Color.black);
+        AtomicInteger secretCount = new AtomicInteger();
         about.addHyperlinkListener(hle -> {
             if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.getEventType())) {
-                Links.openLink(hle.getURL().toString());
+                if(hle.getDescription().equals("secret")) {
+                    if(secretCount.get() >= 10) {
+                        new BGame();
+                        secretCount.set(0);
+                    } else {
+                        secretCount.getAndIncrement();
+                    }
+                } else {
+                    Links.openLink(hle.getURL().toString());
+                }
             }
         });
         rightSide.add(about);
@@ -168,7 +180,7 @@ public class AboutWindow extends JFrame {
             case "dark": color = "white"; break;
             case "light": color = "black"; break;
         }
-        html = html.replace("%LINK_COLOR%", color);
+        html = html.replaceAll("%TEXT_COLOR%", color);
     }
 
     public BufferedImage resizeImageButRetainSize(BufferedImage image, int oldSize, int newSize) {
