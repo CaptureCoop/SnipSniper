@@ -62,7 +62,8 @@ public class EditorTab extends JPanel implements ITab{
         hsvSlider.addChangeListener(e -> {
             hsvPercentage.setText(hsvSlider.getValue() + "%");
             config.set(ConfigHelper.PROFILE.hsvColorSwitchSpeed, hsvSlider.getValue() + "");
-            saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+            if(saveButtonUpdate[0] != null)
+                saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
 
         hsvSlider.setValue(config.getInt(ConfigHelper.PROFILE.hsvColorSwitchSpeed));
