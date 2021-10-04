@@ -1,7 +1,5 @@
 package org.snipsniper.secrets.games;
 
-import org.snipsniper.utils.DrawUtils;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -49,8 +47,20 @@ public class BGamePanel extends JPanel {
         drawScoreText(g, offsetX, ts, 3, "Score");
         drawScoreText(g, offsetX, ts, 4, game.getScore() + "");
         drawScoreText(g, offsetX, ts, 6, "Lines cleared");
-        drawScoreText(g, offsetX, ts, 7, game.getLinesCleared() + "");
+        int offY = drawScoreText(g, offsetX, ts, 7, game.getLinesCleared() + "");
+        int npX = getWidth() - (offsetX + game.BOARD_WIDTH * ts) + game.BOARD_WIDTH * ts;
+        int npOffsetX = getWidth() - npX;
 
+        BGamePiece np = game.getNextPiece();
+        int npWidth = game.getResources().getTrueWidth(np.index) * ts;
+        
+        for(int y = 0; y < np.figure[0].length; y++) {
+            for(int x = 0; x < np.figure.length; x++) {
+                if(np.figure[y][x] != 0) {
+                    g.drawImage(game.getResources().getImage(np.index), npOffsetX / 2 - npWidth / 2 + npX + x * ts, offY + y * ts, ts, ts, null);
+                }
+            }
+        }
 
         if(game.isPaused()) {
             g.setColor(new Color(0,0,0,100));
@@ -60,12 +70,13 @@ public class BGamePanel extends JPanel {
         }
     }
 
-    public void drawScoreText(Graphics g, int offsetX, int ts, int index, String text) {
+    //Returns Y
+    public int drawScoreText(Graphics g, int offsetX, int ts, int index, String text) {
         int height = getHeight() / 20;
         Rectangle rect = new Rectangle(offsetX + game.BOARD_WIDTH * ts, height * index, getWidth() - (offsetX + game.BOARD_WIDTH * ts), height);
         drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, height));
+        return rect.y + rect.height;
     }
-
 
     public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font ) {
         FontMetrics metrics = g.getFontMetrics(font);
