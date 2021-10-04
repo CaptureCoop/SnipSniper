@@ -19,13 +19,9 @@ public class BGame extends JFrame {
 
     private final int FALLSPEED_MAX_START = 500;
 
-    private final int SCORE_1ROW = 40;
-    private final int SCORE_2ROW = 100;
-    private final int SCORE_3ROW = 300;
-    private final int SCORE_4ROW = 1200;
+    private final int[] SCORES = {40, 100, 300, 1200};
 
     private final int LINES_BEFORE_LVLUP_ADD = 10;
-
 
     private BGameBlock[][] board;
     private final BGamePanel gamePanel = new BGamePanel(this);
@@ -123,12 +119,7 @@ public class BGame extends JFrame {
                         fallSpeedMax -= 25;
                     }
                     int scoreMultiplier = level + 1;
-                    switch(rows) {
-                        case 1: score += SCORE_1ROW * scoreMultiplier; break;
-                        case 2: score += SCORE_2ROW * scoreMultiplier; break;
-                        case 3: score += SCORE_3ROW * scoreMultiplier; break;
-                        case 4: score += SCORE_4ROW * scoreMultiplier; break;
-                    }
+                    score += SCORES[rows - 1] * scoreMultiplier;
                 }
             }
             gamePanel.repaint();

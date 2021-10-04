@@ -1,7 +1,6 @@
 package org.snipsniper.secrets.games;
 
 import org.snipsniper.ImageManager;
-import org.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
 import java.util.ArrayList;
