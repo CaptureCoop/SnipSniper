@@ -46,10 +46,10 @@ public class Sniper {
 
 			try {
 				String icon = config.getString(ConfigHelper.PROFILE.icon);
-				Image image = Utils.getIconDynamically(icon);
+				Image image = ImageUtils.getIconDynamically(icon);
 
 				if(image == null)
-					image = Utils.getDefaultIcon(profileID);
+					image = ImageUtils.getDefaultIcon(profileID);
 				else
 					image = image.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
 

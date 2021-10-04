@@ -1,6 +1,6 @@
 package org.snipsniper.secrets.games;
 
-import org.snipsniper.utils.Utils;
+import org.snipsniper.utils.ImageUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class BGamePanel extends JPanel {
         Graphics g = screenshot.createGraphics();
         render(g, true);
         g.dispose();
-        Utils.saveImage(screenshot, "_bgame", game.getSniper().getConfig());
+        ImageUtils.saveImage(screenshot, "_bgame", game.getSniper().getConfig());
     }
 
     public void render(Graphics g, boolean isScreenshot) {

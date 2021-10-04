@@ -104,7 +104,7 @@ public class IconWindow extends JFrame implements IClosable {
                         button.setIcon(new ImageIcon(ImageManager.getAnimatedImage(file.getPath()).getScaledInstance(size, size, 0)));
                     break;
                 case LOCAL:
-                    button.setIcon(new ImageIcon(Utils.getImageFromDisk(SnipSniper.getImageFolder() + "/" + file.getPath()).getScaledInstance(size, size, 0)));
+                    button.setIcon(new ImageIcon(ImageUtils.getImageFromDisk(SnipSniper.getImageFolder() + "/" + file.getPath()).getScaledInstance(size, size, 0)));
                     break;
             }
 

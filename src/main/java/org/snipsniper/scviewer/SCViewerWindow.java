@@ -5,10 +5,10 @@ import org.snipsniper.config.Config;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.snipscope.SnipScopeWindow;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.utils.ImageUtils;
 import org.snipsniper.utils.enums.ClockDirection;
 import org.snipsniper.utils.FileUtils;
 import org.snipsniper.ImageManager;
-import org.snipsniper.utils.Utils;
 import org.apache.commons.lang3.SystemUtils;
 
 import javax.imageio.ImageIO;
@@ -49,7 +49,7 @@ public class SCViewerWindow extends SnipScopeWindow {
             refreshFolder();
             image = getImageFromFile(currentFile);
         } else {
-            image = Utils.getDragPasteImage(ImageManager.getImage("icons/viewer.png"), "Drop image here!");
+            image = ImageUtils.getDragPasteImage(ImageManager.getImage("icons/viewer.png"), "Drop image here!");
             defaultImage = image;
         }
 
@@ -120,9 +120,9 @@ public class SCViewerWindow extends SnipScopeWindow {
 
     public void rotateImage(ClockDirection direction) {
         if(direction == ClockDirection.CLOCKWISE)
-            setImage(Utils.rotateClockwise90(getImage()));
+            setImage(ImageUtils.rotateClockwise90(getImage()));
         else //TODO: Ugly hack, figure out better solution
-            setImage(Utils.rotateClockwise90(Utils.rotateClockwise90(Utils.rotateClockwise90(getImage()))));
+            setImage(ImageUtils.rotateClockwise90(ImageUtils.rotateClockwise90(ImageUtils.rotateClockwise90(getImage()))));
         if(currentFile != null)
             saveItem.setEnabled(true);
         repaint();
@@ -180,7 +180,7 @@ public class SCViewerWindow extends SnipScopeWindow {
     }
 
     public void setImage(File file) {
-        BufferedImage newImage = Utils.imageToBufferedImage(new ImageIcon(file.getAbsolutePath()).getImage());
+        BufferedImage newImage = ImageUtils.imageToBufferedImage(new ImageIcon(file.getAbsolutePath()).getImage());
         super.setImage(newImage);
         currentFile = new File(file.getAbsolutePath());
         setEnableInteraction(!isDefaultImage());

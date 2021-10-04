@@ -133,7 +133,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			LogManager.log("Couldn't take screenshot. Message: " + e.getMessage(), LogLevel.ERROR);
 			e.printStackTrace();
 		}
-		screenshotTinted = Utils.copyImage(screenshot);
+		screenshotTinted = ImageUtils.copyImage(screenshot);
 		Graphics g2 = screenshotTinted.getGraphics();
 		g2.setColor(new Color(100,100,100,100));
 		g2.fillRect(0, 0, screenshotTinted.getTileWidth(), screenshotTinted.getHeight());
@@ -198,11 +198,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		boolean inClipboard = false;
 
 		if(config.getBool(ConfigHelper.PROFILE.saveToDisk)) {
-			finalLocation = Utils.saveImage(finalImg, "", config);
+			finalLocation = ImageUtils.saveImage(finalImg, "", config);
 		}
 
 		if(config.getBool(ConfigHelper.PROFILE.copyToClipboard)) {
-			Utils.copyToClipboard(finalImg);
+			ImageUtils.copyToClipboard(finalImg);
 			inClipboard = true;
 		}
 

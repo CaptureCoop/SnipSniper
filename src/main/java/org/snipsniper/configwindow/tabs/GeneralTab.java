@@ -95,9 +95,9 @@ public class GeneralTab extends JPanel implements ITab{
         }
         iconButton.addActionListener(e -> configWindow.addCWindow(new IconWindow("Custom Profile Icon", configWindow, args -> {
             config.set(ConfigHelper.PROFILE.icon, args[0]);
-            Image img = Utils.getIconDynamically(config);
+            Image img = ImageUtils.getIconDynamically(config);
             if(img == null)
-                img = Utils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()));
+                img = ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()));
             iconButton.setIcon(new ImageIcon(img.getScaledInstance(16, 16, 0)));
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         })));

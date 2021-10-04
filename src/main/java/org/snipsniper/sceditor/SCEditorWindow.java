@@ -71,13 +71,13 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         stamps[6] = new EraserStamp(this, config);
 
         if(image == null) {
-            image = Utils.getDragPasteImage(ImageManager.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
+            image = ImageUtils.getDragPasteImage(ImageManager.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
             defaultImage = image;
         }
         renderer = new SCEditorRenderer(this);
         listener = new SCEditorListener(this);
 
-        originalImage = Utils.copyImage(image);
+        originalImage = ImageUtils.copyImage(image);
         init(image, renderer, listener);
 
         listener.resetHistory();
@@ -206,9 +206,9 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         Graphics g = finalImg.getGraphics();
         g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), this);
         g.dispose();
-        Utils.saveImage(finalImg, FILENAME_MODIFIER, config);
+        ImageUtils.saveImage(finalImg, FILENAME_MODIFIER, config);
         if(config.getBool(ConfigHelper.PROFILE.copyToClipboard))
-            Utils.copyToClipboard(finalImg);
+            ImageUtils.copyToClipboard(finalImg);
     }
 
     public void refreshTitle() {
@@ -236,7 +236,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         if(isNewImage) {
             resetZoom();
             renderer.resetPreview();
-            originalImage = Utils.copyImage(image);
+            originalImage = ImageUtils.copyImage(image);
         }
     }
 
