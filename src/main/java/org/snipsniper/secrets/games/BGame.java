@@ -180,6 +180,9 @@ public class BGame extends JFrame {
     public void start() {
         board = new BGameBlock[BOARD_WIDTH][BOARD_HEIGHT];
         fallSpeedMax = FALLSPEED_MAX_START;
+        score = 0;
+        rowsDone = 0;
+        level = 0;
         spawnPiece();
     }
 

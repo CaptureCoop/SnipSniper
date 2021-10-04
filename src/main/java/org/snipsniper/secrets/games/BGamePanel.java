@@ -63,7 +63,7 @@ public class BGamePanel extends JPanel {
     public void drawScoreText(Graphics g, int offsetX, int ts, int index, String text) {
         int height = getHeight() / 20;
         Rectangle rect = new Rectangle(offsetX + game.BOARD_WIDTH * ts, height * index, getWidth() - (offsetX + game.BOARD_WIDTH * ts), height);
-        drawCenteredString(g, text, rect, new Font("Monoscpaced", Font.BOLD, height));
+        drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, height));
     }
 
 
