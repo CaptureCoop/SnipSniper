@@ -17,6 +17,16 @@ public class BGame extends JFrame {
     public final int BOARD_WIDTH = 10;
     public final int BOARD_HEIGHT = 20;
 
+    private final int FALLSPEED_MAX_START = 500;
+
+    private final int SCORE_1ROW = 40;
+    private final int SCORE_2ROW = 100;
+    private final int SCORE_3ROW = 300;
+    private final int SCORE_4ROW = 1200;
+
+    private final int LINES_BEFORE_LVLUP_ADD = 10;
+
+
     private BGameBlock[][] board;
     private final BGamePanel gamePanel = new BGamePanel(this);
     private BGamePiece cPiece;
@@ -26,6 +36,12 @@ public class BGame extends JFrame {
 
     private final boolean[] keys = new boolean[25565];
     private BGameResources resources;
+
+    private int score;
+    private int level;
+    private int rowsDone;
+    private int rowsBeforeLevelUp = 10;
+
 
     public BGame() {
         Thread gameThread = new Thread(() -> launch());
@@ -74,7 +90,7 @@ public class BGame extends JFrame {
     }
 
     int fallSpeed = 0;
-    int fallSpeedMax = 300;
+    int fallSpeedMax = FALLSPEED_MAX_START;
     public void loop() {
         while(running) {
             final int ts = getTileSize();
@@ -96,10 +112,22 @@ public class BGame extends JFrame {
                 }
 
                 int rows = checkRows();
-                if(rows != 0)
-                    fallSpeedMax-= 10 * rows;
+                if(rows != 0) {
+                    rowsDone += rows;
+                    if(rowsDone >= rowsBeforeLevelUp) {
+                        rowsBeforeLevelUp += LINES_BEFORE_LVLUP_ADD;
+                        level += 1;
+                        fallSpeedMax -= 25;
+                    }
+                    int scoreMultiplier = level + 1;
+                    switch(rows) {
+                        case 1: score += SCORE_1ROW * scoreMultiplier; break;
+                        case 2: score += SCORE_2ROW * scoreMultiplier; break;
+                        case 3: score += SCORE_3ROW * scoreMultiplier; break;
+                        case 4: score += SCORE_4ROW * scoreMultiplier; break;
+                    }
+                }
             }
-
             gamePanel.repaint();
 
             try {
@@ -151,6 +179,7 @@ public class BGame extends JFrame {
 
     public void start() {
         board = new BGameBlock[BOARD_WIDTH][BOARD_HEIGHT];
+        fallSpeedMax = FALLSPEED_MAX_START;
         spawnPiece();
     }
 
