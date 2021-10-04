@@ -11,7 +11,7 @@ import java.awt.event.WindowEvent;
 import java.util.Random;
 
 public class BGame extends JFrame {
-    public final int INITIAL_SCREEN_WIDTH = 512;
+    public final int INITIAL_SCREEN_WIDTH = 1024;
     public final int INITIAL_SCREEN_HEIGHT = 512;
 
     public final int BOARD_WIDTH = 10;

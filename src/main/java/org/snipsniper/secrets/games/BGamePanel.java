@@ -55,7 +55,15 @@ public class BGamePanel extends JPanel {
         BGamePiece np = game.getNextPiece();
 
         BufferedImage npPreview = np.getRawImage(ts);
-        g.drawImage(npPreview, npX + npOffsetX / 2 - npPreview.getWidth() / 2, offY, null);
+        g.drawImage(npPreview, npX + npOffsetX / 2 - npPreview.getWidth() / 2, offY + ts/2, null);
+
+        drawHelpText(g, offsetX, 0, "Block Game", 1.5F);
+        drawHelpText(g, offsetX, 2, "Controls:", 1.1F);
+        drawHelpText(g, offsetX, 4, "Q / E = Rotate", 1);
+        drawHelpText(g, offsetX, 5, "A / D = Move", 1);
+        drawHelpText(g, offsetX, 6, "S = Faster", 1);
+        drawHelpText(g, offsetX, 7, "Space = Drop", 1);
+        drawHelpText(g, offsetX, 8, "Escape = Pause", 1);
 
         if(game.isPaused()) {
             g.setColor(new Color(0,0,0,100));
@@ -70,6 +78,14 @@ public class BGamePanel extends JPanel {
         int height = getHeight() / 20;
         Rectangle rect = new Rectangle(offsetX + game.BOARD_WIDTH * ts, height * index, getWidth() - (offsetX + game.BOARD_WIDTH * ts), height);
         drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, height));
+        return rect.y + rect.height;
+    }
+
+    public int drawHelpText(Graphics g, int offsetX, int index, String text, float fontMultiplier) {
+        float height = getHeight() / 20;
+        height *= fontMultiplier;
+        Rectangle rect = new Rectangle(0, (int)height * index, offsetX, (int)height);
+        drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, (int)height));
         return rect.y + rect.height;
     }
 
