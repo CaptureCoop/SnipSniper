@@ -28,10 +28,14 @@ public class BGamePiece {
 
         posX = (this.game.BOARD_WIDTH/2) - figure[0].length/2;
 
-        //TODO: Add proper game over screen with score that you can save as screenshot
-        if(this.game.getBoard()[posX][posY] != null)
-            game.start();
-
+        for(int y = 0; y < figure.length; y++) {
+            for(int x = 0; x < figure[y].length; x++) {
+                if(game.getBoard()[posX + x][posY + y] != null) {
+                    game.gameOver();
+                }
+            }
+        }
+        
         //Important:
         //When looping through int[][] figure you need to do figure[y][x]
     }

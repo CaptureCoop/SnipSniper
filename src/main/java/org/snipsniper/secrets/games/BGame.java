@@ -30,7 +30,7 @@ public class BGame extends JFrame {
     private boolean running = true;
     private boolean isPaused = false;
 
-    private final boolean[] keys = new boolean[25565];
+    private boolean[] keys;
     private BGameResources resources;
 
     private int score;
@@ -39,6 +39,7 @@ public class BGame extends JFrame {
     private int rowsBeforeLevelUp = 10;
 
     private BGamePiece nextPiece;
+    private boolean gameOver = false;
 
     public BGame() {
         Thread gameThread = new Thread(() -> launch());
@@ -57,7 +58,7 @@ public class BGame extends JFrame {
                 super.keyPressed(keyEvent);
                 keys[keyEvent.getKeyCode()] = true;
 
-                if(keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE)
+                if(keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE && !gameOver)
                     isPaused = !isPaused;
             }
 
@@ -94,32 +95,34 @@ public class BGame extends JFrame {
             setMinimumSize(new Dimension(BOARD_WIDTH *ts, BOARD_HEIGHT * ts));
             if(!isPaused) {
                 input();
-                boolean isHit = false;
-                if(cPiece != null)
-                    isHit = cPiece.update();
-
-                if(fallSpeed >= fallSpeedMax) {
-                    if(isHit) {
-                        cPiece.hit();
-                        spawnPiece();
-                    }
+                if(!gameOver) {
+                    boolean isHit = false;
                     if(cPiece != null)
-                        cPiece.moveDown();
-                    fallSpeed = 0;
-                } else {
-                    fallSpeed += 10;
-                }
+                        isHit = cPiece.update();
 
-                int rows = checkRows();
-                if(rows != 0) {
-                    rowsDone += rows;
-                    if(rowsDone >= rowsBeforeLevelUp) {
-                        rowsBeforeLevelUp += LINES_BEFORE_LVLUP_ADD;
-                        level += 1;
-                        fallSpeedMax -= 25;
+                    if(fallSpeed >= fallSpeedMax) {
+                        if(isHit) {
+                            cPiece.hit();
+                            spawnPiece();
+                        }
+                        if(cPiece != null)
+                            cPiece.moveDown();
+                        fallSpeed = 0;
+                    } else {
+                        fallSpeed += 10;
                     }
-                    int scoreMultiplier = level + 1;
-                    score += SCORES[rows - 1] * scoreMultiplier;
+
+                    int rows = checkRows();
+                    if(rows != 0) {
+                        rowsDone += rows;
+                        if(rowsDone >= rowsBeforeLevelUp) {
+                            rowsBeforeLevelUp += LINES_BEFORE_LVLUP_ADD;
+                            level += 1;
+                            fallSpeedMax -= 25;
+                        }
+                        int scoreMultiplier = level + 1;
+                        score += SCORES[rows - 1] * scoreMultiplier;
+                    }
                 }
             }
             gamePanel.repaint();
@@ -130,6 +133,10 @@ public class BGame extends JFrame {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void gameOver() {
+        gameOver = true;
     }
 
     public int checkRows() {
@@ -168,6 +175,10 @@ public class BGame extends JFrame {
             cPiece = new BGamePiece(this);
         else
             cPiece = nextPiece;
+        if(gameOver) {
+            cPiece = null;
+            return;
+        }
         nextPiece = new BGamePiece(this);
     }
 
@@ -176,12 +187,16 @@ public class BGame extends JFrame {
     }
 
     public void start() {
+        gameOver = false;
         board = new BGameBlock[BOARD_WIDTH][BOARD_HEIGHT];
         fallSpeedMax = FALLSPEED_MAX_START;
+        nextPiece = null;
+        keys = new boolean[25565];
         score = 0;
         rowsDone = 0;
         level = 0;
         spawnPiece();
+        loop();
     }
 
     int dropCooldown = 0;
@@ -191,7 +206,7 @@ public class BGame extends JFrame {
             dropCooldown--;
 
         if(cPiece != null) {
-            if(isPressed(KeyEvent.VK_SPACE) && dropCooldown == 0) {
+            if(isPressed(KeyEvent.VK_SPACE) && dropCooldown == 0 && !gameOver) {
                 for(int i = 0; i < BOARD_HEIGHT; i++) {
                     if(cPiece.moveDown())
                         break;
@@ -199,20 +214,20 @@ public class BGame extends JFrame {
                 dropCooldown = dropCooldownMax;
             }
 
-            if(isPressed(KeyEvent.VK_E))
+            if(isPressed(KeyEvent.VK_E) && !gameOver)
                 cPiece.rotate(1);
-            if(isPressed(KeyEvent.VK_Q))
+            if(isPressed(KeyEvent.VK_Q) && !gameOver)
                 cPiece.rotate(-1);
 
-            if(isPressed(KeyEvent.VK_A))
+            if(isPressed(KeyEvent.VK_A) && !gameOver)
                 cPiece.move(-1);
-            if(isPressed(KeyEvent.VK_D))
+            if(isPressed(KeyEvent.VK_D) && !gameOver)
                 cPiece.move(1);
 
             if(isPressed(KeyEvent.VK_R))
                 start();
 
-            if(isPressed(KeyEvent.VK_S)) {
+            if(isPressed(KeyEvent.VK_S) && !gameOver) {
                 cPiece.moveDown();
                 if(cPiece.checkCollision()) cPiece.hit();
             }
@@ -249,6 +264,10 @@ public class BGame extends JFrame {
 
     public int getLinesCleared() {
         return rowsDone;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
     }
 
     public BGamePiece getNextPiece() {

@@ -52,11 +52,12 @@ public class BGamePanel extends JPanel {
         int offY = drawScoreText(g, offsetX, ts, 9, "Next piece:");
         int npX = getWidth() - (offsetX + game.BOARD_WIDTH * ts) + game.BOARD_WIDTH * ts;
         int npOffsetX = getWidth() - npX;
+
         BGamePiece np = game.getNextPiece();
-
-        BufferedImage npPreview = np.getRawImage(ts);
-        g.drawImage(npPreview, npX + npOffsetX / 2 - npPreview.getWidth() / 2, offY + ts/2, null);
-
+        if(np != null) {
+            BufferedImage npPreview = np.getRawImage(ts);
+            g.drawImage(npPreview, npX + npOffsetX / 2 - npPreview.getWidth() / 2, offY + ts / 2, null);
+        }
         drawHelpText(g, offsetX, 0, "Block Game", 1.5F);
         drawHelpText(g, offsetX, 2, "Controls:", 1.1F);
         drawHelpText(g, offsetX, 4, "Q / E = Rotate", 1);
