@@ -17,6 +17,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -358,6 +359,61 @@ public class Utils {
 
 	public static Color hex2rgb(String colorStr) {
 	    return new Color(Integer.valueOf(colorStr.substring(1, 3), 16), Integer.valueOf( colorStr.substring(3, 5), 16), Integer.valueOf(colorStr.substring(5, 7), 16));
+	}
+
+	//https://stackoverflow.com/a/36938923
+	public static BufferedImage trimImage(BufferedImage image) {
+		WritableRaster raster = image.getAlphaRaster();
+		int width = raster.getWidth();
+		int height = raster.getHeight();
+		int left = 0;
+		int top = 0;
+		int right = width - 1;
+		int bottom = height - 1;
+		int minRight = width - 1;
+		int minBottom = height - 1;
+
+		top:
+		for (;top < bottom; top++){
+			for (int x = 0; x < width; x++){
+				if (raster.getSample(x, top, 0) != 0){
+					minRight = x;
+					minBottom = top;
+					break top;
+				}
+			}
+		}
+
+		left:
+		for (;left < minRight; left++){
+			for (int y = height - 1; y > top; y--){
+				if (raster.getSample(left, y, 0) != 0){
+					minBottom = y;
+					break left;
+				}
+			}
+		}
+
+		bottom:
+		for (;bottom > minBottom; bottom--){
+			for (int x = width - 1; x >= left; x--){
+				if (raster.getSample(x, bottom, 0) != 0){
+					minRight = x;
+					break bottom;
+				}
+			}
+		}
+
+		right:
+		for (;right > minRight; right--){
+			for (int y = bottom; y >= top; y--){
+				if (raster.getSample(right, y, 0) != 0){
+					break right;
+				}
+			}
+		}
+
+		return image.getSubimage(left, top, right - left + 1, bottom - top + 1);
 	}
 
 	public static synchronized BufferedImage copyImage(BufferedImage source){

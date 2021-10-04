@@ -1,5 +1,10 @@
 package org.snipsniper.secrets.games;
 
+import org.snipsniper.utils.Utils;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 public class BGamePiece {
     private final BGame game;
 
@@ -46,6 +51,20 @@ public class BGamePiece {
             return false;
         }
         return true;
+    }
+
+    public BufferedImage getRawImage(int size) {
+        BufferedImage image = new BufferedImage(figure[0].length * size, figure[1].length * size, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = image.createGraphics();
+        for(int y = 0; y < figure[0].length; y++) {
+            for(int x = 0; x < figure.length; x++) {
+                if(figure[y][x] != 0) {
+                    g.drawImage(game.getResources().getImage(index), x * size, y * size, size, size, null);
+                }
+            }
+        }
+        g.dispose();
+        return Utils.trimImage(image);
     }
 
     //returns true if the piece hit something
