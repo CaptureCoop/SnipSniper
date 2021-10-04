@@ -126,7 +126,6 @@ public class BGame extends JFrame {
                 }
             }
             gamePanel.repaint();
-
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -171,14 +170,16 @@ public class BGame extends JFrame {
     }
 
     public void spawnPiece() {
-        if(nextPiece == null)
-            cPiece = new BGamePiece(this);
-        else
-            cPiece = nextPiece;
+        BGamePiece newPiece = new BGamePiece(this);
         if(gameOver) {
             cPiece = null;
             return;
         }
+        if(nextPiece == null)
+            cPiece = newPiece;
+        else
+            cPiece = nextPiece;
+
         nextPiece = new BGamePiece(this);
     }
 
@@ -196,7 +197,6 @@ public class BGame extends JFrame {
         rowsDone = 0;
         level = 0;
         spawnPiece();
-        loop();
     }
 
     int dropCooldown = 0;
@@ -204,6 +204,11 @@ public class BGame extends JFrame {
     public void input() {
         if(dropCooldown > 0)
             dropCooldown--;
+
+        if(isPressed(KeyEvent.VK_R)) {
+            start();
+            return;
+        }
 
         if(cPiece != null) {
             if(isPressed(KeyEvent.VK_SPACE) && dropCooldown == 0 && !gameOver) {
@@ -223,9 +228,6 @@ public class BGame extends JFrame {
                 cPiece.move(-1);
             if(isPressed(KeyEvent.VK_D) && !gameOver)
                 cPiece.move(1);
-
-            if(isPressed(KeyEvent.VK_R))
-                start();
 
             if(isPressed(KeyEvent.VK_S) && !gameOver) {
                 cPiece.moveDown();

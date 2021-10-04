@@ -65,6 +65,15 @@ public class BGamePanel extends JPanel {
         drawHelpText(g, offsetX, 6, "S = Faster", 1);
         drawHelpText(g, offsetX, 7, "Space = Drop", 1);
         drawHelpText(g, offsetX, 8, "Escape = Pause", 1);
+        drawHelpText(g, offsetX, 9, "R = Restart", 1);
+        drawHelpText(g, offsetX, 10, "Right Click = Screenshot", 1);
+
+        if(game.isGameOver()) {
+            g.setColor(new Color(0,0,0,100));
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(Color.WHITE);
+            drawCenteredString(g, "GAME OVER", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
+        }
 
         if(game.isPaused()) {
             g.setColor(new Color(0,0,0,100));
