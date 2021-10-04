@@ -57,7 +57,7 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 10, 0, 10);
-        options.add(configWindow.createJLabel("Title", JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.getItem("config_label_title"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JPanel titleContent = new JPanel(new GridLayout(0, 2));
         JTextField titleInput = new JTextField(config.getString(ConfigHelper.PROFILE.title));
@@ -71,7 +71,7 @@ public class GeneralTab extends JPanel implements ITab{
             }
         });
         titleContent.add(titleInput);
-        JButton titleReset = new JButton("Reset");
+        JButton titleReset = new JButton(LangManager.getItem("config_label_reset"));
         titleReset.addActionListener(e -> {
             titleInput.setText("none");
             config.set(ConfigHelper.PROFILE.title, titleInput.getText());
@@ -86,7 +86,7 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 0;
         options.add(configWindow.createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
-        JButton iconButton = new JButton("Set Icon");
+        JButton iconButton = new JButton(LangManager.getItem("config_label_seticon"));
         DropdownItem item = ((DropdownItem)dropdown.getSelectedItem());
         if(item != null) {
             Icon icon = ((DropdownItem)dropdown.getSelectedItem()).getIcon();
