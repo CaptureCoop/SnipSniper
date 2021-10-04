@@ -5,6 +5,7 @@ import org.snipsniper.LangManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.secrets.games.BGame;
+import org.snipsniper.systray.Sniper;
 import org.snipsniper.utils.enums.PlatformType;
 import org.snipsniper.utils.enums.ReleaseType;
 
@@ -24,7 +25,7 @@ public class AboutWindow extends JFrame {
     private static String html;
     private boolean onC = false;
 
-    public AboutWindow() {
+    public AboutWindow(Sniper sniper) {
         instance = this;
         try {
             loadHTML();
@@ -129,7 +130,7 @@ public class AboutWindow extends JFrame {
             if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.getEventType())) {
                 if(hle.getDescription().equals("secret")) {
                     if(secretCount.get() >= 10) {
-                        new BGame();
+                        new BGame(sniper);
                         secretCount.set(0);
                     } else {
                         secretCount.getAndIncrement();

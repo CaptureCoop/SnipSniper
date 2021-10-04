@@ -105,12 +105,11 @@ public class BGamePanel extends JPanel {
         return rect.y + rect.height;
     }
 
-    public int drawHelpText(Graphics g, int offsetX, int index, String text, float fontMultiplier) {
-        float height = getHeight() / 20;
+    public void drawHelpText(Graphics g, int offsetX, int index, String text, float fontMultiplier) {
+        float height = getHeight() / 20F;
         height *= fontMultiplier;
         Rectangle rect = new Rectangle(0, (int)height * index, offsetX, (int)height);
         drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, (int)height));
-        return rect.y + rect.height;
     }
 
     public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font ) {

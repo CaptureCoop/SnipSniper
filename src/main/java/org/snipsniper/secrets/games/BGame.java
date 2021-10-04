@@ -38,7 +38,7 @@ public class BGame extends JFrame {
 
     private BGamePiece nextPiece;
     private boolean gameOver = false;
-    private Sniper sniper;
+    private final Sniper sniper;
 
     public BGame(Sniper sniper) {
         this.sniper = sniper;
@@ -159,23 +159,19 @@ public class BGame extends JFrame {
             }
             if(hasFull) {
                 rowsCleared++;
-                for(int x = 0; x < BOARD_WIDTH; x++) {
+                for(int x = 0; x < BOARD_WIDTH; x++)
                     board[x][y] = null;
-                }
 
-                for(int z = y; z > 0; z--) {
-                    for(int x = 0; x < BOARD_WIDTH; x++) {
+                for(int z = y; z > 0; z--)
+                    for(int x = 0; x < BOARD_WIDTH; x++)
                         board[x][z] = board[x][z-1];
-                    }
-                }
             }
         }
         return rowsCleared;
     }
 
     public static int randomRange(int min, int max) {
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
+        return new Random().nextInt((max - min) + 1) + min;
     }
 
     public void spawnPiece() {

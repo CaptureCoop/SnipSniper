@@ -13,10 +13,10 @@ public class BGamePiece {
     private int posY = 1;
 
     private int rotationCooldown = 0;
-    private int rotationCooldownMax = 10;
+    private final int rotationCooldownMax = 10;
 
     private int moveCooldown = 0;
-    private int moveCooldownMax = 10;
+    private final int moveCooldownMax = 10;
 
     public int index;
 
