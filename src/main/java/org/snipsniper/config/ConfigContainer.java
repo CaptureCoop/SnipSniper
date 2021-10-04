@@ -70,7 +70,7 @@ public class ConfigContainer {
             if(option.getKey() != null) {
                 String value = option.getValue();
                 String otherValue = other.get(option.getKey());
-                if(otherValue == null || !otherValue.equals(value)) {
+                if(otherValue != null && !otherValue.equals(value)) {
                     isSame = false;
                 }
             }
