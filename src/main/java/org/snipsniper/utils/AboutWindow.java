@@ -59,10 +59,7 @@ public class AboutWindow extends JFrame {
                 if(index >= icons.length - 1) index = 0;
                 else index++;
 
-                if(index == 3)
-                    onC = true;
-                else
-                    onC = false;
+                onC = index == 3;
 
                 setNewImage(index, iconSize, true);
             }

@@ -10,7 +10,6 @@ import javax.swing.*;
 
 import org.json.JSONArray;
 import org.snipsniper.utils.FileUtils;
-import org.snipsniper.utils.Utils;
 import org.snipsniper.utils.enums.LogLevel;
 
 public class ImageManager {
