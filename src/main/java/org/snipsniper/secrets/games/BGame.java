@@ -1,13 +1,11 @@
 package org.snipsniper.secrets.games;
 
 import org.snipsniper.ImageManager;
+import org.snipsniper.systray.Sniper;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.Random;
 
 public class BGame extends JFrame {
@@ -40,8 +38,10 @@ public class BGame extends JFrame {
 
     private BGamePiece nextPiece;
     private boolean gameOver = false;
+    private Sniper sniper;
 
-    public BGame() {
+    public BGame(Sniper sniper) {
+        this.sniper = sniper;
         Thread gameThread = new Thread(() -> launch());
         gameThread.start();
     }
@@ -66,6 +66,15 @@ public class BGame extends JFrame {
             public void keyReleased(KeyEvent keyEvent) {
                 super.keyReleased(keyEvent);
                 keys[keyEvent.getKeyCode()] = false;
+            }
+        });
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(e.getButton() == 3) {
+                    gamePanel.screenshot();
+                }
             }
         });
         addWindowListener(new WindowAdapter() {
@@ -274,5 +283,9 @@ public class BGame extends JFrame {
 
     public BGamePiece getNextPiece() {
         return nextPiece;
+    }
+
+    public Sniper getSniper() {
+        return sniper;
     }
 }

@@ -1,5 +1,7 @@
 package org.snipsniper.secrets.games;
 
+import org.snipsniper.utils.Utils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,8 +13,15 @@ public class BGamePanel extends JPanel {
         this.game = game;
     }
 
-    @Override
-    public void paint(Graphics g) {
+    public void screenshot() {
+        BufferedImage screenshot = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics g = screenshot.createGraphics();
+        render(g, true);
+        g.dispose();
+        Utils.saveImage(screenshot, "_bgame", game.getSniper().getConfig());
+    }
+
+    public void render(Graphics g, boolean isScreenshot) {
         final int ts = game.getTileSize();
         g.clearRect(0, 0, getWidth(), getHeight());
         g.setColor(Color.CYAN);
@@ -68,19 +77,24 @@ public class BGamePanel extends JPanel {
         drawHelpText(g, offsetX, 9, "R = Restart", 1);
         drawHelpText(g, offsetX, 10, "Right Click = Screenshot", 1);
 
-        if(game.isGameOver()) {
+        if(game.isGameOver() && !isScreenshot) {
             g.setColor(new Color(0,0,0,100));
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.WHITE);
             drawCenteredString(g, "GAME OVER", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
         }
 
-        if(game.isPaused()) {
+        if(game.isPaused() && !isScreenshot) {
             g.setColor(new Color(0,0,0,100));
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.WHITE);
             drawCenteredString(g, "PAUSED", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
         }
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        render(g, false);
     }
 
     //Returns Y
