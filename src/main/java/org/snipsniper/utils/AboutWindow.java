@@ -60,7 +60,9 @@ public class AboutWindow extends JFrame {
                 else index++;
 
                 if(index == 3)
-                    onC = !onC;
+                    onC = true;
+                else
+                    onC = false;
 
                 setNewImage(index, iconSize, true);
             }
