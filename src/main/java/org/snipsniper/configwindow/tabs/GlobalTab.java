@@ -192,7 +192,7 @@ public class GlobalTab extends JPanel implements ITab{
             gbc.gridx = 1;
 
             final String userHome = System.getProperty("user.home");
-            final String startup = userHome + "/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/SnipSniper/";
+            final String startup = userHome + "/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/";
             final String batchMain = "SnipSniper.bat";
             final String linkMain = "SnipSniper.lnk";
             final String icoMain = "SnipSniper.ico";
