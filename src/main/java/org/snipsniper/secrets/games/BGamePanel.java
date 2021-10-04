@@ -1,5 +1,7 @@
 package org.snipsniper.secrets.games;
 
+import org.snipsniper.utils.DrawUtils;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -42,6 +44,14 @@ public class BGamePanel extends JPanel {
             }
         }
 
+        drawScoreText(g, offsetX, ts, 0, "Level");
+        drawScoreText(g, offsetX, ts, 1, game.getLevel() + "");
+        drawScoreText(g, offsetX, ts, 3, "Score");
+        drawScoreText(g, offsetX, ts, 4, game.getScore() + "");
+        drawScoreText(g, offsetX, ts, 6, "Lines cleared");
+        drawScoreText(g, offsetX, ts, 7, game.getLinesCleared() + "");
+
+
         if(game.isPaused()) {
             g.setColor(new Color(0,0,0,100));
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -50,7 +60,14 @@ public class BGamePanel extends JPanel {
         }
     }
 
-    public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
+    public void drawScoreText(Graphics g, int offsetX, int ts, int index, String text) {
+        int height = getHeight() / 20;
+        Rectangle rect = new Rectangle(offsetX + game.BOARD_WIDTH * ts, height * index, getWidth() - (offsetX + game.BOARD_WIDTH * ts), height);
+        drawCenteredString(g, text, rect, new Font("Monoscpaced", Font.BOLD, height));
+    }
+
+
+    public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font ) {
         FontMetrics metrics = g.getFontMetrics(font);
         int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
         int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();

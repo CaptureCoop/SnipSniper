@@ -237,4 +237,16 @@ public class BGame extends JFrame {
     public BGameBlock[][] getBoard() {
         return board;
     }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getLinesCleared() {
+        return rowsDone;
+    }
 }
