@@ -41,6 +41,8 @@
     "config_label_delete": "削除",
     "config_label_none": "なし",
     "config_label_save": "保存",
+    "config_label_close": "選ぶ",
+    "config_label_cancel": "キャンセル",
     "config_label_saveclose": "保存して閉じます",
     "config_label_hotkey_listening": "リスニング...",
     "config_label_mouse": "マウス",

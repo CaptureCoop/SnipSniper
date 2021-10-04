@@ -326,7 +326,7 @@ public class ConfigWindow extends JFrame implements IClosable{
             }
         });
 
-        JButton close = new JButton("Close");
+        JButton close = new JButton(LangManager.getItem("config_label_close"));
         close.addActionListener(e -> {
             if(isDirty[0]) {
                 if (showDirtyWarning() == JOptionPane.NO_OPTION)
@@ -344,9 +344,9 @@ public class ConfigWindow extends JFrame implements IClosable{
                     case NO_SAVE: allowSaving[0] = false; break;
                 }
                 if(isDirty[0])
-                    close.setText("Cancel");
+                    close.setText(LangManager.getItem("config_label_cancel"));
                 else
-                    close.setText("Close");
+                    close.setText(LangManager.getItem("config_label_close"));
 
                 return true;
             }

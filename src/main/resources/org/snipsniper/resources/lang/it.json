@@ -41,6 +41,8 @@
     "config_label_delete": "Cancella",
     "config_label_none": "NESSUNO",
     "config_label_save": "Salva",
+    "config_label_close": "Chiudere",
+    "config_label_cancel": "Annulla",
     "config_label_saveclose": "Salva e chiudi",
     "config_label_hotkey_listening": "Ascolto...",
     "config_label_mouse": "Mouse",

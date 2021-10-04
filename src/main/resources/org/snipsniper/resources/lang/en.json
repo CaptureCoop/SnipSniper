@@ -40,6 +40,8 @@
     "config_label_delete": "Delete",
     "config_label_none": "NONE",
     "config_label_save": "Save",
+    "config_label_close": "Close",
+    "config_label_cancel": "Cancel",
     "config_label_saveclose": "Save and close",
     "config_label_hotkey_listening": "Listening...",
     "config_label_mouse": "Mouse",

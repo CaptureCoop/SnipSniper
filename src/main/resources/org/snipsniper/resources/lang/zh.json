@@ -41,6 +41,8 @@
     "config_label_delete": "删除",
     "config_label_none": "无",
     "config_label_save": "拯救",
+    "config_label_close": "关闭",
+    "config_label_cancel": "取消",
     "config_label_saveclose": "保存并关闭",
     "config_label_hotkey_listening": "聆听...",
     "config_label_mouse": "鼠标",

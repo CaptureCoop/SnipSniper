@@ -41,6 +41,8 @@
     "config_label_delete": "Удалить",
     "config_label_none": "НЕТ",
     "config_label_save": "Сохранить",
+    "config_label_close": "близко",
+    "config_label_cancel": "Отмена",
     "config_label_saveclose": "Сохрани и закрой",
     "config_label_hotkey_listening": "Слушаю...",
     "config_label_mouse": "Мышь",

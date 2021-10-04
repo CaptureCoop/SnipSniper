@@ -40,6 +40,8 @@
     "config_label_delete": "Löschen",
     "config_label_none": "KEINE",
     "config_label_save": "Speichern",
+    "config_label_close": "Schließen",
+    "config_label_cancel": "Abbrechen",
     "config_label_saveclose": "Speichern und schließen",
     "config_label_hotkey_listening": "Warten auf Eingabe...",
     "config_label_mouse": "Maus",

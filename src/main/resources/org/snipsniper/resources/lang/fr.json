@@ -41,6 +41,8 @@
     "config_label_delete": "Supprimer",
     "config_label_none": "AUCUN",
     "config_label_save": "Sauvegarder",
+    "config_label_close": "Proche",
+    "config_label_cancel": "Annuler",
     "config_label_saveclose": "Sauvegarder et fermer",
     "config_label_hotkey_listening": "Écouter...",
     "config_label_mouse": "Souris",
