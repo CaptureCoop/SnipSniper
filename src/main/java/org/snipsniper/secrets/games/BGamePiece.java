@@ -79,7 +79,6 @@ public class BGamePiece {
                 }
             }
         }
-        game.spawnPiece();
     }
 
     private boolean checkMoveCollision(int dir) {

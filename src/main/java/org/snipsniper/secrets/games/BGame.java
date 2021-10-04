@@ -42,6 +42,7 @@ public class BGame extends JFrame {
     private int rowsDone;
     private int rowsBeforeLevelUp = 10;
 
+    private BGamePiece nextPiece;
 
     public BGame() {
         Thread gameThread = new Thread(() -> launch());
@@ -102,8 +103,10 @@ public class BGame extends JFrame {
                     isHit = cPiece.update();
 
                 if(fallSpeed >= fallSpeedMax) {
-                    if(isHit) cPiece.hit();
-
+                    if(isHit) {
+                        cPiece.hit();
+                        spawnPiece();
+                    }
                     if(cPiece != null)
                         cPiece.moveDown();
                     fallSpeed = 0;
@@ -170,7 +173,11 @@ public class BGame extends JFrame {
     }
 
     public void spawnPiece() {
-        cPiece = new BGamePiece(this);
+        if(nextPiece == null)
+            cPiece = new BGamePiece(this);
+        else
+            cPiece = nextPiece;
+        nextPiece = new BGamePiece(this);
     }
 
     public int getTileSize() {
@@ -251,5 +258,9 @@ public class BGame extends JFrame {
 
     public int getLinesCleared() {
         return rowsDone;
+    }
+
+    public BGamePiece getNextPiece() {
+        return nextPiece;
     }
 }
