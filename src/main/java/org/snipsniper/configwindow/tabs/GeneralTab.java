@@ -105,6 +105,7 @@ public class GeneralTab extends JPanel implements ITab{
         iconPanel.add(iconButton);
         JButton iconReset = new JButton(LangManager.getItem("config_label_reset"));
         iconReset.addActionListener(e -> {
+            //TODO: Barf, duplicated code
             config.set(ConfigHelper.PROFILE.icon, "none");
             Image img = ImageUtils.getIconDynamically(config);
             if(img == null)
