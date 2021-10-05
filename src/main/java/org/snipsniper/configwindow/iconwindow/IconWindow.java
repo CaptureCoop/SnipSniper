@@ -124,7 +124,7 @@ public class IconWindow extends JFrame implements IClosable {
                 gbc.gridx = 0;
         }
         if(type == ICON_TYPE.CUSTOM) {
-            JButton customButton = new JButton("Custom");
+            JButton customButton = new JButton("New");
             customButton.setPreferredSize(sizeDim);
             customButton.setMinimumSize(sizeDim);
             customButton.setMaximumSize(sizeDim);
