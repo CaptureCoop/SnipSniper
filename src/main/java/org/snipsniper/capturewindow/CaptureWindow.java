@@ -389,15 +389,18 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		Rectangle rect = calcRectangle();
 		Point livePoint = listener.getCurrentPoint(PointType.LIVE);
 		g.setFont(new Font("Arial", Font.BOLD, 30));
-		/*rect.x -= 5;
-		rect.y -= 5;
-		rect.width += 10;
-		rect.height += 10;*/
 		boolean top = false;
 		boolean bottom = false;
 		boolean left = false;
 		boolean right = false;
-		if(startedCapture) {
+
+		Rectangle check = calcRectangle();
+		check.x -= 10;
+		check.y -= 10;
+		check.width += 20;
+		check.height += 20;
+
+		if(startedCapture && check.contains(livePoint)) {
 			int pointYTop = rect.y - livePoint.y;
 			if (pointYTop > -10 && pointYTop < 10)
 				top = true;
@@ -441,6 +444,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			else
 				getRootPane().setCursor(toSet);
+		} else {
+			getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 
 		globalBuffer.dispose();
