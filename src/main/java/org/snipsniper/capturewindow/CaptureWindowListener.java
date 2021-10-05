@@ -25,8 +25,6 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	private boolean hoverTop = false;
 	private boolean hoverBottom = false;
 
-	enum DIRECTION {TOP, BOTTOM, LEFT, RIGHT}
-
 	public CaptureWindowListener(CaptureWindow wndInstance) {
 		this.wndInstance = wndInstance;
 	}
@@ -38,21 +36,19 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 		if(!stoppedCapture) {
 			cPoint = mouseEvent.getPoint();
 		} else {
-			if(hoverTop) {
+			if(hoverTop)
 				startPoint.y -= startPoint.y - cPointLive.y;
-			}
-			if(hoverBottom) {
+
+			if(hoverBottom)
 				cPoint.y -= cPoint.y - cPointLive.y;
-			}
-			if(hoverLeft) {
+
+			if(hoverLeft)
 				startPoint.x -= startPoint.x - cPointLive.x;
-			}
-			if(hoverRight) {
+
+			if(hoverRight)
 				cPoint.x -= cPoint.x - cPointLive.x;
-			}
 		}
 		cPointLive = mouseEvent.getPoint();
-
 	}
 	
 	@Override
@@ -87,6 +83,13 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
+		if(stoppedCapture) {
+			Rectangle rect = wndInstance.calcRectangle();
+			startPoint.x = rect.x;
+			startPoint.y = rect.y;
+			cPoint.x = rect.width + rect.x;
+			cPoint.y = rect.height + rect.y;
+		}
 		if(mouseEvent.getButton() == 1) {
 			if(!stoppedCapture)
 				cPointTotal = MouseInfo.getPointerInfo().getLocation();

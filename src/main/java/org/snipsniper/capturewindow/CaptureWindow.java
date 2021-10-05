@@ -153,10 +153,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		Point startPoint = listener.getStartPoint(PointType.NORMAL);
 		Point cPoint = listener.getCurrentPoint(PointType.NORMAL);
 		if(startPoint != null && cPoint != null) {
-			minX = Math.min( startPoint.x, cPoint.x);
-			maxX = Math.max( startPoint.x, cPoint.x);
-			minY = Math.min( startPoint.y, cPoint.y);
-			maxY = Math.max( startPoint.y, cPoint.y);
+			minX = Math.min(startPoint.x, cPoint.x);
+			maxX = Math.max(startPoint.x, cPoint.x);
+			minY = Math.min(startPoint.y, cPoint.y);
+			maxY = Math.max(startPoint.y, cPoint.y);
 		}
 		return new Rectangle(minX, minY, maxX - minX, maxY - minY);
 	}
