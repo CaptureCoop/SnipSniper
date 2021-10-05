@@ -418,10 +418,29 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			g.drawString(StringUtils.format("top: %c, bottom: %c, left: %c, right: %c", top, bottom, left, right), 0, 30);
 			g.drawString("PointXLeft: " + pointXLeft, 0, 60);
 
+			Cursor toSet = null;
+			if(left || right)
+				toSet = new Cursor(Cursor.W_RESIZE_CURSOR);
+
+			if(top || bottom)
+				toSet = new Cursor(Cursor.N_RESIZE_CURSOR);
+
+			if(left && top)
+				toSet = new Cursor(Cursor.NW_RESIZE_CURSOR);
+
+			if(right && top)
+				toSet = new Cursor(Cursor.NE_RESIZE_CURSOR);
+
+			if(bottom && left)
+				toSet = new Cursor(Cursor.SW_RESIZE_CURSOR);
+
+			if(bottom && right)
+				toSet = new Cursor(Cursor.SE_RESIZE_CURSOR);
+
 			if(!top && !bottom && !left && !right)
 				getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			else
-				getRootPane().setCursor(new Cursor(Cursor.E_RESIZE_CURSOR));
+				getRootPane().setCursor(toSet);
 		}
 
 		globalBuffer.dispose();
