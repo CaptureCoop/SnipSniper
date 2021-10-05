@@ -33,7 +33,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	public BufferedImage screenshot = null;
 	public BufferedImage screenshotTinted = null;
 
-	public boolean startedCapture = false;
 	public boolean isRunning = true;
 
 	public CaptureWindow(Sniper sniperInstance) {
@@ -308,7 +307,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			Point cPointLive = listener.getCurrentPoint(PointType.LIVE);
 			Point startPoint = listener.getStartPoint(PointType.NORMAL);
 
-			if(selectArea != null && cPoint != null && startedCapture) {
+			if(selectArea != null && cPoint != null && listener.startedCapture()) {
 				selectBuffer.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
 			}
 
@@ -384,70 +383,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		} else {
 			LogManager.log("WARNING: Screenshot is null when trying to render. Trying again.", LogLevel.WARNING);
 			repaint();
-		}
-
-		Rectangle rect = calcRectangle();
-		Point livePoint = listener.getCurrentPoint(PointType.LIVE);
-		g.setFont(new Font("Arial", Font.BOLD, 30));
-		boolean top = false;
-		boolean bottom = false;
-		boolean left = false;
-		boolean right = false;
-
-		int margin = 10;
-
-		Rectangle check = calcRectangle();
-		check.x -= margin;
-		check.y -= margin;
-		check.width += margin * 2;
-		check.height += margin * 2;
-
-		if(startedCapture && check.contains(livePoint)) {
-			int pointYTop = rect.y - livePoint.y;
-			if (pointYTop > -margin && pointYTop < margin)
-				top = true;
-
-			int pointYBottom = pointYTop + rect.height;
-			if(pointYBottom > -margin && pointYBottom < margin)
-				bottom = true;
-
-			int pointXLeft = rect.x - livePoint.x;
-			if(pointXLeft > -margin && pointXLeft < margin)
-				left = true;
-
-			int pointXRight = pointXLeft + rect.width;
-			if(pointXRight > -margin && pointXRight < margin)
-				right = true;
-
-			//g.clearRect(0, 0, 1024, 500);
-			//g.drawString(StringUtils.format("top: %c, bottom: %c, left: %c, right: %c", top, bottom, left, right), 0, 30);
-			//g.drawString("PointXLeft: " + pointXLeft, 0, 60);
-
-			Cursor toSet = null;
-			if(left || right)
-				toSet = new Cursor(Cursor.W_RESIZE_CURSOR);
-
-			if(top || bottom)
-				toSet = new Cursor(Cursor.N_RESIZE_CURSOR);
-
-			if(left && top)
-				toSet = new Cursor(Cursor.NW_RESIZE_CURSOR);
-
-			if(right && top)
-				toSet = new Cursor(Cursor.NE_RESIZE_CURSOR);
-
-			if(bottom && left)
-				toSet = new Cursor(Cursor.SW_RESIZE_CURSOR);
-
-			if(bottom && right)
-				toSet = new Cursor(Cursor.SE_RESIZE_CURSOR);
-
-			if(!top && !bottom && !left && !right)
-				getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			else
-				getRootPane().setCursor(toSet);
-		} else {
-			getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 
 		globalBuffer.dispose();
