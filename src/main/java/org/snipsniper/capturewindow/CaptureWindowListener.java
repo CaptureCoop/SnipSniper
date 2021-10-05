@@ -62,7 +62,8 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	public void mouseReleased(MouseEvent mouseEvent) {
 		if(mouseEvent.getButton() == 1) {
 			cPointTotal = MouseInfo.getPointerInfo().getLocation();
-			wndInstance.capture();
+			//wndInstance.capture();
+			//TODO: testing
 		}
 	}
 	

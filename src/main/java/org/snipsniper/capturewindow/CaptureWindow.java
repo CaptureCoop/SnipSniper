@@ -386,6 +386,25 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			repaint();
 		}
 
+		Rectangle rect = calcRectangle();
+		Point livePoint = listener.getCurrentPoint(PointType.LIVE);
+		g.setFont(new Font("Arial", Font.BOLD, 30));
+		rect.x -= 5;
+		rect.y -= 5;
+		rect.width += 10;
+		rect.height += 10;
+		if(startedCapture) {
+			g.clearRect(300, 300, 500, 500);
+			g.drawString(rect.getY() - livePoint.getY() + "", 512, 512);
+			int pointY = (int) (rect.getY() - livePoint.getY());
+			if (pointY > -10 && pointY < 10) {
+				//TOP
+				getRootPane().setCursor(new Cursor(Cursor.HAND_CURSOR));
+			} else {
+				getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		}
+
 		globalBuffer.dispose();
 		selectBuffer.dispose();
 		if(spyglassBuffer != null) spyglassBuffer.dispose();
