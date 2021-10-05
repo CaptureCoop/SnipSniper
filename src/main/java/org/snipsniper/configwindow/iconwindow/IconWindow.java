@@ -7,12 +7,18 @@ import org.snipsniper.utils.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class IconWindow extends JFrame implements IClosable {
@@ -62,6 +68,7 @@ public class IconWindow extends JFrame implements IClosable {
         pane.addTab("Random", setupPanel(ICON_TYPE.RANDOM));
         pane.addTab("Custom", setupPanel(ICON_TYPE.CUSTOM));
         add(pane);
+
         pack();
         setSize(getWidth(), 256);
     }
@@ -124,6 +131,23 @@ public class IconWindow extends JFrame implements IClosable {
                 gbc.gridx = 0;
         }
         if(type == ICON_TYPE.CUSTOM) {
+            content.setDropTarget(new DropTarget() {
+                public synchronized void drop(DropTargetDropEvent evt) {
+                    try {
+                        evt.acceptDrop(DnDConstants.ACTION_COPY);
+                        java.util.List droppedFiles = (List) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                        for(Object fileObject : droppedFiles) {
+                            File file = (File) fileObject;
+                            loadFile(file);
+                            populateButtons(content, type);
+                        }
+                    } catch (UnsupportedFlavorException | IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
             JButton customButton = new JButton("New");
             customButton.setPreferredSize(sizeDim);
             customButton.setMinimumSize(sizeDim);
@@ -147,19 +171,23 @@ public class IconWindow extends JFrame implements IClosable {
                 fileChooser.setFileFilter(fileFilter);
                 int option = fileChooser.showOpenDialog(instance);
                 if(option == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        File file = fileChooser.getSelectedFile();
-                        Files.copy(file.toPath(), new File(SnipSniper.getImageFolder() + "/" + file.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        populateButtons(content, type);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                    File file = fileChooser.getSelectedFile();
+                    loadFile(file);
+                    populateButtons(content, type);
                 }
             });
             content.add(customButton, gbc);
         }
         content.revalidate();
         content.repaint();
+    }
+
+    public void loadFile(File file) {
+        try {
+            Files.copy(file.toPath(), new File(SnipSniper.getImageFolder() + "/" + file.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
