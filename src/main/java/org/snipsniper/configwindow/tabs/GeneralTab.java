@@ -200,8 +200,8 @@ public class GeneralTab extends JPanel implements ITab{
         });
         colorBtn.addActionListener(e -> {
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
-                int x = (int)((getLocation().getX() + getWidth()/2));
-                int y = (int)((getLocation().getY() + getHeight()/2));
+                int x = (int)((configWindow.getLocation().getX() + getWidth()/2));
+                int y = (int)((configWindow.getLocation().getY() + getHeight()/2));
                 colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y, true);
                 colorChooser[0].addWindowListener(() -> colorChooser[0] = null);
                 configWindow.addCWindow(colorChooser[0]);
