@@ -398,24 +398,30 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		boolean left = false;
 		boolean right = false;
 		if(startedCapture) {
-			int pointYTop = (int) (rect.getY() - livePoint.getY());
-			if (pointYTop > -10 && pointYTop < 10) {
+			int pointYTop = rect.y - livePoint.y;
+			if (pointYTop > -10 && pointYTop < 10)
 				top = true;
-				getRootPane().setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
 
-			int pointYBottom = (int) (pointYTop + rect.getHeight());
-			if(pointYBottom > -10 && pointYBottom < 10) {
+			int pointYBottom = pointYTop + rect.height;
+			if(pointYBottom > -10 && pointYBottom < 10)
 				bottom = true;
-				getRootPane().setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
+
+			int pointXLeft = rect.x - livePoint.x;
+			if(pointXLeft > -10 && pointXLeft < 10)
+				left = true;
+
+			int pointXRight = pointXLeft + rect.width;
+			if(pointXRight > -10 && pointXRight < 10)
+				right = true;
 
 			g.clearRect(0, 0, 1024, 500);
 			g.drawString(StringUtils.format("top: %c, bottom: %c, left: %c, right: %c", top, bottom, left, right), 0, 30);
-			g.drawString("PointY: " + pointYBottom, 0, 60);
+			g.drawString("PointXLeft: " + pointXLeft, 0, 60);
 
 			if(!top && !bottom && !left && !right)
 				getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			else
+				getRootPane().setCursor(new Cursor(Cursor.E_RESIZE_CURSOR));
 		}
 
 		globalBuffer.dispose();
