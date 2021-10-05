@@ -389,20 +389,33 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		Rectangle rect = calcRectangle();
 		Point livePoint = listener.getCurrentPoint(PointType.LIVE);
 		g.setFont(new Font("Arial", Font.BOLD, 30));
-		rect.x -= 5;
+		/*rect.x -= 5;
 		rect.y -= 5;
 		rect.width += 10;
-		rect.height += 10;
+		rect.height += 10;*/
+		boolean top = false;
+		boolean bottom = false;
+		boolean left = false;
+		boolean right = false;
 		if(startedCapture) {
-			g.clearRect(300, 300, 500, 500);
-			g.drawString(rect.getY() - livePoint.getY() + "", 512, 512);
-			int pointY = (int) (rect.getY() - livePoint.getY());
-			if (pointY > -10 && pointY < 10) {
-				//TOP
+			int pointYTop = (int) (rect.getY() - livePoint.getY());
+			if (pointYTop > -10 && pointYTop < 10) {
+				top = true;
 				getRootPane().setCursor(new Cursor(Cursor.HAND_CURSOR));
-			} else {
-				getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
+
+			int pointYBottom = (int) (pointYTop + rect.getHeight());
+			if(pointYBottom > -10 && pointYBottom < 10) {
+				bottom = true;
+				getRootPane().setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			g.clearRect(0, 0, 1024, 500);
+			g.drawString(StringUtils.format("top: %c, bottom: %c, left: %c, right: %c", top, bottom, left, right), 0, 30);
+			g.drawString("PointY: " + pointYBottom, 0, 60);
+
+			if(!top && !bottom && !left && !right)
+				getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 
 		globalBuffer.dispose();
