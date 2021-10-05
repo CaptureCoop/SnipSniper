@@ -24,6 +24,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	private boolean hoverRight = false;
 	private boolean hoverTop = false;
 	private boolean hoverBottom = false;
+	private boolean hoverCenter = false;
 
 	public CaptureWindowListener(CaptureWindow wndInstance) {
 		this.wndInstance = wndInstance;
@@ -47,6 +48,16 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 
 			if(hoverRight)
 				cPoint.x -= cPoint.x - cPointLive.x;
+
+			if(hoverCenter) {
+				Point livePoint = mouseEvent.getPoint();
+				int moveX = cPointLive.x - livePoint.x;
+				int moveY = cPointLive.y - livePoint.y;
+				startPoint.x -= moveX;
+				startPoint.y -= moveY;
+				cPoint.x -= moveX;
+				cPoint.y -= moveY;
+			}
 		}
 		cPointLive = mouseEvent.getPoint();
 	}
@@ -193,10 +204,13 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 			if(hoverBottom && hoverRight)
 				toSet = new Cursor(Cursor.SE_RESIZE_CURSOR);
 
-			if(!hoverTop && !hoverBottom && !hoverLeft && !hoverRight)
-				wndInstance.getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			else
+			if(!hoverTop && !hoverBottom && !hoverLeft && !hoverRight) {
+				hoverCenter = true;
+				wndInstance.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
+			} else {
+				hoverCenter = false;
 				wndInstance.getRootPane().setCursor(toSet);
+			}
 		} else {
 			wndInstance.getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
