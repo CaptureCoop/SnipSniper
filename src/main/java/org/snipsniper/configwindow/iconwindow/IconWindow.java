@@ -96,7 +96,6 @@ public class IconWindow extends JFrame implements IClosable {
             }
         }
         int size = getRootPane().getWidth()/5;
-        gbc.gridx++;
         for (SSFile file : list) {
             IconButton button = new IconButton(file.getPathWithLocation(), file.getLocation());
             button.setOnSelect(args -> {
