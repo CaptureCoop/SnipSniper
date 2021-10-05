@@ -86,6 +86,7 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 0;
         options.add(configWindow.createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
+        JPanel iconPanel = new JPanel(new GridLayout(0, 2));
         JButton iconButton = new JButton(LangManager.getItem("config_label_seticon"));
         DropdownItem item = ((DropdownItem)dropdown.getSelectedItem());
         if(item != null) {
@@ -94,14 +95,26 @@ public class GeneralTab extends JPanel implements ITab{
                 iconButton.setIcon(icon);
         }
         iconButton.addActionListener(e -> configWindow.addCWindow(new IconWindow("Custom Profile Icon", configWindow, args -> {
-            config.set(ConfigHelper.PROFILE.icon, args[0]);
+            config.set(ConfigHelper.PROFILE.icon, args[0]); //TODO: We have duplicated code here, uuuuugh. I miss having functions in functions :(
             Image img = ImageUtils.getIconDynamically(config);
             if(img == null)
                 img = ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()));
             iconButton.setIcon(new ImageIcon(img.getScaledInstance(16, 16, 0)));
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         })));
-        options.add(iconButton, gbc);
+        iconPanel.add(iconButton);
+        JButton iconReset = new JButton(LangManager.getItem("config_label_reset"));
+        iconReset.addActionListener(e -> {
+            //TODO: Barf, duplicated code
+            config.set(ConfigHelper.PROFILE.icon, "none");
+            Image img = ImageUtils.getIconDynamically(config);
+            if(img == null)
+                img = ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()));
+            iconButton.setIcon(new ImageIcon(img.getScaledInstance(16, 16, 0)));
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
+        iconPanel.add(iconReset);
+        options.add(iconPanel, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(WikiManager.getContent("config/general/icon.json")), gbc);
         //END ICON
