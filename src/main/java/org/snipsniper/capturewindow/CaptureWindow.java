@@ -321,11 +321,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			}
 
 			if(cPoint != null && startPoint != null && selectArea != null) {
-				int thickness = 3;
+				final int thickness = 1;
 				Rectangle rec = Utils.fixRectangle(selectArea);
 				allBounds.addRectangle(new Rectangle(rec.x - thickness, rec.y - thickness, rec.width + thickness * 2, rec.height + thickness * 2));
-				drawDashedLine(globalBuffer, startPoint.x, startPoint.y, cPoint.x, startPoint.y, thickness);
-				drawDashedLine(globalBuffer, startPoint.x, startPoint.y, startPoint.x, cPoint.y, thickness);
+				drawDashedLine(globalBuffer, startPoint.x - thickness, startPoint.y - thickness, cPoint.x, startPoint.y - thickness, thickness);
+				drawDashedLine(globalBuffer, startPoint.x - thickness, startPoint.y, startPoint.x - thickness, cPoint.y, thickness);
 				drawDashedLine(globalBuffer, cPoint.x, startPoint.y, cPoint.x, cPoint.y, thickness);
 				drawDashedLine(globalBuffer, startPoint.x, cPoint.y, cPoint.x, cPoint.y, thickness);
 			}
