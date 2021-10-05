@@ -59,7 +59,7 @@ public class ColorChooser extends JFrame implements IClosable {
 
 	public void save() {
         if(configKey != null) {
-            config.set(configKey, Utils.rgb2hex(color.getPrimaryColor()));
+            config.set(configKey, color.toSaveString());
             config.save();
         }
         close(true);
