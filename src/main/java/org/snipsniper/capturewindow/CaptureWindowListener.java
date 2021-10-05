@@ -36,7 +36,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	public void mouseDragged(MouseEvent mouseEvent) {
 		if(!stoppedCapture) {
 			cPoint = mouseEvent.getPoint();
-		} else {
+		} else if(wndInstance.isAfterDrag()) {
 			if(hoverTop)
 				startPoint.y -= startPoint.y - cPointLive.y;
 
@@ -95,7 +95,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
 		if(mouseEvent.getButton() == 1) {
-			if(stoppedCapture) {
+			if(stoppedCapture && wndInstance.isAfterDrag()) {
 				Rectangle rect = wndInstance.calcRectangle();
 				startPoint.x = rect.x;
 				startPoint.y = rect.y;
