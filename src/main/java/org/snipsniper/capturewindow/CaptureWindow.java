@@ -320,6 +320,14 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				globalBuffer.drawImage(selectBufferImage, selectArea.x, selectArea.y, selectArea.width, selectArea.height, selectArea.x, selectArea.y, selectArea.width, selectArea.height, this);
 			}
 
+			if(cPoint != null && startPoint != null) {
+				int thickness = 5;
+				drawDashedLine(globalBuffer, startPoint.x, startPoint.y, cPoint.x, startPoint.y, thickness);
+				drawDashedLine(globalBuffer, startPoint.x, startPoint.y, startPoint.x, cPoint.y, thickness);
+				drawDashedLine(globalBuffer, cPoint.x, startPoint.y, cPoint.x, cPoint.y, thickness);
+				drawDashedLine(globalBuffer, startPoint.x, cPoint.y, cPoint.x, cPoint.y, thickness);
+			}
+
 			if(cPointLive != null && config.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
 				boolean displaySpyglass = true;
 				switch(config.getString(ConfigHelper.PROFILE.spyglassMode)) {
@@ -388,6 +396,23 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		globalBuffer.dispose();
 		selectBuffer.dispose();
 		if(spyglassBuffer != null) spyglassBuffer.dispose();
+	}
+
+	public void drawDashedLine(Graphics g, int x1, int y1, int x2, int y2, int thickness){
+
+		// Create a copy of the Graphics instance
+		Graphics2D g2d = (Graphics2D) g.create();
+
+		// Set the stroke of the copy, not the original
+		Stroke dashed = new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+				0, new float[]{9}, 0);
+		g2d.setStroke(dashed);
+
+		// Draw to the copy
+		g2d.drawLine(x1, y1, x2, y2);
+
+		// Get rid of the copy
+		g2d.dispose();
 	}
 
 	private void generateSpyglass(BufferedImage image) {
