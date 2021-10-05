@@ -500,4 +500,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 	@Override
 	public void windowOpened(WindowEvent windowEvent) { }
+
+	public boolean isAfterDrag() {
+		return !config.getString(ConfigHelper.PROFILE.afterDragMode).equalsIgnoreCase("none");
+	}
 }

@@ -106,7 +106,9 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 			if(!stoppedCapture)
 				cPointTotal = MouseInfo.getPointerInfo().getLocation();
 			stoppedCapture = true;
-			wndInstance.capture();
+
+			if(!wndInstance.isAfterDrag())
+				wndInstance.capture();
 		}
 	}
 	
