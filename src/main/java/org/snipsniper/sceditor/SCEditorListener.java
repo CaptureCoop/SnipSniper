@@ -51,6 +51,13 @@ public class SCEditorListener extends SnipScopeListener {
         if(!scEditorWindow.isEnableInteraction() && keyEvent.getKeyCode() == KeyEvent.VK_N)
             openNewImageWindow = true;
 
+        if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
+            scEditorWindow.setSaveLocation("");
+            scEditorWindow.setInClipboard(true);
+            scEditorWindow.refreshTitle();
+            scEditorWindow.setImage(ImageUtils.imageToBufferedImage(ImageUtils.getImageFromClipboard()), true, true);
+        }
+
         if(!scEditorWindow.isEnableInteraction()) return;
 
         if(input.isKeyPressed(KeyEvent.VK_PERIOD))
@@ -69,13 +76,6 @@ public class SCEditorListener extends SnipScopeListener {
 
         if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_N))
             openNewImageWindow = true;
-
-        if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
-            scEditorWindow.setSaveLocation("");
-            scEditorWindow.setInClipboard(true);
-            scEditorWindow.refreshTitle();
-            scEditorWindow.setImage(ImageUtils.imageToBufferedImage(ImageUtils.getImageFromClipboard()), true, true);
-        }
 
         switch (keyEvent.getKeyCode()) {
             case KeyEvent.VK_1: scEditorWindow.setSelectedStamp(0); break;

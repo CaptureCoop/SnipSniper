@@ -30,9 +30,9 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        if(!snipScopeWindow.isEnableInteraction()) return;
-
         input.setKey(keyEvent.getKeyCode(), true);
+
+        if(!snipScopeWindow.isEnableInteraction()) return;
 
         switch(keyEvent.getKeyCode()) {
             case KeyEvent.VK_R: snipScopeWindow.resetZoom(); break;
@@ -44,9 +44,8 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        if(!snipScopeWindow.isEnableInteraction()) return;
-
         input.setKey(keyEvent.getKeyCode(), false);
+        if(!snipScopeWindow.isEnableInteraction()) return;
     }
 
     //Mouse listener
