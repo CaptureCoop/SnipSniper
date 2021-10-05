@@ -320,8 +320,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				globalBuffer.drawImage(selectBufferImage, selectArea.x, selectArea.y, selectArea.width, selectArea.height, selectArea.x, selectArea.y, selectArea.width, selectArea.height, this);
 			}
 
-			if(cPoint != null && startPoint != null) {
-				int thickness = 5;
+			if(cPoint != null && startPoint != null && selectArea != null) {
+				int thickness = 3;
+				Rectangle rec = Utils.fixRectangle(selectArea);
+				allBounds.addRectangle(new Rectangle(rec.x - thickness, rec.y - thickness, rec.width + thickness * 2, rec.height + thickness * 2));
 				drawDashedLine(globalBuffer, startPoint.x, startPoint.y, cPoint.x, startPoint.y, thickness);
 				drawDashedLine(globalBuffer, startPoint.x, startPoint.y, startPoint.x, cPoint.y, thickness);
 				drawDashedLine(globalBuffer, cPoint.x, startPoint.y, cPoint.x, cPoint.y, thickness);
@@ -399,19 +401,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	}
 
 	public void drawDashedLine(Graphics g, int x1, int y1, int x2, int y2, int thickness){
-
-		// Create a copy of the Graphics instance
 		Graphics2D g2d = (Graphics2D) g.create();
-
-		// Set the stroke of the copy, not the original
-		Stroke dashed = new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
-				0, new float[]{9}, 0);
+		Stroke dashed = new BasicStroke(thickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
 		g2d.setStroke(dashed);
-
-		// Draw to the copy
 		g2d.drawLine(x1, y1, x2, y2);
-
-		// Get rid of the copy
 		g2d.dispose();
 	}
 
