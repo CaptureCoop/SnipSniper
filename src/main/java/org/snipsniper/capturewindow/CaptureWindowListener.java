@@ -34,10 +34,20 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mouseDragged(MouseEvent mouseEvent) {
+
 		if(!stoppedCapture) {
 			cPoint = mouseEvent.getPoint();
+		} else {
+			//TODO: still buggy when dragging down
+			if(hoverTop) {
+				if(startPoint.y < cPoint.y)
+					startPoint.y -= startPoint.y - cPointLive.y;
+				else
+					cPoint.y -= cPoint.y - cPointLive.y;
+			}
 		}
 		cPointLive = mouseEvent.getPoint();
+
 	}
 	
 	@Override
@@ -136,6 +146,8 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 		check.y -= margin;
 		check.width += margin * 2;
 		check.height += margin * 2;
+
+		hoverTop = false; hoverBottom = false; hoverLeft = false; hoverRight = false;
 
 		if(startedCapture && check.contains(livePoint)) {
 			int pointYTop = rect.y - livePoint.y;
