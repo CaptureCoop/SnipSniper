@@ -206,7 +206,9 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         Graphics g = finalImg.getGraphics();
         g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), this);
         g.dispose();
-        ImageUtils.saveImage(finalImg, FILENAME_MODIFIER, config);
+        String location = ImageUtils.saveImage(finalImg, FILENAME_MODIFIER, config);
+        if(location != null)
+            config.set(ConfigHelper.PROFILE.lastSaveFolder, location);
         if(config.getBool(ConfigHelper.PROFILE.copyToClipboard))
             ImageUtils.copyToClipboard(finalImg);
     }

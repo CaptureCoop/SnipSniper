@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Arrays;
 
 import javax.swing.JFrame;
@@ -199,6 +200,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 		if(config.getBool(ConfigHelper.PROFILE.saveToDisk)) {
 			finalLocation = ImageUtils.saveImage(finalImg, "", config);
+			if(finalLocation != null) {
+				String folder = finalLocation.replace(new File(finalLocation).getName(), "");
+				config.set(ConfigHelper.PROFILE.lastSaveFolder, folder);
+				config.save();
+			}
 		}
 
 		if(config.getBool(ConfigHelper.PROFILE.copyToClipboard)) {

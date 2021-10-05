@@ -17,6 +17,7 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 
 public class Popup extends JFrame{
@@ -39,7 +40,13 @@ public class Popup extends JFrame{
         add(new PopupMenuButton("Viewer", ImageManager.getImage("icons/viewer.png"), this, args -> new SCViewerWindow(null, config, false), menus));
         add(new PopupMenuButton("Editor", ImageManager.getImage("icons/editor.png"), this, args -> new SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false), menus));
         add(new JSeparator());
-        add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), ImageManager.getImage("icons/folder.png"), this, args -> FileUtils.openFolder(sniper.getConfig().getString(ConfigHelper.PROFILE.pictureFolder)), menus));
+        add(new PopupMenuButton(LangManager.getItem("menu_open_image_folder"), ImageManager.getImage("icons/folder.png"), this, args -> {
+            String folderToOpen = sniper.getConfig().getString(ConfigHelper.PROFILE.lastSaveFolder);
+            if(folderToOpen.isEmpty() || folderToOpen.equalsIgnoreCase("none") || !new File(folderToOpen).exists()) {
+                folderToOpen = sniper.getConfig().getString(ConfigHelper.PROFILE.pictureFolder);
+            }
+            FileUtils.openFolder(folderToOpen);
+        }, menus));
         add(new PopupMenuButton(LangManager.getItem("menu_config"), ImageManager.getImage("icons/config.png"), this, args -> sniper.openConfigWindow(), menus));
 
         if (SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
