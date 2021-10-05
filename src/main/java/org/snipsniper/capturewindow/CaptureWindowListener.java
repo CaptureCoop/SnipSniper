@@ -25,6 +25,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	private boolean hoverTop = false;
 	private boolean hoverBottom = false;
 
+	enum DIRECTION {TOP, BOTTOM, LEFT, RIGHT}
 
 	public CaptureWindowListener(CaptureWindow wndInstance) {
 		this.wndInstance = wndInstance;
@@ -34,16 +35,20 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mouseDragged(MouseEvent mouseEvent) {
-
 		if(!stoppedCapture) {
 			cPoint = mouseEvent.getPoint();
 		} else {
-			//TODO: still buggy when dragging down
 			if(hoverTop) {
-				if(startPoint.y < cPoint.y)
-					startPoint.y -= startPoint.y - cPointLive.y;
-				else
-					cPoint.y -= cPoint.y - cPointLive.y;
+				startPoint.y -= startPoint.y - cPointLive.y;
+			}
+			if(hoverBottom) {
+				cPoint.y -= cPoint.y - cPointLive.y;
+			}
+			if(hoverLeft) {
+				startPoint.x -= startPoint.x - cPointLive.x;
+			}
+			if(hoverRight) {
+				cPoint.x -= cPoint.x - cPointLive.x;
 			}
 		}
 		cPointLive = mouseEvent.getPoint();
