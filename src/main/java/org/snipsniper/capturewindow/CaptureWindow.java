@@ -320,7 +320,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				globalBuffer.drawImage(selectBufferImage, selectArea.x, selectArea.y, selectArea.width, selectArea.height, selectArea.x, selectArea.y, selectArea.width, selectArea.height, this);
 			}
 
-			if(cPoint != null && startPoint != null && selectArea != null) {
+			if(config.getBool(ConfigHelper.PROFILE.dottedOutline) && cPoint != null && startPoint != null && selectArea != null) {
 				final int thickness = 1;
 				Rectangle rec = Utils.fixRectangle(selectArea);
 				allBounds.addRectangle(new Rectangle(rec.x - thickness, rec.y - thickness, rec.width + thickness * 2, rec.height + thickness * 2));
