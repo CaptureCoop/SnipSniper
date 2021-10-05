@@ -95,7 +95,8 @@ public class IconWindow extends JFrame implements IClosable {
                 list.add(new SSFile(localFile.getName(), SSFile.LOCATION.LOCAL));
             }
         }
-        int size = getRootPane().getWidth()/5;
+        int size = getRootPane().getWidth() / 5;
+        Dimension sizeDim = new Dimension(size, size);
         for (SSFile file : list) {
             IconButton button = new IconButton(file.getPathWithLocation(), file.getLocation());
             button.setOnSelect(args -> {
@@ -124,9 +125,9 @@ public class IconWindow extends JFrame implements IClosable {
         }
         if(type == ICON_TYPE.CUSTOM) {
             JButton customButton = new JButton("Custom");
-            customButton.setPreferredSize(new Dimension(size, size));
-            customButton.setMinimumSize(new Dimension(size, size));
-            customButton.setMaximumSize(new Dimension(size, size));
+            customButton.setPreferredSize(sizeDim);
+            customButton.setMinimumSize(sizeDim);
+            customButton.setMaximumSize(sizeDim);
             customButton.addActionListener(e -> {
                 JFileChooser fileChooser = new JFileChooser();
                 FileFilter fileFilter = new FileFilter() {
