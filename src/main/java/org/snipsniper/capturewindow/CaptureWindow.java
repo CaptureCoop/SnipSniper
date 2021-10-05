@@ -394,32 +394,34 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		boolean left = false;
 		boolean right = false;
 
+		int margin = 10;
+
 		Rectangle check = calcRectangle();
-		check.x -= 10;
-		check.y -= 10;
-		check.width += 20;
-		check.height += 20;
+		check.x -= margin;
+		check.y -= margin;
+		check.width += margin * 2;
+		check.height += margin * 2;
 
 		if(startedCapture && check.contains(livePoint)) {
 			int pointYTop = rect.y - livePoint.y;
-			if (pointYTop > -10 && pointYTop < 10)
+			if (pointYTop > -margin && pointYTop < margin)
 				top = true;
 
 			int pointYBottom = pointYTop + rect.height;
-			if(pointYBottom > -10 && pointYBottom < 10)
+			if(pointYBottom > -margin && pointYBottom < margin)
 				bottom = true;
 
 			int pointXLeft = rect.x - livePoint.x;
-			if(pointXLeft > -10 && pointXLeft < 10)
+			if(pointXLeft > -margin && pointXLeft < margin)
 				left = true;
 
 			int pointXRight = pointXLeft + rect.width;
-			if(pointXRight > -10 && pointXRight < 10)
+			if(pointXRight > -margin && pointXRight < margin)
 				right = true;
 
-			g.clearRect(0, 0, 1024, 500);
-			g.drawString(StringUtils.format("top: %c, bottom: %c, left: %c, right: %c", top, bottom, left, right), 0, 30);
-			g.drawString("PointXLeft: " + pointXLeft, 0, 60);
+			//g.clearRect(0, 0, 1024, 500);
+			//g.drawString(StringUtils.format("top: %c, bottom: %c, left: %c, right: %c", top, bottom, left, right), 0, 30);
+			//g.drawString("PointXLeft: " + pointXLeft, 0, 60);
 
 			Cursor toSet = null;
 			if(left || right)
