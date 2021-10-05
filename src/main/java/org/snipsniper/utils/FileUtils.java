@@ -143,11 +143,17 @@ public class FileUtils {
     }
 
     public static String getFileExtension(File file) {
+        return getFileExtension(file, true);
+    }
+
+    public static String getFileExtension(File file, boolean dot) {
         String name = file.getName();
         int lastIndexOf = name.lastIndexOf(".");
         if (lastIndexOf == -1) {
             return ""; // empty extension
         }
+        if(!dot)
+            lastIndexOf++;
         return name.substring(lastIndexOf);
     }
 

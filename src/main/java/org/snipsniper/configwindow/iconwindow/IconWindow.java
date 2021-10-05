@@ -4,6 +4,7 @@ import org.snipsniper.ImageManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.utils.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
@@ -13,6 +14,7 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -183,10 +185,21 @@ public class IconWindow extends JFrame implements IClosable {
     }
 
     public void loadFile(File file) {
-        try {
-            Files.copy(file.toPath(), new File(SnipSniper.getImageFolder() + "/" + file.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
+        //We use Smooth Scaling for everything but gifs
+        if(file.getName().endsWith("gif")) {
+            try {
+                Files.copy(file.toPath(), new File(SnipSniper.getImageFolder() + "/" + file.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                BufferedImage img = ImageIO.read(file);
+                img = ImageUtils.imageToBufferedImage(img.getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+                ImageIO.write(img, FileUtils.getFileExtension(file, false), new File(SnipSniper.getImageFolder() + "/" + file.getName()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
