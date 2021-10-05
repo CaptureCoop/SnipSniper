@@ -11,13 +11,20 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	private final CaptureWindow wndInstance;
 	private final boolean[] keys = new boolean[4096];
 
-	private boolean startedCapture = false;
-
 	private Point startPoint; //Mouse position given by event *1
 	private Point startPointTotal; //Mouse position given by MouseInfo.getPointerInfo (Different then the above in some scenarios) *2
 	private Point cPoint; //See *1
 	private Point cPointTotal; //See *2
 	private Point cPointLive; //Live position, cPoint and cPointTotal are only set once dragging mouse. cPointLive is always set
+
+	private boolean startedCapture = false;
+	private boolean stoppedCapture = false;
+
+	private boolean hoverLeft = false;
+	private boolean hoverRight = false;
+	private boolean hoverTop = false;
+	private boolean hoverBottom = false;
+
 
 	public CaptureWindowListener(CaptureWindow wndInstance) {
 		this.wndInstance = wndInstance;
@@ -27,7 +34,9 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mouseDragged(MouseEvent mouseEvent) {
-		cPoint = mouseEvent.getPoint();
+		if(!stoppedCapture) {
+			cPoint = mouseEvent.getPoint();
+		}
 		cPointLive = mouseEvent.getPoint();
 	}
 	
@@ -52,7 +61,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
-		if(mouseEvent.getButton() == 1) {
+		if(mouseEvent.getButton() == 1 && !stoppedCapture) {
 			startPoint = mouseEvent.getPoint();
 			startPointTotal = MouseInfo.getPointerInfo().getLocation();
 			startedCapture = true;
@@ -64,7 +73,9 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
 		if(mouseEvent.getButton() == 1) {
-			cPointTotal = MouseInfo.getPointerInfo().getLocation();
+			if(!stoppedCapture)
+				cPointTotal = MouseInfo.getPointerInfo().getLocation();
+			stoppedCapture = true;
 			//wndInstance.capture();
 			//TODO: testing
 		}
@@ -119,11 +130,6 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 		Rectangle check = wndInstance.calcRectangle();
 		Point livePoint = getCurrentPoint(PointType.LIVE);
 
-		boolean top = false;
-		boolean bottom = false;
-		boolean left = false;
-		boolean right = false;
-
 		int margin = 10;
 
 		check.x -= margin;
@@ -134,44 +140,40 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 		if(startedCapture && check.contains(livePoint)) {
 			int pointYTop = rect.y - livePoint.y;
 			if (pointYTop > -margin && pointYTop < margin)
-				top = true;
+				hoverTop = true;
 
 			int pointYBottom = pointYTop + rect.height;
 			if(pointYBottom > -margin && pointYBottom < margin)
-				bottom = true;
+				hoverBottom = true;
 
 			int pointXLeft = rect.x - livePoint.x;
 			if(pointXLeft > -margin && pointXLeft < margin)
-				left = true;
+				hoverLeft = true;
 
 			int pointXRight = pointXLeft + rect.width;
 			if(pointXRight > -margin && pointXRight < margin)
-				right = true;
-
-			//g.clearRect(0, 0, 1024, 500);
-			//g.drawString(StringUtils.format("top: %c, bottom: %c, left: %c, right: %c", top, bottom, left, right), 0, 30);
-			//g.drawString("PointXLeft: " + pointXLeft, 0, 60);
+				hoverRight = true;
 
 			Cursor toSet = null;
-			if(left || right)
+			if(hoverLeft || hoverRight)
 				toSet = new Cursor(Cursor.W_RESIZE_CURSOR);
 
-			if(top || bottom)
+			if(hoverTop || hoverBottom)
 				toSet = new Cursor(Cursor.N_RESIZE_CURSOR);
 
-			if(left && top)
+			if(hoverLeft && hoverTop)
 				toSet = new Cursor(Cursor.NW_RESIZE_CURSOR);
 
-			if(right && top)
+			if(hoverRight && hoverTop)
 				toSet = new Cursor(Cursor.NE_RESIZE_CURSOR);
 
-			if(bottom && left)
+			if(hoverBottom && hoverLeft)
 				toSet = new Cursor(Cursor.SW_RESIZE_CURSOR);
 
-			if(bottom && right)
+			if(hoverBottom && hoverRight)
 				toSet = new Cursor(Cursor.SE_RESIZE_CURSOR);
 
-			if(!top && !bottom && !left && !right)
+			if(!hoverTop && !hoverBottom && !hoverLeft && !hoverRight)
 				wndInstance.getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			else
 				wndInstance.getRootPane().setCursor(toSet);
