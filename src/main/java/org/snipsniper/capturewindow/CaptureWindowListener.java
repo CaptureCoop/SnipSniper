@@ -94,19 +94,19 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
-		if(stoppedCapture) {
-			Rectangle rect = wndInstance.calcRectangle();
-			startPoint.x = rect.x;
-			startPoint.y = rect.y;
-			cPoint.x = rect.width + rect.x;
-			cPoint.y = rect.height + rect.y;
-		}
 		if(mouseEvent.getButton() == 1) {
+			if(stoppedCapture) {
+				Rectangle rect = wndInstance.calcRectangle();
+				startPoint.x = rect.x;
+				startPoint.y = rect.y;
+				cPoint.x = rect.width + rect.x;
+				cPoint.y = rect.height + rect.y;
+			}
+
 			if(!stoppedCapture)
 				cPointTotal = MouseInfo.getPointerInfo().getLocation();
 			stoppedCapture = true;
-			//wndInstance.capture();
-			//TODO: testing
+			wndInstance.capture();
 		}
 	}
 	
