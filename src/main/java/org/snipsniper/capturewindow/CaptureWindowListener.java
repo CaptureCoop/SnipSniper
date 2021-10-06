@@ -36,7 +36,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	public void mouseDragged(MouseEvent mouseEvent) {
 		if(!stoppedCapture) {
 			cPoint = mouseEvent.getPoint();
-		} else if(wndInstance.isAfterDrag()) {
+		} else if(wndInstance.isAfterDragEnabled()) {
 			if(hoverTop)
 				startPoint.y -= startPoint.y - cPointLive.y;
 
@@ -86,6 +86,8 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 		if(mouseEvent.getButton() == 1 && !stoppedCapture) {
 			startPoint = mouseEvent.getPoint();
 			startPointTotal = MouseInfo.getPointerInfo().getLocation();
+			if(isPressed(wndInstance.getAfterDragHotkey()) && wndInstance.getAfterDragMode().equalsIgnoreCase("hold"))
+				wndInstance.afterDragHoldEnable = true;
 			startedCapture = true;
 		} else if (mouseEvent.getButton() == 3) {
 			wndInstance.getSniperInstance().killCaptureWindow();
@@ -95,7 +97,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
 		if(mouseEvent.getButton() == 1) {
-			if(stoppedCapture && wndInstance.isAfterDrag()) {
+			if(stoppedCapture && wndInstance.isAfterDragEnabled()) {
 				Rectangle rect = wndInstance.calcRectangle();
 				startPoint.x = rect.x;
 				startPoint.y = rect.y;
@@ -107,7 +109,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 				cPointTotal = MouseInfo.getPointerInfo().getLocation();
 			stoppedCapture = true;
 
-			if(!wndInstance.isAfterDrag())
+			if(!wndInstance.isAfterDragEnabled())
 				wndInstance.capture();
 		}
 	}
