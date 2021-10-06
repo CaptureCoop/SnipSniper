@@ -9,6 +9,7 @@ import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.configwindow.HotKeyButton;
 import org.snipsniper.configwindow.folderpreview.FolderPreview;
 import org.snipsniper.configwindow.iconwindow.IconWindow;
+import org.snipsniper.sceditor.stamps.StampUtils;
 import org.snipsniper.utils.*;
 import org.snipsniper.utils.enums.ConfigSaveButtonState;
 
@@ -435,19 +436,36 @@ public class GeneralTab extends JPanel implements ITab{
                 case 1: config.set(ConfigHelper.PROFILE.afterDragMode, "enabled"); afterDragDropdownHotkey.setVisible(false); break;
                 case 2: config.set(ConfigHelper.PROFILE.afterDragMode, "hold"); afterDragDropdownHotkey.setVisible(true); break;
             }
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         afterDragDropdownHotkey.addItemListener(e -> {
             switch(afterDragDropdownHotkey.getSelectedIndex()) {
                 case 0: config.set(ConfigHelper.PROFILE.afterDragHotkey, KeyEvent.VK_CONTROL);
                 case 1: config.set(ConfigHelper.PROFILE.afterDragHotkey, KeyEvent.VK_SHIFT);
             }
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
 
         JPanel afterDragPanel = new JPanel(new GridLayout(0, 2));
         afterDragPanel.add(afterDragDropdownMode);
         afterDragPanel.add(afterDragDropdownHotkey);
         options.add(afterDragPanel, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
         //END AFTERDRAG
+        //BEGIN AFTERDRAG DEADZONE
+        gbc.gridx = 0;
+        options.add(configWindow.createJLabel("AfterDrag deadzone", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        JSpinner afterDragDeadzoneSpinner = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.afterDragDeadzone), 1, 50, 1));
+        afterDragDeadzoneSpinner.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.afterDragDeadzone, Integer.parseInt(afterDragDeadzoneSpinner.getValue().toString()));
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
+        options.add(afterDragDeadzoneSpinner, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
+        //END AFTERDRAG DEADZONE
         //END ELEMENTS
 
         //BEGIN SAVE

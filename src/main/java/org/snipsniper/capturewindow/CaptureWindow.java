@@ -36,10 +36,12 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	public boolean isRunning = true;
 
 	public boolean isAfterDragHotkeyPressed = false;
+	private int dottedLineDistance = 5;
 
 	public CaptureWindow(Sniper sniperInstance) {
 		this.sniperInstance = sniperInstance;
 		config = sniperInstance.getConfig();
+		dottedLineDistance = config.getInt(ConfigHelper.PROFILE.dottedOutlineDistance);
 
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -406,7 +408,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		Graphics2D g2d = (Graphics2D) g.create();
 		g2d.setColor(Color.BLACK);
 		g2d.drawLine(x1, y1, x2, y2);
-		Stroke dashed = new BasicStroke(thickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+		Stroke dashed = new BasicStroke(thickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, 0, new float[]{dottedLineDistance}, 0);
 		g2d.setStroke(dashed);
 		g2d.setColor(Color.WHITE);
 		g2d.drawLine(x1, y1, x2, y2);
@@ -522,5 +524,9 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 	public int getAfterDragHotkey() {
 		return config.getInt(ConfigHelper.PROFILE.afterDragHotkey);
+	}
+
+	public Config getConfig() {
+		return config;
 	}
 }

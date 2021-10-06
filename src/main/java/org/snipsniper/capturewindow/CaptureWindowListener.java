@@ -1,5 +1,7 @@
 package org.snipsniper.capturewindow;
 
+import org.snipsniper.config.ConfigHelper;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -172,30 +174,30 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 		Rectangle check = wndInstance.calcRectangle();
 		Point livePoint = getCurrentPoint(PointType.LIVE);
 
-		int margin = 10;
+		int deadzone = wndInstance.getConfig().getInt(ConfigHelper.PROFILE.afterDragDeadzone);
 
-		check.x -= margin;
-		check.y -= margin;
-		check.width += margin * 2;
-		check.height += margin * 2;
+		check.x -= deadzone;
+		check.y -= deadzone;
+		check.width += deadzone * 2;
+		check.height += deadzone * 2;
 
 		hoverTop = false; hoverBottom = false; hoverLeft = false; hoverRight = false;
 
 		if(startedCapture && check.contains(livePoint)) {
 			int pointYTop = rect.y - livePoint.y;
-			if (pointYTop > -margin && pointYTop < margin)
+			if (pointYTop > -deadzone && pointYTop < deadzone)
 				hoverTop = true;
 
 			int pointYBottom = pointYTop + rect.height;
-			if(pointYBottom > -margin && pointYBottom < margin)
+			if(pointYBottom > -deadzone && pointYBottom < deadzone)
 				hoverBottom = true;
 
 			int pointXLeft = rect.x - livePoint.x;
-			if(pointXLeft > -margin && pointXLeft < margin)
+			if(pointXLeft > -deadzone && pointXLeft < deadzone)
 				hoverLeft = true;
 
 			int pointXRight = pointXLeft + rect.width;
-			if(pointXRight > -margin && pointXRight < margin)
+			if(pointXRight > -deadzone && pointXRight < deadzone)
 				hoverRight = true;
 
 			Cursor toSet = null;
