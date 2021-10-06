@@ -213,7 +213,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		}
 
 		if(config.getBool(ConfigHelper.PROFILE.copyToClipboard) || copyOverride) {
-			if(enforceOverride && !copyOverride) {
+			System.out.println(enforceOverride + " " + copyOverride);
+			if(!enforceOverride || copyOverride) {
 				ImageUtils.copyToClipboard(finalImg);
 				inClipboard = true;
 			}

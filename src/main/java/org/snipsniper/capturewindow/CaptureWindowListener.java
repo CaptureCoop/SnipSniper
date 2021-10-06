@@ -85,8 +85,10 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
-		if(mouseEvent.getButton() == 1 && !stoppedCapture) {
+		if(mouseEvent.getButton() == 1 && !isOnSelection()) {
 			startPoint = mouseEvent.getPoint();
+			cPoint = mouseEvent.getPoint();
+			stoppedCapture = false;
 			startPointTotal = MouseInfo.getPointerInfo().getLocation();
 			if(isPressed(wndInstance.getAfterDragHotkey()) && wndInstance.getAfterDragMode().equalsIgnoreCase("hold"))
 				wndInstance.isAfterDragHotkeyPressed = true;
@@ -169,21 +171,27 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 		return null;
 	}
 
-	public void checkMouse() {
-		Rectangle rect = wndInstance.calcRectangle();
+	public boolean isOnSelection() {
+		if(cPoint == null)
+			return false;
 		Rectangle check = wndInstance.calcRectangle();
-		Point livePoint = getCurrentPoint(PointType.LIVE);
-
 		int deadzone = wndInstance.getConfig().getInt(ConfigHelper.PROFILE.afterDragDeadzone);
-
 		check.x -= deadzone;
 		check.y -= deadzone;
 		check.width += deadzone * 2;
 		check.height += deadzone * 2;
+		return check.contains(getCurrentPoint(PointType.LIVE));
+	}
+
+	public void checkMouse() {
+		Rectangle rect = wndInstance.calcRectangle();
+		Point livePoint = getCurrentPoint(PointType.LIVE);
+
+		int deadzone = wndInstance.getConfig().getInt(ConfigHelper.PROFILE.afterDragDeadzone);
 
 		hoverTop = false; hoverBottom = false; hoverLeft = false; hoverRight = false;
 
-		if(startedCapture && check.contains(livePoint)) {
+		if(startedCapture && isOnSelection()) {
 			int pointYTop = rect.y - livePoint.y;
 			if (pointYTop > -deadzone && pointYTop < deadzone)
 				hoverTop = true;
