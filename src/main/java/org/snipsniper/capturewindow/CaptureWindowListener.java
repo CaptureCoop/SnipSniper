@@ -91,8 +91,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 				cPoint.y = rect.height + rect.y;
 			}
 
-			//if(!stoppedCapture)
-				cPointTotal = MouseInfo.getPointerInfo().getLocation();
+			cPointTotal = MouseInfo.getPointerInfo().getLocation();
 			stoppedCapture = true;
 
 			if(!wndInstance.isAfterDragEnabled())
@@ -226,16 +225,16 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 
 	public void checkMovement(MouseEvent mouseEvent) {
 		if(hoverTop)
-			startPoint.y -= startPoint.y - cPointLive.y;
+			startPoint.y = cPointLive.y;
 
 		if(hoverBottom)
-			cPoint.y -= cPoint.y - cPointLive.y;
+			cPoint.y = cPointLive.y;
 
 		if(hoverLeft)
-			startPoint.x -= startPoint.x - cPointLive.x;
+			startPoint.x = cPointLive.x;
 
 		if(hoverRight)
-			cPoint.x -= cPoint.x - cPointLive.x;
+			cPoint.x = cPointLive.x;
 
 		if(hoverCenter) {
 			Point livePoint = mouseEvent.getPoint();
