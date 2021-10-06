@@ -112,7 +112,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 			stoppedCapture = true;
 
 			if(!wndInstance.isAfterDragEnabled())
-				wndInstance.capture(false, false, false);
+				wndInstance.capture(false, false, false, false);
 		}
 	}
 	
@@ -125,13 +125,13 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 			wndInstance.getSniperInstance().killCaptureWindow();
 
 		if(isPressed(KeyEvent.VK_ENTER) || isPressed(KeyEvent.VK_SPACE))
-			wndInstance.capture(false, false, false);
+			wndInstance.capture(false, false, false, false);
 
 		if(isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_S))
-			wndInstance.capture(true, false, false);
+			wndInstance.capture(true, false, false, true);
 
 		if(isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_C))
-			wndInstance.capture(false, true, false);
+			wndInstance.capture(false, true, false, true);
 	}
 
 	@Override

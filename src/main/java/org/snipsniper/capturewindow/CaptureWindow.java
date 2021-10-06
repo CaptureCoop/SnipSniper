@@ -36,7 +36,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	public boolean isRunning = true;
 
 	public boolean isAfterDragHotkeyPressed = false;
-	private int dottedLineDistance = 5;
+	private int dottedLineDistance;
 
 	public CaptureWindow(Sniper sniperInstance) {
 		this.sniperInstance = sniperInstance;
@@ -176,7 +176,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		return result.getBounds();
 	}
 	
-	void capture(boolean saveOverride, boolean copyOverride, boolean editorOverride) {
+	void capture(boolean saveOverride, boolean copyOverride, boolean editorOverride, boolean enforceOverride) {
 		BufferedImage finalImg;
 		isRunning = false;
 		dispose();
@@ -202,37 +202,52 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		boolean inClipboard = false;
 
 		if(config.getBool(ConfigHelper.PROFILE.saveToDisk) || saveOverride) {
-			finalLocation = ImageUtils.saveImage(finalImg, "", config);
-			if(finalLocation != null) {
-				String folder = finalLocation.replace(new File(finalLocation).getName(), "");
-				config.set(ConfigHelper.PROFILE.lastSaveFolder, folder);
-				config.save();
+			boolean doSave = true;
+			if(enforceOverride && !saveOverride)
+				doSave = false;
+			if(doSave) {
+				finalLocation = ImageUtils.saveImage(finalImg, "", config);
+				if (finalLocation != null) {
+					String folder = finalLocation.replace(new File(finalLocation).getName(), "");
+					config.set(ConfigHelper.PROFILE.lastSaveFolder, folder);
+					config.save();
+				}
 			}
 		}
 
 		if(config.getBool(ConfigHelper.PROFILE.copyToClipboard) || copyOverride) {
-			ImageUtils.copyToClipboard(finalImg);
-			inClipboard = true;
+			boolean doCopy = true;
+			if(enforceOverride && !copyOverride)
+				doCopy = false;
+			if(doCopy) {
+				ImageUtils.copyToClipboard(finalImg);
+				inClipboard = true;
+			}
 		}
 
 		if (config.getBool(ConfigHelper.PROFILE.openEditor) || editorOverride) {
-			Point startPointTotal = listener.getStartPoint(PointType.TOTAL);
-			Point cPointTotal = listener.getCurrentPoint(PointType.TOTAL);
+			boolean openEditor = true;
+			if(enforceOverride && !editorOverride)
+				openEditor = false;
+			if (openEditor) {
+				Point startPointTotal = listener.getStartPoint(PointType.TOTAL);
+				Point cPointTotal = listener.getCurrentPoint(PointType.TOTAL);
 
-			int posX = (int) cPointTotal.getX();
-			int posY = (int) cPointTotal.getY();
-			boolean leftToRight = false;
+				int posX = (int) cPointTotal.getX();
+				int posY = (int) cPointTotal.getY();
+				boolean leftToRight = false;
 
-			if (!(startPointTotal.getX() > cPointTotal.getX())) {
-				posX -= finalImg.getWidth();
-				leftToRight = true;
+				if (!(startPointTotal.getX() > cPointTotal.getX())) {
+					posX -= finalImg.getWidth();
+					leftToRight = true;
+				}
+				if (!(startPointTotal.getY() > cPointTotal.getY())) {
+					posY -= finalImg.getHeight();
+					leftToRight = true;
+				}
+
+				new SCEditorWindow(finalImg, posX, posY, "SnipSniper Editor", config, leftToRight, finalLocation, inClipboard, false);
 			}
-			if (!(startPointTotal.getY() > cPointTotal.getY())) {
-				posY -= finalImg.getHeight();
-				leftToRight = true;
-			}
-
-			new SCEditorWindow(finalImg, posX, posY, "SnipSniper Editor", config, leftToRight, finalLocation, inClipboard, false);
 		}
 
 		sniperInstance.killCaptureWindow();
