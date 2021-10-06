@@ -109,7 +109,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 				cPoint.y = rect.height + rect.y;
 			}
 
-			if(!stoppedCapture)
+			//if(!stoppedCapture)
 				cPointTotal = MouseInfo.getPointerInfo().getLocation();
 			stoppedCapture = true;
 
@@ -134,6 +134,9 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 
 		if(isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_C))
 			wndInstance.capture(false, true, false, true);
+
+		if(isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_E))
+			wndInstance.capture(false, false, true, true);
 	}
 
 	@Override

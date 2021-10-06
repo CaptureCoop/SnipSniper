@@ -190,6 +190,15 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			return;
 		}
 
+		if(captureArea.x < 0)
+			captureArea.x = 0;
+		if(captureArea.y < 0)
+			captureArea.y = 0;
+		if(captureArea.width + captureArea.x > bounds.width)
+			captureArea.width = bounds.width - captureArea.x;
+		if(captureArea.height + captureArea.y > bounds.height)
+			captureArea.height = bounds.height - captureArea.y;
+		
 		BufferedImage croppedBuffer = screenshot.getSubimage(captureArea.x, captureArea.y, captureArea.width, captureArea.height);
 		finalImg = new BufferedImage(croppedBuffer.getWidth() + borderSize *2, croppedBuffer.getHeight() + borderSize *2, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = (Graphics2D) finalImg.getGraphics();
