@@ -472,7 +472,10 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 1;
         JCheckBox enableOutline = new JCheckBox();
         enableOutline.setSelected(config.getBool(ConfigHelper.PROFILE.dottedOutline));
-        enableOutline.addActionListener(e -> config.set(ConfigHelper.PROFILE.dottedOutline, enableOutline.isSelected()));
+        enableOutline.addActionListener(e -> {
+            config.set(ConfigHelper.PROFILE.dottedOutline, enableOutline.isSelected());
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
         options.add(enableOutline, gbc);
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
