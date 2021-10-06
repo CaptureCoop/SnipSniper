@@ -91,8 +91,8 @@ public class RectangleStamp implements IStamp {
         int drawWidth = (int) ((double)width * difference[0]);
         int drawHeight = (int) ((double)height * difference[1]);
 
-        int x = (int)(position.getX() - drawWidth / 2);
-        int y = (int)(position.getY() - drawHeight / 2);
+        int x = position.getX() - drawWidth / 2;
+        int y = position.getY() - drawHeight / 2;
 
         Paint oldColor = g2.getPaint();
         g2.setPaint(color.getGradientPaint(drawWidth, drawHeight, x, y));

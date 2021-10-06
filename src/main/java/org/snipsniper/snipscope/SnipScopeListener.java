@@ -45,7 +45,6 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
     @Override
     public void keyReleased(KeyEvent keyEvent) {
         input.setKey(keyEvent.getKeyCode(), false);
-        if(!snipScopeWindow.isEnableInteraction()) return;
     }
 
     //Mouse listener
