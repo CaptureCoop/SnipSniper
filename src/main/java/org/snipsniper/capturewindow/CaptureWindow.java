@@ -174,7 +174,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		return result.getBounds();
 	}
 	
-	void capture() {
+	void capture(boolean saveOverride, boolean copyOverride) {
 		BufferedImage finalImg;
 		isRunning = false;
 		dispose();
@@ -199,7 +199,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		String finalLocation = null;
 		boolean inClipboard = false;
 
-		if(config.getBool(ConfigHelper.PROFILE.saveToDisk)) {
+		if(config.getBool(ConfigHelper.PROFILE.saveToDisk) || saveOverride) {
 			finalLocation = ImageUtils.saveImage(finalImg, "", config);
 			if(finalLocation != null) {
 				String folder = finalLocation.replace(new File(finalLocation).getName(), "");
@@ -208,7 +208,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			}
 		}
 
-		if(config.getBool(ConfigHelper.PROFILE.copyToClipboard)) {
+		if(config.getBool(ConfigHelper.PROFILE.copyToClipboard) || copyOverride) {
 			ImageUtils.copyToClipboard(finalImg);
 			inClipboard = true;
 		}
