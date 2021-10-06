@@ -1,6 +1,21 @@
 # Changelog
 All stable or otherwise notable changes will be listed here
 
+## [3.9.4](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.4) - 06.10.2021
+### Added
+- Added AfterDrag, allowing you to optionally fine tune your captured area
+- Responsive save buttons
+- Config Window now notifies you in multiple situations if you have unsaved changes
+- Added fancy flag icons
+- Added custom title setting for each profile
+- Added wiki system, starting with some of hte info buttons
+
+### Changed
+- Better Icon Window (Tabs, drag & drop)
+- "Open image folder" now opens last folder you screenshotted in
+- Fixed issue with CTRL + V not working in editor
+- Fixed bug with Capture Window getting stuck if message popup is open
+
 ## [3.9.2](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.2) - 24.09.2021
 ### Added
 - Added Update Button
@@ -8,7 +23,6 @@ All stable or otherwise notable changes will be listed here
 
 ### Changed
 - You can now have as many custom icons in your icon chooser as you want
-
 
 ## [3.9.1](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.1) - 24.09.2021
 #### This release has been removed due to a critical bug, please use [3.9.2](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.2)
