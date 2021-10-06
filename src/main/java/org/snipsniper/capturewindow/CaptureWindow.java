@@ -176,7 +176,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		return result.getBounds();
 	}
 	
-	void capture(boolean saveOverride, boolean copyOverride) {
+	void capture(boolean saveOverride, boolean copyOverride, boolean editorOverride) {
 		BufferedImage finalImg;
 		isRunning = false;
 		dispose();
@@ -215,22 +215,23 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			inClipboard = true;
 		}
 
-		Point startPointTotal = listener.getStartPoint(PointType.TOTAL);
-		Point cPointTotal = listener.getCurrentPoint(PointType.TOTAL);
+		if (config.getBool(ConfigHelper.PROFILE.openEditor) || editorOverride) {
+			Point startPointTotal = listener.getStartPoint(PointType.TOTAL);
+			Point cPointTotal = listener.getCurrentPoint(PointType.TOTAL);
 
-		int posX = (int) cPointTotal.getX();
-		int posY = (int) cPointTotal.getY();
-		boolean leftToRight = false;
+			int posX = (int) cPointTotal.getX();
+			int posY = (int) cPointTotal.getY();
+			boolean leftToRight = false;
 
-		if (!(startPointTotal.getX() > cPointTotal.getX())) {
-			posX -= finalImg.getWidth();
-			leftToRight = true;
-		}
-		if (!(startPointTotal.getY() > cPointTotal.getY())) {
-			posY -= finalImg.getHeight();
-			leftToRight = true;
-		}
-		if (config.getBool(ConfigHelper.PROFILE.openEditor)) {
+			if (!(startPointTotal.getX() > cPointTotal.getX())) {
+				posX -= finalImg.getWidth();
+				leftToRight = true;
+			}
+			if (!(startPointTotal.getY() > cPointTotal.getY())) {
+				posY -= finalImg.getHeight();
+				leftToRight = true;
+			}
+
 			new SCEditorWindow(finalImg, posX, posY, "SnipSniper Editor", config, leftToRight, finalLocation, inClipboard, false);
 		}
 
