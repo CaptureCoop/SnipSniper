@@ -404,8 +404,11 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 	public void drawDashedLine(Graphics g, int x1, int y1, int x2, int y2, int thickness){
 		Graphics2D g2d = (Graphics2D) g.create();
+		g2d.setColor(Color.BLACK);
+		g2d.drawLine(x1, y1, x2, y2);
 		Stroke dashed = new BasicStroke(thickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
 		g2d.setStroke(dashed);
+		g2d.setColor(Color.WHITE);
 		g2d.drawLine(x1, y1, x2, y2);
 		g2d.dispose();
 	}
