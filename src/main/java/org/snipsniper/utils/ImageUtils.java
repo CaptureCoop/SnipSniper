@@ -56,18 +56,16 @@ public class ImageUtils {
         File path = new File(savePath + savePathModifier);
         file = new File(path.getAbsolutePath() + "//" + filename);
         try {
-            if(config.getBool(ConfigHelper.PROFILE.saveToDisk)) {
-                if(!path.exists()) {
-                    if(!path.mkdirs()) {
-                        LogManager.log("Failed saving, directory missing & could not create it!", LogLevel.WARNING);
-                        return null;
-                    }
+            if(!path.exists()) {
+                if(!path.mkdirs()) {
+                    LogManager.log("Failed saving, directory missing & could not create it!", LogLevel.WARNING);
+                    return null;
                 }
-                if(file.createNewFile()) {
-                    ImageIO.write(finalImg, "png", file);
-                    LogManager.log("Saved image on disk. Location: " + file, LogLevel.INFO);
-                    return file.getAbsolutePath();
-                }
+            }
+            if(file.createNewFile()) {
+                ImageIO.write(finalImg, "png", file);
+                LogManager.log("Saved image on disk. Location: " + file, LogLevel.INFO);
+                return file.getAbsolutePath();
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not save image to \"" + file + "\"!" , "Error", JOptionPane.INFORMATION_MESSAGE);

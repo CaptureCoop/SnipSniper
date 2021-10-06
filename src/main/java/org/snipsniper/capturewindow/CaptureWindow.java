@@ -33,12 +33,15 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	public BufferedImage screenshot = null;
 	public BufferedImage screenshotTinted = null;
 
-	public boolean startedCapture = false;
 	public boolean isRunning = true;
+
+	public boolean isAfterDragHotkeyPressed = false;
+	private int dottedLineDistance;
 
 	public CaptureWindow(Sniper sniperInstance) {
 		this.sniperInstance = sniperInstance;
 		config = sniperInstance.getConfig();
+		dottedLineDistance = config.getInt(ConfigHelper.PROFILE.dottedOutlineDistance);
 
 		qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -154,10 +157,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		Point startPoint = listener.getStartPoint(PointType.NORMAL);
 		Point cPoint = listener.getCurrentPoint(PointType.NORMAL);
 		if(startPoint != null && cPoint != null) {
-			minX = Math.min( startPoint.x, cPoint.x);
-			maxX = Math.max( startPoint.x, cPoint.x);
-			minY = Math.min( startPoint.y, cPoint.y);
-			maxY = Math.max( startPoint.y, cPoint.y);
+			minX = Math.min(startPoint.x, cPoint.x);
+			maxX = Math.max(startPoint.x, cPoint.x);
+			minY = Math.min(startPoint.y, cPoint.y);
+			maxY = Math.max(startPoint.y, cPoint.y);
 		}
 		return new Rectangle(minX, minY, maxX - minX, maxY - minY);
 	}
@@ -173,7 +176,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		return result.getBounds();
 	}
 	
-	void capture() {
+	void capture(boolean saveOverride, boolean copyOverride, boolean editorOverride, boolean enforceOverride) {
 		BufferedImage finalImg;
 		isRunning = false;
 		dispose();
@@ -198,37 +201,44 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		String finalLocation = null;
 		boolean inClipboard = false;
 
-		if(config.getBool(ConfigHelper.PROFILE.saveToDisk)) {
-			finalLocation = ImageUtils.saveImage(finalImg, "", config);
-			if(finalLocation != null) {
-				String folder = finalLocation.replace(new File(finalLocation).getName(), "");
-				config.set(ConfigHelper.PROFILE.lastSaveFolder, folder);
-				config.save();
+		if(config.getBool(ConfigHelper.PROFILE.saveToDisk) || saveOverride) {
+			if(!enforceOverride || saveOverride) {
+				finalLocation = ImageUtils.saveImage(finalImg, "", config);
+				if (finalLocation != null) {
+					String folder = finalLocation.replace(new File(finalLocation).getName(), "");
+					config.set(ConfigHelper.PROFILE.lastSaveFolder, folder);
+					config.save();
+				}
 			}
 		}
 
-		if(config.getBool(ConfigHelper.PROFILE.copyToClipboard)) {
-			ImageUtils.copyToClipboard(finalImg);
-			inClipboard = true;
+		if(config.getBool(ConfigHelper.PROFILE.copyToClipboard) || copyOverride) {
+			if(enforceOverride && !copyOverride) {
+				ImageUtils.copyToClipboard(finalImg);
+				inClipboard = true;
+			}
 		}
 
-		Point startPointTotal = listener.getStartPoint(PointType.TOTAL);
-		Point cPointTotal = listener.getCurrentPoint(PointType.TOTAL);
+		if (config.getBool(ConfigHelper.PROFILE.openEditor) || editorOverride) {
+			if (!enforceOverride || editorOverride) {
+				Point startPointTotal = listener.getStartPoint(PointType.TOTAL);
+				Point cPointTotal = listener.getCurrentPoint(PointType.TOTAL);
 
-		int posX = (int) cPointTotal.getX();
-		int posY = (int) cPointTotal.getY();
-		boolean leftToRight = false;
+				int posX = (int) cPointTotal.getX();
+				int posY = (int) cPointTotal.getY();
+				boolean leftToRight = false;
 
-		if (!(startPointTotal.getX() > cPointTotal.getX())) {
-			posX -= finalImg.getWidth();
-			leftToRight = true;
-		}
-		if (!(startPointTotal.getY() > cPointTotal.getY())) {
-			posY -= finalImg.getHeight();
-			leftToRight = true;
-		}
-		if (config.getBool(ConfigHelper.PROFILE.openEditor)) {
-			new SCEditorWindow(finalImg, posX, posY, "SnipSniper Editor", config, leftToRight, finalLocation, inClipboard, false);
+				if (!(startPointTotal.getX() > cPointTotal.getX())) {
+					posX -= finalImg.getWidth();
+					leftToRight = true;
+				}
+				if (!(startPointTotal.getY() > cPointTotal.getY())) {
+					posY -= finalImg.getHeight();
+					leftToRight = true;
+				}
+
+				new SCEditorWindow(finalImg, posX, posY, "SnipSniper Editor", config, leftToRight, finalLocation, inClipboard, false);
+			}
 		}
 
 		sniperInstance.killCaptureWindow();
@@ -308,7 +318,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			Point cPointLive = listener.getCurrentPoint(PointType.LIVE);
 			Point startPoint = listener.getStartPoint(PointType.NORMAL);
 
-			if(selectArea != null && cPoint != null && startedCapture) {
+			if(selectArea != null && cPoint != null && listener.startedCapture()) {
 				selectBuffer.drawImage(screenshot, startPoint.x, startPoint.y, cPoint.x, cPoint.y,startPoint.x, startPoint.y, cPoint.x, cPoint.y, this);
 			}
 
@@ -319,6 +329,16 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 			if(cPoint != null && selectArea != null) {
 				globalBuffer.drawImage(selectBufferImage, selectArea.x, selectArea.y, selectArea.width, selectArea.height, selectArea.x, selectArea.y, selectArea.width, selectArea.height, this);
+			}
+
+			if(config.getBool(ConfigHelper.PROFILE.dottedOutline) && cPoint != null && startPoint != null && selectArea != null) {
+				final int thickness = 1;
+				Rectangle rec = Utils.fixRectangle(selectArea);
+				allBounds.addRectangle(new Rectangle(rec.x - thickness, rec.y - thickness, rec.width + thickness * 2, rec.height + thickness * 2));
+				drawDashedLine(globalBuffer, startPoint.x - thickness, startPoint.y - thickness, cPoint.x, startPoint.y - thickness, thickness);
+				drawDashedLine(globalBuffer, startPoint.x - thickness, startPoint.y, startPoint.x - thickness, cPoint.y, thickness);
+				drawDashedLine(globalBuffer, cPoint.x, startPoint.y, cPoint.x, cPoint.y, thickness);
+				drawDashedLine(globalBuffer, startPoint.x, cPoint.y, cPoint.x, cPoint.y, thickness);
 			}
 
 			if(cPointLive != null && config.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
@@ -389,6 +409,17 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		globalBuffer.dispose();
 		selectBuffer.dispose();
 		if(spyglassBuffer != null) spyglassBuffer.dispose();
+	}
+
+	public void drawDashedLine(Graphics g, int x1, int y1, int x2, int y2, int thickness){
+		Graphics2D g2d = (Graphics2D) g.create();
+		g2d.setColor(Color.BLACK);
+		g2d.drawLine(x1, y1, x2, y2);
+		Stroke dashed = new BasicStroke(thickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, 0, new float[]{dottedLineDistance}, 0);
+		g2d.setStroke(dashed);
+		g2d.setColor(Color.WHITE);
+		g2d.drawLine(x1, y1, x2, y2);
+		g2d.dispose();
 	}
 
 	private void generateSpyglass(BufferedImage image) {
@@ -483,4 +514,26 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 	@Override
 	public void windowOpened(WindowEvent windowEvent) { }
+
+	public boolean isAfterDragEnabled() {
+		if(getAfterDragMode().equalsIgnoreCase("none"))
+			return false;
+
+		if(getAfterDragMode().equalsIgnoreCase("enabled"))
+			return true;
+
+		return getAfterDragMode().equalsIgnoreCase("hold") && isAfterDragHotkeyPressed;
+	}
+
+	public String getAfterDragMode() {
+		return config.getString(ConfigHelper.PROFILE.afterDragMode);
+	}
+
+	public int getAfterDragHotkey() {
+		return config.getInt(ConfigHelper.PROFILE.afterDragHotkey);
+	}
+
+	public Config getConfig() {
+		return config;
+	}
 }

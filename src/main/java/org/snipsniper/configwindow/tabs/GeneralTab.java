@@ -9,6 +9,7 @@ import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.configwindow.HotKeyButton;
 import org.snipsniper.configwindow.folderpreview.FolderPreview;
 import org.snipsniper.configwindow.iconwindow.IconWindow;
+import org.snipsniper.sceditor.stamps.StampUtils;
 import org.snipsniper.utils.*;
 import org.snipsniper.utils.enums.ConfigSaveButtonState;
 
@@ -413,6 +414,69 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 2;
         options.add(new InfoButton(WikiManager.getContent("config/general/spyglasszoom.json")), gbc);
         //END SPYGLASS ZOOM
+
+        //BEGIN AFTERDRAG
+        gbc.gridx = 0;
+        options.add(configWindow.createJLabel("After Drag", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        JComboBox<Object> afterDragDropdownMode = new JComboBox<>(new String[]{LangManager.getItem("config_label_disabled"), LangManager.getItem("config_label_enabled"), LangManager.getItem("config_label_hold")});
+        JComboBox<Object> afterDragDropdownHotkey = new JComboBox<>(new String[]{LangManager.getItem("config_label_control"), LangManager.getItem("config_label_shift")});
+        switch(config.getString(ConfigHelper.PROFILE.afterDragMode).toLowerCase()) {
+            case "none": afterDragDropdownMode.setSelectedIndex(0); afterDragDropdownHotkey.setVisible(false); break;
+            case "enabled": afterDragDropdownMode.setSelectedIndex(1); afterDragDropdownHotkey.setVisible(false); break;
+            case "hold": afterDragDropdownMode.setSelectedIndex(2); break;
+        }
+        switch(config.getInt(ConfigHelper.PROFILE.afterDragHotkey)) {
+            case KeyEvent.VK_CONTROL: afterDragDropdownHotkey.setSelectedIndex(0); break;
+            case KeyEvent.VK_SHIFT: afterDragDropdownHotkey.setSelectedIndex(1); break;
+        }
+        afterDragDropdownMode.addItemListener(e -> {
+            switch(afterDragDropdownMode.getSelectedIndex()) {
+                case 0: config.set(ConfigHelper.PROFILE.afterDragMode, "none"); afterDragDropdownHotkey.setVisible(false); break;
+                case 1: config.set(ConfigHelper.PROFILE.afterDragMode, "enabled"); afterDragDropdownHotkey.setVisible(false); break;
+                case 2: config.set(ConfigHelper.PROFILE.afterDragMode, "hold"); afterDragDropdownHotkey.setVisible(true); break;
+            }
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
+        afterDragDropdownHotkey.addItemListener(e -> {
+            switch(afterDragDropdownHotkey.getSelectedIndex()) {
+                case 0: config.set(ConfigHelper.PROFILE.afterDragHotkey, KeyEvent.VK_CONTROL);
+                case 1: config.set(ConfigHelper.PROFILE.afterDragHotkey, KeyEvent.VK_SHIFT);
+            }
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
+
+        JPanel afterDragPanel = new JPanel(new GridLayout(0, 2));
+        afterDragPanel.add(afterDragDropdownMode);
+        afterDragPanel.add(afterDragDropdownHotkey);
+        options.add(afterDragPanel, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
+        //END AFTERDRAG
+        //BEGIN AFTERDRAG DEADZONE
+        gbc.gridx = 0;
+        options.add(configWindow.createJLabel("AfterDrag deadzone", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        JSpinner afterDragDeadzoneSpinner = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.afterDragDeadzone), 1, 50, 1));
+        afterDragDeadzoneSpinner.addChangeListener(e -> {
+            config.set(ConfigHelper.PROFILE.afterDragDeadzone, Integer.parseInt(afterDragDeadzoneSpinner.getValue().toString()));
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
+        options.add(afterDragDeadzoneSpinner, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
+        //END AFTERDRAG DEADZONE
+        //START DOTTED LINE
+        gbc.gridx = 0;
+        options.add(configWindow.createJLabel("Enable dotted outline", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        JCheckBox enableOutline = new JCheckBox();
+        enableOutline.setSelected(config.getBool(ConfigHelper.PROFILE.dottedOutline));
+        enableOutline.addActionListener(e -> config.set(ConfigHelper.PROFILE.dottedOutline, enableOutline.isSelected()));
+        options.add(enableOutline, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
+        //END DOTTED LINE
         //END ELEMENTS
 
         //BEGIN SAVE
