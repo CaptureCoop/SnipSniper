@@ -35,7 +35,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 	public boolean isRunning = true;
 
-	public boolean afterDragHoldEnable = false;
+	public boolean isAfterDragHotkeyPressed = false;
 
 	public CaptureWindow(Sniper sniperInstance) {
 		this.sniperInstance = sniperInstance;
@@ -510,7 +510,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		if(getAfterDragMode().equalsIgnoreCase("enabled"))
 			return true;
 
-		return getAfterDragMode().equalsIgnoreCase("hold") && afterDragHoldEnable;
+		return getAfterDragMode().equalsIgnoreCase("hold") && isAfterDragHotkeyPressed;
 	}
 
 	public String getAfterDragMode() {

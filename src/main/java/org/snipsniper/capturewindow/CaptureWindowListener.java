@@ -87,7 +87,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 			startPoint = mouseEvent.getPoint();
 			startPointTotal = MouseInfo.getPointerInfo().getLocation();
 			if(isPressed(wndInstance.getAfterDragHotkey()) && wndInstance.getAfterDragMode().equalsIgnoreCase("hold"))
-				wndInstance.afterDragHoldEnable = true;
+				wndInstance.isAfterDragHotkeyPressed = true;
 			startedCapture = true;
 		} else if (mouseEvent.getButton() == 3) {
 			wndInstance.getSniperInstance().killCaptureWindow();
