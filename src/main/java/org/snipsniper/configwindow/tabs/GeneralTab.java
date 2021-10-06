@@ -466,6 +466,17 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
         //END AFTERDRAG DEADZONE
+        //START DOTTED LINE
+        gbc.gridx = 0;
+        options.add(configWindow.createJLabel("Enable dotted outline", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        JCheckBox enableOutline = new JCheckBox();
+        enableOutline.setSelected(config.getBool(ConfigHelper.PROFILE.dottedOutline));
+        enableOutline.addActionListener(e -> config.set(ConfigHelper.PROFILE.dottedOutline, enableOutline.isSelected()));
+        options.add(enableOutline, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
+        //END DOTTED LINE
         //END ELEMENTS
 
         //BEGIN SAVE
