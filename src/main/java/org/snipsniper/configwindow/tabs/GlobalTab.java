@@ -207,7 +207,7 @@ public class GlobalTab extends JPanel implements ITab{
                     FileUtils.copyFromJar("org/snipsniper/resources/img/icons/" + icoMain.toLowerCase(), SnipSniper.getJarFolder() + "/" + icoMain);
                     ShellLinkUtils.createShellLink(startup + linkMain, SnipSniper.getJarFolder() + batchMain, SnipSniper.getJarFolder() + "/" + icoMain);
                 } else {
-                    FileUtils.deleteRecursively(startup);
+                    FileUtils.deleteRecursively(startup + linkMain);
                 }
             });
 
