@@ -202,10 +202,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		boolean inClipboard = false;
 
 		if(config.getBool(ConfigHelper.PROFILE.saveToDisk) || saveOverride) {
-			boolean doSave = true;
-			if(enforceOverride && !saveOverride)
-				doSave = false;
-			if(doSave) {
+			if(!enforceOverride || saveOverride) {
 				finalLocation = ImageUtils.saveImage(finalImg, "", config);
 				if (finalLocation != null) {
 					String folder = finalLocation.replace(new File(finalLocation).getName(), "");
@@ -216,20 +213,14 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		}
 
 		if(config.getBool(ConfigHelper.PROFILE.copyToClipboard) || copyOverride) {
-			boolean doCopy = true;
-			if(enforceOverride && !copyOverride)
-				doCopy = false;
-			if(doCopy) {
+			if(enforceOverride && !copyOverride) {
 				ImageUtils.copyToClipboard(finalImg);
 				inClipboard = true;
 			}
 		}
 
 		if (config.getBool(ConfigHelper.PROFILE.openEditor) || editorOverride) {
-			boolean openEditor = true;
-			if(enforceOverride && !editorOverride)
-				openEditor = false;
-			if (openEditor) {
+			if (!enforceOverride || editorOverride) {
 				Point startPointTotal = listener.getStartPoint(PointType.TOTAL);
 				Point cPointTotal = listener.getCurrentPoint(PointType.TOTAL);
 
