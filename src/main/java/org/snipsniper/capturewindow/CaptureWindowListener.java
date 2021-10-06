@@ -39,27 +39,7 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 		if(!stoppedCapture) {
 			cPoint = mouseEvent.getPoint();
 		} else if(wndInstance.isAfterDragEnabled()) {
-			if(hoverTop)
-				startPoint.y -= startPoint.y - cPointLive.y;
-
-			if(hoverBottom)
-				cPoint.y -= cPoint.y - cPointLive.y;
-
-			if(hoverLeft)
-				startPoint.x -= startPoint.x - cPointLive.x;
-
-			if(hoverRight)
-				cPoint.x -= cPoint.x - cPointLive.x;
-
-			if(hoverCenter) {
-				Point livePoint = mouseEvent.getPoint();
-				int moveX = cPointLive.x - livePoint.x;
-				int moveY = cPointLive.y - livePoint.y;
-				startPoint.x -= moveX;
-				startPoint.y -= moveY;
-				cPoint.x -= moveX;
-				cPoint.y -= moveY;
-			}
+			checkMovement(mouseEvent);
 		}
 		cPointLive = mouseEvent.getPoint();
 	}
@@ -96,6 +76,8 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 		} else if (mouseEvent.getButton() == 3) {
 			wndInstance.getSniperInstance().killCaptureWindow();
 		}
+		if(isOnSelection() && stoppedCapture && wndInstance.isAfterDragEnabled())
+			checkMouse();
 	}
 
 	@Override
@@ -239,6 +221,30 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 			}
 		} else {
 			wndInstance.getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+	}
+
+	public void checkMovement(MouseEvent mouseEvent) {
+		if(hoverTop)
+			startPoint.y -= startPoint.y - cPointLive.y;
+
+		if(hoverBottom)
+			cPoint.y -= cPoint.y - cPointLive.y;
+
+		if(hoverLeft)
+			startPoint.x -= startPoint.x - cPointLive.x;
+
+		if(hoverRight)
+			cPoint.x -= cPoint.x - cPointLive.x;
+
+		if(hoverCenter) {
+			Point livePoint = mouseEvent.getPoint();
+			int moveX = cPointLive.x - livePoint.x;
+			int moveY = cPointLive.y - livePoint.y;
+			startPoint.x -= moveX;
+			startPoint.y -= moveY;
+			cPoint.x -= moveX;
+			cPoint.y -= moveY;
 		}
 	}
 
