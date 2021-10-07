@@ -167,7 +167,7 @@ public class GeneralTab extends JPanel implements ITab{
         tintColorButton.addActionListener(e -> {
             int x = (int)((configWindow.getLocation().getX() + getWidth()/2));
             int y = (int)((configWindow.getLocation().getY() + getHeight()/2));
-            ColorChooser chooser = new ColorChooser(null, "Tint Color", tintColor, null, x, y, false);
+            ColorChooser chooser = new ColorChooser(null, "Tint Color", tintColor, null, x, y, false, ImageManager.getImage("preview/code_light.png"));
             configWindow.addCWindow(chooser);
         });
         options.add(tintColorButton, gbc);
@@ -227,7 +227,7 @@ public class GeneralTab extends JPanel implements ITab{
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
                 int x = (int)((configWindow.getLocation().getX() + getWidth()/2));
                 int y = (int)((configWindow.getLocation().getY() + getHeight()/2));
-                colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y, true);
+                colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y, true, null);
                 colorChooser[0].addWindowListener(() -> colorChooser[0] = null);
                 configWindow.addCWindow(colorChooser[0]);
             }
