@@ -14,6 +14,8 @@ import org.snipsniper.utils.*;
 import org.snipsniper.utils.enums.ConfigSaveButtonState;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -150,6 +152,28 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 2;
         options.add(new InfoButton(WikiManager.getContent("config/general/hotkey.json")), gbc);
         //END HOTKEY
+
+        //BEGIN TINT COLOR
+        gbc.gridx = 0;
+        options.add(configWindow.createJLabel("Tint color", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        SSColor tintColor = config.getColor(ConfigHelper.PROFILE.tintColor);
+        GradientJButton tintColorButton = new GradientJButton("Tint Color", tintColor);
+        tintColor.addChangeListener(e -> {
+            System.out.println(((SSColor)e.getSource()).toSaveString());
+            config.set(ConfigHelper.PROFILE.tintColor, ((SSColor)e.getSource()).toSaveString());
+            cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
+        });
+        tintColorButton.addActionListener(e -> {
+            int x = (int)((configWindow.getLocation().getX() + getWidth()/2));
+            int y = (int)((configWindow.getLocation().getY() + getHeight()/2));
+            ColorChooser chooser = new ColorChooser(null, "Tint Color", tintColor, null, x, y, false);
+            configWindow.addCWindow(chooser);
+        });
+        options.add(tintColorButton, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
+        //END TINT COLOR
 
         //BEGIN SAVEIMAGES
         gbc.gridx = 0;
