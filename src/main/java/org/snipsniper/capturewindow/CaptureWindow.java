@@ -212,7 +212,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 		if(config.getBool(ConfigHelper.PROFILE.saveToDisk) || saveOverride) {
 			if(!enforceOverride || saveOverride) {
-				finalLocation = ImageUtils.saveImage(finalImg, "", config);
+				finalLocation = ImageUtils.saveImage(finalImg, config.getString(ConfigHelper.PROFILE.saveFormat), "", config);
 				if (finalLocation != null) {
 					String folder = finalLocation.replace(new File(finalLocation).getName(), "");
 					config.set(ConfigHelper.PROFILE.lastSaveFolder, folder);
