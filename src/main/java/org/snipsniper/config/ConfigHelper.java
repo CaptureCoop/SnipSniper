@@ -14,6 +14,7 @@ public enum PROFILE {
 title, 
 hotkey, 
 tintColor, 
+saveFormat, 
 pictureFolder, 
 saveToDisk, 
 borderSize, 
