@@ -345,10 +345,10 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				final int thickness = 1;
 				Rectangle rec = Utils.fixRectangle(selectArea);
 				allBounds.addRectangle(new Rectangle(rec.x - thickness, rec.y - thickness, rec.width + thickness * 2, rec.height + thickness * 2));
-				drawDashedLine(globalBuffer, startPoint.x - thickness, startPoint.y - thickness, cPoint.x, startPoint.y - thickness, thickness);
-				drawDashedLine(globalBuffer, startPoint.x - thickness, startPoint.y, startPoint.x - thickness, cPoint.y, thickness);
-				drawDashedLine(globalBuffer, cPoint.x, startPoint.y, cPoint.x, cPoint.y, thickness);
-				drawDashedLine(globalBuffer, startPoint.x, cPoint.y, cPoint.x, cPoint.y, thickness);
+				drawDashedLine(globalBuffer, rec.x - thickness, rec.y - thickness, rec.width, rec.y - thickness, thickness);
+				drawDashedLine(globalBuffer, rec.x - thickness, rec.y, rec.x - thickness, rec.height, thickness);
+				drawDashedLine(globalBuffer, rec.width, rec.y, rec.width, rec.height, thickness);
+				drawDashedLine(globalBuffer, rec.x, rec.height, rec.width, rec.height, thickness);
 			}
 
 			if(cPointLive != null && config.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
