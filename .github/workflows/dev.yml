@@ -38,6 +38,7 @@ jobs:
         java -jar build/libs/SnipSniper.jar -version >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
     - name: Upload to website
+      continue-on-error: true
       uses: fjogeleit/http-request-action@master
       with:
         url: https://snipsniper.org/upload.php
