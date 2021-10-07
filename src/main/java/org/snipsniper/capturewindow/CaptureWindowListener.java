@@ -2,6 +2,7 @@ package org.snipsniper.capturewindow;
 
 import org.snipsniper.config.ConfigHelper;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -91,7 +92,10 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 				cPoint.y = rect.height + rect.y;
 			}
 
-			cPointTotal = MouseInfo.getPointerInfo().getLocation();
+			cPointTotal = new Point(cPoint);
+			SwingUtilities.convertPointToScreen(cPointTotal, wndInstance);
+			startPointTotal = new Point(startPoint);
+			SwingUtilities.convertPointToScreen(startPointTotal, wndInstance);
 			stoppedCapture = true;
 
 			if(!wndInstance.isAfterDragEnabled())
