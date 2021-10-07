@@ -13,6 +13,7 @@ colorChooserType,
 public enum PROFILE { 
 title, 
 hotkey, 
+tintColor, 
 pictureFolder, 
 saveToDisk, 
 borderSize, 

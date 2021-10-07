@@ -139,7 +139,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		}
 		screenshotTinted = ImageUtils.copyImage(screenshot);
 		Graphics g2 = screenshotTinted.getGraphics();
-		g2.setColor(new Color(100,100,100,100));
+		g2.setColor(config.getColor(ConfigHelper.PROFILE.tintColor).getPrimaryColor());
 		g2.fillRect(0, 0, screenshotTinted.getTileWidth(), screenshotTinted.getHeight());
 	    g2.dispose();
 	}
