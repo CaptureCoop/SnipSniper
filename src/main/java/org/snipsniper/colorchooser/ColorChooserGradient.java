@@ -15,6 +15,7 @@ public class ColorChooserGradient extends JPanel {
     private int lastStartX;
     private int lastStartY;
     private int lastSize;
+    private final BufferedImage previewBackground;
 
     private Rectangle point1Rect;
     private Rectangle point2Rect;
@@ -24,9 +25,10 @@ public class ColorChooserGradient extends JPanel {
 
     BufferedImage previewBuffer;
 
-    public ColorChooserGradient(ColorChooser colorChooser) {
+    public ColorChooserGradient(ColorChooser colorChooser, BufferedImage previewBackground) {
         color = colorChooser.getColor();
         color.addChangeListener(e -> repaint());
+        this.previewBackground = previewBackground;
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -85,6 +87,8 @@ public class ColorChooserGradient extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        if(previewBackground != null)
+            g.drawImage(previewBackground.getSubimage(0, 0, getHeight(), getHeight()), getWidth() / 2 - getHeight()/2, 0, getHeight(), getHeight(), null);
         if(color != null) {
             Graphics2D g2d = (Graphics2D) g;
 

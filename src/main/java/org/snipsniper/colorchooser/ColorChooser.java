@@ -9,6 +9,7 @@ import org.snipsniper.utils.*;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -17,6 +18,8 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class ColorChooser extends JFrame implements IClosable {
     private final ColorChooser instance;
@@ -27,7 +30,7 @@ public class ColorChooser extends JFrame implements IClosable {
     private final Config config;
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
 
-	public ColorChooser(Config config, String title, SSColor color, String configKey, int x, int y, boolean useGradient) {
+	public ColorChooser(Config config, String title, SSColor color, String configKey, int x, int y, boolean useGradient, BufferedImage previewBackground) {
         instance = this;
         this.config = config;
         colorToChange = color;
@@ -44,7 +47,7 @@ public class ColorChooser extends JFrame implements IClosable {
 
         setTitle(title);
         setIconImage(ImageManager.getImage("icons/snipsniper.png"));
-		init(x, y, useGradient);
+		init(x, y, useGradient, previewBackground);
 	}
 	
 	public void close(boolean doSave) {
@@ -65,7 +68,7 @@ public class ColorChooser extends JFrame implements IClosable {
         close(true);
     }
 	
-	void init(int x, int y, boolean useGradient) {
+	void init(int x, int y, boolean useGradient, BufferedImage previewBackground) {
 		jcc = new JColorChooser();
 		jcc.setColor(color.getPrimaryColor());
         AbstractColorChooserPanel[] panels = jcc.getChooserPanels();
@@ -88,12 +91,7 @@ public class ColorChooser extends JFrame implements IClosable {
         
         colorPanel.add(jcc);
 
-        ColorChooserPreviewPanel gradientPanel = null;
-        if(useGradient)
-            gradientPanel = new ColorChooserPreviewPanel(this);
-
-        if(gradientPanel != null)
-            mainPanel.add(gradientPanel);
+        mainPanel.add(new ColorChooserPreviewPanel(this, useGradient, previewBackground));
         mainPanel.add(colorPanel);
         mainPanel.add(submitButtonPanel);
         
