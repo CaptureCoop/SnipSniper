@@ -545,4 +545,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	public Config getConfig() {
 		return config;
 	}
+
+	public Rectangle getBounds() {
+		return bounds;
+	}
 }

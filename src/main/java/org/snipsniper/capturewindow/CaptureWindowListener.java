@@ -98,6 +98,15 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 			SwingUtilities.convertPointToScreen(startPointTotal, wndInstance);
 			stoppedCapture = true;
 
+			if(startPoint.x < 0)
+				startPoint.x = 0;
+			if(startPoint.y < 0)
+				startPoint.y = 0;
+			if(cPoint.x > wndInstance.getBounds().width)
+				cPoint.x = wndInstance.getBounds().width;
+			if(cPoint.y > wndInstance.getBounds().height)
+				cPoint.y = wndInstance.getBounds().height;
+
 			if(!wndInstance.isAfterDragEnabled())
 				wndInstance.capture(false, false, false, false);
 		}
