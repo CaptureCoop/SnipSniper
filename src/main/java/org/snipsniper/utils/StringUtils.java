@@ -1,5 +1,6 @@
 package org.snipsniper.utils;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.time.LocalDate;
@@ -32,6 +33,10 @@ public class StringUtils {
         returnVal = returnVal.replaceAll("%minute%", getDateWithProperZero(now.getMinute()));
         returnVal = returnVal.replaceAll("%second%", getDateWithProperZero(now.getSecond()));
         return returnVal;
+    }
+
+    public static String getRandomString(int length, boolean useLetters, boolean useNumbers) {
+        return RandomStringUtils.random(length, useLetters, useNumbers);
     }
 
     public static String formatDateArguments(String string) {

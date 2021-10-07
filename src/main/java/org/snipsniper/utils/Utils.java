@@ -192,6 +192,7 @@ public class Utils {
 
 	public static String constructFilename(String format, String modifier) {
 		String filename = StringUtils.formatTimeArguments(StringUtils.formatDateArguments(format));
+		filename = filename.replaceAll("%random%", StringUtils.getRandomString(10, true, true));
 		filename += modifier + ".png";
 		return filename;
 	}
