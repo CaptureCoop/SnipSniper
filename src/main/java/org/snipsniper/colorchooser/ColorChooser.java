@@ -17,6 +17,8 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class ColorChooser extends JFrame implements IClosable {
     private final ColorChooser instance;
@@ -89,8 +91,12 @@ public class ColorChooser extends JFrame implements IClosable {
         colorPanel.add(jcc);
 
         ColorChooserPreviewPanel gradientPanel = null;
-        if(useGradient)
+        if(useGradient) {
+            //If we use gradients we add the changelistener there, maybe make this better
             gradientPanel = new ColorChooserPreviewPanel(this);
+        } else {
+            jcc.getSelectionModel().addChangeListener(e -> color.setPrimaryColor(jcc.getColor()));
+        }
 
         if(gradientPanel != null)
             mainPanel.add(gradientPanel);
