@@ -280,7 +280,7 @@ public class GeneralTab extends JPanel implements ITab{
                     }
                 } else {
                     cleanDirtyFunction[0].run(ConfigSaveButtonState.YES_SAVE);
-                    config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationFinal);
+                    config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationRaw);
                 }
             }
         });
