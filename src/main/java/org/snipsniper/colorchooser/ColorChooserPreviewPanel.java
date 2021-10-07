@@ -8,14 +8,15 @@ public class ColorChooserPreviewPanel extends JPanel {
     ColorChooserGradient panelGradient;
     JTabbedPane tabPane;
 
-    public ColorChooserPreviewPanel(ColorChooser colorChooser) {
+    public ColorChooserPreviewPanel(ColorChooser colorChooser, boolean useGradient) {
         setPreferredSize(new Dimension(0, 256));
         setLayout(new GridLayout());
         tabPane = new JTabbedPane(JTabbedPane.TOP);
 
         panelSingle = new ColorChooserSingle(colorChooser);
 
-        panelGradient = new ColorChooserGradient(colorChooser);
+        if(useGradient)
+            panelGradient = new ColorChooserGradient(colorChooser);
 
         colorChooser.getJcc().getSelectionModel().addChangeListener(e -> {
             if(tabPane.getSelectedIndex() == 0)
@@ -25,9 +26,10 @@ public class ColorChooserPreviewPanel extends JPanel {
         });
 
         tabPane.addTab("Single color", panelSingle);
-        tabPane.addTab("Gradient",  panelGradient);
+        if(useGradient)
+            tabPane.addTab("Gradient",  panelGradient);
 
-        if(colorChooser.getColor().isGradient())
+        if(colorChooser.getColor().isGradient() && useGradient)
             tabPane.setSelectedIndex(1);
 
         tabPane.addChangeListener(e -> {

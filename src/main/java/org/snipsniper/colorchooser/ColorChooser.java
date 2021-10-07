@@ -90,16 +90,7 @@ public class ColorChooser extends JFrame implements IClosable {
         
         colorPanel.add(jcc);
 
-        ColorChooserPreviewPanel gradientPanel = null;
-        if(useGradient) {
-            //If we use gradients we add the changelistener there, maybe make this better
-            gradientPanel = new ColorChooserPreviewPanel(this);
-        } else {
-            jcc.getSelectionModel().addChangeListener(e -> color.setPrimaryColor(jcc.getColor()));
-        }
-
-        if(gradientPanel != null)
-            mainPanel.add(gradientPanel);
+        mainPanel.add(new ColorChooserPreviewPanel(this, useGradient));
         mainPanel.add(colorPanel);
         mainPanel.add(submitButtonPanel);
         
