@@ -2,6 +2,7 @@ package org.snipsniper.configwindow.tabs;
 
 import org.snipsniper.ImageManager;
 import org.snipsniper.LangManager;
+import org.snipsniper.SnipSniper;
 import org.snipsniper.colorchooser.ColorChooser;
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
@@ -18,6 +19,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class GeneralTab extends JPanel implements ITab{
@@ -158,7 +160,7 @@ public class GeneralTab extends JPanel implements ITab{
         options.add(configWindow.createJLabel("Tint color", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         SSColor tintColor = config.getColor(ConfigHelper.PROFILE.tintColor);
-        GradientJButton tintColorButton = new GradientJButton("Tint Color", tintColor);
+        GradientJButton tintColorButton = new GradientJButton("Color", tintColor);
         tintColor.addChangeListener(e -> {
             System.out.println(((SSColor)e.getSource()).toSaveString());
             config.set(ConfigHelper.PROFILE.tintColor, ((SSColor)e.getSource()).toSaveString());
@@ -167,7 +169,10 @@ public class GeneralTab extends JPanel implements ITab{
         tintColorButton.addActionListener(e -> {
             int x = (int)((configWindow.getLocation().getX() + getWidth()/2));
             int y = (int)((configWindow.getLocation().getY() + getHeight()/2));
-            ColorChooser chooser = new ColorChooser(null, "Tint Color", tintColor, null, x, y, false, ImageManager.getImage("preview/code_light.png"));
+            BufferedImage image = ImageManager.getImage("preview/code_light.png");
+            if(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme).equals("dark"))
+                image = ImageManager.getImage("preview/code_dark.png");
+            ColorChooser chooser = new ColorChooser(null, "Tint Color", tintColor, null, x, y, false, image);
             configWindow.addCWindow(chooser);
         });
         options.add(tintColorButton, gbc);
