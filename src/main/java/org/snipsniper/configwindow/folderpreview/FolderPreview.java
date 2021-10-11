@@ -19,7 +19,6 @@ public class FolderPreview extends JFrame implements IClosable {
     private final JLabel explanation = new JLabel("%day% = 1, %month% = 8, %year% = 2021");
 
     private IFunction onSave;
-    private IFunction onClose;
 
     public FolderPreview(String title, String content) {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -82,16 +81,11 @@ public class FolderPreview extends JFrame implements IClosable {
         gbc.fill = GridBagConstraints.VERTICAL;
         saveButton.addActionListener(e -> {
             if(onSave != null) onSave.run();
-            if(onClose != null) onClose.run();
             dispose();
         });
         content.add(saveButton, gbc);
 
         add(content);
-    }
-
-    public void setOnClose(IFunction function) {
-        onClose = function;
     }
 
     public void setOnSave(IFunction function) {
@@ -104,7 +98,6 @@ public class FolderPreview extends JFrame implements IClosable {
 
     @Override
     public void close() {
-        if(onClose != null) onClose.run();
         dispose();
     }
 }
