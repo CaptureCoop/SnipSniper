@@ -10,7 +10,8 @@ import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.configwindow.HotKeyButton;
 import org.snipsniper.configwindow.folderpreview.FolderPreview;
 import org.snipsniper.configwindow.iconwindow.IconWindow;
-import org.snipsniper.configwindow.saveformatpreview.SaveFormatPreview;
+import org.snipsniper.configwindow.saveformatpreview.SaveFormatPreviewRenderer;
+import org.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
 import org.snipsniper.utils.*;
 import org.snipsniper.utils.enums.ConfigSaveButtonState;
 
@@ -248,14 +249,13 @@ public class GeneralTab extends JPanel implements ITab{
         String currentSaveFormat = config.getString(ConfigHelper.PROFILE.saveFormat);
         JButton saveFormatButton = new JButton(Utils.constructFilename(currentSaveFormat, ""));
         saveFormatButton.addActionListener(e -> {
-            SaveFormatPreview saveFormatPreview = new SaveFormatPreview(currentSaveFormat);
+            SaveFormatPreviewRenderer saveFormatRenderer = new SaveFormatPreviewRenderer(512, 256);
+            TextPreviewWindow saveFormatPreview = new TextPreviewWindow("Save format", currentSaveFormat, saveFormatRenderer, ImageManager.getImage("icons/folder.png"), configWindow, "%hour%, %minute%, %second%, %day%, %month%, %year%, %random%");
+            saveFormatRenderer.setTextPreviewWindow(saveFormatPreview);
             saveFormatPreview.setOnSave(args -> {
                 config.set(ConfigHelper.PROFILE.saveFormat, saveFormatPreview.getText());
                 saveFormatButton.setText(saveFormatPreview.getText());
             });
-            int x = (int) (configWindow.getLocation().getX() + configWindow.getWidth() / 2) - saveFormatPreview.getWidth() / 2;
-            int y = (int) (configWindow.getLocation().getY() + configWindow.getHeight() / 2) - saveFormatPreview.getHeight() / 2;
-            saveFormatPreview.setLocation(x, y);
             configWindow.addCWindow(saveFormatPreview);
         });
         options.add(saveFormatButton, gbc);

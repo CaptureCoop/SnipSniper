@@ -19,13 +19,14 @@ public class TextPreviewWindow extends JFrame implements IClosable {
     private JTextField input;
     private final JPanel renderer;
     private final JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-    private final JLabel explanation = new JLabel("%hour%, %minute%, %second%, %day%, %month%, %year%, %random%");
+    private final JLabel explanationLabel = new JLabel("%hour%, %minute%, %second%, %day%, %month%, %year%, %random%");
     private IFunction onSave;
 
-    public TextPreviewWindow(String title, String text, JPanel renderPanel, BufferedImage icon, JFrame parent) {
+    public TextPreviewWindow(String title, String text, JPanel renderPanel, BufferedImage icon, JFrame parent, String explanation) {
         this.text = text;
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle(title);
+        this.explanationLabel.setText(explanation);
         renderer = renderPanel;
         addWindowListener(new WindowAdapter() {
             @Override
@@ -35,7 +36,7 @@ public class TextPreviewWindow extends JFrame implements IClosable {
         });
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
-                Dimension newSize = new Dimension(getRootPane().getWidth(), getContentPane().getHeight() - input.getHeight() - saveButton.getHeight() - explanation.getHeight());
+                Dimension newSize = new Dimension(getRootPane().getWidth(), getContentPane().getHeight() - input.getHeight() - saveButton.getHeight() - explanationLabel.getHeight());
                 renderer.setPreferredSize(newSize);
                 renderer.setMinimumSize(newSize);
                 renderer.revalidate();
@@ -47,6 +48,9 @@ public class TextPreviewWindow extends JFrame implements IClosable {
         setVisible(true);
         requestFocus();
         pack();
+        int x = (int) (parent.getLocation().getX() + parent.getWidth() / 2) - getWidth() / 2;
+        int y = (int) (parent.getLocation().getY() + parent.getHeight() / 2) - getHeight() / 2;
+        setLocation(x, y);
     }
 
     private void setupUI() {
@@ -80,7 +84,7 @@ public class TextPreviewWindow extends JFrame implements IClosable {
         });
         content.add(input, gbc);
         gbc.gridy = 2;
-        content.add(explanation, gbc);
+        content.add(explanationLabel, gbc);
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.VERTICAL;
         saveButton.addActionListener(e -> {
