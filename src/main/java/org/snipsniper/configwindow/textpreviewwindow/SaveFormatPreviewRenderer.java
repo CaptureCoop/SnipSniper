@@ -1,4 +1,4 @@
-package org.snipsniper.configwindow.saveformatpreview;
+package org.snipsniper.configwindow.textpreviewwindow;
 
 import org.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
 import org.snipsniper.utils.DrawUtils;

@@ -1,4 +1,4 @@
-package org.snipsniper.configwindow.folderpreview;
+package org.snipsniper.configwindow.textpreviewwindow;
 
 import org.snipsniper.ImageManager;
 import org.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
