@@ -26,7 +26,7 @@ public class SaveFormatPreviewRenderer extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
         g.setColor(Color.BLACK);
         String text = Utils.constructFilename(saveFormatPreview.getText(), "");
-        DrawUtils.drawCenteredString(g, text, new Rectangle(0, 0, getWidth(), getHeight()), new Font("Arial", Font.BOLD, getHeight()/4));
+        DrawUtils.drawCenteredString(g, text, new Rectangle(0, 0, getWidth(), getHeight()), new Font("Arial", Font.BOLD, DrawUtils.pickOptimalFontSize((Graphics2D) g, text, getWidth() - 30, getHeight())));
     }
 
 }

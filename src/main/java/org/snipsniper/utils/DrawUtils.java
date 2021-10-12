@@ -1,6 +1,7 @@
 package org.snipsniper.utils;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 public class DrawUtils {
     public static void drawRect(Graphics g, Rectangle rect) {
@@ -21,6 +22,25 @@ public class DrawUtils {
     public static void fillRect(Graphics2D g, Rectangle rect) {
         if(rect != null)
             g.fillRect(rect.x, rect.y, rect.width, rect.height);
+    }
+
+    public static int pickOptimalFontSize(Graphics2D g, String title, int width, int height) {
+        Rectangle2D rect;
+
+        int fontSize = height; //initial value
+        do {
+            fontSize--;
+            Font font = new Font("Arial", Font.PLAIN, fontSize);
+            rect = getStringBoundsRectangle2D(g, title, font);
+        } while (rect.getWidth() >= width || rect.getHeight() >= height);
+
+        return fontSize;
+    }
+
+    public static Rectangle2D getStringBoundsRectangle2D(Graphics g, String title, Font font) {
+        g.setFont(font);
+        FontMetrics fm = g.getFontMetrics();
+        return fm.getStringBounds(title, g);
     }
 
     public static void drawCenteredString(Graphics g, String text, Rectangle rect, Font font ) {
