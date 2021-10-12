@@ -21,11 +21,10 @@ public class SaveFormatPreview extends JFrame implements IClosable{
     private JTextField input;
     private final JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
     private final JLabel explanation = new JLabel("%hour%, %minute%, %second%, %day%, %month%, %year%, %random%");
-    private final IFunction onSave;
+    private IFunction onSave;
 
-    public SaveFormatPreview(String text, IFunction onSave) {
+    public SaveFormatPreview(String text) {
         this.text = text;
-        this.onSave = onSave;
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Save format");
         addWindowListener(new WindowAdapter() {
@@ -48,6 +47,10 @@ public class SaveFormatPreview extends JFrame implements IClosable{
         setVisible(true);
         requestFocus();
         pack();
+    }
+
+    public void setOnSave(IFunction function) {
+        onSave = function;
     }
 
     private void setupUI() {
