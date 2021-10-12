@@ -8,7 +8,7 @@ import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.configwindow.HotKeyButton;
-import org.snipsniper.configwindow.folderpreview.FolderPreview;
+import org.snipsniper.configwindow.folderpreview.FolderPreviewRenderer;
 import org.snipsniper.configwindow.iconwindow.IconWindow;
 import org.snipsniper.configwindow.saveformatpreview.SaveFormatPreviewRenderer;
 import org.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
@@ -315,11 +315,10 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 1;
         JButton customSaveButton = new JButton(StringUtils.formatDateArguments(config.getString(ConfigHelper.PROFILE.saveFolderCustom)));
         customSaveButton.addActionListener(e -> {
-            FolderPreview preview = new FolderPreview("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom));
+            FolderPreviewRenderer renderer = new FolderPreviewRenderer(512, 512);
+            TextPreviewWindow preview = new TextPreviewWindow("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom), renderer, ImageManager.getImage("icons/folder.png"), configWindow, "%day% = 1, %month% = 8, %year% = 2021");
             configWindow.addCWindow(preview);
-            int x = (int) (configWindow.getLocation().getX() + configWindow.getWidth() / 2) - preview.getWidth() / 2;
-            int y = (int) (configWindow.getLocation().getY() + configWindow.getHeight() / 2) - preview.getHeight() / 2;
-            preview.setLocation(x, y);
+            renderer.setTextPreviewWindow(preview);
             preview.setOnSave(args -> {
                 String text = preview.getText();
                 if(text.isEmpty())
@@ -515,6 +514,7 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 2;
         options.add(new InfoButton(null), gbc);
         //END AFTERDRAG DEADZONE
+
         //START DOTTED LINE
         gbc.gridx = 0;
         options.add(configWindow.createJLabel("Enable dotted outline", JLabel.RIGHT, JLabel.CENTER), gbc);

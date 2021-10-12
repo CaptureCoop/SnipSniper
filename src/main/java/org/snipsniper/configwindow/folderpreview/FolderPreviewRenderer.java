@@ -1,6 +1,7 @@
 package org.snipsniper.configwindow.folderpreview;
 
 import org.snipsniper.ImageManager;
+import org.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
 import org.snipsniper.utils.StringUtils;
 
 import javax.swing.*;
@@ -9,23 +10,22 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class FolderPreviewRenderer extends JPanel {
-    private final FolderPreview folderPreview;
+    private TextPreviewWindow textPreviewWindow;
     private final BufferedImage folderIcon = ImageManager.getImage("icons/folder.png");
 
-    public FolderPreviewRenderer(FolderPreview folderPreview, int minWidth, int minHeight) {
-        this.folderPreview = folderPreview;
+    public FolderPreviewRenderer(int minWidth, int minHeight) {
         Dimension min = new Dimension(minWidth, minHeight);
         setPreferredSize(min);
         setMinimumSize(min);
     }
 
-    public void refresh() {
-        repaint();
+    public void setTextPreviewWindow(TextPreviewWindow textPreviewWindow) {
+        this.textPreviewWindow = textPreviewWindow;
     }
 
     @Override
     public void paint(Graphics g) {
-        String content = folderPreview.getText().replaceAll("\\\\", "/");
+        String content = textPreviewWindow.getText().replaceAll("\\\\", "/");
         content = StringUtils.formatDateArguments(content);
         String[] parts = content.split("/");
         ArrayList<String> partsFinal = new ArrayList<>();
