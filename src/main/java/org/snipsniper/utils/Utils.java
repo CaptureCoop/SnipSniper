@@ -190,9 +190,9 @@ public class Utils {
 		return languageDropdown;
 	}
 
-	public static String constructFilename(String modifier) {
-		LocalDateTime now = LocalDateTime.now();
-		String filename = now.toString().replace(".", "_").replace(":", "_");
+	public static String constructFilename(String format, String modifier) {
+		String filename = StringUtils.formatTimeArguments(StringUtils.formatDateArguments(format));
+		filename = filename.replaceAll("%random%", StringUtils.getRandomString(10, true, true));
 		filename += modifier + ".png";
 		return filename;
 	}

@@ -1,8 +1,10 @@
 package org.snipsniper.utils;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class StringUtils {
     public static String removeWhitespace(String string) {
@@ -24,11 +26,24 @@ public class StringUtils {
         return dateString;
     }
 
+    public static String formatTimeArguments(String string) {
+        String returnVal = string;
+        LocalDateTime now = LocalDateTime.now();
+        returnVal = returnVal.replaceAll("%hour%", getDateWithProperZero(now.getHour()));
+        returnVal = returnVal.replaceAll("%minute%", getDateWithProperZero(now.getMinute()));
+        returnVal = returnVal.replaceAll("%second%", getDateWithProperZero(now.getSecond()));
+        return returnVal;
+    }
+
+    public static String getRandomString(int length, boolean useLetters, boolean useNumbers) {
+        return RandomStringUtils.random(length, useLetters, useNumbers);
+    }
+
     public static String formatDateArguments(String string) {
         String returnVal = string;
         LocalDate currentDate = LocalDate.now();
-        returnVal = returnVal.replaceAll("%day%", String.valueOf(currentDate.getDayOfMonth()));
-        returnVal = returnVal.replaceAll("%month%", String.valueOf(currentDate.getMonthValue()));
+        returnVal = returnVal.replaceAll("%day%", getDateWithProperZero(currentDate.getDayOfMonth()));
+        returnVal = returnVal.replaceAll("%month%", getDateWithProperZero(currentDate.getMonthValue()));
         returnVal = returnVal.replaceAll("%year%", String.valueOf(currentDate.getYear()));
         return returnVal;
     }

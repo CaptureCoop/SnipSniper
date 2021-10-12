@@ -1,35 +1,38 @@
-package org.snipsniper.configwindow.folderpreview;
+package org.snipsniper.configwindow.saveformatpreview;
 
-import org.snipsniper.LangManager;
-import org.snipsniper.utils.IFunction;
-import org.snipsniper.utils.IClosable;
 import org.snipsniper.ImageManager;
+import org.snipsniper.LangManager;
+import org.snipsniper.configwindow.folderpreview.FolderPreviewRenderer;
+import org.snipsniper.utils.IClosable;
+import org.snipsniper.utils.IFunction;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-public class FolderPreview extends JFrame implements IClosable {
+public class SaveFormatPreview extends JFrame implements IClosable{
     private String text;
-    private FolderPreviewRenderer renderer;
+    private SaveFormatPreviewRenderer renderer;
     private JTextField input;
     private final JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
-    private final JLabel explanation = new JLabel("%day% = 1, %month% = 8, %year% = 2021");
-
+    private final JLabel explanation = new JLabel("%hour%, %minute%, %second%, %day%, %month%, %year%, %random%");
     private IFunction onSave;
 
-    public FolderPreview(String title, String content) {
+    public SaveFormatPreview(String text) {
+        this.text = text;
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setTitle(title);
-        this.addWindowListener(new WindowAdapter() {
+        setTitle("Save format");
+        addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent windowEvent) {
+            public void windowClosing(WindowEvent e) {
                 close();
             }
         });
-        text = content;
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
                 Dimension newSize = new Dimension(getRootPane().getWidth(), getContentPane().getHeight() - input.getHeight() - saveButton.getHeight() - explanation.getHeight());
@@ -46,12 +49,16 @@ public class FolderPreview extends JFrame implements IClosable {
         pack();
     }
 
+    public void setOnSave(IFunction function) {
+        onSave = function;
+    }
+
     private void setupUI() {
         JPanel content = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridy = 0;
-        renderer = new FolderPreviewRenderer(this, 512, 256);
+        renderer = new SaveFormatPreviewRenderer(this, 512, 256);
         content.add(renderer, gbc);
         gbc.gridy = 1;
         input = new JTextField(text);
@@ -86,10 +93,6 @@ public class FolderPreview extends JFrame implements IClosable {
         content.add(saveButton, gbc);
 
         add(content);
-    }
-
-    public void setOnSave(IFunction function) {
-        onSave = function;
     }
 
     public String getText() {

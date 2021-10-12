@@ -14,8 +14,9 @@ public class FolderPreviewRenderer extends JPanel {
 
     public FolderPreviewRenderer(FolderPreview folderPreview, int minWidth, int minHeight) {
         this.folderPreview = folderPreview;
-        setPreferredSize(new Dimension(minWidth, minHeight));
-        setMinimumSize(new Dimension(minWidth, minHeight));
+        Dimension min = new Dimension(minWidth, minHeight);
+        setPreferredSize(min);
+        setMinimumSize(min);
     }
 
     public void refresh() {

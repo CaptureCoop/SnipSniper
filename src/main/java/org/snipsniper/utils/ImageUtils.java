@@ -30,9 +30,9 @@ public class ImageUtils {
         return getIconDynamically(config.getString(ConfigHelper.PROFILE.icon));
     }
 
-    public static String saveImage(BufferedImage finalImg, String modifier, Config config) {
+    public static String saveImage(BufferedImage finalImg, String format, String modifier, Config config) {
         File file;
-        String filename = Utils.constructFilename(modifier);
+        String filename = Utils.constructFilename(format, modifier);
         String savePath = config.getString(ConfigHelper.PROFILE.pictureFolder);
         String pathCustom = config.getString(ConfigHelper.PROFILE.saveFolderCustom);
         if(!pathCustom.startsWith("/"))

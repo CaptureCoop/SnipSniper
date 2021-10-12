@@ -1,5 +1,7 @@
 package org.snipsniper.secrets.games;
 
+import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.utils.DrawUtils;
 import org.snipsniper.utils.ImageUtils;
 
 import javax.swing.*;
@@ -18,7 +20,7 @@ public class BGamePanel extends JPanel {
         Graphics g = screenshot.createGraphics();
         render(g, true);
         g.dispose();
-        ImageUtils.saveImage(screenshot, "_bgame", game.getSniper().getConfig());
+        ImageUtils.saveImage(screenshot, game.getSniper().getConfig().getString(ConfigHelper.PROFILE.saveFormat), "_bgame", game.getSniper().getConfig());
     }
 
     public void render(Graphics g, boolean isScreenshot) {
@@ -81,14 +83,14 @@ public class BGamePanel extends JPanel {
             g.setColor(new Color(0,0,0,100));
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.WHITE);
-            drawCenteredString(g, "GAME OVER", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
+            DrawUtils.drawCenteredString(g, "GAME OVER", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
         }
 
         if(game.isPaused() && !isScreenshot) {
             g.setColor(new Color(0,0,0,100));
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.WHITE);
-            drawCenteredString(g, "PAUSED", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
+            DrawUtils.drawCenteredString(g, "PAUSED", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
         }
     }
 
@@ -101,7 +103,7 @@ public class BGamePanel extends JPanel {
     public int drawScoreText(Graphics g, int offsetX, int ts, int index, String text) {
         int height = getHeight() / 20;
         Rectangle rect = new Rectangle(offsetX + game.BOARD_WIDTH * ts, height * index, getWidth() - (offsetX + game.BOARD_WIDTH * ts), height);
-        drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, height));
+        DrawUtils.drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, height));
         return rect.y + rect.height;
     }
 
@@ -109,14 +111,6 @@ public class BGamePanel extends JPanel {
         float height = getHeight() / 20F;
         height *= fontMultiplier;
         Rectangle rect = new Rectangle(0, (int)height * index, offsetX, (int)height);
-        drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, (int)height));
-    }
-
-    public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font ) {
-        FontMetrics metrics = g.getFontMetrics(font);
-        int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
-        int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
-        g.setFont(font);
-        g.drawString(text, x, y);
+        DrawUtils.drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, (int)height));
     }
 }

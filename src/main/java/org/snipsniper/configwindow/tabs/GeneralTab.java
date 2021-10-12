@@ -10,13 +10,11 @@ import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.configwindow.HotKeyButton;
 import org.snipsniper.configwindow.folderpreview.FolderPreview;
 import org.snipsniper.configwindow.iconwindow.IconWindow;
-import org.snipsniper.sceditor.stamps.StampUtils;
+import org.snipsniper.configwindow.saveformatpreview.SaveFormatPreview;
 import org.snipsniper.utils.*;
 import org.snipsniper.utils.enums.ConfigSaveButtonState;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -243,6 +241,28 @@ public class GeneralTab extends JPanel implements ITab{
         options.add(new InfoButton(WikiManager.getContent("config/general/bordersize.json")), gbc);
         //END BORDERSIZE
 
+        //START SAVEFORMAT
+        gbc.gridx = 0;
+        options.add(configWindow.createJLabel("Save format", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        String currentSaveFormat = config.getString(ConfigHelper.PROFILE.saveFormat);
+        JButton saveFormatButton = new JButton(Utils.constructFilename(currentSaveFormat, ""));
+        saveFormatButton.addActionListener(e -> {
+            SaveFormatPreview saveFormatPreview = new SaveFormatPreview(currentSaveFormat);
+            saveFormatPreview.setOnSave(args -> {
+                config.set(ConfigHelper.PROFILE.saveFormat, saveFormatPreview.getText());
+                saveFormatButton.setText(saveFormatPreview.getText());
+            });
+            int x = (int) (configWindow.getLocation().getX() + configWindow.getWidth() / 2) - saveFormatPreview.getWidth() / 2;
+            int y = (int) (configWindow.getLocation().getY() + configWindow.getHeight() / 2) - saveFormatPreview.getHeight() / 2;
+            saveFormatPreview.setLocation(x, y);
+            configWindow.addCWindow(saveFormatPreview);
+        });
+        options.add(saveFormatButton, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
+        //END SAVEFORMAT
+
         //BEGIN LOCATION
         gbc.gridx = 0;
         options.add(configWindow.createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER), gbc);
@@ -297,8 +317,8 @@ public class GeneralTab extends JPanel implements ITab{
         customSaveButton.addActionListener(e -> {
             FolderPreview preview = new FolderPreview("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom));
             configWindow.addCWindow(preview);
-            int x = (int) (getLocation().getX() + getWidth() / 2) - preview.getWidth() / 2;
-            int y = (int) (getLocation().getY() + getHeight() / 2) - preview.getHeight() / 2;
+            int x = (int) (configWindow.getLocation().getX() + configWindow.getWidth() / 2) - preview.getWidth() / 2;
+            int y = (int) (configWindow.getLocation().getY() + configWindow.getHeight() / 2) - preview.getHeight() / 2;
             preview.setLocation(x, y);
             preview.setOnSave(args -> {
                 String text = preview.getText();
