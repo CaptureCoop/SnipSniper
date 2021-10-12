@@ -1,4 +1,4 @@
-package org.snipsniper.configwindow.saveformatpreview;
+package org.snipsniper.configwindow.textpreviewwindow;
 
 import org.snipsniper.utils.DrawUtils;
 import org.snipsniper.utils.Utils;
@@ -7,17 +7,18 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SaveFormatPreviewRenderer extends JPanel {
-    private final SaveFormatPreview saveFormatPreview;
+    private TextPreviewWindow textPreviewWindow;
 
-    public SaveFormatPreviewRenderer(SaveFormatPreview saveFormatPreview, int minWidth, int minHeight) {
-        this.saveFormatPreview = saveFormatPreview;
+    public static String DEFAULT_FORMAT = "%year%-%month%-%day%__%hour%_%minute%_%second%";
+
+    public SaveFormatPreviewRenderer(int minWidth, int minHeight) {
         Dimension min = new Dimension(minWidth, minHeight);
         setPreferredSize(min);
         setMinimumSize(min);
     }
 
-    public void refresh() {
-        repaint();
+    public void setTextPreviewWindow(TextPreviewWindow window) {
+        textPreviewWindow = window;
     }
 
     @Override
@@ -25,7 +26,10 @@ public class SaveFormatPreviewRenderer extends JPanel {
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(0, 0, getWidth(), getHeight());
         g.setColor(Color.BLACK);
-        String text = Utils.constructFilename(saveFormatPreview.getText(), "");
+        String raw = textPreviewWindow.getText();
+        if(raw.isEmpty())
+            raw = DEFAULT_FORMAT;
+        String text = Utils.constructFilename(raw, "");
         int margin = 100;
         DrawUtils.drawCenteredString(g, text, new Rectangle(0, 0, getWidth(), getHeight()), new Font("Arial", Font.BOLD, DrawUtils.pickOptimalFontSize((Graphics2D) g, text, getWidth() - margin, getHeight())));
     }
