@@ -1,6 +1,5 @@
 package org.snipsniper.configwindow.textpreviewwindow;
 
-import org.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
 import org.snipsniper.utils.DrawUtils;
 import org.snipsniper.utils.Utils;
 
@@ -9,6 +8,8 @@ import java.awt.*;
 
 public class SaveFormatPreviewRenderer extends JPanel {
     private TextPreviewWindow textPreviewWindow;
+
+    public static String DEFAULT_FORMAT = "%year%-%month%-%day%__%hour%_%minute%_%second%";
 
     public SaveFormatPreviewRenderer(int minWidth, int minHeight) {
         Dimension min = new Dimension(minWidth, minHeight);
@@ -25,7 +26,10 @@ public class SaveFormatPreviewRenderer extends JPanel {
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(0, 0, getWidth(), getHeight());
         g.setColor(Color.BLACK);
-        String text = Utils.constructFilename(textPreviewWindow.getText(), "");
+        String raw = textPreviewWindow.getText();
+        if(raw.isEmpty())
+            raw = DEFAULT_FORMAT;
+        String text = Utils.constructFilename(raw, "");
         int margin = 100;
         DrawUtils.drawCenteredString(g, text, new Rectangle(0, 0, getWidth(), getHeight()), new Font("Arial", Font.BOLD, DrawUtils.pickOptimalFontSize((Graphics2D) g, text, getWidth() - margin, getHeight())));
     }

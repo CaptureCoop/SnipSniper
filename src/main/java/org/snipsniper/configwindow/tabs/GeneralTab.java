@@ -250,11 +250,15 @@ public class GeneralTab extends JPanel implements ITab{
         JButton saveFormatButton = new JButton(Utils.constructFilename(currentSaveFormat, ""));
         saveFormatButton.addActionListener(e -> {
             SaveFormatPreviewRenderer saveFormatRenderer = new SaveFormatPreviewRenderer(512, 256);
-            TextPreviewWindow saveFormatPreview = new TextPreviewWindow("Save format", currentSaveFormat, saveFormatRenderer, ImageManager.getImage("icons/folder.png"), configWindow, "%hour%, %minute%, %second%, %day%, %month%, %year%, %random%");
+            TextPreviewWindow saveFormatPreview = new TextPreviewWindow("Save format", config.getString(ConfigHelper.PROFILE.saveFormat), saveFormatRenderer, ImageManager.getImage("icons/folder.png"), configWindow, "%hour%, %minute%, %second%, %day%, %month%, %year%, %random%");
             saveFormatRenderer.setTextPreviewWindow(saveFormatPreview);
             saveFormatPreview.setOnSave(args -> {
-                config.set(ConfigHelper.PROFILE.saveFormat, saveFormatPreview.getText());
-                saveFormatButton.setText(saveFormatPreview.getText());
+                String text = saveFormatPreview.getText();
+                if(text.isEmpty()) {
+                    text = SaveFormatPreviewRenderer.DEFAULT_FORMAT;
+                }
+                config.set(ConfigHelper.PROFILE.saveFormat, text);
+                saveFormatButton.setText(Utils.constructFilename(text, ""));
             });
             configWindow.addCWindow(saveFormatPreview);
         });
