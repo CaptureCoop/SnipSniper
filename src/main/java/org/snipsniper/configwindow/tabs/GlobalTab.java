@@ -185,7 +185,7 @@ public class GlobalTab extends JPanel implements ITab{
         gbc.gridx = 1;
         options.add(debugCheckBox, gbc);
 
-
+        IFunction[] autostart = {null};
         if(SystemUtils.IS_OS_WINDOWS && SnipSniper.getVersion().getPlatformType() == PlatformType.JAR) {
             gbc.gridx = 0;
             options.add(configWindow.createJLabel("Start with Windows", JLabel.RIGHT, JLabel.CENTER), gbc);
@@ -202,12 +202,14 @@ public class GlobalTab extends JPanel implements ITab{
 
             autostartCheckbox.addActionListener(e -> {
                 if(autostartCheckbox.isSelected()) {
-                    FileUtils.mkdirs(startup);
-                    FileUtils.copyFromJar("org/snipsniper/resources/batch/" + batchMain, SnipSniper.getJarFolder() + "/" + batchMain);
-                    FileUtils.copyFromJar("org/snipsniper/resources/img/icons/" + icoMain.toLowerCase(), SnipSniper.getJarFolder() + "/" + icoMain);
-                    ShellLinkUtils.createShellLink(startup + linkMain, SnipSniper.getJarFolder() + batchMain, SnipSniper.getJarFolder() + "/" + icoMain);
+                    autostart[0] = args -> {
+                        FileUtils.mkdirs(startup);
+                        FileUtils.copyFromJar("org/snipsniper/resources/batch/" + batchMain, SnipSniper.getJarFolder() + "/" + batchMain);
+                        FileUtils.copyFromJar("org/snipsniper/resources/img/icons/" + icoMain.toLowerCase(), SnipSniper.getJarFolder() + "/" + icoMain);
+                        ShellLinkUtils.createShellLink(startup + linkMain, SnipSniper.getJarFolder() + batchMain, SnipSniper.getJarFolder() + "/" + icoMain);
+                    };
                 } else {
-                    FileUtils.deleteRecursively(startup + linkMain);
+                    autostart[0] = args -> FileUtils.deleteRecursively(startup + linkMain);
                 }
             });
 
@@ -218,7 +220,7 @@ public class GlobalTab extends JPanel implements ITab{
             boolean restartConfig = !config.getString(ConfigHelper.MAIN.language).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.language));
             boolean didThemeChange = !config.getString(ConfigHelper.MAIN.theme).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme));
 
-            globalSave(config);
+            globalSave(config, autostart[0]);
 
             if(restartConfig || didThemeChange) {
                 new ConfigWindow(configWindow.getLastSelectedConfig(), ConfigWindow.PAGE.globalPanel);
@@ -247,10 +249,13 @@ public class GlobalTab extends JPanel implements ITab{
         return isDirty;
     }
 
-    private void globalSave(Config config) {
+    private void globalSave(Config config, IFunction autostart) {
         boolean doRestartProfiles = !config.getString(ConfigHelper.MAIN.language).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.language));
         boolean didThemeChange = !config.getString(ConfigHelper.MAIN.theme).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme));
         boolean didDebugChange = config.getBool(ConfigHelper.MAIN.debug) != SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug);
+
+        if(autostart != null)
+            autostart.run();
 
         if(didDebugChange && config.getBool(ConfigHelper.MAIN.debug)) {
             SnipSniper.openDebugConsole();
