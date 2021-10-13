@@ -115,13 +115,12 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	public void specialRepaint() {
 		if(selectArea != null) {
 			final Rectangle rect = selectArea;
-			
-			int x = Math.min( rect.x, rect.width);
-			int y = Math.min( rect.y, rect.height);
+			int x = Math.min(rect.x, rect.width);
+			int y = Math.min(rect.y, rect.height);
 			int width = Math.max(rect.x, rect.width);
 			int height = Math.max(rect.y, rect.height);
 
-			repaint(x,y,width,height);
+			repaint(x, y, width, height);
 		} else {
 			repaint();
 		}
@@ -130,9 +129,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	public synchronized void screenshot() {
 		bounds = getTotalBounds();
-		Rectangle screenshotRect = new Rectangle((int)bounds.getX(),(int)bounds.getY(), bounds.width, bounds.height);
 		try {
-			screenshot = new Robot().createScreenCapture(screenshotRect);
+			screenshot = new Robot().createScreenCapture(new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height));
 		} catch (AWTException e) {
 			LogManager.log("Couldn't take screenshot. Message: " + e.getMessage(), LogLevel.ERROR);
 			e.printStackTrace();
@@ -140,12 +138,12 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		screenshotTinted = ImageUtils.copyImage(screenshot);
 		Graphics g2 = screenshotTinted.getGraphics();
 		g2.setColor(config.getColor(ConfigHelper.PROFILE.tintColor).getPrimaryColor());
-		g2.fillRect(0, 0, screenshotTinted.getTileWidth(), screenshotTinted.getHeight());
+		g2.fillRect(0, 0, screenshotTinted.getWidth(), screenshotTinted.getHeight());
 	    g2.dispose();
 	}
 	
 	public void setSize() {
-		setLocation((int)bounds.getX(),(int)bounds.getY());
+		setLocation(bounds.x, bounds.y);
 		setSize(bounds.width, bounds.height);
 		requestFocus();
 		setAlwaysOnTop(true);
@@ -233,15 +231,15 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				Point startPointTotal = listener.getStartPoint(PointType.TOTAL);
 				Point cPointTotal = listener.getCurrentPoint(PointType.TOTAL);
 
-				int posX = (int) cPointTotal.getX();
-				int posY = (int) cPointTotal.getY();
+				int posX = cPointTotal.x;
+				int posY = cPointTotal.y;
 				boolean leftToRight = false;
 
-				if (!(startPointTotal.getX() > cPointTotal.getX())) {
+				if (!(startPointTotal.x > cPointTotal.x)) {
 					posX -= finalImg.getWidth();
 					leftToRight = true;
 				}
-				if (!(startPointTotal.getY() > cPointTotal.getY())) {
+				if (!(startPointTotal.y > cPointTotal.y)) {
 					posY -= finalImg.getHeight();
 					leftToRight = true;
 				}
