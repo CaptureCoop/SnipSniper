@@ -40,6 +40,8 @@ public class BGame extends JFrame {
     private boolean gameOver = false;
     private final Sniper sniper;
 
+    private boolean hitDuringDownPress = false;
+
     public BGame(Sniper sniper) {
         this.sniper = sniper;
         Thread gameThread = new Thread(() -> launch());
@@ -110,8 +112,9 @@ public class BGame extends JFrame {
                         isHit = cPiece.update();
 
                     if(fallSpeed >= fallSpeedMax) {
-                        if(isHit) {
+                        if(isHit || hitDuringDownPress) {
                             cPiece.hit();
+                            hitDuringDownPress = false;
                             spawnPiece();
                         }
                         if(cPiece != null)
@@ -236,7 +239,8 @@ public class BGame extends JFrame {
 
             if(isPressed(KeyEvent.VK_S) && !gameOver) {
                 cPiece.moveDown();
-                if(cPiece.checkCollision()) cPiece.hit();
+                if(cPiece.checkCollision())
+                    hitDuringDownPress = true;
             }
         }
     }
