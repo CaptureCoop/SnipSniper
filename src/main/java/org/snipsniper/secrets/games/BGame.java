@@ -219,7 +219,7 @@ public class BGame extends JFrame {
         }
 
         if(cPiece != null) {
-            if(isPressed(KeyEvent.VK_SPACE) && dropCooldown == 0 && !gameOver) {
+            if(isPressedAny(KeyEvent.VK_SPACE, KeyEvent.VK_SHIFT) && dropCooldown == 0 && !gameOver) {
                 for(int i = 0; i < BOARD_HEIGHT; i++) {
                     if(cPiece.moveDown())
                         break;
@@ -227,17 +227,17 @@ public class BGame extends JFrame {
                 dropCooldown = dropCooldownMax;
             }
 
-            if(isPressed(KeyEvent.VK_E) && !gameOver)
+            if(isPressedAny(KeyEvent.VK_E, KeyEvent.VK_UP) && !gameOver)
                 cPiece.rotate(1);
             if(isPressed(KeyEvent.VK_Q) && !gameOver)
                 cPiece.rotate(-1);
 
-            if(isPressed(KeyEvent.VK_A) && !gameOver)
+            if(isPressedAny(KeyEvent.VK_A, KeyEvent.VK_LEFT) && !gameOver)
                 cPiece.move(-1);
-            if(isPressed(KeyEvent.VK_D) && !gameOver)
+            if(isPressedAny(KeyEvent.VK_D, KeyEvent.VK_RIGHT) && !gameOver)
                 cPiece.move(1);
 
-            if(isPressed(KeyEvent.VK_S) && !gameOver) {
+            if(isPressedAny(KeyEvent.VK_S, KeyEvent.VK_DOWN) && !gameOver) {
                 cPiece.moveDown();
                 if(cPiece.checkCollision())
                     hitDuringDownPress = true;
@@ -247,6 +247,14 @@ public class BGame extends JFrame {
 
     public boolean isPressed(int keyCode) {
         return keys[keyCode];
+    }
+
+    public boolean isPressedAny(int... keyCodes) {
+        for(int keyCode : keyCodes) {
+            if(keys[keyCode])
+                return true;
+        }
+        return false;
     }
 
     public BGameResources getResources() {
