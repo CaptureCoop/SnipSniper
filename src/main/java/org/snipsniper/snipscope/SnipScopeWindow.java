@@ -54,7 +54,7 @@ public class SnipScopeWindow extends JFrame {
                 insets.top = getHeight() - renderer.getHeight() - insets.bottom + 1;
 
             setSize(insets.left + insets.right + image.getWidth(), insets.bottom + insets.top + image.getHeight());
-            setLocation((int) getLocation().getX(), (int) (getLocation().getY() - insets.top));
+            setLocation(getLocation().x, getLocation().y - insets.top);
             setOptimalImageDimension(new Dimension(image.getWidth(), image.getHeight()));
         }
     }
@@ -66,8 +66,8 @@ public class SnipScopeWindow extends JFrame {
     }
 
     public void calculateZoom() {
-        int dimWidth = (int) getOptimalImageDimension().getWidth();
-        int dimHeight = (int) getOptimalImageDimension().getHeight();
+        int dimWidth = getOptimalImageDimension().width;
+        int dimHeight = getOptimalImageDimension().height;
 
         int offsetX = dimWidth/2;
         int offsetY = dimHeight/2;

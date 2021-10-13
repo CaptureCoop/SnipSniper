@@ -17,7 +17,7 @@ public class PopupMenu extends JMenu {
                 super.mouseEntered(e);
                 setArmed(true);
                 setPopupMenuVisible(true);
-                getPopupMenu().setLocation((int)getLocationOnScreen().getX() + getWidth(), (int)getLocationOnScreen().getY());
+                getPopupMenu().setLocation(getLocationOnScreen().x + getWidth(), getLocationOnScreen().y);
            }
 
             @Override
