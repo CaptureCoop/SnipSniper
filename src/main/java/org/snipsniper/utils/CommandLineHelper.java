@@ -65,7 +65,6 @@ public class CommandLineHelper {
                     break;
                 default:
                     System.out.println("Unrecognized argument <" + arg + ">. Use argument -help to see all the commands!");
-                    doExit = true;
                     break;
             }
             index++;
