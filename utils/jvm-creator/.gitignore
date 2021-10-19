@@ -1,0 +1,5 @@
+jdk/
+output/
+SnipSniper.jar
+jdeps-output.txt
+powerjdep-output.txt
