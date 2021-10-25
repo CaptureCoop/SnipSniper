@@ -39,9 +39,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	command += javaLocation + " -jar SnipSniper.jar -viewer";
 #endif
 
-	for(int i = 1; i < __argc; i++) {
+	for(int i = 1; i < _argc; i++) {
 		command += " ";
-		command += __argv[i];
+		command += _argv[i];
 	}
 
     char cmdline[command.length() + 1];
