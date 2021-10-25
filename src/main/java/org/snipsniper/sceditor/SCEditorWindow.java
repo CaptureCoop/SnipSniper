@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class SCEditorWindow extends SnipScopeWindow implements IClosable{
+    private SCEditorWindow instance;
     private final Config config;
     private final String title;
     private String saveLocation;
@@ -53,6 +54,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     JTabbedPane ezModeStampPanelTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
     
     public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
+        instance = this;
         this.config = config;
         this.title = title;
         this.saveLocation = saveLocation;
@@ -90,6 +92,8 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         ezModeStampPanelTabs.addTab("", null);
         ezModeStampPanelTabs.addTab("", null);
         ezModeStampPanelTabs.addTab("", null);
+
+        ezModeStampPanelTabs.addChangeListener(e -> instance.requestFocus()); //TODO: Select stamps
 
         ezModeStampPanelTabs.setIconAt(0, new ImageIcon(ImageManager.getImage("ui/editor/marker.png").getScaledInstance(32, 32, 0)));
         ezModeStampPanelTabs.setIconAt(1, new ImageIcon(ImageManager.getImage("ui/editor/counter.png").getScaledInstance(32, 32, 0)));
