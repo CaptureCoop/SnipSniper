@@ -49,6 +49,9 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
     private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
+    JPanel ezModeStampPanel = new JPanel();
+    JTabbedPane ezModeStampPanelTabs = new JTabbedPane();
+    
     public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         this.config = config;
         this.title = title;
@@ -79,6 +82,21 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
         originalImage = ImageUtils.copyImage(image);
         init(image, renderer, listener);
+        setLayout(null);
+
+        ezModeStampPanelTabs.addTab("", null);
+        ezModeStampPanelTabs.addTab("", null);
+        ezModeStampPanelTabs.addTab("", null);
+        ezModeStampPanelTabs.addTab("", null);
+
+        ezModeStampPanelTabs.setIconAt(0, new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(64, 64, 0)));
+        ezModeStampPanelTabs.setIconAt(1, new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(64, 64, 0)));
+        ezModeStampPanelTabs.setIconAt(2, new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(64, 64, 0)));
+        ezModeStampPanelTabs.setIconAt(3, new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(64, 64, 0)));
+
+        ezModeStampPanel.setLayout(null);
+        ezModeStampPanel.add(ezModeStampPanelTabs);
+        add(ezModeStampPanel);
 
         listener.resetHistory();
 
@@ -173,6 +191,9 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     public void resizeTrigger() {
         super.resizeTrigger();
         autoSizeStampButtons();
+        ezModeStampPanel.setBounds(200, 0, getContentPane().getWidth() - 200, 100);
+        ezModeStampPanelTabs.setBounds(0, 0, ezModeStampPanel.getWidth(), ezModeStampPanel.getHeight());
+        renderer.setBounds(200, 100, getContentPane().getWidth() - 200, getContentPane().getHeight() - 100);
     }
 
     public void openNewImageWindow() {
