@@ -50,7 +50,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
     JPanel ezModeStampPanel = new JPanel();
-    JTabbedPane ezModeStampPanelTabs = new JTabbedPane();
+    JTabbedPane ezModeStampPanelTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
     
     public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         this.config = config;
