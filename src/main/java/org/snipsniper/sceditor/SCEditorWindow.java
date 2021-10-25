@@ -88,11 +88,16 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         ezModeStampPanelTabs.addTab("", null);
         ezModeStampPanelTabs.addTab("", null);
         ezModeStampPanelTabs.addTab("", null);
+        ezModeStampPanelTabs.addTab("", null);
+        ezModeStampPanelTabs.addTab("", null);
 
-        ezModeStampPanelTabs.setIconAt(0, new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(64, 64, 0)));
-        ezModeStampPanelTabs.setIconAt(1, new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(64, 64, 0)));
-        ezModeStampPanelTabs.setIconAt(2, new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(64, 64, 0)));
-        ezModeStampPanelTabs.setIconAt(3, new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(64, 64, 0)));
+        ezModeStampPanelTabs.setIconAt(0, new ImageIcon(ImageManager.getImage("ui/editor/marker.png").getScaledInstance(32, 32, 0)));
+        ezModeStampPanelTabs.setIconAt(1, new ImageIcon(ImageManager.getImage("ui/editor/counter.png").getScaledInstance(32, 32, 0)));
+        ezModeStampPanelTabs.setIconAt(2, new ImageIcon(ImageManager.getImage("ui/editor/circle.png").getScaledInstance(32, 32, 0)));
+        ezModeStampPanelTabs.setIconAt(3, new ImageIcon(ImageManager.getImage("ui/editor/brush.png").getScaledInstance(32, 32, 0)));
+        ezModeStampPanelTabs.setIconAt(4, new ImageIcon(ImageManager.getImage("ui/editor/text_tool.png").getScaledInstance(32, 32, 0)));
+        ezModeStampPanelTabs.setIconAt(5, new ImageIcon(ImageManager.getImage("ui/editor/rectangle.png").getScaledInstance(32, 32, 0)));
+        ezModeStampPanelTabs.setIconAt(5, new ImageIcon(ImageManager.getImage("ui/editor/ratzefummel.png").getScaledInstance(32, 32, 0)));
 
         ezModeStampPanel.setLayout(null);
         ezModeStampPanel.add(ezModeStampPanelTabs);
@@ -191,9 +196,9 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     public void resizeTrigger() {
         super.resizeTrigger();
         autoSizeStampButtons();
-        ezModeStampPanel.setBounds(200, 0, getContentPane().getWidth() - 200, 100);
+        ezModeStampPanel.setBounds(200, 0, getContentPane().getWidth() - 200, 40);
         ezModeStampPanelTabs.setBounds(0, 0, ezModeStampPanel.getWidth(), ezModeStampPanel.getHeight());
-        renderer.setBounds(200, 100, getContentPane().getWidth() - 200, getContentPane().getHeight() - 100);
+        renderer.setBounds(200, 40, getContentPane().getWidth() - 200, getContentPane().getHeight() - 40);
     }
 
     public void openNewImageWindow() {
