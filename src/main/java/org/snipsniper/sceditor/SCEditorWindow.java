@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class SCEditorWindow extends SnipScopeWindow implements IClosable{
-    private SCEditorWindow instance;
+    private final SCEditorWindow instance;
     private final Config config;
     private final String title;
     private String saveLocation;
@@ -51,6 +51,9 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
     JPanel ezModeStampPanel = new JPanel();
+    JPanel ezModeTitlePanel = new JPanel();
+    JLabel ezModeTitle = new JLabel("Marker");
+    JPanel ezModeStampSettingsPanel = new JPanel();
     JTabbedPane ezModeStampPanelTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
     
     public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
@@ -105,7 +108,14 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
         ezModeStampPanel.setLayout(null);
         ezModeStampPanel.add(ezModeStampPanelTabs);
+
+        ezModeTitle.setHorizontalAlignment(JLabel.CENTER);
+        ezModeTitle.setVerticalAlignment(JLabel.CENTER);
+        ezModeTitlePanel.add(ezModeTitle);
+
         add(ezModeStampPanel);
+        add(ezModeStampSettingsPanel);
+        add(ezModeTitlePanel);
 
         listener.resetHistory();
 
@@ -200,9 +210,16 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     public void resizeTrigger() {
         super.resizeTrigger();
         autoSizeStampButtons();
-        ezModeStampPanel.setBounds(200, 0, getContentPane().getWidth() - 200, 40);
+
+        int width = 200;
+        int height = 40;
+        int titleMargin = 5;
+
+        ezModeTitlePanel.setBounds(0, 0, width, height);
+        ezModeTitle.setFont(new Font("Arial", Font.PLAIN, height - titleMargin));
+        ezModeStampPanel.setBounds(width, 0, getContentPane().getWidth() - width, height);
         ezModeStampPanelTabs.setBounds(0, 0, ezModeStampPanel.getWidth(), ezModeStampPanel.getHeight());
-        renderer.setBounds(200, 40, getContentPane().getWidth() - 200, getContentPane().getHeight() - 40);
+        renderer.setBounds(width, height, getContentPane().getWidth() - width, getContentPane().getHeight() - height);
     }
 
     public void openNewImageWindow() {
