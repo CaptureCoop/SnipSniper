@@ -90,31 +90,44 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         init(image, renderer, listener);
         setLayout(null);
         ezModeStampPanelTabs.addTab("Marker", null);
-        ezModeStampPanelTabs.setTabComponentAt(0, new EzModeStampTab(ImageManager.getImage("ui/editor/marker.png"), 32, this, 0));
+        BufferedImage ezIconMarker = ImageManager.getImage("ui/editor/marker.png");
+        ezModeStampPanelTabs.setTabComponentAt(0, new EzModeStampTab(ezIconMarker, 32, this, 0));
+        ezModeStampPanelTabs.setIconAt(0, new ImageIcon(ezIconMarker));
 
         ezModeStampPanelTabs.addTab("Counter", null);
-        ezModeStampPanelTabs.setTabComponentAt(1, new EzModeStampTab(ImageManager.getImage("ui/editor/counter.png"), 32, this, 1));
+        BufferedImage ezIconCounter = ImageManager.getImage("ui/editor/counter.png");
+        ezModeStampPanelTabs.setTabComponentAt(1, new EzModeStampTab(ezIconCounter, 32, this, 1));
+        ezModeStampPanelTabs.setIconAt(1, new ImageIcon(ezIconCounter));
 
         ezModeStampPanelTabs.addTab("Circle", null);
-        ezModeStampPanelTabs.setTabComponentAt(2, new EzModeStampTab(ImageManager.getImage("ui/editor/circle.png"), 32, this, 2));
+        BufferedImage ezIconCircle = ImageManager.getImage("ui/editor/circle.png");
+        ezModeStampPanelTabs.setTabComponentAt(2, new EzModeStampTab(ezIconCircle, 32, this, 2));
+        ezModeStampPanelTabs.setIconAt(2, new ImageIcon(ezIconCircle));
 
         ezModeStampPanelTabs.addTab("Brush", null);
-        ezModeStampPanelTabs.setTabComponentAt(3, new EzModeStampTab(ImageManager.getImage("ui/editor/brush.png"), 32, this, 3));
+        BufferedImage ezIconBrush = ImageManager.getImage("ui/editor/brush.png");
+        ezModeStampPanelTabs.setTabComponentAt(3, new EzModeStampTab(ezIconBrush, 32, this, 3));
+        ezModeStampPanelTabs.setIconAt(3, new ImageIcon(ezIconBrush));
 
         ezModeStampPanelTabs.addTab("Text", null);
-        ezModeStampPanelTabs.setTabComponentAt(4, new EzModeStampTab(ImageManager.getImage("ui/editor/text_tool.png"), 32, this, 4));
+        BufferedImage ezIconText = ImageManager.getImage("ui/editor/text_tool.png");
+        ezModeStampPanelTabs.setTabComponentAt(4, new EzModeStampTab(ezIconText, 32, this, 4));
+        ezModeStampPanelTabs.setIconAt(4, new ImageIcon(ezIconText));
 
         ezModeStampPanelTabs.addTab("Rectangle", null);
-        ezModeStampPanelTabs.setTabComponentAt(5, new EzModeStampTab(ImageManager.getImage("ui/editor/rectangle.png"), 32, this, 5));
+        BufferedImage ezIconRectangle = ImageManager.getImage("ui/editor/rectangle.png");
+        ezModeStampPanelTabs.setTabComponentAt(5, new EzModeStampTab(ezIconRectangle, 32, this, 5));
+        ezModeStampPanelTabs.setIconAt(5, new ImageIcon(ezIconRectangle));
 
         ezModeStampPanelTabs.addTab("Eraser", null);
-        ezModeStampPanelTabs.setTabComponentAt(6, new EzModeStampTab(ImageManager.getImage("ui/editor/ratzefummel.png"), 32, this, 6));
-
+        BufferedImage ezIconEraser = ImageManager.getImage("ui/editor/ratzefummel.png");
+        ezModeStampPanelTabs.setTabComponentAt(6, new EzModeStampTab(ezIconEraser, 32, this, 6));
+        ezModeStampPanelTabs.setIconAt(6, new ImageIcon(ezIconEraser));
 
         ezModeStampPanelTabs.addChangeListener(e -> {
             setSelectedStamp(ezModeStampPanelTabs.getSelectedIndex());
             instance.requestFocus();
-        }); //TODO: Select stamps
+        });
 
         ezModeStampPanel.setLayout(null);
         ezModeStampPanel.add(ezModeStampPanelTabs);
