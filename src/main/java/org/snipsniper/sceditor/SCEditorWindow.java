@@ -167,7 +167,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
             addUIComponent(button);
             stampButtons.add(button);
         }
-        autoSizeStampButtons();
 
         if(!isStandalone) {
             GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -218,17 +217,23 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     @Override
     public void resizeTrigger() {
         super.resizeTrigger();
-        autoSizeStampButtons();
 
-        int width = 200;
-        int height = 40;
-        int titleMargin = 5;
+        if(ezMode) {
+            int width = 200;
+            int height = 40;
+            int titleMargin = 5;
 
-        ezModeTitlePanel.setBounds(0, 0, width, height);
-        ezModeTitle.setFont(new Font("Arial", Font.PLAIN, height - titleMargin));
-        ezModeStampPanel.setBounds(width, 0, getContentPane().getWidth() - width, height);
-        ezModeStampPanelTabs.setBounds(0, 0, ezModeStampPanel.getWidth(), ezModeStampPanel.getHeight());
-        renderer.setBounds(width, height, getContentPane().getWidth() - width, getContentPane().getHeight() - height);
+            ezModeTitlePanel.setBounds(0, 0, width, height);
+            ezModeTitle.setFont(new Font("Arial", Font.PLAIN, height - titleMargin));
+            ezModeStampPanel.setBounds(width, 0, getContentPane().getWidth() - width, height);
+            ezModeStampPanelTabs.setBounds(0, 0, ezModeStampPanel.getWidth(), ezModeStampPanel.getHeight());
+            renderer.setBounds(width, height, getContentPane().getWidth() - width, getContentPane().getHeight() - height);
+        } else {
+            ezModeTitlePanel.setBounds(0, 0, 0, 0);
+            ezModeStampPanel.setBounds(0, 0, 0, 0);
+            renderer.setBounds(0, 0, getContentPane().getWidth(), getContentPane().getHeight());
+            instance.requestFocus();
+        }
     }
 
     public void openNewImageWindow() {
@@ -242,18 +247,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
             isDirty = true;
             repaint();
         });
-    }
-
-    public void autoSizeStampButtons() {
-        if(!ezMode) return;
-        int size = getHeight() / 10;
-        int index = 0;
-        int margin = size/4;
-        for(SnipScopeUIButton btn : stampButtons) {
-            btn.setSize(size, size);
-            btn.setPosition((size * index) + margin * (index + 1), margin);
-            index++;
-        }
     }
 
     public void saveImage() {
@@ -346,10 +339,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
     public void setEzMode(boolean value) {
         ezMode = value;
-        for(SnipScopeUIButton btn : stampButtons)
-            btn.setEnabled(ezMode);
-        if(ezMode)
-            autoSizeStampButtons();
+        resizeTrigger();
     }
 
     public boolean isDefaultImage() {
