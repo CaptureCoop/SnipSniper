@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,6 +72,12 @@ public final class SnipSniper {
 
 		version = new Version(digits, releaseType, platformType, buildDate, githash);
 
+		try {
+			StatsManager.init();
+			StatsManager.incrementCount("started");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
