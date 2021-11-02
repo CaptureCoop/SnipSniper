@@ -26,26 +26,30 @@ public class StatsManager {
         }
     }
 
-    public static void incrementCount(String id) throws SQLException {
+    public static void incrementCount(String id) {
         if(!enabled) return;
 
         Connection connection = getConnection();
         if(connection == null) return;
 
-        if(!doesIDExist(connection, "counters", id)) {
-            PreparedStatement prep = connection.prepareStatement("insert into counters values (?, ?);");
-            prep.setString(1, id);
-            prep.setInt(2, 1);
-            prep.execute();
+        try {
+            if (!doesIDExist(connection, "counters", id)) {
+                PreparedStatement prep = connection.prepareStatement("insert into counters values (?, ?);");
+                prep.setString(1, id);
+                prep.setInt(2, 1);
+                prep.execute();
+                connection.close();
+                return;
+            }
+
+            PreparedStatement increment = connection.prepareStatement("update counters set count = count + 1 where id=?");
+            increment.setString(1, id);
+            increment.execute();
+
             connection.close();
-            return;
+        } catch(SQLException sqlException) {
+            LogManager.log("Error incrementing id: " + id + "! Message: " + sqlException.getMessage(), LogLevel.ERROR);
         }
-
-        PreparedStatement increment = connection. prepareStatement("update counters set count = count + 1 where id=?");
-        increment.setString(1, id);
-        increment.execute();
-
-        connection.close();
     }
 
     private static boolean doesIDExist(Connection connection, String table, String id) {
@@ -64,7 +68,7 @@ public class StatsManager {
 
     private static Connection getConnection() {
         try {
-            return DriverManager.getConnection("jdbc:sqlite:test.db");
+            return DriverManager.getConnection("jdbc:sqlite:" + SnipSniper.getMainFolder() + "\\stats.db");
         } catch (SQLException e) {
             e.printStackTrace();
         }

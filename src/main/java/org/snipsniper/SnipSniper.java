@@ -72,13 +72,6 @@ public final class SnipSniper {
 
 		version = new Version(digits, releaseType, platformType, buildDate, githash);
 
-		try {
-			StatsManager.init();
-			StatsManager.incrementCount("started");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
 
@@ -101,6 +94,9 @@ public final class SnipSniper {
 				exit(false);
 			}
 		}
+
+		StatsManager.init();
+		StatsManager.incrementCount("started");
 
 		config = new Config("main.cfg", "main_defaults.cfg");
 		String language = cmdline.getLanguage();
