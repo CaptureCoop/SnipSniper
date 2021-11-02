@@ -45,4 +45,3 @@ jobs:
         method: "POST"
         data: '{"password": "${{ secrets.WEBSITE_UPLOAD }}", "version": "${{env.VERSION}}"}'
         files: '{ "file": "build/libs/SnipSniper.jar" }'
-        timeout: 10
