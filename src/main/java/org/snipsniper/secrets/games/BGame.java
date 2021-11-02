@@ -1,6 +1,7 @@
 package org.snipsniper.secrets.games;
 
 import org.snipsniper.ImageManager;
+import org.snipsniper.StatsManager;
 import org.snipsniper.systray.Sniper;
 
 import javax.swing.*;
@@ -44,6 +45,7 @@ public class BGame extends JFrame {
 
     public BGame(Sniper sniper) {
         this.sniper = sniper;
+        StatsManager.incrementCount(StatsManager.BGAME_STARTED_AMOUNT);
         Thread gameThread = new Thread(() -> launch());
         gameThread.start();
     }
@@ -178,6 +180,7 @@ public class BGame extends JFrame {
     }
 
     public void spawnPiece() {
+        StatsManager.incrementCount(StatsManager.BGAME_STARTED_SPAWNED_PIECES_AMOUNT);
         BGamePiece newPiece = new BGamePiece(this);
         if(gameOver) {
             cPiece = null;

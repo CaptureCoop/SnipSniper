@@ -2,6 +2,7 @@ package org.snipsniper.sceditor;
 
 import org.snipsniper.ImageManager;
 import org.snipsniper.SnipSniper;
+import org.snipsniper.StatsManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.sceditor.stamps.*;
@@ -56,6 +57,8 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         this.inClipboard = inClipboard;
 
         LogManager.log("Starting new editor window. (" + this + ")", LogLevel.INFO);
+
+        StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT);
 
         qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);

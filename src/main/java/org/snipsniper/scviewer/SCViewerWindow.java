@@ -1,6 +1,7 @@
 package org.snipsniper.scviewer;
 
 import org.snipsniper.SnipSniper;
+import org.snipsniper.StatsManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.snipscope.SnipScopeWindow;
@@ -41,6 +42,7 @@ public class SCViewerWindow extends SnipScopeWindow {
 
     public SCViewerWindow(File file, Config config, boolean isStandalone) {
         currentFile = file;
+        StatsManager.incrementCount(StatsManager.VIEWER_STARTED_AMOUNT);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         refreshTitle();
         setIconImage(ImageManager.getImage("icons/viewer.png"));

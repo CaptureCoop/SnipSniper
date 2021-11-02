@@ -3,6 +3,7 @@ package org.snipsniper.utils;
 import org.snipsniper.ImageManager;
 import org.snipsniper.LangManager;
 import org.snipsniper.SnipSniper;
+import org.snipsniper.StatsManager;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.secrets.games.BGame;
 import org.snipsniper.systray.Sniper;
@@ -62,6 +63,8 @@ public class AboutWindow extends JFrame {
                 onC = index == 3;
 
                 setNewImage(index, iconSize, true);
+
+                StatsManager.incrementCount(StatsManager.ABOUT_ICON_CLICKED_AMOUNT);
             }
 
             @Override
