@@ -7,6 +7,8 @@ import java.sql.*;
 public class StatsManager {
     private static boolean enabled = true;
     public static final String STARTED_AMOUNT = "started_amount";
+    public static final String EDITOR_STARTED_AMOUNT = "editor_started_amount";
+    public static final String VIEWER_STARTED_AMOUNT = "viewer_started_amount";
     public static final String SCREENSHOTS_TAKEN_AMOUNT = "screenshots_taken_amount";
     public static final String ABOUT_ICON_CLICKED_AMOUNT = "about_icon_clicked_amount";
 
