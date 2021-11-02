@@ -96,7 +96,7 @@ public final class SnipSniper {
 		}
 
 		StatsManager.init();
-		StatsManager.incrementCount("started");
+		StatsManager.incrementCount(StatsManager.ID_STARTED);
 
 		config = new Config("main.cfg", "main_defaults.cfg");
 		String language = cmdline.getLanguage();

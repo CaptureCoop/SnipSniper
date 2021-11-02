@@ -6,6 +6,7 @@ import java.sql.*;
 
 public class StatsManager {
     private static boolean enabled = true;
+    public static final String ID_STARTED = "started";
 
     public static void init() {
         try {
