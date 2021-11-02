@@ -51,6 +51,8 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
     private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
+    private boolean isStampVisible = true;
+
     JPanel ezModeStampPanel = new JPanel();
     JPanel ezModeTitlePanel = new JPanel();
     JLabel ezModeTitle = new JLabel("Marker");
@@ -362,5 +364,13 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     public void close() {
         for(IClosable wnd : cWindows)
             wnd.close();
+    }
+
+    public void setStampVisible(boolean enabled) {
+        isStampVisible = enabled;
+    }
+
+    public boolean isStampVisible() {
+        return isStampVisible;
     }
 }
