@@ -12,6 +12,9 @@ public class StatsManager {
     public static final String SCREENSHOTS_TAKEN_AMOUNT = "screenshots_taken_amount";
     public static final String ABOUT_ICON_CLICKED_AMOUNT = "about_icon_clicked_amount";
 
+    public static final String BGAME_STARTED_AMOUNT = "bgame_started_amount";
+    public static final String BGAME_STARTED_SPAWNED_PIECES_AMOUNT = "bgame_spawned_pieces_amount";
+
     public static void init() {
         try {
             Class.forName("org.sqlite.JDBC");
