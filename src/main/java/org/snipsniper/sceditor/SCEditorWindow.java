@@ -29,7 +29,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     private boolean inClipboard;
     private BufferedImage originalImage;
 
-    final static int X_OFFSET = 8;
+    private final static int X_OFFSET = 8;
 
     private final IStamp[] stamps = new IStamp[7];
     private int selectedStamp = 0;
