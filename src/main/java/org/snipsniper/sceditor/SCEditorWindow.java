@@ -7,7 +7,6 @@ import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.sceditor.ezmode.EzModeStampTab;
 import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.snipscope.SnipScopeWindow;
-import org.snipsniper.snipscope.ui.SnipScopeUIButton;
 import org.apache.commons.lang3.SystemUtils;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.*;
@@ -44,15 +43,13 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
     public static final String FILENAME_MODIFIER = "_edited";
 
-    private boolean ezMode;
-    private final ArrayList<SnipScopeUIButton> stampButtons = new ArrayList<>();
-
     private BufferedImage defaultImage;
 
     private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
     private boolean isStampVisible = true;
 
+    private boolean ezMode;
     JPanel ezModeStampPanel = new JPanel();
     JPanel ezModeTitlePanel = new JPanel();
     JLabel ezModeTitle = new JLabel("Marker");
@@ -149,25 +146,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
             newItem.addActionListener(e -> openNewImageWindow());
             topBar.add(newItem);
             setJMenuBar(topBar);
-        }
-
-        ezMode = config.getBool(ConfigHelper.PROFILE.ezMode);
-        String[] buttonStrings = {"cube", "counter", "circle", "simplebrush", "text", "rectangle"};
-        int i = 0;
-        for(String str : buttonStrings) {
-            SnipScopeUIButton button = new SnipScopeUIButton(ImageManager.getImage("buttons/stamp_" + str + ".png"), ImageManager.getImage("buttons/stamp_" + str + "_hover.png"), ImageManager.getImage("buttons/stamp_" + str + "_sel.png"));
-            int selectedStamp = i;
-            button.addOnPress(args -> {
-                for(SnipScopeUIButton btn : stampButtons) {
-                    btn.setSelected(button == btn);
-                }
-                setSelectedStamp(selectedStamp);
-            });
-            if(i == 0) button.setSelected(true);
-            i++;
-            button.setEnabled(ezMode);
-            addUIComponent(button);
-            stampButtons.add(button);
         }
 
         if(!isStandalone) {
