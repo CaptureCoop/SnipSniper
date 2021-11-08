@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 
 import org.snipsniper.ImageManager;
 import org.snipsniper.LogManager;
+import org.snipsniper.StatsManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.ConfigHelper;
@@ -128,6 +129,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	}
 	
 	public synchronized void screenshot() {
+		StatsManager.incrementCount(StatsManager.SCREENSHOTS_TAKEN_AMOUNT);
 		bounds = getTotalBounds();
 		try {
 			screenshot = new Robot().createScreenCapture(new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height));
