@@ -51,6 +51,8 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     private boolean isStampVisible = true;
 
     private boolean ezMode;
+    private int ezModeWidth = 200;
+    private int ezModeHeight = 40;
     private final JPanel ezModeStampPanel = new JPanel();
     private final JPanel ezModeTitlePanel = new JPanel();
     private final JLabel ezModeTitle = new JLabel("Marker");
@@ -116,6 +118,19 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         ezModeTitle.setHorizontalAlignment(JLabel.CENTER);
         ezModeTitle.setVerticalAlignment(JLabel.CENTER);
         ezModeTitlePanel.add(ezModeTitle);
+
+
+        ezModeStampSettingsPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        ezModeStampSettingsPanel.add(new JLabel("width"));
+        ezModeStampSettingsPanel.add(createEZModeSlider());
+        ezModeStampSettingsPanel.add(createJSeperator());
+        ezModeStampSettingsPanel.add(new JLabel("height"));
+        ezModeStampSettingsPanel.add(createEZModeSlider());
+        ezModeStampSettingsPanel.add(createJSeperator());
+        ezModeStampSettingsPanel.add(new JLabel("color"));
+        ezModeStampSettingsPanel.add(createEZModeSlider());
+        ezModeStampSettingsPanel.add(createEZModeSlider());
+        ezModeStampSettingsPanel.add(createEZModeSlider());
 
         add(ezModeStampPanel);
         add(ezModeStampSettingsPanel);
@@ -190,6 +205,24 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         setEnableInteraction(!isDefaultImage());
     }
 
+    public JSlider createEZModeSlider() {
+        JSlider slider = new JSlider();
+        Dimension dim = new Dimension(ezModeWidth, 30);
+        slider.setPreferredSize(dim);
+        slider.setMinimumSize(dim);
+        slider.setMaximumSize(dim);
+        return slider;
+    }
+
+    public JSeparator createJSeperator() {
+        JSeparator sep = new JSeparator();
+        Dimension dim = new Dimension(ezModeWidth, 10);
+        sep.setPreferredSize(dim);
+        sep.setMinimumSize(dim);
+        sep.setMaximumSize(dim);
+        return sep;
+    }
+
     public void addEZModeStampButton(String title, String iconName, String theme, int stampIndex) {
         ezModeStampPanelTabs.addTab(title, null);
         BufferedImage ezIconMarker = ImageManager.getImage("ui/editor/" + theme + "/" + iconName + ".png");
@@ -202,15 +235,14 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         super.resizeTrigger();
 
         if(ezMode) {
-            int width = 200;
-            int height = 40;
             int titleMargin = 5;
 
-            ezModeTitlePanel.setBounds(0, 0, width, height);
-            ezModeTitle.setFont(new Font("Arial", Font.PLAIN, height - titleMargin));
-            ezModeStampPanel.setBounds(width, 0, getContentPane().getWidth() - width, height);
+            ezModeTitlePanel.setBounds(0, 0, ezModeWidth, ezModeHeight);
+            ezModeTitle.setFont(new Font("Arial", Font.PLAIN, ezModeHeight - titleMargin));
+            ezModeStampPanel.setBounds(ezModeWidth, 0, getContentPane().getWidth() - ezModeWidth, ezModeHeight);
             ezModeStampPanelTabs.setBounds(0, 0, ezModeStampPanel.getWidth(), ezModeStampPanel.getHeight());
-            renderer.setBounds(width, height, getContentPane().getWidth() - width, getContentPane().getHeight() - height);
+            ezModeStampSettingsPanel.setBounds(0, ezModeHeight, ezModeWidth, getContentPane().getHeight() - ezModeHeight);
+            renderer.setBounds(ezModeWidth, ezModeHeight, getContentPane().getWidth() - ezModeWidth, getContentPane().getHeight() - ezModeHeight);
         } else {
             ezModeTitlePanel.setBounds(0, 0, 0, 0);
             ezModeStampPanel.setBounds(0, 0, 0, 0);
