@@ -15,15 +15,22 @@ import java.util.ArrayList;
 
 public class HotKeyButton extends JButton implements NativeKeyListener, NativeMouseListener {
 	private boolean listening = false;
-	public int hotkey;
+	private int hotkey;
 	private final HotKeyButton instance;
-	public boolean isKeyboard = true;
+	private boolean isKeyboard = true;
+	private int location = -1;
 
 	private String oldLabel;
 
 	private final ArrayList<ChangeListener> listeners = new ArrayList<>();
 
 	public HotKeyButton(String key) {
+		if(key.contains("_")) {
+			String[] parts = key.split("_");
+			key = parts[0];
+			location = Integer.parseInt(parts[1]);
+		}
+
 		if(key.startsWith("NONE")) {
 			this.setText(LangManager.getItem("config_label_none"));
 			hotkey = -1;
@@ -56,6 +63,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 			} else {
 				isKeyboard = true;
 				hotkey = nativeKeyEvent.getKeyCode();
+				location = nativeKeyEvent.getKeyLocation();
 				listening = false;
 				instance.setText(NativeKeyEvent.getKeyText(hotkey));
 				oldLabel = instance.getText();
@@ -79,6 +87,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 				hotkey = -1;
 				return;
 			}
+			location = -1;
 			isKeyboard = false;
 			listening = false;
 			notifyListeners();
@@ -100,5 +109,27 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 
 	public void addDoneCapturingListener(ChangeListener listener) {
 		listeners.add(listener);
+	}
+
+	public int getHotkey() {
+		return hotkey;
+	}
+
+	public void setHotKey(int key) {
+		hotkey = key;
+	}
+
+	public boolean isKeyboard() {
+		return isKeyboard;
+	}
+
+	public String getHotKeyString() {
+		String hotkeyModifier = "KB";
+		if (!isKeyboard)
+			hotkeyModifier = "M";
+		String locationModifier ="";
+		if(location != -1)
+			locationModifier = "_" + location;
+		return hotkeyModifier + hotkey + locationModifier;
 	}
 }
