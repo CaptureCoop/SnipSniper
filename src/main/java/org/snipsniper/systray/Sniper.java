@@ -94,13 +94,13 @@ public class Sniper {
 		nativeKeyAdapter = new NativeKeyAdapter(){
 			@Override
 			public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
-				checkNativeKey("KB", nativeKeyEvent.getKeyCode());
+				checkNativeKey("KB", nativeKeyEvent.getKeyCode(), nativeKeyEvent.getKeyLocation());
 			}
 		};
 		nativeMouseAdapter = new NativeMouseAdapter(){
 			@Override
 			public void nativeMousePressed(NativeMouseEvent nativeMouseEvent) {
-				checkNativeKey("M", nativeMouseEvent.getButton());
+				checkNativeKey("M", nativeMouseEvent.getButton(), -1);
 			}
 		};
 		GlobalScreen.addNativeKeyListener(nativeKeyAdapter);
@@ -127,12 +127,18 @@ public class Sniper {
 		}
 	}
 
-	public void checkNativeKey(String identifier, int pressedKey) {
+	public void checkNativeKey(String identifier, int pressedKey, int pressedLocation) {
 		String hotkey = config.getString(ConfigHelper.PROFILE.hotkey);
 		if(!hotkey.equals("NONE")) {
 			if(hotkey.startsWith(identifier)) {
+				int location = -1;
+				if(pressedLocation != -1 && hotkey.contains("_")) {
+					String[] parts =  hotkey.split("_");
+					hotkey = parts[0];
+					location = Integer.parseInt(parts[1]);
+				}
 				int key = Integer.parseInt(hotkey.replace(identifier, ""));
-				if(pressedKey == key) {
+				if(pressedKey == key && (location == -1 || location == pressedLocation)) {
 					if(captureWindow == null && SnipSniper.isIdle()) {
 						captureWindow = new CaptureWindow(instance);
 						SnipSniper.setIdle(false);
