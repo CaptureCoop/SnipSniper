@@ -10,12 +10,10 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class EzModeStampTab extends JPanel {
-    private BufferedImage image;
-    private SCEditorWindow scEditorWindow;
+    private final BufferedImage image;
 
     public EzModeStampTab(BufferedImage image, int size, SCEditorWindow scEditorWindow, int stampIndex) {
         this.image = image;
-        this.scEditorWindow = scEditorWindow;
         //TODO: can we somehow enable the preview title even if not directly on the jlabel? :/
         setPreferredSize(new Dimension(size, size));
         addMouseListener(new MouseAdapter() {
