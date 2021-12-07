@@ -12,6 +12,8 @@ public class StampUtils {
     public static final int INDEX_RECTANGLE = 5;
     public static final int INDEX_ERASER = 6;
 
+    public enum TYPE {CUBE, COUNTER, CIRCLE, BRUSH, TEXT, RECTANGLE, ERASER}
+
     public static IStamp getNewIStampByIndex(int index, Config config, SCEditorWindow scEditorWindow) {
         switch(index) {
             case 0: return new CubeStamp(config, scEditorWindow);

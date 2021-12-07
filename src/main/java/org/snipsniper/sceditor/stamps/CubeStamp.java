@@ -177,4 +177,9 @@ public class CubeStamp implements IStamp{
     public SSColor getColor() {
         return color;
     }
+
+    @Override
+    public StampUtils.TYPE getType() {
+        return StampUtils.TYPE.CUBE;
+    }
 }

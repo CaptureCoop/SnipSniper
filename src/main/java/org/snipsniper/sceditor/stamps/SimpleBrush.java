@@ -122,4 +122,9 @@ public class SimpleBrush implements IStamp {
     public SSColor getColor() {
         return color;
     }
+
+    @Override
+    public StampUtils.TYPE getType() {
+        return StampUtils.TYPE.BRUSH;
+    }
 }

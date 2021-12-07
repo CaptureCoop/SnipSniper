@@ -108,4 +108,9 @@ public class EraserStamp implements IStamp {
     public SSColor getColor() {
         return null;
     }
+
+    @Override
+    public StampUtils.TYPE getType() {
+        return StampUtils.TYPE.ERASER;
+    }
 }

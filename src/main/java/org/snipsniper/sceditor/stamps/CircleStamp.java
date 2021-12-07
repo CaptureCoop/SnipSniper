@@ -147,4 +147,9 @@ public class CircleStamp implements IStamp{
     public SSColor getColor() {
         return color;
     }
+
+    @Override
+    public StampUtils.TYPE getType() {
+        return StampUtils.TYPE.CIRCLE;
+    }
 }
