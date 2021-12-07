@@ -20,6 +20,7 @@ public class EzModeSettingsCreator {
             case RECTANGLE: rectangle(editorWindow, panel, stamp); break;
             case ERASER: eraser(editorWindow, panel, stamp); break;
         }
+        panel.repaint();
     }
 
     public static JSlider createEZModeSlider(int width) {
