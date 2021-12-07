@@ -5,6 +5,7 @@ import org.snipsniper.SnipSniper;
 import org.snipsniper.StatsManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.configwindow.ConfigWindow;
+import org.snipsniper.sceditor.ezmode.EzModeSettingsCreator;
 import org.snipsniper.sceditor.ezmode.EzModeStampTab;
 import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.snipscope.SnipScopeWindow;
@@ -119,18 +120,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         ezModeTitle.setVerticalAlignment(JLabel.CENTER);
         ezModeTitlePanel.add(ezModeTitle);
 
-
-        ezModeStampSettingsPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        ezModeStampSettingsPanel.add(new JLabel("width"));
-        ezModeStampSettingsPanel.add(createEZModeSlider());
-        ezModeStampSettingsPanel.add(createJSeperator());
-        ezModeStampSettingsPanel.add(new JLabel("height"));
-        ezModeStampSettingsPanel.add(createEZModeSlider());
-        ezModeStampSettingsPanel.add(createJSeperator());
-        ezModeStampSettingsPanel.add(new JLabel("color"));
-        ezModeStampSettingsPanel.add(createEZModeSlider());
-        ezModeStampSettingsPanel.add(createEZModeSlider());
-        ezModeStampSettingsPanel.add(createEZModeSlider());
+        EzModeSettingsCreator.addSettingsToPanel(this, ezModeStampSettingsPanel, getSelectedStamp());
 
         add(ezModeStampPanel);
         add(ezModeStampSettingsPanel);
@@ -203,24 +193,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
             }
         });
         setEnableInteraction(!isDefaultImage());
-    }
-
-    public JSlider createEZModeSlider() {
-        JSlider slider = new JSlider();
-        Dimension dim = new Dimension(ezModeWidth, 30);
-        slider.setPreferredSize(dim);
-        slider.setMinimumSize(dim);
-        slider.setMaximumSize(dim);
-        return slider;
-    }
-
-    public JSeparator createJSeperator() {
-        JSeparator sep = new JSeparator();
-        Dimension dim = new Dimension(ezModeWidth, 10);
-        sep.setPreferredSize(dim);
-        sep.setMinimumSize(dim);
-        sep.setMaximumSize(dim);
-        return sep;
     }
 
     public void addEZModeStampButton(String title, String iconName, String theme, int stampIndex) {
@@ -385,5 +357,13 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
     public boolean isStampVisible() {
         return isStampVisible;
+    }
+
+    public int getEzModeWidth() {
+        return ezModeWidth;
+    }
+
+    public int getEzModeHeight() {
+        return ezModeHeight;
     }
 }
