@@ -304,6 +304,8 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     }
 
     public void setSelectedStamp(int i) {
+        if(selectedStamp == i)
+            return;
         selectedStamp = i;
         ezModeStampPanelTabs.setSelectedIndex(i);
         setEzModeTitle(StampUtils.getStampAsString(i));
