@@ -39,6 +39,23 @@ public class EzModeSettingsCreator {
         panel.add(createEZModeSlider());
     }
 
+    public void addBasicBoxSettings(JPanel panel) {
+        panel.add(new JLabel("width"));
+        panel.add(createEZModeSlider());
+        panel.add(createJSeperator());
+        panel.add(new JLabel("height"));
+        panel.add(createEZModeSlider());
+        panel.add(createJSeperator());
+        addColorSettings(panel);
+    }
+
+    public void addBasicCircleSettings(JPanel panel) {
+        panel.add(new JLabel("size"));
+        panel.add(createEZModeSlider());
+        panel.add(createJSeperator());
+        addColorSettings(panel);
+    }
+
     public JSlider createEZModeSlider() {
         JSlider slider = new JSlider();
         Dimension dim = new Dimension(scEditorWindow.getEzModeWidth(), 30);
@@ -58,34 +75,19 @@ public class EzModeSettingsCreator {
     }
 
     private void cube(JPanel panel, IStamp stamp) {
-        panel.add(new JLabel("width"));
-        panel.add(createEZModeSlider());
-        panel.add(createJSeperator());
-        panel.add(new JLabel("height"));
-        panel.add(createEZModeSlider());
-        panel.add(createJSeperator());
-        addColorSettings(panel);
+        addBasicBoxSettings(panel);
     }
 
     private void counter(JPanel panel, IStamp stamp) {
-        panel.add(new JLabel("size"));
-        panel.add(createEZModeSlider());
-        panel.add(createJSeperator());
-        addColorSettings(panel);
+        addBasicCircleSettings(panel);
     }
 
     private void circle(JPanel panel, IStamp stamp) {
-        panel.add(new JLabel("size"));
-        panel.add(createEZModeSlider());
-        panel.add(createJSeperator());
-        addColorSettings(panel);
+        addBasicCircleSettings(panel);
     }
 
     private void brush(JPanel panel, IStamp stamp) {
-        panel.add(new JLabel("size"));
-        panel.add(createEZModeSlider());
-        panel.add(createJSeperator());
-        addColorSettings(panel);
+        addBasicCircleSettings(panel);
     }
 
     private void text(JPanel panel, IStamp stamp) {
@@ -105,20 +107,10 @@ public class EzModeSettingsCreator {
     }
 
     private void rectangle(JPanel panel, IStamp stamp) {
-        panel.add(new JLabel("width"));
-        panel.add(createEZModeSlider());
-        panel.add(createJSeperator());
-        panel.add(new JLabel("height"));
-        panel.add(createEZModeSlider());
-        panel.add(createJSeperator());
-        addColorSettings(panel);
+        addBasicBoxSettings(panel);
     }
 
     private void eraser(JPanel panel, IStamp stamp) {
-        panel.add(new JLabel("size"));
-        panel.add(createEZModeSlider());
-        panel.add(createJSeperator());
-        addColorSettings(panel);
+        addBasicCircleSettings(panel);
     }
-
 }
