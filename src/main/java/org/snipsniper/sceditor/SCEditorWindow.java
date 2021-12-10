@@ -52,6 +52,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     private boolean isStampVisible = true;
 
     private boolean ezMode;
+    private final EzModeSettingsCreator ezModeSettingsCreator = new EzModeSettingsCreator(this);
     private int ezModeWidth = 200;
     private int ezModeHeight = 40;
     private final JPanel ezModeStampPanel = new JPanel();
@@ -120,7 +121,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         ezModeTitle.setVerticalAlignment(JLabel.CENTER);
         ezModeTitlePanel.add(ezModeTitle);
 
-        EzModeSettingsCreator.addSettingsToPanel(this, ezModeStampSettingsPanel, getSelectedStamp());
+        ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp());
 
         add(ezModeStampPanel);
         add(ezModeStampSettingsPanel);
@@ -306,7 +307,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         selectedStamp = i;
         ezModeStampPanelTabs.setSelectedIndex(i);
         setEzModeTitle(StampUtils.getStampAsString(i));
-        EzModeSettingsCreator.addSettingsToPanel(this, ezModeStampSettingsPanel, getSelectedStamp());
+        ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp());
     }
 
     public IStamp[] getStamps() {
