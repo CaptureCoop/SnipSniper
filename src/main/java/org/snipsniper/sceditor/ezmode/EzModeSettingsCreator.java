@@ -9,7 +9,7 @@ import org.snipsniper.utils.DropdownItem;
 import java.awt.*;
 
 public class EzModeSettingsCreator {
-    private SCEditorWindow scEditorWindow;
+    private final SCEditorWindow scEditorWindow;
 
     public EzModeSettingsCreator(SCEditorWindow scEditorWindow) {
         this.scEditorWindow = scEditorWindow;
@@ -75,7 +75,10 @@ public class EzModeSettingsCreator {
     }
 
     private void circle(JPanel panel, IStamp stamp) {
-
+        panel.add(new JLabel("size"));
+        panel.add(createEZModeSlider());
+        panel.add(createJSeperator());
+        addColorSettings(panel);
     }
 
     private void brush(JPanel panel, IStamp stamp) {
@@ -102,11 +105,20 @@ public class EzModeSettingsCreator {
     }
 
     private void rectangle(JPanel panel, IStamp stamp) {
-
+        panel.add(new JLabel("width"));
+        panel.add(createEZModeSlider());
+        panel.add(createJSeperator());
+        panel.add(new JLabel("height"));
+        panel.add(createEZModeSlider());
+        panel.add(createJSeperator());
+        addColorSettings(panel);
     }
 
     private void eraser(JPanel panel, IStamp stamp) {
-
+        panel.add(new JLabel("size"));
+        panel.add(createEZModeSlider());
+        panel.add(createJSeperator());
+        addColorSettings(panel);
     }
 
 }
