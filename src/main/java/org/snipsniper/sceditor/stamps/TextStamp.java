@@ -146,7 +146,7 @@ public class TextStamp implements IStamp{
 
     @Override
     public int getHeight() {
-        return 0;
+        return fontSize;
     }
 
     @Override
