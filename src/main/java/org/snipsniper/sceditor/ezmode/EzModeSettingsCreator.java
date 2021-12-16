@@ -57,9 +57,10 @@ public class EzModeSettingsCreator {
     public void addBasicCircleSettings(JPanel panel, IStamp stamp, boolean addColor) {
         panel.add(new JLabel("size"));
         panel.add(createEZModeSlider(1, 400, stamp.getWidth()));
+        if(!addColor)
+            return;
         panel.add(createJSeperator());
-        if(addColor)
-            addColorSettings(panel, stamp);
+        addColorSettings(panel, stamp);
     }
 
     public JSlider createEZModeSlider(int min, int max, int currentValue) {
