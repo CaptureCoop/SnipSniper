@@ -54,11 +54,12 @@ public class EzModeSettingsCreator {
         addColorSettings(panel, stamp);
     }
 
-    public void addBasicCircleSettings(JPanel panel, IStamp stamp) {
+    public void addBasicCircleSettings(JPanel panel, IStamp stamp, boolean addColor) {
         panel.add(new JLabel("size"));
         panel.add(createEZModeSlider(1, 400, stamp.getWidth()));
         panel.add(createJSeperator());
-        addColorSettings(panel, stamp);
+        if(addColor)
+            addColorSettings(panel, stamp);
     }
 
     public JSlider createEZModeSlider(int min, int max, int currentValue) {
@@ -98,15 +99,15 @@ public class EzModeSettingsCreator {
     }
 
     private void counter(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel, stamp);
+        addBasicCircleSettings(panel, stamp, true);
     }
 
     private void circle(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel, stamp);
+        addBasicCircleSettings(panel, stamp, true);
     }
 
     private void brush(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel, stamp);
+        addBasicCircleSettings(panel, stamp, true);
     }
 
     private void text(JPanel panel, IStamp stamp) {
@@ -123,6 +124,25 @@ public class EzModeSettingsCreator {
         fontTypeDropdown.setMinimumSize(dim);
         fontTypeDropdown.setMaximumSize(dim);
         fontTypeDropdown.setPreferredSize(dim);
+
+        //If we idle for more then 5 seconds remove focus
+        fontTypeDropdown.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent focusEvent) {
+                super.focusGained(focusEvent);
+                Thread waitThread = new Thread(() -> {
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    scEditorWindow.requestFocus();
+                });
+                waitThread.start();
+            }
+        });
+        fontTypeDropdown.addItemListener(e -> scEditorWindow.requestFocus());
+
         panel.add(fontTypeDropdown);
     }
 
@@ -131,6 +151,6 @@ public class EzModeSettingsCreator {
     }
 
     private void eraser(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel, stamp);
+        addBasicCircleSettings(panel, stamp, false);
     }
 }
