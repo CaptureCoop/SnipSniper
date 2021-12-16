@@ -7,6 +7,8 @@ import org.snipsniper.sceditor.stamps.IStamp;
 import org.snipsniper.utils.DropdownItem;
 
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class EzModeSettingsCreator {
     private final SCEditorWindow scEditorWindow;
@@ -69,6 +71,15 @@ public class EzModeSettingsCreator {
         slider.setMinimum(min);
         slider.setMaximum(max);
         slider.setValue(currentValue);
+
+        slider.addChangeListener(e -> scEditorWindow.requestFocus());
+        slider.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                scEditorWindow.requestFocus();
+            }
+        });
 
         return slider;
     }
