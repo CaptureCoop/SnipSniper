@@ -32,36 +32,44 @@ public class EzModeSettingsCreator {
         panel.repaint();
     }
 
-    public void addColorSettings(JPanel panel) {
+    public void addColorSettings(JPanel panel, IStamp stamp) {
         panel.add(new JLabel("color"));
-        panel.add(createEZModeSlider());
-        panel.add(createEZModeSlider());
-        panel.add(createEZModeSlider());
+        Color color = stamp.getColor().getPrimaryColor();
+        panel.add(createEZModeSlider(0, 255, color.getRed()));
+        panel.add(createEZModeSlider(0, 255, color.getGreen()));
+        panel.add(createEZModeSlider(0, 255, color.getBlue()));
     }
 
-    public void addBasicBoxSettings(JPanel panel) {
+    public void addBasicBoxSettings(JPanel panel, IStamp stamp) {
+        final int boxMinimum = 1;
+        final int boxMaximum = 400;
         panel.add(new JLabel("width"));
-        panel.add(createEZModeSlider());
+        panel.add(createEZModeSlider(boxMinimum, boxMaximum, stamp.getWidth()));
         panel.add(createJSeperator());
         panel.add(new JLabel("height"));
-        panel.add(createEZModeSlider());
+        panel.add(createEZModeSlider(boxMinimum, boxMaximum, stamp.getHeight()));
         panel.add(createJSeperator());
-        addColorSettings(panel);
+        addColorSettings(panel, stamp);
     }
 
-    public void addBasicCircleSettings(JPanel panel) {
+    public void addBasicCircleSettings(JPanel panel, IStamp stamp) {
         panel.add(new JLabel("size"));
-        panel.add(createEZModeSlider());
+        panel.add(createEZModeSlider(1, 400, stamp.getWidth()));
         panel.add(createJSeperator());
-        addColorSettings(panel);
+        addColorSettings(panel, stamp);
     }
 
-    public JSlider createEZModeSlider() {
+    public JSlider createEZModeSlider(int min, int max, int currentValue) {
         JSlider slider = new JSlider();
         Dimension dim = new Dimension(scEditorWindow.getEzModeWidth(), 30);
         slider.setPreferredSize(dim);
         slider.setMinimumSize(dim);
         slider.setMaximumSize(dim);
+
+        slider.setMinimum(min);
+        slider.setMaximum(max);
+        slider.setValue(currentValue);
+
         return slider;
     }
 
@@ -75,24 +83,25 @@ public class EzModeSettingsCreator {
     }
 
     private void cube(JPanel panel, IStamp stamp) {
-        addBasicBoxSettings(panel);
+        addBasicBoxSettings(panel, stamp);
     }
 
     private void counter(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel);
+        addBasicCircleSettings(panel, stamp);
     }
 
     private void circle(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel);
+        addBasicCircleSettings(panel, stamp);
     }
 
     private void brush(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel);
+        addBasicCircleSettings(panel, stamp);
     }
 
     private void text(JPanel panel, IStamp stamp) {
         panel.add(new JLabel("font size"));
-        panel.add(createEZModeSlider());
+        //Font size = height
+        panel.add(createEZModeSlider(5, 200, stamp.getHeight()));
         panel.add(createJSeperator());
         panel.add(new JLabel("font type"));
         JComboBox<DropdownItem> fontTypeDropdown = new JComboBox<>();
@@ -107,10 +116,10 @@ public class EzModeSettingsCreator {
     }
 
     private void rectangle(JPanel panel, IStamp stamp) {
-        addBasicBoxSettings(panel);
+        addBasicBoxSettings(panel, stamp);
     }
 
     private void eraser(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel);
+        addBasicCircleSettings(panel, stamp);
     }
 }
