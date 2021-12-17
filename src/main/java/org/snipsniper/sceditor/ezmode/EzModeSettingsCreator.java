@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.sceditor.stamps.IStamp;
+import org.snipsniper.sceditor.stamps.TextStamp;
 import org.snipsniper.utils.DropdownItem;
 import org.snipsniper.utils.Function;
 import org.snipsniper.utils.IFunction;
@@ -169,6 +170,7 @@ public class EzModeSettingsCreator {
             }
         }));
         panel.add(createJSeperator());
+        TextStamp textStamp = (TextStamp) stamp;
         panel.add(new JLabel("font type"));
         JComboBox<DropdownItem> fontTypeDropdown = new JComboBox<>();
         fontTypeDropdown.addItem(new DropdownItem("plain", "plain"));
@@ -178,6 +180,12 @@ public class EzModeSettingsCreator {
         fontTypeDropdown.setMinimumSize(dim);
         fontTypeDropdown.setMaximumSize(dim);
         fontTypeDropdown.setPreferredSize(dim);
+
+        switch(textStamp.getFontMode()) {
+            case Font.PLAIN: fontTypeDropdown.setSelectedIndex(0); break;
+            case Font.BOLD: fontTypeDropdown.setSelectedIndex(1); break;
+            case Font.ITALIC: fontTypeDropdown.setSelectedIndex(2); break;
+        }
 
         //If we idle for more then 5 seconds remove focus
         fontTypeDropdown.addFocusListener(new FocusAdapter() {
@@ -195,7 +203,10 @@ public class EzModeSettingsCreator {
                 waitThread.start();
             }
         });
-        fontTypeDropdown.addItemListener(e -> scEditorWindow.requestFocus());
+        fontTypeDropdown.addItemListener(e -> {
+            textStamp.setFontMode(fontTypeDropdown.getSelectedIndex());
+            scEditorWindow.requestFocus();
+        });
 
         panel.add(fontTypeDropdown);
     }
