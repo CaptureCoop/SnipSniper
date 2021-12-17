@@ -5,6 +5,8 @@ import javax.swing.*;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.sceditor.stamps.IStamp;
 import org.snipsniper.utils.DropdownItem;
+import org.snipsniper.utils.Function;
+import org.snipsniper.utils.IFunction;
 
 import java.awt.*;
 import java.awt.event.FocusAdapter;
@@ -37,33 +39,75 @@ public class EzModeSettingsCreator {
     public void addColorSettings(JPanel panel, IStamp stamp) {
         panel.add(new JLabel("color"));
         Color color = stamp.getColor().getPrimaryColor();
-        panel.add(createEZModeSlider(0, 255, color.getRed()));
-        panel.add(createEZModeSlider(0, 255, color.getGreen()));
-        panel.add(createEZModeSlider(0, 255, color.getBlue()));
+        panel.add(createEZModeSlider(0, 255, color.getRed(), new Function() {
+            @Override
+            public boolean run(Integer... args) {
+                Color cColor = stamp.getColor().getPrimaryColor();
+                stamp.getColor().setPrimaryColor(new Color(args[0], cColor.getGreen(), cColor.getBlue()));
+                return true;
+            }
+        }));
+        panel.add(createEZModeSlider(0, 255, color.getGreen(), new Function() {
+            @Override
+            public boolean run(Integer... args) {
+                Color cColor = stamp.getColor().getPrimaryColor();
+                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), args[0], cColor.getBlue()));
+                return true;
+            }
+        }));
+        panel.add(createEZModeSlider(0, 255, color.getBlue(), new Function() {
+            @Override
+            public boolean run(Integer... args) {
+                Color cColor = stamp.getColor().getPrimaryColor();
+                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), cColor.getGreen(), args[0]));
+                return true;
+            }
+        }));
+
     }
 
     public void addBasicBoxSettings(JPanel panel, IStamp stamp) {
         final int boxMinimum = 1;
         final int boxMaximum = 400;
         panel.add(new JLabel("width"));
-        panel.add(createEZModeSlider(boxMinimum, boxMaximum, stamp.getWidth()));
+        panel.add(createEZModeSlider(boxMinimum, boxMaximum, stamp.getWidth(), new Function() {
+            @Override
+            public boolean run(Integer... args) {
+                stamp.setWidth(args[0]);
+                return true;
+            }
+        }));
         panel.add(createJSeperator());
         panel.add(new JLabel("height"));
-        panel.add(createEZModeSlider(boxMinimum, boxMaximum, stamp.getHeight()));
+        panel.add(createEZModeSlider(boxMinimum, boxMaximum, stamp.getHeight(), new Function() {
+            @Override
+            public boolean run(Integer... args) {
+                stamp.setHeight(args[0]);
+                return true;
+            }
+        }));
         panel.add(createJSeperator());
         addColorSettings(panel, stamp);
     }
 
     public void addBasicCircleSettings(JPanel panel, IStamp stamp, boolean addColor) {
         panel.add(new JLabel("size"));
-        panel.add(createEZModeSlider(1, 400, stamp.getWidth()));
+        panel.add(createEZModeSlider(1, 400, stamp.getWidth(), new Function() {
+            @Override
+            public boolean run(Integer... args) {
+                //On circle type stamps which use only "size" instead of width and height
+                //we use setWidth and getWidth() to determine size
+                stamp.setWidth(args[0]);
+                return true;
+            }
+        }));
         if(!addColor)
             return;
         panel.add(createJSeperator());
         addColorSettings(panel, stamp);
     }
 
-    public JSlider createEZModeSlider(int min, int max, int currentValue) {
+    public JSlider createEZModeSlider(int min, int max, int currentValue, Function onChange) {
         JSlider slider = new JSlider();
         Dimension dim = new Dimension(scEditorWindow.getEzModeWidth(), 30);
         slider.setPreferredSize(dim);
@@ -74,7 +118,10 @@ public class EzModeSettingsCreator {
         slider.setMaximum(max);
         slider.setValue(currentValue);
 
-        slider.addChangeListener(e -> scEditorWindow.requestFocus());
+        slider.addChangeListener(e -> {
+            onChange.run(slider.getValue());
+            scEditorWindow.requestFocus();
+        });
         slider.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -114,7 +161,13 @@ public class EzModeSettingsCreator {
     private void text(JPanel panel, IStamp stamp) {
         panel.add(new JLabel("font size"));
         //Font size = height
-        panel.add(createEZModeSlider(5, 200, stamp.getHeight()));
+        panel.add(createEZModeSlider(5, 200, stamp.getHeight(), new Function() {
+            @Override
+            public boolean run(Integer... args) {
+                stamp.setHeight(args[0]);
+                return true;
+            }
+        }));
         panel.add(createJSeperator());
         panel.add(new JLabel("font type"));
         JComboBox<DropdownItem> fontTypeDropdown = new JComboBox<>();
