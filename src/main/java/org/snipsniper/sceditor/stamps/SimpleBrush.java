@@ -111,13 +111,10 @@ public class SimpleBrush implements IStamp {
     }
 
     @Override
-    public void setHeight(int height) {
-        LogManager.log("setHeight() called on SimpleBrush. This does not do anything! Use setWidth() to set the size", LogLevel.WARNING);
-    }
+    public void setHeight(int height) { }
 
     @Override
     public int getHeight() {
-        LogManager.log("getHeight() called on SimpleBrush. This does not return anything! Use getWidth() to get the size!", LogLevel.WARNING);
         return 0;
     }
 

@@ -99,13 +99,10 @@ public class EraserStamp implements IStamp {
     }
 
     @Override
-    public void setHeight(int height) {
-        LogManager.log("setHeight() called on EraserStamp! This does not do anything! Use setWidth() to set size.", LogLevel.WARNING);
-    }
+    public void setHeight(int height) { }
 
     @Override
     public int getHeight() {
-        LogManager.log("getHeight() called on EraserStamp! This does not return anything! Use setWidth() to set size!", LogLevel.WARNING);
         return 0;
     }
 

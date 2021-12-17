@@ -95,9 +95,8 @@ public class EzModeSettingsCreator {
         panel.add(createEZModeSlider(1, 400, stamp.getWidth(), new Function() {
             @Override
             public boolean run(Integer... args) {
-                //On circle type stamps which use only "size" instead of width and height
-                //we use setWidth and getWidth() to determine size
                 stamp.setWidth(args[0]);
+                stamp.setHeight(args[0]);
                 return true;
             }
         }));
