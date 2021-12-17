@@ -313,7 +313,8 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     }
 
     public void updateEzUI() {
-        ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp());
+        if(ezMode)
+            ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp());
     }
 
     public IStamp[] getStamps() {
