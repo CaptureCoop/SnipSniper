@@ -66,6 +66,9 @@ public class CubeStamp implements IStamp{
                 }
                 break;
         }
+
+        if(scEditorWindow != null)
+            scEditorWindow.updateEzUI();
     }
 
     public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
@@ -154,8 +157,18 @@ public class CubeStamp implements IStamp{
     }
 
     @Override
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    @Override
     public int getWidth() {
         return width;
+    }
+
+    @Override
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     @Override
@@ -176,5 +189,10 @@ public class CubeStamp implements IStamp{
     @Override
     public SSColor getColor() {
         return color;
+    }
+
+    @Override
+    public StampUtils.TYPE getType() {
+        return StampUtils.TYPE.CUBE;
     }
 }

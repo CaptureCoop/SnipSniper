@@ -2,6 +2,7 @@ package org.snipsniper.sceditor.stamps;
 
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 
 public class CounterStamp implements IStamp{
     private final Config config;
+    private final SCEditorWindow scEditorWindow;
 
     private int width;
     private int height;
@@ -31,8 +33,9 @@ public class CounterStamp implements IStamp{
 
     private final ArrayList<Integer> historyPoints = new ArrayList<>();
 
-    public CounterStamp(Config config) {
+    public CounterStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
+        this.scEditorWindow = scEditorWindow;
         reset();
     }
 
@@ -68,6 +71,9 @@ public class CounterStamp implements IStamp{
 
             if (height <= minimumHeight)
                 height = minimumHeight;
+
+            if(scEditorWindow != null)
+                scEditorWindow.updateEzUI();
         }
     }
 
@@ -161,8 +167,18 @@ public class CounterStamp implements IStamp{
     }
 
     @Override
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    @Override
     public int getWidth() {
         return width;
+    }
+
+    @Override
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     @Override
@@ -183,5 +199,10 @@ public class CounterStamp implements IStamp{
     @Override
     public SSColor getColor() {
         return color;
+    }
+
+    @Override
+    public StampUtils.TYPE getType() {
+        return StampUtils.TYPE.COUNTER;
     }
 }

@@ -16,11 +16,14 @@ public interface IStamp {
 
     void reset();
 
+    void setWidth(int width);
     int getWidth();
+    void setHeight(int height);
     int getHeight();
 
     String getID();
 
     void setColor(SSColor color);
     SSColor getColor();
+    StampUtils.TYPE getType();
 }

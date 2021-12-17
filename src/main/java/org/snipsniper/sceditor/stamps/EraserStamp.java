@@ -1,11 +1,13 @@
 package org.snipsniper.sceditor.stamps;
 
+import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
+import org.snipsniper.utils.enums.LogLevel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -35,6 +37,8 @@ public class EraserStamp implements IStamp {
                     size += speed;
                     break;
             }
+            if(scEditorWindow != null)
+                scEditorWindow.updateEzUI();
         }
     }
 
@@ -87,9 +91,17 @@ public class EraserStamp implements IStamp {
     }
 
     @Override
-    public int getWidth() {
-        return 0;
+    public void setWidth(int width) {
+        size = width;
     }
+
+    @Override
+    public int getWidth() {
+        return size;
+    }
+
+    @Override
+    public void setHeight(int height) { }
 
     @Override
     public int getHeight() {
@@ -107,5 +119,10 @@ public class EraserStamp implements IStamp {
     @Override
     public SSColor getColor() {
         return null;
+    }
+
+    @Override
+    public StampUtils.TYPE getType() {
+        return StampUtils.TYPE.ERASER;
     }
 }

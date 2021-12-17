@@ -2,6 +2,7 @@ package org.snipsniper.sceditor.stamps;
 
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
+import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
@@ -11,6 +12,7 @@ import java.awt.event.KeyEvent;
 
 public class RectangleStamp implements IStamp {
     private final Config config;
+    private final SCEditorWindow scEditorWindow;
 
     private int width;
     private int height;
@@ -25,8 +27,9 @@ public class RectangleStamp implements IStamp {
 
     private SSColor color;
 
-    public RectangleStamp(Config config) {
+    public RectangleStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
+        this.scEditorWindow = scEditorWindow;
         reset();
     }
 
@@ -43,6 +46,8 @@ public class RectangleStamp implements IStamp {
             }
             if(thickness <= 0)
                 thickness = 1;
+            if(scEditorWindow != null)
+                scEditorWindow.updateEzUI();
             return;
         }
 
@@ -77,6 +82,8 @@ public class RectangleStamp implements IStamp {
                 }
                 break;
         }
+        if(scEditorWindow != null)
+            scEditorWindow.updateEzUI();
     }
 
     @Override
@@ -128,8 +135,18 @@ public class RectangleStamp implements IStamp {
     }
 
     @Override
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    @Override
     public int getWidth() {
         return width;
+    }
+
+    @Override
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     @Override
@@ -150,5 +167,10 @@ public class RectangleStamp implements IStamp {
     @Override
     public SSColor getColor() {
         return color;
+    }
+
+    @Override
+    public StampUtils.TYPE getType() {
+        return StampUtils.TYPE.RECTANGLE;
     }
 }

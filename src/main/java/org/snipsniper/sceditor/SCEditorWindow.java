@@ -5,9 +5,10 @@ import org.snipsniper.SnipSniper;
 import org.snipsniper.StatsManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.configwindow.ConfigWindow;
+import org.snipsniper.sceditor.ezmode.EzModeSettingsCreator;
+import org.snipsniper.sceditor.ezmode.EzModeStampTab;
 import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.snipscope.SnipScopeWindow;
-import org.snipsniper.snipscope.ui.SnipScopeUIButton;
 import org.apache.commons.lang3.SystemUtils;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.*;
@@ -23,13 +24,14 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class SCEditorWindow extends SnipScopeWindow implements IClosable{
+    private final SCEditorWindow instance;
     private final Config config;
     private final String title;
     private String saveLocation;
     private boolean inClipboard;
     private BufferedImage originalImage;
 
-    final static int X_OFFSET = 8;
+    private final static int X_OFFSET = 8;
 
     private final IStamp[] stamps = new IStamp[7];
     private int selectedStamp = 0;
@@ -43,14 +45,24 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
     public static final String FILENAME_MODIFIER = "_edited";
 
-    private boolean ezMode;
-    private final ArrayList<SnipScopeUIButton> stampButtons = new ArrayList<>();
-
     private BufferedImage defaultImage;
 
     private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
+    private boolean isStampVisible = true;
+
+    private boolean ezMode;
+    private final EzModeSettingsCreator ezModeSettingsCreator = new EzModeSettingsCreator(this);
+    private int ezModeWidth = 200;
+    private int ezModeHeight = 40;
+    private final JPanel ezModeStampPanel = new JPanel();
+    private final JPanel ezModeTitlePanel = new JPanel();
+    private final JLabel ezModeTitle = new JLabel("Marker");
+    private final JPanel ezModeStampSettingsPanel = new JPanel();
+    private final JTabbedPane ezModeStampPanelTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
+    
     public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
+        instance = this;
         this.config = config;
         this.title = title;
         this.saveLocation = saveLocation;
@@ -66,11 +78,11 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         LogManager.log("Loading stamps", LogLevel.INFO);
 
         stamps[0] = new CubeStamp(config, this);
-        stamps[1] = new CounterStamp(config);
-        stamps[2] = new CircleStamp(config);
+        stamps[1] = new CounterStamp(config, this);
+        stamps[2] = new CircleStamp(config, this);
         stamps[3] = new SimpleBrush(config, this);
         stamps[4] = new TextStamp(config, this);
-        stamps[5] = new RectangleStamp(config);
+        stamps[5] = new RectangleStamp(config, this);
         stamps[6] = new EraserStamp(this, config);
 
         if(image == null) {
@@ -82,6 +94,38 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
         originalImage = ImageUtils.copyImage(image);
         init(image, renderer, listener);
+        setLayout(null);
+
+        String ezIconType = "black";
+        if(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme).equals("dark")) {
+            ezIconType = "white";
+        }
+
+        addEZModeStampButton("Marker", "marker", ezIconType, 0);
+        addEZModeStampButton("Counter", "counter", ezIconType, 1);
+        addEZModeStampButton("Circle", "circle", ezIconType, 2);
+        addEZModeStampButton("Brush", "brush", ezIconType, 3);
+        addEZModeStampButton("Text", "text_tool", ezIconType, 4);
+        addEZModeStampButton("Rectangle", "rectangle", ezIconType, 5);
+        addEZModeStampButton("Eraser", "ratzefummel", ezIconType, 6);
+
+        ezModeStampPanelTabs.addChangeListener(e -> {
+            setSelectedStamp(ezModeStampPanelTabs.getSelectedIndex());
+            instance.requestFocus();
+        });
+
+        ezModeStampPanel.setLayout(null);
+        ezModeStampPanel.add(ezModeStampPanelTabs);
+
+        ezModeTitle.setHorizontalAlignment(JLabel.CENTER);
+        ezModeTitle.setVerticalAlignment(JLabel.CENTER);
+        ezModeTitlePanel.add(ezModeTitle);
+
+        ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp());
+
+        add(ezModeStampPanel);
+        add(ezModeStampSettingsPanel);
+        add(ezModeTitlePanel);
 
         listener.resetHistory();
 
@@ -112,26 +156,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
             topBar.add(newItem);
             setJMenuBar(topBar);
         }
-
-        ezMode = config.getBool(ConfigHelper.PROFILE.ezMode);
-        String[] buttonStrings = {"cube", "counter", "circle", "simplebrush", "text", "rectangle"};
-        int i = 0;
-        for(String str : buttonStrings) {
-            SnipScopeUIButton button = new SnipScopeUIButton(ImageManager.getImage("buttons/stamp_" + str + ".png"), ImageManager.getImage("buttons/stamp_" + str + "_hover.png"), ImageManager.getImage("buttons/stamp_" + str + "_sel.png"));
-            int selectedStamp = i;
-            button.addOnPress(args -> {
-                for(SnipScopeUIButton btn : stampButtons) {
-                    btn.setSelected(button == btn);
-                }
-                setSelectedStamp(selectedStamp);
-            });
-            if(i == 0) button.setSelected(true);
-            i++;
-            button.setEnabled(ezMode);
-            addUIComponent(button);
-            stampButtons.add(button);
-        }
-        autoSizeStampButtons();
 
         if(!isStandalone) {
             GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -172,10 +196,32 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         setEnableInteraction(!isDefaultImage());
     }
 
+    public void addEZModeStampButton(String title, String iconName, String theme, int stampIndex) {
+        ezModeStampPanelTabs.addTab(title, null);
+        BufferedImage ezIconMarker = ImageManager.getImage("ui/editor/" + theme + "/" + iconName + ".png");
+        ezModeStampPanelTabs.setTabComponentAt(stampIndex, new EzModeStampTab(ezIconMarker, 32, this, stampIndex));
+        ezModeStampPanelTabs.setIconAt(stampIndex, new ImageIcon(ezIconMarker));
+    }
+
     @Override
     public void resizeTrigger() {
         super.resizeTrigger();
-        autoSizeStampButtons();
+
+        if(ezMode) {
+            int titleMargin = 5;
+
+            ezModeTitlePanel.setBounds(0, 0, ezModeWidth, ezModeHeight);
+            ezModeTitle.setFont(new Font("Arial", Font.PLAIN, ezModeHeight - titleMargin));
+            ezModeStampPanel.setBounds(ezModeWidth, 0, getContentPane().getWidth() - ezModeWidth, ezModeHeight);
+            ezModeStampPanelTabs.setBounds(0, 0, ezModeStampPanel.getWidth(), ezModeStampPanel.getHeight());
+            ezModeStampSettingsPanel.setBounds(0, ezModeHeight, ezModeWidth, getContentPane().getHeight() - ezModeHeight);
+            renderer.setBounds(ezModeWidth, ezModeHeight, getContentPane().getWidth() - ezModeWidth, getContentPane().getHeight() - ezModeHeight);
+        } else {
+            ezModeTitlePanel.setBounds(0, 0, 0, 0);
+            ezModeStampPanel.setBounds(0, 0, 0, 0);
+            renderer.setBounds(0, 0, getContentPane().getWidth(), getContentPane().getHeight());
+            instance.requestFocus();
+        }
     }
 
     public void openNewImageWindow() {
@@ -189,18 +235,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
             isDirty = true;
             repaint();
         });
-    }
-
-    public void autoSizeStampButtons() {
-        if(!ezMode) return;
-        int size = getHeight() / 10;
-        int index = 0;
-        int margin = size/4;
-        for(SnipScopeUIButton btn : stampButtons) {
-            btn.setSize(size, size);
-            btn.setPosition((size * index) + margin * (index + 1), margin);
-            index++;
-        }
     }
 
     public void saveImage() {
@@ -261,8 +295,25 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         return stamps[selectedStamp];
     }
 
+    public void setEzModeTitle(String title) {
+        if(title == null) {
+            ezModeTitle.setText(StampUtils.getStampAsString(selectedStamp));
+            return;
+        }
+        ezModeTitle.setText(title);
+    }
+
     public void setSelectedStamp(int i) {
+        if(selectedStamp == i)
+            return;
         selectedStamp = i;
+        ezModeStampPanelTabs.setSelectedIndex(i);
+        setEzModeTitle(StampUtils.getStampAsString(i));
+        updateEzUI();
+    }
+
+    public void updateEzUI() {
+        ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp());
     }
 
     public IStamp[] getStamps() {
@@ -283,10 +334,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
     public void setEzMode(boolean value) {
         ezMode = value;
-        for(SnipScopeUIButton btn : stampButtons)
-            btn.setEnabled(ezMode);
-        if(ezMode)
-            autoSizeStampButtons();
+        resizeTrigger();
     }
 
     public boolean isDefaultImage() {
@@ -309,5 +357,21 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     public void close() {
         for(IClosable wnd : cWindows)
             wnd.close();
+    }
+
+    public void setStampVisible(boolean enabled) {
+        isStampVisible = enabled;
+    }
+
+    public boolean isStampVisible() {
+        return isStampVisible;
+    }
+
+    public int getEzModeWidth() {
+        return ezModeWidth;
+    }
+
+    public int getEzModeHeight() {
+        return ezModeHeight;
     }
 }

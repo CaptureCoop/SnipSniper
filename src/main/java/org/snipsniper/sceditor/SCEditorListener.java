@@ -258,4 +258,18 @@ public class SCEditorListener extends SnipScopeListener {
         scEditorWindow.getInputContainer().setMousePosition(mouseEvent.getX(), mouseEvent.getY());
         scEditorWindow.repaint();
     }
+
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) {
+        super.mouseEntered(mouseEvent);
+        scEditorWindow.setStampVisible(true);
+        scEditorWindow.repaint();
+    }
+
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) {
+        super.mouseExited(mouseEvent);
+        scEditorWindow.setStampVisible(false);
+        scEditorWindow.repaint();
+    }
 }
