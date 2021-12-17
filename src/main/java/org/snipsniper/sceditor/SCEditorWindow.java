@@ -78,11 +78,11 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         LogManager.log("Loading stamps", LogLevel.INFO);
 
         stamps[0] = new CubeStamp(config, this);
-        stamps[1] = new CounterStamp(config);
-        stamps[2] = new CircleStamp(config);
+        stamps[1] = new CounterStamp(config, this);
+        stamps[2] = new CircleStamp(config, this);
         stamps[3] = new SimpleBrush(config, this);
         stamps[4] = new TextStamp(config, this);
-        stamps[5] = new RectangleStamp(config);
+        stamps[5] = new RectangleStamp(config, this);
         stamps[6] = new EraserStamp(this, config);
 
         if(image == null) {
@@ -309,6 +309,10 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         selectedStamp = i;
         ezModeStampPanelTabs.setSelectedIndex(i);
         setEzModeTitle(StampUtils.getStampAsString(i));
+        updateEzUI();
+    }
+
+    public void updateEzUI() {
         ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp());
     }
 

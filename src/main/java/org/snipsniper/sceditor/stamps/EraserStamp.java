@@ -37,6 +37,8 @@ public class EraserStamp implements IStamp {
                     size += speed;
                     break;
             }
+            if(scEditorWindow != null)
+                scEditorWindow.updateEzUI();
         }
     }
 

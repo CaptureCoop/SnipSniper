@@ -60,11 +60,15 @@ public class TextStamp implements IStamp{
             if (keyEvent.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
                 if (text.length() > 0)
                     text = text.substring(0, text.length() - 1);
+                if(scEditorWindow != null)
+                    scEditorWindow.updateEzUI();
                 return;
             }
 
             if(!nonTypeKeys.contains(keyEvent.getKeyCode()) && !input.isKeyPressed(KeyEvent.VK_CONTROL))
                 text += keyEvent.getKeyChar();
+            if(scEditorWindow != null)
+                scEditorWindow.updateEzUI();
         }
     }
 

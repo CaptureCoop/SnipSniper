@@ -66,6 +66,9 @@ public class CubeStamp implements IStamp{
                 }
                 break;
         }
+
+        if(scEditorWindow != null)
+            scEditorWindow.updateEzUI();
     }
 
     public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
