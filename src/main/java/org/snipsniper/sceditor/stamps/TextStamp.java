@@ -1,11 +1,13 @@
 package org.snipsniper.sceditor.stamps;
 
+import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
+import org.snipsniper.utils.enums.LogLevel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -140,8 +142,20 @@ public class TextStamp implements IStamp{
     }
 
     @Override
+    public void setWidth(int width) {
+        LogManager.log("setWidth called on TextStamp. This does not do anything! Use setHeight() instead.", LogLevel.WARNING);
+    }
+
+    @Override
     public int getWidth() {
+        //TODO: Return width in pixels?
+        LogManager.log("getWidth called on TextStamp. This does not return anything! Use getHeight() instead.", LogLevel.WARNING);
         return 0;
+    }
+
+    @Override
+    public void setHeight(int height) {
+        fontSize = height;
     }
 
     @Override

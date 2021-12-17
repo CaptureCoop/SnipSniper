@@ -1,11 +1,13 @@
 package org.snipsniper.sceditor.stamps;
 
+import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
+import org.snipsniper.utils.enums.LogLevel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -87,12 +89,23 @@ public class EraserStamp implements IStamp {
     }
 
     @Override
+    public void setWidth(int width) {
+        size = width;
+    }
+
+    @Override
     public int getWidth() {
-        return 0;
+        return size;
+    }
+
+    @Override
+    public void setHeight(int height) {
+        LogManager.log("setHeight() called on EraserStamp! This does not do anything! Use setWidth() to set size.", LogLevel.WARNING);
     }
 
     @Override
     public int getHeight() {
+        LogManager.log("getHeight() called on EraserStamp! This does not return anything! Use setWidth() to set size!", LogLevel.WARNING);
         return 0;
     }
 
