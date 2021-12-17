@@ -33,6 +33,7 @@ public class EzModeSettingsCreator {
             case ERASER: eraser(panel, stamp); break;
         }
         panel.add(createJSeperator());
+        panel.revalidate();
         panel.repaint();
     }
 
