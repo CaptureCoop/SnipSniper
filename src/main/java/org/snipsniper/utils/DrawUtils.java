@@ -2,8 +2,61 @@ package org.snipsniper.utils;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public class DrawUtils {
+
+    public enum DIRECTION {VERTICAL, HORIZONTAL}
+
+    public static BufferedImage createHSVHueBar(int width, int height, DIRECTION direction) {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = (Graphics2D) image.getGraphics();
+
+        float hue = 0F;
+        float stepHeight = 1F / height;
+        float stepWidth = 1F / width;
+
+        if(direction == DIRECTION.VERTICAL) {
+            for(int y = 0; y < height; y++) {
+                g.setColor(new Color(Color.HSBtoRGB(hue, 1F, 1F)));
+                g.drawLine(0, y, width, y);
+                hue += stepHeight;
+            }
+        } else {
+            for(int x = 0; x < width; x++) {
+                g.setColor(new Color(Color.HSBtoRGB(hue, 1F, 1F)));
+                g.drawLine(x, 0, x, height);
+                hue += stepWidth;
+            }
+        }
+
+        g.dispose();
+        return image;
+    }
+
+    public static BufferedImage createHSVBox(int width, int height, float hue) {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = (Graphics2D) image.getGraphics();
+
+        float brightness = 1F;
+        float saturation;
+        float stepHeight = 1F / height;
+        float stepWidth = 1F / width;
+
+        for(int bY = 0; bY < height; bY++) {
+            saturation = 0;
+            for(int bX = 0; bX < width; bX++) {
+                saturation += stepWidth;
+                g.setColor(new Color(Color.HSBtoRGB(hue, saturation, brightness)));
+                g.drawLine(bX, bY, bX, bY);
+            }
+            brightness -= stepHeight;
+        }
+
+        g.dispose();
+        return image;
+    }
+
     public static void drawRect(Graphics g, Rectangle rect) {
         if(rect != null)
             g.drawRect(rect.x, rect.y, rect.width, rect.height);
