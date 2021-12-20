@@ -123,9 +123,6 @@ public final class SnipSniper {
 			LogManager.log("Error setting look and feel. Message: " + e.getMessage(), LogLevel.ERROR, true);
 		}
 
-		if(config.getBool(ConfigHelper.MAIN.debug))
-			openDebugConsole();
-
 		LangManager.load();
 		WikiManager.load(LangManager.getLanguage());
 

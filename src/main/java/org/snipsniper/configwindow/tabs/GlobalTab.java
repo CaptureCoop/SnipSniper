@@ -258,7 +258,6 @@ public class GlobalTab extends JPanel implements ITab{
             autostart.run();
 
         if(didDebugChange && config.getBool(ConfigHelper.MAIN.debug)) {
-            SnipSniper.openDebugConsole();
             doRestartProfiles = true;
         } else if(didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)){
             SnipSniper.closeDebugConsole();
