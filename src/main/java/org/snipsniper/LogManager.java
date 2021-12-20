@@ -39,6 +39,9 @@ public class LogManager {
         if(!enabled)
             return;
 
+        if(level == LogLevel.DEBUG && !SnipSniper.isDebug())
+            return;
+
         StringBuilder msg = new StringBuilder("%DATETIME% [%TYPE%]%INSERTSPACE% [%CLASS%]: %MESSAGE%");
 
         String levelString = level.toString();
