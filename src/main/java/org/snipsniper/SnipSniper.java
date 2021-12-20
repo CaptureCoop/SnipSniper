@@ -134,11 +134,9 @@ public final class SnipSniper {
 			LogManager.log("=================================================================================", LogLevel.WARNING);
 		}
 
-		if(config.getBool(ConfigHelper.MAIN.debug)) {
-			LogManager.log("========================================", LogLevel.INFO);
-			LogManager.log("= SnipSniper is running in debug mode! =", LogLevel.INFO);
-			LogManager.log("========================================", LogLevel.INFO);
-		}
+		LogManager.log("========================================", LogLevel.DEBUG);
+		LogManager.log("= SnipSniper is running in debug mode! =", LogLevel.DEBUG);
+		LogManager.log("========================================", LogLevel.DEBUG);
 
 		if(!LangManager.languages.contains(SnipSniper.config.getString(ConfigHelper.MAIN.language))) {
 			LogManager.log("Language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> not found. Available languages: " + LangManager.languages.toString(), LogLevel.ERROR);
