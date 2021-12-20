@@ -22,7 +22,7 @@ public class DrawUtils {
                 g.drawLine(0, y, width, y);
                 hue += stepHeight;
             }
-        } else {
+        } else if(direction == DIRECTION.HORIZONTAL){
             for(int x = 0; x < width; x++) {
                 g.setColor(new Color(Color.HSBtoRGB(hue, 1F, 1F)));
                 g.drawLine(x, 0, x, height);
