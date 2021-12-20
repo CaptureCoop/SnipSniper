@@ -374,4 +374,8 @@ public final class SnipSniper {
 			debugConsole = null;
 		}
 	}
+
+	public static boolean isDebug() {
+		return config.getBool(ConfigHelper.MAIN.debug);
+	}
 }

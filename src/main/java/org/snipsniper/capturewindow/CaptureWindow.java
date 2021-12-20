@@ -307,7 +307,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 		if(screenshot != null) {
 			if((screenshotTinted != null && !hasSaved && bounds != null) || SystemUtils.IS_OS_LINUX) {
-				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
+				if(SnipSniper.isDebug()) {
 					LogManager.log("About to render image: " + screenshotTinted, LogLevel.INFO);
 					LogManager.log("Frame Visible: " + isVisible(), LogLevel.INFO);
 				}
@@ -315,7 +315,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				globalBuffer.drawImage(screenshotTinted, 0,0, bounds.width,bounds.height, this);
 				allBounds.addRectangle(bounds);
 
-				if(SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug)) {
+				if(SnipSniper.isDebug()) {
 					LogManager.log("Rendered tinted background. More Info: ", LogLevel.INFO);
 					LogManager.log("Image rendered:        " + screenshotTinted.toString(), LogLevel.INFO);
 					LogManager.log("Frame Visible: " + isVisible(), LogLevel.INFO);
