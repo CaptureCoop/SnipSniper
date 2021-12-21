@@ -13,21 +13,21 @@ public class DrawUtils {
         Graphics2D g = (Graphics2D) image.getGraphics();
 
         float hue = 0F;
-        float stepHeight = 1F / height;
-        float stepWidth = 1F / width;
+        int amount = width;
+        float step = 1F / width;
 
         if(direction == DIRECTION.VERTICAL) {
-            for(int y = 0; y < height; y++) {
-                g.setColor(new Color(Color.HSBtoRGB(hue, 1F, 1F)));
-                g.drawLine(0, y, width, y);
-                hue += stepHeight;
+            amount = height;
+            step = 1F / height;
+        }
+
+        for(int pos = 0; pos < amount; pos++) {
+            g.setColor(new Color(Color.HSBtoRGB(hue, 1F, 1F)));
+            switch(direction) {
+                case VERTICAL: g.drawLine(0, pos, width, pos); break;
+                case HORIZONTAL: g.drawLine(pos, 0, pos, height); break;
             }
-        } else if(direction == DIRECTION.HORIZONTAL){
-            for(int x = 0; x < width; x++) {
-                g.setColor(new Color(Color.HSBtoRGB(hue, 1F, 1F)));
-                g.drawLine(x, 0, x, height);
-                hue += stepWidth;
-            }
+            hue += step;
         }
 
         g.dispose();
@@ -43,12 +43,12 @@ public class DrawUtils {
         float stepHeight = 1F / height;
         float stepWidth = 1F / width;
 
-        for(int bY = 0; bY < height; bY++) {
+        for(int y = 0; y < height; y++) {
             saturation = 0;
-            for(int bX = 0; bX < width; bX++) {
+            for(int x = 0; x < width; x++) {
                 saturation += stepWidth;
                 g.setColor(new Color(Color.HSBtoRGB(hue, saturation, brightness)));
-                g.drawLine(bX, bY, bX, bY);
+                g.drawLine(x, y, x, y);
             }
             brightness -= stepHeight;
         }
