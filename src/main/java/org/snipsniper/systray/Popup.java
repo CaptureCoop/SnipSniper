@@ -52,6 +52,7 @@ public class Popup extends JFrame{
         if (SnipSniper.isDebug()) {
             PopupMenu debugMenu = new PopupMenu("Debug", ImageManager.getImage("icons/random/kiwi.png"));
             debugMenu.add(new PopupMenuButton("Console", ImageManager.getImage("icons/console.png"), this, args -> SnipSniper.openDebugConsole(), menus));
+            debugMenu.add(new PopupMenuButton("Open log folder", ImageManager.getImage("icons/folder.png"), this, args -> FileUtils.openFolder(SnipSniper.getLogFolder()), menus));
             debugMenu.add(new PopupMenuButton("Language test", ImageManager.getImage("icons/config.png"), this, args -> new LangDebugWindow(), menus));
             add(debugMenu);
             menus.add(debugMenu);
