@@ -1,8 +1,10 @@
 package org.snipsniper.secrets.games;
 
 import org.snipsniper.ImageManager;
+import org.snipsniper.SnipSniper;
 import org.snipsniper.StatsManager;
 import org.snipsniper.systray.Sniper;
+import org.snipsniper.utils.IFunction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,8 +48,7 @@ public class BGame extends JFrame {
     public BGame(Sniper sniper) {
         this.sniper = sniper;
         StatsManager.incrementCount(StatsManager.BGAME_STARTED_AMOUNT);
-        Thread gameThread = new Thread(() -> launch());
-        gameThread.start();
+        SnipSniper.getNewThread(args -> launch()).start();
     }
 
     private void launch() {

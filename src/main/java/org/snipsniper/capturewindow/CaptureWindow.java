@@ -82,7 +82,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	
 	
 	public void loop() {
-		Thread thread = new Thread(() -> {
+		IFunction loopFunction = args -> {
 			final double nsPerTick = 1000000000D / config.getInt(ConfigHelper.PROFILE.maxFPS);
 			long lastTime = System.nanoTime();
 			long lastTimer = System.currentTimeMillis();
@@ -109,8 +109,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				if (System.currentTimeMillis() - lastTimer >= 1000)
 					lastTimer += 1000;
 			}
-		});
-		thread.start();
+		};
+		SnipSniper.getNewThread(loopFunction).start();
 	}
 	
 	public void specialRepaint() {

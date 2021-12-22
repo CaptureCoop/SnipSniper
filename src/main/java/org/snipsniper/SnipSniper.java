@@ -17,6 +17,7 @@ import javax.swing.*;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.configwindow.ConfigWindow;
@@ -52,6 +53,8 @@ public final class SnipSniper {
 
 	private static DebugConsole debugConsole;
 
+	private static Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
+
 	public static void start(String[] args) {
 		if(!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
 			System.out.println("SnipSniper is currently only available for Windows and Linux (In development, use with caution). Sorry!");
@@ -75,6 +78,9 @@ public final class SnipSniper {
 		cmdline.handle(args);
 
 		LogManager.setEnabled(true);
+
+		uncaughtExceptionHandler = (thread, throwable) -> LogManager.log("SnipSniper encountered an uncaught exception. This may be fatal!\n" + ExceptionUtils.getStackTrace(throwable), LogLevel.ERROR);
+		Thread.currentThread().setUncaughtExceptionHandler(uncaughtExceptionHandler);
 
 		try {
 			GlobalScreen.registerNativeHook();
@@ -368,6 +374,12 @@ public final class SnipSniper {
 			debugConsole.dispose();
 			debugConsole = null;
 		}
+	}
+
+	public static Thread getNewThread(IFunction function) {
+		Thread thread = new Thread(() -> function.run());
+		thread.setUncaughtExceptionHandler(uncaughtExceptionHandler);
+		return thread;
 	}
 
 	public static boolean isDebug() {

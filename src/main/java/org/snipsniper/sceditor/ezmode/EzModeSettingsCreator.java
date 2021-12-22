@@ -2,6 +2,7 @@ package org.snipsniper.sceditor.ezmode;
 
 import javax.swing.*;
 
+import org.snipsniper.SnipSniper;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.sceditor.stamps.IStamp;
 import org.snipsniper.sceditor.stamps.TextStamp;
@@ -192,15 +193,14 @@ public class EzModeSettingsCreator {
             @Override
             public void focusGained(FocusEvent focusEvent) {
                 super.focusGained(focusEvent);
-                Thread waitThread = new Thread(() -> {
+                SnipSniper.getNewThread(args -> {
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
                     scEditorWindow.requestFocus();
-                });
-                waitThread.start();
+                }).start();
             }
         });
         fontTypeDropdown.addItemListener(e -> {
