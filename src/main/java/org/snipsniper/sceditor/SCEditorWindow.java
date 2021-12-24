@@ -197,6 +197,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
             }
         });
         setEnableInteraction(!isDefaultImage());
+        requestFocus();
     }
 
     public void addEZModeStampButton(String title, String iconName, String theme, int stampIndex) {
