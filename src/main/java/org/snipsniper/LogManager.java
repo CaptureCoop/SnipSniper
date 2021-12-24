@@ -57,7 +57,10 @@ public class LogManager {
         final int STACKTRACE_START = 3;
         StackTraceElement currentStackTrace = stackTrace[STACKTRACE_START];
 
-        msg = new StringBuilder(msg.toString().replace("%CLASS%", currentStackTrace.getClassName() + "." + currentStackTrace.getMethodName() + ":" + currentStackTrace.getLineNumber()));
+        String classFilename = currentStackTrace.getFileName();
+        if(classFilename != null)
+            classFilename = classFilename.replaceAll(".java" ,"");
+        msg = new StringBuilder(msg.toString().replace("%CLASS%", classFilename + "." + currentStackTrace.getMethodName() + ":" + currentStackTrace.getLineNumber()));
         msg = new StringBuilder(msg.toString().replace("%INSERTSPACE%", ""));
         msg = new StringBuilder(msg.toString().replace("%TYPE%", levelString));
         msg = new StringBuilder(msg.toString().replace("%MESSAGE%", message));
