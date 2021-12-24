@@ -52,7 +52,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
     private boolean isStampVisible = true;
 
-    private boolean ezMode;
+    private boolean ezMode = true;
     private final EzModeSettingsCreator ezModeSettingsCreator = new EzModeSettingsCreator(this);
     private int ezModeWidth = 200;
     private int ezModeHeight = 40;
