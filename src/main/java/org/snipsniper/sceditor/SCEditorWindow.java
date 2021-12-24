@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -244,8 +245,11 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), this);
         g.dispose();
         String location = ImageUtils.saveImage(finalImg, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config);
-        if(location != null)
-            config.set(ConfigHelper.PROFILE.lastSaveFolder, location);
+        if(location != null) {
+            String folder = location.replace(new File(location).getName(), "");
+            config.set(ConfigHelper.PROFILE.lastSaveFolder, folder);
+            config.save();
+        }
         if(config.getBool(ConfigHelper.PROFILE.copyToClipboard))
             ImageUtils.copyToClipboard(finalImg);
     }
