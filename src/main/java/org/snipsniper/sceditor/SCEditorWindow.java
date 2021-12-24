@@ -52,7 +52,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
     private boolean isStampVisible = true;
 
-    private boolean ezMode = true;
+    private boolean ezMode;
     private final EzModeSettingsCreator ezModeSettingsCreator = new EzModeSettingsCreator(this);
     private int ezModeWidth = 200;
     private int ezModeHeight = 40;
@@ -68,6 +68,8 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         this.title = title;
         this.saveLocation = saveLocation;
         this.inClipboard = inClipboard;
+
+        ezMode = config.getBool(ConfigHelper.PROFILE.ezMode);
 
         LogManager.log("Starting new editor window. (" + this + ")", LogLevel.INFO);
 

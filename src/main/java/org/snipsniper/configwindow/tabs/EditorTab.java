@@ -52,6 +52,16 @@ public class EditorTab extends JPanel implements ITab{
         //BEGIN ELEMENTS
 
         gbc.gridx = 0;
+        options.add(configWindow.createJLabel("EzMode", JLabel.RIGHT, JLabel.CENTER), gbc);
+        gbc.gridx = 1;
+        JCheckBox ezModeCheckBox = new JCheckBox();
+        ezModeCheckBox.setSelected(config.getBool(ConfigHelper.PROFILE.ezMode));
+        ezModeCheckBox.addChangeListener(e -> config.set(ConfigHelper.PROFILE.ezMode, ezModeCheckBox.isSelected()));
+        options.add(ezModeCheckBox, gbc);
+        gbc.gridx = 2;
+        options.add(new InfoButton(null), gbc);
+
+        gbc.gridx = 0;
         options.add(configWindow.createJLabel(LangManager.getItem("config_label_hsvspeed"), JLabel.RIGHT, JLabel.CENTER), gbc);
         JLabel hsvPercentage = new JLabel(config.getInt(ConfigHelper.PROFILE.hsvColorSwitchSpeed) + "%");
         hsvPercentage.setHorizontalAlignment(JLabel.CENTER);
