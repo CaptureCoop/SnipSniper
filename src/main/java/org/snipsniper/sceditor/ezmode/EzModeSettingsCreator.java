@@ -2,7 +2,6 @@ package org.snipsniper.sceditor.ezmode;
 
 import javax.swing.*;
 
-import javafx.scene.shape.Circle;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.sceditor.stamps.CircleStamp;
@@ -11,7 +10,6 @@ import org.snipsniper.sceditor.stamps.RectangleStamp;
 import org.snipsniper.sceditor.stamps.TextStamp;
 import org.snipsniper.utils.DropdownItem;
 import org.snipsniper.utils.Function;
-import org.snipsniper.utils.IFunction;
 
 import java.awt.*;
 import java.awt.event.FocusAdapter;
