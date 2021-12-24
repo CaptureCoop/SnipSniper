@@ -134,6 +134,14 @@ public class RectangleStamp implements IStamp {
         thickness = config.getInt(ConfigHelper.PROFILE.editorStampRectangleThickness);
     }
 
+    public void setThickness(int thickness) {
+        this.thickness = thickness;
+    }
+
+    public int getThickness() {
+        return thickness;
+    }
+
     @Override
     public void setWidth(int width) {
         this.width = width;

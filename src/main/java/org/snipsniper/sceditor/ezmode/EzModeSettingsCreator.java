@@ -2,9 +2,12 @@ package org.snipsniper.sceditor.ezmode;
 
 import javax.swing.*;
 
+import javafx.scene.shape.Circle;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.sceditor.SCEditorWindow;
+import org.snipsniper.sceditor.stamps.CircleStamp;
 import org.snipsniper.sceditor.stamps.IStamp;
+import org.snipsniper.sceditor.stamps.RectangleStamp;
 import org.snipsniper.sceditor.stamps.TextStamp;
 import org.snipsniper.utils.DropdownItem;
 import org.snipsniper.utils.Function;
@@ -69,7 +72,7 @@ public class EzModeSettingsCreator {
 
     }
 
-    public void addBasicBoxSettings(JPanel panel, IStamp stamp) {
+    public void addWidthHeightSettings(JPanel panel, IStamp stamp) {
         final int boxMinimum = 1;
         final int boxMaximum = 400;
         panel.add(new JLabel("width"));
@@ -90,6 +93,10 @@ public class EzModeSettingsCreator {
             }
         }));
         panel.add(createJSeperator());
+    }
+
+    public void addBasicBoxSettings(JPanel panel, IStamp stamp) {
+        addWidthHeightSettings(panel, stamp);
         addColorSettings(panel, stamp);
     }
 
@@ -153,7 +160,18 @@ public class EzModeSettingsCreator {
     }
 
     private void circle(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel, stamp, true);
+        addBasicCircleSettings(panel, stamp, false);
+        CircleStamp cStamp = (CircleStamp)stamp;
+        panel.add(new JLabel("thickness"));
+        panel.add(createEZModeSlider(1, 200, cStamp.getThickness(), new Function() {
+            @Override
+            public boolean run(Integer... args) {
+                cStamp.setThickness(args[0]);
+                return true;
+            }
+        }));
+        panel.add(createJSeperator());
+        addColorSettings(panel, stamp);
     }
 
     private void brush(JPanel panel, IStamp stamp) {
@@ -212,7 +230,18 @@ public class EzModeSettingsCreator {
     }
 
     private void rectangle(JPanel panel, IStamp stamp) {
-        addBasicBoxSettings(panel, stamp);
+        addWidthHeightSettings(panel, stamp);
+        RectangleStamp rStamp = (RectangleStamp)stamp;
+        panel.add(new JLabel("thickness"));
+        panel.add(createEZModeSlider(1, 200, rStamp.getThickness(), new Function() {
+            @Override
+            public boolean run(Integer... args) {
+                rStamp.setThickness(args[0]);
+                return true;
+            }
+        }));
+        panel.add(createJSeperator());
+        addColorSettings(panel, stamp);
     }
 
     private void eraser(JPanel panel, IStamp stamp) {

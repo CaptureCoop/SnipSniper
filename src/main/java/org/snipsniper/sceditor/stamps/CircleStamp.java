@@ -129,6 +129,14 @@ public class CircleStamp implements IStamp{
         thickness = config.getInt(ConfigHelper.PROFILE.editorStampCircleThickness);
     }
 
+    public void setThickness(int thickness) {
+        this.thickness = thickness;
+    }
+
+    public int getThickness() {
+        return thickness;
+    }
+
     @Override
     public void setWidth(int width) {
         this.width = width;
