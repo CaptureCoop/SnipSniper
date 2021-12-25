@@ -205,6 +205,7 @@ public final class SnipSniper {
 	}
 
 	public static void resetProfiles() {
+		LogManager.log("Resetting/Starting profiles...", LogLevel.INFO);
 		if(SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
 			for (TrayIcon icon : tray.getTrayIcons()) {
