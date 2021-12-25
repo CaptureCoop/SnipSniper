@@ -16,6 +16,11 @@ public class StatsManager {
     public static final String BGAME_STARTED_SPAWNED_PIECES_AMOUNT = "bgame_spawned_pieces_amount";
 
     public static void init() {
+        //TODO: Implement in json
+        enabled = false;
+    }
+
+    public static void initOld() {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
