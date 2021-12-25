@@ -160,6 +160,11 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
             setJMenuBar(topBar);
         }
 
+        if(ezMode) {
+            setSize(getWidth() + ezModeWidth, getHeight() + ezModeHeight);
+            setLocation((int)getLocation().getX() - ezModeWidth, (int)getLocation().getY() - ezModeHeight);
+        }
+
         if(!isStandalone) {
             GraphicsEnvironment localGE = GraphicsEnvironment.getLocalGraphicsEnvironment();
             boolean found = false;
