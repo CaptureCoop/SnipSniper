@@ -5,6 +5,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.snipsniper.SnipSniper;
+import org.snipsniper.configwindow.StampJPanel;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.sceditor.stamps.CircleStamp;
 import org.snipsniper.sceditor.stamps.IStamp;
@@ -40,6 +41,16 @@ public class EzModeSettingsCreator {
             case ERASER: eraser(panel, stamp); break;
         }
         panel.add(createJSeperator());
+        panel.add(new JLabel("preview"));
+        StampJPanel previewPanel = new StampJPanel();
+        previewPanel.setStamp(stamp);
+        previewPanel.setBackground(scEditorWindow.getImage());
+        Dimension previewDimension = new Dimension(scEditorWindow.getEzModeWidth(), scEditorWindow.getEzModeWidth());
+        previewPanel.setPreferredSize(previewDimension);
+        previewPanel.setMinimumSize(previewDimension);
+        previewPanel.setMaximumSize(previewDimension);
+
+        panel.add(previewPanel);
         panel.revalidate();
         panel.repaint();
     }
