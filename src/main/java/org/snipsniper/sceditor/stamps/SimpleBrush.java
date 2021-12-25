@@ -57,7 +57,7 @@ public class SimpleBrush implements IStamp {
         g.setPaint(paint);
         g.fillOval(position.getX() - newSize / 2, position.getY() - newSize / 2, newSize, newSize);
 
-        if(scEditorWindow != null && !input.isKeyPressed(scEditorWindow.getMovementKey())) {
+        if(scEditorWindow != null && input != null && !input.isKeyPressed(scEditorWindow.getMovementKey())) {
             Vector2Int p0 = scEditorWindow.getPointOnImage(input.getMousePathPoint(0));
             Vector2Int p1 = scEditorWindow.getPointOnImage(input.getMousePathPoint(1));
 

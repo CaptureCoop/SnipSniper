@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 
 public class EzModeSettingsCreator {
     private final SCEditorWindow scEditorWindow;
+    private StampJPanel stampPreviewPanel;
 
     public EzModeSettingsCreator(SCEditorWindow scEditorWindow) {
         this.scEditorWindow = scEditorWindow;
@@ -42,15 +43,15 @@ public class EzModeSettingsCreator {
         }
         panel.add(createJSeperator());
         panel.add(new JLabel("preview"));
-        StampJPanel previewPanel = new StampJPanel();
-        previewPanel.setStamp(stamp);
-        previewPanel.setBackground(scEditorWindow.getImage());
+        stampPreviewPanel = new StampJPanel();
+        stampPreviewPanel.setStamp(stamp);
+        stampPreviewPanel.setBackground(scEditorWindow.getImage());
         Dimension previewDimension = new Dimension(scEditorWindow.getEzModeWidth(), scEditorWindow.getEzModeWidth());
-        previewPanel.setPreferredSize(previewDimension);
-        previewPanel.setMinimumSize(previewDimension);
-        previewPanel.setMaximumSize(previewDimension);
+        stampPreviewPanel.setPreferredSize(previewDimension);
+        stampPreviewPanel.setMinimumSize(previewDimension);
+        stampPreviewPanel.setMaximumSize(previewDimension);
 
-        panel.add(previewPanel);
+        panel.add(stampPreviewPanel);
         panel.revalidate();
         panel.repaint();
     }
@@ -63,6 +64,7 @@ public class EzModeSettingsCreator {
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
                 stamp.getColor().setPrimaryColor(new Color(args[0], cColor.getGreen(), cColor.getBlue()));
+                stampPreviewPanel.repaint();
                 return true;
             }
         }));
@@ -71,6 +73,7 @@ public class EzModeSettingsCreator {
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
                 stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), args[0], cColor.getBlue()));
+                stampPreviewPanel.repaint();
                 return true;
             }
         }));
@@ -79,6 +82,7 @@ public class EzModeSettingsCreator {
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
                 stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), cColor.getGreen(), args[0]));
+                stampPreviewPanel.repaint();
                 return true;
             }
         }));
@@ -93,6 +97,7 @@ public class EzModeSettingsCreator {
             @Override
             public boolean run(Integer... args) {
                 stamp.setWidth(args[0]);
+                stampPreviewPanel.repaint();
                 return true;
             }
         }));
@@ -102,6 +107,7 @@ public class EzModeSettingsCreator {
             @Override
             public boolean run(Integer... args) {
                 stamp.setHeight(args[0]);
+                stampPreviewPanel.repaint();
                 return true;
             }
         }));
@@ -120,6 +126,7 @@ public class EzModeSettingsCreator {
             public boolean run(Integer... args) {
                 stamp.setWidth(args[0]);
                 stamp.setHeight(args[0]);
+                stampPreviewPanel.repaint();
                 return true;
             }
         }));
@@ -142,6 +149,7 @@ public class EzModeSettingsCreator {
 
         slider.addChangeListener(e -> {
             onChange.run(slider.getValue());
+            stampPreviewPanel.repaint();
             scEditorWindow.requestFocus();
         });
         slider.addFocusListener(new FocusAdapter() {
