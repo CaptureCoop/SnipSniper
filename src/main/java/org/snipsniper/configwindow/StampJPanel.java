@@ -42,15 +42,15 @@ public class StampJPanel extends JPanel {
 
         if(background != null && backgroundEnabled) {
             if(background.getWidth() >= getWidth() && background.getHeight() >= getHeight()) {
-                g2d.drawImage(background, 0, 0, getWidth(), getWidth()/2, 0, 0, getWidth(), getWidth()/2, null);
+                g2d.drawImage(background, 0, 0, getWidth(), getHeight(), 0, 0, getWidth(), getHeight(), null);
             }
         }
         if(!isEnabled())
             g2d.setColor(Utils.getDisabledColor());
-        g2d.drawRect(0,0,getWidth()-1,getWidth()/2-1);
+        g2d.drawRect(0,0,getWidth() - 1,getHeight() -1);
 
         if(stamp != null)
-            stamp.render(g2d, null, new Vector2Int(getWidth()/2, getWidth()/4), new Double[]{1D, 1D}, false, false, 0);
+            stamp.render(g2d, null, new Vector2Int(getWidth()/2, getHeight()/2), new Double[]{1D, 1D}, false, false, 0);
 
         if(!isEnabled())
             g2d.fillRect(0, 0, getWidth(), getWidth()/2);

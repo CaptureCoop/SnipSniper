@@ -46,7 +46,7 @@ public class EraserStamp implements IStamp {
     public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         int newSize = (int) ((double)size * difference[0]);
 
-        if(scEditorWindow != null && !input.isKeyPressed(scEditorWindow.getMovementKey())) {
+        if(scEditorWindow != null && input != null && !input.isKeyPressed(scEditorWindow.getMovementKey())) {
             Vector2Int p0 = scEditorWindow.getPointOnImage(input.getMousePathPoint(0));
             Vector2Int p1 = scEditorWindow.getPointOnImage(input.getMousePathPoint(1));
 
