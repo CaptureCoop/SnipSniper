@@ -1,6 +1,8 @@
 package org.snipsniper.sceditor.ezmode;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.snipsniper.SnipSniper;
 import org.snipsniper.sceditor.SCEditorWindow;
@@ -14,6 +16,8 @@ import org.snipsniper.utils.Function;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class EzModeSettingsCreator {
     private final SCEditorWindow scEditorWindow;
@@ -225,6 +229,45 @@ public class EzModeSettingsCreator {
         });
 
         panel.add(fontTypeDropdown);
+
+        panel.add(createJSeperator());
+
+        panel.add(new JLabel("text"));
+
+        JTextField textInput = new JTextField();
+        textInput.setMinimumSize(dim);
+        textInput.setMaximumSize(dim);
+        textInput.setPreferredSize(dim);
+        textInput.setText(textStamp.getReadableText());
+        textInput.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                if(keyEvent.getKeyCode() == KeyEvent.VK_ENTER || keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE)
+                    scEditorWindow.requestFocus();
+            }
+        });
+        textInput.getDocument().addDocumentListener(new DocumentListener() {
+            public void update() {
+                textStamp.setText(textInput.getText());
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent event) {
+                update();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent event) {
+                update();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent event) {
+                update();
+            }
+        });
+
+        panel.add(textInput);
     }
 
     private void rectangle(JPanel panel, IStamp stamp) {

@@ -33,6 +33,8 @@ public class TextStamp implements IStamp{
 
     public enum TextState {IDLE, TYPING}
 
+    private final static String DEFAULT_TEXT = "Text";
+
     public TextStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
         this.scEditorWindow = scEditorWindow;
@@ -93,7 +95,7 @@ public class TextStamp implements IStamp{
         if(scEditorWindow != null)
             renderPos = scEditorWindow.getPointOnImage(pointToUseForRenderPos);
 
-        String textToDraw = "Text";
+        String textToDraw = DEFAULT_TEXT;
         if(!text.isEmpty())
             textToDraw = text;
 
@@ -141,6 +143,20 @@ public class TextStamp implements IStamp{
         color = config.getColor(ConfigHelper.PROFILE.editorStampTextDefaultColor);
         fontSize = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultFontSize);
         fontSizeSpeed = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultSpeed);
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getReadableText() {
+        if(text == null || text.isEmpty())
+            return DEFAULT_TEXT;
+        return text;
+    }
+
+    public String getText() {
+        return text;
     }
 
     @Override

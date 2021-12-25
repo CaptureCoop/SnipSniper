@@ -197,6 +197,7 @@ public class SCEditorListener extends SnipScopeListener {
         }
 
         scEditorWindow.repaint();
+        scEditorWindow.requestFocus();
     }
 
     public void save(Graphics g, boolean isCensor) {
