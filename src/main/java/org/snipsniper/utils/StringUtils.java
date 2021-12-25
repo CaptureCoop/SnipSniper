@@ -32,6 +32,7 @@ public class StringUtils {
         returnVal = returnVal.replaceAll("%hour%", getDateWithProperZero(now.getHour()));
         returnVal = returnVal.replaceAll("%minute%", getDateWithProperZero(now.getMinute()));
         returnVal = returnVal.replaceAll("%second%", getDateWithProperZero(now.getSecond()));
+        returnVal = returnVal.replaceAll("%ms%", getDateWithProperZero(now.getNano() / 10000000));
         return returnVal;
     }
 
