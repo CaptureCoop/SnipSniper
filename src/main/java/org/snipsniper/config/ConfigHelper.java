@@ -9,6 +9,7 @@ debug,
 theme, 
 updateChannel, 
 colorChooserType, 
+logFormat, 
 } 
 public enum PROFILE { 
 title, 
