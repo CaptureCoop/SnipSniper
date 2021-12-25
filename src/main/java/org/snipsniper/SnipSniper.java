@@ -17,7 +17,6 @@ import javax.swing.*;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import jdk.nashorn.internal.runtime.regexp.joni.Warnings;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
