@@ -268,15 +268,14 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 0;
         options.add(configWindow.createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
-        JTextField pictureLocation = new JTextField(config.getRawString(ConfigHelper.PROFILE.pictureFolder));
+        JTextField pictureLocation = new JTextField(StringUtils.correctSlashes(config.getRawString(ConfigHelper.PROFILE.pictureFolder)));
         pictureLocation.setPreferredSize(new Dimension(200, pictureLocation.getHeight()));
         pictureLocation.setMaximumSize(new Dimension(200, pictureLocation.getHeight()));
         pictureLocation.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent focusEvent) {
                 String saveLocationRaw = pictureLocation.getText();
-                if(!saveLocationRaw.endsWith("/"))
-                    saveLocationRaw += "/";
+                StringUtils.correctSlashes(saveLocationRaw);
 
                 String saveLocationFinal = StringUtils.replaceVars(saveLocationRaw);
 

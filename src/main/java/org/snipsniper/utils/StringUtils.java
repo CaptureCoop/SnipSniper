@@ -3,7 +3,7 @@ package org.snipsniper.utils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.SystemUtils;
 
-import java.time.LocalDate;
+import java.io.File;
 import java.time.LocalDateTime;
 
 public class StringUtils {
@@ -56,7 +56,10 @@ public class StringUtils {
     }
 
     public static String correctSlashes(String string) {
-        return string.replaceAll("\\\\", "/").replaceAll("//", "/");
+        String returnVal = string.replaceAll("\\\\", File.separator + File.separator).replaceAll("/", File.separator + File.separator);
+        if(!returnVal.endsWith(File.separator))
+            returnVal += File.separator;
+        return returnVal;
     }
 
     public static boolean endsWith(String original, String... text) {
