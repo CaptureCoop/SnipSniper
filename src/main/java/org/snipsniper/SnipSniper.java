@@ -17,6 +17,7 @@ import javax.swing.*;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import jdk.nashorn.internal.runtime.regexp.joni.Warnings;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
@@ -82,7 +83,7 @@ public final class SnipSniper {
 
 		uncaughtExceptionHandler = (thread, throwable) -> {
 			LogManager.log("SnipSniper encountered an uncaught exception. This may be fatal!", LogLevel.ERROR);
-			LogManager.logSimple(ExceptionUtils.getStackTrace(throwable), LogLevel.ERROR);
+			LogManager.logStacktrace(ExceptionUtils.getStackTrace(throwable), LogLevel.ERROR);
 		};
 		Thread.currentThread().setUncaughtExceptionHandler(uncaughtExceptionHandler);
 

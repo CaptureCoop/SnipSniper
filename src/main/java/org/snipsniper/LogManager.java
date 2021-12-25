@@ -48,7 +48,7 @@ public class LogManager {
         logInternal(message, level, printStackTrace, LocalDateTime.now());
     }
 
-    public static void logSimple(String message, LogLevel level) {
+    public static void logStacktrace(String message, LogLevel level) {
         System.out.println(message);
         htmlLog += "<p style='margin-top:0; white-space: nowrap;'><font color='" + getLevelColor(level) + "'>" + escapeHtml4(message).replaceAll("\n", "<br>") + "</font></p>";
         htmlLog += "<br>";
@@ -91,15 +91,6 @@ public class LogManager {
         msg = new StringBuilder(msg.toString().replace("%level%", levelString));
         msg = new StringBuilder(msg.toString().replace("%message%", message));
 
-        if(printStackTrace) {
-            msg.append("%newline%");
-            for(int i = STACKTRACE_START; i < stackTrace.length; i++) {
-                String trace = stackTrace[i].toString();
-                if(trace.contains("org.snipsniper"))
-                    msg.append(trace).append("%newline%");
-            }
-        }
-
         System.out.println(msg.toString().replaceAll("%newline%", "\n"));
 
         String finalMsg = escapeHtml4(msg.toString()).replaceAll(" ", "&nbsp;");
@@ -110,10 +101,18 @@ public class LogManager {
             finalMsg = finalMsg.replace(":" + currentStackTrace.getLineNumber() + "]", ":" + currentStackTrace.getLineNumber() + " <a href='" + link + "'>@</a>]");
         }
         String htmlLine = "<p style='margin-top:0; white-space: nowrap;'><font color='" + getLevelColor(level) + "'>" + finalMsg + "</font></p>";
-        if(printStackTrace)
-            htmlLine += "<br>";
+
         htmlLog += htmlLine;
 
+        if(printStackTrace) {
+            String stackTraceString = "";
+            for(int i = STACKTRACE_START; i < stackTrace.length; i++) {
+                String trace = stackTrace[i].toString();
+                if(trace.contains("org.snipsniper"))
+                    stackTraceString += trace + "\n";
+            }
+            logStacktrace(stackTraceString, level);
+        }
 
         DebugConsole console = SnipSniper.getDebugConsole();
         if(console != null)
