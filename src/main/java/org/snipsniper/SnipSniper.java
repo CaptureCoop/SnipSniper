@@ -77,6 +77,7 @@ public final class SnipSniper {
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
 
+		config = new Config("main.cfg", "main_defaults.cfg");
 		LogManager.setEnabled(true);
 
 		uncaughtExceptionHandler = (thread, throwable) -> LogManager.log("SnipSniper encountered an uncaught exception. This may be fatal!\n" + ExceptionUtils.getStackTrace(throwable), LogLevel.ERROR);
@@ -103,7 +104,6 @@ public final class SnipSniper {
 		StatsManager.init();
 		StatsManager.incrementCount(StatsManager.STARTED_AMOUNT);
 
-		config = new Config("main.cfg", "main_defaults.cfg");
 		String language = cmdline.getLanguage();
 		if(language != null && !language.isEmpty())
 			config.set(ConfigHelper.MAIN.language, language);

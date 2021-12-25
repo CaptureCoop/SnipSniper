@@ -26,27 +26,33 @@ public class StringUtils {
         return dateString;
     }
 
-    public static String formatTimeArguments(String string) {
+    public static String formatTimeArguments(String string, LocalDateTime time) {
         String returnVal = string;
-        LocalDateTime now = LocalDateTime.now();
-        returnVal = returnVal.replaceAll("%hour%", getDateWithProperZero(now.getHour()));
-        returnVal = returnVal.replaceAll("%minute%", getDateWithProperZero(now.getMinute()));
-        returnVal = returnVal.replaceAll("%second%", getDateWithProperZero(now.getSecond()));
-        returnVal = returnVal.replaceAll("%ms%", getDateWithProperZero(now.getNano() / 10000000));
+        returnVal = returnVal.replaceAll("%hour%", getDateWithProperZero(time.getHour()));
+        returnVal = returnVal.replaceAll("%minute%", getDateWithProperZero(time.getMinute()));
+        returnVal = returnVal.replaceAll("%second%", getDateWithProperZero(time.getSecond()));
+        returnVal = returnVal.replaceAll("%ms%", getDateWithProperZero(time.getNano() / 10000000));
         return returnVal;
+    }
+
+    public static String formatTimeArguments(String string) {
+        return formatTimeArguments(string, LocalDateTime.now());
     }
 
     public static String getRandomString(int length, boolean useLetters, boolean useNumbers) {
         return RandomStringUtils.random(length, useLetters, useNumbers);
     }
 
-    public static String formatDateArguments(String string) {
+    public static String formatDateArguments(String string, LocalDateTime time) {
         String returnVal = string;
-        LocalDate currentDate = LocalDate.now();
-        returnVal = returnVal.replaceAll("%day%", getDateWithProperZero(currentDate.getDayOfMonth()));
-        returnVal = returnVal.replaceAll("%month%", getDateWithProperZero(currentDate.getMonthValue()));
-        returnVal = returnVal.replaceAll("%year%", String.valueOf(currentDate.getYear()));
+        returnVal = returnVal.replaceAll("%day%", getDateWithProperZero(time.getDayOfMonth()));
+        returnVal = returnVal.replaceAll("%month%", getDateWithProperZero(time.getMonthValue()));
+        returnVal = returnVal.replaceAll("%year%", String.valueOf(time.getYear()));
         return returnVal;
+    }
+
+    public static String formatDateArguments(String string) {
+        return formatDateArguments(string, LocalDateTime.now());
     }
 
     public static String correctSlashes(String string) {
