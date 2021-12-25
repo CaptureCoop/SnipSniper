@@ -86,15 +86,12 @@ public class LogManager {
         msg = new StringBuilder(msg.toString().replace("%message%", message));
 
         if(printStackTrace) {
-            int stackSizingHelp = MAX_LEVEL_LENGTH + 4;
-
             msg.append("%newline%");
             for(int i = STACKTRACE_START; i < stackTrace.length; i++) {
                 String trace = stackTrace[i].toString();
                 if(trace.contains("org.snipsniper"))
-                    msg.append(StringUtils.repeat(" ", stackSizingHelp)).append("[").append(trace).append("]%newline%");
+                    msg.append(trace).append("%newline%");
             }
-            msg.append("%newline%");
         }
 
         System.out.println(msg.toString().replaceAll("%newline%", "\n"));
@@ -106,12 +103,16 @@ public class LogManager {
 
         String finalMsg = escapeHtml4(msg.toString()).replaceAll(" ", "&nbsp;");
         finalMsg = finalMsg.replaceAll("%newline%", "<br>");
-        if(SnipSniper.getConfig() != null && finalMsg.contains("org.snipsniper")) {
+        if(SnipSniper.getConfig() != null) {
             String baseTreeLink = "https://github.com/CaptureCoop/SnipSniper/tree/" + SnipSniper.getVersion().getGithash() + "/src/main/java/";
             String link = baseTreeLink + currentStackTrace.getClassName().replaceAll("\\.", "/") + ".java#L" + currentStackTrace.getLineNumber();
             finalMsg = finalMsg.replace(":" + currentStackTrace.getLineNumber() + "]", ":" + currentStackTrace.getLineNumber() + " <a href='" + link + "'>@</a>]");
         }
-        htmlLog += "<p style='margin-top:0; white-space: nowrap;'><font color='" + color + "'>" + finalMsg + "</font></p>";
+        String htmlLine = "<p style='margin-top:0; white-space: nowrap;'><font color='" + color + "'>" + finalMsg + "</font></p>";
+        if(printStackTrace)
+            htmlLine += "<br>";
+        htmlLog += htmlLine;
+
 
         DebugConsole console = SnipSniper.getDebugConsole();
         if(console != null)
