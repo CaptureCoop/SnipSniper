@@ -65,7 +65,7 @@ public final class SnipSniper {
 
 		LaunchType launchType = Utils.getLaunchType(System.getProperty("launchType"));
 
-		Config buildinfo = new Config("buildinfo.cfg", "buildinfo.cfg");
+		Config buildinfo = new Config("buildinfo.cfg", "buildinfo.cfg", true);
 		ReleaseType releaseType = Utils.getReleaseType(buildinfo.getString(ConfigHelper.BUILDINFO.type));
 		PlatformType platformType = Utils.getPlatformType(System.getProperty("platform"));
 		String digits = buildinfo.getString(ConfigHelper.BUILDINFO.version);
@@ -76,6 +76,11 @@ public final class SnipSniper {
 
 		CommandLineHelper cmdline = new CommandLineHelper();
 		cmdline.handle(args);
+
+		if(platformType == PlatformType.STEAM || platformType == PlatformType.WIN_INSTALLED)
+			SnipSniper.setSaveLocationToDocuments();
+		else
+			setSaveLocationToJar();
 
 		config = new Config("main.cfg", "main_defaults.cfg");
 		LogManager.setEnabled(true);
@@ -91,11 +96,6 @@ public final class SnipSniper {
 		} catch (NativeHookException nativeHookException) {
 			LogManager.log("There was an issue setting up NativeHook! Message: " + nativeHookException.getMessage(), LogLevel.ERROR);
 		}
-
-		if(platformType == PlatformType.STEAM || platformType == PlatformType.WIN_INSTALLED)
-			SnipSniper.setSaveLocationToDocuments();
-		else
-			setSaveLocationToJar();
 
 		if(!isDemo) {
 			if(!FileUtils.mkdirs(configFolder, logFolder, imgFolder)) {

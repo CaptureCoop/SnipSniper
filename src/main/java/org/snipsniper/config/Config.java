@@ -24,7 +24,7 @@ public class Config {
 
 	public Config (Config config) {
 		//Copies config
-		LogManager.log("Copying config for <" + config.filename + ">", LogLevel.INFO);
+		LogManager.log("Copying config for <" + config.filename + ">", LogLevel.DEBUG);
 		loadFromConfig(config);
 	}
 
@@ -35,18 +35,31 @@ public class Config {
 		defaults.loadFromContainer(config.defaults);
 	}
 
-	public Config (String filename, String defaultFile) {
+	public Config(String filename, String defaultFile) {
+		this(filename, defaultFile, false);
+	}
+
+	public Config(String filename, String defaultFile, boolean ignoreLocal) {
 		this.filename = filename;
-		LogManager.log("Creating config object for <" + filename + ">.", LogLevel.INFO);
+		String idPrefix = filename + ": ";
+		LogManager.log(idPrefix + "Creating config object for <" + filename + ">.", LogLevel.DEBUG);
 		try {
-			String filePath = SnipSniper.getConfigFolder() + filename;
 			String defaultPath = "/org/snipsniper/resources/cfg/" + defaultFile;
-			if(new File(filePath).exists())
-				loadFile(filePath, settings, false);
-			else
-				loadFile(defaultPath, settings, true);
+			if(!ignoreLocal) {
+				String filePath = SnipSniper.getConfigFolder() + filename;
+				if (new File(filePath).exists()) {
+					LogManager.log(idPrefix + "Config file found locally! Using that one.", LogLevel.DEBUG);
+					loadFile(filePath, settings, false);
+				} else {
+					LogManager.log(idPrefix + "Config file not found locally! Using default.", LogLevel.DEBUG);
+					loadFile(defaultPath, settings, true);
+				}
+			} else {
+				LogManager.log(idPrefix + "ignoreLocal is true. Ignoring local file.", LogLevel.DEBUG);
+			}
 
 			loadFile(defaultPath, defaults, true);
+			LogManager.log(idPrefix + "Done!", LogLevel.DEBUG);
 		} catch (NumberFormatException | IOException e) {
 			LogManager.log("There was an error loading the config. Message: " + e.getMessage(), LogLevel.ERROR, true);
 			e.printStackTrace();

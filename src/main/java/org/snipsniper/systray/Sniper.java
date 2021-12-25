@@ -38,7 +38,7 @@ public class Sniper {
 		this.profileID = profileID;
 		config = new Config("profile" + profileID + ".cfg", "profile_defaults.cfg");
 
-		LogManager.log("Loading profile " + profileID, LogLevel.INFO);
+		LogManager.log("Loading profile " + profileID, LogLevel.DEBUG);
 
 		if(SystemTray.isSupported()) {
 			Popup popup = new Popup(this);
