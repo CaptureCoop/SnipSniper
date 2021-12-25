@@ -105,13 +105,13 @@ public class LogManager {
         htmlLog += htmlLine;
 
         if(printStackTrace) {
-            String stackTraceString = "";
+            StringBuilder stackTraceString = new StringBuilder();
             for(int i = STACKTRACE_START; i < stackTrace.length; i++) {
                 String trace = stackTrace[i].toString();
                 if(trace.contains("org.snipsniper"))
-                    stackTraceString += trace + "\n";
+                    stackTraceString.append(trace).append("\n");
             }
-            logStacktrace(stackTraceString, level);
+            logStacktrace(stackTraceString.toString(), level);
         }
 
         DebugConsole console = SnipSniper.getDebugConsole();
