@@ -45,6 +45,7 @@ public class SCEditorRenderer extends SnipScopeRenderer {
 
     @Override
     public void paint(Graphics g) {
+        g.setColor(new Color(85, 85, 85));
         g.fillRect(0,0,getWidth(),getHeight());
         super.paint(g);
 
