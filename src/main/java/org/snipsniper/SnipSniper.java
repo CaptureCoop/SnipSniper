@@ -80,7 +80,10 @@ public final class SnipSniper {
 		config = new Config("main.cfg", "main_defaults.cfg");
 		LogManager.setEnabled(true);
 
-		uncaughtExceptionHandler = (thread, throwable) -> LogManager.log("SnipSniper encountered an uncaught exception. This may be fatal!\n" + ExceptionUtils.getStackTrace(throwable), LogLevel.ERROR);
+		uncaughtExceptionHandler = (thread, throwable) -> {
+			LogManager.log("SnipSniper encountered an uncaught exception. This may be fatal!", LogLevel.ERROR);
+			LogManager.logSimple(ExceptionUtils.getStackTrace(throwable), LogLevel.ERROR);
+		};
 		Thread.currentThread().setUncaughtExceptionHandler(uncaughtExceptionHandler);
 
 		try {

@@ -48,6 +48,12 @@ public class LogManager {
         logInternal(message, level, printStackTrace, LocalDateTime.now());
     }
 
+    public static void logSimple(String message, LogLevel level) {
+        System.out.println(message);
+        htmlLog += "<p style='margin-top:0; white-space: nowrap;'><font color='" + getLevelColor(level) + "'>" + escapeHtml4(message).replaceAll("\n", "<br>") + "</font></p>";
+        htmlLog += "<br>";
+    }
+
     //The reason for this is that this way we can take index 3 of stack trace at all times
     private static void logInternal(String message, LogLevel level, boolean printStackTrace, LocalDateTime time) {
         if(!enabled)
@@ -95,11 +101,6 @@ public class LogManager {
         }
 
         System.out.println(msg.toString().replaceAll("%newline%", "\n"));
-        String color = "white";
-        if(level == LogLevel.WARNING)
-            color = "yellow";
-        else if(level == LogLevel.ERROR)
-            color = "red";
 
         String finalMsg = escapeHtml4(msg.toString()).replaceAll(" ", "&nbsp;");
         finalMsg = finalMsg.replaceAll("%newline%", "<br>");
@@ -108,7 +109,7 @@ public class LogManager {
             String link = baseTreeLink + currentStackTrace.getClassName().replaceAll("\\.", "/") + ".java#L" + currentStackTrace.getLineNumber();
             finalMsg = finalMsg.replace(":" + currentStackTrace.getLineNumber() + "]", ":" + currentStackTrace.getLineNumber() + " <a href='" + link + "'>@</a>]");
         }
-        String htmlLine = "<p style='margin-top:0; white-space: nowrap;'><font color='" + color + "'>" + finalMsg + "</font></p>";
+        String htmlLine = "<p style='margin-top:0; white-space: nowrap;'><font color='" + getLevelColor(level) + "'>" + finalMsg + "</font></p>";
         if(printStackTrace)
             htmlLine += "<br>";
         htmlLog += htmlLine;
@@ -141,6 +142,15 @@ public class LogManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static String getLevelColor(LogLevel level) {
+        String color = "white";
+        if(level == LogLevel.WARNING)
+            color = "yellow";
+        else if(level == LogLevel.ERROR)
+            color = "red";
+        return color;
     }
 
     public static void setEnabled(boolean enabled) {
