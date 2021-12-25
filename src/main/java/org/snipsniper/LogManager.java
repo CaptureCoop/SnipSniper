@@ -145,10 +145,9 @@ public class LogManager {
     public static void setEnabled(boolean enabled) {
         LogManager.enabled = enabled;
         if(enabled) {
-            for(LogMessage msg : preEnabledMessages) {
-                preEnabledMessages.remove(msg);
+            for(LogMessage msg : preEnabledMessages)
                 logInternal(msg.getMessage(), msg.getLevel(), msg.getPrintStackTrace(), msg.getTime());
-            }
+            preEnabledMessages.clear();
         }
     }
 
