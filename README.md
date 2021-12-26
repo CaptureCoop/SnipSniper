@@ -9,10 +9,10 @@ The Screenshot Tool
   - Image viewer!
 
 <p float="left">
-  <img title="SnipSniper Icon" src="https://github.com/CaptureCoop/SnipSniper/raw/master/src/main/resources/org/snipsniper/resources/img/icons/snipsniper.png" width="10%"/>
-  <img title="Editor Icon" src="https://github.com/CaptureCoop/SnipSniper/raw/master/src/main/resources/org/snipsniper/resources/img/icons/editor.png" width="10%"/>
-  <img title="Viewer Icon" src="https://github.com/CaptureCoop/SnipSniper/raw/master/src/main/resources/org/snipsniper/resources/img/icons/viewer.png" width="10%"/>
-  <img title="Console Icon" src="https://github.com/CaptureCoop/SnipSniper/raw/master/src/main/resources/org/snipsniper/resources/img/icons/console.png" width="10%"/>
+  <img title="SnipSniper Icon" src="https://github.com/CaptureCoop/SnipSniper/raw/master/src/main/resources/org/snipsniper/resources/img/svg/snipsniper.svg" width="10%"/>
+  <img title="Editor Icon" src="https://github.com/CaptureCoop/SnipSniper/raw/master/src/main/resources/org/snipsniper/resources/img/editor.svg" width="10%"/>
+  <img title="Viewer Icon" src="https://github.com/CaptureCoop/SnipSniper/raw/master/src/main/resources/org/snipsniper/resources/img/viewer.svg" width="10%"/>
+  <img title="Console Icon" src="https://github.com/CaptureCoop/SnipSniper/raw/master/src/main/resources/org/snipsniper/resources/img/console.svg" width="10%"/>
 </p>
 
 ### Installation
