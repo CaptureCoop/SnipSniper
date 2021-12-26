@@ -36,6 +36,7 @@ public class EzModeSettingsCreator {
     public void addSettingsToPanel(JPanel panel, IStamp stamp) {
         panel.removeAll();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        panel.setBackground(Color.WHITE);
         panel.add(createJSeperator());
         switch(stamp.getType()) {
             case CUBE: cube(panel, stamp); break;
