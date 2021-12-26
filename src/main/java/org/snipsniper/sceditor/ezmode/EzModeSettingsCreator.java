@@ -64,7 +64,7 @@ public class EzModeSettingsCreator {
     public void addColorSettings(JPanel panel, IStamp stamp) {
         panel.add(new JLabel("color"));
         Color color = stamp.getColor().getPrimaryColor();
-        panel.add(createEZModeSlider(0, 255, color.getRed(), new Function() {
+        JSlider redSlider = createEZModeSlider(0, 255, color.getRed(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
@@ -72,8 +72,8 @@ public class EzModeSettingsCreator {
                 stampPreviewPanel.repaint();
                 return true;
             }
-        }));
-        panel.add(createEZModeSlider(0, 255, color.getGreen(), new Function() {
+        });
+        JSlider greenSlider = createEZModeSlider(0, 255, color.getGreen(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
@@ -81,8 +81,8 @@ public class EzModeSettingsCreator {
                 stampPreviewPanel.repaint();
                 return true;
             }
-        }));
-        panel.add(createEZModeSlider(0, 255, color.getBlue(), new Function() {
+        });
+        JSlider blueSlider = createEZModeSlider(0, 255, color.getBlue(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
@@ -90,7 +90,11 @@ public class EzModeSettingsCreator {
                 stampPreviewPanel.repaint();
                 return true;
             }
-        }));
+        });
+
+        panel.add(redSlider);
+        panel.add(greenSlider);
+        panel.add(blueSlider);
 
         panel.add(createJSeperator());
 
@@ -117,7 +121,12 @@ public class EzModeSettingsCreator {
         alphaBar.setMinimumSize(dim3);
         panel.add(alphaBar);
 
-        stampColor.addChangeListener(e -> scEditorWindow.repaint());
+        stampColor.addChangeListener(e -> {
+            redSlider.setValue(stampColor.getPrimaryColor().getRed());
+            greenSlider.setValue(stampColor.getPrimaryColor().getGreen());
+            blueSlider.setValue(stampColor.getPrimaryColor().getBlue());
+            scEditorWindow.repaint();
+        });
     }
 
     public void addWidthHeightSettings(JPanel panel, IStamp stamp) {
