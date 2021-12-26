@@ -7,13 +7,13 @@ import org.snipsniper.utils.Vector2Float;
 import javax.swing.*;
 import java.awt.*;
 
-public class SSColorChooserPanel extends JPanel {
+public class SSColorChooserPicker extends JPanel {
     private SSColor color;
     private Vector2Float position;
 
     private static final int MARGIN = 20;
 
-    public SSColorChooserPanel(SSColor color) {
+    public SSColorChooserPicker(SSColor color) {
         this.color = color;
     }
 
