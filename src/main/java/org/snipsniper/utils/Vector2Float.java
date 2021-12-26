@@ -56,17 +56,20 @@ public class Vector2Float {
         return new Vector2Float(vector1).sub(vector2);
     }
 
-    public void limitX(float min, float max) {
+    public Vector2Float limitX(float min, float max) {
         x = Math.min(Math.max(x, min), max);
+        return this;
     }
 
-    public void limitY(float min, float max) {
+    public Vector2Float limitY(float min, float max) {
         y = Math.min(Math.max(y, min), max);
+        return this;
     }
 
-    public void limit(float min, float max) {
+    public Vector2Float limit(float min, float max) {
         limitX(min, max);
         limitY(min, max);
+        return this;
     }
 
     public void setX(float x) {
