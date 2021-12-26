@@ -5,14 +5,18 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.snipsniper.SnipSniper;
+import org.snipsniper.colorchooser.SSColorChooserBar;
+import org.snipsniper.colorchooser.SSColorChooserPanel;
 import org.snipsniper.configwindow.StampJPanel;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.sceditor.stamps.CircleStamp;
 import org.snipsniper.sceditor.stamps.IStamp;
 import org.snipsniper.sceditor.stamps.RectangleStamp;
 import org.snipsniper.sceditor.stamps.TextStamp;
+import org.snipsniper.utils.DrawUtils;
 import org.snipsniper.utils.DropdownItem;
 import org.snipsniper.utils.Function;
+import org.snipsniper.utils.SSColor;
 
 import java.awt.*;
 import java.awt.event.FocusAdapter;
@@ -86,6 +90,23 @@ public class EzModeSettingsCreator {
                 return true;
             }
         }));
+
+        panel.add(createJSeperator());
+
+        SSColor testColor = new SSColor();
+        SSColorChooserPanel colorChooserPanel = new SSColorChooserPanel(testColor);
+        Dimension dim = new Dimension(scEditorWindow.getEzModeWidth(), scEditorWindow.getEzModeWidth());
+        colorChooserPanel.setPreferredSize(dim);
+        colorChooserPanel.setMinimumSize(dim);
+        colorChooserPanel.setMaximumSize(dim);
+        panel.add(colorChooserPanel);
+
+        SSColorChooserBar colorChooserBar = new SSColorChooserBar(testColor, DrawUtils.DIRECTION.HORIZONTAL);
+        Dimension dim2 = new Dimension(scEditorWindow.getEzModeWidth(), 30);
+        colorChooserBar.setPreferredSize(dim2);
+        colorChooserBar.setMinimumSize(dim2);
+        colorChooserBar.setMaximumSize(dim2);
+        panel.add(colorChooserBar);
 
     }
 
