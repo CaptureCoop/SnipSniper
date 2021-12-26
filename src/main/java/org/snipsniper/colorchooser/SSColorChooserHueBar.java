@@ -47,12 +47,20 @@ public class SSColorChooserHueBar extends JPanel {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
                 if(hasGrabbed) {
-                    float percentage = (mouseEvent.getY() * 100F) / getHeight();
-                    position = new Vector2Float(percentage / 100F, 0).limitX(0F, 1F).getX();
-                    HSB current = new HSB(color.getPrimaryColor());
-                    color.setPrimaryColor(new HSB(-position, current.getSaturation(), current.getBrightness()).toRGB());
-                    repaint();
+                    if(direction == DrawUtils.DIRECTION.VERTICAL) {
+                        float percentage = (mouseEvent.getY() * 100F) / getHeight();
+                        position = new Vector2Float(percentage / 100F, 0).limitX(0F, 0.99F).getX();
+                        System.out.println(position);
+                        HSB current = new HSB(color.getPrimaryColor());
+                        color.setPrimaryColor(new HSB(-position, current.getSaturation(), current.getBrightness()).toRGB());
+                    } else if(direction == DrawUtils.DIRECTION.HORIZONTAL) {
+                        float percentage = (mouseEvent.getX() * 100F) / getWidth();
+                        position = new Vector2Float(percentage / 100F, 0).limitX(0F, 0.99F).getX();
+                        HSB current = new HSB(color.getPrimaryColor());
+                        color.setPrimaryColor(new HSB(-position, current.getSaturation(), current.getBrightness()).toRGB());
+                    }
                 }
+                repaint();
             }
         });
     }
