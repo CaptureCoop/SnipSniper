@@ -7,7 +7,6 @@ import javax.swing.event.DocumentListener;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.colorchooser.SSColorChooserBar;
 import org.snipsniper.colorchooser.SSColorChooserPicker;
-import org.snipsniper.colorchooser.SSColorChooserSelectPanelVertical;
 import org.snipsniper.configwindow.StampJPanel;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.sceditor.stamps.CircleStamp;
