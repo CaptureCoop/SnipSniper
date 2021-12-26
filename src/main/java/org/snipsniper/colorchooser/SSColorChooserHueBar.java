@@ -64,7 +64,8 @@ public class SSColorChooserHueBar extends JPanel {
     }
 
     private void updateHSV() {
-        position = new HSB(color.getPrimaryColor()).getHue();
+        if(!hasGrabbed)
+            position = new HSB(color.getPrimaryColor()).getHue();
     }
 
     private int getSizeX() {
