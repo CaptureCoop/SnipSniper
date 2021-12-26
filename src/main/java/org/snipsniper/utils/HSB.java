@@ -1,6 +1,9 @@
 package org.snipsniper.utils;
 
+import com.sun.javafx.binding.StringFormatter;
+
 import java.awt.*;
+import java.util.Arrays;
 
 public class HSB {
     private float hue;
@@ -18,9 +21,8 @@ public class HSB {
 
     public HSB(Color color) {
         float[] values = new float[3];
-        Color.RGBtoHSB(color.getRed(), color.getBlue(), color.getGreen(), values);
-        //We do 1F - hue because RGBtoHSB inverts our value here, for some reason...
-        load(1F - values[0], values[1], values[2], color.getAlpha());
+        Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), values);
+        load(values[0], values[1], values[2], color.getAlpha());
     }
 
     private void load(float hue, float saturation, float brightness, int alpha) {
@@ -49,5 +51,9 @@ public class HSB {
 
     public int getAlpha() {
         return alpha;
+    }
+
+    public String toString() {
+        return StringUtils.format("HSB [hue: %c, saturation: %c, brightness: %c, alpha: %c]", hue, saturation, brightness, alpha);
     }
 }
