@@ -19,7 +19,7 @@ public class HSB {
     public HSB(Color color) {
         float[] values = new float[3];
         Color.RGBtoHSB(color.getRed(), color.getBlue(), color.getGreen(), values);
-        load(values[0], values[1], values[2], color.getAlpha());
+        load(1F - values[0], values[1], values[2], color.getAlpha());
     }
 
     private void load(float hue, float saturation, float brightness, int alpha) {
