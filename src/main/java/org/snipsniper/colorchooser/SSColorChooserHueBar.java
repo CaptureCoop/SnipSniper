@@ -47,18 +47,16 @@ public class SSColorChooserHueBar extends JPanel {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
                 if(hasGrabbed) {
-                    if(direction == DrawUtils.DIRECTION.VERTICAL) {
-                        float percentage = (mouseEvent.getY() * 100F) / getHeight();
-                        position = new Vector2Float(percentage / 100F, 0).limitX(0F, 0.99F).getX();
-                        System.out.println(position);
-                        HSB current = new HSB(color.getPrimaryColor());
-                        color.setPrimaryColor(new HSB(-position, current.getSaturation(), current.getBrightness()).toRGB());
-                    } else if(direction == DrawUtils.DIRECTION.HORIZONTAL) {
-                        float percentage = (mouseEvent.getX() * 100F) / getWidth();
-                        position = new Vector2Float(percentage / 100F, 0).limitX(0F, 0.99F).getX();
-                        HSB current = new HSB(color.getPrimaryColor());
-                        color.setPrimaryColor(new HSB(-position, current.getSaturation(), current.getBrightness()).toRGB());
+                    int pos = mouseEvent.getY();
+                    int size = getHeight();
+                    if(direction == DrawUtils.DIRECTION.HORIZONTAL) {
+                        pos = mouseEvent.getX();
+                        size = getWidth();
                     }
+                    float percentage = (pos * 100F) / size;
+                    position = new Vector2Float(percentage / 100F, 0).limitX(0F, 0.99F).getX();
+                    HSB current = new HSB(color.getPrimaryColor());
+                    color.setPrimaryColor(new HSB(-position, current.getSaturation(), current.getBrightness()).toRGB());
                 }
                 repaint();
             }
@@ -91,8 +89,8 @@ public class SSColorChooserHueBar extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        int sizeX = getWidth() - MARGIN;
-        int sizeY = getHeight() - MARGIN;
+        int sizeX = getSizeX();
+        int sizeY = getSizeY();
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, getWidth(), getHeight());
         g.drawImage(DrawUtils.createHSVHueBar(sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
