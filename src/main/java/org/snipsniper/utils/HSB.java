@@ -19,6 +19,7 @@ public class HSB {
     public HSB(Color color) {
         float[] values = new float[3];
         Color.RGBtoHSB(color.getRed(), color.getBlue(), color.getGreen(), values);
+        //We do 1F - hue because RGBtoHSB inverts our value here, for some reason...
         load(1F - values[0], values[1], values[2], color.getAlpha());
     }
 
