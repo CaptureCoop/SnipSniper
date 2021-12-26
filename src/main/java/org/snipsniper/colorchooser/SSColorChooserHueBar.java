@@ -6,14 +6,14 @@ import org.snipsniper.utils.SSColor;
 import javax.swing.*;
 import java.awt.*;
 
-public class SSColorChooserBar extends JPanel {
+public class SSColorChooserHueBar extends JPanel {
     private SSColor color;
     private float position;
     private DrawUtils.DIRECTION direction;
 
     private final static int MARGIN = 10;
 
-    public SSColorChooserBar(SSColor color, DrawUtils.DIRECTION direction) {
+    public SSColorChooserHueBar(SSColor color, DrawUtils.DIRECTION direction) {
         this.color = color;
         this.direction = direction;
     }

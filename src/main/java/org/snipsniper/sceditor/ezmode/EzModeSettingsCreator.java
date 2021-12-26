@@ -1,14 +1,12 @@
 package org.snipsniper.sceditor.ezmode;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.snipsniper.SnipSniper;
 import org.snipsniper.colorchooser.SSColorChooserAlphaBar;
-import org.snipsniper.colorchooser.SSColorChooserBar;
+import org.snipsniper.colorchooser.SSColorChooserHueBar;
 import org.snipsniper.colorchooser.SSColorChooserPicker;
 import org.snipsniper.configwindow.StampJPanel;
 import org.snipsniper.sceditor.SCEditorWindow;
@@ -105,7 +103,7 @@ public class EzModeSettingsCreator {
         colorChooserPanel.setMaximumSize(dim);
         panel.add(colorChooserPanel);
 
-        SSColorChooserBar colorChooserBar = new SSColorChooserBar(stampColor, DrawUtils.DIRECTION.VERTICAL);
+        SSColorChooserHueBar colorChooserBar = new SSColorChooserHueBar(stampColor, DrawUtils.DIRECTION.VERTICAL);
         Dimension dim2 = new Dimension(barWidth, scEditorWindow.getEzModeWidth() - barWidth);
         colorChooserBar.setPreferredSize(dim2);
         colorChooserBar.setMinimumSize(dim2);
