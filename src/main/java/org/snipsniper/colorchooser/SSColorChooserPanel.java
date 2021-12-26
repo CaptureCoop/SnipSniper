@@ -11,6 +11,8 @@ public class SSColorChooserPanel extends JPanel {
     private SSColor color;
     private Vector2Float position;
 
+    private static final int MARGIN = 20;
+
     public SSColorChooserPanel(SSColor color) {
         this.color = color;
     }
@@ -19,6 +21,10 @@ public class SSColorChooserPanel extends JPanel {
     public void paint(Graphics g) {
         float[] hsv = new float[3];
         Color.RGBtoHSB(color.getPrimaryColor().getRed(), color.getPrimaryColor().getBlue(), color.getPrimaryColor().getGreen(), hsv);
-        g.drawImage(DrawUtils.createHSVBox(getWidth(), getHeight(), hsv[2]), 0, 0, this);
+        int sizeX = getWidth() - MARGIN;
+        int sizeY = getHeight() - MARGIN;
+        g.drawImage(DrawUtils.createHSVBox(getWidth(), getHeight(), hsv[2]), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+        g.setColor(Color.BLACK);
+        g.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
     }
 }
