@@ -51,7 +51,7 @@ public class DrawUtils {
         }
 
         for(int pos = 0; pos < amount; pos++) {
-            g.setColor(new Color(Color.HSBtoRGB(hue, 1F, 1F)));
+            g.setColor(new HSB(hue, 1F, 1F).toRGB());
             switch(direction) {
                 case VERTICAL: g.drawLine(0, pos, width, pos); break;
                 case HORIZONTAL: g.drawLine(pos, 0, pos, height); break;
@@ -76,7 +76,7 @@ public class DrawUtils {
             saturation = 0;
             for(int x = 0; x < width; x++) {
                 saturation += stepWidth;
-                g.setColor(new Color(Color.HSBtoRGB(hue, saturation, brightness)));
+                g.setColor(new HSB(hue, saturation, brightness).toRGB());
                 g.drawLine(x, y, x, y);
             }
             brightness -= stepHeight;

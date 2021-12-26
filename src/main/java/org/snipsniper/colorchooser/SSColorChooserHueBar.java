@@ -1,6 +1,7 @@
 package org.snipsniper.colorchooser;
 
 import org.snipsniper.utils.DrawUtils;
+import org.snipsniper.utils.HSB;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Float;
 
@@ -8,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 
 public class SSColorChooserHueBar extends JPanel {
@@ -38,7 +38,7 @@ public class SSColorChooserHueBar extends JPanel {
             }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
+            public void mouseReleased(MouseEvent mouseEvent) {
                 hasGrabbed = false;
             }
         });
@@ -49,24 +49,16 @@ public class SSColorChooserHueBar extends JPanel {
                 if(hasGrabbed) {
                     float percentage = (mouseEvent.getY() * 100F) / getHeight();
                     position = new Vector2Float(percentage / 100F, 0).limitX(0F, 1F).getX();
-                    //TODO: Implement horizontally too :^)
-                    //float[] hsv = getHSV(); TODO: This doesnt work, why
-                    //TODO: Additionally, we are using hsv[2] rn as hue, but that is plain wrong according to java. what??
-                    //color.setPrimaryColor(new Color(Color.HSBtoRGB(position, hsv[0], hsv[1])));
+                    HSB current = new HSB(color.getPrimaryColor());
+                    color.setPrimaryColor(new HSB(-position, current.getSaturation(), current.getBrightness()).toRGB());
                     repaint();
                 }
             }
         });
     }
 
-    private float[] getHSV() {
-        float[] hsv = new float[3];
-        Color.RGBtoHSB(color.getPrimaryColor().getRed(), color.getPrimaryColor().getBlue(), color.getPrimaryColor().getGreen(), hsv);
-        return hsv;
-    }
-
     private void updateHSV() {
-        position = getHSV()[2];
+        position = new HSB(color.getPrimaryColor()).getHue();
     }
 
     private int getSizeX() {
@@ -75,12 +67,6 @@ public class SSColorChooserHueBar extends JPanel {
 
     private int getSizeY() {
         return getHeight() - MARGIN;
-    }
-
-    private int getPos() {
-        int sizeX = getWidth() - MARGIN;
-        int sizeY = getHeight() - MARGIN;
-        return 0;
     }
 
     private Rectangle getSelectRect() {
