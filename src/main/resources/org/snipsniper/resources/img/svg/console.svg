@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600">
+  <defs>
+    <linearGradient id="fv01" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4e4e4e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <path d="M200 0 h 500 v 100 h 100 v -100 h 600 v 100 h 100 v 100 h 100 v 200 h -100 v 100 h -100 v 100 h -600 v -100 h -100 v 100 h -100 v 400 h 100 v 100 h 100 v -100 h 600 v 100 h 100 v 100 h 100 v 200 h -100 v 100 h -100 v 100 h -600 v -100 h -100 v 100 h -500 v -100 h -100 v -100 h -100 v -1200 h 100 v -100 h 100" fill="balck"/>
+  <path d="M200 100 h 300 v 1400 h -300 v -100 h -100 v -1200 h 100" fill="#cccccc"/>
+  <path d="M600 100 h 800 v 100 h 100 v 200 h -100 v 100 h -600 v -400 h -100 v 400 h -100" fill="url(#fv01)"/>
+  <path d="M600 1100 h 800 v 100 h 100 v 200 h -100 v 100 h -600 v -400 h -100 v 400 h -100" fill="url(#fv01)"/>
+</svg>
