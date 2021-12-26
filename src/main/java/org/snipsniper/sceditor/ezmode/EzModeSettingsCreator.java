@@ -1,6 +1,8 @@
 package org.snipsniper.sceditor.ezmode;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -95,28 +97,29 @@ public class EzModeSettingsCreator {
         panel.add(createJSeperator());
 
         int barWidth = 30;
-        SSColor testColor = new SSColor();
-        SSColorChooserPicker colorChooserPanel = new SSColorChooserPicker(testColor);
+        SSColor stampColor = stamp.getColor();
+        SSColorChooserPicker colorChooserPanel = new SSColorChooserPicker(stampColor);
         Dimension dim = new Dimension(scEditorWindow.getEzModeWidth() - barWidth, scEditorWindow.getEzModeWidth() - barWidth);
         colorChooserPanel.setPreferredSize(dim);
         colorChooserPanel.setMinimumSize(dim);
         colorChooserPanel.setMaximumSize(dim);
         panel.add(colorChooserPanel);
 
-        SSColorChooserBar colorChooserBar = new SSColorChooserBar(testColor, DrawUtils.DIRECTION.VERTICAL);
+        SSColorChooserBar colorChooserBar = new SSColorChooserBar(stampColor, DrawUtils.DIRECTION.VERTICAL);
         Dimension dim2 = new Dimension(barWidth, scEditorWindow.getEzModeWidth() - barWidth);
         colorChooserBar.setPreferredSize(dim2);
         colorChooserBar.setMinimumSize(dim2);
         colorChooserBar.setMaximumSize(dim2);
         panel.add(colorChooserBar);
 
-        SSColorChooserAlphaBar alphaBar = new SSColorChooserAlphaBar(testColor, DrawUtils.DIRECTION.HORIZONTAL);
+        SSColorChooserAlphaBar alphaBar = new SSColorChooserAlphaBar(stampColor, DrawUtils.DIRECTION.HORIZONTAL);
         Dimension dim3 = new Dimension(scEditorWindow.getEzModeWidth(), barWidth);
         alphaBar.setPreferredSize(dim3);
         alphaBar.setMaximumSize(dim3);
         alphaBar.setMinimumSize(dim3);
         panel.add(alphaBar);
 
+        stampColor.addChangeListener(e -> scEditorWindow.repaint());
     }
 
     public void addWidthHeightSettings(JPanel panel, IStamp stamp) {
