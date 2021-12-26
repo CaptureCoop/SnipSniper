@@ -5,6 +5,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.snipsniper.SnipSniper;
+import org.snipsniper.colorchooser.SSColorChooserAlphaBar;
 import org.snipsniper.colorchooser.SSColorChooserBar;
 import org.snipsniper.colorchooser.SSColorChooserPicker;
 import org.snipsniper.configwindow.StampJPanel;
@@ -108,6 +109,14 @@ public class EzModeSettingsCreator {
         colorChooserBar.setMinimumSize(dim2);
         colorChooserBar.setMaximumSize(dim2);
         panel.add(colorChooserBar);
+
+        SSColorChooserAlphaBar alphaBar = new SSColorChooserAlphaBar(testColor, DrawUtils.DIRECTION.HORIZONTAL);
+        Dimension dim3 = new Dimension(scEditorWindow.getEzModeWidth(), barWidth);
+        alphaBar.setPreferredSize(dim3);
+        alphaBar.setMaximumSize(dim3);
+        alphaBar.setMinimumSize(dim3);
+        panel.add(alphaBar);
+
     }
 
     public void addWidthHeightSettings(JPanel panel, IStamp stamp) {

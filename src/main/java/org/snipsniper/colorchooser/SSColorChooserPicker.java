@@ -11,7 +11,7 @@ public class SSColorChooserPicker extends JPanel {
     private SSColor color;
     private Vector2Float position;
 
-    private static final int MARGIN = 20;
+    private static final int MARGIN = 10;
 
     public SSColorChooserPicker(SSColor color) {
         this.color = color;
