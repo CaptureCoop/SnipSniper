@@ -66,6 +66,20 @@ public class SSColorChooserHueBar extends JPanel {
         position = hsv[2];
     }
 
+    private Rectangle getSelectRect() {
+        int sizeX = getWidth() - MARGIN;
+        int sizeY = getHeight() - MARGIN;
+        switch(direction) {
+            case VERTICAL:
+                int yPos = (int) (sizeY / (1 / position)) + MARGIN / 2;
+                return new Rectangle(SEL_MARGIN_OFF, yPos - SEL_MARGIN, getWidth() - SEL_MARGIN_OFF * 2, SEL_MARGIN * 2);
+            case HORIZONTAL:
+                int xPos = (int) (sizeX / (1 / position)) + MARGIN / 2;
+                return new Rectangle(xPos - SEL_MARGIN, SEL_MARGIN_OFF, SEL_MARGIN * 2, getHeight() - SEL_MARGIN_OFF * 2);
+        }
+        return null;
+    }
+
     @Override
     public void paint(Graphics g) {
         int sizeX = getWidth() - MARGIN;
@@ -74,17 +88,8 @@ public class SSColorChooserHueBar extends JPanel {
         g.setColor(Color.BLACK);
         g.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
         g.setColor(Color.GRAY);
-        switch(direction) {
-            case VERTICAL:
-                int yPos = (int) (sizeY / (1 / position)) + MARGIN / 2;
-                g.fillRect(SEL_MARGIN_OFF, yPos - SEL_MARGIN, getWidth() - SEL_MARGIN_OFF * 2, SEL_MARGIN * 2);
-                break;
-            case HORIZONTAL:
-                int xPos = (int) (sizeX / (1 / position)) + MARGIN / 2;
-                g.fillRect(xPos - SEL_MARGIN, SEL_MARGIN_OFF, SEL_MARGIN * 2, getHeight() - SEL_MARGIN_OFF * 2);
-                break;
-        }
-
+        Rectangle rect = getSelectRect();
+        g.fillRect(rect.x, rect.y, rect.width, rect.height);
     }
 
 }
