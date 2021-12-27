@@ -1,5 +1,6 @@
 package org.snipsniper.configwindow;
 
+import org.snipsniper.ImageManager;
 import org.snipsniper.sceditor.stamps.IStamp;
 import org.snipsniper.utils.Utils;
 import org.snipsniper.utils.Vector2Int;
@@ -53,16 +54,16 @@ public class StampJPanel extends JPanel {
         g2d.setRenderingHints(qualityHints);
 
         if(background != null && backgroundEnabled) {
-            if(background.getWidth() >= getWidth() && background.getHeight() >= getHeight()) {
-                int pos = margin / 2;
-                int width = sizeX + margin / 2;
-                int height = sizeY + margin / 2;
-                g2d.drawImage(background, pos, pos, width, height, pos, pos, width, height, null);
-                Color oldColor = g2d.getColor();
-                g2d.setColor(Color.BLACK);
-                g2d.drawRect(pos, pos, width - margin / 2, height - margin / 2);
-                g2d.setColor(oldColor);
-            }
+            if(!(background.getWidth() >= getWidth() && background.getHeight() >= getHeight()))
+                background = ImageManager.getCodePreview();
+            int pos = margin / 2;
+            int width = sizeX + margin / 2;
+            int height = sizeY + margin / 2;
+            g2d.drawImage(background, pos, pos, width, height, pos, pos, width, height, null);
+            Color oldColor = g2d.getColor();
+            g2d.setColor(Color.BLACK);
+            g2d.drawRect(pos, pos, width - margin / 2, height - margin / 2);
+            g2d.setColor(oldColor);
         }
         if(!isEnabled())
             g2d.setColor(Utils.getDisabledColor());

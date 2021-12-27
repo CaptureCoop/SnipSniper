@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.json.JSONArray;
+import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.FileUtils;
 import org.snipsniper.utils.enums.LogLevel;
 
@@ -81,5 +82,13 @@ public class ImageManager {
 		if(animatedImages.containsKey(path))
 			return true;
 		else return images.containsKey(path);
+	}
+
+	public static BufferedImage getCodePreview() {
+		switch(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme)) {
+			case "light": return ImageManager.getImage("preview/code_light.png");
+			case "dark": return ImageManager.getImage("preview/code_dark.png");
+		}
+		return null;
 	}
 }

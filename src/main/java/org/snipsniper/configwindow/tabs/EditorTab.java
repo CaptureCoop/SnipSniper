@@ -92,12 +92,7 @@ public class EditorTab extends JPanel implements ITab{
         JPanel row3_stampConfig = new JPanel(new GridBagLayout());
         StampJPanel row3_stampPreview = new StampJPanel();
         row3_stampPreview.setMargin(10);
-        String theme = SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme);
-        if(theme.equals("light")) {
-            row3_stampPreview.setBackground(ImageManager.getImage("preview/code_light.png"));
-        } else if(theme.equals("dark")) {
-            row3_stampPreview.setBackground(ImageManager.getImage("preview/code_dark.png"));
-        }
+        row3_stampPreview.setBackground(ImageManager.getCodePreview());
         IStamp stamp = new CubeStamp(config, null);
         row3_stampPreview.setStamp(stamp);
 
