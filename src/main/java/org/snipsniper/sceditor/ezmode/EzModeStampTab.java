@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 
 public class EzModeStampTab extends JPanel {
@@ -19,20 +20,24 @@ public class EzModeStampTab extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                super.mouseClicked(mouseEvent);
                 scEditorWindow.setSelectedStamp(stampIndex);
             }
 
             @Override
             public void mouseEntered(MouseEvent mouseEvent) {
-                super.mouseEntered(mouseEvent);
                 scEditorWindow.setEzModeTitle(StampUtils.getStampAsString(stampIndex));
             }
 
             @Override
             public void mouseExited(MouseEvent mouseEvent) {
-                super.mouseExited(mouseEvent);
                 scEditorWindow.setEzModeTitle(null);
+            }
+        });
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                scEditorWindow.setSelectedStamp(stampIndex);
             }
         });
     }
