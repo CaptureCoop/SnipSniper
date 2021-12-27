@@ -8,7 +8,7 @@ public class DrawUtils {
 
     public enum DIRECTION {VERTICAL, HORIZONTAL}
 
-    public static BufferedImage createAlphaBar(int width, int height, DIRECTION direction) {
+    public static BufferedImage createAlphaBar(Color color, int width, int height, DIRECTION direction) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D) image.getGraphics();
 
@@ -22,7 +22,7 @@ public class DrawUtils {
         }
 
         for(int pos = 0; pos < amount; pos++) {
-            g.setColor(new Color(0, 0, 0, (int)alpha));
+            g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)alpha));
             switch(direction) {
                 case VERTICAL: g.drawLine(0, pos, width, pos); break;
                 case HORIZONTAL: g.drawLine(pos, 0, pos, height); break;

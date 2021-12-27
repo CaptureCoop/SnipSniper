@@ -90,7 +90,7 @@ public class SSColorChooserHSBPicker extends JPanel {
         g.drawImage(DrawUtils.createHSVBox(getWidth(), getHeight(), new HSB(color.getPrimaryColor()).getHue()), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
         g.setColor(Color.BLACK);
         g.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
-        g.setColor(Color.PINK);
+        g.setColor(Color.GRAY);
         Rectangle rect = getSelectRect();
         g.fillRect(rect.x, rect.y, rect.width, rect.height);
     }

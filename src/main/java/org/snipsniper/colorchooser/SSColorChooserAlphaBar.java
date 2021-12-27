@@ -1,5 +1,6 @@
 package org.snipsniper.colorchooser;
 
+import org.snipsniper.ImageManager;
 import org.snipsniper.utils.*;
 
 import javax.swing.*;
@@ -98,7 +99,11 @@ public class SSColorChooserAlphaBar extends JPanel {
         int sizeY = getSizeY();
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
-        g.drawImage(DrawUtils.createAlphaBar(sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+        int amount = sizeX / sizeY;
+        for(int i = 0; i < amount; i++) {
+            g.drawImage(ImageManager.getImage("ui/transparent_grid_4x4.png"), MARGIN / 2 + i * sizeY, MARGIN / 2, sizeY, sizeY, this);
+        }
+        g.drawImage(DrawUtils.createAlphaBar(color.getPrimaryColor(), sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
         g.setColor(Color.BLACK);
         g.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
         g.setColor(Color.GRAY);
