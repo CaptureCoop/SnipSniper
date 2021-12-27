@@ -51,8 +51,8 @@ public class SSColorChooserHSBPicker extends JPanel {
     private void execute(int x, int y) {
         float percentageX = (x * 100F) / getWidth();
         float percentageY = (y * 100F) / getHeight();
-        float pointX = new Vector2Float(percentageX / 100F, 0).limitX(0.01F, 0.99F).getX();
-        float pointY = new Vector2Float(percentageY / 100F, 0).limitX(0.01F, 0.99F).getX();
+        float pointX = new Vector2Float(percentageX / 100F, 0).limitX(0F, 1F).getX();
+        float pointY = new Vector2Float(percentageY / 100F, 0).limitX(0F, 1F).getX();
         HSB current = new HSB(color.getPrimaryColor());
         color.setPrimaryColor(new HSB(current.getHue(), position.getX(), position.getY(), current.getAlpha()).toRGB());
         pointY = (pointY - 1) * - 1;
