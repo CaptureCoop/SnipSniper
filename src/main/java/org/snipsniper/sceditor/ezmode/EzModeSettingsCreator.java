@@ -69,7 +69,7 @@ public class EzModeSettingsCreator {
             @Override
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(args[0], cColor.getGreen(), cColor.getBlue()));
+                stamp.getColor().setPrimaryColor(new Color(args[0], cColor.getGreen(), cColor.getBlue(), cColor.getAlpha()));
                 stampPreviewPanel.repaint();
                 return true;
             }
@@ -78,7 +78,7 @@ public class EzModeSettingsCreator {
             @Override
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), args[0], cColor.getBlue()));
+                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), args[0], cColor.getBlue(), cColor.getAlpha()));
                 stampPreviewPanel.repaint();
                 return true;
             }
@@ -87,7 +87,7 @@ public class EzModeSettingsCreator {
             @Override
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), cColor.getGreen(), args[0]));
+                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), cColor.getGreen(), args[0], cColor.getAlpha()));
                 stampPreviewPanel.repaint();
                 return true;
             }
