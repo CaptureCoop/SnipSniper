@@ -7,6 +7,7 @@ import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
 
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ public class CounterStamp implements IStamp{
     private boolean solidColor;
 
     private final ArrayList<Integer> historyPoints = new ArrayList<>();
+
+    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
 
     public CounterStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -77,6 +80,7 @@ public class CounterStamp implements IStamp{
         }
     }
 
+    @Override
     public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         Graphics2D g = (Graphics2D) g_;
         Rectangle drawnRectangle = null;
@@ -149,6 +153,12 @@ public class CounterStamp implements IStamp{
 
     }
 
+    public void alertChangeListeners() {
+        for(ChangeListener listener : changeListeners) {
+            listener.stateChanged(null);
+        }
+    }
+
     @Override
     public void reset() {
         count = 1;
@@ -204,5 +214,10 @@ public class CounterStamp implements IStamp{
     @Override
     public StampUtils.TYPE getType() {
         return StampUtils.TYPE.COUNTER;
+    }
+
+    @Override
+    public void addChangeListener(ChangeListener listener) {
+        changeListeners.add(listener);
     }
 }

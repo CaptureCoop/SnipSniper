@@ -1,17 +1,17 @@
 package org.snipsniper.sceditor.stamps;
 
-import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
-import org.snipsniper.utils.enums.LogLevel;
 
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class EraserStamp implements IStamp {
     private final SCEditorWindow scEditorWindow;
@@ -20,6 +20,8 @@ public class EraserStamp implements IStamp {
     private int size;
     private int speed;
     private int pointDistance;
+
+    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
 
     public EraserStamp(SCEditorWindow scEditorWindow, Config config) {
         this.scEditorWindow = scEditorWindow;
@@ -77,6 +79,12 @@ public class EraserStamp implements IStamp {
         return new Rectangle(position.getX() - newSize / 2, position.getY() - newSize / 2, newSize, newSize);
     }
 
+    public void alertChangeListeners() {
+        for(ChangeListener listener : changeListeners) {
+            listener.stateChanged(null);
+        }
+    }
+
     @Override
     public void editorUndo(int historyPoint) { }
 
@@ -124,5 +132,10 @@ public class EraserStamp implements IStamp {
     @Override
     public StampUtils.TYPE getType() {
         return StampUtils.TYPE.ERASER;
+    }
+
+    @Override
+    public void addChangeListener(ChangeListener listener) {
+        changeListeners.add(listener);
     }
 }

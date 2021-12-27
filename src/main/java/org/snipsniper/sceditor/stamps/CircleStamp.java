@@ -7,8 +7,10 @@ import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
 
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class CircleStamp implements IStamp{
     private int width;
@@ -26,6 +28,8 @@ public class CircleStamp implements IStamp{
 
     private final Config config;
     private final SCEditorWindow scEditorWindow;
+
+    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
 
     public CircleStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -129,6 +133,12 @@ public class CircleStamp implements IStamp{
         thickness = config.getInt(ConfigHelper.PROFILE.editorStampCircleThickness);
     }
 
+    public void alertChangeListeners() {
+        for(ChangeListener listener : changeListeners) {
+            listener.stateChanged(null);
+        }
+    }
+
     public void setThickness(int thickness) {
         this.thickness = thickness;
     }
@@ -175,5 +185,10 @@ public class CircleStamp implements IStamp{
     @Override
     public StampUtils.TYPE getType() {
         return StampUtils.TYPE.CIRCLE;
+    }
+
+    @Override
+    public void addChangeListener(ChangeListener listener) {
+        changeListeners.add(listener);
     }
 }

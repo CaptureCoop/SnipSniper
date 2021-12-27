@@ -9,6 +9,7 @@ import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
 import org.snipsniper.utils.enums.LogLevel;
 
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class TextStamp implements IStamp{
     public enum TextState {IDLE, TYPING}
 
     private final static String DEFAULT_TEXT = "Text";
+
+    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
 
     public TextStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -207,5 +210,16 @@ public class TextStamp implements IStamp{
     @Override
     public StampUtils.TYPE getType() {
         return StampUtils.TYPE.TEXT;
+    }
+
+    @Override
+    public void addChangeListener(ChangeListener listener) {
+        changeListeners.add(listener);
+    }
+
+    public void alertChangeListeners() {
+        for(ChangeListener listener : changeListeners) {
+            listener.stateChanged(null);
+        }
     }
 }

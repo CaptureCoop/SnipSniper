@@ -7,9 +7,11 @@ import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
 
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class CubeStamp implements IStamp{
     private final Config config;
@@ -26,6 +28,9 @@ public class CubeStamp implements IStamp{
     private SSColor color;
 
     private BufferedImage smartPixelBuffer;
+
+    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
+
 
     public CubeStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -133,6 +138,12 @@ public class CubeStamp implements IStamp{
         return new Rectangle(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
     }
 
+    public void alertChangeListeners() {
+        for(ChangeListener listener : changeListeners) {
+            listener.stateChanged(null);
+        }
+    }
+
     @Override
     public void editorUndo(int historyPoint) {
 
@@ -194,5 +205,10 @@ public class CubeStamp implements IStamp{
     @Override
     public StampUtils.TYPE getType() {
         return StampUtils.TYPE.CUBE;
+    }
+
+    @Override
+    public void addChangeListener(ChangeListener listener) {
+        changeListeners.add(listener);
     }
 }
