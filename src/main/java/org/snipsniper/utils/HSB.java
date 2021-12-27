@@ -1,9 +1,6 @@
 package org.snipsniper.utils;
 
-import com.sun.javafx.binding.StringFormatter;
-
 import java.awt.*;
-import java.util.Arrays;
 
 public class HSB {
     private float hue;
