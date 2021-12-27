@@ -53,10 +53,11 @@ public class SSColorChooserHueBar extends JPanel {
                         pos = mouseEvent.getX();
                         size = getWidth();
                     }
+                    int oldAlpha = color.getPrimaryColor().getAlpha();
                     float percentage = (pos * 100F) / size;
                     position = new Vector2Float(percentage / 100F, 0).limitX(0.01F, 0.99F).getX();
                     HSB current = new HSB(color.getPrimaryColor());
-                    color.setPrimaryColor(new HSB(position, current.getSaturation(), current.getBrightness()).toRGB());
+                    color.setPrimaryColor(new HSB(position, current.getSaturation(), current.getBrightness()).toRGB(), oldAlpha);
                 }
                 repaint();
             }
