@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
 
 public class SSColorChooserHSBPicker extends JPanel {
     private SSColor color;
@@ -15,6 +16,9 @@ public class SSColorChooserHSBPicker extends JPanel {
     private static final int MARGIN = 10;
 
     private boolean isDragging = false;
+
+    private BufferedImage buffer;
+    private boolean dirty = true;
 
     public SSColorChooserHSBPicker(SSColor color, boolean alwaysGrab) {
         this.color = color;
@@ -49,6 +53,7 @@ public class SSColorChooserHSBPicker extends JPanel {
     }
 
     private void execute(int x, int y) {
+        dirty = true;
         float percentageX = (x * 100F) / getWidth();
         float percentageY = (y * 100F) / getHeight();
         float pointX = new Vector2Float(percentageX / 100F, 0).limitX(0F, 1F).getX();
@@ -68,8 +73,10 @@ public class SSColorChooserHSBPicker extends JPanel {
 
     public void updatePosition() {
         if(!isDragging) {
+            dirty = true;
             HSB hsb = new HSB(color.getPrimaryColor());
             position = new Vector2Float(hsb.getSaturation(), hsb.getBrightness());
+            repaint();
         }
     }
 
@@ -83,15 +90,29 @@ public class SSColorChooserHSBPicker extends JPanel {
 
     @Override
     public void paint(Graphics g) {
+        if(!dirty) {
+            g.drawImage(buffer, 0, 0, this);
+            return;
+        }
+
+        if(buffer == null || !(buffer.getWidth() == getWidth() && buffer.getHeight() == getHeight())) {
+            buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+        }
+
+        Graphics bufferGraphics = buffer.getGraphics();
+        dirty = false;
+
         int sizeX = getSizeX();
         int sizeY = getSizeY();
-        g.setColor(getBackground());
-        g.fillRect(0, 0, getWidth(), getHeight());
-        g.drawImage(DrawUtils.createHSVBox(getWidth(), getHeight(), new HSB(color.getPrimaryColor()).getHue()), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
-        g.setColor(Color.BLACK);
-        g.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
-        g.setColor(Color.GRAY);
+        bufferGraphics.setColor(getBackground());
+        bufferGraphics.fillRect(0, 0, getWidth(), getHeight());
+        bufferGraphics.drawImage(DrawUtils.createHSVBox(getWidth(), getHeight(), new HSB(color.getPrimaryColor()).getHue()), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+        bufferGraphics.setColor(Color.BLACK);
+        bufferGraphics.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
+        bufferGraphics.setColor(Color.GRAY);
         Rectangle rect = getSelectRect();
-        g.fillRect(rect.x, rect.y, rect.width, rect.height);
+        bufferGraphics.fillRect(rect.x, rect.y, rect.width, rect.height);
+        bufferGraphics.dispose();
+        g.drawImage(buffer, 0, 0, this);
     }
 }
