@@ -19,9 +19,9 @@ public class SSColorChooserHueBar extends JPanel {
     private final static int MARGIN = 10;
     private final static int SEL_MARGIN = 4;
     private final static int SEL_MARGIN_OFF = 2;
-    private boolean hasGrabbed = false;
+    private boolean isDragging = false;
 
-    public SSColorChooserHueBar(SSColor color, DrawUtils.DIRECTION direction) {
+    public SSColorChooserHueBar(SSColor color, DrawUtils.DIRECTION direction, boolean alwaysGrab) {
         this.color = color;
         this.direction = direction;
         updateHSV();
@@ -33,38 +33,44 @@ public class SSColorChooserHueBar extends JPanel {
                 if(rect == null)
                     return;
 
-                if(rect.contains(mouseEvent.getPoint()))
-                    hasGrabbed = true;
+                if(rect.contains(mouseEvent.getPoint()) && !alwaysGrab)
+                    isDragging = true;
             }
 
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
-                hasGrabbed = false;
+                isDragging = false;
+                if(alwaysGrab)
+                    execute(mouseEvent.getX(), mouseEvent.getY());
             }
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
-                if(hasGrabbed) {
-                    int pos = mouseEvent.getY();
-                    int size = getHeight();
-                    if(direction == DrawUtils.DIRECTION.HORIZONTAL) {
-                        pos = mouseEvent.getX();
-                        size = getWidth();
-                    }
-                    float percentage = (pos * 100F) / size;
-                    position = new Vector2Float(percentage / 100F, 0).limitX(0.01F, 0.99F).getX();
-                    HSB current = new HSB(color.getPrimaryColor());
-                    color.setPrimaryColor(new HSB(position, current.getSaturation(), current.getBrightness(), current.getAlpha()).toRGB());
-                }
-                repaint();
+                if(isDragging || alwaysGrab)
+                    execute(mouseEvent.getX(), mouseEvent.getY());
             }
         });
     }
 
+    private void execute(int x, int y) {
+        int pos = y;
+        int size = getHeight();
+        if(direction == DrawUtils.DIRECTION.HORIZONTAL) {
+            pos = x;
+            size = getWidth();
+        }
+        float percentage = (pos * 100F) / size;
+        position = new Vector2Float(percentage / 100F, 0).limitX(0.01F, 0.99F).getX();
+        HSB current = new HSB(color.getPrimaryColor());
+        color.setPrimaryColor(new HSB(position, current.getSaturation(), current.getBrightness(), current.getAlpha()).toRGB());
+        repaint();
+
+    }
+
     private void updateHSV() {
-        if(!hasGrabbed)
+        if(!isDragging)
             position = new HSB(color.getPrimaryColor()).getHue();
     }
 

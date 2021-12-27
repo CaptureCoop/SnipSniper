@@ -108,7 +108,7 @@ public class EzModeSettingsCreator {
         colorChooserPanel.setMaximumSize(dim);
         panel.add(colorChooserPanel);
 
-        SSColorChooserHueBar colorChooserBar = new SSColorChooserHueBar(stampColor, DrawUtils.DIRECTION.VERTICAL);
+        SSColorChooserHueBar colorChooserBar = new SSColorChooserHueBar(stampColor, DrawUtils.DIRECTION.VERTICAL, true);
         Dimension dim2 = new Dimension(barWidth, scEditorWindow.getEzModeWidth() - barWidth);
         colorChooserBar.setPreferredSize(dim2);
         colorChooserBar.setMinimumSize(dim2);
