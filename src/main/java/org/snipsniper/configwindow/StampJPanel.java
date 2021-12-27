@@ -14,9 +14,15 @@ public class StampJPanel extends JPanel {
     private boolean backgroundEnabled = true;
     private RenderingHints qualityHints;
 
+    private int margin = 0;
+
     public void setStamp(IStamp stamp) {
         this.stamp = stamp;
         repaint();
+    }
+
+    public void setMargin(int margin) {
+        this.margin = margin;
     }
 
     public void setBackground(BufferedImage image) {
@@ -31,7 +37,13 @@ public class StampJPanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
+        int sizeX = getWidth() - margin;
+        int sizeY = getHeight() - margin;
+
         Graphics2D g2d = (Graphics2D) g;
+
+        g.setColor(getBackground());
+        g.fillRect(0, 0, getWidth(), getHeight());
 
         if(qualityHints == null) {
             qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -42,7 +54,14 @@ public class StampJPanel extends JPanel {
 
         if(background != null && backgroundEnabled) {
             if(background.getWidth() >= getWidth() && background.getHeight() >= getHeight()) {
-                g2d.drawImage(background, 0, 0, getWidth(), getHeight(), 0, 0, getWidth(), getHeight(), null);
+                int pos = margin / 2;
+                int width = sizeX + margin / 2;
+                int height = sizeY + margin / 2;
+                g2d.drawImage(background, pos, pos, width, height, pos, pos, width, height, null);
+                Color oldColor = g2d.getColor();
+                g2d.setColor(Color.BLACK);
+                g2d.drawRect(pos, pos, width - margin / 2, height - margin / 2);
+                g2d.setColor(oldColor);
             }
         }
         if(!isEnabled())

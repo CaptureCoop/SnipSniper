@@ -92,7 +92,7 @@ public class SSColorChooserHueBar extends JPanel {
     public void paint(Graphics g) {
         int sizeX = getSizeX();
         int sizeY = getSizeY();
-        g.setColor(Color.WHITE);
+        g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
         g.drawImage(DrawUtils.createHSVHueBar(sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
         g.setColor(Color.BLACK);

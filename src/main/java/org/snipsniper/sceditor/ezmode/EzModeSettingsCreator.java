@@ -36,7 +36,6 @@ public class EzModeSettingsCreator {
     public void addSettingsToPanel(JPanel panel, IStamp stamp) {
         panel.removeAll();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        panel.setBackground(Color.WHITE);
         panel.add(createJSeperator());
         switch(stamp.getType()) {
             case CUBE: cube(panel, stamp); break;
@@ -50,6 +49,7 @@ public class EzModeSettingsCreator {
         panel.add(createJSeperator());
         panel.add(new JLabel("preview"));
         stampPreviewPanel = new StampJPanel();
+        stampPreviewPanel.setMargin(10);
         stampPreviewPanel.setStamp(stamp);
         stampPreviewPanel.setBackground(scEditorWindow.getImage());
         Dimension previewDimension = new Dimension(scEditorWindow.getEzModeWidth(), scEditorWindow.getEzModeWidth());

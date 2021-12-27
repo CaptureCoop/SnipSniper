@@ -80,7 +80,7 @@ public class SSColorChooserPicker extends JPanel {
     public void paint(Graphics g) {
         int sizeX = getSizeX();
         int sizeY = getSizeY();
-        g.setColor(Color.WHITE);
+        g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
         g.drawImage(DrawUtils.createHSVBox(getWidth(), getHeight(), new HSB(color.getPrimaryColor()).getHue()), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
         g.setColor(Color.BLACK);
