@@ -94,6 +94,7 @@ public class SSColorChooserAlphaBar extends JPanel {
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
         g.drawImage(DrawUtils.createAlphaBar(sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+        g.setColor(Color.BLACK);
         g.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
         g.setColor(Color.GRAY);
         Rectangle rect = getSelectRect();
