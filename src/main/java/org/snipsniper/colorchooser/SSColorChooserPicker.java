@@ -45,10 +45,8 @@ public class SSColorChooserPicker extends JPanel {
                     float percentageY = (mouseEvent.getY() * 100F) / getHeight();
                     float pointX = new Vector2Float(percentageX / 100F, 0).limitX(0.01F, 0.99F).getX();
                     float pointY = new Vector2Float(percentageY / 100F, 0).limitX(0.01F, 0.99F).getX();
-                    int oldAlpha = color.getPrimaryColor().getAlpha();
                     HSB current = new HSB(color.getPrimaryColor());
-                    System.out.println(oldAlpha);
-                    color.setPrimaryColor(new HSB(current.getHue(), position.getX(), position.getY()).toRGB(), oldAlpha);
+                    color.setPrimaryColor(new HSB(current.getHue(), position.getX(), position.getY(), current.getAlpha()).toRGB());
                     pointY = (pointY - 1) * - 1;
                     position = new Vector2Float(pointX, pointY);
                 }
