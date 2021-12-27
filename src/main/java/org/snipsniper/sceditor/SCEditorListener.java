@@ -232,7 +232,7 @@ public class SCEditorListener extends SnipScopeListener {
                 hsv[0] -= speed;
 
             Color newColor = Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
-            stamp.setColor(new SSColor(newColor, alpha));
+            stamp.getColor().setPrimaryColor(newColor, alpha);
             scEditorWindow.repaint();
             return;
         }
