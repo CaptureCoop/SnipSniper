@@ -101,7 +101,7 @@ public class EzModeSettingsCreator {
 
         int barWidth = 30;
         SSColor stampColor = stamp.getColor();
-        SSColorChooserPicker colorChooserPanel = new SSColorChooserPicker(stampColor);
+        SSColorChooserPicker colorChooserPanel = new SSColorChooserPicker(stampColor, true);
         Dimension dim = new Dimension(scEditorWindow.getEzModeWidth() - barWidth, scEditorWindow.getEzModeWidth() - barWidth);
         colorChooserPanel.setPreferredSize(dim);
         colorChooserPanel.setMinimumSize(dim);

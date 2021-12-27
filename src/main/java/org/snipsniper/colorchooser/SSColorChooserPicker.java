@@ -16,7 +16,7 @@ public class SSColorChooserPicker extends JPanel {
 
     private boolean isDragging = false;
 
-    public SSColorChooserPicker(SSColor color) {
+    public SSColorChooserPicker(SSColor color, boolean alwaysGrab) {
         this.color = color;
         updatePosition();
         color.addChangeListener(changeEvent -> updatePosition());
@@ -27,32 +27,37 @@ public class SSColorChooserPicker extends JPanel {
                 if(rect == null)
                     return;
 
-                if(rect.contains(mouseEvent.getPoint()))
+                if(rect.contains(mouseEvent.getPoint()) && !alwaysGrab)
                     isDragging = true;
             }
 
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 isDragging = false;
+                if(alwaysGrab)
+                    execute(mouseEvent.getX(), mouseEvent.getY());
             }
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
-                if(isDragging) {
-                    float percentageX = (mouseEvent.getX() * 100F) / getWidth();
-                    float percentageY = (mouseEvent.getY() * 100F) / getHeight();
-                    float pointX = new Vector2Float(percentageX / 100F, 0).limitX(0.01F, 0.99F).getX();
-                    float pointY = new Vector2Float(percentageY / 100F, 0).limitX(0.01F, 0.99F).getX();
-                    HSB current = new HSB(color.getPrimaryColor());
-                    color.setPrimaryColor(new HSB(current.getHue(), position.getX(), position.getY(), current.getAlpha()).toRGB());
-                    pointY = (pointY - 1) * - 1;
-                    position = new Vector2Float(pointX, pointY);
-                }
-                repaint();
+                if(isDragging || alwaysGrab)
+                    execute(mouseEvent.getX(), mouseEvent.getY());
             }
         });
+    }
+
+    private void execute(int x, int y) {
+        float percentageX = (x * 100F) / getWidth();
+        float percentageY = (y * 100F) / getHeight();
+        float pointX = new Vector2Float(percentageX / 100F, 0).limitX(0.01F, 0.99F).getX();
+        float pointY = new Vector2Float(percentageY / 100F, 0).limitX(0.01F, 0.99F).getX();
+        HSB current = new HSB(color.getPrimaryColor());
+        color.setPrimaryColor(new HSB(current.getHue(), position.getX(), position.getY(), current.getAlpha()).toRGB());
+        pointY = (pointY - 1) * - 1;
+        position = new Vector2Float(pointX, pointY);
+        repaint();
     }
 
     public Rectangle getSelectRect() {
