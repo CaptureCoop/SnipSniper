@@ -35,6 +35,8 @@ public class TextStamp implements IStamp{
 
     private final static String DEFAULT_TEXT = "Text";
 
+    private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
+
     public TextStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
         this.scEditorWindow = scEditorWindow;
@@ -62,14 +64,14 @@ public class TextStamp implements IStamp{
             if (keyEvent.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
                 if (text.length() > 0)
                     text = text.substring(0, text.length() - 1);
+                alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
                 return;
             }
 
             if(!nonTypeKeys.contains(keyEvent.getKeyCode()) && !input.isKeyPressed(KeyEvent.VK_CONTROL))
                 text += keyEvent.getKeyChar();
         }
-        if(scEditorWindow != null)
-            scEditorWindow.updateEzUI();
+        alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
     }
 
     @Override
@@ -129,6 +131,7 @@ public class TextStamp implements IStamp{
         } else if(pressed && state == TextState.TYPING) {
             doSaveNextRender = true;
         }
+        alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
     }
 
     public TextState getState() {
@@ -147,6 +150,7 @@ public class TextStamp implements IStamp{
 
     public void setText(String text) {
         this.text = text;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     public String getReadableText() {
@@ -174,6 +178,7 @@ public class TextStamp implements IStamp{
     @Override
     public void setHeight(int height) {
         fontSize = height;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -183,6 +188,7 @@ public class TextStamp implements IStamp{
 
     public void setFontMode(int fontMode) {
         this.fontMode = fontMode;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     public int getFontMode() {
@@ -197,6 +203,7 @@ public class TextStamp implements IStamp{
     @Override
     public void setColor(SSColor color) {
         this.color = color;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -207,5 +214,16 @@ public class TextStamp implements IStamp{
     @Override
     public StampUtils.TYPE getType() {
         return StampUtils.TYPE.TEXT;
+    }
+
+    @Override
+    public void addChangeListener(IStampUpdateListener listener) {
+        changeListeners.add(listener);
+    }
+
+    public void alertChangeListeners(IStampUpdateListener.TYPE type) {
+        for(IStampUpdateListener listener : changeListeners) {
+            listener.updated(type);
+        }
     }
 }

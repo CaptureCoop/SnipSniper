@@ -63,7 +63,7 @@ public class SCEditorListener extends SnipScopeListener {
         if(input.isKeyPressed(KeyEvent.VK_PERIOD)) {
             scEditorWindow.setEzMode(!scEditorWindow.isEzMode());
             if(scEditorWindow.isEzMode())
-                scEditorWindow.updateEzUI();
+                scEditorWindow.updateEzUI(true);
         }
         TextStamp.TextState textState = TextStamp.TextState.TYPING;
         for(IStamp stamp : scEditorWindow.getStamps())

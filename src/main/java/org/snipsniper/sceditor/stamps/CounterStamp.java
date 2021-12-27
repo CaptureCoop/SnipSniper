@@ -7,6 +7,7 @@ import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
 
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ public class CounterStamp implements IStamp{
     private boolean solidColor;
 
     private final ArrayList<Integer> historyPoints = new ArrayList<>();
+
+    private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
     public CounterStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -72,11 +75,11 @@ public class CounterStamp implements IStamp{
             if (height <= minimumHeight)
                 height = minimumHeight;
 
-            if(scEditorWindow != null)
-                scEditorWindow.updateEzUI();
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
         }
     }
 
+    @Override
     public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         Graphics2D g = (Graphics2D) g_;
         Rectangle drawnRectangle = null;
@@ -141,12 +144,19 @@ public class CounterStamp implements IStamp{
             }
             if (count > 1)
                 count--;
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
         }
     }
 
     @Override
     public void mousePressedEvent(int button, boolean pressed) {
 
+    }
+
+    public void alertChangeListeners(IStampUpdateListener.TYPE type) {
+        for(IStampUpdateListener listener : changeListeners) {
+            listener.updated(type);
+        }
     }
 
     @Override
@@ -169,6 +179,7 @@ public class CounterStamp implements IStamp{
     @Override
     public void setWidth(int width) {
         this.width = width;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -179,6 +190,7 @@ public class CounterStamp implements IStamp{
     @Override
     public void setHeight(int height) {
         this.height = height;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -194,6 +206,7 @@ public class CounterStamp implements IStamp{
     @Override
     public void setColor(SSColor color) {
         this.color = color;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -204,5 +217,10 @@ public class CounterStamp implements IStamp{
     @Override
     public StampUtils.TYPE getType() {
         return StampUtils.TYPE.COUNTER;
+    }
+
+    @Override
+    public void addChangeListener(IStampUpdateListener listener) {
+        changeListeners.add(listener);
     }
 }

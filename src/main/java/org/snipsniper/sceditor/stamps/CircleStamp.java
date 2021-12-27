@@ -7,8 +7,10 @@ import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
 
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class CircleStamp implements IStamp{
     private int width;
@@ -26,6 +28,8 @@ public class CircleStamp implements IStamp{
 
     private final Config config;
     private final SCEditorWindow scEditorWindow;
+
+    private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
     public CircleStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -47,6 +51,7 @@ public class CircleStamp implements IStamp{
                 }
                 if(thickness <= 0)
                     thickness = 1;
+                alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
                 return;
             }
 
@@ -80,8 +85,7 @@ public class CircleStamp implements IStamp{
             if (height <= minimumHeight)
                 height = minimumHeight;
 
-            if(scEditorWindow != null)
-                scEditorWindow.updateEzUI();
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
         }
     }
 
@@ -129,8 +133,15 @@ public class CircleStamp implements IStamp{
         thickness = config.getInt(ConfigHelper.PROFILE.editorStampCircleThickness);
     }
 
+    public void alertChangeListeners(IStampUpdateListener.TYPE type) {
+        for(IStampUpdateListener listener : changeListeners) {
+            listener.updated(type);
+        }
+    }
+
     public void setThickness(int thickness) {
         this.thickness = thickness;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     public int getThickness() {
@@ -140,6 +151,7 @@ public class CircleStamp implements IStamp{
     @Override
     public void setWidth(int width) {
         this.width = width;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -150,6 +162,7 @@ public class CircleStamp implements IStamp{
     @Override
     public void setHeight(int height) {
         this.height = height;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -165,6 +178,7 @@ public class CircleStamp implements IStamp{
     @Override
     public void setColor(SSColor color) {
         this.color = color;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -175,5 +189,10 @@ public class CircleStamp implements IStamp{
     @Override
     public StampUtils.TYPE getType() {
         return StampUtils.TYPE.CIRCLE;
+    }
+
+    @Override
+    public void addChangeListener(IStampUpdateListener listener) {
+        changeListeners.add(listener);
     }
 }

@@ -9,6 +9,7 @@ import org.snipsniper.utils.Vector2Int;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class RectangleStamp implements IStamp {
     private final Config config;
@@ -26,6 +27,8 @@ public class RectangleStamp implements IStamp {
     private int thickness;
 
     private SSColor color;
+
+    private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
     public RectangleStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -46,8 +49,7 @@ public class RectangleStamp implements IStamp {
             }
             if(thickness <= 0)
                 thickness = 1;
-            if(scEditorWindow != null)
-                scEditorWindow.updateEzUI();
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
             return;
         }
 
@@ -82,8 +84,7 @@ public class RectangleStamp implements IStamp {
                 }
                 break;
         }
-        if(scEditorWindow != null)
-            scEditorWindow.updateEzUI();
+        alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
     }
 
     @Override
@@ -136,6 +137,7 @@ public class RectangleStamp implements IStamp {
 
     public void setThickness(int thickness) {
         this.thickness = thickness;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     public int getThickness() {
@@ -145,6 +147,7 @@ public class RectangleStamp implements IStamp {
     @Override
     public void setWidth(int width) {
         this.width = width;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -155,6 +158,7 @@ public class RectangleStamp implements IStamp {
     @Override
     public void setHeight(int height) {
         this.height = height;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -170,6 +174,7 @@ public class RectangleStamp implements IStamp {
     @Override
     public void setColor(SSColor color) {
         this.color = color;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -180,5 +185,16 @@ public class RectangleStamp implements IStamp {
     @Override
     public StampUtils.TYPE getType() {
         return StampUtils.TYPE.RECTANGLE;
+    }
+
+    @Override
+    public void addChangeListener(IStampUpdateListener listener) {
+        changeListeners.add(listener);
+    }
+
+    public void alertChangeListeners(IStampUpdateListener.TYPE type) {
+        for(IStampUpdateListener listener : changeListeners) {
+            listener.updated(type);
+        }
     }
 }

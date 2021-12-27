@@ -4,6 +4,7 @@ import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
 
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -26,4 +27,6 @@ public interface IStamp {
     void setColor(SSColor color);
     SSColor getColor();
     StampUtils.TYPE getType();
+
+    void addChangeListener(IStampUpdateListener listener);
 }

@@ -1,16 +1,15 @@
 package org.snipsniper.sceditor.stamps;
 
-import org.snipsniper.LogManager;
 import org.snipsniper.config.Config;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
-import org.snipsniper.utils.enums.LogLevel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class SimpleBrush implements IStamp {
     private final Config config;
@@ -20,6 +19,8 @@ public class SimpleBrush implements IStamp {
     private int speed;
 
     private SSColor color;
+
+    private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
     public SimpleBrush(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -38,8 +39,7 @@ public class SimpleBrush implements IStamp {
                     size += speed;
                     break;
             }
-            if(scEditorWindow != null)
-                scEditorWindow.updateEzUI();
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
         }
     }
 
@@ -105,6 +105,7 @@ public class SimpleBrush implements IStamp {
     @Override
     public void setWidth(int width) {
         size = width;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -128,6 +129,7 @@ public class SimpleBrush implements IStamp {
     @Override
     public void setColor(SSColor color) {
         this.color = color;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -138,5 +140,16 @@ public class SimpleBrush implements IStamp {
     @Override
     public StampUtils.TYPE getType() {
         return StampUtils.TYPE.BRUSH;
+    }
+
+    @Override
+    public void addChangeListener(IStampUpdateListener listener) {
+        changeListeners.add(listener);
+    }
+
+    public void alertChangeListeners(IStampUpdateListener.TYPE type) {
+        for(IStampUpdateListener listener : changeListeners) {
+            listener.updated(type);
+        }
     }
 }
