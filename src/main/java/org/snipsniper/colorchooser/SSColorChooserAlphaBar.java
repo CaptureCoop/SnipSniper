@@ -19,7 +19,7 @@ public class SSColorChooserAlphaBar extends JPanel {
 
     private boolean isDragging = false;
 
-    public SSColorChooserAlphaBar(SSColor color, DrawUtils.DIRECTION direction) {
+    public SSColorChooserAlphaBar(SSColor color, DrawUtils.DIRECTION direction, boolean alwaysGrab) {
         this.color = color;
         this.direction = direction;
         updateAlpha();
@@ -31,34 +31,39 @@ public class SSColorChooserAlphaBar extends JPanel {
                 if(rect == null)
                     return;
 
-                if(rect.contains(mouseEvent.getPoint()))
+                if(rect.contains(mouseEvent.getPoint()) && !alwaysGrab)
                     isDragging = true;
             }
 
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 isDragging = false;
+                if(alwaysGrab)
+                    execute(mouseEvent.getX(), mouseEvent.getY());
             }
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
-                if(isDragging) {
-                    int pos = mouseEvent.getY();
-                    int size = getHeight();
-                    if(direction == DrawUtils.DIRECTION.HORIZONTAL) {
-                        pos = mouseEvent.getX();
-                        size = getWidth();
-                    }
-                    float percentage = (pos * 100F) / size;
-                    position = new Vector2Float(percentage / 100F, 0).limitX(0, 1).getX();
-                    Color oldColor = color.getPrimaryColor();
-                    color.setPrimaryColor(new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), MathUtils.clampInt((int)(position * 255), 0, 255)));
-                }
-                repaint();
+                if(isDragging || alwaysGrab)
+                    execute(mouseEvent.getX(), mouseEvent.getY());
             }
         });
+    }
+
+    private void execute(int x, int y) {
+        int pos = y;
+        int size = getHeight();
+        if(direction == DrawUtils.DIRECTION.HORIZONTAL) {
+            pos = x;
+            size = getWidth();
+        }
+        float percentage = (pos * 100F) / size;
+        position = new Vector2Float(percentage / 100F, 0).limitX(0, 1).getX();
+        Color oldColor = color.getPrimaryColor();
+        color.setPrimaryColor(new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), MathUtils.clampInt((int)(position * 255), 0, 255)));
+        repaint();
     }
 
     private void updateAlpha() {

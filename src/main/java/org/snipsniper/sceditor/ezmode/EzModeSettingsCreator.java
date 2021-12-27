@@ -115,7 +115,7 @@ public class EzModeSettingsCreator {
         colorChooserBar.setMaximumSize(dim2);
         panel.add(colorChooserBar);
 
-        SSColorChooserAlphaBar alphaBar = new SSColorChooserAlphaBar(stampColor, DrawUtils.DIRECTION.HORIZONTAL);
+        SSColorChooserAlphaBar alphaBar = new SSColorChooserAlphaBar(stampColor, DrawUtils.DIRECTION.HORIZONTAL, true);
         Dimension dim3 = new Dimension(scEditorWindow.getEzModeWidth(), barWidth);
         alphaBar.setPreferredSize(dim3);
         alphaBar.setMaximumSize(dim3);
