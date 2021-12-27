@@ -7,7 +7,6 @@ import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
 
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class SimpleBrush implements IStamp {
 
     private SSColor color;
 
-    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
+    private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
     public SimpleBrush(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -40,8 +39,7 @@ public class SimpleBrush implements IStamp {
                     size += speed;
                     break;
             }
-            if(scEditorWindow != null)
-                scEditorWindow.updateEzUI();
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
         }
     }
 
@@ -107,6 +105,7 @@ public class SimpleBrush implements IStamp {
     @Override
     public void setWidth(int width) {
         size = width;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -130,6 +129,7 @@ public class SimpleBrush implements IStamp {
     @Override
     public void setColor(SSColor color) {
         this.color = color;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -143,13 +143,13 @@ public class SimpleBrush implements IStamp {
     }
 
     @Override
-    public void addChangeListener(ChangeListener listener) {
+    public void addChangeListener(IStampUpdateListener listener) {
         changeListeners.add(listener);
     }
 
-    public void alertChangeListeners() {
-        for(ChangeListener listener : changeListeners) {
-            listener.stateChanged(null);
+    public void alertChangeListeners(IStampUpdateListener.TYPE type) {
+        for(IStampUpdateListener listener : changeListeners) {
+            listener.updated(type);
         }
     }
 }

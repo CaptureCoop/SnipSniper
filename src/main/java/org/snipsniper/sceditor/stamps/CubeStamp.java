@@ -7,7 +7,6 @@ import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
 
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -29,7 +28,7 @@ public class CubeStamp implements IStamp{
 
     private BufferedImage smartPixelBuffer;
 
-    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
+    private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
 
     public CubeStamp(Config config, SCEditorWindow scEditorWindow) {
@@ -72,8 +71,7 @@ public class CubeStamp implements IStamp{
                 break;
         }
 
-        if(scEditorWindow != null)
-            scEditorWindow.updateEzUI();
+        alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
     }
 
     public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
@@ -138,9 +136,9 @@ public class CubeStamp implements IStamp{
         return new Rectangle(position.getX() - drawWidth / 2, position.getY() - drawHeight / 2, drawWidth, drawHeight);
     }
 
-    public void alertChangeListeners() {
-        for(ChangeListener listener : changeListeners) {
-            listener.stateChanged(null);
+    public void alertChangeListeners(IStampUpdateListener.TYPE type) {
+        for(IStampUpdateListener listener : changeListeners) {
+            listener.updated(type);
         }
     }
 
@@ -170,6 +168,7 @@ public class CubeStamp implements IStamp{
     @Override
     public void setWidth(int width) {
         this.width = width;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -180,6 +179,7 @@ public class CubeStamp implements IStamp{
     @Override
     public void setHeight(int height) {
         this.height = height;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -195,6 +195,7 @@ public class CubeStamp implements IStamp{
     @Override
     public void setColor(SSColor color) {
         this.color = color;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -208,7 +209,7 @@ public class CubeStamp implements IStamp{
     }
 
     @Override
-    public void addChangeListener(ChangeListener listener) {
+    public void addChangeListener(IStampUpdateListener listener) {
         changeListeners.add(listener);
     }
 }

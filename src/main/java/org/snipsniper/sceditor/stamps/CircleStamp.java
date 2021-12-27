@@ -29,7 +29,7 @@ public class CircleStamp implements IStamp{
     private final Config config;
     private final SCEditorWindow scEditorWindow;
 
-    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
+    private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
     public CircleStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -51,6 +51,7 @@ public class CircleStamp implements IStamp{
                 }
                 if(thickness <= 0)
                     thickness = 1;
+                alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
                 return;
             }
 
@@ -84,8 +85,7 @@ public class CircleStamp implements IStamp{
             if (height <= minimumHeight)
                 height = minimumHeight;
 
-            if(scEditorWindow != null)
-                scEditorWindow.updateEzUI();
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
         }
     }
 
@@ -133,14 +133,15 @@ public class CircleStamp implements IStamp{
         thickness = config.getInt(ConfigHelper.PROFILE.editorStampCircleThickness);
     }
 
-    public void alertChangeListeners() {
-        for(ChangeListener listener : changeListeners) {
-            listener.stateChanged(null);
+    public void alertChangeListeners(IStampUpdateListener.TYPE type) {
+        for(IStampUpdateListener listener : changeListeners) {
+            listener.updated(type);
         }
     }
 
     public void setThickness(int thickness) {
         this.thickness = thickness;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     public int getThickness() {
@@ -150,6 +151,7 @@ public class CircleStamp implements IStamp{
     @Override
     public void setWidth(int width) {
         this.width = width;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -160,6 +162,7 @@ public class CircleStamp implements IStamp{
     @Override
     public void setHeight(int height) {
         this.height = height;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -175,6 +178,7 @@ public class CircleStamp implements IStamp{
     @Override
     public void setColor(SSColor color) {
         this.color = color;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -188,7 +192,7 @@ public class CircleStamp implements IStamp{
     }
 
     @Override
-    public void addChangeListener(ChangeListener listener) {
+    public void addChangeListener(IStampUpdateListener listener) {
         changeListeners.add(listener);
     }
 }

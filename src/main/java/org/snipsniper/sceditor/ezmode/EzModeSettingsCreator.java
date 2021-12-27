@@ -10,10 +10,7 @@ import org.snipsniper.colorchooser.SSColorChooserHSBHueBar;
 import org.snipsniper.colorchooser.SSColorChooserHSBPicker;
 import org.snipsniper.configwindow.StampJPanel;
 import org.snipsniper.sceditor.SCEditorWindow;
-import org.snipsniper.sceditor.stamps.CircleStamp;
-import org.snipsniper.sceditor.stamps.IStamp;
-import org.snipsniper.sceditor.stamps.RectangleStamp;
-import org.snipsniper.sceditor.stamps.TextStamp;
+import org.snipsniper.sceditor.stamps.*;
 import org.snipsniper.utils.DrawUtils;
 import org.snipsniper.utils.DropdownItem;
 import org.snipsniper.utils.Function;
@@ -134,24 +131,33 @@ public class EzModeSettingsCreator {
         final int boxMinimum = 1;
         final int boxMaximum = 400;
         panel.add(new JLabel("width"));
-        panel.add(createEZModeSlider(boxMinimum, boxMaximum, stamp.getWidth(), new Function() {
+        JSlider widthSlider = createEZModeSlider(boxMinimum, boxMaximum, stamp.getWidth(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 stamp.setWidth(args[0]);
                 stampPreviewPanel.repaint();
                 return true;
             }
-        }));
+        });
+        panel.add(widthSlider);
         panel.add(createJSeperator());
         panel.add(new JLabel("height"));
-        panel.add(createEZModeSlider(boxMinimum, boxMaximum, stamp.getHeight(), new Function() {
+        JSlider heightSlider = createEZModeSlider(boxMinimum, boxMaximum, stamp.getHeight(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 stamp.setHeight(args[0]);
                 stampPreviewPanel.repaint();
                 return true;
             }
-        }));
+        });
+        panel.add(heightSlider);
+
+        stamp.addChangeListener(type -> {
+            if(type == IStampUpdateListener.TYPE.INPUT) {
+                widthSlider.setValue(stamp.getWidth());
+                heightSlider.setValue(stamp.getHeight());
+            }
+        });
         panel.add(createJSeperator());
     }
 
@@ -162,7 +168,7 @@ public class EzModeSettingsCreator {
 
     public void addBasicCircleSettings(JPanel panel, IStamp stamp, boolean addColor) {
         panel.add(new JLabel("size"));
-        panel.add(createEZModeSlider(1, 400, stamp.getWidth(), new Function() {
+        JSlider sizeSlider = createEZModeSlider(1, 400, stamp.getWidth(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 stamp.setWidth(args[0]);
@@ -170,7 +176,12 @@ public class EzModeSettingsCreator {
                 stampPreviewPanel.repaint();
                 return true;
             }
-        }));
+        });
+        panel.add(sizeSlider);
+        stamp.addChangeListener(type -> {
+            if(type == IStampUpdateListener.TYPE.INPUT)
+                sizeSlider.setValue(stamp.getWidth());
+        });
         if(!addColor)
             return;
         panel.add(createJSeperator());
@@ -225,14 +236,19 @@ public class EzModeSettingsCreator {
         addBasicCircleSettings(panel, stamp, false);
         CircleStamp cStamp = (CircleStamp)stamp;
         panel.add(new JLabel("thickness"));
-        panel.add(createEZModeSlider(1, 200, cStamp.getThickness(), new Function() {
+        JSlider thicknessSlider = createEZModeSlider(1, 200, cStamp.getThickness(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 cStamp.setThickness(args[0]);
                 return true;
             }
-        }));
+        });
+        panel.add(thicknessSlider);
         panel.add(createJSeperator());
+        stamp.addChangeListener(type -> {
+            if(type == IStampUpdateListener.TYPE.INPUT)
+                thicknessSlider.setValue(cStamp.getThickness());
+        });
         addColorSettings(panel, stamp);
     }
 
@@ -243,13 +259,14 @@ public class EzModeSettingsCreator {
     private void text(JPanel panel, IStamp stamp) {
         panel.add(new JLabel("font size"));
         //Font size = height
-        panel.add(createEZModeSlider(5, 200, stamp.getHeight(), new Function() {
+        JSlider sizeSlider = createEZModeSlider(5, 200, stamp.getHeight(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 stamp.setHeight(args[0]);
                 return true;
             }
-        }));
+        });
+        panel.add(sizeSlider);
         panel.add(createJSeperator());
         TextStamp textStamp = (TextStamp) stamp;
         panel.add(new JLabel("font type"));
@@ -327,6 +344,25 @@ public class EzModeSettingsCreator {
             }
         });
 
+        stamp.addChangeListener(type -> {
+            if(type == IStampUpdateListener.TYPE.INPUT) {
+                sizeSlider.setValue(stamp.getHeight());
+                //TODO: Remove code duplication
+                switch (textStamp.getFontMode()) {
+                    case Font.PLAIN:
+                        fontTypeDropdown.setSelectedIndex(0);
+                        break;
+                    case Font.BOLD:
+                        fontTypeDropdown.setSelectedIndex(1);
+                        break;
+                    case Font.ITALIC:
+                        fontTypeDropdown.setSelectedIndex(2);
+                        break;
+                }
+                textInput.setText(textStamp.getReadableText());
+            }
+        });
+
         panel.add(textInput);
     }
 
@@ -334,13 +370,18 @@ public class EzModeSettingsCreator {
         addWidthHeightSettings(panel, stamp);
         RectangleStamp rStamp = (RectangleStamp)stamp;
         panel.add(new JLabel("thickness"));
-        panel.add(createEZModeSlider(1, 200, rStamp.getThickness(), new Function() {
+        JSlider thicknessSlider = createEZModeSlider(1, 200, rStamp.getThickness(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 rStamp.setThickness(args[0]);
                 return true;
             }
-        }));
+        });
+        panel.add(thicknessSlider);
+        stamp.addChangeListener(type -> {
+            if(type == IStampUpdateListener.TYPE.INPUT)
+                thicknessSlider.setValue(rStamp.getThickness());
+        });
         panel.add(createJSeperator());
         addColorSettings(panel, stamp);
     }

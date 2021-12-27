@@ -21,7 +21,7 @@ public class EraserStamp implements IStamp {
     private int speed;
     private int pointDistance;
 
-    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
+    private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
     public EraserStamp(SCEditorWindow scEditorWindow, Config config) {
         this.scEditorWindow = scEditorWindow;
@@ -39,8 +39,7 @@ public class EraserStamp implements IStamp {
                     size += speed;
                     break;
             }
-            if(scEditorWindow != null)
-                scEditorWindow.updateEzUI();
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
         }
     }
 
@@ -79,9 +78,9 @@ public class EraserStamp implements IStamp {
         return new Rectangle(position.getX() - newSize / 2, position.getY() - newSize / 2, newSize, newSize);
     }
 
-    public void alertChangeListeners() {
-        for(ChangeListener listener : changeListeners) {
-            listener.stateChanged(null);
+    public void alertChangeListeners(IStampUpdateListener.TYPE type) {
+        for(IStampUpdateListener listener : changeListeners) {
+            listener.updated(type);
         }
     }
 
@@ -101,6 +100,7 @@ public class EraserStamp implements IStamp {
     @Override
     public void setWidth(int width) {
         size = width;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class EraserStamp implements IStamp {
     }
 
     @Override
-    public void addChangeListener(ChangeListener listener) {
+    public void addChangeListener(IStampUpdateListener listener) {
         changeListeners.add(listener);
     }
 }

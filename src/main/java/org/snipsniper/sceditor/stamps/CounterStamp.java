@@ -34,7 +34,7 @@ public class CounterStamp implements IStamp{
 
     private final ArrayList<Integer> historyPoints = new ArrayList<>();
 
-    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
+    private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
     public CounterStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
@@ -75,8 +75,7 @@ public class CounterStamp implements IStamp{
             if (height <= minimumHeight)
                 height = minimumHeight;
 
-            if(scEditorWindow != null)
-                scEditorWindow.updateEzUI();
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
         }
     }
 
@@ -145,6 +144,7 @@ public class CounterStamp implements IStamp{
             }
             if (count > 1)
                 count--;
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
         }
     }
 
@@ -153,9 +153,9 @@ public class CounterStamp implements IStamp{
 
     }
 
-    public void alertChangeListeners() {
-        for(ChangeListener listener : changeListeners) {
-            listener.stateChanged(null);
+    public void alertChangeListeners(IStampUpdateListener.TYPE type) {
+        for(IStampUpdateListener listener : changeListeners) {
+            listener.updated(type);
         }
     }
 
@@ -179,6 +179,7 @@ public class CounterStamp implements IStamp{
     @Override
     public void setWidth(int width) {
         this.width = width;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -189,6 +190,7 @@ public class CounterStamp implements IStamp{
     @Override
     public void setHeight(int height) {
         this.height = height;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -204,6 +206,7 @@ public class CounterStamp implements IStamp{
     @Override
     public void setColor(SSColor color) {
         this.color = color;
+        alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
@@ -217,7 +220,7 @@ public class CounterStamp implements IStamp{
     }
 
     @Override
-    public void addChangeListener(ChangeListener listener) {
+    public void addChangeListener(IStampUpdateListener listener) {
         changeListeners.add(listener);
     }
 }

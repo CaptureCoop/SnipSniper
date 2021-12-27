@@ -28,5 +28,5 @@ public interface IStamp {
     SSColor getColor();
     StampUtils.TYPE getType();
 
-    void addChangeListener(ChangeListener listener);
+    void addChangeListener(IStampUpdateListener listener);
 }
