@@ -58,7 +58,7 @@ public class SSColorChooserPicker extends JPanel {
     public Rectangle getSelectRect() {
         int posX = (int)(position.getX() * getSizeX());
         int posY = (int)((position.getY() - 1) * - 1 * getSizeY());
-        return new Rectangle(posX, posY, 10, 10);
+        return new Rectangle(posX, posY, MARGIN, MARGIN);
     }
 
     public void updatePosition() {
