@@ -8,7 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-public class SSColorChooserPicker extends JPanel {
+public class SSColorChooserHSBPicker extends JPanel {
     private SSColor color;
     private Vector2Float position;
 
@@ -16,7 +16,7 @@ public class SSColorChooserPicker extends JPanel {
 
     private boolean isDragging = false;
 
-    public SSColorChooserPicker(SSColor color, boolean alwaysGrab) {
+    public SSColorChooserHSBPicker(SSColor color, boolean alwaysGrab) {
         this.color = color;
         updatePosition();
         color.addChangeListener(changeEvent -> updatePosition());

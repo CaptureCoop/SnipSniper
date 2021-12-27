@@ -6,8 +6,8 @@ import javax.swing.event.DocumentListener;
 
 import org.snipsniper.SnipSniper;
 import org.snipsniper.colorchooser.SSColorChooserAlphaBar;
-import org.snipsniper.colorchooser.SSColorChooserHueBar;
-import org.snipsniper.colorchooser.SSColorChooserPicker;
+import org.snipsniper.colorchooser.SSColorChooserHSBHueBar;
+import org.snipsniper.colorchooser.SSColorChooserHSBPicker;
 import org.snipsniper.configwindow.StampJPanel;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.sceditor.stamps.CircleStamp;
@@ -101,14 +101,14 @@ public class EzModeSettingsCreator {
 
         int barWidth = 30;
         SSColor stampColor = stamp.getColor();
-        SSColorChooserPicker colorChooserPanel = new SSColorChooserPicker(stampColor, true);
+        SSColorChooserHSBPicker colorChooserPanel = new SSColorChooserHSBPicker(stampColor, true);
         Dimension dim = new Dimension(scEditorWindow.getEzModeWidth() - barWidth, scEditorWindow.getEzModeWidth() - barWidth);
         colorChooserPanel.setPreferredSize(dim);
         colorChooserPanel.setMinimumSize(dim);
         colorChooserPanel.setMaximumSize(dim);
         panel.add(colorChooserPanel);
 
-        SSColorChooserHueBar colorChooserBar = new SSColorChooserHueBar(stampColor, DrawUtils.DIRECTION.VERTICAL, true);
+        SSColorChooserHSBHueBar colorChooserBar = new SSColorChooserHSBHueBar(stampColor, DrawUtils.DIRECTION.VERTICAL, true);
         Dimension dim2 = new Dimension(barWidth, scEditorWindow.getEzModeWidth() - barWidth);
         colorChooserBar.setPreferredSize(dim2);
         colorChooserBar.setMinimumSize(dim2);

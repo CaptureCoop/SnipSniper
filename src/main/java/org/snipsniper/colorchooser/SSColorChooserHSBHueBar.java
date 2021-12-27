@@ -11,7 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-public class SSColorChooserHueBar extends JPanel {
+public class SSColorChooserHSBHueBar extends JPanel {
     private SSColor color;
     private float position;
     private final DrawUtils.DIRECTION direction;
@@ -21,7 +21,7 @@ public class SSColorChooserHueBar extends JPanel {
     private final static int SEL_MARGIN_OFF = 2;
     private boolean isDragging = false;
 
-    public SSColorChooserHueBar(SSColor color, DrawUtils.DIRECTION direction, boolean alwaysGrab) {
+    public SSColorChooserHSBHueBar(SSColor color, DrawUtils.DIRECTION direction, boolean alwaysGrab) {
         this.color = color;
         this.direction = direction;
         updateHSV();
