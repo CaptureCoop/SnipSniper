@@ -51,7 +51,7 @@ public class EzModeSettingsCreator {
         stampPreviewPanel = new StampJPanel();
         stampPreviewPanel.setMargin(10);
         stampPreviewPanel.setStamp(stamp);
-        stampPreviewPanel.setBackground(scEditorWindow.getImage());
+        stampPreviewPanel.setBackground(scEditorWindow.getOriginalImage());
         Dimension previewDimension = new Dimension(scEditorWindow.getEzModeWidth(), scEditorWindow.getEzModeWidth());
         stampPreviewPanel.setPreferredSize(previewDimension);
         stampPreviewPanel.setMinimumSize(previewDimension);
