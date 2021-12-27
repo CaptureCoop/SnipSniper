@@ -8,6 +8,32 @@ public class DrawUtils {
 
     public enum DIRECTION {VERTICAL, HORIZONTAL}
 
+    public static BufferedImage createAlphaBar(int width, int height, DIRECTION direction) {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = (Graphics2D) image.getGraphics();
+
+        int amount = width;
+        float step = 255F / width;
+        float alpha = 0;
+
+        if(direction == DIRECTION.VERTICAL) {
+            amount = height;
+            step = 255F / height;
+        }
+
+        for(int pos = 0; pos < amount; pos++) {
+            g.setColor(new Color(0, 0, 0, (int)alpha));
+            switch(direction) {
+                case VERTICAL: g.drawLine(0, pos, width, pos); break;
+                case HORIZONTAL: g.drawLine(pos, 0, pos, height); break;
+            }
+            alpha += step;
+        }
+
+        g.dispose();
+        return image;
+    }
+
     public static BufferedImage createHSVHueBar(int width, int height, DIRECTION direction) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = (Graphics2D) image.getGraphics();
@@ -22,7 +48,7 @@ public class DrawUtils {
         }
 
         for(int pos = 0; pos < amount; pos++) {
-            g.setColor(new Color(Color.HSBtoRGB(hue, 1F, 1F)));
+            g.setColor(new HSB(hue, 1F, 1F).toRGB());
             switch(direction) {
                 case VERTICAL: g.drawLine(0, pos, width, pos); break;
                 case HORIZONTAL: g.drawLine(pos, 0, pos, height); break;
@@ -47,7 +73,7 @@ public class DrawUtils {
             saturation = 0;
             for(int x = 0; x < width; x++) {
                 saturation += stepWidth;
-                g.setColor(new Color(Color.HSBtoRGB(hue, saturation, brightness)));
+                g.setColor(new HSB(hue, saturation, brightness).toRGB());
                 g.drawLine(x, y, x, y);
             }
             brightness -= stepHeight;

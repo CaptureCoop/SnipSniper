@@ -5,14 +5,19 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.snipsniper.SnipSniper;
+import org.snipsniper.colorchooser.SSColorChooserAlphaBar;
+import org.snipsniper.colorchooser.SSColorChooserHSBHueBar;
+import org.snipsniper.colorchooser.SSColorChooserHSBPicker;
 import org.snipsniper.configwindow.StampJPanel;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.sceditor.stamps.CircleStamp;
 import org.snipsniper.sceditor.stamps.IStamp;
 import org.snipsniper.sceditor.stamps.RectangleStamp;
 import org.snipsniper.sceditor.stamps.TextStamp;
+import org.snipsniper.utils.DrawUtils;
 import org.snipsniper.utils.DropdownItem;
 import org.snipsniper.utils.Function;
+import org.snipsniper.utils.SSColor;
 
 import java.awt.*;
 import java.awt.event.FocusAdapter;
@@ -44,6 +49,7 @@ public class EzModeSettingsCreator {
         panel.add(createJSeperator());
         panel.add(new JLabel("preview"));
         stampPreviewPanel = new StampJPanel();
+        stampPreviewPanel.setMargin(10);
         stampPreviewPanel.setStamp(stamp);
         stampPreviewPanel.setBackground(scEditorWindow.getImage());
         Dimension previewDimension = new Dimension(scEditorWindow.getEzModeWidth(), scEditorWindow.getEzModeWidth());
@@ -59,34 +65,69 @@ public class EzModeSettingsCreator {
     public void addColorSettings(JPanel panel, IStamp stamp) {
         panel.add(new JLabel("color"));
         Color color = stamp.getColor().getPrimaryColor();
-        panel.add(createEZModeSlider(0, 255, color.getRed(), new Function() {
+        JSlider redSlider = createEZModeSlider(0, 255, color.getRed(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(args[0], cColor.getGreen(), cColor.getBlue()));
+                stamp.getColor().setPrimaryColor(new Color(args[0], cColor.getGreen(), cColor.getBlue(), cColor.getAlpha()));
                 stampPreviewPanel.repaint();
                 return true;
             }
-        }));
-        panel.add(createEZModeSlider(0, 255, color.getGreen(), new Function() {
+        });
+        JSlider greenSlider = createEZModeSlider(0, 255, color.getGreen(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), args[0], cColor.getBlue()));
+                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), args[0], cColor.getBlue(), cColor.getAlpha()));
                 stampPreviewPanel.repaint();
                 return true;
             }
-        }));
-        panel.add(createEZModeSlider(0, 255, color.getBlue(), new Function() {
+        });
+        JSlider blueSlider = createEZModeSlider(0, 255, color.getBlue(), new Function() {
             @Override
             public boolean run(Integer... args) {
                 Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), cColor.getGreen(), args[0]));
+                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), cColor.getGreen(), args[0], cColor.getAlpha()));
                 stampPreviewPanel.repaint();
                 return true;
             }
-        }));
+        });
 
+        panel.add(redSlider);
+        panel.add(greenSlider);
+        panel.add(blueSlider);
+
+        panel.add(createJSeperator());
+
+        int barWidth = 30;
+        SSColor stampColor = stamp.getColor();
+        SSColorChooserHSBPicker colorChooserPanel = new SSColorChooserHSBPicker(stampColor, true);
+        Dimension dim = new Dimension(scEditorWindow.getEzModeWidth() - barWidth, scEditorWindow.getEzModeWidth() - barWidth);
+        colorChooserPanel.setPreferredSize(dim);
+        colorChooserPanel.setMinimumSize(dim);
+        colorChooserPanel.setMaximumSize(dim);
+        panel.add(colorChooserPanel);
+
+        SSColorChooserHSBHueBar colorChooserBar = new SSColorChooserHSBHueBar(stampColor, DrawUtils.DIRECTION.VERTICAL, true);
+        Dimension dim2 = new Dimension(barWidth, scEditorWindow.getEzModeWidth() - barWidth);
+        colorChooserBar.setPreferredSize(dim2);
+        colorChooserBar.setMinimumSize(dim2);
+        colorChooserBar.setMaximumSize(dim2);
+        panel.add(colorChooserBar);
+
+        SSColorChooserAlphaBar alphaBar = new SSColorChooserAlphaBar(stampColor, DrawUtils.DIRECTION.HORIZONTAL, true);
+        Dimension dim3 = new Dimension(scEditorWindow.getEzModeWidth(), barWidth);
+        alphaBar.setPreferredSize(dim3);
+        alphaBar.setMaximumSize(dim3);
+        alphaBar.setMinimumSize(dim3);
+        panel.add(alphaBar);
+
+        stampColor.addChangeListener(e -> {
+            redSlider.setValue(stampColor.getPrimaryColor().getRed());
+            greenSlider.setValue(stampColor.getPrimaryColor().getGreen());
+            blueSlider.setValue(stampColor.getPrimaryColor().getBlue());
+            scEditorWindow.repaint();
+        });
     }
 
     public void addWidthHeightSettings(JPanel panel, IStamp stamp) {

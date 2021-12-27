@@ -15,7 +15,7 @@ public class SSColor {
 	private final ArrayList<ChangeListener> listeners = new ArrayList<>();
 
 	public SSColor() {
-
+		primaryColor = Color.WHITE;
 	}
 
 	public SSColor(Color color) {

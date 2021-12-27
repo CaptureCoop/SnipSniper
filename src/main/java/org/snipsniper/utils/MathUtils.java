@@ -18,4 +18,8 @@ public class MathUtils {
             return false;
         }
     }
+
+    public static int clampInt(int number, int min, int max) {
+        return Math.min(Math.max(number, min), max);
+    }
 }
