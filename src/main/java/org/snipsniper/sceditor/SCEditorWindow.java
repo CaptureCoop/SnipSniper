@@ -89,8 +89,17 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         stamps[6] = new EraserStamp(this, config);
 
         if(image == null) {
-            image = ImageUtils.getDragPasteImage(ImageManager.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
-            defaultImage = image;
+            if (config.getBool(ConfigHelper.PROFILE.standaloneStartWithEmpty)) {
+                Dimension imgSize = Toolkit.getDefaultToolkit().getScreenSize();
+                image = new BufferedImage(imgSize.width / 2, imgSize.height / 2, BufferedImage.TYPE_INT_RGB);
+                Graphics imgG = image.getGraphics();
+                imgG.setColor(Color.WHITE);
+                imgG.fillRect(0, 0, image.getWidth(), image.getHeight());
+                imgG.dispose();
+            } else {
+                image = ImageUtils.getDragPasteImage(ImageManager.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
+                defaultImage = image;
+            }
         }
         renderer = new SCEditorRenderer(this);
         listener = new SCEditorListener(this);
