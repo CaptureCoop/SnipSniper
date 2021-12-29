@@ -17,6 +17,8 @@ import org.snipsniper.utils.enums.LogLevel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -120,6 +122,22 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         addEZModeStampButton("Text", "text_tool", ezIconType, 4);
         addEZModeStampButton("Rectangle", "rectangle", ezIconType, 5);
         addEZModeStampButton("Eraser", "ratzefummel", ezIconType, 6);
+        Rectangle[] tabRects = new Rectangle[ezModeStampPanelTabs.getTabCount()];
+        //TODO: Make this dynamic if we ever allow resizing
+        for(int i = 0; i < tabRects.length; i++)
+            tabRects[i] = ezModeStampPanelTabs.getUI().getTabBounds(ezModeStampPanelTabs, i);
+
+        ezModeStampPanelTabs.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                for(int i = 0; i < tabRects.length; i++) {
+                    if(tabRects[i].contains(e.getPoint())) {
+                        setEzModeTitle(StampUtils.getStampAsString(i));
+                        break;
+                    }
+                }
+            }
+        });
 
         ezModeStampPanelTabs.addChangeListener(e -> {
             setSelectedStamp(ezModeStampPanelTabs.getSelectedIndex());
