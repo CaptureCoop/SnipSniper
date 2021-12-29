@@ -7,8 +7,8 @@ public interface IStampUpdateListener {
     //This way we only update sliders if necessary, which can prevent issues like
     //Endless loops when updating an element, it triggers a stamp update, which then triggers another update etc...
 
-    //While JSlider.setValue() does not cause that, since it doesnt alert itself, JTextInput.setText does, causing an endless loop.
-    //This is why i decided to use this enum, since in Stamps the only two ways to change the stamp is either by using the update() function
+    //While JSlider.setValue() does not cause that, since it doesn't alert itself, JTextInput.setText does, causing an endless loop.
+    //This is why I decided to use this enum, since in Stamps the only two ways to change the stamp is either by using the update() function
     //which uses an InputContainer or by using Setters.
     //In the case of the EzUI the EzModeSettingsCreator can then decide when to do what, which works great for now.
     enum TYPE {SETTER, INPUT}

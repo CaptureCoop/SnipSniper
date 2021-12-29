@@ -7,7 +7,6 @@ import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
 
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -118,11 +117,10 @@ public class CounterStamp implements IStamp{
             if (config.getBool(ConfigHelper.PROFILE.editorStampCounterBorderEnabled)) {
                 oldColor = g.getColor();
                 g.setColor(Color.BLACK);
-                Graphics2D g2 = (Graphics2D) g;
-                Stroke oldStroke = g2.getStroke();
-                g2.setStroke(new BasicStroke(drawHeight / config.getFloat(ConfigHelper.PROFILE.editorStampCounterBorderModifier)));
-                g2.drawOval(x, y, drawWidth, drawHeight);
-                g2.setStroke(oldStroke);
+                Stroke oldStroke = g.getStroke();
+                g.setStroke(new BasicStroke(drawHeight / config.getFloat(ConfigHelper.PROFILE.editorStampCounterBorderModifier)));
+                g.drawOval(x, y, drawWidth, drawHeight);
+                g.setStroke(oldStroke);
                 g.setColor(oldColor);
             }
         }

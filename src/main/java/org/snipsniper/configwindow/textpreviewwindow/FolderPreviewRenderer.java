@@ -1,7 +1,6 @@
 package org.snipsniper.configwindow.textpreviewwindow;
 
 import org.snipsniper.ImageManager;
-import org.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
 import org.snipsniper.utils.StringUtils;
 
 import javax.swing.*;

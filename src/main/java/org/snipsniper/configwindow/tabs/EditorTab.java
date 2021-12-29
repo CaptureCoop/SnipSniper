@@ -2,7 +2,6 @@ package org.snipsniper.configwindow.tabs;
 
 import org.snipsniper.ImageManager;
 import org.snipsniper.LangManager;
-import org.snipsniper.SnipSniper;
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.configwindow.ConfigWindow;
