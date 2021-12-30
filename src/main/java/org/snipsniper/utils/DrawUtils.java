@@ -3,7 +3,8 @@ package org.snipsniper.utils;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class DrawUtils {
 
@@ -61,7 +62,7 @@ public class DrawUtils {
         return image;
     }
 
-    private static final HashMap<String, BufferedImage> hsvBoxCache = new HashMap<>();
+    private static final Map<String, BufferedImage> hsvBoxCache = new LinkedHashMap<>();
     private static final int MAX_CACHED = 10;
     public static BufferedImage createHSVBox(int width, int height, float hue) {
         String key = width + "_" + height + "_" + hue;
@@ -89,7 +90,7 @@ public class DrawUtils {
         g.dispose();
 
         if(hsvBoxCache.size() > MAX_CACHED)
-            hsvBoxCache.clear();
+            hsvBoxCache.remove(hsvBoxCache.keySet().iterator().next());
         hsvBoxCache.put(key, image);
         return image;
     }
