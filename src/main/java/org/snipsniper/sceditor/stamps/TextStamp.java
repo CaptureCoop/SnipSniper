@@ -44,6 +44,11 @@ public class TextStamp implements IStamp{
         nonTypeKeys.add(KeyEvent.VK_SHIFT);
         nonTypeKeys.add(KeyEvent.VK_CONTROL);
         nonTypeKeys.add(KeyEvent.VK_ALT);
+        //Arrow keys
+        nonTypeKeys.add(KeyEvent.VK_LEFT);
+        nonTypeKeys.add(KeyEvent.VK_RIGHT);
+        nonTypeKeys.add(KeyEvent.VK_UP);
+        nonTypeKeys.add(KeyEvent.VK_DOWN);
         reset();
     }
 
