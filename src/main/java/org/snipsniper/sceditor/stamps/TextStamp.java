@@ -102,10 +102,7 @@ public class TextStamp implements IStamp{
         if(scEditorWindow != null)
             renderPos = scEditorWindow.getPointOnImage(pointToUseForRenderPos);
 
-        String textToDraw = DEFAULT_TEXT;
-        if(!text.isEmpty())
-            textToDraw = text;
-
+        String textToDraw = getReadableText();
         int drawFontSize = (int) ((double)fontSize * difference[1]);
 
         Font oldFont = g.getFont();

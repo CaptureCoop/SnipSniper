@@ -315,7 +315,7 @@ public class EzModeSettingsCreator {
         textInput.setMinimumSize(dim);
         textInput.setMaximumSize(dim);
         textInput.setPreferredSize(dim);
-        textInput.setText(textStamp.getReadableText());
+        textInput.setText(textStamp.getText());
         textInput.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent keyEvent) {
@@ -359,7 +359,7 @@ public class EzModeSettingsCreator {
                         fontTypeDropdown.setSelectedIndex(2);
                         break;
                 }
-                textInput.setText(textStamp.getReadableText());
+                textInput.setText(textStamp.getText());
             }
         });
 
