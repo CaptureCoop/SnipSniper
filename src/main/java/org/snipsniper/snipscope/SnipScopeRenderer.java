@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 public class SnipScopeRenderer extends JPanel {
     private final SnipScopeWindow snipScopeWindow;
     private final RenderingHints qualityHints = Utils.getRenderingHints();
+    private final double zoomAntialisingKickIn = 2D;
 
     public Rectangle lastRectangle;
 
@@ -21,7 +22,7 @@ public class SnipScopeRenderer extends JPanel {
     public void paint(Graphics _g) {
         Graphics2D g = (Graphics2D) _g;
 
-        if(snipScopeWindow.getZoom() < 2D)
+        if(snipScopeWindow.getZoom() < zoomAntialisingKickIn)
             g.setRenderingHints(qualityHints);
 
         Dimension optimalDimension = snipScopeWindow.getOptimalImageDimension();
