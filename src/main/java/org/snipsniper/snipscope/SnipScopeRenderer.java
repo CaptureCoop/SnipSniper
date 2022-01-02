@@ -32,7 +32,10 @@ public class SnipScopeRenderer extends JPanel {
 
             float zoom = snipScopeWindow.getZoom();
             lastRectangle = new Rectangle(x, y, (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom));
-            g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height , this);
+            g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height, this);
+            g.setColor(Color.BLACK);
+            //TODO: add config option for outline
+            g.drawRect(lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height);
         }
     }
 

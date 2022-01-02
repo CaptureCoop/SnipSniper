@@ -206,6 +206,24 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
                 }
             });
             topBar.add(whatsappTest);
+            JMenuItem whatsappBox = new JMenuItem("Box test");
+            whatsappBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int width = 512;
+                    int height = 512;
+                    BufferedImage test = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D g = (Graphics2D) test.getGraphics();
+                    g.setRenderingHints(qualityHints);
+
+                    Dimension optimalDimension = Utils.getScaledDimension(originalImage, new Dimension(width, height));
+                    g.drawImage(originalImage, test.getWidth() / 2 - optimalDimension.width / 2, test.getHeight() / 2 - optimalDimension.height / 2, optimalDimension.width, optimalDimension.height, null);
+
+                    g.dispose();
+                    setImage(test, true, true);
+                }
+            });
+            topBar.add(whatsappBox);
             setJMenuBar(topBar);
         }
 
