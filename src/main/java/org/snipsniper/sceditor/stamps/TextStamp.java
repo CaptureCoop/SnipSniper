@@ -37,6 +37,8 @@ public class TextStamp implements IStamp{
 
     private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
+    private int lastDrawnWidth = 0;
+
     public TextStamp(Config config, SCEditorWindow scEditorWindow) {
         this.config = config;
         this.scEditorWindow = scEditorWindow;
@@ -123,7 +125,8 @@ public class TextStamp implements IStamp{
             state = TextState.IDLE;
             doSaveNextRender = false;
         }
-        return new Rectangle(renderPos.getX(), renderPos.getY(), g.getFontMetrics().stringWidth(textToDraw), drawFontSize);
+        lastDrawnWidth = g.getFontMetrics().stringWidth(textToDraw);
+        return new Rectangle(renderPos.getX(), renderPos.getY(), lastDrawnWidth, drawFontSize);
     }
 
     @Override
@@ -183,9 +186,8 @@ public class TextStamp implements IStamp{
 
     @Override
     public int getWidth() {
-        //TODO: Return width in pixels?
-        LogManager.log("getWidth called on TextStamp. This does not return anything! Use getHeight() instead.", LogLevel.WARNING);
-        return 0;
+        //Returns width in pixels
+        return lastDrawnWidth;
     }
 
     @Override
