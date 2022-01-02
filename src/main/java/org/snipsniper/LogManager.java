@@ -3,6 +3,7 @@ package org.snipsniper;
 import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.LogMessage;
 import org.snipsniper.utils.enums.LogLevel;
@@ -24,38 +25,43 @@ public class LogManager {
 
     private LogManager() { }
 
-    public static void log(String message, LogLevel level, Object... args) {
-        if(!enabled) {
-            preEnabledMessages.add(new LogMessage(level, org.snipsniper.utils.StringUtils.format(message, args), false, LocalDateTime.now()));
-            return;
-        }
-        logInternal(org.snipsniper.utils.StringUtils.format(message, args), level, false, LocalDateTime.now());
-    }
-
     public static void log(String message, LogLevel level) {
         if(!enabled) {
-            preEnabledMessages.add(new LogMessage(level, message, false, LocalDateTime.now()));
+            preEnabledMessages.add(new LogMessage(level, message, LocalDateTime.now()));
             return;
         }
-        logInternal(message, level, false, LocalDateTime.now());
+        logInternal(message, level, LocalDateTime.now());
     }
 
-    public static void log(String message, LogLevel level, boolean printStackTrace) {
-        if(!enabled) {
-            preEnabledMessages.add(new LogMessage(level, message, printStackTrace, LocalDateTime.now()));
-            return;
+    public static void log(String message, LogLevel level, Object... args) {
+        log(org.snipsniper.utils.StringUtils.format(message, args), level);
+    }
+
+    public static void logStacktrace(LogLevel level) {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        final int STACKTRACE_START = 2;
+
+        StringBuilder stackTraceString = new StringBuilder();
+        for(int i = STACKTRACE_START; i < stackTrace.length; i++) {
+            String trace = stackTrace[i].toString();
+            if(trace.contains("org.snipsniper"))
+                stackTraceString.append(trace).append("\n");
         }
-        logInternal(message, level, printStackTrace, LocalDateTime.now());
+        logStacktraceInternal(stackTraceString.toString(), level);
     }
 
-    public static void logStacktrace(String message, LogLevel level) {
+    public static void logStacktrace(Throwable exception, LogLevel level) {
+        logStacktraceInternal(ExceptionUtils.getStackTrace(exception), level);
+    }
+
+    private static void logStacktraceInternal(String message, LogLevel level) {
         System.out.println(message);
         htmlLog += "<p style='margin-top:0; white-space: nowrap;'><font color='" + getLevelColor(level) + "'>" + escapeHtml4(message).replaceAll("\n", "<br>") + "</font></p>";
         htmlLog += "<br>";
     }
 
     //The reason for this is that this way we can take index 3 of stack trace at all times
-    private static void logInternal(String message, LogLevel level, boolean printStackTrace, LocalDateTime time) {
+    private static void logInternal(String message, LogLevel level, LocalDateTime time) {
         if(!enabled)
             return;
 
@@ -104,16 +110,6 @@ public class LogManager {
 
         htmlLog += htmlLine;
 
-        if(printStackTrace) {
-            StringBuilder stackTraceString = new StringBuilder();
-            for(int i = STACKTRACE_START; i < stackTrace.length; i++) {
-                String trace = stackTrace[i].toString();
-                if(trace.contains("org.snipsniper"))
-                    stackTraceString.append(trace).append("\n");
-            }
-            logStacktrace(stackTraceString.toString(), level);
-        }
-
         DebugConsole console = SnipSniper.getDebugConsole();
         if(console != null)
             console.update();
@@ -156,7 +152,7 @@ public class LogManager {
         LogManager.enabled = enabled;
         if(enabled) {
             for(LogMessage msg : preEnabledMessages)
-                logInternal(msg.getMessage(), msg.getLevel(), msg.getPrintStackTrace(), msg.getTime());
+                logInternal(msg.getMessage(), msg.getLevel(), msg.getTime());
             preEnabledMessages.clear();
         }
     }

@@ -46,7 +46,8 @@ public class ImageManager {
 				}
 			}
 		} catch (IOException ioException) {
-			LogManager.log("Could not load resources. Message: " + ioException.getMessage(), LogLevel.ERROR, true);
+			LogManager.log("Could not load resources. Message:", LogLevel.ERROR, true);
+			LogManager.logStacktrace(ioException, LogLevel.ERROR);
 		}
 		LogManager.log("Done!", LogLevel.INFO);
 	}
