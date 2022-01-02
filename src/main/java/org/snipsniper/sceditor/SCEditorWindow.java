@@ -15,14 +15,13 @@ import org.snipsniper.utils.*;
 import org.snipsniper.LogManager;
 import org.snipsniper.utils.enums.LogLevel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -184,6 +183,32 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
             JMenuItem newItem = new JMenuItem("New");
             newItem.addActionListener(e -> openNewImageWindow());
             topBar.add(newItem);
+            JMenuItem whatsappTest = new JMenuItem("Border test");
+            whatsappTest.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int size = 10;
+                    BufferedImage test = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D g = (Graphics2D) test.getGraphics();
+                    g.setRenderingHints(qualityHints);
+                    for(int y = 0; y < originalImage.getHeight(); y++) {
+                        for(int x = 0; x < originalImage.getWidth(); x++) {
+                            if(new Color(originalImage.getRGB(x, y), true).getAlpha() > 10) {
+                                g.setColor(Color.WHITE);
+                                g.drawOval(x - size / 2, y - size / 2, size, size);
+                            }
+                        }
+                    }
+                    g.drawImage(originalImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), null);
+                    g.dispose();
+                    try {
+                        ImageIO.write(test, "png", new File("D:/test.png"));
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            topBar.add(whatsappTest);
             setJMenuBar(topBar);
         }
 
