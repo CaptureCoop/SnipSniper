@@ -368,6 +368,8 @@ public class EzModeSettingsCreator {
         });
 
         panel.add(textInput);
+
+        addColorSettings(panel, stamp);
     }
 
     private void rectangle(JPanel panel, IStamp stamp) {
