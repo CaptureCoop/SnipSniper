@@ -65,6 +65,11 @@ public class TextStamp implements IStamp{
                 fontMode = 0;
         }
 
+        if(scEditorWindow.isEzMode()) {
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
+            return;
+        }
+
         if(keyEvent != null && state == TextState.TYPING) {
             if (keyEvent.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
                 if (text.length() > 0)
