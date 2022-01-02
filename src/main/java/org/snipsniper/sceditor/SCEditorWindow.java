@@ -73,7 +73,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
         ezMode = config.getBool(ConfigHelper.PROFILE.ezMode);
 
-        LogManager.log("Starting new editor window. (" + this + ")", LogLevel.INFO);
+        LogManager.log("Creating new editor window...", LogLevel.INFO);
 
         StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT);
 
@@ -230,6 +230,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         });
         setEnableInteraction(!isDefaultImage());
         requestFocus();
+        LogManager.log("Started new editor window. (" + this + ")", LogLevel.INFO);
     }
 
     public void addEZModeStampButton(String title, String iconName, String theme, int stampIndex) {
