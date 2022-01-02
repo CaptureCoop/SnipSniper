@@ -188,18 +188,18 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     int borderThickness = 10;
-                    BufferedImage test = new BufferedImage(originalImage.getWidth() + borderThickness * 2, originalImage.getHeight() + borderThickness * 2, BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage test = new BufferedImage(originalImage.getWidth() + borderThickness, originalImage.getHeight() + borderThickness, BufferedImage.TYPE_INT_ARGB);
                     Graphics2D g = (Graphics2D) test.getGraphics();
                     g.setRenderingHints(qualityHints);
                     for(int y = 0; y < originalImage.getHeight(); y++) {
                         for(int x = 0; x < originalImage.getWidth(); x++) {
                             if(new Color(originalImage.getRGB(x, y), true).getAlpha() > 10) {
                                 g.setColor(Color.WHITE);
-                                g.fillOval(x + borderThickness / 2, y + borderThickness / 2, borderThickness, borderThickness);
+                                g.fillOval((x + borderThickness / 2) - borderThickness / 2, (y + borderThickness / 2) - borderThickness / 2, borderThickness, borderThickness);
                             }
                         }
                     }
-                    g.drawImage(originalImage, borderThickness, borderThickness, originalImage.getWidth(), originalImage.getHeight(), null);
+                    g.drawImage(originalImage, borderThickness / 2 , borderThickness / 2, originalImage.getWidth(), originalImage.getHeight(), null);
                     g.dispose();
 
                     setImage(test, true, true);
