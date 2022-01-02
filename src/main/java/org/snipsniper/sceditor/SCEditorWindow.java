@@ -355,6 +355,8 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     public void updateEzUI(boolean reset) {
         if(ezMode && reset)
             ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp());
+        else if(!ezMode && reset)
+            ezModeStampSettingsPanel.removeAll();
     }
 
     public IStamp[] getStamps() {
@@ -376,6 +378,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     public void setEzMode(boolean value) {
         ezMode = value;
         resizeTrigger();
+        updateEzUI(true);
     }
 
     public boolean isDefaultImage() {
