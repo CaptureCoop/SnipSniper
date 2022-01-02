@@ -44,7 +44,8 @@ public class ConfigOption {
             case COMMENT: return "#" + value;
             case NEWLINE: return "";
         }
-        LogManager.log("NO TYPE SET! KEY: " + key + " VALUE: " + value, LogLevel.ERROR, true);
+        LogManager.log("NO TYPE SET! KEY: %c VALUE: %c", LogLevel.ERROR, key, value);
+        LogManager.logStacktrace(LogLevel.ERROR);
         return null;
     }
 

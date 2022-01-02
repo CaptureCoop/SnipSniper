@@ -129,7 +129,8 @@ public final class SnipSniper {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			JDialog.setDefaultLookAndFeelDecorated(true);
 		} catch (UnsupportedLookAndFeelException e) {
-			LogManager.log("Error setting look and feel. Message: " + e.getMessage(), LogLevel.ERROR, true);
+			LogManager.log("Error setting look and feel. Message: ", LogLevel.ERROR);
+			LogManager.logStacktrace(e, LogLevel.ERROR);
 		}
 
 		LangManager.load();
@@ -353,13 +354,13 @@ public final class SnipSniper {
 
 	public static void refreshTheme() {
 		try {
-			if (config.getString(ConfigHelper.MAIN.theme).equals("dark")) {
-				UIManager.setLookAndFeel(new FlatDarculaLaf());
-			} else if(config.getString(ConfigHelper.MAIN.theme).equals("light")) {
-				UIManager.setLookAndFeel(new FlatIntelliJLaf());
+			switch(config.getString(ConfigHelper.MAIN.theme)) {
+				case "dark": UIManager.setLookAndFeel(new FlatDarculaLaf()); break;
+				case "light": UIManager.setLookAndFeel(new FlatIntelliJLaf()); break;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException exception) {
+			LogManager.log("Could not set theme!", LogLevel.ERROR);
+			LogManager.logStacktrace(exception, LogLevel.ERROR);
 		}
 	}
 

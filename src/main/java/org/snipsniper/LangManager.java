@@ -41,7 +41,7 @@ public class LangManager {
         else if (langMap.get(DEFAULT_LANGUAGE).getJSONObject("strings").has(key))
             return MISSING_STRING_CHAR + langMap.get(DEFAULT_LANGUAGE).getJSONObject("strings").getString(key);
 
-        LogManager.log("Could not find key <" + key + "> in language file <" + language + ">", LogLevel.ERROR, true);
+        LogManager.log("Could not find key <%c> in language file <%c>", LogLevel.ERROR, key, language);
         return "LM<" + key + ">";
     }
 

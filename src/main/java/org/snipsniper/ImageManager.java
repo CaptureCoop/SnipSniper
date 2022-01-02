@@ -31,7 +31,7 @@ public class ImageManager {
 					if (url != null) {
 						images.put(list.getString(i), ImageIO.read(url));
 					} else {
-						LogManager.log("Could not load image " + list.getString(i) + ". This should not happen. Exiting...", LogLevel.ERROR);
+						LogManager.log("Could not load image %c. This should not happen. Exiting...", LogLevel.ERROR, list.getString(i));
 						SnipSniper.exit(false);
 					}
 				} else {
@@ -40,13 +40,13 @@ public class ImageManager {
 						Image img = new ImageIcon(url).getImage();
 						animatedImages.put(list.getString(i), img);
 					} else {
-						LogManager.log("Could not load image " + list.getString(i) + ". This should not happen. Exiting...", LogLevel.ERROR);
+						LogManager.log("Could not load image %c. This should not happen. Exiting...", LogLevel.ERROR, list.getString(i));
 						SnipSniper.exit(false);
 					}
 				}
 			}
 		} catch (IOException ioException) {
-			LogManager.log("Could not load resources. Message:", LogLevel.ERROR, true);
+			LogManager.log("Could not load resources. Message:", LogLevel.ERROR);
 			LogManager.logStacktrace(ioException, LogLevel.ERROR);
 		}
 		LogManager.log("Done!", LogLevel.INFO);

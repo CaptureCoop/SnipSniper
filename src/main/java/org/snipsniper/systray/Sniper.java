@@ -85,9 +85,9 @@ public class Sniper {
 				});
 
 				tray.add(trayIcon);
-			} catch (AWTException e) {
-				LogManager.log("There was an issue setting up the Tray Icon! Message: " + e.getMessage(), LogLevel.ERROR, true);
-				e.printStackTrace();
+			} catch (AWTException awtException) {
+				LogManager.log("There was an issue setting up the Tray Icon! Message: ", LogLevel.ERROR);
+				LogManager.logStacktrace(awtException, LogLevel.ERROR);
 			}
 		}
 

@@ -60,9 +60,9 @@ public class Config {
 
 			loadFile(defaultPath, defaults, true);
 			LogManager.log(idPrefix + "Done!", LogLevel.DEBUG);
-		} catch (NumberFormatException | IOException e) {
-			LogManager.log("There was an error loading the config. Message: " + e.getMessage(), LogLevel.ERROR, true);
-			e.printStackTrace();
+		} catch (NumberFormatException | IOException exception) {
+			LogManager.log("There was an error loading the config. Message:", LogLevel.ERROR);
+			LogManager.logStacktrace(exception, LogLevel.ERROR);
 		}
 	}
 	
@@ -96,12 +96,14 @@ public class Config {
 
 	public String getRawString(String key) {
 		String returnVal = "<NULL> (" + key + ">";
-		if(settings.containsKey(key))
+		if(settings.containsKey(key)) {
 			returnVal = settings.get(key);
-		else if(defaults.containsKey(key))
+		} else if(defaults.containsKey(key)) {
 			returnVal = defaults.get(key);
-		else
-			LogManager.log("No value found for <" + key + "> in Config <" + SnipSniper.getConfigFolder() + filename + ">.", LogLevel.ERROR, true);
+		} else {
+			LogManager.log("No value found for <%c> in Config <%c>.", LogLevel.ERROR, key, SnipSniper.getConfigFolder() + filename);
+			LogManager.logStacktrace(LogLevel.ERROR);
+		}
 		return returnVal;
 	}
 
@@ -190,9 +192,9 @@ public class Config {
 				writer.write(option.toString() + "\n");
 
 			writer.close();
-		} catch (IOException e) {
-			LogManager.log("There was an error saving the config! Message: " + e.getMessage(), LogLevel.ERROR, true);
-			e.printStackTrace();
+		} catch (IOException exception) {
+			LogManager.log("There was an error saving the config! Message:", LogLevel.ERROR);
+			LogManager.logStacktrace(exception, LogLevel.ERROR);
 		}
 	}
 	
