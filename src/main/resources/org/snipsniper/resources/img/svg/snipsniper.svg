@@ -9,39 +9,9 @@
     <stop offset="100%" style="stop-color:#aeff6d;stop-opacity:1" />
   </linearGradient>
 </defs>
-<path d="M300 0 l 200 0 l 000 100 l -200 0" fill="black"/>
-<path d="M600 0 l 100 0 l 000 100 l -100 0" fill="black"/>
-<path d="M800 0 l 600 0 l 000 100 l -600 0" fill="black"/>
-<path d="M1400 100 l 100 0 l 000 100 l -100 0" fill="black"/>
-<path d="M1500 200 l 100 0 l 000 200 l -100 0" fill="black"/>
-<path d="M1400 400 l 100 0 l 000 100 l -100 0" fill="black"/>
-<path d="M500 600 l 0 -500 l 100 0 l 0 400 l 100 0 l 0 -400 l 100 0 l 0 400 l 600 0 l 0 200 l -100 0 l 0 -100" fill="black"/>
-<path d="M1400 700 l 100 0 l 000 100 l -100 0" fill="black"/>
-<path d="M1600 800 l 0 500 l -100 0 l 0 -500" fill="black"/>
-<path d="M1400 1300 l 100 0 l 000 100 l -100 0" fill="black"/>
-<path d="M1300 1400 l 100 0 l 000 100 l -100 0" fill="black"/>
-<path d="M1100 1500 l 200 0 l 000 100 l -200 0" fill="black   "/>
-<path d="M1100 1000 l 0 500 l -100 0 l 0 -400 l -100 0 l 0 400 l -100 0 l 0 -400 l -600 0 l 0 -200 l 100 0 l 0 100" fill="black"/>
-<path d="M900 1500 l 100 0 l 000 100 l -100 0" fill="black"/>
-<path d="M200 1500 l 600 0 l 000 100 l -600 0" fill="black"/>
-<path d="M000 1200 l 100 0 l 000 200 l -100 0" fill="black"/>
-<path d="M100 1400 l 100 0 l 000 100 l -100 0" fill="black"/>
-<path d="M100 1100 l 100 0 l 000 100 l -100 0" fill="black"/>
-<path d="M100 800 l 100 0 l 000 100 l -100 0" fill="black"/>
-<path d="M100 300 l 0 500 l -100 0 l 0 -500" fill="black"/>
-<path d="M100 200 l 100 0 l 000 100 l -100 0" fill="black"/>
-<path d="M200 100 l 100 0 l 000 100 l -100 0" fill="black"/>
-
-
-<path d="M100 300 l 100 0 l 000 -100 l 100 0 l 0 -100 l 200 0 l 0 500 l 800 0 l 0 100 l 100 0 l 0 100 l 100 0 l 0 500 l -100 0 v 100 h -100 v 100 h -200 v -500 h -800 v -100 h -100 v -100 h -100" fill="#aeff6d"/>
+<path d="M300 0 h 400 v 100 h 100 v -100 h 600 v 100 h 100 v 100 h 100 v 200 h -100 v 100 h -100 v 200 h 100 v 100 h 100 v 500 h -100 v 100 h -100 v 100 h -100 v 100 h -400 v -100 h -100 v 100 h -600 v -100 h -100 v -100 h -100 v -200 h 100 v -100 h 100 v -200 h -100 v -100 h -100 v -500 h 100 v -100 h 100 v -100 h 100" fill="#black"/>
+<path d="M100 300 h 100 v -100 h 100 v -100 h 200 v 500 h 800 v 100 h 100 v 100 h 100 v 500 h -100 v 100 h -100 v 100 h -200 v -500 h -800 v -100 h -100 v -100 h -100" fill="#aeff6d"/>
 <path d="M600 100 h 800 v 100 h 100 v 200 h -100 v 100 h -600 v -400 h -100 v 400 h -100" fill="url(#fv01)"/>
 <path d="M1000 1500 h -800 v -100 h -100 v -200 h 100 v -100 h 600 v 400 h 100 v -400 h 100" fill="url(#fv02)"/>
-
-
-
-
-
-
-
 
 </svg>
