@@ -206,6 +206,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
                     g.dispose();
 
                     setImage(test, true, true);
+                    isDirty = true;
                     repaint();
                     refreshTitle();
                 }
@@ -226,6 +227,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
                     g.dispose();
                     setImage(test, true, true);
+                    isDirty = true;
                     repaint();
                     refreshTitle();
                 }
