@@ -120,7 +120,8 @@ public class TextStamp implements IStamp{
         g.setPaint(oldColor);
         
         if(isSaveRender) {
-            reset();
+            state = TextState.IDLE;
+            doSaveNextRender = false;
         }
         return new Rectangle(renderPos.getX(), renderPos.getY(), g.getFontMetrics().stringWidth(textToDraw), drawFontSize);
     }
@@ -132,6 +133,11 @@ public class TextStamp implements IStamp{
 
     @Override
     public void mousePressedEvent(int button, boolean pressed) {
+        if(scEditorWindow.isEzMode()) {
+            doSaveNextRender = true;
+            alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
+            return;
+        }
         if(pressed && state == TextState.IDLE) {
             state = TextState.TYPING;
             cPosition = new Vector2Int(livePosition);
