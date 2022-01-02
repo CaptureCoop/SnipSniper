@@ -97,17 +97,8 @@ public class TextStamp implements IStamp{
 
         livePosition = new Vector2Int(input.getMouseX(), input.getMouseY()); //Update method only gets called upon keypress
 
-        Point pointToUseForRenderPos = new Point(input.getMouseX(), input.getMouseY());
-
-        if(state == TextState.TYPING)
-            pointToUseForRenderPos = new Point(cPosition.toPoint());
-
         if(isSaveRender && !doSaveNextRender)
             return null;
-
-        Vector2Int renderPos = position;
-        if(scEditorWindow != null)
-            renderPos = scEditorWindow.getPointOnImage(pointToUseForRenderPos);
 
         String textToDraw = getReadableText();
         int drawFontSize = (int) ((double)fontSize * difference[1]);
@@ -116,9 +107,9 @@ public class TextStamp implements IStamp{
         Paint oldColor = g.getPaint();
         g.setFont(new Font("Arial", fontMode, drawFontSize));
         int width = g.getFontMetrics().stringWidth(textToDraw);
-        g.setPaint(color.getGradientPaint(width, drawFontSize, renderPos.getX(), renderPos.getY()));
+        g.setPaint(color.getGradientPaint(width, drawFontSize, position.getX(), position.getY()));
         lastDrawnWidth = g.getFontMetrics().stringWidth(textToDraw);
-        g.drawString(textToDraw, renderPos.getX() - lastDrawnWidth / 2, renderPos.getY());
+        g.drawString(textToDraw, position.getX() - lastDrawnWidth / 2, position.getY());
         g.setFont(oldFont);
         g.setPaint(oldColor);
         
@@ -126,7 +117,7 @@ public class TextStamp implements IStamp{
             state = TextState.IDLE;
             doSaveNextRender = false;
         }
-        return new Rectangle(renderPos.getX(), renderPos.getY(), lastDrawnWidth, drawFontSize);
+        return new Rectangle(position.getX(), position.getY(), lastDrawnWidth, drawFontSize);
     }
 
     @Override
