@@ -7,10 +7,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DrawUtils {
+    private static final int MAX_CACHED = 10;
 
     public enum DIRECTION {VERTICAL, HORIZONTAL}
 
+    private static final Map<String, BufferedImage> alphaBarCache = new LinkedHashMap<>();
     public static BufferedImage createAlphaBar(Color color, int width, int height, DIRECTION direction) {
+        String key = width + "_" + height + "_" + direction;
+        if(alphaBarCache.containsKey(key))
+            return alphaBarCache.get(key);
+
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D) image.getGraphics();
 
@@ -33,10 +39,20 @@ public class DrawUtils {
         }
 
         g.dispose();
+
+        if(alphaBarCache.size() > MAX_CACHED)
+            alphaBarCache.remove(alphaBarCache.keySet().iterator().next());
+        alphaBarCache.put(key, image);
+
         return image;
     }
 
+    private static final Map<String, BufferedImage> hsvHueBarCache = new LinkedHashMap<>();
     public static BufferedImage createHSVHueBar(int width, int height, DIRECTION direction) {
+        String key = width + "_" + height + "_" + direction;
+        if(hsvHueBarCache.containsKey(key))
+            return hsvHueBarCache.get(key);
+
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = (Graphics2D) image.getGraphics();
 
@@ -59,11 +75,15 @@ public class DrawUtils {
         }
 
         g.dispose();
+
+        if(hsvHueBarCache.size() > MAX_CACHED)
+            hsvHueBarCache.remove(hsvHueBarCache.keySet().iterator().next());
+        hsvHueBarCache.put(key, image);
+
         return image;
     }
 
     private static final Map<String, BufferedImage> hsvBoxCache = new LinkedHashMap<>();
-    private static final int MAX_CACHED = 10;
     public static BufferedImage createHSVBox(int width, int height, float hue) {
         String key = width + "_" + height + "_" + hue;
         if(hsvBoxCache.containsKey(key))
