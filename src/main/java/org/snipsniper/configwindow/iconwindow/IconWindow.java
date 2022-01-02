@@ -1,8 +1,10 @@
 package org.snipsniper.configwindow.iconwindow;
 
 import org.snipsniper.ImageManager;
+import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.utils.*;
+import org.snipsniper.utils.enums.LogLevel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -144,7 +146,8 @@ public class IconWindow extends JFrame implements IClosable {
                             populateButtons(content, type);
                         }
                     } catch (UnsupportedFlavorException | IOException e) {
-                        e.printStackTrace();
+                        LogManager.log("Error setting up drop target for IconWindow", LogLevel.ERROR);
+                        LogManager.logStacktrace(e, LogLevel.ERROR);
                     }
 
                 }
@@ -189,16 +192,18 @@ public class IconWindow extends JFrame implements IClosable {
         if(file.getName().endsWith("gif")) {
             try {
                 Files.copy(file.toPath(), new File(SnipSniper.getImageFolder() + "/" + file.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ioException) {
+                LogManager.log("Could not load file for IconWindow! File: %c", LogLevel.ERROR, file.getAbsolutePath());
+                LogManager.logStacktrace(ioException, LogLevel.ERROR);
             }
         } else {
             try {
                 BufferedImage img = ImageIO.read(file);
                 img = ImageUtils.imageToBufferedImage(img.getScaledInstance(16, 16, Image.SCALE_SMOOTH));
                 ImageIO.write(img, FileUtils.getFileExtension(file, false), new File(SnipSniper.getImageFolder() + "/" + file.getName()));
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ioException) {
+                LogManager.log("Could not load file for IconWindow! File: %c", LogLevel.ERROR, file.getAbsolutePath());
+                LogManager.logStacktrace(ioException, LogLevel.ERROR);
             }
         }
     }

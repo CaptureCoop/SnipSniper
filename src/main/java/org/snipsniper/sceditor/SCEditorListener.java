@@ -140,8 +140,9 @@ public class SCEditorListener extends SnipScopeListener {
                 try {
                     if(chooser.getSelectedFile().createNewFile())
                         ImageIO.write(scEditorWindow.getImage(), "png", chooser.getSelectedFile());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ioException) {
+                    LogManager.log("Error with loading image chosen for editor!", LogLevel.ERROR);
+                    LogManager.logStacktrace(ioException, LogLevel.ERROR);
                 }
             }
         }

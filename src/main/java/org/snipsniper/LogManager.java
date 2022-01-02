@@ -124,8 +124,10 @@ public class LogManager {
                 try {
                     if (logFile.createNewFile())
                         LogManager.log("Created new logfile at: " + logFile.getAbsolutePath(), LogLevel.INFO);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ioException) {
+                    LogManager.log("Could not create logfile at \"%c\". Printing to console as well just in case!", LogLevel.ERROR, logFile.getAbsolutePath());
+                    LogManager.logStacktrace(ioException, LogLevel.ERROR);
+                    ioException.printStackTrace();
                 }
             }
 
@@ -133,8 +135,10 @@ public class LogManager {
 
             try {
                 Files.write(Paths.get(logFile.getAbsolutePath()), msg.toString().getBytes(), StandardOpenOption.APPEND);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ioException) {
+                LogManager.log("Could not create logfile at \"%c\". Printing to console as well just in case!", LogLevel.ERROR, logFile.getAbsolutePath());
+                LogManager.logStacktrace(ioException, LogLevel.ERROR);
+                ioException.printStackTrace();
             }
         }
     }

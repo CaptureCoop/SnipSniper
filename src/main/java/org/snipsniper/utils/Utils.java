@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class Utils {
@@ -210,7 +211,8 @@ public class Utils {
 			if(waitTillDone)
 				process.waitFor();
 		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
+			LogManager.log("Could not execute process! Args: %c", LogLevel.ERROR, Arrays.toString(args));
+			LogManager.logStacktrace(e, LogLevel.ERROR);
 		}
 	}
 

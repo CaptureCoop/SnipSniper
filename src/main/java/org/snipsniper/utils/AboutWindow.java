@@ -1,12 +1,10 @@
 package org.snipsniper.utils;
 
-import org.snipsniper.ImageManager;
-import org.snipsniper.LangManager;
-import org.snipsniper.SnipSniper;
-import org.snipsniper.StatsManager;
+import org.snipsniper.*;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.secrets.games.BGame;
 import org.snipsniper.systray.Sniper;
+import org.snipsniper.utils.enums.LogLevel;
 import org.snipsniper.utils.enums.PlatformType;
 import org.snipsniper.utils.enums.ReleaseType;
 
@@ -30,8 +28,9 @@ public class AboutWindow extends JFrame {
         instance = this;
         try {
             loadHTML();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            LogManager.log("Couldnt load about html!", LogLevel.ERROR);
+            LogManager.logStacktrace(exception, LogLevel.ERROR);
         }
 
         setSize(512,256);

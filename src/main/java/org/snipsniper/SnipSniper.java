@@ -17,7 +17,6 @@ import javax.swing.*;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.configwindow.ConfigWindow;
@@ -180,8 +179,9 @@ public final class SnipSniper {
 					fileExists = file.exists();
 					if(fileExists)
 						img = ImageIO.read(file);
-				} catch (IOException e) {
-					e.printStackTrace();
+				} catch (IOException ioException) {
+					LogManager.log("Error reading image file for editor, path: %c", LogLevel.ERROR, path);
+					LogManager.logStacktrace(ioException, LogLevel.ERROR);
 				}
 			}
 
@@ -265,16 +265,17 @@ public final class SnipSniper {
 	}
 
 	public static void exit(boolean exitForRestart) {
-		LogManager.log("Exit requested. Goodbye!", LogLevel.INFO);
 		if(config.getBool(ConfigHelper.MAIN.debug)) {
 			if (!exitForRestart && Desktop.isDesktopSupported()) {
 				try {
 					Desktop.getDesktop().open(LogManager.getLogFile());
-				} catch (IOException e) {
-					e.printStackTrace();
+				} catch (IOException ioException) {
+					LogManager.log("Error opening last logFile!, path: %c", LogLevel.ERROR, LogManager.getLogFile().getAbsolutePath());
+					LogManager.logStacktrace(ioException, LogLevel.ERROR);
 				}
 			}
 		}
+		LogManager.log("Exit requested. Goodbye!", LogLevel.INFO);
 		System.exit(0);
 	}
 

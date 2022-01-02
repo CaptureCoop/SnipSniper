@@ -1,6 +1,8 @@
 package org.snipsniper.sceditor;
 
+import org.snipsniper.LogManager;
 import org.snipsniper.snipscope.SnipScopeRenderer;
+import org.snipsniper.utils.enums.LogLevel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -32,7 +34,8 @@ public class SCEditorRenderer extends SnipScopeRenderer {
                     scEditorWindow.refreshTitle();
                     scEditorWindow.setImage(image, true, true);
                 } catch (UnsupportedFlavorException | IOException e) {
-                    e.printStackTrace();
+                    LogManager.log("Error setting up Drop Target for editor window!", LogLevel.ERROR);
+                    LogManager.logStacktrace(e, LogLevel.ERROR);
                 }
 
             }

@@ -128,7 +128,8 @@ public class FileUtils {
         try {
             Desktop.getDesktop().open(new File(path));
         } catch (IOException ioException) {
-            ioException.printStackTrace();
+            LogManager.log("Could not open folder \"%c\"!", LogLevel.ERROR, path);
+            LogManager.logStacktrace(ioException, LogLevel.ERROR);
         }
     }
 
@@ -137,8 +138,9 @@ public class FileUtils {
             PrintWriter out = new PrintWriter(filename);
             out.print(text);
             out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException fileNotFoundException) {
+            LogManager.log("Could not write to file \"%c\"!", LogLevel.ERROR, filename);
+            LogManager.logStacktrace(fileNotFoundException, LogLevel.ERROR);
         }
     }
 
@@ -160,8 +162,9 @@ public class FileUtils {
     public static String getCanonicalPath(String path) {
         try {
             return new File(path).getCanonicalPath();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            LogManager.log("Could not get path for \"%c\"!", LogLevel.ERROR, path);
+            LogManager.logStacktrace(ioException, LogLevel.ERROR);
         }
         return null;
     }
@@ -180,8 +183,9 @@ public class FileUtils {
         }
         try {
             Files.copy(inputStream, new File(path).getCanonicalFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
-            LogManager.log("Issue copying from jar! Message: " + ex.getMessage(), LogLevel.ERROR);
+        } catch (IOException ioException) {
+            LogManager.log("Issue copying from jar!", LogLevel.ERROR);
+            LogManager.logStacktrace(ioException, LogLevel.ERROR);
             return false;
         }
         return true;
@@ -206,6 +210,7 @@ public class FileUtils {
             streamReader.close();
         } catch (IOException ioException) {
             LogManager.log("Could not load file: " + file, LogLevel.ERROR);
+            LogManager.logStacktrace(ioException, LogLevel.ERROR);
         }
         return content.toString();
     }

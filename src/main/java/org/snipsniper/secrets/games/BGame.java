@@ -1,10 +1,11 @@
 package org.snipsniper.secrets.games;
 
 import org.snipsniper.ImageManager;
+import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.StatsManager;
 import org.snipsniper.systray.Sniper;
-import org.snipsniper.utils.IFunction;
+import org.snipsniper.utils.enums.LogLevel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -144,7 +145,8 @@ public class BGame extends JFrame {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LogManager.log("Error sleeping thread for BGame!", LogLevel.ERROR);
+                LogManager.logStacktrace(e, LogLevel.ERROR);
             }
         }
     }

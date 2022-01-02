@@ -133,9 +133,9 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		bounds = getTotalBounds();
 		try {
 			screenshot = new Robot().createScreenCapture(new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height));
-		} catch (AWTException e) {
-			LogManager.log("Couldn't take screenshot. Message: " + e.getMessage(), LogLevel.ERROR);
-			e.printStackTrace();
+		} catch (AWTException exception) {
+			LogManager.log("Couldn't take screenshot. Message:", LogLevel.ERROR);
+			LogManager.logStacktrace(exception, LogLevel.ERROR);
 		}
 		screenshotTinted = ImageUtils.copyImage(screenshot);
 		Graphics g2 = screenshotTinted.getGraphics();

@@ -1,5 +1,8 @@
 package org.snipsniper.utils;
 
+import org.snipsniper.LogManager;
+import org.snipsniper.utils.enums.LogLevel;
+
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
@@ -17,8 +20,9 @@ public class Links {
     public static URI getURI(String link) {
         try {
             return new URI(link);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+        } catch (URISyntaxException exception) {
+            LogManager.log("Could not get URI!", LogLevel.ERROR);
+            LogManager.logStacktrace(exception, LogLevel.ERROR);
         }
         return null;
     }
@@ -26,8 +30,9 @@ public class Links {
     public static void openLink(String link) {
         try {
             Desktop.getDesktop().browse(getURI(link));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            LogManager.log("Could open link!", LogLevel.ERROR);
+            LogManager.logStacktrace(exception, LogLevel.ERROR);
         }
     }
 }

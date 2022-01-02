@@ -1,5 +1,6 @@
 package org.snipsniper.scviewer;
 
+import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.StatsManager;
 import org.snipsniper.config.Config;
@@ -11,6 +12,7 @@ import org.snipsniper.utils.enums.ClockDirection;
 import org.snipsniper.utils.FileUtils;
 import org.snipsniper.ImageManager;
 import org.apache.commons.lang3.SystemUtils;
+import org.snipsniper.utils.enums.LogLevel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -72,8 +74,9 @@ public class SCViewerWindow extends SnipScopeWindow {
                     evt.acceptDrop(DnDConstants.ACTION_COPY);
                     List droppedFiles = (List) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                     setImage((File) droppedFiles.get(0));
-                } catch (UnsupportedFlavorException | IOException e) {
-                    e.printStackTrace();
+                } catch (UnsupportedFlavorException | IOException exception) {
+                    LogManager.log("Error setting up viewer window drop target!", LogLevel.ERROR);
+                    LogManager.logStacktrace(exception, LogLevel.ERROR);
                 }
             }
         });
@@ -100,7 +103,8 @@ public class SCViewerWindow extends SnipScopeWindow {
                 try {
                     ImageIO.write(getImage(), "png", currentFile);
                 } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                    LogManager.log("Error saving file in viewer!", LogLevel.ERROR);
+                    LogManager.logStacktrace(ioException, LogLevel.ERROR);
                 }
                 saveItem.setEnabled(false);
             });
@@ -199,8 +203,9 @@ public class SCViewerWindow extends SnipScopeWindow {
             BufferedImage image = null;
             try {
                 image = ImageIO.read(file);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ioException) {
+                LogManager.log("Could not get image from file! File: %c", LogLevel.ERROR, file.getAbsolutePath());
+                LogManager.logStacktrace(ioException, LogLevel.ERROR);
             }
             return image;
         }

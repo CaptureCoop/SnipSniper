@@ -24,7 +24,7 @@ public class StatsManager {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LogManager.log("StatsManager is disabled for now. This should not be called!", LogLevel.WARNING);
         }
         try {
             Connection connection = getConnection();

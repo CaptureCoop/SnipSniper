@@ -3,6 +3,7 @@ package org.snipsniper.configwindow.tabs;
 import org.apache.commons.lang3.SystemUtils;
 import org.snipsniper.ImageManager;
 import org.snipsniper.LangManager;
+import org.snipsniper.LogManager;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.config.Config;
 import org.snipsniper.config.ConfigHelper;
@@ -10,6 +11,7 @@ import org.snipsniper.configwindow.ConfigWindow;
 import org.snipsniper.configwindow.UpdateButton;
 import org.snipsniper.utils.*;
 import org.snipsniper.utils.enums.ConfigSaveButtonState;
+import org.snipsniper.utils.enums.LogLevel;
 import org.snipsniper.utils.enums.PlatformType;
 import org.snipsniper.utils.enums.ReleaseType;
 
@@ -87,7 +89,8 @@ public class GlobalTab extends JPanel implements ITab{
                     bis.close();
                     zis.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    LogManager.log("Could not import zip file!", LogLevel.ERROR);
+                    LogManager.logStacktrace(ex, LogLevel.ERROR);
                 }
             }
 
@@ -125,7 +128,8 @@ public class GlobalTab extends JPanel implements ITab{
                     }
                     out.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    LogManager.log("Could not export zip file!", LogLevel.ERROR);
+                    LogManager.logStacktrace(ex, LogLevel.ERROR);
                 }
             }
         });

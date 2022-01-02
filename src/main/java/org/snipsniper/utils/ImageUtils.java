@@ -67,11 +67,10 @@ public class ImageUtils {
                 LogManager.log("Saved image on disk. Location: " + file, LogLevel.INFO);
                 return file.getAbsolutePath();
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Could not save image to \"" + file + "\"!" , "Error", JOptionPane.INFORMATION_MESSAGE);
-            LogManager.log("Failed Saving. Wanted Location: " + file, LogLevel.WARNING);
-            LogManager.log("Detailed Error: " + e.getMessage(), LogLevel.WARNING);
-            e.printStackTrace();
+        } catch (IOException exception) {
+            JOptionPane.showMessageDialog(null, StringUtils.format("Could not save image to \"%c\"!", file) , "Error", JOptionPane.INFORMATION_MESSAGE);
+            LogManager.log("Image could not be saved. Wanted Location: " + file, LogLevel.WARNING);
+            LogManager.logStacktrace(exception, LogLevel.WARNING);
             return null;
         }
         return null;
@@ -180,7 +179,8 @@ public class ImageUtils {
             try {
                 return (Image) transferable.getTransferData(DataFlavor.imageFlavor);
             } catch (UnsupportedFlavorException | IOException e) {
-                e.printStackTrace();
+                LogManager.log("Error getting image from clipboard!", LogLevel.ERROR);
+                LogManager.logStacktrace(e, LogLevel.ERROR);
             }
         }
         return null;
