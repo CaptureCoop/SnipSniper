@@ -137,4 +137,9 @@ public class EraserStamp implements IStamp {
     public void addChangeListener(IStampUpdateListener listener) {
         changeListeners.add(listener);
     }
+
+    @Override
+    public boolean doAlwaysRender() {
+        return false;
+    }
 }

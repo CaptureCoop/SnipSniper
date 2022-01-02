@@ -29,4 +29,5 @@ public interface IStamp {
     StampUtils.TYPE getType();
 
     void addChangeListener(IStampUpdateListener listener);
+    boolean doAlwaysRender();
 }

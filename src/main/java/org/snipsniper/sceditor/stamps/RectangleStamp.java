@@ -197,4 +197,9 @@ public class RectangleStamp implements IStamp {
             listener.updated(type);
         }
     }
+
+    @Override
+    public boolean doAlwaysRender() {
+        return false;
+    }
 }

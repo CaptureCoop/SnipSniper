@@ -60,7 +60,7 @@ public class SCEditorRenderer extends SnipScopeRenderer {
         scEditorWindow.getSelectedStamp().render(previewGraphics, scEditorWindow.getInputContainer(), scEditorWindow.getPointOnImage(new Point(scEditorWindow.getInputContainer().getMouseX(), scEditorWindow.getInputContainer().getMouseY())), scEditorWindow.getDifferenceFromImage(), false, false, -1);
         previewGraphics.dispose();
 
-        if(!scEditorWindow.isPointOnUiComponents(scEditorWindow.getInputContainer().getMousePoint()) && scEditorWindow.isEnableInteraction() && scEditorWindow.isStampVisible())
+        if((!scEditorWindow.isPointOnUiComponents(scEditorWindow.getInputContainer().getMousePoint()) && scEditorWindow.isEnableInteraction() && scEditorWindow.isStampVisible()) || scEditorWindow.getSelectedStamp().doAlwaysRender())
             g.drawImage(preview, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height, this);
 
         renderUI((Graphics2D) g);

@@ -228,4 +228,9 @@ public class TextStamp implements IStamp{
             listener.updated(type);
         }
     }
+
+    @Override
+    public boolean doAlwaysRender() {
+        return state != TextState.IDLE;
+    }
 }
