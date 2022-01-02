@@ -49,10 +49,10 @@ public class TextStamp implements IStamp{
 
     @Override
     public void update(InputContainer input, int mouseWheelDirection, KeyEvent keyEvent) {
-        if(mouseWheelDirection == 1)
-            fontSize -= fontSizeSpeed;
-        else if(mouseWheelDirection == -1)
-            fontSize += fontSizeSpeed;
+        switch(mouseWheelDirection) {
+            case 1: fontSize -= fontSizeSpeed; break;
+            case -1: fontSize += fontSizeSpeed; break;
+        }
 
         if(input.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_B)) {
             fontMode++;
