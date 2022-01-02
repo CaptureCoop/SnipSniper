@@ -24,6 +24,7 @@ import java.awt.event.*;
 public class EzModeSettingsCreator {
     private final SCEditorWindow scEditorWindow;
     private StampJPanel stampPreviewPanel;
+    private JPanel lastPanel;
 
     public EzModeSettingsCreator(SCEditorWindow scEditorWindow) {
         this.scEditorWindow = scEditorWindow;
@@ -56,6 +57,16 @@ public class EzModeSettingsCreator {
         panel.add(stampPreviewPanel);
         panel.revalidate();
         panel.repaint();
+        lastPanel = panel;
+    }
+
+    public int getLastCorrectHeight() {
+        int height = 0;
+        for(Component comp : lastPanel.getComponents()) {
+            if(!(comp instanceof SSColorChooserHSBHueBar))
+                height += comp.getHeight();
+        }
+        return height;
     }
 
     public void addColorSettings(JPanel panel, IStamp stamp) {
