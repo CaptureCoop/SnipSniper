@@ -117,7 +117,8 @@ public class TextStamp implements IStamp{
         g.setFont(new Font("Arial", fontMode, drawFontSize));
         int width = g.getFontMetrics().stringWidth(textToDraw);
         g.setPaint(color.getGradientPaint(width, drawFontSize, renderPos.getX(), renderPos.getY()));
-        g.drawString(textToDraw, renderPos.getX(), renderPos.getY());
+        lastDrawnWidth = g.getFontMetrics().stringWidth(textToDraw);
+        g.drawString(textToDraw, renderPos.getX() - lastDrawnWidth / 2, renderPos.getY());
         g.setFont(oldFont);
         g.setPaint(oldColor);
         
@@ -125,7 +126,6 @@ public class TextStamp implements IStamp{
             state = TextState.IDLE;
             doSaveNextRender = false;
         }
-        lastDrawnWidth = g.getFontMetrics().stringWidth(textToDraw);
         return new Rectangle(renderPos.getX(), renderPos.getY(), lastDrawnWidth, drawFontSize);
     }
 
