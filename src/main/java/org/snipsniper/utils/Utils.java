@@ -126,6 +126,12 @@ public class Utils {
 		return true;
 	}
 
+	public static RenderingHints getRenderingHints() {
+		RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		return hints;
+	}
+
 	public static Dimension getScaledDimension(BufferedImage image, Dimension boundary) {
 		return Utils.getScaledDimension(new Dimension(image.getWidth(), image.getHeight()), boundary);
 	}

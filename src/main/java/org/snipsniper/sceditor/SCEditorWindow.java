@@ -76,8 +76,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
         StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT);
 
-        qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        qualityHints = Utils.getRenderingHints();
 
         LogManager.log("Loading stamps", LogLevel.INFO);
 

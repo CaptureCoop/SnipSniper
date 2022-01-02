@@ -1,6 +1,7 @@
 package org.snipsniper.snipscope;
 
 import org.snipsniper.snipscope.ui.SnipScopeUIComponent;
+import org.snipsniper.utils.Utils;
 import org.snipsniper.utils.Vector2Int;
 
 import javax.swing.*;
@@ -9,14 +10,20 @@ import java.awt.image.BufferedImage;
 
 public class SnipScopeRenderer extends JPanel {
     private final SnipScopeWindow snipScopeWindow;
+    private final RenderingHints qualityHints = Utils.getRenderingHints();
+
+    public Rectangle lastRectangle;
 
     public SnipScopeRenderer(SnipScopeWindow snipScopeWindow) {
         this.snipScopeWindow = snipScopeWindow;
     }
 
-    public Rectangle lastRectangle;
+    public void paint(Graphics _g) {
+        Graphics2D g = (Graphics2D) _g;
+        System.out.println(snipScopeWindow.getZoom());
+        if(snipScopeWindow.getZoom() < 2D)
+            g.setRenderingHints(qualityHints);
 
-    public void paint(Graphics g) {
         Dimension optimalDimension = snipScopeWindow.getOptimalImageDimension();
         BufferedImage image = snipScopeWindow.getImage();
         if(image != null && optimalDimension != null) {

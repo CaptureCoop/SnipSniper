@@ -47,8 +47,7 @@ public class StampJPanel extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
 
         if(qualityHints == null) {
-            qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            qualityHints = Utils.getRenderingHints();
         }
 
         g2d.setRenderingHints(qualityHints);
