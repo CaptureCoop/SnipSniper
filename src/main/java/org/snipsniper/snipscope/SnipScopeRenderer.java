@@ -20,7 +20,7 @@ public class SnipScopeRenderer extends JPanel {
 
     public void paint(Graphics _g) {
         Graphics2D g = (Graphics2D) _g;
-        System.out.println(snipScopeWindow.getZoom());
+
         if(snipScopeWindow.getZoom() < 2D)
             g.setRenderingHints(qualityHints);
 
