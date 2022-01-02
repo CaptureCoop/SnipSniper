@@ -7,7 +7,6 @@ import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 import org.snipsniper.utils.Vector2Int;
 
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
