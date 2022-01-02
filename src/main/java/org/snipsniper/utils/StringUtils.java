@@ -75,7 +75,7 @@ public class StringUtils {
             String replacer = "NULL";
             if (arg != null)
                 replacer = arg.toString();
-            newMessage = newMessage.replaceFirst("%c", replacer);
+            newMessage = org.apache.commons.lang3.StringUtils.replaceOnce(newMessage, "%c", replacer);
         }
         return newMessage;
     }
