@@ -17,10 +17,7 @@ import org.snipsniper.utils.Function;
 import org.snipsniper.utils.SSColor;
 
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class EzModeSettingsCreator {
     private final SCEditorWindow scEditorWindow;
@@ -321,6 +318,13 @@ public class EzModeSettingsCreator {
             public void keyReleased(KeyEvent keyEvent) {
                 if(keyEvent.getKeyCode() == KeyEvent.VK_ENTER || keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE)
                     scEditorWindow.requestFocus();
+            }
+        });
+        textInput.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent focusEvent) {
+                textInput.setSelectionStart(0);
+                textInput.setSelectionEnd(textInput.getText().length());
             }
         });
         textInput.getDocument().addDocumentListener(new DocumentListener() {
