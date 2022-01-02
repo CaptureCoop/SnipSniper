@@ -17,10 +17,7 @@ import org.snipsniper.utils.Function;
 import org.snipsniper.utils.SSColor;
 
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class EzModeSettingsCreator {
     private final SCEditorWindow scEditorWindow;
@@ -323,6 +320,13 @@ public class EzModeSettingsCreator {
                     scEditorWindow.requestFocus();
             }
         });
+        textInput.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent focusEvent) {
+                textInput.setSelectionStart(0);
+                textInput.setSelectionEnd(textInput.getText().length());
+            }
+        });
         textInput.getDocument().addDocumentListener(new DocumentListener() {
             public void update() {
                 textStamp.setText(textInput.getText());
@@ -364,6 +368,8 @@ public class EzModeSettingsCreator {
         });
 
         panel.add(textInput);
+
+        addColorSettings(panel, stamp);
     }
 
     private void rectangle(JPanel panel, IStamp stamp) {
