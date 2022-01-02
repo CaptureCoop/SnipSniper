@@ -206,6 +206,8 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
                     g.dispose();
 
                     setImage(test, true, true);
+                    repaint();
+                    refreshTitle();
                 }
             });
             topBar.add(whatsappTest);
@@ -224,6 +226,8 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
                     g.dispose();
                     setImage(test, true, true);
+                    repaint();
+                    refreshTitle();
                 }
             });
             topBar.add(whatsappBox);
@@ -351,6 +355,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         if(inClipboard) {
             newTitle += " (Clipboard)";
         }
+        newTitle += StringUtils.format(" %cx%c", getImage().getWidth(), getImage().getHeight());
         setTitle(newTitle);
     }
 
