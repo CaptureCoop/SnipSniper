@@ -17,10 +17,7 @@ import org.snipsniper.utils.enums.LogLevel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -62,8 +59,9 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
     private final JPanel ezModeTitlePanel = new JPanel();
     private final JLabel ezModeTitle = new JLabel("Marker");
     private final JPanel ezModeStampSettingsPanel = new JPanel();
+    private final JScrollPane ezModeStampSettingsScrollPane;
+
     private final JTabbedPane ezModeStampPanelTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-    
     public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         instance = this;
         this.config = config;
@@ -77,8 +75,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
         StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT);
 
-        qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        qualityHints = Utils.getRenderingHints();
 
         LogManager.log("Loading stamps", LogLevel.INFO);
 
@@ -153,8 +150,13 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
         ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp());
 
+        ezModeStampSettingsScrollPane = new JScrollPane(ezModeStampSettingsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        ezModeStampSettingsScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        ezModeStampSettingsScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+        ezModeStampSettingsScrollPane.setWheelScrollingEnabled(true);
+
         add(ezModeStampPanel);
-        add(ezModeStampSettingsPanel);
+        add(ezModeStampSettingsScrollPane);
         add(ezModeTitlePanel);
 
         listener.resetHistory();
@@ -184,6 +186,53 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
             JMenuItem newItem = new JMenuItem("New");
             newItem.addActionListener(e -> openNewImageWindow());
             topBar.add(newItem);
+            JMenuItem whatsappTest = new JMenuItem("Border test");
+            whatsappTest.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int borderThickness = 10;
+                    BufferedImage test = new BufferedImage(originalImage.getWidth() + borderThickness, originalImage.getHeight() + borderThickness, BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D g = (Graphics2D) test.getGraphics();
+                    g.setRenderingHints(qualityHints);
+                    for(int y = 0; y < originalImage.getHeight(); y++) {
+                        for(int x = 0; x < originalImage.getWidth(); x++) {
+                            if(new Color(originalImage.getRGB(x, y), true).getAlpha() > 10) {
+                                g.setColor(Color.WHITE);
+                                g.fillOval((x + borderThickness / 2) - borderThickness / 2, (y + borderThickness / 2) - borderThickness / 2, borderThickness, borderThickness);
+                            }
+                        }
+                    }
+                    g.drawImage(originalImage, borderThickness / 2 , borderThickness / 2, originalImage.getWidth(), originalImage.getHeight(), null);
+                    g.dispose();
+
+                    setImage(test, true, true);
+                    isDirty = true;
+                    repaint();
+                    refreshTitle();
+                }
+            });
+            topBar.add(whatsappTest);
+            JMenuItem whatsappBox = new JMenuItem("Box test");
+            whatsappBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int width = 512;
+                    int height = 512;
+                    BufferedImage test = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D g = (Graphics2D) test.getGraphics();
+                    g.setRenderingHints(qualityHints);
+
+                    Dimension optimalDimension = Utils.getScaledDimension(originalImage, new Dimension(width, height));
+                    g.drawImage(originalImage, test.getWidth() / 2 - optimalDimension.width / 2, test.getHeight() / 2 - optimalDimension.height / 2, optimalDimension.width, optimalDimension.height, null);
+
+                    g.dispose();
+                    setImage(test, true, true);
+                    isDirty = true;
+                    repaint();
+                    refreshTitle();
+                }
+            });
+            topBar.add(whatsappBox);
             setJMenuBar(topBar);
         }
 
@@ -230,12 +279,12 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         });
         setEnableInteraction(!isDefaultImage());
         requestFocus();
-        LogManager.log("Started new editor window. (" + this + ")", LogLevel.INFO);
+        LogManager.log("Started new editor window. (%c)", LogLevel.INFO, this);
     }
 
     public void addEZModeStampButton(String title, String iconName, String theme, int stampIndex) {
         ezModeStampPanelTabs.addTab(title, null);
-        BufferedImage ezIconMarker = ImageManager.getImage("ui/editor/" + theme + "/" + iconName + ".png");
+        BufferedImage ezIconMarker = ImageManager.getImage(StringUtils.format("ui/editor/%c/%c.png", theme, iconName));
         ezModeStampPanelTabs.setTabComponentAt(stampIndex, new EzModeStampTab(ezIconMarker, 32, this, stampIndex));
         ezModeStampPanelTabs.setIconAt(stampIndex, new ImageIcon(ezIconMarker));
     }
@@ -246,13 +295,23 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
 
         if(ezMode) {
             int titleMargin = 5;
+            int ezModeWidthToUse = ezModeWidth;
+            if(ezModeStampSettingsScrollPane.getVerticalScrollBar().isVisible())
+                ezModeWidthToUse += ezModeStampSettingsScrollPane.getVerticalScrollBar().getWidth();
 
-            ezModeTitlePanel.setBounds(0, 0, ezModeWidth, ezModeHeight);
+            ezModeTitlePanel.setBounds(0, 0, ezModeWidthToUse, ezModeHeight);
             ezModeTitle.setFont(new Font("Arial", Font.PLAIN, ezModeHeight - titleMargin));
-            ezModeStampPanel.setBounds(ezModeWidth, 0, getContentPane().getWidth() - ezModeWidth, ezModeHeight);
+            ezModeStampPanel.setBounds(ezModeWidthToUse, 0, getContentPane().getWidth() - ezModeWidthToUse, ezModeHeight);
             ezModeStampPanelTabs.setBounds(0, 0, ezModeStampPanel.getWidth(), ezModeStampPanel.getHeight());
-            ezModeStampSettingsPanel.setBounds(0, ezModeHeight, ezModeWidth, getContentPane().getHeight() - ezModeHeight);
-            renderer.setBounds(ezModeWidth, ezModeHeight, getContentPane().getWidth() - ezModeWidth, getContentPane().getHeight() - ezModeHeight);
+
+            int ezModeSettingsHeight = ezModeSettingsCreator.getLastCorrectHeight();
+            ezModeStampSettingsPanel.setPreferredSize(new Dimension(ezModeWidthToUse, ezModeSettingsHeight));
+            ezModeStampSettingsPanel.setMinimumSize(new Dimension(ezModeWidthToUse, ezModeSettingsHeight));
+            ezModeStampSettingsPanel.setMaximumSize(new Dimension(ezModeWidthToUse, ezModeSettingsHeight));
+
+            ezModeStampSettingsScrollPane.setBounds(0, ezModeHeight, ezModeWidthToUse, getContentPane().getHeight() - ezModeHeight);
+
+            renderer.setBounds(ezModeWidthToUse, ezModeHeight, getContentPane().getWidth() - ezModeWidthToUse, getContentPane().getHeight() - ezModeHeight);
         } else {
             ezModeTitlePanel.setBounds(0, 0, 0, 0);
             ezModeStampPanel.setBounds(0, 0, 0, 0);
@@ -298,6 +357,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         if(inClipboard) {
             newTitle += " (Clipboard)";
         }
+        newTitle += StringUtils.format(" %cx%c", getImage().getWidth(), getImage().getHeight());
         setTitle(newTitle);
     }
 

@@ -2,6 +2,7 @@ package org.snipsniper.scviewer;
 
 import org.snipsniper.snipscope.SnipScopeRenderer;
 import org.snipsniper.snipscope.SnipScopeWindow;
+import org.snipsniper.utils.Utils;
 
 import java.awt.*;
 
@@ -10,8 +11,7 @@ public class SCViewerRenderer extends SnipScopeRenderer {
 
     public SCViewerRenderer(SnipScopeWindow snipScopeWindow) {
         super(snipScopeWindow);
-        qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        qualityHints = Utils.getRenderingHints();
     }
 
     @Override

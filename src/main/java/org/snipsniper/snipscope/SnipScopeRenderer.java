@@ -1,6 +1,7 @@
 package org.snipsniper.snipscope;
 
 import org.snipsniper.snipscope.ui.SnipScopeUIComponent;
+import org.snipsniper.utils.Utils;
 import org.snipsniper.utils.Vector2Int;
 
 import javax.swing.*;
@@ -9,14 +10,21 @@ import java.awt.image.BufferedImage;
 
 public class SnipScopeRenderer extends JPanel {
     private final SnipScopeWindow snipScopeWindow;
+    private final RenderingHints qualityHints = Utils.getRenderingHints();
+    private final double zoomAntialisingKickIn = 2D;
+
+    public Rectangle lastRectangle;
 
     public SnipScopeRenderer(SnipScopeWindow snipScopeWindow) {
         this.snipScopeWindow = snipScopeWindow;
     }
 
-    public Rectangle lastRectangle;
+    public void paint(Graphics _g) {
+        Graphics2D g = (Graphics2D) _g;
 
-    public void paint(Graphics g) {
+        if(snipScopeWindow.getZoom() < zoomAntialisingKickIn)
+            g.setRenderingHints(qualityHints);
+
         Dimension optimalDimension = snipScopeWindow.getOptimalImageDimension();
         BufferedImage image = snipScopeWindow.getImage();
         if(image != null && optimalDimension != null) {
@@ -32,7 +40,10 @@ public class SnipScopeRenderer extends JPanel {
 
             float zoom = snipScopeWindow.getZoom();
             lastRectangle = new Rectangle(x, y, (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom));
-            g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height , this);
+            g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height, this);
+            g.setColor(Color.BLACK);
+            //TODO: add config option for outline
+            g.drawRect(lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height);
         }
     }
 
