@@ -273,12 +273,12 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable{
         });
         setEnableInteraction(!isDefaultImage());
         requestFocus();
-        LogManager.log("Started new editor window. (" + this + ")", LogLevel.INFO);
+        LogManager.log("Started new editor window. (%c)", LogLevel.INFO, this);
     }
 
     public void addEZModeStampButton(String title, String iconName, String theme, int stampIndex) {
         ezModeStampPanelTabs.addTab(title, null);
-        BufferedImage ezIconMarker = ImageManager.getImage("ui/editor/" + theme + "/" + iconName + ".png");
+        BufferedImage ezIconMarker = ImageManager.getImage(StringUtils.format("ui/editor/%c/%c.png", theme, iconName));
         ezModeStampPanelTabs.setTabComponentAt(stampIndex, new EzModeStampTab(ezIconMarker, 32, this, stampIndex));
         ezModeStampPanelTabs.setIconAt(stampIndex, new ImageIcon(ezIconMarker));
     }
