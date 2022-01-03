@@ -44,7 +44,7 @@ public class AboutWindow extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0; gbc.gridy = 0;
         int iconSize = 100;
-        ImageIcon icon = new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(iconSize,iconSize,Image.SCALE_DEFAULT));
+        ImageIcon icon = new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(iconSize,iconSize,Image.SCALE_SMOOTH));
         JLabel label = new JLabel(icon);
         label.addMouseListener(new MouseAdapter() {
             int index = 0;
