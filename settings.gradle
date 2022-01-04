@@ -1,0 +1,5 @@
+sourceControl {
+    gitRepository("https://github.com/CaptureCoop/CCMathUtils.git") {
+        producesModule("net.capturecoop.ccmathutils:CCMathUtils")
+    }
+}

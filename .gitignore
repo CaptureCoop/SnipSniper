@@ -8,5 +8,4 @@
 /build/
 /release/*
 SnipSniper.iml
-settings.gradle
 src/main/resources/org/snipsniper/resources/cfg/buildinfo.cfg
