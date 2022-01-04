@@ -1,9 +1,9 @@
 package org.snipsniper.configwindow;
 
+import net.capturecoop.ccmathutils.Vector2Int;
 import org.snipsniper.ImageManager;
 import org.snipsniper.sceditor.stamps.IStamp;
 import org.snipsniper.utils.Utils;
-import org.snipsniper.utils.Vector2Int;
 
 import javax.swing.*;
 import java.awt.*;
