@@ -1,7 +1,7 @@
 package org.snipsniper.utils;
 
-import net.capturecoop.ccmathutils.Vector2Float;
-import net.capturecoop.ccmathutils.Vector2Int;
+import net.capturecoop.ccutils.math.Vector2Float;
+import net.capturecoop.ccutils.math.Vector2Int;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;

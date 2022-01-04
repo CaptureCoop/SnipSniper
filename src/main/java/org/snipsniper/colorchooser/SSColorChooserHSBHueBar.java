@@ -1,9 +1,9 @@
 package org.snipsniper.colorchooser;
 
+import net.capturecoop.ccutils.math.Vector2Float;
 import org.snipsniper.utils.DrawUtils;
 import org.snipsniper.utils.HSB;
 import org.snipsniper.utils.SSColor;
-import net.capturecoop.ccmathutils.Vector2Float;
 
 import javax.swing.*;
 import java.awt.*;

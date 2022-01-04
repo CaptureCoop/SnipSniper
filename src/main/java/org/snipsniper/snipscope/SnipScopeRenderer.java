@@ -1,6 +1,6 @@
 package org.snipsniper.snipscope;
 
-import net.capturecoop.ccmathutils.Vector2Int;
+import net.capturecoop.ccutils.math.Vector2Int;
 import org.snipsniper.snipscope.ui.SnipScopeUIComponent;
 import org.snipsniper.utils.Utils;
 

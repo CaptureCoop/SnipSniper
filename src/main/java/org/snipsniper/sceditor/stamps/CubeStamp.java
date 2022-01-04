@@ -1,11 +1,11 @@
 package org.snipsniper.sceditor.stamps;
 
+import net.capturecoop.ccutils.math.Vector2Int;
 import org.snipsniper.config.Config;
 import org.snipsniper.sceditor.SCEditorWindow;
 import org.snipsniper.config.ConfigHelper;
 import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
-import net.capturecoop.ccmathutils.Vector2Int;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

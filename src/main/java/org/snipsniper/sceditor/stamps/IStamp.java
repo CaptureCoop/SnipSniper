@@ -1,6 +1,6 @@
 package org.snipsniper.sceditor.stamps;
 
-import net.capturecoop.ccmathutils.Vector2Int;
+import net.capturecoop.ccutils.math.Vector2Int;
 import org.snipsniper.utils.InputContainer;
 import org.snipsniper.utils.SSColor;
 

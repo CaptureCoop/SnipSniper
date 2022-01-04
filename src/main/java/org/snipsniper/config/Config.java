@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import net.capturecoop.ccmathutils.CCMathUtils;
+import net.capturecoop.ccutils.math.MathUtils;
 import org.snipsniper.SnipSniper;
 import org.snipsniper.LogManager;
 import org.snipsniper.utils.*;
@@ -127,7 +127,7 @@ public class Config {
 	public int getInt(String key) {
 		if(getString(key) != null) {
 			String value = getString(key);
-			if(CCMathUtils.isDouble(value))
+			if(MathUtils.isDouble(value))
 				return (int) Double.parseDouble(value);
 			else return Integer.parseInt(getString(key));
 		}

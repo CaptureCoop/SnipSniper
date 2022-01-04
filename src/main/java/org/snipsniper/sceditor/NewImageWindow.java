@@ -1,6 +1,6 @@
 package org.snipsniper.sceditor;
 
-import net.capturecoop.ccmathutils.CCMathUtils;
+import net.capturecoop.ccutils.math.MathUtils;
 import org.snipsniper.ImageManager;
 import org.snipsniper.colorchooser.ColorChooser;
 import org.snipsniper.utils.*;
@@ -62,7 +62,7 @@ public class NewImageWindow extends JFrame implements IClosable{
         submitButton.addActionListener(e -> {
             String widthString = widthTextField.getText();
             String heightString = heightTextField.getText();
-            if(!CCMathUtils.isInteger(widthString) || !CCMathUtils.isInteger(heightString)) {
+            if(!MathUtils.isInteger(widthString) || !MathUtils.isInteger(heightString)) {
                 Utils.showPopup(instance, "Bad input! Not a valid number.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
             } else {
                 int width = Integer.parseInt(widthString);
