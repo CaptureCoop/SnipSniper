@@ -1,12 +1,12 @@
 @echo off
 setlocal EnableDelayedExpansion
 
-set javaFile="src\main\java\org\snipsniper\config\ConfigHelper.java"
+set javaFile="src\main\java\net\snipsniper\config\ConfigHelper.java"
 del %javaFile%
 
-set configLocation=src\main\resources\org\snipsniper\resources\cfg\
+set configLocation=src\main\resources\net\snipsniper\resources\cfg\
 
-echo package org.snipsniper.config; >> %javaFile%
+echo package net.snipsniper.config; >> %javaFile%
 echo public class ConfigHelper { >> %javaFile%
 
 echo    /* >> %javaFile%
