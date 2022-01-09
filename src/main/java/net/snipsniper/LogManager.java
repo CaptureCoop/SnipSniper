@@ -44,7 +44,7 @@ public class LogManager {
         StringBuilder stackTraceString = new StringBuilder();
         for(int i = STACKTRACE_START; i < stackTrace.length; i++) {
             String trace = stackTrace[i].toString();
-            if(trace.contains("org.snipsniper"))
+            if(trace.contains("net.snipsniper"))
                 stackTraceString.append(trace).append("\n");
         }
         logStacktraceInternal(stackTraceString.toString(), level);
