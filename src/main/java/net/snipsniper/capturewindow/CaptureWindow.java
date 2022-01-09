@@ -21,7 +21,6 @@ import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.systray.Sniper;
 import net.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
-import org.snipsniper.utils.*;
 import net.snipsniper.utils.enums.LogLevel;
 
 public class CaptureWindow extends JFrame implements WindowListener{

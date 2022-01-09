@@ -1,7 +1,6 @@
 package net.snipsniper.utils;
 
 import net.snipsniper.*;
-import org.snipsniper.*;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.secrets.games.BGame;
 import net.snipsniper.systray.Sniper;
