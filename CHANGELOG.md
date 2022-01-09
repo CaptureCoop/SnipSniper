@@ -44,7 +44,7 @@ All stable or otherwise notable changes will be listed here
 - Added Kofi Button
 - You can now further customize where screenshots are stored
 - EzMode is now in beta, toggle it with "." in the Editor
-- Uploading to SnipSniper.org/jars/ with every commit
+- Uploading to SnipSniper.net/jars/ with every commit
 - GIF Support
  
 ### Changed

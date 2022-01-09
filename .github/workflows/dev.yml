@@ -41,7 +41,7 @@ jobs:
       continue-on-error: true
       uses: fjogeleit/http-request-action@master
       with:
-        url: https://snipsniper.org/upload.php
+        url: https://snipsniper.net/upload.php
         method: "POST"
         data: '{"password": "${{ secrets.WEBSITE_UPLOAD }}", "version": "${{env.VERSION}}"}'
         files: '{ "file": "build/libs/SnipSniper.jar" }'
