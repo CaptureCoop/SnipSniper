@@ -5,7 +5,6 @@ import net.snipsniper.LogManager;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.*;
-import org.snipsniper.utils.*;
 import net.snipsniper.utils.enums.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;

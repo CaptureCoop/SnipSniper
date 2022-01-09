@@ -6,7 +6,6 @@ import net.snipsniper.utils.FileUtils;
 import net.snipsniper.utils.IDJButton;
 import net.snipsniper.utils.IFunction;
 import net.snipsniper.utils.SSFile;
-import org.snipsniper.utils.*;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;

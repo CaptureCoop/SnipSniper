@@ -7,7 +7,6 @@ import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.CustomWindowListener;
 import net.snipsniper.utils.IClosable;
 import net.snipsniper.utils.SSColor;
-import org.snipsniper.utils.*;
 
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;

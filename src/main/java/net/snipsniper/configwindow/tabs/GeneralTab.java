@@ -13,7 +13,6 @@ import net.snipsniper.configwindow.iconwindow.IconWindow;
 import net.snipsniper.configwindow.textpreviewwindow.SaveFormatPreviewRenderer;
 import net.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
 import net.snipsniper.utils.*;
-import org.snipsniper.utils.*;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;
 
 import javax.swing.*;

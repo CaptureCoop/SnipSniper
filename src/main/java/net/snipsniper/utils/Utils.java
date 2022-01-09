@@ -8,7 +8,6 @@ import net.snipsniper.utils.enums.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
 import org.json.JSONObject;
-import org.snipsniper.utils.enums.*;
 
 import javax.swing.*;
 import java.awt.*;

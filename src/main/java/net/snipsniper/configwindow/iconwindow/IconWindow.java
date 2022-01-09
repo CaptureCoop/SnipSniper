@@ -4,7 +4,6 @@ import net.snipsniper.ImageManager;
 import net.snipsniper.LogManager;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.utils.*;
-import org.snipsniper.utils.*;
 import net.snipsniper.utils.enums.LogLevel;
 
 import javax.imageio.ImageIO;

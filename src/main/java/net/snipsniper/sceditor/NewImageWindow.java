@@ -4,7 +4,6 @@ import net.capturecoop.ccutils.math.MathUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.utils.*;
 import net.snipsniper.colorchooser.ColorChooser;
-import org.snipsniper.utils.*;
 
 import javax.swing.*;
 import java.awt.*;

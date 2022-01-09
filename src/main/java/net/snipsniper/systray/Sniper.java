@@ -18,7 +18,6 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import net.snipsniper.capturewindow.CaptureWindow;
 import net.snipsniper.configwindow.ConfigWindow;
 import org.jnativehook.mouse.NativeMouseEvent;
-import org.snipsniper.utils.*;
 import net.snipsniper.utils.enums.LogLevel;
 
 public class Sniper {

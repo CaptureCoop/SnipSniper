@@ -7,7 +7,6 @@ import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.configwindow.ConfigWindow;
 import net.snipsniper.configwindow.StampJPanel;
 import net.snipsniper.sceditor.stamps.*;
-import org.snipsniper.sceditor.stamps.*;
 import net.snipsniper.utils.Function;
 import net.snipsniper.utils.InfoButton;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;

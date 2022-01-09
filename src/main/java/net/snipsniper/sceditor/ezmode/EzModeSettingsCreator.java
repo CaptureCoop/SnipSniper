@@ -17,7 +17,6 @@ import net.snipsniper.utils.DropdownItem;
 import net.snipsniper.utils.Function;
 import net.snipsniper.utils.SSColor;
 import net.snipsniper.utils.enums.LogLevel;
-import org.snipsniper.sceditor.stamps.*;
 
 import java.awt.*;
 import java.awt.event.*;

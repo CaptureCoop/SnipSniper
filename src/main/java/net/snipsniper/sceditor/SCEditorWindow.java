@@ -14,10 +14,8 @@ import net.snipsniper.utils.Utils;
 import net.snipsniper.configwindow.ConfigWindow;
 import net.snipsniper.sceditor.ezmode.EzModeSettingsCreator;
 import net.snipsniper.sceditor.ezmode.EzModeStampTab;
-import org.snipsniper.sceditor.stamps.*;
 import net.snipsniper.snipscope.SnipScopeWindow;
 import org.apache.commons.lang3.SystemUtils;
-import org.snipsniper.utils.*;
 import net.snipsniper.utils.enums.LogLevel;
 
 import javax.swing.*;

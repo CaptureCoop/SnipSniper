@@ -9,7 +9,6 @@ import net.snipsniper.utils.Utils;
 import net.snipsniper.colorchooser.ColorChooser;
 import net.snipsniper.sceditor.stamps.IStamp;
 import net.snipsniper.snipscope.SnipScopeListener;
-import org.snipsniper.utils.*;
 import net.snipsniper.utils.enums.LogLevel;
 
 import javax.imageio.ImageIO;

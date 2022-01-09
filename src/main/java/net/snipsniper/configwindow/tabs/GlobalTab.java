@@ -10,7 +10,6 @@ import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.configwindow.ConfigWindow;
 import net.snipsniper.configwindow.UpdateButton;
-import org.snipsniper.utils.*;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;
 import net.snipsniper.utils.enums.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;

@@ -11,8 +11,6 @@ import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.configwindow.tabs.*;
 import net.snipsniper.systray.Sniper;
 import net.snipsniper.utils.*;
-import org.snipsniper.configwindow.tabs.*;
-import org.snipsniper.utils.*;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;
 import net.snipsniper.utils.enums.LogLevel;
 

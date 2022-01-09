@@ -5,7 +5,6 @@ import net.capturecoop.ccutils.math.Vector2Float;
 import net.snipsniper.ImageManager;
 import net.snipsniper.utils.DrawUtils;
 import net.snipsniper.utils.SSColor;
-import org.snipsniper.utils.*;
 
 import javax.swing.*;
 import java.awt.*;
