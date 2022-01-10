@@ -9,7 +9,7 @@ import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.stamps.*;
 import net.snipsniper.utils.IClosable;
 import net.snipsniper.utils.ImageUtils;
-import net.snipsniper.utils.StringUtils;
+import org.capturecoop.ccutils.utils.StringUtils;;
 import net.snipsniper.utils.Utils;
 import net.snipsniper.configwindow.ConfigWindow;
 import net.snipsniper.sceditor.ezmode.EzModeSettingsCreator;

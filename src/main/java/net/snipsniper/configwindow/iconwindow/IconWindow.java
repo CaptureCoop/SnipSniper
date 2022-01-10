@@ -5,6 +5,7 @@ import net.snipsniper.LogManager;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.utils.*;
 import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.ccutils.utils.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

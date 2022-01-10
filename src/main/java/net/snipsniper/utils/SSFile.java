@@ -1,5 +1,7 @@
 package net.snipsniper.utils;
 
+import org.capturecoop.ccutils.utils.StringUtils;
+
 public class SSFile {
     private final String path;
     private final LOCATION location;

@@ -34,7 +34,7 @@ public class LogManager {
     }
 
     public static void log(String message, LogLevel level, Object... args) {
-        log(net.snipsniper.utils.StringUtils.format(message, args), level);
+        log(org.capturecoop.ccutils.utils.StringUtils.format(message, args), level);
     }
 
     public static void logStacktrace(LogLevel level) {
@@ -69,8 +69,7 @@ public class LogManager {
             return;
 
         StringBuilder msg = new StringBuilder(SnipSniper.getConfig().getString(ConfigHelper.MAIN.logFormat));
-        msg = new StringBuilder(net.snipsniper.utils.StringUtils.formatDateArguments(msg.toString(), time));
-        msg = new StringBuilder(net.snipsniper.utils.StringUtils.formatTimeArguments(msg.toString(), time));
+        msg = new StringBuilder(org.capturecoop.ccutils.utils.StringUtils.formatDateTimeString(msg.toString(), time));
 
         String levelString = level.toString();
 

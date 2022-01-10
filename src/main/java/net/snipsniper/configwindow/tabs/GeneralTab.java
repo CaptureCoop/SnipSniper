@@ -14,6 +14,7 @@ import net.snipsniper.configwindow.textpreviewwindow.SaveFormatPreviewRenderer;
 import net.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
 import net.snipsniper.utils.*;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;
+import org.capturecoop.ccutils.utils.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -277,7 +278,7 @@ public class GeneralTab extends JPanel implements ITab{
                 String saveLocationRaw = pictureLocation.getText();
                 StringUtils.correctSlashes(saveLocationRaw);
 
-                String saveLocationFinal = StringUtils.replaceVars(saveLocationRaw);
+                String saveLocationFinal = Utils.replaceVars(saveLocationRaw);
 
                 File saveLocationCheck = new File(saveLocationFinal);
                 if(!saveLocationCheck.exists()) {
@@ -313,7 +314,7 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 0;
         options.add(configWindow.createJLabel("Save folder modifier", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
-        JButton customSaveButton = new JButton(StringUtils.formatDateArguments(config.getString(ConfigHelper.PROFILE.saveFolderCustom)));
+        JButton customSaveButton = new JButton(StringUtils.formatDateTimeString(config.getString(ConfigHelper.PROFILE.saveFolderCustom)));
         customSaveButton.addActionListener(e -> {
             FolderPreviewRenderer renderer = new FolderPreviewRenderer(512, 512);
             TextPreviewWindow preview = new TextPreviewWindow("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom), renderer, ImageManager.getImage("icons/folder.png"), configWindow, "%day% = 1, %month% = 8, %year% = 2021");
@@ -324,7 +325,7 @@ public class GeneralTab extends JPanel implements ITab{
                 if(text.isEmpty())
                     text = "/";
                 config.set(ConfigHelper.PROFILE.saveFolderCustom, text);
-                customSaveButton.setText(StringUtils.formatDateArguments(text));
+                customSaveButton.setText(StringUtils.formatDateTimeString(text));
                 cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
             });
         });

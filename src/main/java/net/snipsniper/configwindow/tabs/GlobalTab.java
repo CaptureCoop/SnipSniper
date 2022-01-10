@@ -14,6 +14,7 @@ import net.snipsniper.utils.enums.ConfigSaveButtonState;
 import net.snipsniper.utils.enums.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
+import org.capturecoop.ccutils.utils.StringUtils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;

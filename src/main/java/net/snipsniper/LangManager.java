@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.FileUtils;
-import net.snipsniper.utils.StringUtils;
+import org.capturecoop.ccutils.utils.StringUtils;;
 import net.snipsniper.utils.enums.LogLevel;
 
 import java.awt.*;

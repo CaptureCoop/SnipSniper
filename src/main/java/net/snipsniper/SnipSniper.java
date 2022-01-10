@@ -25,6 +25,7 @@ import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.scviewer.SCViewerWindow;
 import net.snipsniper.systray.Sniper;
 import org.apache.commons.lang3.SystemUtils;
+import org.capturecoop.ccutils.utils.StringUtils;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import net.snipsniper.utils.enums.LaunchType;

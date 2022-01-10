@@ -1,7 +1,7 @@
 package net.snipsniper.configwindow.textpreviewwindow;
 
 import net.snipsniper.ImageManager;
-import net.snipsniper.utils.StringUtils;
+import org.capturecoop.ccutils.utils.StringUtils;;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +25,7 @@ public class FolderPreviewRenderer extends JPanel {
     @Override
     public void paint(Graphics g) {
         String content = textPreviewWindow.getText().replaceAll("\\\\", "/");
-        content = StringUtils.formatDateArguments(content);
+        content = StringUtils.formatDateTimeString(content);
         String[] parts = content.split("/");
         ArrayList<String> partsFinal = new ArrayList<>();
         for(String str : parts) {

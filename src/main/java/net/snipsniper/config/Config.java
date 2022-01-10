@@ -11,9 +11,10 @@ import java.io.InputStreamReader;
 import net.snipsniper.LogManager;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.utils.SSColor;
-import net.snipsniper.utils.StringUtils;
+import net.snipsniper.utils.Utils;
+import org.capturecoop.ccutils.utils.StringUtils;;
 import net.snipsniper.utils.enums.LogLevel;
-import org.capturecoop.ccutils.math.MathUtils;
+import org.capturecoop.ccutils.utils.MathUtils;
 
 public class Config {
 	private final ConfigContainer settings = new ConfigContainer();
@@ -116,7 +117,7 @@ public class Config {
 	public String getString(String key) {
 		String str = getRawString(key);
 		if(str != null) {
-			str = StringUtils.replaceVars(str);
+			str = Utils.replaceVars(str);
 		}
 		return str;
 	}

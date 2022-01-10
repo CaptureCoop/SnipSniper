@@ -35,7 +35,7 @@ dependencies {
     implementation 'com.formdev:flatlaf:1.6.5'
     implementation 'com.erigir:mslinks:0.0.2+5'
 
-    implementation 'org.capturecoop:CCUtils:1.4'
+    implementation 'org.capturecoop:CCUtils:1.6'
 }
 
 void refreshWiki() {

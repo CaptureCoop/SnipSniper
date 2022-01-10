@@ -7,6 +7,8 @@ import net.snipsniper.utils.enums.LaunchType;
 import net.snipsniper.utils.enums.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
+import org.apache.commons.lang3.SystemUtils;
+import org.capturecoop.ccutils.utils.StringUtils;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -52,6 +54,13 @@ public class Utils {
 			return null;
 		}
 		return new JSONObject(text).getString("sha");
+	}
+
+	public static String replaceVars(String string) {
+		if(string.contains("%username%")) string = string.replace("%username%", System.getProperty("user.name"));
+		if(SystemUtils.IS_OS_WINDOWS) if(string.contains("%userprofile%")) string = string.replace("%userprofile%", System.getenv("USERPROFILE"));
+		if(SystemUtils.IS_OS_LINUX) if(string.contains("%userprofile%")) string = string.replace("%userprofile%", System.getProperty("user.home"));
+		return string;
 	}
 
 	public static int showPopup(Component parent, String message, String title, int optionType, int messageType, BufferedImage icon, boolean blockScreenshot) {
@@ -200,7 +209,7 @@ public class Utils {
 	}
 
 	public static String constructFilename(String format, String modifier) {
-		String filename = StringUtils.formatTimeArguments(StringUtils.formatDateArguments(format));
+		String filename = StringUtils.formatDateTimeString(format);
 		filename = filename.replaceAll("%random%", StringUtils.getRandomString(10, true, true));
 		filename += modifier + ".png";
 		return filename;

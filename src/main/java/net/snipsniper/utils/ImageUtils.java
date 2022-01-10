@@ -6,6 +6,7 @@ import net.snipsniper.SnipSniper;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.ccutils.utils.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -37,7 +38,7 @@ public class ImageUtils {
         String pathCustom = config.getString(ConfigHelper.PROFILE.saveFolderCustom);
         if(!pathCustom.startsWith("/"))
             pathCustom = "/" + pathCustom;
-        savePath += StringUtils.formatDateArguments(pathCustom);
+        savePath += StringUtils.formatDateTimeString(pathCustom);
 
         String savePathModifier = "";
 

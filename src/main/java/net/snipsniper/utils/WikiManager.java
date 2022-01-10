@@ -1,6 +1,7 @@
 package net.snipsniper.utils;
 
 import net.snipsniper.LogManager;
+import org.capturecoop.ccutils.utils.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import net.snipsniper.utils.enums.LogLevel;

@@ -1,5 +1,7 @@
 package net.snipsniper.utils;
 
+import org.capturecoop.ccutils.utils.StringUtils;
+
 import java.awt.*;
 
 public class HSB {
