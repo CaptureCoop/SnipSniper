@@ -31,7 +31,7 @@ dependencies {
     implementation 'com.1stleg:jnativehook:2.1.0'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.apache.commons:commons-text:1.9'
-    implementation 'org.json:json:20210307'
+    implementation 'org.json:json:20211205'
     implementation 'com.formdev:flatlaf:1.6.5'
     implementation 'com.erigir:mslinks:0.0.2+5'
 
