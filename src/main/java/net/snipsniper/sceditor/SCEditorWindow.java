@@ -65,21 +65,14 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
     private final JScrollPane ezModeStampSettingsScrollPane;
 
     private final JTabbedPane ezModeStampPanelTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-    public SCEditorWindow(BufferedImage initImage, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
+    public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         instance = this;
         this.config = config;
         this.title = title;
         this.saveLocation = saveLocation;
         this.inClipboard = inClipboard;
 
-        //This makes sure the image has transparency
-        BufferedImage image = null;
-        if(initImage != null) {
-            image = new BufferedImage(initImage.getWidth(), initImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
-            Graphics g = image.getGraphics();
-            g.drawImage(initImage, 0, 0, this);
-            g.dispose();
-        }
+        image = ImageUtils.ensureAlphaLayer(image);
 
         ezMode = config.getBool(ConfigHelper.PROFILE.ezMode);
 
@@ -376,6 +369,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
     }
 
     public void setImage(BufferedImage image, boolean resetHistory, boolean isNewImage) {
+        image = ImageUtils.ensureAlphaLayer(image);
         super.setImage(image);
         LogManager.log("Setting new Image", LogLevel.INFO);
         setEnableInteraction(!isDefaultImage());

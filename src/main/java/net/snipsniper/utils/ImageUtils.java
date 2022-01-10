@@ -31,6 +31,17 @@ public class ImageUtils {
         return getIconDynamically(config.getString(ConfigHelper.PROFILE.icon));
     }
 
+    public static BufferedImage ensureAlphaLayer(BufferedImage image) {
+        if(image != null && image.getType() != BufferedImage.TYPE_INT_ARGB) {
+            BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics newGraphics = newImage.getGraphics();
+            newGraphics.drawImage(image, 0, 0, null);
+            newGraphics.dispose();
+            return newImage;
+        }
+        return image;
+    }
+
     public static String saveImage(BufferedImage finalImg, String format, String modifier, Config config) {
         File file;
         String filename = Utils.constructFilename(format, modifier);
