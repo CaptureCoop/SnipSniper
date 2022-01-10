@@ -53,8 +53,13 @@ public class EraserStamp implements IStamp {
             if (p0 != null && p1 != null) {
                 Graphics2D g2 = (Graphics2D) scEditorWindow.getImage().getGraphics();
                 g2.setRenderingHints(scEditorWindow.getQualityHints());
-                BufferedImage img = scEditorWindow.getOriginalImage();
-                g2.setPaint(new TexturePaint(img, new Rectangle(0, 0, img.getWidth(), img.getHeight())));
+                if(!input.isKeyPressed(KeyEvent.VK_CONTROL)) {
+                    BufferedImage img = scEditorWindow.getOriginalImage();
+                    g2.setColor(new Color(0, 0, 0, 0));
+                    g2.setPaint(new TexturePaint(img, new Rectangle(0, 0, img.getWidth(), img.getHeight())));
+                } else {
+                    g2.setComposite(AlphaComposite.Clear);
+                }
                 g2.setStroke(new BasicStroke(newSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
                 double distance = Math.hypot(p0.getX() - p1.getX(), p0.getY() - p1.getY());

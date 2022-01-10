@@ -9,7 +9,7 @@ import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.stamps.*;
 import net.snipsniper.utils.IClosable;
 import net.snipsniper.utils.ImageUtils;
-import org.capturecoop.ccutils.utils.StringUtils;;
+import org.capturecoop.ccutils.utils.StringUtils;
 import net.snipsniper.utils.Utils;
 import net.snipsniper.configwindow.ConfigWindow;
 import net.snipsniper.sceditor.ezmode.EzModeSettingsCreator;
@@ -65,12 +65,21 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
     private final JScrollPane ezModeStampSettingsScrollPane;
 
     private final JTabbedPane ezModeStampPanelTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-    public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
+    public SCEditorWindow(BufferedImage initImage, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         instance = this;
         this.config = config;
         this.title = title;
         this.saveLocation = saveLocation;
         this.inClipboard = inClipboard;
+
+        //This makes sure the image has transparency
+        BufferedImage image = null;
+        if(initImage != null) {
+            image = new BufferedImage(initImage.getWidth(), initImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics g = image.getGraphics();
+            g.drawImage(initImage, 0, 0, this);
+            g.dispose();
+        }
 
         ezMode = config.getBool(ConfigHelper.PROFILE.ezMode);
 
@@ -194,18 +203,20 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     int borderThickness = 10;
-                    BufferedImage test = new BufferedImage(originalImage.getWidth() + borderThickness, originalImage.getHeight() + borderThickness, BufferedImage.TYPE_INT_ARGB);
+                    //Fix to have this work without originalImage. As we will remove/Change this anyways i dont care if this affects anything for now.
+                    BufferedImage imageToUse = getImage();
+                    BufferedImage test = new BufferedImage(imageToUse.getWidth() + borderThickness, imageToUse.getHeight() + borderThickness, BufferedImage.TYPE_INT_ARGB);
                     Graphics2D g = (Graphics2D) test.getGraphics();
                     g.setRenderingHints(qualityHints);
-                    for(int y = 0; y < originalImage.getHeight(); y++) {
-                        for(int x = 0; x < originalImage.getWidth(); x++) {
-                            if(new Color(originalImage.getRGB(x, y), true).getAlpha() > 10) {
+                    for(int y = 0; y < imageToUse.getHeight(); y++) {
+                        for(int x = 0; x < imageToUse.getWidth(); x++) {
+                            if(new Color(imageToUse.getRGB(x, y), true).getAlpha() > 10) {
                                 g.setColor(Color.WHITE);
                                 g.fillOval((x + borderThickness / 2) - borderThickness / 2, (y + borderThickness / 2) - borderThickness / 2, borderThickness, borderThickness);
                             }
                         }
                     }
-                    g.drawImage(originalImage, borderThickness / 2 , borderThickness / 2, originalImage.getWidth(), originalImage.getHeight(), null);
+                    g.drawImage(imageToUse, borderThickness / 2 , borderThickness / 2, imageToUse.getWidth(), imageToUse.getHeight(), null);
                     g.dispose();
 
                     setImage(test, true, true);
