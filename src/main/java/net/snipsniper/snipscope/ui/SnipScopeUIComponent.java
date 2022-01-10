@@ -1,6 +1,6 @@
 package net.snipsniper.snipscope.ui;
 
-import net.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.Vector2Int;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;

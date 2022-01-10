@@ -1,6 +1,6 @@
 package net.snipsniper.colorchooser;
 
-import net.capturecoop.ccutils.math.Vector2Float;
+import org.capturecoop.ccutils.math.Vector2Float;
 import net.snipsniper.utils.DrawUtils;
 import net.snipsniper.utils.HSB;
 import net.snipsniper.utils.SSColor;

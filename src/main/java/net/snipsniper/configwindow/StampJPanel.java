@@ -1,6 +1,6 @@
 package net.snipsniper.configwindow;
 
-import net.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.Vector2Int;
 import net.snipsniper.ImageManager;
 import net.snipsniper.utils.Utils;
 import net.snipsniper.sceditor.stamps.IStamp;

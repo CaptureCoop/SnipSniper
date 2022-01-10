@@ -1,6 +1,6 @@
 package net.snipsniper.configwindow;
 
-import net.capturecoop.ccutils.math.MathUtils;
+import org.capturecoop.ccutils.math.MathUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.LangManager;
 import net.snipsniper.LogManager;

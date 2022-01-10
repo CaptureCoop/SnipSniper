@@ -1,6 +1,6 @@
 package net.snipsniper.sceditor;
 
-import net.capturecoop.ccutils.math.MathUtils;
+import org.capturecoop.ccutils.math.MathUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.utils.*;
 import net.snipsniper.colorchooser.ColorChooser;

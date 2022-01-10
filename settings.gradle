@@ -1,5 +1,5 @@
 sourceControl {
     gitRepository("https://github.com/CaptureCoop/CCUtils.git") {
-        producesModule("net.capturecoop:CCUtils")
+        producesModule("org.capturecoop:CCUtils")
     }
 }

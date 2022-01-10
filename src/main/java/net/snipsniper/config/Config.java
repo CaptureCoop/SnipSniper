@@ -8,12 +8,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import net.capturecoop.ccutils.math.MathUtils;
 import net.snipsniper.LogManager;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.utils.SSColor;
 import net.snipsniper.utils.StringUtils;
 import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.ccutils.math.MathUtils;
 
 public class Config {
 	private final ConfigContainer settings = new ConfigContainer();
