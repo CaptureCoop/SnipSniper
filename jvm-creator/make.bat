@@ -1,5 +1,6 @@
 @echo off
 set initialPath=%cd%
+set title=jvm-creator: 
 cd %~dp0
 
 IF "%~1" == "" goto help
@@ -17,41 +18,36 @@ goto exit
 
 :build
 if not exist jdk\ (
-	echo jdk folder not found, please place as "jdk"
+	echo %title%jdk folder not found, please place as "jdk"
 	goto exit
 )
 
 if not exist SnipSniper.jar (
-	echo SnipSniper.jar is missing, please place as "SnipSniper.jar"
+	echo %title%SnipSniper.jar is missing, please place as "SnipSniper.jar"
 	goto exit
 )
 
-echo jvm-creator: Building...
-if exist output\ rmdir /Q /S output
-if exist jdeps-output.txt del jdeps-output.txt
-if exist powerjdep-output.txt del powerjdep-output.txt
-
-echo Running jdeps on SnipSniper.jar...
+call :clean
+echo %title%Building...
+echo %title%Running jdeps on SnipSniper.jar...
 jdk\bin\jdeps.exe SnipSniper.jar >> jdeps-output.txt
-echo Running PowerJDEP.jar on jdeps-output.txt...
+echo %title%Running PowerJDEP.jar on jdeps-output.txt...
 jdk\bin\java.exe -jar PowerJDEP.jar jdeps-output.txt -jlink-pretty >> powerjdep-output.txt
 
 set /p modules=<powerjdep-output.txt
 
-echo Running jlink with powerjdep-output.txt...
+echo %title%Running jlink with powerjdep-output.txt...
 jdk\bin\jlink.exe --output output\jdk\ --add-modules %modules%
 
-echo jvm-creator: Done!
+echo %title%Done!
 goto exit
 
 :clean
-echo jvm-creator: Cleaning...
+echo %title%Cleaning...
 if exist output\ rmdir /Q /S output
-if exist jdk\ rmdir /Q /S jdk
-if exist SnipSniper.jar del /Q /S SnipSniper.jar >> nul
 if exist powerjdep-output.txt del /Q /S powerjdep-output.txt >> nul
 if exist jdeps-output.txt del /Q /S jdeps-output.txt >> nul
-echo jvm-creator: Done!
+echo %title%Done!
 goto exit
 
 :exit
