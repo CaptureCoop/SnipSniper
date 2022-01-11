@@ -1,5 +1,8 @@
 @echo off
 
+set initialPath=%cd%
+set zip=%programFiles%\7-Zip\7z.exe
+
 IF "%~1" == "" goto help
 
 if %1==help goto help
@@ -11,6 +14,7 @@ if %1==exe goto exe
 if %1==prepare goto prepare
 if %1==portable goto portable
 if %1==installer goto installer
+if %1==moveJar goto moveJar
 if %1==full goto full
 
 :help
@@ -24,6 +28,7 @@ echo make exe           - Create the EXEs in ./exe-creator/
 echo make prepare       - Move files from above directories
 echo make portable      - Zip the windows version up as the portable release
 echo make installer     - Create an installer from the windows version
+echo make moveJar		- Moves the jar to the ./release/output/ directory
 echo make full          - Do everything (Except open)
 goto exit
 
@@ -63,9 +68,24 @@ goto :EOF
 :prepare
 echo Preparing files...
 mkdir release
-robocopy jvm-creator/output/jdk/ release/SnipSniper/jdk/ /E
-robocopy exe-creator/output/ release/ /E
-xcopy build\libs\SnipSniper.jar release\
+robocopy jvm-creator/output/jdk/ release/SnipSniper/jdk/ /E > nul
+robocopy exe-creator/output/ release/ /E > nul
+xcopy build\libs\SnipSniper.jar release\ > nul
+echo Done preparing files
+goto :EOF
+
+:portable
+echo Zipping portable...
+cd release\
+"%zip%" a output\SnipSniper_Win_Portable.zip *
+cd %initialPath%
+goto :EOF
+
+:moveJar
+cd release
+echo Moving jar...
+xcopy SnipSniper.jar output\ > nul
+cd %initialPath%
 goto :EOF
 
 :full
