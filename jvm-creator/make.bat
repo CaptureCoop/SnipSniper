@@ -26,7 +26,7 @@ if not exist SnipSniper.jar (
 	goto exit
 )
 
-echo Cleaning...
+echo jvm-creator: Building...
 if exist output\ rmdir /Q /S output
 if exist jdeps-output.txt del jdeps-output.txt
 if exist powerjdep-output.txt del powerjdep-output.txt
@@ -41,17 +41,17 @@ set /p modules=<powerjdep-output.txt
 echo Running jlink with powerjdep-output.txt...
 jdk\bin\jlink.exe --output output\jdk\ --add-modules %modules%
 
-echo Done!
+echo jvm-creator: Done!
 goto exit
 
 :clean
-echo Cleaning files...
+echo jvm-creator: Cleaning...
 if exist output\ rmdir /Q /S output
 if exist jdk\ rmdir /Q /S jdk
 if exist SnipSniper.jar del /Q /S SnipSniper.jar >> nul
 if exist powerjdep-output.txt del /Q /S powerjdep-output.txt >> nul
 if exist jdeps-output.txt del /Q /S jdeps-output.txt >> nul
-echo Done!
+echo jvm-creator: Done!
 goto exit
 
 :exit
