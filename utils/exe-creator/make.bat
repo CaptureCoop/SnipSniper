@@ -1,4 +1,7 @@
 @echo off
+set initialPath=%cd%
+cd %~dp0
+
 echo Cleaning output directory ...
 if exist output\ (
 	del /Q /S output\*.* >> %temp%\compilelog.txt
@@ -35,3 +38,4 @@ goto :EOF
 :exit
 echo.
 echo Goodbye!
+cd %initialPath%

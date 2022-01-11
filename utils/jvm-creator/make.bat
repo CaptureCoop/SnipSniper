@@ -1,4 +1,6 @@
 @echo off
+set initialPath=%cd%
+cd %~dp0
 
 IF "%~1" == "" goto help
 
@@ -53,3 +55,4 @@ echo Done!
 goto exit
 
 :exit
+cd %initialPath%
