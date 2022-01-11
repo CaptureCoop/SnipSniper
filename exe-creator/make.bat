@@ -1,6 +1,7 @@
 @echo off
 set initialPath=%cd%
 set title=exe-creator: 
+set cFolder=%~dp0
 cd %~dp0
 
 IF "%~1" == "" goto help
@@ -30,12 +31,13 @@ goto exit
 :build
 call :clean
 echo %title%Building...
-set icoPath=../../src/main/resources/net/snipsniper/resources/img/icons/
+set escapedFolder=%cFolder:\=/%
+set icoPath=%escapedFolder%../src/main/resources/net/snipsniper/resources/img/icons/
 call :compile %icoPath%snipsniper.ico SnipSniper NORMAL
 call :compile %icoPath%editor.ico Editor EDITOR
 call :compile %icoPath%viewer.ico Viewer VIEWER
-rename "output\Editor.exe" "SnipSniper Editor.exe"
-rename "output\Viewer.exe" "SnipSniper Viewer.exe"
+rename "%cFolder%output\Editor.exe" "SnipSniper Editor.exe"
+rename "%cFolder%output\Viewer.exe" "SnipSniper Viewer.exe"
 echo %title%Done
 goto exit
 
@@ -46,14 +48,14 @@ if exist src\resources.rc (
 	del src\resources.rc
 )
 echo %title%Creating resources.rc for icon %~1...
-echo MAINICON ICON "%~1" >> src\resources.rc
+echo MAINICON ICON "%~1" >> %cFolder%src\resources.rc
 echo %title%Compiling resources.rc for icon %~1...
-windres src\resources.rc -o output\res.ress
+windres %cFolder%src\resources.rc -o %cFolder%output\res.ress
 echo %title%Compiling code.cpp to %~2.exe...
-c++ -D%~3 -Wl,--subsystem,windows src\code.cpp output\res.ress -o output\%~2.exe -s -Os -static-libgcc -static-libstdc++
+c++ -D%~3 -Wl,--subsystem,windows %cFolder%src\code.cpp %cFolder%output\res.ress -o %cFolder%output\%~2.exe -s -Os -static-libgcc -static-libstdc++
 echo %title%Cleaning resource files...
-del output\res.ress
-del src\resources.rc
+del %cFolder%output\res.ress
+del %cFolder%src\resources.rc
 goto :EOF
 
 :exit
