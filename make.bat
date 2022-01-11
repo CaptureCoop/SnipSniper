@@ -35,4 +35,36 @@ call exe-creator/make clean
 echo Done!
 goto :EOF
 
+:open
+if exist release\ (
+    echo Opening release folder
+    %SystemRoot%\explorer.exe "release"
+) else (
+    echo Release folder does not exist. Try "make full" first
+)
+goto :EOF
+
+:jar
+echo Compiling jar...
+call gradlew build
+goto :EOF
+
+:jvm
+echo Running jvm-creator...
+call jvm-creator/make build
+goto :EOF
+
+:exe
+echo Running exe-creator/
+call exe-creator/make build
+goto :EOF
+
+:full
+call :clean
+call :jar
+call :jvm
+call :exe
+goto exit
+
 :exit
+echo Exiting...
