@@ -23,15 +23,19 @@ if not exist jdk\ (
 	goto exit
 )
 
-if not exist SnipSniper.jar (
-	echo %title%SnipSniper.jar is missing, please place as "SnipSniper.jar"
-	goto exit
+set jarPath=%cFolder%../build/libs/SnipSniper.jar
+if not exist %jarPath% (
+	if not exist SnipSniper.jar (
+		echo %title%SnipSniper.jar missing! Try building with gradle or place SnipSniper.jar here
+		goto exit
+	)
+	jarPath=%cFolder%SnipSniper.jar
 )
 
 call :clean
 echo %title%Building...
 echo %title%Running jdeps on SnipSniper.jar...
-%cFolder%jdk\bin\jdeps.exe %cFolder%SnipSniper.jar >> %cFolder%jdeps-output.txt
+%cFolder%jdk\bin\jdeps.exe %jarPath% >> %cFolder%jdeps-output.txt
 echo %title%Running PowerJDEP.jar on jdeps-output.txt...
 %cFolder%jdk\bin\java.exe -jar %cFolder%PowerJDEP.jar %cFolder%jdeps-output.txt -jlink-pretty >> %cFolder%powerjdep-output.txt
 
