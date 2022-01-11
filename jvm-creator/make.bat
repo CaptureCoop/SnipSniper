@@ -1,6 +1,7 @@
 @echo off
 set initialPath=%cd%
 set title=jvm-creator: 
+set cFolder=%~dp0
 cd %~dp0
 
 IF "%~1" == "" goto help
@@ -30,14 +31,14 @@ if not exist SnipSniper.jar (
 call :clean
 echo %title%Building...
 echo %title%Running jdeps on SnipSniper.jar...
-jdk\bin\jdeps.exe SnipSniper.jar >> jdeps-output.txt
+%cFolder%jdk\bin\jdeps.exe %cFolder%SnipSniper.jar >> %cFolder%jdeps-output.txt
 echo %title%Running PowerJDEP.jar on jdeps-output.txt...
-jdk\bin\java.exe -jar PowerJDEP.jar jdeps-output.txt -jlink-pretty >> powerjdep-output.txt
+%cFolder%jdk\bin\java.exe -jar %cFolder%PowerJDEP.jar %cFolder%jdeps-output.txt -jlink-pretty >> %cFolder%powerjdep-output.txt
 
-set /p modules=<powerjdep-output.txt
+set /p modules=<%cFolder%powerjdep-output.txt
 
 echo %title%Running jlink with powerjdep-output.txt...
-jdk\bin\jlink.exe --output output\jdk\ --add-modules %modules%
+%cFolder%jdk\bin\jlink.exe --output %cFolder%output\jdk\ --add-modules %modules%
 
 echo %title%Done!
 goto exit
