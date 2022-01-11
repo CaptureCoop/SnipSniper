@@ -24,7 +24,7 @@ echo make exe           - Create the EXEs in ./exe-creator/
 echo make prepare       - Move files from above directories
 echo make portable      - Zip the windows version up as the portable release
 echo make installer     - Create an installer from the windows version
-echo make full          - Do everything
+echo make full          - Do everything (Except open)
 goto exit
 
 :clean
@@ -59,11 +59,20 @@ echo Running exe-creator/
 call exe-creator/make build
 goto :EOF
 
+:prepare
+echo Preparing files...
+mkdir release
+robocopy jvm-creator/output/jdk/ release/SnipSniper/jdk/ /E
+robocopy exe-creator/output/ release/ /E
+xcopy build\libs\SnipSniper.jar release\
+goto :EOF
+
 :full
 call :clean
 call :jar
 call :jvm
 call :exe
+call :prepare
 goto exit
 
 :exit
