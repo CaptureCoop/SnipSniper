@@ -33,9 +33,9 @@ call :clean
 echo %title%Building...
 set escapedFolder=%cFolder:\=/%
 set icoPath=%escapedFolder%../src/main/resources/net/snipsniper/resources/img/icons/
-call :compile %icoPath%snipsniper.ico SnipSniper NORMAL
-call :compile %icoPath%editor.ico Editor EDITOR
-call :compile %icoPath%viewer.ico Viewer VIEWER
+call :compile %icoPath%snipsniper.ico SnipSniper NORMAL %~2
+call :compile %icoPath%editor.ico Editor EDITOR %~2
+call :compile %icoPath%viewer.ico Viewer VIEWER %~2
 rename "%cFolder%output\Editor.exe" "SnipSniper Editor.exe"
 rename "%cFolder%output\Viewer.exe" "SnipSniper Viewer.exe"
 echo %title%Done
@@ -51,8 +51,12 @@ echo %title%Creating resources.rc for icon %~1...
 echo MAINICON ICON "%~1" >> %cFolder%src\resources.rc
 echo %title%Compiling resources.rc for icon %~1...
 windres %cFolder%src\resources.rc -o %cFolder%output\res.ress
-echo %title%Compiling code.cpp to %~2.exe...
-c++ -D%~3 -Wl,--subsystem,windows %cFolder%src\code.cpp %cFolder%output\res.ress -o %cFolder%output\%~2.exe -s -Os -static-libgcc -static-libstdc++
+echo %title%Compiling code.cpp to %~2.exe with platformType %~4
+set platformType=
+if not "%~4"=="" (
+    set platformType=-D%~4
+)
+c++ -D%~3 %platformType% -Wl,--subsystem,windows %cFolder%src\code.cpp %cFolder%output\res.ress -o %cFolder%output\%~2.exe -s -Os -static-libgcc -static-libstdc++
 echo %title%Cleaning resource files...
 del %cFolder%output\res.ress
 del %cFolder%src\resources.rc
