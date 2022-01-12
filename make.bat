@@ -18,85 +18,78 @@ if %1==moveJar goto moveJar
 if %1==full goto full
 
 :help
-echo Available parameters
-echo make help          - Display this help
-echo make clean         - Remove the release folder and clean ./jvm-creator/ and ./exe-creator/
-echo make open          - Opens release folder
-echo make jar           - Create the jar in ./build/libs/
-echo make jvm           - Create the JVM in ./jvm-creator/
-echo make exe           - Create the EXEs in ./exe-creator/
-echo make prepare       - Move files from above directories
-echo make portable      - Zip the windows version up as the portable release
-echo make installer     - Create an installer from the windows version
-echo make moveJar		- Moves the jar to the ./release/output/ directory
-echo make full          - Do everything (Except open)
+	echo Available parameters
+	echo make help          - Display this help
+	echo make clean <all>	- Cleans the build system (add "all" to also remove ./release/output/
+	echo make open          - Opens release folder
+	echo make jar           - Create the jar in ./build/libs/
+	echo make portable      - Zip the windows version up as the portable release
+	echo make installer     - Create an installer from the windows version
+	echo make full          - Build all three versions
 goto exit
 
 :clean
-echo Cleaning...
-if exist release\ RMDIR /S /Q release
-call jvm-creator/make clean
-call exe-creator/make clean
-call gradlew clean
-echo Done!
+	echo Cleaning...
+	if "%~2" == "all" (
+		if exist release\ RMDIR /S /Q release\
+	) else (
+		if exist release\raw\ RMDIR /S /Q release\raw\
+	)
+	call jvm-creator/make clean
+	call exe-creator/make clean
+	call gradlew clean
+	echo Done!
 goto :EOF
 
 :open
-if exist release\ (
-    echo Opening release folder
-    %SystemRoot%\explorer.exe "release"
-) else (
-    echo Release folder does not exist. Try "make full" first
-)
+	if exist release\ (
+		echo Opening release folder
+		%SystemRoot%\explorer.exe "release"
+	) else (
+		echo Release folder does not exist. Try "make full" first
+	)
 goto :EOF
 
 :jar
-echo Compiling jar...
-call gradlew build
-goto :EOF
+	call :clean
+	echo Compiling jar...
+	call gradlew build
+	call :prepare
 
-:jvm
-echo Running jvm-creator...
-call jvm-creator/make build
-goto :EOF
-
-:exe
-echo Running exe-creator/
-call exe-creator/make build
-goto :EOF
-
-:prepare
-echo Preparing files...
-mkdir release
-robocopy jvm-creator/output/jdk/ release/raw/SnipSniper/jdk/ /E > nul
-robocopy exe-creator/output/ release/raw/ /E > nul
-xcopy build\libs\SnipSniper.jar release\raw\ > nul
-echo Done preparing files
+	cd release\raw\
+		echo Moving jar...
+		xcopy SnipSniper.jar ..\output\ > nul
+	cd %initialPath%
 goto :EOF
 
 :portable
-echo Zipping portable...
-cd release\raw\
-"%zip%" a ..\output\SnipSniper_Win_Portable.zip *
-cd %initialPath%
+	echo Creating portable...
+	call :clean
+	call gradlew build
+	call exe-creator/make build WIN
+	call jvm-creator/make build
+	call :prepare
+
+	cd release\raw\
+		"%zip%" a ..\output\SnipSniper_Win_Portable.zip *
+	cd %initialPath%
 goto :EOF
 
-:moveJar
-cd release\raw\
-echo Moving jar...
-xcopy SnipSniper.jar ..\output\ > nul
-cd %initialPath%
+:prepare
+	echo Preparing files...
+	mkdir release
+	robocopy jvm-creator/output/jdk/ release/raw/SnipSniper/jdk/ /E > nul
+	robocopy exe-creator/output/ release/raw/ /E > nul
+	xcopy build\libs\SnipSniper.jar release\raw\ > nul
+	echo Done preparing files
 goto :EOF
+
 
 :full
-call :clean
-call :jar
-call :jvm
-call :exe
-call :prepare
-call :moveJar
-call :portable
+	call :clean all
+	call :jar
+	call :portable
 goto exit
 
 :exit
-echo Exiting...
+	echo Exiting...

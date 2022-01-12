@@ -31,10 +31,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	command += javaLocation;
 
 #ifdef WIN
-    command += " -Dplatform=win"
+    command += " -Dplatform=win";
 #endif
 #ifdef WIN_INSTALLED
-    command += " -Dplatform=win_installed"
+    command += " -Dplatform=win_installed";
 #endif
 
 #ifdef NORMAL
