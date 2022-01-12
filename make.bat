@@ -37,7 +37,7 @@ echo Cleaning...
 if exist release\ RMDIR /S /Q release
 call jvm-creator/make clean
 call exe-creator/make clean
-gradlew clean
+call gradlew clean
 echo Done!
 goto :EOF
 
