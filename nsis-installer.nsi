@@ -147,7 +147,7 @@ Section "Main Component"
   SetOutPath $INSTDIR
 
   ;Put the following file in the SetOutPath
-  File "README.md"
+  File /r "release\raw\*"
 
   ;Store installation folder in registry
   WriteRegStr HKLM "Software\${PRODUCT}" "" $INSTDIR
@@ -160,8 +160,15 @@ Section "Main Component"
 
   ;Create optional start menu shortcut for uninstaller and Main component
   CreateDirectory "$SMPROGRAMS\${PRODUCT}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT}\Main Component.lnk" "$INSTDIR\example_file_component_01.txt" "" "$INSTDIR\example_file_component_01.txt" 0
-  CreateShortCut "$SMPROGRAMS\${PRODUCT}\Uninstall ${PRODUCT}.lnk" "$INSTDIR\${PRODUCT}_uninstaller.exe" "" "$INSTDIR\${PRODUCT}_uninstaller.exe" 0
+  CreateShortCut "$SMPROGRAMS\${PRODUCT}\SnipSniper.lnk" "$INSTDIR\SnipSniper.exe"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT}\SnipSniper Editor.lnk" "$INSTDIR\SnipSniper Editor.exe"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT}\SnipSniper Viewer.lnk" "$INSTDIR\SnipSniper Viewer.exe"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT}\Uninstall ${PRODUCT}.lnk" "$INSTDIR\${PRODUCT}_uninstaller.exe"
+
+	CreateShortcut "$desktop\SnipSniper.lnk" "$INSTDIR\SnipSniper.exe"
+	CreateShortcut "$desktop\SnipSniper Editor.lnk" "$INSTDIR\SnipSniper Editor.exe"
+	CreateShortcut "$desktop\SnipSniper Viewer.lnk" "$INSTDIR\SnipSniper Viewer.exe"
+	
 
   ;Create uninstaller
   WriteUninstaller "${PRODUCT}_uninstaller.exe"
@@ -185,7 +192,12 @@ Section "Uninstall"
   ;Delete Start Menu Shortcuts
   Delete "$SMPROGRAMS\${PRODUCT}\*.*"
   RmDir  "$SMPROGRAMS\${PRODUCT}"
-
+  
+  ;Delete Desktop shortcuts
+  Delete "$desktop\SnipSniper.lnk"
+  Delete "$desktop\SnipSniper Viewer.lnk"
+  Delete "$desktop\SnipSniper Editor.lnk"
+ 
 SectionEnd
 
 
