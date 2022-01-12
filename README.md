@@ -37,7 +37,7 @@ We recommend a java version above or equal to Java 8.
 
 Should you want to build more then the jar, as in the Windows Portable/Installer Versions you can use our make.bat file, which works under Windows.
 
-For this to work you need a java version above or equal to Java 16, as it uses jpackage.
+For this to work you need to have 7zip (for portable) and nsis (for installer) installed, and you need to provide a jdk under "jvm-creator".
 
 ### Libraries
 
