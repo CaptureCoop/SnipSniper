@@ -28,15 +28,24 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		javaLocation = GetExePath() + "\\SnipSniper\\jdk\\bin\\javaw.exe";
 		fclose(file);
 	}
+	command += javaLocation;
+
+#ifdef WIN
+    command += " -Dplatform=win";
+#endif
+#ifdef WIN_INSTALLED
+    command += " -Dplatform=win_installed";
+#endif
+
 #ifdef NORMAL
-	command += javaLocation + " -jar SnipSniper.jar";
+	command += " -jar SnipSniper.jar";
 #endif
 #ifdef EDITOR
-	command += javaLocation + " -jar SnipSniper.jar -editor";
+	command += " -jar SnipSniper.jar -editor";
 #endif
 
 #ifdef VIEWER
-	command += javaLocation + " -jar SnipSniper.jar -viewer";
+	command += " -jar SnipSniper.jar -viewer";
 #endif
 
 	for(int i = 1; i < _argc; i++) {

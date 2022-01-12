@@ -1,3 +1,0 @@
-main-class=net.snipsniper.Main
-icon=src/main/resources/net/snipsniper/resources/img/icons/viewer.ico
-java-options=-Dplatform=win_installed -DlaunchType=viewer

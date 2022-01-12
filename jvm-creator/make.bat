@@ -1,5 +1,7 @@
 @echo off
 set initialPath=%cd%
+set title=jvm-creator: 
+set cFolder=%~dp0
 cd %~dp0
 
 IF "%~1" == "" goto help
@@ -17,41 +19,40 @@ goto exit
 
 :build
 if not exist jdk\ (
-	echo jdk folder not found, please place as "jdk"
+	echo %title%jdk folder not found, please place as "jdk"
 	goto exit
 )
 
-if not exist SnipSniper.jar (
-	echo SnipSniper.jar is missing, please place as "SnipSniper.jar"
-	goto exit
+set jarPath=%cFolder%../build/libs/SnipSniper.jar
+if not exist %jarPath% (
+	if not exist SnipSniper.jar (
+		echo %title%SnipSniper.jar missing! Try building with gradle or place SnipSniper.jar here
+		goto exit
+	)
+	jarPath=%cFolder%SnipSniper.jar
 )
 
-echo Cleaning...
-if exist output\ rmdir /Q /S output
-if exist jdeps-output.txt del jdeps-output.txt
-if exist powerjdep-output.txt del powerjdep-output.txt
+call :clean
+echo %title%Building...
+echo %title%Running jdeps on SnipSniper.jar...
+%cFolder%jdk\bin\jdeps.exe %jarPath% >> %cFolder%jdeps-output.txt
+echo %title%Running PowerJDEP.jar on jdeps-output.txt...
+%cFolder%jdk\bin\java.exe -jar %cFolder%PowerJDEP.jar %cFolder%jdeps-output.txt -jlink-pretty >> %cFolder%powerjdep-output.txt
 
-echo Running jdeps on SnipSniper.jar...
-jdk\bin\jdeps.exe SnipSniper.jar >> jdeps-output.txt
-echo Running PowerJDEP.jar on jdeps-output.txt...
-jdk\bin\java.exe -jar PowerJDEP.jar jdeps-output.txt -jlink-pretty >> powerjdep-output.txt
+set /p modules=<%cFolder%powerjdep-output.txt
 
-set /p modules=<powerjdep-output.txt
+echo %title%Running jlink with powerjdep-output.txt...
+%cFolder%jdk\bin\jlink.exe --output %cFolder%output\jdk\ --add-modules %modules%
 
-echo Running jlink with powerjdep-output.txt...
-jdk\bin\jlink.exe --output output\jdk\ --add-modules %modules%
-
-echo Done!
+echo %title%Done!
 goto exit
 
 :clean
-echo Cleaning files...
+echo %title%Cleaning...
 if exist output\ rmdir /Q /S output
-if exist jdk\ rmdir /Q /S jdk
-if exist SnipSniper.jar del /Q /S SnipSniper.jar >> nul
 if exist powerjdep-output.txt del /Q /S powerjdep-output.txt >> nul
 if exist jdeps-output.txt del /Q /S jdeps-output.txt >> nul
-echo Done!
+echo %title%Done!
 goto exit
 
 :exit
