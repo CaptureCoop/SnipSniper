@@ -68,16 +68,16 @@ goto :EOF
 :prepare
 echo Preparing files...
 mkdir release
-robocopy jvm-creator/output/jdk/ release/SnipSniper/jdk/ /E > nul
-robocopy exe-creator/output/ release/ /E > nul
-xcopy build\libs\SnipSniper.jar release\ > nul
+robocopy jvm-creator/output/jdk/ release/raw/SnipSniper/jdk/ /E > nul
+robocopy exe-creator/output/ release/raw/ /E > nul
+xcopy build\libs\SnipSniper.jar release\raw\ > nul
 echo Done preparing files
 goto :EOF
 
 :portable
 echo Zipping portable...
-cd release\
-"%zip%" a output\SnipSniper_Win_Portable.zip *
+cd release\raw\
+"%zip%" a ..\output\SnipSniper_Win_Portable.zip *
 cd %initialPath%
 goto :EOF
 
@@ -94,6 +94,7 @@ call :jar
 call :jvm
 call :exe
 call :prepare
+call :portable
 goto exit
 
 :exit
