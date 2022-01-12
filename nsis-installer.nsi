@@ -22,6 +22,16 @@
 	ShowUninstDetails "show"
 
 	InstallDirRegKey HKLM "Software\${PRODUCT}" ""
+	
+	!define /file PRODUCT_VERSION "version.txt"
+	!define /file VERSION "version.txt"
+
+	;Add .0 at the end because it wants 4 digits
+	VIProductVersion "${PRODUCT_VERSION}.0"
+	VIFileVersion "${VERSION}.0"
+	VIAddVersionKey "FileVersion" "${VERSION}.0"
+	VIAddVersionKey "LegalCopyright" "2022 CaptureCoop.org"
+	VIAddVersionKey "FileDescription" "SnipSniper Installer"
 
 ;--------------------------------
 ;Interface Settings
