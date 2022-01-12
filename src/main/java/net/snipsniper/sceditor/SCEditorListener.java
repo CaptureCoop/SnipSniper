@@ -92,7 +92,7 @@ public class SCEditorListener extends SnipScopeListener {
         if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_S)) {
             if(scEditorWindow.isDirty)
                 scEditorWindow.saveImage();
-            scEditorWindow.dispose();
+            scEditorWindow.close();
         }
 
         if(scEditorWindow.getInputContainer().areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_Z)) {
@@ -161,7 +161,7 @@ public class SCEditorListener extends SnipScopeListener {
         if(mouseEvent.getButton() == 3) {
             if(scEditorWindow.isDirty)
                 scEditorWindow.saveImage();
-            scEditorWindow.dispose();
+            scEditorWindow.close();
         }
 
         scEditorWindow.repaint();

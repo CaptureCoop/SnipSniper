@@ -65,12 +65,15 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
     private final JScrollPane ezModeStampSettingsScrollPane;
 
     private final JTabbedPane ezModeStampPanelTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
+
+    private boolean isStandalone;
     public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         instance = this;
         this.config = config;
         this.title = title;
         this.saveLocation = saveLocation;
         this.inClipboard = inClipboard;
+        this.isStandalone = isStandalone;
 
         image = ImageUtils.ensureAlphaLayer(image);
 
@@ -279,8 +282,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                if(isStandalone)
-                    SnipSniper.exit(false);
                 close();
             }
         });
@@ -469,6 +470,9 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
     public void close() {
         for(IClosable wnd : cWindows)
             wnd.close();
+        dispose();
+        if(isStandalone)
+            SnipSniper.exit(false);
     }
 
     public void setStampVisible(boolean enabled) {
