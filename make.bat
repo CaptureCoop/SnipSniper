@@ -2,6 +2,7 @@
 
 set initialPath=%cd%
 set zip=%programFiles%\7-Zip\7z.exe
+set nsis=%ProgramFiles(x86)%\NSIS\makensis.exe
 
 IF "%~1" == "" goto help
 
@@ -75,6 +76,19 @@ goto :EOF
 	cd %initialPath%
 goto :EOF
 
+:installer
+	echo Creating installer...
+	call :clean
+	call gradlew build
+	call exe-creator/make build WIN_INSTALLED
+	call jvm-creator/make build
+	call :prepare
+	if not exist release\output\ (
+		mkdir release\output\
+	)
+	"%nsis%" nsis-installer.nsi
+goto :EOF
+
 :prepare
 	echo Preparing files...
 	mkdir release
@@ -89,6 +103,7 @@ goto :EOF
 	call :clean all
 	call :jar
 	call :portable
+	call :installer
 goto exit
 
 :exit
