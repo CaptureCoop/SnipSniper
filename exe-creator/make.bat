@@ -30,6 +30,10 @@ goto exit
 
 :build
 call :clean
+if "%~2"=="" (
+    echo Please provide a PlatformType! Check c++ file for clues.
+    goto exit
+)
 echo %title%Building...
 set escapedFolder=%cFolder:\=/%
 set icoPath=%escapedFolder%../src/main/resources/net/snipsniper/resources/img/icons/
@@ -52,11 +56,7 @@ echo MAINICON ICON "%~1" >> %cFolder%src\resources.rc
 echo %title%Compiling resources.rc for icon %~1...
 windres %cFolder%src\resources.rc -o %cFolder%output\res.ress
 echo %title%Compiling code.cpp to %~2.exe with platformType %~4
-set platformType=
-if not "%~4"=="" (
-    set platformType=-D%~4
-)
-c++ -D%~3 %platformType% -Wl,--subsystem,windows %cFolder%src\code.cpp %cFolder%output\res.ress -o %cFolder%output\%~2.exe -s -Os -static-libgcc -static-libstdc++
+c++ -D%~3 -D%~4 %platformType% -Wl,--subsystem,windows %cFolder%src\code.cpp %cFolder%output\res.ress -o %cFolder%output\%~2.exe -s -Os -static-libgcc -static-libstdc++
 echo %title%Cleaning resource files...
 del %cFolder%output\res.ress
 del %cFolder%src\resources.rc
