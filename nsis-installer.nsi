@@ -175,23 +175,23 @@ SectionEnd
 ;Uninstaller
 
 Section "Uninstall"
-  ;Remove all registry keys
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}"
-  DeleteRegKey HKLM "Software\${PRODUCT}"
+	;Remove all registry keys
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT}"
+	DeleteRegKey HKLM "Software\${PRODUCT}"
 
-  RMDir /r "$INSTDIR\*.*"
-  RMDir "$INSTDIR"
+	RMDir /r "$INSTDIR\*.*"
+	RMDir "$INSTDIR"
 
-  Delete "$SMPROGRAMS\${PRODUCT}\*.*"
-  RmDir  "$SMPROGRAMS\${PRODUCT}"
-  
-  Delete "$desktop\SnipSniper.lnk"
-  Delete "$desktop\SnipSniper Viewer.lnk"
-  Delete "$desktop\SnipSniper Editor.lnk" 
+	Delete "$SMPROGRAMS\${PRODUCT}\*.*"
+	RmDir  "$SMPROGRAMS\${PRODUCT}"
+
+	Delete "$desktop\SnipSniper.lnk"
+	Delete "$desktop\SnipSniper Viewer.lnk"
+	Delete "$desktop\SnipSniper Editor.lnk" 
 SectionEnd
 
 ;--------------------------------
 ;After Installation Function
 Function .onInstSuccess
-  ExecShell "open" "microsoft-edge:${AFTER_INSTALLATION_URL}"
+	ExecShell "open" "microsoft-edge:${AFTER_INSTALLATION_URL}"
 FunctionEnd
