@@ -55,7 +55,6 @@
   ;For the installer
   !insertmacro MUI_PAGE_WELCOME # simply remove this and other pages if you don't want it
   !insertmacro MUI_PAGE_LICENSE "LICENSE" # link to an ANSI encoded license file
-  !insertmacro MUI_PAGE_COMPONENTS # remove if you don't want to list components
   !insertmacro MUI_PAGE_INSTFILES
   !insertmacro MUI_PAGE_FINISH
 
