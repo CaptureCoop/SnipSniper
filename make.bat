@@ -82,9 +82,9 @@ cd %initialPath%
 goto :EOF
 
 :moveJar
-cd release
+cd release\raw\
 echo Moving jar...
-xcopy SnipSniper.jar output\ > nul
+xcopy SnipSniper.jar ..\output\ > nul
 cd %initialPath%
 goto :EOF
 
@@ -94,6 +94,7 @@ call :jar
 call :jvm
 call :exe
 call :prepare
+call :moveJar
 call :portable
 goto exit
 
