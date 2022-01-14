@@ -1,20 +1,20 @@
 #include <tchar.h>
 #include <windows.h>
 #include <string>
-#include<stdio.h>
+#include <stdio.h>
 
 std::string GetExeFileName() {
-  char buffer[MAX_PATH];
-  GetModuleFileName( NULL, buffer, MAX_PATH );
-  return std::string(buffer);
+	char buffer[MAX_PATH];
+	GetModuleFileName( NULL, buffer, MAX_PATH );
+	return std::string(buffer);
 }
 
 std::string GetExePath() {
-  std::string f = GetExeFileName();
-  return f.substr(0, f.find_last_of("\\/"));
+	std::string f = GetExeFileName();
+	return f.substr(0, f.find_last_of("\\/"));
 }
 
-int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {   
+int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPTSTR lpCmdLine, int nCmdShow) {   
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
 
@@ -68,7 +68,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		SetInformationJobObject(ghJob, JobObjectExtendedLimitInformation, &jeli, sizeof(jeli));
 	}
 	
-    if(!CreateProcess( NULL,  	// No module name (use command line)
+    if(!CreateProcess(NULL,  	// No module name (use command line)
         cmdline,              	// Command line
         NULL,             		// Process handle not inheritable
         NULL,             		// Thread handle not inheritable
