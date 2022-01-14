@@ -10,12 +10,8 @@ if %1==help goto help
 if %1==clean goto clean
 if %1==open goto open
 if %1==jar goto jar
-if %1==jvm goto jvm
-if %1==exe goto exe
-if %1==prepare goto prepare
 if %1==portable goto portable
 if %1==installer goto installer
-if %1==moveJar goto moveJar
 if %1==full goto full
 
 :help
