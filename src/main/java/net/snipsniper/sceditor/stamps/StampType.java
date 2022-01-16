@@ -14,7 +14,7 @@ public enum StampType {
     RECTANGLE("Rectangle", "rectangle"),
     ERASER("Eraser", "ratzefummel");
 
-    private static final HashMap<StampType, Integer> indexes = new HashMap<StampType, Integer>();
+    private static final HashMap<StampType, Integer> indexCache = new HashMap<>();
     private final String title;
     private final String iconFile;
 
@@ -25,18 +25,18 @@ public enum StampType {
 
     //This way we can rearrange enums without worrying about updating their index manually
     public int getIndex() {
-        if(indexes.containsKey(this))
-            return indexes.get(this);
+        if(indexCache.containsKey(this))
+            return indexCache.get(this);
 
         int index = 0;
+        int foundIndex = -1;
         for(StampType type : StampType.values()) {
-            if (type == this) {
-                indexes.put(this, index);
-                return index;
-            }
+            if (type == this)
+                foundIndex = index;
+            indexCache.put(type, index);
             index++;
         }
-        return -1;
+        return foundIndex;
     }
 
     public String getTitle() {
