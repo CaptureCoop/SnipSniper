@@ -125,7 +125,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             public void mouseMoved(MouseEvent e) {
                 for(int i = 0; i < tabRects.length; i++) {
                     if(tabRects[i].contains(e.getPoint())) {
-                        setEzModeTitle(StampType.getByIndex(i).getTitle());
+                        setEzModeTitle(stamps[i].getType().getTitle());
                         break;
                     }
                 }
@@ -393,10 +393,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
     }
 
     public void setEzModeTitle(String title) {
-        if(title == null) {
-            ezModeTitle.setText(StampType.getByIndex(selectedStamp).getTitle());
-            return;
-        }
         ezModeTitle.setText(title);
     }
 
@@ -405,7 +401,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             return;
         selectedStamp = i;
         ezModeStampPanelTabs.setSelectedIndex(i);
-        setEzModeTitle(StampType.getByIndex(i).getTitle());
+        setEzModeTitle(getSelectedStamp().getType().getTitle());
         updateEzUI(true);
     }
 
