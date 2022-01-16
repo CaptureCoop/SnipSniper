@@ -97,10 +97,14 @@ public class EditorTab extends JPanel implements ITab{
 
         final Function[] onUpdate = {null};
 
-        JComboBox<Object> stampDropdown = new JComboBox<>(StampUtils.getStampsAsString());
+        String[] stampTitles = new String[StampType.values().length];
+        for(int i = 0; i < stampTitles.length; i++) {
+            stampTitles[i] = StampType.values()[i].getTitle();
+        }
+        JComboBox<Object> stampDropdown = new JComboBox<>(stampTitles);
         stampDropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                IStamp newStamp = StampUtils.getNewIStampByIndex(stampDropdown.getSelectedIndex(), config, null);
+                IStamp newStamp = StampType.getByIndex(stampDropdown.getSelectedIndex()).getIStamp(config, null);
                 row3_stampPreview.setStamp(newStamp);
                 setupStampConfigPanel(row3_stampConfig, newStamp, row3_stampPreview, config, onUpdate[0]);
                 saveButtonUpdate[0].run();
@@ -162,7 +166,7 @@ public class EditorTab extends JPanel implements ITab{
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(Double.parseDouble(config.getFloat(configKey)+""), min, max, stepSize));
         spinner.addChangeListener(e -> {
             config.set(configKey, (int)Double.parseDouble(spinner.getValue().toString()));
-            previewPanel.setStamp(StampUtils.getNewIStampByIndex(stampIndex, config, null));
+            previewPanel.setStamp(StampType.getByIndex(stampIndex).getIStamp(config, null));
             onUpdate.run();
         });
         return spinner;
@@ -208,12 +212,13 @@ public class EditorTab extends JPanel implements ITab{
             panel.add(new InfoButton(null), gbc);
             gbc.gridx = 0;
 
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startwidth"), ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startheight"), ConfigHelper.PROFILE.editorStampCubeHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthspeed"), ConfigHelper.PROFILE.editorStampCubeWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightspeed"), ConfigHelper.PROFILE.editorStampCubeHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthminimum"), ConfigHelper.PROFILE.editorStampCubeWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightminimum"), ConfigHelper.PROFILE.editorStampCubeHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CUBE, gbc, null, onUpdate);
+            int stampIndex = StampType.CUBE.getIndex();
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startwidth"), ConfigHelper.PROFILE.editorStampCubeWidth, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startheight"), ConfigHelper.PROFILE.editorStampCubeHeight, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthspeed"), ConfigHelper.PROFILE.editorStampCubeWidthSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightspeed"), ConfigHelper.PROFILE.editorStampCubeHeightSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthminimum"), ConfigHelper.PROFILE.editorStampCubeWidthMinimum, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightminimum"), ConfigHelper.PROFILE.editorStampCubeHeightMinimum, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
         } else if(stamp instanceof CounterStamp) {
             panel.add(configWindow.createJLabel(LangManager.getItem("config_label_startcolor"), JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
@@ -222,13 +227,14 @@ public class EditorTab extends JPanel implements ITab{
             panel.add(new InfoButton(null), gbc);
             gbc.gridx = 0;
 
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startwidth"), ConfigHelper.PROFILE.editorStampCounterWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startheight"), ConfigHelper.PROFILE.editorStampCounterHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_generalspeed"), ConfigHelper.PROFILE.editorStampCounterSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthspeed"), ConfigHelper.PROFILE.editorStampCounterWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightspeed"), ConfigHelper.PROFILE.editorStampCounterHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthminimum"), ConfigHelper.PROFILE.editorStampCounterWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightminimum"), ConfigHelper.PROFILE.editorStampCounterHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
+            int stampIndex = StampType.COUNTER.getIndex();
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startwidth"), ConfigHelper.PROFILE.editorStampCounterWidth, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startheight"), ConfigHelper.PROFILE.editorStampCounterHeight, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_generalspeed"), ConfigHelper.PROFILE.editorStampCounterSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthspeed"), ConfigHelper.PROFILE.editorStampCounterWidthSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightspeed"), ConfigHelper.PROFILE.editorStampCounterHeightSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthminimum"), ConfigHelper.PROFILE.editorStampCounterWidthMinimum, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightminimum"), ConfigHelper.PROFILE.editorStampCounterHeightMinimum, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
 
             panel.add(configWindow.createJLabel(LangManager.getItem("config_label_solidcolor"), JLabel.RIGHT, JLabel.CENTER), gbc);
             JCheckBox cbSolidColor = new JCheckBox();
@@ -257,8 +263,8 @@ public class EditorTab extends JPanel implements ITab{
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
 
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_fontsizemodifier"), ConfigHelper.PROFILE.editorStampCounterFontSizeModifier, 0.1, 10, 0.01D, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_bordermofizier"), ConfigHelper.PROFILE.editorStampCounterBorderModifier, 1, 999, 1, previewPanel, config, StampUtils.INDEX_COUNTER, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_fontsizemodifier"), ConfigHelper.PROFILE.editorStampCounterFontSizeModifier, 0.1, 10, 0.01D, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_bordermofizier"), ConfigHelper.PROFILE.editorStampCounterBorderModifier, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
         } else if(stamp instanceof CircleStamp) {
             panel.add(configWindow.createJLabel(LangManager.getItem("config_label_startcolor"), JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
@@ -266,14 +272,15 @@ public class EditorTab extends JPanel implements ITab{
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
 
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startwidth"), ConfigHelper.PROFILE.editorStampCircleWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startheight"), ConfigHelper.PROFILE.editorStampCircleHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_generalspeed"), ConfigHelper.PROFILE.editorStampCircleSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthspeed"), ConfigHelper.PROFILE.editorStampCircleWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightspeed"), ConfigHelper.PROFILE.editorStampCircleHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthminimum"), ConfigHelper.PROFILE.editorStampCircleWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightminimum"), ConfigHelper.PROFILE.editorStampCircleHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_thickness"), ConfigHelper.PROFILE.editorStampCircleThickness, 1, 999, 1, previewPanel, config, StampUtils.INDEX_CIRCLE, gbc, null, onUpdate);
+            int stampIndex = StampType.CIRCLE.getIndex();
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startwidth"), ConfigHelper.PROFILE.editorStampCircleWidth, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startheight"), ConfigHelper.PROFILE.editorStampCircleHeight, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_generalspeed"), ConfigHelper.PROFILE.editorStampCircleSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthspeed"), ConfigHelper.PROFILE.editorStampCircleWidthSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightspeed"), ConfigHelper.PROFILE.editorStampCircleHeightSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthminimum"), ConfigHelper.PROFILE.editorStampCircleWidthMinimum, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightminimum"), ConfigHelper.PROFILE.editorStampCircleHeightMinimum, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_thickness"), ConfigHelper.PROFILE.editorStampCircleThickness, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
         } else if(stamp instanceof SimpleBrush) {
             panel.add(configWindow.createJLabel(LangManager.getItem("config_label_startcolor"), JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
@@ -281,9 +288,10 @@ public class EditorTab extends JPanel implements ITab{
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
 
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_brushsize"), ConfigHelper.PROFILE.editorStampSimpleBrushSize, 1, 999, 1, previewPanel, config, StampUtils.INDEX_SIMPLE_BRUSH, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_brushsizespeed"), ConfigHelper.PROFILE.editorStampSimpleBrushSizeSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_SIMPLE_BRUSH, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_linepointdistance"), ConfigHelper.PROFILE.editorStampSimpleBrushDistance, 1, 999, 1, previewPanel, config, StampUtils.INDEX_SIMPLE_BRUSH, gbc, null, onUpdate);
+            int stampIndex = StampType.SIMPLE_BRUSH.getIndex();
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_brushsize"), ConfigHelper.PROFILE.editorStampSimpleBrushSize, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_brushsizespeed"), ConfigHelper.PROFILE.editorStampSimpleBrushSizeSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_linepointdistance"), ConfigHelper.PROFILE.editorStampSimpleBrushDistance, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
             panel.add(new JPanel()); //Padding
         } else if(stamp instanceof TextStamp) {
             panel.add(configWindow.createJLabel(LangManager.getItem("config_label_startcolor"), JLabel.RIGHT, JLabel.CENTER), gbc);
@@ -292,8 +300,9 @@ public class EditorTab extends JPanel implements ITab{
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
 
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_defaultfontsize"), ConfigHelper.PROFILE.editorStampTextDefaultFontSize, 1, 999, 1, previewPanel, config, StampUtils.INDEX_TEXT, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_fontsizechangespeed"), ConfigHelper.PROFILE.editorStampTextDefaultSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_TEXT, gbc, null, onUpdate);
+            int stampIndex = StampType.TEXT.getIndex();
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_defaultfontsize"), ConfigHelper.PROFILE.editorStampTextDefaultFontSize, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_fontsizechangespeed"), ConfigHelper.PROFILE.editorStampTextDefaultSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
             for(int i = 0; i < 6; i++) panel.add(new JPanel(), gbc); //Padding
             //TODO: Draw it in the middle, possibly by giving TextStamp a getTextWidth() function and adding an edgecase to the Stamp Renderer, to move it to the left
         } else if(stamp instanceof RectangleStamp) {
@@ -303,13 +312,14 @@ public class EditorTab extends JPanel implements ITab{
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
 
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startwidth"), ConfigHelper.PROFILE.editorStampRectangleWidth, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startheight"), ConfigHelper.PROFILE.editorStampRectangleHeight, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthspeed"), ConfigHelper.PROFILE.editorStampRectangleWidthSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightspeed"), ConfigHelper.PROFILE.editorStampRectangleHeightSpeed, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthminimum"), ConfigHelper.PROFILE.editorStampRectangleWidthMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightminimum"), ConfigHelper.PROFILE.editorStampRectangleHeightMinimum, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, null, onUpdate);
-            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_thickness"), ConfigHelper.PROFILE.editorStampRectangleThickness, 1, 999, 1, previewPanel, config, StampUtils.INDEX_RECTANGLE, gbc, null, onUpdate);
+            int stampIndex = StampType.RECTANGLE.getIndex();
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startwidth"), ConfigHelper.PROFILE.editorStampRectangleWidth, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_startheight"), ConfigHelper.PROFILE.editorStampRectangleHeight, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthspeed"), ConfigHelper.PROFILE.editorStampRectangleWidthSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightspeed"), ConfigHelper.PROFILE.editorStampRectangleHeightSpeed, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_widthminimum"), ConfigHelper.PROFILE.editorStampRectangleWidthMinimum, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_heightminimum"), ConfigHelper.PROFILE.editorStampRectangleHeightMinimum, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
+            setupStampConfigPanelSpinnerWithLabel(panel, LangManager.getItem("config_label_thickness"), ConfigHelper.PROFILE.editorStampRectangleThickness, 1, 999, 1, previewPanel, config, stampIndex, gbc, null, onUpdate);
         } else {
             panel.add(configWindow.createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER));
             for (int i = 0; i < 15; i++) panel.add(new JLabel());

@@ -186,8 +186,8 @@ public class CircleStamp implements IStamp{
     }
 
     @Override
-    public StampUtils.TYPE getType() {
-        return StampUtils.TYPE.CIRCLE;
+    public StampType getType() {
+        return StampType.CIRCLE;
     }
 
     @Override

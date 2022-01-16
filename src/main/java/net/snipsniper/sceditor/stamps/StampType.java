@@ -6,19 +6,21 @@ import net.snipsniper.sceditor.SCEditorWindow;
 import java.util.HashMap;
 
 public enum StampType {
-    CUBE("Cube"),
-    COUNTER("Counter"),
-    CIRCLE("Circle"),
-    SIMPLE_BRUSH("Simple Brush"),
-    TEXT("Text"),
-    RECTANGLE("Rectangle"),
-    ERASER("Eraser");
+    CUBE("Marker", "marker"),
+    COUNTER("Counter", "counter"),
+    CIRCLE("Circle", "circle"),
+    SIMPLE_BRUSH("Simple Brush", "brush"),
+    TEXT("Text", "text_tool"),
+    RECTANGLE("Rectangle", "rectangle"),
+    ERASER("Eraser", "ratzefummel");
 
     private static final HashMap<StampType, Integer> indexes = new HashMap<StampType, Integer>();
     private final String title;
+    private final String iconFile;
 
-    StampType(String title) {
+    StampType(String title, String iconFile) {
         this.title = title;
+        this.iconFile = iconFile;
     }
 
     //This way we can rearrange enums without worrying about updating their index manually
@@ -39,6 +41,10 @@ public enum StampType {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getIconFile() {
+        return iconFile;
     }
 
     public IStamp getIStamp(Config config, SCEditorWindow scEditorWindow) {

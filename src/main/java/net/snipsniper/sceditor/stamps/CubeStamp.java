@@ -204,8 +204,8 @@ public class CubeStamp implements IStamp{
     }
 
     @Override
-    public StampUtils.TYPE getType() {
-        return StampUtils.TYPE.CUBE;
+    public StampType getType() {
+        return StampType.CUBE;
     }
 
     @Override

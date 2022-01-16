@@ -120,13 +120,10 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             ezIconType = "white";
         }
 
-        addEZModeStampButton("Marker", "marker", ezIconType, 0);
-        addEZModeStampButton("Counter", "counter", ezIconType, 1);
-        addEZModeStampButton("Circle", "circle", ezIconType, 2);
-        addEZModeStampButton("Brush", "brush", ezIconType, 3);
-        addEZModeStampButton("Text", "text_tool", ezIconType, 4);
-        addEZModeStampButton("Rectangle", "rectangle", ezIconType, 5);
-        addEZModeStampButton("Eraser", "ratzefummel", ezIconType, 6);
+        for(int i = 0; i < StampType.getSize(); i++) {
+            StampType type = StampType.getByIndex(i);
+            addEZModeStampButton(type.getTitle(), type.getIconFile(), ezIconType, i);
+        }
         Rectangle[] tabRects = new Rectangle[ezModeStampPanelTabs.getTabCount()];
         //TODO: Make this dynamic if we ever allow resizing
         for(int i = 0; i < tabRects.length; i++)
@@ -137,7 +134,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             public void mouseMoved(MouseEvent e) {
                 for(int i = 0; i < tabRects.length; i++) {
                     if(tabRects[i].contains(e.getPoint())) {
-                        setEzModeTitle(StampUtils.getStampAsString(i));
+                        setEzModeTitle(StampType.getByIndex(i).getTitle());
                         break;
                     }
                 }
@@ -406,7 +403,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
     public void setEzModeTitle(String title) {
         if(title == null) {
-            ezModeTitle.setText(StampUtils.getStampAsString(selectedStamp));
+            ezModeTitle.setText(StampType.getByIndex(selectedStamp).getTitle());
             return;
         }
         ezModeTitle.setText(title);
@@ -417,7 +414,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             return;
         selectedStamp = i;
         ezModeStampPanelTabs.setSelectedIndex(i);
-        setEzModeTitle(StampUtils.getStampAsString(i));
+        setEzModeTitle(StampType.getByIndex(i).getTitle());
         updateEzUI(true);
     }
 

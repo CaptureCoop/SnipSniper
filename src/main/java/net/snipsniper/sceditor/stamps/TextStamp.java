@@ -218,8 +218,8 @@ public class TextStamp implements IStamp{
     }
 
     @Override
-    public StampUtils.TYPE getType() {
-        return StampUtils.TYPE.TEXT;
+    public StampType getType() {
+        return StampType.TEXT;
     }
 
     @Override

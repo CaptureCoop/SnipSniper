@@ -183,8 +183,8 @@ public class RectangleStamp implements IStamp {
     }
 
     @Override
-    public StampUtils.TYPE getType() {
-        return StampUtils.TYPE.RECTANGLE;
+    public StampType getType() {
+        return StampType.RECTANGLE;
     }
 
     @Override

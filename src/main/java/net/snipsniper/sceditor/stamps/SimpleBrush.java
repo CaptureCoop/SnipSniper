@@ -138,8 +138,8 @@ public class SimpleBrush implements IStamp {
     }
 
     @Override
-    public StampUtils.TYPE getType() {
-        return StampUtils.TYPE.BRUSH;
+    public StampType getType() {
+        return StampType.SIMPLE_BRUSH;
     }
 
     @Override
