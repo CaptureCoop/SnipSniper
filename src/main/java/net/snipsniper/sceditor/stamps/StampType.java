@@ -9,9 +9,9 @@ public enum StampType {
     CUBE("Marker", "marker"),
     COUNTER("Counter", "counter"),
     CIRCLE("Circle", "circle"),
+    RECTANGLE("Rectangle", "rectangle"),
     SIMPLE_BRUSH("Simple Brush", "brush"),
     TEXT("Text", "text_tool"),
-    RECTANGLE("Rectangle", "rectangle"),
     ERASER("Eraser", "ratzefummel");
 
     private static final HashMap<StampType, Integer> indexCache = new HashMap<>();
