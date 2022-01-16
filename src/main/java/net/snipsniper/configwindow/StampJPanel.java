@@ -13,7 +13,7 @@ public class StampJPanel extends JPanel {
     private IStamp stamp;
     private BufferedImage background;
     private boolean backgroundEnabled = true;
-    private RenderingHints qualityHints;
+    private final RenderingHints qualityHints = Utils.getRenderingHints();
 
     private int margin = 0;
 
@@ -45,10 +45,6 @@ public class StampJPanel extends JPanel {
 
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
-
-        if(qualityHints == null) {
-            qualityHints = Utils.getRenderingHints();
-        }
 
         g2d.setRenderingHints(qualityHints);
 

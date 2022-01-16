@@ -44,7 +44,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
     public boolean isDirty = false;
 
-    private final RenderingHints qualityHints;
+    private final RenderingHints qualityHints = Utils.getRenderingHints();
 
     public static final String FILENAME_MODIFIER = "_edited";
 
@@ -83,8 +83,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
         StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT);
 
-        qualityHints = Utils.getRenderingHints();
-
         if(image == null) {
             if (config.getBool(ConfigHelper.PROFILE.standaloneStartWithEmpty)) {
                 Dimension imgSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -110,6 +108,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             ezIconType = "white";
         }
 
+        //Setting up stamp array and stamp ui buttons
         for(int i = 0; i < stamps.length; i++) {
             StampType type = StampType.getByIndex(i);
             stamps[i] = type.getIStamp(config, this);
