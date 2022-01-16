@@ -85,11 +85,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
         qualityHints = Utils.getRenderingHints();
 
-        LogManager.log("Loading stamps", LogLevel.INFO);
-
-        for(int i = 0; i < stamps.length; i++)
-            stamps[i] = StampType.getByIndex(i).getIStamp(config, this);
-
         if(image == null) {
             if (config.getBool(ConfigHelper.PROFILE.standaloneStartWithEmpty)) {
                 Dimension imgSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -115,10 +110,12 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             ezIconType = "white";
         }
 
-        for(int i = 0; i < StampType.getSize(); i++) {
+        for(int i = 0; i < stamps.length; i++) {
             StampType type = StampType.getByIndex(i);
+            stamps[i] = type.getIStamp(config, this);
             addEZModeStampButton(type.getTitle(), type.getIconFile(), ezIconType, i);
         }
+
         Rectangle[] tabRects = new Rectangle[ezModeStampPanelTabs.getTabCount()];
         //TODO: Make this dynamic if we ever allow resizing
         for(int i = 0; i < tabRects.length; i++)
