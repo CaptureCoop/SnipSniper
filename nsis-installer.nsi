@@ -49,42 +49,51 @@
 	;No description for components
 	!define MUI_COMPONENTSPAGE_NODESC
 
-
-	var desktop_shortcut
-	var autostart_shortcut
-
-	Function finishpageAction
-		Pop $desktop_shortcut
-		${NSD_GetState} $desktop_shortcut $0
-		${If} $0 == 1
-			CreateShortcut "$desktop\SnipSniper.lnk" "$INSTDIR\SnipSniper.exe"
-			CreateShortcut "$desktop\SnipSniper Editor.lnk" "$INSTDIR\SnipSniper Editor.exe"
-			CreateShortcut "$desktop\SnipSniper Viewer.lnk" "$INSTDIR\SnipSniper Viewer.exe"
-		${EndIf}
-	FunctionEnd
-
 ;--------------------------------
-;Shortcut page
+;Shortcut functions
+
+var desktop_shortcut_checkbox
+var desktop_shortcut_checkbox_state
+
+var autostart_shortcut_checkbox
+var autostart_shortcut_checkbox_state
 
 Function shortcutPage
-!insertmacro MUI_HEADER_TEXT "Shortcuts" "Choose what kind of shortcuts to create"
+	!insertmacro MUI_HEADER_TEXT "Shortcuts" "Choose what kind of shortcuts to create"
 
-nsDialogs::Create 1018
-Pop $0
-${If} $0 == error
-    Abort
-${EndIf}
+	nsDialogs::Create 1018
+	Pop $0
+	${If} $0 == error
+		Abort
+	${EndIf}
 
-${NSD_CreateLabel} 0 0 100% 12u "Choose your preferences below"
-Pop $0
+	${NSD_CreateLabel} 0 0 100% 12u "Choose your preferences below"
+	Pop $0
 
-${NSD_CreateCheckbox} 0 25 100% 15 "Create desktop shortcuts"
-Pop $desktop_shortcut
+	${NSD_CreateCheckbox} 0 25 100% 15 "Create desktop shortcuts"
+	Pop $desktop_shortcut_checkbox
 
-${NSD_CreateCheckbox} 0 50 100% 15 "Add to autostart"
-Pop $autostart_shortcut
+	${NSD_CreateCheckbox} 0 50 100% 15 "Add to autostart"
+	Pop $autostart_shortcut_checkbox
 
-nsDialogs::Show
+	nsDialogs::Show
+FunctionEnd
+
+Function shortcutPageLeave
+	${NSD_GetState} $desktop_shortcut_checkbox $desktop_shortcut_checkbox_state
+	${NSD_GetState} $autostart_shortcut_checkbox $autostart_shortcut_checkbox_state
+FunctionEnd
+
+Function finishpageAction
+	${If} $desktop_shortcut_checkbox_state == 1
+		CreateShortcut "$desktop\SnipSniper.lnk" "$INSTDIR\SnipSniper.exe"
+		CreateShortcut "$desktop\SnipSniper Editor.lnk" "$INSTDIR\SnipSniper Editor.exe"
+		CreateShortcut "$desktop\SnipSniper Viewer.lnk" "$INSTDIR\SnipSniper Viewer.exe"
+	${EndIf}
+	
+	${If} $autostart_shortcut_checkbox_state == 1
+		CreateShortCut "$SMPROGRAMS\Startup\SnipSniper.lnk" "$INSTDIR\SnipSniper.exe"
+	${EndIf}
 FunctionEnd
 
 ;--------------------------------
@@ -94,7 +103,7 @@ FunctionEnd
 	!insertmacro MUI_PAGE_WELCOME # simply remove this and other pages if you don't want it
 	!insertmacro MUI_PAGE_LICENSE "LICENSE" # link to an ANSI encoded license file
     !insertmacro MUI_PAGE_DIRECTORY
-	Page custom shortcutPage 
+	Page custom shortcutPage shortcutPageLeave
 	!insertmacro MUI_PAGE_INSTFILES
 	!define MUI_PAGE_CUSTOMFUNCTION_PRE finishpageaction
 	!define MUI_FINISHPAGE_RUN "$INSTDIR\SnipSniper.exe"
@@ -219,10 +228,12 @@ Section "Uninstall"
 	Delete "$desktop\SnipSniper.lnk"
 	Delete "$desktop\SnipSniper Viewer.lnk"
 	Delete "$desktop\SnipSniper Editor.lnk" 
+	Delete "$SMPROGRAMS\Startup\SnipSniper.lnk"
+
 SectionEnd
 
 ;--------------------------------
 ;After Installation Function
 Function .onInstSuccess
-	;ExecShell "open" "microsoft-edge:${AFTER_INSTALLATION_URL}"
+	ExecShell "open" "microsoft-edge:${AFTER_INSTALLATION_URL}"
 FunctionEnd
