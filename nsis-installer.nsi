@@ -49,22 +49,22 @@
 	;No description for components
 	!define MUI_COMPONENTSPAGE_NODESC
 
-	;Replace readme at the end with desktop shortcuts
-	Function finishpageaction
-		CreateShortcut "$desktop\SnipSniper.lnk" "$INSTDIR\SnipSniper.exe"
-		CreateShortcut "$desktop\SnipSniper Editor.lnk" "$INSTDIR\SnipSniper Editor.exe"
-		CreateShortcut "$desktop\SnipSniper Viewer.lnk" "$INSTDIR\SnipSniper Viewer.exe"
-	FunctionEnd
 
-	!define MUI_FINISHPAGE_SHOWREADME ""
-	!define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
-	!define MUI_FINISHPAGE_SHOWREADME_TEXT "Create Desktop Shortcuts"
-	!define MUI_FINISHPAGE_SHOWREADME_FUNCTION finishpageaction
+	var desktop_shortcut
+	var autostart_shortcut
+
+	Function finishpageAction
+		Pop $desktop_shortcut
+		${NSD_GetState} $desktop_shortcut $0
+		${If} $0 == 1
+			CreateShortcut "$desktop\SnipSniper.lnk" "$INSTDIR\SnipSniper.exe"
+			CreateShortcut "$desktop\SnipSniper Editor.lnk" "$INSTDIR\SnipSniper Editor.exe"
+			CreateShortcut "$desktop\SnipSniper Viewer.lnk" "$INSTDIR\SnipSniper Viewer.exe"
+		${EndIf}
+	FunctionEnd
 
 ;--------------------------------
 ;Shortcut page
-var desktop_shortcut
-var autostart_shortcut
 
 Function shortcutPage
 !insertmacro MUI_HEADER_TEXT "Shortcuts" "Choose what kind of shortcuts to create"
@@ -96,6 +96,9 @@ FunctionEnd
     !insertmacro MUI_PAGE_DIRECTORY
 	Page custom shortcutPage 
 	!insertmacro MUI_PAGE_INSTFILES
+	!define MUI_PAGE_CUSTOMFUNCTION_PRE finishpageaction
+	!define MUI_FINISHPAGE_RUN "$INSTDIR\SnipSniper.exe"
+	;!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.txt"
 	!insertmacro MUI_PAGE_FINISH
 
 	;Uninstaller
@@ -221,5 +224,5 @@ SectionEnd
 ;--------------------------------
 ;After Installation Function
 Function .onInstSuccess
-	ExecShell "open" "microsoft-edge:${AFTER_INSTALLATION_URL}"
+	;ExecShell "open" "microsoft-edge:${AFTER_INSTALLATION_URL}"
 FunctionEnd
