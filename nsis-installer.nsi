@@ -1,6 +1,7 @@
 ;--------------------------------
 ;Include Modern UI
 	!include "MUI2.nsh"
+	!include "nsDialogs.nsh"
 
 ;--------------------------------
 ;General
@@ -61,12 +62,39 @@
 	!define MUI_FINISHPAGE_SHOWREADME_FUNCTION finishpageaction
 
 ;--------------------------------
+;Shortcut page
+var desktop_shortcut
+var autostart_shortcut
+
+Function shortcutPage
+!insertmacro MUI_HEADER_TEXT "Shortcuts" "Choose what kind of shortcuts to create"
+
+nsDialogs::Create 1018
+Pop $0
+${If} $0 == error
+    Abort
+${EndIf}
+
+${NSD_CreateLabel} 0 0 100% 12u "Choose your preferences below"
+Pop $0
+
+${NSD_CreateCheckbox} 0 25 100% 15 "Create desktop shortcuts"
+Pop $desktop_shortcut
+
+${NSD_CreateCheckbox} 0 50 100% 15 "Add to autostart"
+Pop $autostart_shortcut
+
+nsDialogs::Show
+FunctionEnd
+
+;--------------------------------
 ;Pages
 
 	;Installer
 	!insertmacro MUI_PAGE_WELCOME # simply remove this and other pages if you don't want it
 	!insertmacro MUI_PAGE_LICENSE "LICENSE" # link to an ANSI encoded license file
     !insertmacro MUI_PAGE_DIRECTORY
+	Page custom shortcutPage 
 	!insertmacro MUI_PAGE_INSTFILES
 	!insertmacro MUI_PAGE_FINISH
 
