@@ -36,7 +36,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
     private final static int X_OFFSET = 8;
 
-    private final IStamp[] stamps = new IStamp[7];
+    private final IStamp[] stamps = new IStamp[StampType.getSize()];
     private int selectedStamp = 0;
 
     private final SCEditorListener listener;
@@ -87,13 +87,8 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
         LogManager.log("Loading stamps", LogLevel.INFO);
 
-        stamps[0] = new CubeStamp(config, this);
-        stamps[1] = new CounterStamp(config, this);
-        stamps[2] = new CircleStamp(config, this);
-        stamps[3] = new SimpleBrush(config, this);
-        stamps[4] = new TextStamp(config, this);
-        stamps[5] = new RectangleStamp(config, this);
-        stamps[6] = new EraserStamp(this, config);
+        for(int i = 0; i < stamps.length; i++)
+            stamps[i] = StampType.getByIndex(i).getIStamp(config, this);
 
         if(image == null) {
             if (config.getBool(ConfigHelper.PROFILE.standaloneStartWithEmpty)) {
