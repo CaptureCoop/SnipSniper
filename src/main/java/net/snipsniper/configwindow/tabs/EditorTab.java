@@ -92,7 +92,7 @@ public class EditorTab extends JPanel implements ITab{
         StampJPanel row3_stampPreview = new StampJPanel();
         row3_stampPreview.setMargin(10);
         row3_stampPreview.setBackground(ImageManager.getCodePreview());
-        IStamp stamp = new CubeStamp(config, null);
+        IStamp stamp = StampType.getByIndex(0).getIStamp(config, null);
         row3_stampPreview.setStamp(stamp);
 
         final Function[] onUpdate = {null};
