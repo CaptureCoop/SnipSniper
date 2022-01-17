@@ -36,7 +36,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
     private final static int X_OFFSET = 8;
 
-    private final IStamp[] stamps = new IStamp[7];
+    private final IStamp[] stamps = new IStamp[StampType.getSize()];
     private int selectedStamp = 0;
 
     private final SCEditorListener listener;
@@ -44,7 +44,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
     public boolean isDirty = false;
 
-    private final RenderingHints qualityHints;
+    private final RenderingHints qualityHints = Utils.getRenderingHints();
 
     public static final String FILENAME_MODIFIER = "_edited";
 
@@ -83,18 +83,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
         StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT);
 
-        qualityHints = Utils.getRenderingHints();
-
-        LogManager.log("Loading stamps", LogLevel.INFO);
-
-        stamps[0] = new CubeStamp(config, this);
-        stamps[1] = new CounterStamp(config, this);
-        stamps[2] = new CircleStamp(config, this);
-        stamps[3] = new SimpleBrush(config, this);
-        stamps[4] = new TextStamp(config, this);
-        stamps[5] = new RectangleStamp(config, this);
-        stamps[6] = new EraserStamp(this, config);
-
         if(image == null) {
             if (config.getBool(ConfigHelper.PROFILE.standaloneStartWithEmpty)) {
                 Dimension imgSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -120,13 +108,13 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             ezIconType = "white";
         }
 
-        addEZModeStampButton("Marker", "marker", ezIconType, 0);
-        addEZModeStampButton("Counter", "counter", ezIconType, 1);
-        addEZModeStampButton("Circle", "circle", ezIconType, 2);
-        addEZModeStampButton("Brush", "brush", ezIconType, 3);
-        addEZModeStampButton("Text", "text_tool", ezIconType, 4);
-        addEZModeStampButton("Rectangle", "rectangle", ezIconType, 5);
-        addEZModeStampButton("Eraser", "ratzefummel", ezIconType, 6);
+        //Setting up stamp array and stamp ui buttons
+        for(int i = 0; i < stamps.length; i++) {
+            StampType type = StampType.getByIndex(i);
+            stamps[i] = type.getIStamp(config, this);
+            addEZModeStampButton(type.getTitle(), type.getIconFile(), ezIconType, i);
+        }
+
         Rectangle[] tabRects = new Rectangle[ezModeStampPanelTabs.getTabCount()];
         //TODO: Make this dynamic if we ever allow resizing
         for(int i = 0; i < tabRects.length; i++)
@@ -137,7 +125,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             public void mouseMoved(MouseEvent e) {
                 for(int i = 0; i < tabRects.length; i++) {
                     if(tabRects[i].contains(e.getPoint())) {
-                        setEzModeTitle(StampUtils.getStampAsString(i));
+                        setEzModeTitle(stamps[i].getType().getTitle());
                         break;
                     }
                 }
@@ -405,10 +393,6 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
     }
 
     public void setEzModeTitle(String title) {
-        if(title == null) {
-            ezModeTitle.setText(StampUtils.getStampAsString(selectedStamp));
-            return;
-        }
         ezModeTitle.setText(title);
     }
 
@@ -417,7 +401,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             return;
         selectedStamp = i;
         ezModeStampPanelTabs.setSelectedIndex(i);
-        setEzModeTitle(StampUtils.getStampAsString(i));
+        setEzModeTitle(getSelectedStamp().getType().getTitle());
         updateEzUI(true);
     }
 

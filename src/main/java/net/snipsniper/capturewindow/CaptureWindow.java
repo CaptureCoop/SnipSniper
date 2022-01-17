@@ -27,7 +27,7 @@ import org.capturecoop.ccutils.utils.StringUtils;
 public class CaptureWindow extends JFrame implements WindowListener{
 	private final Sniper sniperInstance;
 	private final Config config;
-	private final RenderingHints qualityHints;
+	private final RenderingHints qualityHints = Utils.getRenderingHints();
 	private final CaptureWindowListener listener;
 
 	private Rectangle bounds = null;
@@ -44,8 +44,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		this.sniperInstance = sniperInstance;
 		config = sniperInstance.getConfig();
 		dottedLineDistance = config.getInt(ConfigHelper.PROFILE.dottedOutlineDistance);
-
-		qualityHints = Utils.getRenderingHints();
 
 		if(SystemTray.isSupported() && sniperInstance.getIconString().equals("none")) sniperInstance.getTrayIcon().setImage(ImageManager.getImage("systray/alt_icon" + sniperInstance.profileID + ".png"));
 		if(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) != 0) {

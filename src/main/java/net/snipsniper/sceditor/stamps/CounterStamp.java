@@ -213,8 +213,8 @@ public class CounterStamp implements IStamp{
     }
 
     @Override
-    public StampUtils.TYPE getType() {
-        return StampUtils.TYPE.COUNTER;
+    public StampType getType() {
+        return StampType.COUNTER;
     }
 
     @Override

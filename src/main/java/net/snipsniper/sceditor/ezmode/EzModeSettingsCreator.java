@@ -38,7 +38,7 @@ public class EzModeSettingsCreator {
             case CUBE: cube(panel, stamp); break;
             case COUNTER: counter(panel, stamp); break;
             case CIRCLE: circle(panel, stamp); break;
-            case BRUSH: brush(panel, stamp); break;
+            case SIMPLE_BRUSH: brush(panel, stamp); break;
             case TEXT: text(panel, stamp); break;
             case RECTANGLE: rectangle(panel, stamp); break;
             case ERASER: eraser(panel, stamp); break;

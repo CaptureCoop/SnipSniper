@@ -7,11 +7,10 @@ import net.snipsniper.snipscope.SnipScopeWindow;
 import java.awt.*;
 
 public class SCViewerRenderer extends SnipScopeRenderer {
-    private final RenderingHints qualityHints;
+    private final RenderingHints qualityHints = Utils.getRenderingHints();
 
     public SCViewerRenderer(SnipScopeWindow snipScopeWindow) {
         super(snipScopeWindow);
-        qualityHints = Utils.getRenderingHints();
     }
 
     @Override
