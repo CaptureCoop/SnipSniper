@@ -90,8 +90,8 @@ public class GlobalTab extends JPanel implements ITab{
                     bis.close();
                     zis.close();
                 } catch (IOException ex) {
-                    LogManager.log("Could not import zip file!", LogLevel.ERROR);
-                    LogManager.logStacktrace(ex, LogLevel.ERROR);
+                    CCLogger.log("Could not import zip file!", LogLevel.ERROR);
+                    CCLogger.logStacktrace(ex, LogLevel.ERROR);
                 }
             }
 
@@ -129,8 +129,8 @@ public class GlobalTab extends JPanel implements ITab{
                     }
                     out.close();
                 } catch (IOException ex) {
-                    LogManager.log("Could not export zip file!", LogLevel.ERROR);
-                    LogManager.logStacktrace(ex, LogLevel.ERROR);
+                    CCLogger.log("Could not export zip file!", LogLevel.ERROR);
+                    CCLogger.logStacktrace(ex, LogLevel.ERROR);
                 }
             }
         });

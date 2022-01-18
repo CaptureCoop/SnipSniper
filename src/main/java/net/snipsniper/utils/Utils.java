@@ -43,7 +43,7 @@ public class Utils {
 		try {
 			return getTextFromWebsite(new URL(url));
 		} catch (MalformedURLException malformedURLException) {
-			LogManager.log("Issue forming url: " + url, LogLevel.ERROR);
+			CCLogger.log("Issue forming url: " + url, LogLevel.ERROR);
 		}
 		return null;
 	}
@@ -87,7 +87,7 @@ public class Utils {
 			in.close();
 
 		} catch (Exception e) {
-			LogManager.log("Error requesting text from website (" + url.toString() + "): " + e.getMessage(), LogLevel.ERROR);
+			CCLogger.log("Error requesting text from website (" + url.toString() + "): " + e.getMessage(), LogLevel.ERROR);
 		}
 		return result.toString();
 	}
@@ -229,8 +229,8 @@ public class Utils {
 			if(waitTillDone)
 				process.waitFor();
 		} catch (IOException | InterruptedException e) {
-			LogManager.log("Could not execute process! Args: %c", LogLevel.ERROR, Arrays.toString(args));
-			LogManager.logStacktrace(e, LogLevel.ERROR);
+			CCLogger.log("Could not execute process! Args: %c", LogLevel.ERROR, Arrays.toString(args));
+			CCLogger.logStacktrace(e, LogLevel.ERROR);
 		}
 	}
 

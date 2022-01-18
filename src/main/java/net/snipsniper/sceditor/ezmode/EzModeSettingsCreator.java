@@ -304,8 +304,8 @@ public class EzModeSettingsCreator {
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException ex) {
-                        LogManager.log("Error waiting for font type dropdown in ezMode", LogLevel.ERROR);
-                        LogManager.logStacktrace(ex, LogLevel.ERROR);
+                        CCLogger.log("Error waiting for font type dropdown in ezMode", LogLevel.ERROR);
+                        CCLogger.logStacktrace(ex, LogLevel.ERROR);
                     }
                     scEditorWindow.requestFocus();
                 }).start();

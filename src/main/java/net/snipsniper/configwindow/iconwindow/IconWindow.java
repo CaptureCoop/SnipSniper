@@ -147,8 +147,8 @@ public class IconWindow extends JFrame implements IClosable {
                             populateButtons(content, type);
                         }
                     } catch (UnsupportedFlavorException | IOException e) {
-                        LogManager.log("Error setting up drop target for IconWindow", LogLevel.ERROR);
-                        LogManager.logStacktrace(e, LogLevel.ERROR);
+                        CCLogger.log("Error setting up drop target for IconWindow", LogLevel.ERROR);
+                        CCLogger.logStacktrace(e, LogLevel.ERROR);
                     }
 
                 }
@@ -194,8 +194,8 @@ public class IconWindow extends JFrame implements IClosable {
             try {
                 Files.copy(file.toPath(), new File(SnipSniper.getImageFolder() + "/" + file.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException ioException) {
-                LogManager.log("Could not load file for IconWindow! File: %c", LogLevel.ERROR, file.getAbsolutePath());
-                LogManager.logStacktrace(ioException, LogLevel.ERROR);
+                CCLogger.log("Could not load file for IconWindow! File: %c", LogLevel.ERROR, file.getAbsolutePath());
+                CCLogger.logStacktrace(ioException, LogLevel.ERROR);
             }
         } else {
             try {
@@ -203,8 +203,8 @@ public class IconWindow extends JFrame implements IClosable {
                 img = ImageUtils.imageToBufferedImage(img.getScaledInstance(16, 16, Image.SCALE_SMOOTH));
                 ImageIO.write(img, FileUtils.getFileExtension(file, false), new File(SnipSniper.getImageFolder() + "/" + file.getName()));
             } catch (IOException ioException) {
-                LogManager.log("Could not load file for IconWindow! File: %c", LogLevel.ERROR, file.getAbsolutePath());
-                LogManager.logStacktrace(ioException, LogLevel.ERROR);
+                CCLogger.log("Could not load file for IconWindow! File: %c", LogLevel.ERROR, file.getAbsolutePath());
+                CCLogger.logStacktrace(ioException, LogLevel.ERROR);
             }
         }
     }

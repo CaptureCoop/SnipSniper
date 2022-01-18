@@ -29,8 +29,8 @@ public class AboutWindow extends JFrame {
         try {
             loadHTML();
         } catch (IOException exception) {
-            LogManager.log("Couldnt load about html!", LogLevel.ERROR);
-            LogManager.logStacktrace(exception, LogLevel.ERROR);
+            CCLogger.log("Couldnt load about html!", LogLevel.ERROR);
+            CCLogger.logStacktrace(exception, LogLevel.ERROR);
         }
 
         setSize(512,256);

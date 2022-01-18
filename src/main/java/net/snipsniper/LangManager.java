@@ -21,14 +21,14 @@ public class LangManager {
     private LangManager() { }
 
     public static void load() {
-        LogManager.log("Loading language files...", LogLevel.INFO);
+        CCLogger.log("Loading language files...", LogLevel.INFO);
         JSONArray langs = new JSONObject(FileUtils.loadFileFromJar("lang/languages.json")).getJSONArray("languages");
         for(int i = 0; i < langs.length(); i++) {
             String content = FileUtils.loadFileFromJar("lang/" + langs.getString(i) + ".json");
             langMap.put(langs.getString(i), new JSONObject(content));
             languages.add(langs.getString(i));
         }
-        LogManager.log("Done!", LogLevel.INFO);
+        CCLogger.log("Done!", LogLevel.INFO);
     }
 
     public static JSONObject getJSON(String language) {
@@ -41,7 +41,7 @@ public class LangManager {
         else if (langMap.get(DEFAULT_LANGUAGE).getJSONObject("strings").has(key))
             return MISSING_STRING_CHAR + langMap.get(DEFAULT_LANGUAGE).getJSONObject("strings").getString(key);
 
-        LogManager.log("Could not find key <%c> in language file <%c>", LogLevel.ERROR, key, language);
+        CCLogger.log("Could not find key <%c> in language file <%c>", LogLevel.ERROR, key, language);
         return "LM<" + key + ">";
     }
 

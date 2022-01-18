@@ -13,7 +13,7 @@ public class ShellLinkUtils {
             sl.setIconLocation(icon);
             sl.saveTo(linkLocation);
         } catch (IOException e) {
-            LogManager.log("Issue creating shell link. linkLocation: %c, originalLocation: %c, icon: %c", LogLevel.ERROR, linkLocation, originalLocation, icon);
+            CCLogger.log("Issue creating shell link. linkLocation: %c, originalLocation: %c, icon: %c", LogLevel.ERROR, linkLocation, originalLocation, icon);
         }
     }
 }

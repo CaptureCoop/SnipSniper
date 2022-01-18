@@ -50,8 +50,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			try {
 				Thread.sleep(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L);
 			} catch (InterruptedException e) {
-				LogManager.log("There was an error with the delay! Message: " + e.getMessage(), LogLevel.ERROR);
-				LogManager.log("More info: " + Arrays.toString(e.getStackTrace()), LogLevel.ERROR);
+				CCLogger.log("There was an error with the delay! Message: " + e.getMessage(), LogLevel.ERROR);
+				CCLogger.log("More info: " + Arrays.toString(e.getStackTrace()), LogLevel.ERROR);
 			}
 		}
 		
@@ -132,8 +132,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		try {
 			screenshot = new Robot().createScreenCapture(new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height));
 		} catch (AWTException exception) {
-			LogManager.log("Couldn't take screenshot. Message:", LogLevel.ERROR);
-			LogManager.logStacktrace(exception, LogLevel.ERROR);
+			CCLogger.log("Couldn't take screenshot. Message:", LogLevel.ERROR);
+			CCLogger.logStacktrace(exception, LogLevel.ERROR);
 		}
 		screenshotTinted = ImageUtils.copyImage(screenshot);
 		Graphics g2 = screenshotTinted.getGraphics();
@@ -305,15 +305,15 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 		if(screenshot != null) {
 			if((screenshotTinted != null && !hasSaved && bounds != null) || SystemUtils.IS_OS_LINUX) {
-				LogManager.log("About to render image: " + screenshotTinted, LogLevel.DEBUG);
-				LogManager.log("Frame Visible: " + isVisible(), LogLevel.DEBUG);
+				CCLogger.log("About to render image: " + screenshotTinted, LogLevel.DEBUG);
+				CCLogger.log("Frame Visible: " + isVisible(), LogLevel.DEBUG);
 
 				globalBuffer.drawImage(screenshotTinted, 0,0, bounds.width,bounds.height, this);
 				allBounds.addRectangle(bounds);
 
-				LogManager.log("Rendered tinted background. More Info: ", LogLevel.DEBUG);
-				LogManager.log("Image rendered:        " + screenshotTinted.toString(), LogLevel.DEBUG);
-				LogManager.log("Frame Visible: " + isVisible(), LogLevel.DEBUG);
+				CCLogger.log("Rendered tinted background. More Info: ", LogLevel.DEBUG);
+				CCLogger.log("Image rendered:        " + screenshotTinted.toString(), LogLevel.DEBUG);
+				CCLogger.log("Frame Visible: " + isVisible(), LogLevel.DEBUG);
 
 				hasSaved = true;
 			}
@@ -406,7 +406,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 				lastRect = allBounds.getBounds();
 			}
 		} else {
-			LogManager.log("WARNING: Screenshot is null when trying to render. Trying again.", LogLevel.WARNING);
+			CCLogger.log("WARNING: Screenshot is null when trying to render. Trying again.", LogLevel.WARNING);
 			repaint();
 		}
 

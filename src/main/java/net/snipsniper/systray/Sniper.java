@@ -38,7 +38,7 @@ public class Sniper {
 		this.profileID = profileID;
 		config = new Config("profile" + profileID + ".cfg", "profile_defaults.cfg");
 
-		LogManager.log("Loading profile " + profileID, LogLevel.DEBUG);
+		CCLogger.log("Loading profile " + profileID, LogLevel.DEBUG);
 
 		if(SystemTray.isSupported()) {
 			Popup popup = new Popup(this);
@@ -86,8 +86,8 @@ public class Sniper {
 
 				tray.add(trayIcon);
 			} catch (AWTException awtException) {
-				LogManager.log("There was an issue setting up the Tray Icon! Message: ", LogLevel.ERROR);
-				LogManager.logStacktrace(awtException, LogLevel.ERROR);
+				CCLogger.log("There was an issue setting up the Tray Icon! Message: ", LogLevel.ERROR);
+				CCLogger.logStacktrace(awtException, LogLevel.ERROR);
 			}
 		}
 

@@ -172,7 +172,7 @@ public class TextStamp implements IStamp{
 
     @Override
     public void setWidth(int width) {
-        LogManager.log("setWidth called on TextStamp. This does not do anything! Use setHeight() instead.", LogLevel.WARNING);
+        CCLogger.log("setWidth called on TextStamp. This does not do anything! Use setHeight() instead.", LogLevel.WARNING);
     }
 
     @Override

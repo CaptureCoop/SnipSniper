@@ -21,8 +21,8 @@ public class Links {
         try {
             return new URI(link);
         } catch (URISyntaxException exception) {
-            LogManager.log("Could not get URI!", LogLevel.ERROR);
-            LogManager.logStacktrace(exception, LogLevel.ERROR);
+            CCLogger.log("Could not get URI!", LogLevel.ERROR);
+            CCLogger.logStacktrace(exception, LogLevel.ERROR);
         }
         return null;
     }
@@ -31,8 +31,8 @@ public class Links {
         try {
             Desktop.getDesktop().browse(getURI(link));
         } catch (IOException exception) {
-            LogManager.log("Could open link!", LogLevel.ERROR);
-            LogManager.logStacktrace(exception, LogLevel.ERROR);
+            CCLogger.log("Could open link!", LogLevel.ERROR);
+            CCLogger.logStacktrace(exception, LogLevel.ERROR);
         }
     }
 }

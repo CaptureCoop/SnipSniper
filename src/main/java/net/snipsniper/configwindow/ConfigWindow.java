@@ -39,7 +39,7 @@ public class ConfigWindow extends JFrame implements IClosable {
     private final ArrayList<IClosable> cWindows = new ArrayList<>();
 
     public ConfigWindow(Config config, PAGE page) {
-        LogManager.log("Creating config window", LogLevel.INFO);
+        CCLogger.log("Creating config window", LogLevel.INFO);
 
         setSize(512, 512);
         setTitle(LangManager.getItem("config_label_config"));
@@ -369,7 +369,7 @@ public class ConfigWindow extends JFrame implements IClosable {
         if(MathUtils.isInteger(idString)) {
             return Integer.parseInt(idString);
         }
-        LogManager.log("Issue parsing Filename to id: " + name, LogLevel.ERROR);
+        CCLogger.log("Issue parsing Filename to id: " + name, LogLevel.ERROR);
         return -1;
     }
 

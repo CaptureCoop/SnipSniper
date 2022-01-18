@@ -74,7 +74,7 @@ public class UpdateButton extends IDJButton {
                         setIcon(new ImageIcon(download));
                     } else {
                         setText("Error. Check console.");
-                        LogManager.log("Issue checking for updates. Our Version: %c, Online version: %c", LogLevel.ERROR, currentVersion.getDigits(), onlineVersion.getDigits());
+                        CCLogger.log("Issue checking for updates. Our Version: %c, Online version: %c", LogLevel.ERROR, currentVersion.getDigits(), onlineVersion.getDigits());
                         setID(STATE_IDLE);
                         setIcon(null);
                     }
