@@ -1,8 +1,8 @@
 package net.snipsniper.utils;
 
 import com.erigir.mslinks.ShellLink;
-import net.snipsniper.LogManager;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.CCLogger;
+import org.capturecoop.cclogger.LogLevel;
 
 import java.io.IOException;
 

@@ -1,11 +1,11 @@
 package net.snipsniper.utils;
 
 import net.snipsniper.ImageManager;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 import org.capturecoop.ccutils.utils.StringUtils;
 
 import javax.imageio.ImageIO;

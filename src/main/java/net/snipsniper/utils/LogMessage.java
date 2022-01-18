@@ -1,6 +1,6 @@
 package net.snipsniper.utils;
 
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 import java.time.LocalDateTime;
 

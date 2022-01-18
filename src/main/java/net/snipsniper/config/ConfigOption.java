@@ -1,7 +1,7 @@
 package net.snipsniper.config;
 
-import net.snipsniper.LogManager;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.CCLogger;
+import org.capturecoop.cclogger.LogLevel;
 
 public class ConfigOption {
     private String key;

@@ -3,7 +3,7 @@ package net.snipsniper.configwindow;
 import org.capturecoop.ccutils.utils.MathUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.LangManager;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.colorchooser.ColorChooser;
 import net.snipsniper.config.Config;
@@ -12,7 +12,7 @@ import net.snipsniper.configwindow.tabs.*;
 import net.snipsniper.systray.Sniper;
 import net.snipsniper.utils.*;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;

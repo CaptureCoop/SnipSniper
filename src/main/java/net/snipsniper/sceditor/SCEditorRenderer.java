@@ -1,8 +1,8 @@
 package net.snipsniper.sceditor;
 
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.snipscope.SnipScopeRenderer;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

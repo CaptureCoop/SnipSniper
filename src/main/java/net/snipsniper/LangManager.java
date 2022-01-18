@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.FileUtils;
 import org.capturecoop.ccutils.utils.StringUtils;;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

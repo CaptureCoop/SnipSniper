@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import net.snipsniper.ImageManager;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
@@ -18,7 +18,7 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import net.snipsniper.capturewindow.CaptureWindow;
 import net.snipsniper.configwindow.ConfigWindow;
 import org.jnativehook.mouse.NativeMouseEvent;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 public class Sniper {
 	public int profileID; //0 = default

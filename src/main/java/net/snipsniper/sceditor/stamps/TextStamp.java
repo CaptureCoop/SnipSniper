@@ -1,13 +1,13 @@
 package net.snipsniper.sceditor.stamps;
 
 import org.capturecoop.ccutils.math.Vector2Int;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.config.Config;
 import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.InputContainer;
 import net.snipsniper.utils.SSColor;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

@@ -4,7 +4,7 @@ import net.snipsniper.*;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.secrets.games.BGame;
 import net.snipsniper.systray.Sniper;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
 

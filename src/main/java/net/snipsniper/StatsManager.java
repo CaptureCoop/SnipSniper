@@ -1,6 +1,6 @@
 package net.snipsniper;
 
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 import java.sql.*;
 

@@ -11,7 +11,7 @@ import javax.swing.*;
 import org.json.JSONArray;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.FileUtils;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 public class ImageManager {
 

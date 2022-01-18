@@ -1,11 +1,11 @@
 package net.snipsniper.secrets.games;
 
 import net.snipsniper.ImageManager;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.StatsManager;
 import net.snipsniper.systray.Sniper;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 import javax.swing.*;
 import java.awt.*;

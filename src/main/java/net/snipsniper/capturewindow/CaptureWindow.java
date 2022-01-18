@@ -12,7 +12,7 @@ import java.util.Arrays;
 import javax.swing.JFrame;
 
 import net.snipsniper.ImageManager;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.StatsManager;
 import net.snipsniper.config.Config;
@@ -21,7 +21,7 @@ import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.systray.Sniper;
 import net.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 import org.capturecoop.ccutils.utils.StringUtils;
 
 public class CaptureWindow extends JFrame implements WindowListener{

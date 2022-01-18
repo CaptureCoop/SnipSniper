@@ -1,7 +1,7 @@
 package net.snipsniper.sceditor;
 
 import net.snipsniper.ImageManager;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.StatsManager;
 import net.snipsniper.config.Config;
@@ -16,7 +16,7 @@ import net.snipsniper.sceditor.ezmode.EzModeSettingsCreator;
 import net.snipsniper.sceditor.ezmode.EzModeStampTab;
 import net.snipsniper.snipscope.SnipScopeWindow;
 import org.apache.commons.lang3.SystemUtils;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 import javax.swing.*;
 import java.awt.*;
