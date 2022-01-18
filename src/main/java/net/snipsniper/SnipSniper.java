@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,6 +62,7 @@ public final class SnipSniper {
 		}
 
 		CCLogger.setEnabled(true);
+		CCLogger.setPaused(true);
 
 		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
 
@@ -84,6 +86,11 @@ public final class SnipSniper {
 			setSaveLocationToJar();
 
 		config = new Config("main.cfg", "main_defaults.cfg");
+		CCLogger.setLogFormat(config.getString(ConfigHelper.MAIN.logFormat));
+		String logFileName = LocalDateTime.now().toString().replace(".", "_").replace(":", "_") + ".log";
+		CCLogger.setLogFile(new File(SnipSniper.getLogFolder() + logFileName));
+		CCLogger.setGitCodePathURL("https://github.com/CaptureCoop/SnipSniper/tree/" + SnipSniper.getVersion().getGithash() + "/src/main/java/");
+		CCLogger.setPaused(false);
 
 		uncaughtExceptionHandler = (thread, throwable) -> {
 			CCLogger.log("SnipSniper encountered an uncaught exception. This may be fatal!", LogLevel.ERROR);
