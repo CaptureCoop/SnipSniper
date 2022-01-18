@@ -93,10 +93,12 @@ public final class SnipSniper {
 		}
 
 		config = new Config("main.cfg", "main_defaults.cfg");
-		CCLogger.setLogFormat(config.getString(ConfigHelper.MAIN.logFormat));
+
 		String logFileName = LocalDateTime.now().toString().replace(".", "_").replace(":", "_") + ".log";
+		CCLogger.setLogFormat(config.getString(ConfigHelper.MAIN.logFormat));
 		CCLogger.setLogFile(new File(SnipSniper.getLogFolder() + logFileName));
-		CCLogger.setGitCodePathURL("https://github.com/CaptureCoop/SnipSniper/tree/" + SnipSniper.getVersion().getGithash() + "/src/main/java/");
+		CCLogger.setGitHubCodePathURL("https://github.com/CaptureCoop/SnipSniper/tree/" + SnipSniper.getVersion().getGithash() + "/src/main/java/");
+		CCLogger.setGitHubCodeClassPath("net.snipsniper");
 		CCLogger.setPaused(false);
 
 		uncaughtExceptionHandler = (thread, throwable) -> {
