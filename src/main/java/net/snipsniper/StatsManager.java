@@ -1,5 +1,6 @@
 package net.snipsniper;
 
+import org.capturecoop.cclogger.CCLogger;
 import org.capturecoop.cclogger.LogLevel;
 
 import java.sql.*;

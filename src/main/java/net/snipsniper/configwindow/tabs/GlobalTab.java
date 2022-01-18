@@ -265,7 +265,7 @@ public class GlobalTab extends JPanel implements ITab{
         if(didDebugChange && config.getBool(ConfigHelper.MAIN.debug)) {
             doRestartProfiles = true;
         } else if(didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)){
-            SnipSniper.closeDebugConsole();
+            CCLogger.enableDebugConsole(false);
             doRestartProfiles = true;
         }
 

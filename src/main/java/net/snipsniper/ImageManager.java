@@ -8,6 +8,7 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import org.capturecoop.cclogger.CCLogger;
 import org.json.JSONArray;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.FileUtils;

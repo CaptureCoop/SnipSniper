@@ -25,6 +25,7 @@ import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.scviewer.SCViewerWindow;
 import net.snipsniper.systray.Sniper;
 import org.apache.commons.lang3.SystemUtils;
+import org.capturecoop.cclogger.CCLogger;
 import org.capturecoop.ccutils.utils.StringUtils;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -51,8 +52,6 @@ public final class SnipSniper {
 
 	private static boolean isDemo = false;
 
-	private static DebugConsole debugConsole;
-
 	private static Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
 
 	public static void start(String[] args) {
@@ -60,6 +59,8 @@ public final class SnipSniper {
 			System.out.println("SnipSniper is currently only available for Windows and Linux (In development, use with caution). Sorry!");
 			System.exit(0);
 		}
+
+		CCLogger.setEnabled(true);
 
 		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
 
@@ -83,7 +84,6 @@ public final class SnipSniper {
 			setSaveLocationToJar();
 
 		config = new Config("main.cfg", "main_defaults.cfg");
-		CCLogger.setEnabled(true);
 
 		uncaughtExceptionHandler = (thread, throwable) -> {
 			CCLogger.log("SnipSniper encountered an uncaught exception. This may be fatal!", LogLevel.ERROR);
@@ -350,10 +350,6 @@ public final class SnipSniper {
 		profiles[id] = sniper;
 	}
 
-	public static DebugConsole getDebugConsole() {
-		return debugConsole;
-	}
-
 	public static void refreshTheme() {
 		try {
 			switch(config.getString(ConfigHelper.MAIN.theme)) {
@@ -363,23 +359,6 @@ public final class SnipSniper {
 		} catch (UnsupportedLookAndFeelException exception) {
 			CCLogger.log("Could not set theme!", LogLevel.ERROR);
 			CCLogger.logStacktrace(exception, LogLevel.ERROR);
-		}
-	}
-
-	public static void openDebugConsole() {
-		if(debugConsole == null) {
-			debugConsole = new DebugConsole();
-			debugConsole.update();
-			debugConsole.addCustomWindowListener(() -> debugConsole = null);
-		} else {
-			debugConsole.requestFocus();
-		}
-	}
-
-	public static void closeDebugConsole() {
-		if(debugConsole != null) {
-			debugConsole.dispose();
-			debugConsole = null;
 		}
 	}
 

@@ -1,5 +1,6 @@
 package net.snipsniper;
 
+import org.capturecoop.cclogger.CCLogger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import net.snipsniper.config.ConfigHelper;
