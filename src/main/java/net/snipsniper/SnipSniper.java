@@ -62,7 +62,7 @@ public final class SnipSniper {
 		}
 
 		CCLogger.setEnabled(true);
-		CCLogger.setPaused(true);
+		CCLogger.setPaused(true); //Allows us setting up things like log file and format before having it log
 
 		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
 
