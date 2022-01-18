@@ -11,6 +11,7 @@ import net.snipsniper.utils.Utils;
 import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.scviewer.SCViewerWindow;
 import net.snipsniper.utils.debug.LangDebugWindow;
+import org.capturecoop.cclogger.CCLogger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,7 +52,7 @@ public class Popup extends JFrame{
 
         if (SnipSniper.isDebug()) {
             net.snipsniper.systray.PopupMenu debugMenu = new PopupMenu("Debug", ImageManager.getImage("icons/debug.png"));
-            debugMenu.add(new PopupMenuButton("Console", ImageManager.getImage("icons/console.png"), this, args -> SnipSniper.openDebugConsole(), menus));
+            debugMenu.add(new PopupMenuButton("Console", ImageManager.getImage("icons/console.png"), this, args -> CCLogger.enableDebugConsole(true), menus));
             debugMenu.add(new PopupMenuButton("Open log folder", ImageManager.getImage("icons/folder.png"), this, args -> FileUtils.openFolder(SnipSniper.getLogFolder()), menus));
             debugMenu.add(new PopupMenuButton("Language test", ImageManager.getImage("icons/config.png"), this, args -> new LangDebugWindow(), menus));
             add(debugMenu);

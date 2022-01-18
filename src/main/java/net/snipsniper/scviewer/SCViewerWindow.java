@@ -1,7 +1,7 @@
 package net.snipsniper.scviewer;
 
 import net.snipsniper.ImageManager;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.StatsManager;
 import net.snipsniper.config.Config;
@@ -12,7 +12,7 @@ import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.snipscope.SnipScopeWindow;
 import net.snipsniper.utils.enums.ClockDirection;
 import org.apache.commons.lang3.SystemUtils;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -75,8 +75,8 @@ public class SCViewerWindow extends SnipScopeWindow {
                     List droppedFiles = (List) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                     setImage((File) droppedFiles.get(0));
                 } catch (UnsupportedFlavorException | IOException exception) {
-                    LogManager.log("Error setting up viewer window drop target!", LogLevel.ERROR);
-                    LogManager.logStacktrace(exception, LogLevel.ERROR);
+                    CCLogger.log("Error setting up viewer window drop target!", LogLevel.ERROR);
+                    CCLogger.logStacktrace(exception, LogLevel.ERROR);
                 }
             }
         });
@@ -103,8 +103,8 @@ public class SCViewerWindow extends SnipScopeWindow {
                 try {
                     ImageIO.write(getImage(), "png", currentFile);
                 } catch (IOException ioException) {
-                    LogManager.log("Error saving file in viewer!", LogLevel.ERROR);
-                    LogManager.logStacktrace(ioException, LogLevel.ERROR);
+                    CCLogger.log("Error saving file in viewer!", LogLevel.ERROR);
+                    CCLogger.logStacktrace(ioException, LogLevel.ERROR);
                 }
                 saveItem.setEnabled(false);
             });
@@ -204,8 +204,8 @@ public class SCViewerWindow extends SnipScopeWindow {
             try {
                 image = ImageIO.read(file);
             } catch (IOException ioException) {
-                LogManager.log("Could not get image from file! File: %c", LogLevel.ERROR, file.getAbsolutePath());
-                LogManager.logStacktrace(ioException, LogLevel.ERROR);
+                CCLogger.log("Could not get image from file! File: %c", LogLevel.ERROR, file.getAbsolutePath());
+                CCLogger.logStacktrace(ioException, LogLevel.ERROR);
             }
             return image;
         }

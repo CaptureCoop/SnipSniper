@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.colorchooser.SSColorChooserAlphaBar;
 import net.snipsniper.colorchooser.SSColorChooserHSBHueBar;
@@ -16,7 +16,7 @@ import net.snipsniper.utils.DrawUtils;
 import net.snipsniper.utils.DropdownItem;
 import net.snipsniper.utils.Function;
 import net.snipsniper.utils.SSColor;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -304,8 +304,8 @@ public class EzModeSettingsCreator {
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException ex) {
-                        LogManager.log("Error waiting for font type dropdown in ezMode", LogLevel.ERROR);
-                        LogManager.logStacktrace(ex, LogLevel.ERROR);
+                        CCLogger.log("Error waiting for font type dropdown in ezMode", LogLevel.ERROR);
+                        CCLogger.logStacktrace(ex, LogLevel.ERROR);
                     }
                     scEditorWindow.requestFocus();
                 }).start();

@@ -1,7 +1,7 @@
 package net.snipsniper.utils;
 
-import net.snipsniper.LogManager;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.CCLogger;
+import org.capturecoop.cclogger.LogLevel;
 import org.capturecoop.ccutils.utils.StringUtils;
 
 import java.awt.*;
@@ -41,7 +41,7 @@ public class FileUtils {
         if(!file.exists()) return true;
 
         if(!file.delete()) {
-            LogManager.log("File (%c) could not be deleted!", LogLevel.WARNING, file.getAbsolutePath());
+            CCLogger.log("File (%c) could not be deleted!", LogLevel.WARNING, file.getAbsolutePath());
             return false;
         }
         return true;
@@ -55,7 +55,7 @@ public class FileUtils {
         if(folder.exists()) return true;
 
         if(!folder.mkdir()) {
-            LogManager.log("Folder (%c) could not be created.", LogLevel.WARNING, folder.getAbsolutePath());
+            CCLogger.log("Folder (%c) could not be created.", LogLevel.WARNING, folder.getAbsolutePath());
             return false;
         }
         return true;
@@ -69,7 +69,7 @@ public class FileUtils {
         if(folder.exists()) return true;
 
         if(!folder.mkdirs()) {
-            LogManager.log("Folders (%c) could not be created.", LogLevel.WARNING, folder);
+            CCLogger.log("Folders (%c) could not be created.", LogLevel.WARNING, folder);
             return false;
         }
         return true;
@@ -129,8 +129,8 @@ public class FileUtils {
         try {
             Desktop.getDesktop().open(new File(path));
         } catch (IOException ioException) {
-            LogManager.log("Could not open folder \"%c\"!", LogLevel.ERROR, path);
-            LogManager.logStacktrace(ioException, LogLevel.ERROR);
+            CCLogger.log("Could not open folder \"%c\"!", LogLevel.ERROR, path);
+            CCLogger.logStacktrace(ioException, LogLevel.ERROR);
         }
     }
 
@@ -140,8 +140,8 @@ public class FileUtils {
             out.print(text);
             out.close();
         } catch (FileNotFoundException fileNotFoundException) {
-            LogManager.log("Could not write to file \"%c\"!", LogLevel.ERROR, filename);
-            LogManager.logStacktrace(fileNotFoundException, LogLevel.ERROR);
+            CCLogger.log("Could not write to file \"%c\"!", LogLevel.ERROR, filename);
+            CCLogger.logStacktrace(fileNotFoundException, LogLevel.ERROR);
         }
     }
 
@@ -164,29 +164,29 @@ public class FileUtils {
         try {
             return new File(path).getCanonicalPath();
         } catch (IOException ioException) {
-            LogManager.log("Could not get path for \"%c\"!", LogLevel.ERROR, path);
-            LogManager.logStacktrace(ioException, LogLevel.ERROR);
+            CCLogger.log("Could not get path for \"%c\"!", LogLevel.ERROR, path);
+            CCLogger.logStacktrace(ioException, LogLevel.ERROR);
         }
         return null;
     }
 
     public static boolean copyFromJar(String jarPath, String path) {
         if(jarPath.startsWith("\\") || jarPath.startsWith("//"))
-            LogManager.log("jarPath is starting with slashes, this generally does not work inside the jar!", LogLevel.WARNING);
+            CCLogger.log("jarPath is starting with slashes, this generally does not work inside the jar!", LogLevel.WARNING);
 
         if(FileUtils.exists(path))
             FileUtils.delete(path);
 
         InputStream inputStream = ClassLoader.getSystemResourceAsStream(jarPath);
         if(inputStream == null) {
-            LogManager.log("InputStream is null! Copying failed! jarPath: %c, path: %c", LogLevel.ERROR, jarPath, path);
+            CCLogger.log("InputStream is null! Copying failed! jarPath: %c, path: %c", LogLevel.ERROR, jarPath, path);
             return false;
         }
         try {
             Files.copy(inputStream, new File(path).getCanonicalFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ioException) {
-            LogManager.log("Issue copying from jar!", LogLevel.ERROR);
-            LogManager.logStacktrace(ioException, LogLevel.ERROR);
+            CCLogger.log("Issue copying from jar!", LogLevel.ERROR);
+            CCLogger.logStacktrace(ioException, LogLevel.ERROR);
             return false;
         }
         return true;
@@ -198,7 +198,7 @@ public class FileUtils {
             String path = "net/snipsniper/resources/" + file;
             InputStream inputStream = ClassLoader.getSystemResourceAsStream(path);
             if(inputStream == null) {
-                LogManager.log(StringUtils.format("Could not load file %c from jar!", path), LogLevel.ERROR);
+                CCLogger.log(StringUtils.format("Could not load file %c from jar!", path), LogLevel.ERROR);
                 return null;
             }
             InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
@@ -210,8 +210,8 @@ public class FileUtils {
             inputStream.close();
             streamReader.close();
         } catch (IOException ioException) {
-            LogManager.log("Could not load file: " + file, LogLevel.ERROR);
-            LogManager.logStacktrace(ioException, LogLevel.ERROR);
+            CCLogger.log("Could not load file: " + file, LogLevel.ERROR);
+            CCLogger.logStacktrace(ioException, LogLevel.ERROR);
         }
         return content.toString();
     }

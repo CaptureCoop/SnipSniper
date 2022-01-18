@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,11 +26,12 @@ import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.scviewer.SCViewerWindow;
 import net.snipsniper.systray.Sniper;
 import org.apache.commons.lang3.SystemUtils;
+import org.capturecoop.cclogger.CCLogger;
 import org.capturecoop.ccutils.utils.StringUtils;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import net.snipsniper.utils.enums.LaunchType;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
 
@@ -51,8 +53,6 @@ public final class SnipSniper {
 
 	private static boolean isDemo = false;
 
-	private static DebugConsole debugConsole;
-
 	private static Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
 
 	public static void start(String[] args) {
@@ -60,6 +60,9 @@ public final class SnipSniper {
 			System.out.println("SnipSniper is currently only available for Windows and Linux (In development, use with caution). Sorry!");
 			System.exit(0);
 		}
+
+		CCLogger.setEnabled(true);
+		CCLogger.setPaused(true); //Allows us setting up things like log file and format before having it log
 
 		Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF); //We do this because otherwise JNativeHook constantly logs stuff
 
@@ -82,26 +85,32 @@ public final class SnipSniper {
 		else
 			setSaveLocationToJar();
 
+		if(!isDemo) {
+			if(!FileUtils.mkdirs(configFolder, logFolder, imgFolder)) {
+				CCLogger.log("Could not create required folders! Exiting...", LogLevel.ERROR);
+				exit(false);
+			}
+		}
+
 		config = new Config("main.cfg", "main_defaults.cfg");
-		LogManager.setEnabled(true);
+
+		String logFileName = LocalDateTime.now().toString().replace(".", "_").replace(":", "_") + ".log";
+		CCLogger.setLogFormat(config.getString(ConfigHelper.MAIN.logFormat));
+		CCLogger.setLogFile(new File(SnipSniper.getLogFolder() + logFileName));
+		CCLogger.setGitHubCodePathURL("https://github.com/CaptureCoop/SnipSniper/tree/" + SnipSniper.getVersion().getGithash() + "/src/main/java/");
+		CCLogger.setGitHubCodeClassPath("net.snipsniper");
+		CCLogger.setPaused(false);
 
 		uncaughtExceptionHandler = (thread, throwable) -> {
-			LogManager.log("SnipSniper encountered an uncaught exception. This may be fatal!", LogLevel.ERROR);
-			LogManager.logStacktrace(throwable, LogLevel.ERROR);
+			CCLogger.log("SnipSniper encountered an uncaught exception. This may be fatal!", LogLevel.ERROR);
+			CCLogger.logStacktrace(throwable, LogLevel.ERROR);
 		};
 		Thread.currentThread().setUncaughtExceptionHandler(uncaughtExceptionHandler);
 
 		try {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException nativeHookException) {
-			LogManager.log("There was an issue setting up NativeHook! Message: " + nativeHookException.getMessage(), LogLevel.ERROR);
-		}
-
-		if(!isDemo) {
-			if(!FileUtils.mkdirs(configFolder, logFolder, imgFolder)) {
-				LogManager.log("Could not create required folders! Exiting...", LogLevel.ERROR);
-				exit(false);
-			}
+			CCLogger.log("There was an issue setting up NativeHook! Message: " + nativeHookException.getMessage(), LogLevel.ERROR);
 		}
 
 		StatsManager.init();
@@ -129,37 +138,37 @@ public final class SnipSniper {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			JDialog.setDefaultLookAndFeelDecorated(true);
 		} catch (UnsupportedLookAndFeelException e) {
-			LogManager.log("Error setting look and feel. Message: ", LogLevel.ERROR);
-			LogManager.logStacktrace(e, LogLevel.ERROR);
+			CCLogger.log("Error setting look and feel. Message: ", LogLevel.ERROR);
+			CCLogger.logStacktrace(e, LogLevel.ERROR);
 		}
 
 		LangManager.load();
 		WikiManager.load(LangManager.getLanguage());
 
-		LogManager.log("Launching SnipSniper Version " + getVersion().getDigits() + " (rev-" + version.getGithash() + ")", LogLevel.INFO);
+		CCLogger.log("Launching SnipSniper Version " + getVersion().getDigits() + " (rev-" + version.getGithash() + ")", LogLevel.INFO);
 		if(SystemUtils.IS_OS_LINUX) {
-			LogManager.log("=================================================================================", LogLevel.WARNING);
-			LogManager.log("= SnipSniper Linux is still in development and may not work properly or at all. =", LogLevel.WARNING);
-			LogManager.log("=                        !!!!! USE WITH CAUTION !!!!                            =", LogLevel.WARNING);
-			LogManager.log("=================================================================================", LogLevel.WARNING);
+			CCLogger.log("=================================================================================", LogLevel.WARNING);
+			CCLogger.log("= SnipSniper Linux is still in development and may not work properly or at all. =", LogLevel.WARNING);
+			CCLogger.log("=                        !!!!! USE WITH CAUTION !!!!                            =", LogLevel.WARNING);
+			CCLogger.log("=================================================================================", LogLevel.WARNING);
 		}
 
-		LogManager.log("========================================", LogLevel.DEBUG);
-		LogManager.log("= SnipSniper is running in debug mode! =", LogLevel.DEBUG);
-		LogManager.log("========================================", LogLevel.DEBUG);
+		CCLogger.log("========================================", LogLevel.DEBUG);
+		CCLogger.log("= SnipSniper is running in debug mode! =", LogLevel.DEBUG);
+		CCLogger.log("========================================", LogLevel.DEBUG);
 
 		if(!LangManager.languages.contains(SnipSniper.config.getString(ConfigHelper.MAIN.language))) {
-			LogManager.log("Language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> not found. Available languages: " + LangManager.languages.toString(), LogLevel.ERROR);
+			CCLogger.log("Language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> not found. Available languages: " + LangManager.languages.toString(), LogLevel.ERROR);
 			exit(false);
 		}
 
 		config.save();
 
 		if(isDemo) {
-			LogManager.log("============================================================", LogLevel.INFO);
-			LogManager.log("= SnipSniper is running in DEMO mode                       =", LogLevel.INFO);
-			LogManager.log("= This means that no files will be created and/or modified =", LogLevel.INFO);
-			LogManager.log("============================================================", LogLevel.INFO);
+			CCLogger.log("============================================================", LogLevel.INFO);
+			CCLogger.log("= SnipSniper is running in DEMO mode                       =", LogLevel.INFO);
+			CCLogger.log("= This means that no files will be created and/or modified =", LogLevel.INFO);
+			CCLogger.log("============================================================", LogLevel.INFO);
 		}
 
 		if(cmdline.isEditorOnly() || launchType == LaunchType.EDITOR) {
@@ -181,8 +190,8 @@ public final class SnipSniper {
 					if(fileExists)
 						img = ImageIO.read(file);
 				} catch (IOException ioException) {
-					LogManager.log("Error reading image file for editor, path: %c", LogLevel.ERROR, path);
-					LogManager.logStacktrace(ioException, LogLevel.ERROR);
+					CCLogger.log("Error reading image file for editor, path: %c", LogLevel.ERROR, path);
+					CCLogger.logStacktrace(ioException, LogLevel.ERROR);
 				}
 			}
 
@@ -207,7 +216,7 @@ public final class SnipSniper {
 	}
 
 	public static void resetProfiles() {
-		LogManager.log("Resetting/Starting profiles...", LogLevel.INFO);
+		CCLogger.log("Resetting/Starting profiles...", LogLevel.INFO);
 		if(SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
 			for (TrayIcon icon : tray.getTrayIcons()) {
@@ -247,7 +256,7 @@ public final class SnipSniper {
 		try {
 			folderToUseString = URLDecoder.decode(Paths.get(SnipSniper.class.getProtectionDomain().getCodeSource().getLocation().toURI()).toString(), "UTF-8");
 		} catch (UnsupportedEncodingException | URISyntaxException e) {
-			LogManager.log("Could not set profiles folder. Error: " + e.getMessage(), LogLevel.ERROR);
+			CCLogger.log("Could not set profiles folder. Error: " + e.getMessage(), LogLevel.ERROR);
 			exit(false);
 		}
 
@@ -269,14 +278,14 @@ public final class SnipSniper {
 		if(config.getBool(ConfigHelper.MAIN.debug)) {
 			if (!exitForRestart && Desktop.isDesktopSupported()) {
 				try {
-					Desktop.getDesktop().open(LogManager.getLogFile());
+					Desktop.getDesktop().open(CCLogger.getLogFile());
 				} catch (IOException ioException) {
-					LogManager.log("Error opening last logFile!, path: %c", LogLevel.ERROR, LogManager.getLogFile().getAbsolutePath());
-					LogManager.logStacktrace(ioException, LogLevel.ERROR);
+					CCLogger.log("Error opening last logFile!, path: %c", LogLevel.ERROR, CCLogger.getLogFile().getAbsolutePath());
+					CCLogger.logStacktrace(ioException, LogLevel.ERROR);
 				}
 			}
 		}
-		LogManager.log("Exit requested. Goodbye!", LogLevel.INFO);
+		CCLogger.log("Exit requested. Goodbye!", LogLevel.INFO);
 		System.exit(0);
 	}
 
@@ -350,10 +359,6 @@ public final class SnipSniper {
 		profiles[id] = sniper;
 	}
 
-	public static DebugConsole getDebugConsole() {
-		return debugConsole;
-	}
-
 	public static void refreshTheme() {
 		try {
 			switch(config.getString(ConfigHelper.MAIN.theme)) {
@@ -361,25 +366,8 @@ public final class SnipSniper {
 				case "light": UIManager.setLookAndFeel(new FlatIntelliJLaf()); break;
 			}
 		} catch (UnsupportedLookAndFeelException exception) {
-			LogManager.log("Could not set theme!", LogLevel.ERROR);
-			LogManager.logStacktrace(exception, LogLevel.ERROR);
-		}
-	}
-
-	public static void openDebugConsole() {
-		if(debugConsole == null) {
-			debugConsole = new DebugConsole();
-			debugConsole.update();
-			debugConsole.addCustomWindowListener(() -> debugConsole = null);
-		} else {
-			debugConsole.requestFocus();
-		}
-	}
-
-	public static void closeDebugConsole() {
-		if(debugConsole != null) {
-			debugConsole.dispose();
-			debugConsole = null;
+			CCLogger.log("Could not set theme!", LogLevel.ERROR);
+			CCLogger.logStacktrace(exception, LogLevel.ERROR);
 		}
 	}
 

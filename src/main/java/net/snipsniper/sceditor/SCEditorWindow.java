@@ -1,7 +1,7 @@
 package net.snipsniper.sceditor;
 
 import net.snipsniper.ImageManager;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.StatsManager;
 import net.snipsniper.config.Config;
@@ -16,7 +16,7 @@ import net.snipsniper.sceditor.ezmode.EzModeSettingsCreator;
 import net.snipsniper.sceditor.ezmode.EzModeStampTab;
 import net.snipsniper.snipscope.SnipScopeWindow;
 import org.apache.commons.lang3.SystemUtils;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,7 +79,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
         ezMode = config.getBool(ConfigHelper.PROFILE.ezMode);
 
-        LogManager.log("Creating new editor window...", LogLevel.INFO);
+        CCLogger.log("Creating new editor window...", LogLevel.INFO);
 
         StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT);
 
@@ -166,7 +166,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
             int borderSize = config.getInt(ConfigHelper.PROFILE.borderSize);
             if (!isLeftToRight) borderSize = -borderSize;
             setLocation((x - X_OFFSET) + borderSize, y - getInsets().top + borderSize);
-            LogManager.log("Setting location to " + getLocation(), LogLevel.INFO);
+            CCLogger.log("Setting location to " + getLocation(), LogLevel.INFO);
         }
 
         refreshTitle();
@@ -275,7 +275,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
         });
         setEnableInteraction(!isDefaultImage());
         requestFocus();
-        LogManager.log("Started new editor window. (%c)", LogLevel.INFO, this);
+        CCLogger.log("Started new editor window. (%c)", LogLevel.INFO, this);
     }
 
     public void addEZModeStampButton(String title, String iconName, String theme, int stampIndex) {
@@ -346,7 +346,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
     }
 
     public void refreshTitle() {
-        LogManager.log("Refreshing title", LogLevel.INFO);
+        CCLogger.log("Refreshing title", LogLevel.INFO);
         String newTitle = title;
         if(saveLocation != null && !saveLocation.isEmpty())
             newTitle += " (" + saveLocation + ")";
@@ -360,7 +360,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
     public void setImage(BufferedImage image, boolean resetHistory, boolean isNewImage) {
         image = ImageUtils.ensureAlphaLayer(image);
         super.setImage(image);
-        LogManager.log("Setting new Image", LogLevel.INFO);
+        CCLogger.log("Setting new Image", LogLevel.INFO);
         setEnableInteraction(!isDefaultImage());
 
         if(listener != null && resetHistory) {

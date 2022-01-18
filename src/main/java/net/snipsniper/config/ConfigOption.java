@@ -1,7 +1,7 @@
 package net.snipsniper.config;
 
-import net.snipsniper.LogManager;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.CCLogger;
+import org.capturecoop.cclogger.LogLevel;
 
 public class ConfigOption {
     private String key;
@@ -44,8 +44,8 @@ public class ConfigOption {
             case COMMENT: return "#" + value;
             case NEWLINE: return "";
         }
-        LogManager.log("NO TYPE SET! KEY: %c VALUE: %c", LogLevel.ERROR, key, value);
-        LogManager.logStacktrace(LogLevel.ERROR);
+        CCLogger.log("NO TYPE SET! KEY: %c VALUE: %c", LogLevel.ERROR, key, value);
+        CCLogger.logStacktrace(LogLevel.ERROR);
         return null;
     }
 

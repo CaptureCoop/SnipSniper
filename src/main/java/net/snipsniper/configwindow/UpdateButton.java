@@ -1,11 +1,11 @@
 package net.snipsniper.configwindow;
 
 import net.snipsniper.ImageManager;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.*;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
 import org.capturecoop.ccutils.utils.StringUtils;
@@ -74,7 +74,7 @@ public class UpdateButton extends IDJButton {
                         setIcon(new ImageIcon(download));
                     } else {
                         setText("Error. Check console.");
-                        LogManager.log("Issue checking for updates. Our Version: %c, Online version: %c", LogLevel.ERROR, currentVersion.getDigits(), onlineVersion.getDigits());
+                        CCLogger.log("Issue checking for updates. Our Version: %c, Online version: %c", LogLevel.ERROR, currentVersion.getDigits(), onlineVersion.getDigits());
                         setID(STATE_IDLE);
                         setIcon(null);
                     }

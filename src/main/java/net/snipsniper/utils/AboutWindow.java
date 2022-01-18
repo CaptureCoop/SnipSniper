@@ -4,7 +4,8 @@ import net.snipsniper.*;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.secrets.games.BGame;
 import net.snipsniper.systray.Sniper;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.CCLogger;
+import org.capturecoop.cclogger.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
 
@@ -29,8 +30,8 @@ public class AboutWindow extends JFrame {
         try {
             loadHTML();
         } catch (IOException exception) {
-            LogManager.log("Couldnt load about html!", LogLevel.ERROR);
-            LogManager.logStacktrace(exception, LogLevel.ERROR);
+            CCLogger.log("Couldnt load about html!", LogLevel.ERROR);
+            CCLogger.logStacktrace(exception, LogLevel.ERROR);
         }
 
         setSize(512,256);

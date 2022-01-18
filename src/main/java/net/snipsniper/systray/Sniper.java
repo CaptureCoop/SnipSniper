@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import net.snipsniper.ImageManager;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
@@ -18,7 +18,7 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import net.snipsniper.capturewindow.CaptureWindow;
 import net.snipsniper.configwindow.ConfigWindow;
 import org.jnativehook.mouse.NativeMouseEvent;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 
 public class Sniper {
 	public int profileID; //0 = default
@@ -38,7 +38,7 @@ public class Sniper {
 		this.profileID = profileID;
 		config = new Config("profile" + profileID + ".cfg", "profile_defaults.cfg");
 
-		LogManager.log("Loading profile " + profileID, LogLevel.DEBUG);
+		CCLogger.log("Loading profile " + profileID, LogLevel.DEBUG);
 
 		if(SystemTray.isSupported()) {
 			Popup popup = new Popup(this);
@@ -86,8 +86,8 @@ public class Sniper {
 
 				tray.add(trayIcon);
 			} catch (AWTException awtException) {
-				LogManager.log("There was an issue setting up the Tray Icon! Message: ", LogLevel.ERROR);
-				LogManager.logStacktrace(awtException, LogLevel.ERROR);
+				CCLogger.log("There was an issue setting up the Tray Icon! Message: ", LogLevel.ERROR);
+				CCLogger.logStacktrace(awtException, LogLevel.ERROR);
 			}
 		}
 

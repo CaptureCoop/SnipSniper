@@ -4,14 +4,14 @@ import net.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.LangManager;
-import net.snipsniper.LogManager;
+import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.configwindow.ConfigWindow;
 import net.snipsniper.configwindow.UpdateButton;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;
-import net.snipsniper.utils.enums.LogLevel;
+import org.capturecoop.cclogger.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
 import org.capturecoop.ccutils.utils.StringUtils;
@@ -90,8 +90,8 @@ public class GlobalTab extends JPanel implements ITab{
                     bis.close();
                     zis.close();
                 } catch (IOException ex) {
-                    LogManager.log("Could not import zip file!", LogLevel.ERROR);
-                    LogManager.logStacktrace(ex, LogLevel.ERROR);
+                    CCLogger.log("Could not import zip file!", LogLevel.ERROR);
+                    CCLogger.logStacktrace(ex, LogLevel.ERROR);
                 }
             }
 
@@ -129,8 +129,8 @@ public class GlobalTab extends JPanel implements ITab{
                     }
                     out.close();
                 } catch (IOException ex) {
-                    LogManager.log("Could not export zip file!", LogLevel.ERROR);
-                    LogManager.logStacktrace(ex, LogLevel.ERROR);
+                    CCLogger.log("Could not export zip file!", LogLevel.ERROR);
+                    CCLogger.logStacktrace(ex, LogLevel.ERROR);
                 }
             }
         });
@@ -265,7 +265,7 @@ public class GlobalTab extends JPanel implements ITab{
         if(didDebugChange && config.getBool(ConfigHelper.MAIN.debug)) {
             doRestartProfiles = true;
         } else if(didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)){
-            SnipSniper.closeDebugConsole();
+            CCLogger.enableDebugConsole(false);
             doRestartProfiles = true;
         }
 
