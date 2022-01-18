@@ -2,4 +2,8 @@ sourceControl {
     gitRepository("https://github.com/CaptureCoop/CCUtils.git") {
         producesModule("org.capturecoop:CCUtils")
     }
+
+    gitRepository("https://github.com/CaptureCoop/CCLogger.git") {
+        producesModule("org.capturecoop:CCLogger")
+    }
 }
