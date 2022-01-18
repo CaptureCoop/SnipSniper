@@ -85,6 +85,13 @@ public final class SnipSniper {
 		else
 			setSaveLocationToJar();
 
+		if(!isDemo) {
+			if(!FileUtils.mkdirs(configFolder, logFolder, imgFolder)) {
+				CCLogger.log("Could not create required folders! Exiting...", LogLevel.ERROR);
+				exit(false);
+			}
+		}
+
 		config = new Config("main.cfg", "main_defaults.cfg");
 		CCLogger.setLogFormat(config.getString(ConfigHelper.MAIN.logFormat));
 		String logFileName = LocalDateTime.now().toString().replace(".", "_").replace(":", "_") + ".log";
@@ -102,13 +109,6 @@ public final class SnipSniper {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException nativeHookException) {
 			CCLogger.log("There was an issue setting up NativeHook! Message: " + nativeHookException.getMessage(), LogLevel.ERROR);
-		}
-
-		if(!isDemo) {
-			if(!FileUtils.mkdirs(configFolder, logFolder, imgFolder)) {
-				CCLogger.log("Could not create required folders! Exiting...", LogLevel.ERROR);
-				exit(false);
-			}
 		}
 
 		StatsManager.init();
