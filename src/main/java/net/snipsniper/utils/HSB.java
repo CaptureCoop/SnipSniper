@@ -1,6 +1,6 @@
 package net.snipsniper.utils;
 
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import java.awt.*;
 
@@ -53,6 +53,6 @@ public class HSB {
     }
 
     public String toString() {
-        return StringUtils.format("HSB [hue: %c, saturation: %c, brightness: %c, alpha: %c]", hue, saturation, brightness, alpha);
+        return CCStringUtils.format("HSB [hue: %c, saturation: %c, brightness: %c, alpha: %c]", hue, saturation, brightness, alpha);
     }
 }

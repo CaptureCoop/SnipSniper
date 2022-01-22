@@ -9,7 +9,7 @@ import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.stamps.*;
 import net.snipsniper.utils.IClosable;
 import net.snipsniper.utils.ImageUtils;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 import net.snipsniper.utils.Utils;
 import net.snipsniper.configwindow.ConfigWindow;
 import net.snipsniper.sceditor.ezmode.EzModeSettingsCreator;
@@ -280,7 +280,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
     public void addEZModeStampButton(String title, String iconName, String theme, int stampIndex) {
         ezModeStampPanelTabs.addTab(title, null);
-        BufferedImage ezIconMarker = ImageManager.getImage(StringUtils.format("ui/editor/%c/%c.png", theme, iconName));
+        BufferedImage ezIconMarker = ImageManager.getImage(CCStringUtils.format("ui/editor/%c/%c.png", theme, iconName));
         ezModeStampPanelTabs.setTabComponentAt(stampIndex, new EzModeStampTab(ezIconMarker, 32, this, stampIndex));
         ezModeStampPanelTabs.setIconAt(stampIndex, new ImageIcon(ezIconMarker));
     }
@@ -353,7 +353,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
         if(inClipboard) {
             newTitle += " (Clipboard)";
         }
-        newTitle += StringUtils.format(" %cx%c", getImage().getWidth(), getImage().getHeight());
+        newTitle += CCStringUtils.format(" %cx%c", getImage().getWidth(), getImage().getHeight());
         setTitle(newTitle);
     }
 
@@ -425,7 +425,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
     }
 
     public String toString() {
-        return StringUtils.format("SCEditorWindow Pos:[%c] Path:[%c]", getLocation(), saveLocation);
+        return CCStringUtils.format("SCEditorWindow Pos:[%c] Path:[%c]", getLocation(), saveLocation);
     }
 
     public void setEzMode(boolean value) {

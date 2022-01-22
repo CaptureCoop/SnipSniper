@@ -1,6 +1,6 @@
 package net.snipsniper.utils;
 
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 public class SSFile {
     private final String path;
@@ -44,6 +44,6 @@ public class SSFile {
     }
 
     public String toString() {
-        return StringUtils.format("SSFile path: %c, location: %c", path, location.toString().toLowerCase());
+        return CCStringUtils.format("SSFile path: %c, location: %c", path, location.toString().toLowerCase());
     }
 }

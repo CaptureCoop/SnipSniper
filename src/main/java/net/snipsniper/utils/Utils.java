@@ -8,7 +8,7 @@ import org.capturecoop.cclogger.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
 import org.apache.commons.lang3.SystemUtils;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -209,8 +209,8 @@ public class Utils {
 	}
 
 	public static String constructFilename(String format, String modifier) {
-		String filename = StringUtils.formatDateTimeString(format);
-		filename = filename.replaceAll("%random%", StringUtils.getRandomString(10, true, true));
+		String filename = CCStringUtils.formatDateTimeString(format);
+		filename = filename.replaceAll("%random%", CCStringUtils.getRandomString(10, true, true));
 		filename += modifier + ".png";
 		return filename;
 	}

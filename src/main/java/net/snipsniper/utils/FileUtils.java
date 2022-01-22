@@ -2,7 +2,7 @@ package net.snipsniper.utils;
 
 import org.capturecoop.cclogger.CCLogger;
 import org.capturecoop.cclogger.LogLevel;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import java.awt.*;
 import java.io.*;
@@ -104,7 +104,7 @@ public class FileUtils {
             if(file.isDirectory())
                 result.addAll(getFilesInFolders(file.getAbsolutePath()));
             if(!file.isDirectory())
-                result.add(StringUtils.correctSlashes(file.getAbsolutePath()));
+                result.add(CCStringUtils.correctSlashes(file.getAbsolutePath()));
         }
         return result;
     }
@@ -198,7 +198,7 @@ public class FileUtils {
             String path = "net/snipsniper/resources/" + file;
             InputStream inputStream = ClassLoader.getSystemResourceAsStream(path);
             if(inputStream == null) {
-                CCLogger.log(StringUtils.format("Could not load file %c from jar!", path), LogLevel.ERROR);
+                CCLogger.log(CCStringUtils.format("Could not load file %c from jar!", path), LogLevel.ERROR);
                 return null;
             }
             InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);

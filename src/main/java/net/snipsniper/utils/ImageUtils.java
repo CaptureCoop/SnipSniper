@@ -6,7 +6,7 @@ import net.snipsniper.SnipSniper;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import org.capturecoop.cclogger.LogLevel;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -49,15 +49,15 @@ public class ImageUtils {
         String pathCustom = config.getString(ConfigHelper.PROFILE.saveFolderCustom);
         if(!pathCustom.startsWith("/"))
             pathCustom = "/" + pathCustom;
-        savePath += StringUtils.formatDateTimeString(pathCustom);
+        savePath += CCStringUtils.formatDateTimeString(pathCustom);
 
         String savePathModifier = "";
 
         if(config.getBool(ConfigHelper.PROFILE.dateFolders)) {
             LocalDate currentDate = LocalDate.now();
 
-            String dayString = StringUtils.getDateWithProperZero(currentDate.getDayOfMonth());
-            String monthString = StringUtils.getDateWithProperZero(currentDate.getMonthValue());
+            String dayString = CCStringUtils.getDateWithProperZero(currentDate.getDayOfMonth());
+            String monthString = CCStringUtils.getDateWithProperZero(currentDate.getMonthValue());
 
             savePathModifier = "\\" + config.getString(ConfigHelper.PROFILE.dateFoldersFormat);
             savePathModifier = savePathModifier.replaceAll("%day%", dayString);
@@ -80,7 +80,7 @@ public class ImageUtils {
                 return file.getAbsolutePath();
             }
         } catch (IOException exception) {
-            JOptionPane.showMessageDialog(null, StringUtils.format("Could not save image to \"%c\"!", file) , "Error", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, CCStringUtils.format("Could not save image to \"%c\"!", file) , "Error", JOptionPane.INFORMATION_MESSAGE);
             CCLogger.log("Image could not be saved. Wanted Location: " + file, LogLevel.WARNING);
             CCLogger.logStacktrace(exception, LogLevel.WARNING);
             return null;

@@ -14,7 +14,7 @@ import net.snipsniper.configwindow.textpreviewwindow.SaveFormatPreviewRenderer;
 import net.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
 import net.snipsniper.utils.*;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,7 +70,7 @@ public class GeneralTab extends JPanel implements ITab{
             @Override
             public void focusLost(FocusEvent e) {
                 super.focusLost(e);
-                if(StringUtils.removeWhitespace(titleInput.getText()).isEmpty())
+                if(CCStringUtils.removeWhitespace(titleInput.getText()).isEmpty())
                     titleInput.setText("none");
                 config.set(ConfigHelper.PROFILE.title, titleInput.getText());
             }
@@ -269,14 +269,14 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 0;
         options.add(configWindow.createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
-        JTextField pictureLocation = new JTextField(StringUtils.correctSlashes(config.getRawString(ConfigHelper.PROFILE.pictureFolder)));
+        JTextField pictureLocation = new JTextField(CCStringUtils.correctSlashes(config.getRawString(ConfigHelper.PROFILE.pictureFolder)));
         pictureLocation.setPreferredSize(new Dimension(200, pictureLocation.getHeight()));
         pictureLocation.setMaximumSize(new Dimension(200, pictureLocation.getHeight()));
         pictureLocation.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent focusEvent) {
                 String saveLocationRaw = pictureLocation.getText();
-                StringUtils.correctSlashes(saveLocationRaw);
+                CCStringUtils.correctSlashes(saveLocationRaw);
 
                 String saveLocationFinal = Utils.replaceVars(saveLocationRaw);
 
@@ -314,7 +314,7 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 0;
         options.add(configWindow.createJLabel("Save folder modifier", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
-        JButton customSaveButton = new JButton(StringUtils.formatDateTimeString(config.getString(ConfigHelper.PROFILE.saveFolderCustom)));
+        JButton customSaveButton = new JButton(CCStringUtils.formatDateTimeString(config.getString(ConfigHelper.PROFILE.saveFolderCustom)));
         customSaveButton.addActionListener(e -> {
             FolderPreviewRenderer renderer = new FolderPreviewRenderer(512, 512);
             TextPreviewWindow preview = new TextPreviewWindow("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom), renderer, ImageManager.getImage("icons/folder.png"), configWindow, "%day% = 1, %month% = 8, %year% = 2021");
@@ -325,7 +325,7 @@ public class GeneralTab extends JPanel implements ITab{
                 if(text.isEmpty())
                     text = "/";
                 config.set(ConfigHelper.PROFILE.saveFolderCustom, text);
-                customSaveButton.setText(StringUtils.formatDateTimeString(text));
+                customSaveButton.setText(CCStringUtils.formatDateTimeString(text));
                 cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
             });
         });

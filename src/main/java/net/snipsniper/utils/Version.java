@@ -2,7 +2,7 @@ package net.snipsniper.utils;
 
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import java.util.Arrays;
 
@@ -52,7 +52,7 @@ public class Version {
 
     public int[] digitsFromString(String string) {
         int[] ints = new int[MAX_DIGITS];
-        String[] parts = StringUtils.removeWhitespace(string).split("\\.");
+        String[] parts = CCStringUtils.removeWhitespace(string).split("\\.");
         for(int i = 0; i < MAX_DIGITS; i++) {
             ints[i] = Integer.parseInt(parts[i]);
         }
@@ -60,7 +60,7 @@ public class Version {
     }
 
     public String getDigits() {
-        return StringUtils.format("%c.%c.%c", digits[0], digits[1], digits[2]);
+        return CCStringUtils.format("%c.%c.%c", digits[0], digits[1], digits[2]);
     }
 
     public ReleaseType getReleaseType() {
@@ -81,6 +81,6 @@ public class Version {
 
     public String toString() {
         String form = "%c-%c rev-%c";
-        return StringUtils.format(form, getDigits(), releaseType.toString().toLowerCase(), getGithash());
+        return CCStringUtils.format(form, getDigits(), releaseType.toString().toLowerCase(), getGithash());
     }
 }

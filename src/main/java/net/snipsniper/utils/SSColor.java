@@ -2,7 +2,7 @@ package net.snipsniper.utils;
 
 import org.capturecoop.ccutils.math.Vector2Float;
 import org.capturecoop.ccutils.math.Vector2Int;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -230,6 +230,6 @@ public class SSColor {
 	}
 
 	public String toString() {
-		return StringUtils.format("SSColor primaryColor: %c secondaryColor: %c point1: %c point2: %c isGradient: %c", primaryColor, secondaryColor, point1, point2, isGradient);
+		return CCStringUtils.format("SSColor primaryColor: %c secondaryColor: %c point1: %c point2: %c isGradient: %c", primaryColor, secondaryColor, point1, point2, isGradient);
 	}
 }

@@ -5,7 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.FileUtils;
-import org.capturecoop.ccutils.utils.StringUtils;;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 import org.capturecoop.cclogger.LogLevel;
 
 import java.awt.*;
@@ -48,7 +48,7 @@ public class LangManager {
 
     public static BufferedImage getIcon(String language) {
         String file = langMap.get(language).getString("icon");
-        BufferedImage flag = ImageManager.getImage(StringUtils.format("flags/%c.png", file));
+        BufferedImage flag = ImageManager.getImage(CCStringUtils.format("flags/%c.png", file));
         int size = 16;
 
         BufferedImage icon = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);

@@ -27,7 +27,7 @@ import net.snipsniper.scviewer.SCViewerWindow;
 import net.snipsniper.systray.Sniper;
 import org.apache.commons.lang3.SystemUtils;
 import org.capturecoop.cclogger.CCLogger;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import net.snipsniper.utils.enums.LaunchType;
@@ -322,11 +322,11 @@ public final class SnipSniper {
 	}
 
 	public static String getMainFolder() {
-		return StringUtils.correctSlashes(mainFolder);
+		return CCStringUtils.correctSlashes(mainFolder);
 	}
 
 	public static String getJarFolder() {
-		return StringUtils.correctSlashes(jarFolder);
+		return CCStringUtils.correctSlashes(jarFolder);
 	}
 
 	public static Config getConfig() {

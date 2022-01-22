@@ -1,7 +1,7 @@
 package net.snipsniper.utils;
 
 import org.capturecoop.cclogger.CCLogger;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.capturecoop.cclogger.LogLevel;
@@ -41,7 +41,7 @@ public class WikiManager {
         JSONArray list = new JSONArray(listString);
         for(int i = 0; i < list.length(); i++) {
             String string = list.getString(i);
-            String json = FileUtils.loadFileFromJar(StringUtils.format("wiki/%c/" + string, language));
+            String json = FileUtils.loadFileFromJar(CCStringUtils.format("wiki/%c/" + string, language));
             if(json != null)
                 strings.put(string, new JSONObject(json));
             else

@@ -12,9 +12,9 @@ import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.utils.SSColor;
 import net.snipsniper.utils.Utils;
-import org.capturecoop.ccutils.utils.StringUtils;;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 import org.capturecoop.cclogger.LogLevel;
-import org.capturecoop.ccutils.utils.MathUtils;
+import org.capturecoop.ccutils.utils.CCMathUtils;
 
 public class Config {
 	private final ConfigContainer settings = new ConfigContainer();
@@ -129,7 +129,7 @@ public class Config {
 	public int getInt(String key) {
 		if(getString(key) != null) {
 			String value = getString(key);
-			if(MathUtils.isDouble(value))
+			if(CCMathUtils.isDouble(value))
 				return (int) Double.parseDouble(value);
 			else return Integer.parseInt(getString(key));
 		}

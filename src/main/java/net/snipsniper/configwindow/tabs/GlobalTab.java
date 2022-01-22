@@ -14,7 +14,7 @@ import net.snipsniper.utils.enums.ConfigSaveButtonState;
 import org.capturecoop.cclogger.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -145,7 +145,7 @@ public class GlobalTab extends JPanel implements ITab{
         if(releaseType == ReleaseType.DEV)
             version = SnipSniper.getVersion().getGithash();
         String channel = releaseType.toString().toLowerCase();
-        options.add(configWindow.createJLabel(StringUtils.format("Current Version: %c (%c)", version, channel), JLabel.CENTER, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(CCStringUtils.format("Current Version: %c (%c)", version, channel), JLabel.CENTER, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         options.add(new UpdateButton(), gbc);
 

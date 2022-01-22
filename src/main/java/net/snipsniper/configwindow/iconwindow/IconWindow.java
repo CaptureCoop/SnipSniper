@@ -5,7 +5,7 @@ import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.utils.*;
 import org.capturecoop.cclogger.LogLevel;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -165,7 +165,7 @@ public class IconWindow extends JFrame implements IClosable {
                     public boolean accept(File f) {
                         if(f.isDirectory())
                             return true;
-                        return StringUtils.endsWith(f.getName().toLowerCase(), ".png", ".gif", ".jpg", ".jpeg");
+                        return CCStringUtils.endsWith(f.getName().toLowerCase(), ".png", ".gif", ".jpg", ".jpeg");
                     }
 
                     @Override

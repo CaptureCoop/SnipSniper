@@ -8,7 +8,7 @@ import net.snipsniper.utils.*;
 import org.capturecoop.cclogger.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +42,7 @@ public class UpdateButton extends IDJButton {
                         setID(STATE_IDLE);
                         setIcon(new ImageIcon(checkmark));
                     } else {
-                        setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p></html>", newestHash));
+                        setText(CCStringUtils.format("<html><p align='center'>Update available! (%c)</p></html>", newestHash));
                         setID(STATE_DOUPDATE);
                         setIcon(new ImageIcon(download));
                     }
@@ -65,10 +65,10 @@ public class UpdateButton extends IDJButton {
                         setIcon(new ImageIcon(checkmark));
                     } else if (onlineVersion.isNewerThan(currentVersion)) {
                         if(SnipSniper.getVersion().getPlatformType() == PlatformType.STEAM) {
-                            setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Check Steam to update!</p></html>", onlineVersion.getDigits()));
+                            setText(CCStringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Check Steam to update!</p></html>", onlineVersion.getDigits()));
                             setID(STATE_IDLE);
                         } else {
-                            setText(StringUtils.format("<html><p align='center'>Update available! (%c)</p></html>", onlineVersion.getDigits()));
+                            setText(CCStringUtils.format("<html><p align='center'>Update available! (%c)</p></html>", onlineVersion.getDigits()));
                             setID(STATE_DOUPDATE);
                         }
                         setIcon(new ImageIcon(download));

@@ -22,7 +22,7 @@ import net.snipsniper.systray.Sniper;
 import net.snipsniper.utils.*;
 import org.apache.commons.lang3.SystemUtils;
 import org.capturecoop.cclogger.LogLevel;
-import org.capturecoop.ccutils.utils.StringUtils;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 public class CaptureWindow extends JFrame implements WindowListener{
 	private final Sniper sniperInstance;
@@ -389,7 +389,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 					}
 
 					if(spyglassRectangle != null) {
-						String positionText = StringUtils.format("X: %c Y: %c", cPointLive.x, cPointLive.y);
+						String positionText = CCStringUtils.format("X: %c Y: %c", cPointLive.x, cPointLive.y);
 						Rectangle positionTextRect = globalBuffer.getFont().getStringBounds(positionText, globalBuffer.getFontRenderContext()).getBounds();
 						int pointX = (int) (spyglassRectangle.x + spyglassBufferImage.getWidth() / 2 - positionTextRect.getWidth() / 2);
 						int pointY = (int) (spyglassRectangle.y + spyglassBufferImage.getHeight() + positionTextRect.getHeight());

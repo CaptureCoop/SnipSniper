@@ -1,6 +1,6 @@
 package net.snipsniper.configwindow;
 
-import org.capturecoop.ccutils.utils.MathUtils;
+import org.capturecoop.ccutils.utils.CCMathUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.LangManager;
 import org.capturecoop.cclogger.CCLogger;
@@ -366,7 +366,7 @@ public class ConfigWindow extends JFrame implements IClosable {
 
     public int getIDFromFilename(String name) {
         String idString = name.replaceAll(Config.DOT_EXTENSION, "").replace("profile", "");
-        if(MathUtils.isInteger(idString)) {
+        if(CCMathUtils.isInteger(idString)) {
             return Integer.parseInt(idString);
         }
         CCLogger.log("Issue parsing Filename to id: " + name, LogLevel.ERROR);
