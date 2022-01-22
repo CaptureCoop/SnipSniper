@@ -1,6 +1,6 @@
 package net.snipsniper.colorchooser;
 
-import org.capturecoop.ccutils.math.Vector2Float;
+import org.capturecoop.ccutils.math.CCVector2Float;
 import net.snipsniper.utils.DrawUtils;
 import net.snipsniper.utils.HSB;
 import net.snipsniper.utils.SSColor;
@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 
 public class SSColorChooserHSBPicker extends JPanel {
     private SSColor color;
-    private Vector2Float position;
+    private CCVector2Float position;
 
     private static final int MARGIN = 10;
 
@@ -59,12 +59,12 @@ public class SSColorChooserHSBPicker extends JPanel {
         dirty = true;
         float percentageX = (x * 100F) / getWidth();
         float percentageY = (y * 100F) / getHeight();
-        float pointX = new Vector2Float(percentageX / 100F, 0).limitX(0F, 1F).getX();
-        float pointY = new Vector2Float(percentageY / 100F, 0).limitX(0F, 1F).getX();
+        float pointX = new CCVector2Float(percentageX / 100F, 0).limitX(0F, 1F).getX();
+        float pointY = new CCVector2Float(percentageY / 100F, 0).limitX(0F, 1F).getX();
         HSB current = new HSB(color.getPrimaryColor());
         color.setPrimaryColor(new HSB(current.getHue(), position.getX(), position.getY(), current.getAlpha()).toRGB());
         pointY = (pointY - 1) * - 1;
-        position = new Vector2Float(pointX, pointY);
+        position = new CCVector2Float(pointX, pointY);
         repaint();
     }
 
@@ -78,7 +78,7 @@ public class SSColorChooserHSBPicker extends JPanel {
         if(!isDragging) {
             dirty = true;
             HSB hsb = new HSB(color.getPrimaryColor());
-            position = new Vector2Float(hsb.getSaturation(), hsb.getBrightness());
+            position = new CCVector2Float(hsb.getSaturation(), hsb.getBrightness());
             repaint();
         }
     }

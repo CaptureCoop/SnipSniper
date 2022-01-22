@@ -1,6 +1,6 @@
 package net.snipsniper.snipscope.ui;
 
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.utils.IFunction;
 
 import java.awt.*;
@@ -17,7 +17,7 @@ public class SnipScopeUIButton extends SnipScopeUIComponent{
     private boolean isHovering = false;
     private boolean isHeld = false;
     private boolean selected = false;
-    private Vector2Int lastPosition = new Vector2Int();
+    private CCVector2Int lastPosition = new CCVector2Int();
 
     public SnipScopeUIButton(BufferedImage icon, BufferedImage iconHovering, BufferedImage iconPressed) {
         this.icon = icon;
@@ -29,14 +29,14 @@ public class SnipScopeUIButton extends SnipScopeUIComponent{
     public boolean mouseMoved(MouseEvent mouseEvent) {
         if(!super.mouseMoved(mouseEvent)) return false;
         isHovering = contains(mouseEvent.getPoint());
-        lastPosition = new Vector2Int(mouseEvent.getPoint());
+        lastPosition = new CCVector2Int(mouseEvent.getPoint());
         return true;
     }
 
     @Override
     public boolean mouseDragged(MouseEvent mouseEvent) {
         if(!super.mouseDragged(mouseEvent)) return false;
-        lastPosition = new Vector2Int(mouseEvent.getPoint());
+        lastPosition = new CCVector2Int(mouseEvent.getPoint());
         return true;
     }
 

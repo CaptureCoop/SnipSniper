@@ -1,10 +1,10 @@
 package net.snipsniper.utils;
 
 import net.snipsniper.LangManager;
+import org.capturecoop.cclogger.CCLogLevel;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.utils.enums.LaunchType;
-import org.capturecoop.cclogger.LogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
 import org.apache.commons.lang3.SystemUtils;
@@ -43,7 +43,7 @@ public class Utils {
 		try {
 			return getTextFromWebsite(new URL(url));
 		} catch (MalformedURLException malformedURLException) {
-			CCLogger.log("Issue forming url: " + url, LogLevel.ERROR);
+			CCLogger.log("Issue forming url: " + url, CCLogLevel.ERROR);
 		}
 		return null;
 	}
@@ -87,7 +87,7 @@ public class Utils {
 			in.close();
 
 		} catch (Exception e) {
-			CCLogger.log("Error requesting text from website (" + url.toString() + "): " + e.getMessage(), LogLevel.ERROR);
+			CCLogger.log("Error requesting text from website (" + url.toString() + "): " + e.getMessage(), CCLogLevel.ERROR);
 		}
 		return result.toString();
 	}
@@ -229,8 +229,8 @@ public class Utils {
 			if(waitTillDone)
 				process.waitFor();
 		} catch (IOException | InterruptedException e) {
-			CCLogger.log("Could not execute process! Args: %c", LogLevel.ERROR, Arrays.toString(args));
-			CCLogger.logStacktrace(e, LogLevel.ERROR);
+			CCLogger.log("Could not execute process! Args: %c", CCLogLevel.ERROR, Arrays.toString(args));
+			CCLogger.logStacktrace(e, CCLogLevel.ERROR);
 		}
 	}
 

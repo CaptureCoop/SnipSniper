@@ -1,7 +1,7 @@
 package net.snipsniper.colorchooser;
 
 import org.capturecoop.ccutils.utils.CCMathUtils;
-import org.capturecoop.ccutils.math.Vector2Float;
+import org.capturecoop.ccutils.math.CCVector2Float;
 import net.snipsniper.ImageManager;
 import net.snipsniper.utils.DrawUtils;
 import net.snipsniper.utils.SSColor;
@@ -64,7 +64,7 @@ public class SSColorChooserAlphaBar extends JPanel {
             size = getWidth();
         }
         float percentage = (pos * 100F) / size;
-        position = new Vector2Float(percentage / 100F, 0).limitX(0, 1).getX();
+        position = new CCVector2Float(percentage / 100F, 0).limitX(0, 1).getX();
         Color oldColor = color.getPrimaryColor();
         color.setPrimaryColor(new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), CCMathUtils.clampInt((int)(position * 255), 0, 255)));
         repaint();

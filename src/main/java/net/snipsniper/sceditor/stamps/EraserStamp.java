@@ -1,6 +1,6 @@
 package net.snipsniper.sceditor.stamps;
 
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.SCEditorWindow;
@@ -43,12 +43,12 @@ public class EraserStamp implements IStamp {
     }
 
     @Override
-    public Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g, InputContainer input, CCVector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         int newSize = (int) ((double)size * difference[0]);
 
         if(scEditorWindow != null && input != null && !input.isKeyPressed(scEditorWindow.getMovementKey())) {
-            Vector2Int p0 = scEditorWindow.getPointOnImage(input.getMousePathPoint(0));
-            Vector2Int p1 = scEditorWindow.getPointOnImage(input.getMousePathPoint(1));
+            CCVector2Int p0 = scEditorWindow.getPointOnImage(input.getMousePathPoint(0));
+            CCVector2Int p1 = scEditorWindow.getPointOnImage(input.getMousePathPoint(1));
 
             if (p0 != null && p1 != null) {
                 Graphics2D g2 = (Graphics2D) scEditorWindow.getImage().getGraphics();

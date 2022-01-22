@@ -1,6 +1,6 @@
 package net.snipsniper.configwindow;
 
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.ImageManager;
 import net.snipsniper.utils.Utils;
 import net.snipsniper.sceditor.stamps.IStamp;
@@ -65,7 +65,7 @@ public class StampJPanel extends JPanel {
         g2d.drawRect(0,0,getWidth() - 1,getHeight() -1);
 
         if(stamp != null)
-            stamp.render(g2d, null, new Vector2Int(getWidth()/2, getHeight()/2), new Double[]{1D, 1D}, false, false, 0);
+            stamp.render(g2d, null, new CCVector2Int(getWidth()/2, getHeight()/2), new Double[]{1D, 1D}, false, false, 0);
 
         if(!isEnabled())
             g2d.fillRect(0, 0, getWidth(), getWidth()/2);

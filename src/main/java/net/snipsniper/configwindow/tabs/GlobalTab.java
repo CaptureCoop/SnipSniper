@@ -11,7 +11,7 @@ import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.configwindow.ConfigWindow;
 import net.snipsniper.configwindow.UpdateButton;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;
-import org.capturecoop.cclogger.LogLevel;
+import org.capturecoop.cclogger.CCLogLevel;
 import net.snipsniper.utils.enums.PlatformType;
 import net.snipsniper.utils.enums.ReleaseType;
 import org.capturecoop.ccutils.utils.CCStringUtils;
@@ -90,8 +90,8 @@ public class GlobalTab extends JPanel implements ITab{
                     bis.close();
                     zis.close();
                 } catch (IOException ex) {
-                    CCLogger.log("Could not import zip file!", LogLevel.ERROR);
-                    CCLogger.logStacktrace(ex, LogLevel.ERROR);
+                    CCLogger.log("Could not import zip file!", CCLogLevel.ERROR);
+                    CCLogger.logStacktrace(ex, CCLogLevel.ERROR);
                 }
             }
 
@@ -129,8 +129,8 @@ public class GlobalTab extends JPanel implements ITab{
                     }
                     out.close();
                 } catch (IOException ex) {
-                    CCLogger.log("Could not export zip file!", LogLevel.ERROR);
-                    CCLogger.logStacktrace(ex, LogLevel.ERROR);
+                    CCLogger.log("Could not export zip file!", CCLogLevel.ERROR);
+                    CCLogger.logStacktrace(ex, CCLogLevel.ERROR);
                 }
             }
         });

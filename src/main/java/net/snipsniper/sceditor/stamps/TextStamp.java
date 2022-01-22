@@ -1,13 +1,13 @@
 package net.snipsniper.sceditor.stamps;
 
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Int;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.config.Config;
 import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.InputContainer;
 import net.snipsniper.utils.SSColor;
-import org.capturecoop.cclogger.LogLevel;
+import org.capturecoop.cclogger.CCLogLevel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -27,8 +27,8 @@ public class TextStamp implements IStamp{
     private int fontMode = Font.PLAIN;
 
     private TextState state = TextState.IDLE;
-    private Vector2Int cPosition = new Vector2Int();
-    private Vector2Int livePosition = new Vector2Int();
+    private CCVector2Int cPosition = new CCVector2Int();
+    private CCVector2Int livePosition = new CCVector2Int();
     private boolean doSaveNextRender = false;
 
     public enum TextState {IDLE, TYPING}
@@ -87,7 +87,7 @@ public class TextStamp implements IStamp{
     }
 
     @Override
-    public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g_, InputContainer input, CCVector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         if(input == null) {
             input = new InputContainer();
             input.setMousePosition(position.getX(), position.getY());
@@ -95,7 +95,7 @@ public class TextStamp implements IStamp{
 
         Graphics2D g = (Graphics2D) g_;
 
-        livePosition = new Vector2Int(input.getMouseX(), input.getMouseY()); //Update method only gets called upon keypress
+        livePosition = new CCVector2Int(input.getMouseX(), input.getMouseY()); //Update method only gets called upon keypress
 
         if(isSaveRender && !doSaveNextRender)
             return null;
@@ -134,7 +134,7 @@ public class TextStamp implements IStamp{
         }
         if(pressed && state == TextState.IDLE) {
             state = TextState.TYPING;
-            cPosition = new Vector2Int(livePosition);
+            cPosition = new CCVector2Int(livePosition);
         } else if(pressed && state == TextState.TYPING) {
             doSaveNextRender = true;
         }
@@ -172,7 +172,7 @@ public class TextStamp implements IStamp{
 
     @Override
     public void setWidth(int width) {
-        CCLogger.log("setWidth called on TextStamp. This does not do anything! Use setHeight() instead.", LogLevel.WARNING);
+        CCLogger.log("setWidth called on TextStamp. This does not do anything! Use setHeight() instead.", CCLogLevel.WARNING);
     }
 
     @Override

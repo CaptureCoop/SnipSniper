@@ -1,6 +1,6 @@
 package net.snipsniper.snipscope;
 
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.snipscope.ui.SnipScopeUIComponent;
 import net.snipsniper.utils.Utils;
 
@@ -34,7 +34,7 @@ public class SnipScopeRenderer extends JPanel {
             x -= snipScopeWindow.getZoomOffset().getX();
             y -= snipScopeWindow.getZoomOffset().getY();
 
-            Vector2Int posModifier = snipScopeWindow.getPosition();
+            CCVector2Int posModifier = snipScopeWindow.getPosition();
             x -= posModifier.getX();
             y -= posModifier.getY();
 

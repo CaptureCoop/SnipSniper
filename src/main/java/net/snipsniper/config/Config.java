@@ -8,12 +8,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.capturecoop.cclogger.CCLogLevel;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.utils.SSColor;
 import net.snipsniper.utils.Utils;
 import org.capturecoop.ccutils.utils.CCStringUtils;
-import org.capturecoop.cclogger.LogLevel;
 import org.capturecoop.ccutils.utils.CCMathUtils;
 
 public class Config {
@@ -27,7 +27,7 @@ public class Config {
 
 	public Config (Config config) {
 		//Copies config
-		CCLogger.log("Copying config for <" + config.filename + ">", LogLevel.DEBUG);
+		CCLogger.log("Copying config for <" + config.filename + ">", CCLogLevel.DEBUG);
 		loadFromConfig(config);
 	}
 
@@ -45,27 +45,27 @@ public class Config {
 	public Config(String filename, String defaultFile, boolean ignoreLocal) {
 		this.filename = filename;
 		String idPrefix = filename + ": ";
-		CCLogger.log(idPrefix + "Creating config object for <" + filename + ">.", LogLevel.DEBUG);
+		CCLogger.log(idPrefix + "Creating config object for <" + filename + ">.", CCLogLevel.DEBUG);
 		try {
 			String defaultPath = "/net/snipsniper/resources/cfg/" + defaultFile;
 			if(!ignoreLocal) {
 				String filePath = SnipSniper.getConfigFolder() + filename;
 				if (new File(filePath).exists()) {
-					CCLogger.log(idPrefix + "Config file found locally! Using that one.", LogLevel.DEBUG);
+					CCLogger.log(idPrefix + "Config file found locally! Using that one.", CCLogLevel.DEBUG);
 					loadFile(filePath, settings, false);
 				} else {
-					CCLogger.log(idPrefix + "Config file not found locally! Using default.", LogLevel.DEBUG);
+					CCLogger.log(idPrefix + "Config file not found locally! Using default.", CCLogLevel.DEBUG);
 					loadFile(defaultPath, settings, true);
 				}
 			} else {
-				CCLogger.log(idPrefix + "ignoreLocal is true. Ignoring local file.", LogLevel.DEBUG);
+				CCLogger.log(idPrefix + "ignoreLocal is true. Ignoring local file.", CCLogLevel.DEBUG);
 			}
 
 			loadFile(defaultPath, defaults, true);
-			CCLogger.log(idPrefix + "Done!", LogLevel.DEBUG);
+			CCLogger.log(idPrefix + "Done!", CCLogLevel.DEBUG);
 		} catch (NumberFormatException | IOException exception) {
-			CCLogger.log("There was an error loading the config. Message:", LogLevel.ERROR);
-			CCLogger.logStacktrace(exception, LogLevel.ERROR);
+			CCLogger.log("There was an error loading the config. Message:", CCLogLevel.ERROR);
+			CCLogger.logStacktrace(exception, CCLogLevel.ERROR);
 		}
 	}
 	
@@ -104,8 +104,8 @@ public class Config {
 		} else if(defaults.containsKey(key)) {
 			returnVal = defaults.get(key);
 		} else {
-			CCLogger.log("No value found for <%c> in Config <%c>.", LogLevel.ERROR, key, SnipSniper.getConfigFolder() + filename);
-			CCLogger.logStacktrace(LogLevel.ERROR);
+			CCLogger.log("No value found for <%c> in Config <%c>.", CCLogLevel.ERROR, key, SnipSniper.getConfigFolder() + filename);
+			CCLogger.logStacktrace(CCLogLevel.ERROR);
 		}
 		return returnVal;
 	}
@@ -185,7 +185,7 @@ public class Config {
 	public void deleteFile() {
 		File file = new File(SnipSniper.getConfigFolder() + "/" + filename);
 		if(!file.delete())
-			CCLogger.log("Could not delete profile config!", LogLevel.WARNING);
+			CCLogger.log("Could not delete profile config!", CCLogLevel.WARNING);
 	}
 	
 	private void saveFile(ConfigContainer container) {
@@ -196,8 +196,8 @@ public class Config {
 
 			writer.close();
 		} catch (IOException exception) {
-			CCLogger.log("There was an error saving the config! Message:", LogLevel.ERROR);
-			CCLogger.logStacktrace(exception, LogLevel.ERROR);
+			CCLogger.log("There was an error saving the config! Message:", CCLogLevel.ERROR);
+			CCLogger.logStacktrace(exception, CCLogLevel.ERROR);
 		}
 	}
 	

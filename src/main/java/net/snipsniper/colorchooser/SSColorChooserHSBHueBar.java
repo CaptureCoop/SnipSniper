@@ -1,6 +1,6 @@
 package net.snipsniper.colorchooser;
 
-import org.capturecoop.ccutils.math.Vector2Float;
+import org.capturecoop.ccutils.math.CCVector2Float;
 import net.snipsniper.utils.DrawUtils;
 import net.snipsniper.utils.HSB;
 import net.snipsniper.utils.SSColor;
@@ -62,7 +62,7 @@ public class SSColorChooserHSBHueBar extends JPanel {
             size = getWidth();
         }
         float percentage = (pos * 100F) / size;
-        position = new Vector2Float(percentage / 100F, 0).limitX(0.01F, 0.99F).getX();
+        position = new CCVector2Float(percentage / 100F, 0).limitX(0.01F, 0.99F).getX();
         HSB current = new HSB(color.getPrimaryColor());
         color.setPrimaryColor(new HSB(position, current.getSaturation(), current.getBrightness(), current.getAlpha()).toRGB());
         repaint();

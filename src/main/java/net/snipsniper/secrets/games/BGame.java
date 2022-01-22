@@ -5,7 +5,7 @@ import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.StatsManager;
 import net.snipsniper.systray.Sniper;
-import org.capturecoop.cclogger.LogLevel;
+import org.capturecoop.cclogger.CCLogLevel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -145,8 +145,8 @@ public class BGame extends JFrame {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
-                CCLogger.log("Error sleeping thread for BGame!", LogLevel.ERROR);
-                CCLogger.logStacktrace(e, LogLevel.ERROR);
+                CCLogger.log("Error sleeping thread for BGame!", CCLogLevel.ERROR);
+                CCLogger.logStacktrace(e, CCLogLevel.ERROR);
             }
         }
     }

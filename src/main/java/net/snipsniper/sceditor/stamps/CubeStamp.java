@@ -1,6 +1,6 @@
 package net.snipsniper.sceditor.stamps;
 
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.SCEditorWindow;
@@ -74,7 +74,7 @@ public class CubeStamp implements IStamp{
         alertChangeListeners(IStampUpdateListener.TYPE.INPUT);
     }
 
-    public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g_, InputContainer input, CCVector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         boolean isSmartPixel = config.getBool(ConfigHelper.PROFILE.editorStampCubeSmartPixel);
 
         int drawWidth = (int) ((double)width * difference[0]);
@@ -83,8 +83,8 @@ public class CubeStamp implements IStamp{
         Graphics2D g = (Graphics2D) g_;
 
         if(isSmartPixel && isSaveRender && !isCensor && scEditorWindow != null) {
-            Vector2Int pos = new Vector2Int(position.getX() + drawWidth / 2, position.getY() + drawHeight / 2);
-            Vector2Int size = new Vector2Int(-drawWidth, -drawHeight);
+            CCVector2Int pos = new CCVector2Int(position.getX() + drawWidth / 2, position.getY() + drawHeight / 2);
+            CCVector2Int size = new CCVector2Int(-drawWidth, -drawHeight);
 
             if(color.isGradient()) {
                 if(smartPixelBuffer == null || width != smartPixelBuffer.getWidth() || height != smartPixelBuffer.getHeight()) {
