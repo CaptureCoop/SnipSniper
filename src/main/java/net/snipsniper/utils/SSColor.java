@@ -1,7 +1,7 @@
 package net.snipsniper.utils;
 
-import org.capturecoop.ccutils.math.Vector2Float;
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Float;
+import org.capturecoop.ccutils.math.CCVector2Int;
 import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.swing.event.ChangeEvent;
@@ -12,8 +12,8 @@ import java.util.ArrayList;
 public class SSColor {
 	private Color primaryColor;
 	private Color secondaryColor;
-	private Vector2Float point1;
-	private Vector2Float point2;
+	private CCVector2Float point1;
+	private CCVector2Float point2;
 	private boolean isGradient = false;
 
 	private final ArrayList<ChangeListener> listeners = new ArrayList<>();
@@ -30,16 +30,16 @@ public class SSColor {
 		primaryColor = color.primaryColor;
 		secondaryColor = color.secondaryColor;
 		isGradient = color.isGradient;
-		if(color.point1 != null) point1 = new Vector2Float(color.point1);
-		if(color.point2 != null) point2 = new Vector2Float(color.point2);
+		if(color.point1 != null) point1 = new CCVector2Float(color.point1);
+		if(color.point2 != null) point2 = new CCVector2Float(color.point2);
 	}
 
 	public SSColor(SSColor color, int alpha) {
 		primaryColor = new Color(color.primaryColor.getRed(), color.primaryColor.getGreen(), color.primaryColor.getBlue(), alpha);
 		if(color.secondaryColor != null) secondaryColor = new Color(color.secondaryColor.getRed(), color.secondaryColor.getGreen(), color.secondaryColor.getBlue(), alpha);
 		isGradient = color.isGradient;
-		if(color.point1 != null) point1 = new Vector2Float(color.point1);
-		if(color.point2 != null) point2 = new Vector2Float(color.point2);
+		if(color.point1 != null) point1 = new CCVector2Float(color.point1);
+		if(color.point2 != null) point2 = new CCVector2Float(color.point2);
 	}
 
 	public SSColor(Color primaryColor, Color secondaryColor, boolean isGradient) {
@@ -90,9 +90,9 @@ public class SSColor {
 		alertChangeListeners();
 	}
 
-	public void setPoint1(Vector2Float point) {
+	public void setPoint1(CCVector2Float point) {
 		if(point != null) {
-			point1 = new Vector2Float(point);
+			point1 = new CCVector2Float(point);
 			point1.limit(0f, 1f);
 		} else {
 			point1 = null;
@@ -100,9 +100,9 @@ public class SSColor {
 		alertChangeListeners();
 	}
 
-	public void setPoint2(Vector2Float point) {
+	public void setPoint2(CCVector2Float point) {
 		if(point != null) {
-			point2 = new Vector2Float(point);
+			point2 = new CCVector2Float(point);
 			point2.limit(0f, 1f);
 		} else {
 			point2 = null;
@@ -110,11 +110,11 @@ public class SSColor {
 		alertChangeListeners();
 	}
 
-	public Vector2Float getPoint1() {
+	public CCVector2Float getPoint1() {
 		return point1;
 	}
 
-	public Vector2Float getPoint2() {
+	public CCVector2Float getPoint2() {
 		return point2;
 	}
 
@@ -127,12 +127,12 @@ public class SSColor {
 			secondaryColor = primaryColor;
 
 		if(point1 == null)
-			point1 = new Vector2Float(0f, 0f);
+			point1 = new CCVector2Float(0f, 0f);
 		if(point2 == null)
-			point2 = new Vector2Float(1f, 1f);
+			point2 = new CCVector2Float(1f, 1f);
 
-		Vector2Int point1int = new Vector2Int(point1.getX() * width, point1.getY() * height);
-		Vector2Int point2int = new Vector2Int(point2.getX() * width, point2.getY() * height);
+		CCVector2Int point1int = new CCVector2Int(point1.getX() * width, point1.getY() * height);
+		CCVector2Int point2int = new CCVector2Int(point2.getX() * width, point2.getY() * height);
 		return new GradientPaint(point1int.getX() + posX, point1int.getY() + posY, primaryColor, point2int.getX() + posX, point2int.getY() + posY, secondaryColor);
 	}
 
@@ -179,7 +179,7 @@ public class SSColor {
 
 			float defaultPos = 0;
 			if(index != 0) defaultPos = 1;
-			Vector2Float pos = new Vector2Float(defaultPos, defaultPos);
+			CCVector2Float pos = new CCVector2Float(defaultPos, defaultPos);
 			for(String str : part.split("_")) {
 				switch(str.charAt(0)) {
 					case '#': color = Utils.hex2rgb(str); break;

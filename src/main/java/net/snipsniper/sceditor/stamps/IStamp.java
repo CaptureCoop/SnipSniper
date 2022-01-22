@@ -1,6 +1,6 @@
 package net.snipsniper.sceditor.stamps;
 
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.utils.InputContainer;
 import net.snipsniper.utils.SSColor;
 
@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 
 public interface IStamp {
     void update(InputContainer input, int mouseWheelDirection, KeyEvent keyEvent);
-    Rectangle render(Graphics g, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint);
+    Rectangle render(Graphics g, InputContainer input, CCVector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint);
     void editorUndo(int historyPoint);
 
     void mousePressedEvent(int button, boolean pressed);

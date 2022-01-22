@@ -1,6 +1,6 @@
 package net.snipsniper.sceditor.stamps;
 
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.SCEditorWindow;
@@ -79,7 +79,7 @@ public class CounterStamp implements IStamp{
     }
 
     @Override
-    public Rectangle render(Graphics g_, InputContainer input, Vector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
+    public Rectangle render(Graphics g_, InputContainer input, CCVector2Int position, Double[] difference, boolean isSaveRender, boolean isCensor, int historyPoint) {
         Graphics2D g = (Graphics2D) g_;
         Rectangle drawnRectangle = null;
         if(isSaveRender && historyPoint != -1) {

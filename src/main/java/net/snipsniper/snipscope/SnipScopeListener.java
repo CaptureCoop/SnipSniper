@@ -1,6 +1,6 @@
 package net.snipsniper.snipscope;
 
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.snipscope.ui.SnipScopeUIComponent;
 import net.snipsniper.utils.InputContainer;
 
@@ -91,7 +91,7 @@ public class SnipScopeListener implements KeyListener, MouseListener, MouseMotio
             if(lastPoint == null) lastPoint = mouseEvent.getPoint();
             double x = lastPoint.getX() - mouseEvent.getPoint().getX();
             double y = lastPoint.getY() - mouseEvent.getPoint().getY();
-            snipScopeWindow.setPosition(Vector2Int.add(snipScopeWindow.getPosition(), new Vector2Int(x, y)));
+            snipScopeWindow.setPosition(CCVector2Int.add(snipScopeWindow.getPosition(), new CCVector2Int(x, y)));
 
             lastPoint = mouseEvent.getPoint();
             snipScopeWindow.repaint();

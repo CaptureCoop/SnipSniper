@@ -12,7 +12,7 @@ import org.capturecoop.cclogger.CCLogger;
 import org.json.JSONArray;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.FileUtils;
-import org.capturecoop.cclogger.LogLevel;
+import org.capturecoop.cclogger.CCLogLevel;
 
 public class ImageManager {
 
@@ -23,7 +23,7 @@ public class ImageManager {
 	private ImageManager() { }
 
 	public static void loadResources() {
-		CCLogger.log("Loading images...", LogLevel.INFO);
+		CCLogger.log("Loading images...");
 		try {
 			JSONArray list = new JSONArray(FileUtils.loadFileFromJar("img.json"));
 			for(int i = 0; i < list.length(); i++) {
@@ -32,7 +32,7 @@ public class ImageManager {
 					if (url != null) {
 						images.put(list.getString(i), ImageIO.read(url));
 					} else {
-						CCLogger.log("Could not load image %c. This should not happen. Exiting...", LogLevel.ERROR, list.getString(i));
+						CCLogger.log("Could not load image %c. This should not happen. Exiting...", CCLogLevel.ERROR, list.getString(i));
 						SnipSniper.exit(false);
 					}
 				} else {
@@ -41,16 +41,16 @@ public class ImageManager {
 						Image img = new ImageIcon(url).getImage();
 						animatedImages.put(list.getString(i), img);
 					} else {
-						CCLogger.log("Could not load image %c. This should not happen. Exiting...", LogLevel.ERROR, list.getString(i));
+						CCLogger.log("Could not load image %c. This should not happen. Exiting...", CCLogLevel.ERROR, list.getString(i));
 						SnipSniper.exit(false);
 					}
 				}
 			}
 		} catch (IOException ioException) {
-			CCLogger.log("Could not load resources. Message:", LogLevel.ERROR);
-			CCLogger.logStacktrace(ioException, LogLevel.ERROR);
+			CCLogger.log("Could not load resources. Message:", CCLogLevel.ERROR);
+			CCLogger.logStacktrace(ioException, CCLogLevel.ERROR);
 		}
-		CCLogger.log("Done!", LogLevel.INFO);
+		CCLogger.log("Done!");
 	}
 
 	public static String[] getListAsString() {
@@ -66,7 +66,7 @@ public class ImageManager {
 
 	public static BufferedImage getImage(String path) {
 		if(!images.containsKey(path)) {
-			CCLogger.log("Could not find image under path " + path + "!", LogLevel.ERROR, false);
+			CCLogger.log("Could not find image under path " + path + "!", CCLogLevel.ERROR);
 			return images.get("missing.png");
 		}
 		return images.get(path);
@@ -74,7 +74,7 @@ public class ImageManager {
 
 	public static Image getAnimatedImage(String path) {
 		if(!animatedImages.containsKey(path)) {
-			CCLogger.log("Could not find image under path " + path + "!", LogLevel.ERROR, false);
+			CCLogger.log("Could not find image under path " + path + "!", CCLogLevel.ERROR);
 			return images.get("missing.png");
 		}
 		return animatedImages.get(path);

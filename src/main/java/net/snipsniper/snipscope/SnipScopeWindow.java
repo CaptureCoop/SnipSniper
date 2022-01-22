@@ -1,6 +1,6 @@
 package net.snipsniper.snipscope;
 
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.snipscope.ui.SnipScopeUIComponent;
 import net.snipsniper.utils.InputContainer;
 import net.snipsniper.utils.Utils;
@@ -15,8 +15,8 @@ public class SnipScopeWindow extends JFrame {
     private BufferedImage image;
 
     private Dimension optimalImageDimension;
-    private Vector2Int position = new Vector2Int(0,0);
-    private Vector2Int zoomOffset = new Vector2Int(0, 0);
+    private CCVector2Int position = new CCVector2Int(0,0);
+    private CCVector2Int zoomOffset = new CCVector2Int(0, 0);
 
     private SnipScopeRenderer renderer;
 
@@ -74,7 +74,7 @@ public class SnipScopeWindow extends JFrame {
 
         int modX = (int)(offsetX * getZoom() - offsetX);
         int modY = (int)(offsetY * getZoom() - offsetY);
-        zoomOffset = new Vector2Int(modX, modY);
+        zoomOffset = new CCVector2Int(modX, modY);
 
         repaint();
     }
@@ -86,7 +86,7 @@ public class SnipScopeWindow extends JFrame {
         return new Double[]{width, height};
     }
 
-    public Vector2Int getPointOnImage(Point point) {
+    public CCVector2Int getPointOnImage(Point point) {
         if(point == null)
             return null;
 
@@ -105,13 +105,13 @@ public class SnipScopeWindow extends JFrame {
         double posOnImageX = (point.getX() - imageX) * (difference[0]);
         double posOnImageY = (point.getY() - imageY) * (difference[1]);
 
-        return new Vector2Int(posOnImageX, posOnImageY);
+        return new CCVector2Int(posOnImageX, posOnImageY);
     }
 
     public void resetZoom() {
-        setPosition(new Vector2Int());
+        setPosition(new CCVector2Int());
         setZoom(1);
-        setZoomOffset(new Vector2Int());
+        setZoomOffset(new CCVector2Int());
     }
 
     public void resizeTrigger() {
@@ -156,11 +156,11 @@ public class SnipScopeWindow extends JFrame {
         return movementKey;
     }
 
-    public Vector2Int getZoomOffset() {
+    public CCVector2Int getZoomOffset() {
         return zoomOffset;
     }
 
-    public void setZoomOffset(Vector2Int vec2int) {
+    public void setZoomOffset(CCVector2Int vec2int) {
         zoomOffset = vec2int;
     }
 
@@ -168,11 +168,11 @@ public class SnipScopeWindow extends JFrame {
         return image;
     }
 
-    public Vector2Int getPosition() {
+    public CCVector2Int getPosition() {
         return position;
     }
 
-    public void setPosition(Vector2Int vec2int) {
+    public void setPosition(CCVector2Int vec2int) {
         position = vec2int;
     }
 

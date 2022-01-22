@@ -9,7 +9,7 @@ import net.snipsniper.utils.Utils;
 import net.snipsniper.colorchooser.ColorChooser;
 import net.snipsniper.sceditor.stamps.IStamp;
 import net.snipsniper.snipscope.SnipScopeListener;
-import org.capturecoop.cclogger.LogLevel;
+import org.capturecoop.cclogger.CCLogLevel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -37,7 +37,7 @@ public class SCEditorListener extends SnipScopeListener {
     }
 
     public void resetHistory() {
-        CCLogger.log("Reset editor history", LogLevel.INFO);
+        CCLogger.log("Reset editor history");
         history.clear();
         history.add(ImageUtils.copyImage(scEditorWindow.getImage()));
     }
@@ -143,8 +143,8 @@ public class SCEditorListener extends SnipScopeListener {
                     if(chooser.getSelectedFile().createNewFile())
                         ImageIO.write(scEditorWindow.getImage(), "png", chooser.getSelectedFile());
                 } catch (IOException ioException) {
-                    CCLogger.log("Error with loading image chosen for editor!", LogLevel.ERROR);
-                    CCLogger.logStacktrace(ioException, LogLevel.ERROR);
+                    CCLogger.log("Error with loading image chosen for editor!", CCLogLevel.ERROR);
+                    CCLogger.logStacktrace(ioException, CCLogLevel.ERROR);
                 }
             }
         }

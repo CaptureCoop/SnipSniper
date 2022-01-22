@@ -1,6 +1,6 @@
 package net.snipsniper.colorchooser;
 
-import org.capturecoop.ccutils.math.Vector2Float;
+import org.capturecoop.ccutils.math.CCVector2Float;
 import net.snipsniper.utils.DrawUtils;
 import net.snipsniper.utils.SSColor;
 import net.snipsniper.utils.Utils;
@@ -68,9 +68,9 @@ public class ColorChooserGradient extends JPanel {
                     float y = mouseEvent.getY() - lastStartY;
                     float size = lastSize;
                     if(pointControlled == 0)
-                        color.setPoint1(new Vector2Float(x / size, y / size));
+                        color.setPoint1(new CCVector2Float(x / size, y / size));
                     else if(pointControlled == 1)
-                        color.setPoint2(new Vector2Float(x / size, y / size));
+                        color.setPoint2(new CCVector2Float(x / size, y / size));
                     repaint();
                 }
             }

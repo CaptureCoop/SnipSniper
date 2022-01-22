@@ -5,7 +5,7 @@ import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
-import org.capturecoop.cclogger.LogLevel;
+import org.capturecoop.cclogger.CCLogLevel;
 import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.imageio.ImageIO;
@@ -70,19 +70,19 @@ public class ImageUtils {
         try {
             if(!path.exists()) {
                 if(!path.mkdirs()) {
-                    CCLogger.log("Failed saving, directory missing & could not create it!", LogLevel.WARNING);
+                    CCLogger.log("Failed saving, directory missing & could not create it!", CCLogLevel.WARNING);
                     return null;
                 }
             }
             if(file.createNewFile()) {
                 ImageIO.write(finalImg, "png", file);
-                CCLogger.log("Saved image on disk. Location: " + file, LogLevel.INFO);
+                CCLogger.log("Saved image on disk. Location: " + file, CCLogLevel.INFO);
                 return file.getAbsolutePath();
             }
         } catch (IOException exception) {
             JOptionPane.showMessageDialog(null, CCStringUtils.format("Could not save image to \"%c\"!", file) , "Error", JOptionPane.INFORMATION_MESSAGE);
-            CCLogger.log("Image could not be saved. Wanted Location: " + file, LogLevel.WARNING);
-            CCLogger.logStacktrace(exception, LogLevel.WARNING);
+            CCLogger.log("Image could not be saved. Wanted Location: " + file, CCLogLevel.WARNING);
+            CCLogger.logStacktrace(exception, CCLogLevel.WARNING);
             return null;
         }
         return null;
@@ -91,7 +91,7 @@ public class ImageUtils {
     public static void copyToClipboard(BufferedImage img) {
         ImageSelection imgSel = new ImageSelection(img);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
-        CCLogger.log("Copied Image to clipboard", LogLevel.INFO);
+        CCLogger.log("Copied Image to clipboard", CCLogLevel.INFO);
     }
 
     //https://stackoverflow.com/a/36938923
@@ -191,8 +191,8 @@ public class ImageUtils {
             try {
                 return (Image) transferable.getTransferData(DataFlavor.imageFlavor);
             } catch (UnsupportedFlavorException | IOException e) {
-                CCLogger.log("Error getting image from clipboard!", LogLevel.ERROR);
-                CCLogger.logStacktrace(e, LogLevel.ERROR);
+                CCLogger.log("Error getting image from clipboard!", CCLogLevel.ERROR);
+                CCLogger.logStacktrace(e, CCLogLevel.ERROR);
             }
         }
         return null;
@@ -206,7 +206,7 @@ public class ImageUtils {
                 Files.copy(new File(filePath).toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 filePath = newFile.getAbsolutePath();
             } catch (IOException ioException) {
-                CCLogger.log("Issue running getImageFromDisk with gif. Message: " + ioException.getMessage(), LogLevel.ERROR);
+                CCLogger.log("Issue running getImageFromDisk with gif. Message: " + ioException.getMessage(), CCLogLevel.ERROR);
             }
         }
         return new ImageIcon(filePath).getImage();
@@ -221,7 +221,7 @@ public class ImageUtils {
             switch (iconFile.getLocation()) {
                 case JAR:
                     if(!ImageManager.hasImage(iconFile.getPath())) {
-                        CCLogger.log("Couldnt find jar icon. Path: " + iconFile.getPath(), LogLevel.ERROR);
+                        CCLogger.log("Couldnt find jar icon. Path: " + iconFile.getPath(), CCLogLevel.ERROR);
                         return null;
                     }
                     if(icon.endsWith(".gif")) {
@@ -233,7 +233,7 @@ public class ImageUtils {
                 case LOCAL:
                     String path = SnipSniper.getImageFolder() + "/" + iconFile.getPath();
                     if(!FileUtils.exists(path))
-                        CCLogger.log("Couldnt find icon. Path: " + path, LogLevel.ERROR);
+                        CCLogger.log("Couldnt find icon. Path: " + path, CCLogLevel.ERROR);
                     else
                         image = ImageUtils.getImageFromDisk(SnipSniper.getImageFolder() + "/" + iconFile.getPath());
                     return image;

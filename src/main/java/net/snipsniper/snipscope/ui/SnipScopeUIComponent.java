@@ -1,14 +1,14 @@
 package net.snipsniper.snipscope.ui;
 
-import org.capturecoop.ccutils.math.Vector2Int;
+import org.capturecoop.ccutils.math.CCVector2Int;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class SnipScopeUIComponent {
 
-    private final Vector2Int position = new Vector2Int(0, 0);
-    private final Vector2Int size = new Vector2Int(0, 0);
+    private final CCVector2Int position = new CCVector2Int(0, 0);
+    private final CCVector2Int size = new CCVector2Int(0, 0);
     private boolean enabled = true;
 
     public boolean render(Graphics2D g) {
@@ -31,7 +31,7 @@ public class SnipScopeUIComponent {
         return enabled;
     }
 
-    public Vector2Int getPosition() {
+    public CCVector2Int getPosition() {
         return position;
     }
 
@@ -40,7 +40,7 @@ public class SnipScopeUIComponent {
         position.setY(y);
     }
 
-    public Vector2Int getSize() {
+    public CCVector2Int getSize() {
         return size;
     }
 

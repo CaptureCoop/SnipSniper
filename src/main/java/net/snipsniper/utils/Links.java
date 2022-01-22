@@ -1,7 +1,7 @@
 package net.snipsniper.utils;
 
 import org.capturecoop.cclogger.CCLogger;
-import org.capturecoop.cclogger.LogLevel;
+import org.capturecoop.cclogger.CCLogLevel;
 
 import java.awt.*;
 import java.io.IOException;
@@ -21,8 +21,8 @@ public class Links {
         try {
             return new URI(link);
         } catch (URISyntaxException exception) {
-            CCLogger.log("Could not get URI!", LogLevel.ERROR);
-            CCLogger.logStacktrace(exception, LogLevel.ERROR);
+            CCLogger.log("Could not get URI!", CCLogLevel.ERROR);
+            CCLogger.logStacktrace(exception, CCLogLevel.ERROR);
         }
         return null;
     }
@@ -31,8 +31,8 @@ public class Links {
         try {
             Desktop.getDesktop().browse(getURI(link));
         } catch (IOException exception) {
-            CCLogger.log("Could open link!", LogLevel.ERROR);
-            CCLogger.logStacktrace(exception, LogLevel.ERROR);
+            CCLogger.log("Could open link!", CCLogLevel.ERROR);
+            CCLogger.logStacktrace(exception, CCLogLevel.ERROR);
         }
     }
 }
