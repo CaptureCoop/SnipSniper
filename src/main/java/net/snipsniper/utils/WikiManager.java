@@ -29,7 +29,7 @@ public class WikiManager {
                 languageToLoad = langString;
         }
         finalLoad(languageToLoad);
-        CCLogger.log("Done!", CCLogLevel.INFO);
+        CCLogger.log("Done!");
     }
 
     private static void finalLoad(String language) {

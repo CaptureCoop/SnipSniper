@@ -76,7 +76,7 @@ public class ImageUtils {
             }
             if(file.createNewFile()) {
                 ImageIO.write(finalImg, "png", file);
-                CCLogger.log("Saved image on disk. Location: " + file, CCLogLevel.INFO);
+                CCLogger.log("Saved image on disk. Location: " + file);
                 return file.getAbsolutePath();
             }
         } catch (IOException exception) {
@@ -91,7 +91,7 @@ public class ImageUtils {
     public static void copyToClipboard(BufferedImage img) {
         ImageSelection imgSel = new ImageSelection(img);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
-        CCLogger.log("Copied Image to clipboard", CCLogLevel.INFO);
+        CCLogger.log("Copied Image to clipboard");
     }
 
     //https://stackoverflow.com/a/36938923
