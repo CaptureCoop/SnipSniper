@@ -43,6 +43,9 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 			checkMovement(mouseEvent);
 		}
 		cPointLive = mouseEvent.getPoint();
+
+		if(wndInstance.getConfig().getBool(ConfigHelper.PROFILE.afterDragContinuesOoBTrim))
+			trimArea();
 	}
 	
 	@Override
@@ -98,15 +101,8 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 			SwingUtilities.convertPointToScreen(startPointTotal, wndInstance);
 			stoppedCapture = true;
 
-			final int CUT_MARGIN = 1; //This makes the outline show up when cutting screenshot off outside the bounds
-			if(startPoint.x < 0)
-				startPoint.x = CUT_MARGIN;
-			if(startPoint.y < 0)
-				startPoint.y = CUT_MARGIN;
-			if(cPoint.x > wndInstance.getScreenshotBounds().width)
-				cPoint.x = wndInstance.getScreenshotBounds().width - CUT_MARGIN;
-			if(cPoint.y > wndInstance.getScreenshotBounds().height)
-				cPoint.y = wndInstance.getScreenshotBounds().height - CUT_MARGIN;
+			if(!wndInstance.getConfig().getBool(ConfigHelper.PROFILE.afterDragContinuesOoBTrim))
+				trimArea();
 
 			if(!wndInstance.isAfterDragEnabled())
 				wndInstance.capture(false, false, false, false);
@@ -235,6 +231,18 @@ public class CaptureWindowListener implements KeyListener, MouseListener, MouseM
 		} else {
 			wndInstance.getRootPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
+	}
+
+	public void trimArea() {
+		final int CUT_MARGIN = 1; //This makes the outline show up when cutting screenshot off outside the bounds
+		if (startPoint.x < 0)
+			startPoint.x = CUT_MARGIN;
+		if (startPoint.y < 0)
+			startPoint.y = CUT_MARGIN;
+		if (cPoint.x > wndInstance.getScreenshotBounds().width)
+			cPoint.x = wndInstance.getScreenshotBounds().width - CUT_MARGIN;
+		if (cPoint.y > wndInstance.getScreenshotBounds().height)
+			cPoint.y = wndInstance.getScreenshotBounds().height - CUT_MARGIN;
 	}
 
 	public void checkMovement(MouseEvent mouseEvent) {
