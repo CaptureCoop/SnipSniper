@@ -4,18 +4,18 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.capturecoop.cccolorutils.CCColor;
+import org.capturecoop.cccolorutils.CCColorUtils;
+import org.capturecoop.cccolorutils.gui.parts.CCAlphaBar;
+import org.capturecoop.cccolorutils.gui.parts.CCHSBHueBar;
+import org.capturecoop.cccolorutils.gui.parts.CCHSBPicker;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
-import net.snipsniper.colorchooser.SSColorChooserAlphaBar;
-import net.snipsniper.colorchooser.SSColorChooserHSBHueBar;
-import net.snipsniper.colorchooser.SSColorChooserHSBPicker;
 import net.snipsniper.configwindow.StampJPanel;
 import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.sceditor.stamps.*;
-import net.snipsniper.utils.DrawUtils;
 import net.snipsniper.utils.DropdownItem;
 import net.snipsniper.utils.Function;
-import net.snipsniper.utils.SSColor;
 import org.capturecoop.cclogger.CCLogLevel;
 
 import java.awt.*;
@@ -63,7 +63,7 @@ public class EzModeSettingsCreator {
     public int getLastCorrectHeight() {
         int height = 0;
         for(Component comp : lastPanel.getComponents()) {
-            if(!(comp instanceof SSColorChooserHSBHueBar))
+            if(!(comp instanceof CCHSBHueBar))
                 height += comp.getHeight();
         }
         return height;
@@ -107,22 +107,25 @@ public class EzModeSettingsCreator {
         panel.add(createJSeperator());
 
         int barWidth = 30;
-        SSColor stampColor = stamp.getColor();
-        SSColorChooserHSBPicker colorChooserPanel = new SSColorChooserHSBPicker(stampColor, true);
+        CCColor stampColor = stamp.getColor();
+
+        //TODO: This doesnt work yet. add Listeners and possibly remove sliders
+
+        CCHSBPicker colorChooserPanel = new CCHSBPicker(stampColor.getPrimaryColor(), true);
         Dimension dim = new Dimension(scEditorWindow.getEzModeWidth() - barWidth, scEditorWindow.getEzModeWidth() - barWidth);
         colorChooserPanel.setPreferredSize(dim);
         colorChooserPanel.setMinimumSize(dim);
         colorChooserPanel.setMaximumSize(dim);
         panel.add(colorChooserPanel);
 
-        SSColorChooserHSBHueBar colorChooserBar = new SSColorChooserHSBHueBar(stampColor, DrawUtils.DIRECTION.VERTICAL, true);
+        CCHSBHueBar colorChooserBar = new CCHSBHueBar(stampColor.getPrimaryColor(), CCColorUtils.DIRECTION.VERTICAL, true);
         Dimension dim2 = new Dimension(barWidth, scEditorWindow.getEzModeWidth() - barWidth);
         colorChooserBar.setPreferredSize(dim2);
         colorChooserBar.setMinimumSize(dim2);
         colorChooserBar.setMaximumSize(dim2);
         panel.add(colorChooserBar);
 
-        SSColorChooserAlphaBar alphaBar = new SSColorChooserAlphaBar(stampColor, DrawUtils.DIRECTION.HORIZONTAL, true);
+        CCAlphaBar alphaBar = new CCAlphaBar(stampColor.getPrimaryColor(), CCColorUtils.DIRECTION.HORIZONTAL, true);
         Dimension dim3 = new Dimension(scEditorWindow.getEzModeWidth(), barWidth);
         alphaBar.setPreferredSize(dim3);
         alphaBar.setMaximumSize(dim3);
