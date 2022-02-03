@@ -25,7 +25,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPTSTR lpCmd
 	std::string javaLocation = "javaw.exe";
 	FILE *file;
 	if (file = fopen("SnipSniper\\jdk\\bin\\javaw.exe", "r")) {
-		javaLocation = GetExePath() + "\\SnipSniper\\jdk\\bin\\javaw.exe";
+		javaLocation = GetExePath() + "\\SnipSniper\\jdk\\bin\\javaw.exe -Dhttps.protocols=TLSv1.2";
 		fclose(file);
 	}
 	command += javaLocation;
