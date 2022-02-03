@@ -5,8 +5,8 @@ import net.snipsniper.SnipSniper;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.CustomWindowListener;
-import net.snipsniper.utils.IClosable;
 import net.snipsniper.utils.SSColor;
+import org.capturecoop.ccutils.utils.ICCClosable;
 
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
@@ -21,7 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 
-public class ColorChooser extends JFrame implements IClosable {
+public class ColorChooser extends JFrame implements ICCClosable {
     private final ColorChooser instance;
     private JColorChooser jcc;
     private final SSColor colorToChange;

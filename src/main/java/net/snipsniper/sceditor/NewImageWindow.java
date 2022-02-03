@@ -4,6 +4,7 @@ import org.capturecoop.ccutils.utils.CCMathUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.utils.*;
 import net.snipsniper.colorchooser.ColorChooser;
+import org.capturecoop.ccutils.utils.ICCClosable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,11 +13,11 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class NewImageWindow extends JFrame implements IClosable {
+public class NewImageWindow extends JFrame implements ICCClosable {
     private final NewImageWindow instance;
     private BufferedImage image;
     private IFunction onSubmit;
-    private final ArrayList<IClosable> cWindows = new ArrayList<>();
+    private final ArrayList<ICCClosable> cWindows = new ArrayList<>();
 
     public NewImageWindow() {
         instance = this;
@@ -91,7 +92,7 @@ public class NewImageWindow extends JFrame implements IClosable {
 
     @Override
     public void close() {
-        for(IClosable wnd : cWindows)
+        for(ICCClosable wnd : cWindows)
             wnd.close();
         dispose();
     }

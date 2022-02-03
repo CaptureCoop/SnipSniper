@@ -13,6 +13,7 @@ import net.snipsniper.systray.Sniper;
 import net.snipsniper.utils.*;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;
 import org.capturecoop.cclogger.CCLogLevel;
+import org.capturecoop.ccutils.utils.ICCClosable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -21,7 +22,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 
-public class ConfigWindow extends JFrame implements IClosable {
+public class ConfigWindow extends JFrame implements ICCClosable {
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
     private final ArrayList<File> configFiles = new ArrayList<>();
     private Config lastSelectedConfig;
@@ -36,7 +37,7 @@ public class ConfigWindow extends JFrame implements IClosable {
     private int activeTabIndex;
     private int activeDropdownIndex = 0;
 
-    private final ArrayList<IClosable> cWindows = new ArrayList<>();
+    private final ArrayList<ICCClosable> cWindows = new ArrayList<>();
 
     public ConfigWindow(Config config, PAGE page) {
         CCLogger.log("Creating config window");
@@ -424,12 +425,12 @@ public class ConfigWindow extends JFrame implements IClosable {
     public void close() {
         for(CustomWindowListener listener : listeners)
             listener.windowClosed();
-        for(IClosable wnd : cWindows)
+        for(ICCClosable wnd : cWindows)
             wnd.close();
         dispose();
     }
 
-    public void addCWindow(IClosable cWindow) {
+    public void addCWindow(ICCClosable cWindow) {
         cWindows.add(cWindow);
     }
 

@@ -7,7 +7,6 @@ import net.snipsniper.StatsManager;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.stamps.*;
-import net.snipsniper.utils.IClosable;
 import net.snipsniper.utils.ImageUtils;
 import org.capturecoop.ccutils.utils.CCStringUtils;
 import net.snipsniper.utils.Utils;
@@ -17,6 +16,7 @@ import net.snipsniper.sceditor.ezmode.EzModeStampTab;
 import net.snipsniper.snipscope.SnipScopeWindow;
 import org.apache.commons.lang3.SystemUtils;
 import org.capturecoop.cclogger.CCLogLevel;
+import org.capturecoop.ccutils.utils.ICCClosable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +26,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class SCEditorWindow extends SnipScopeWindow implements IClosable {
+public class SCEditorWindow extends SnipScopeWindow implements ICCClosable {
     private final SCEditorWindow instance;
     private final Config config;
     private final String title;
@@ -50,7 +50,7 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
 
     private BufferedImage defaultImage;
 
-    private final ArrayList<IClosable> cWindows = new ArrayList<>();
+    private final ArrayList<ICCClosable> cWindows = new ArrayList<>();
 
     private boolean isStampVisible = true;
 
@@ -446,13 +446,13 @@ public class SCEditorWindow extends SnipScopeWindow implements IClosable {
         return originalImage;
     }
 
-    public void addClosableWindow(IClosable wnd) {
+    public void addClosableWindow(ICCClosable wnd) {
         cWindows.add(wnd);
     }
 
     @Override
     public void close() {
-        for(IClosable wnd : cWindows)
+        for(ICCClosable wnd : cWindows)
             wnd.close();
         dispose();
         if(isStandalone)
