@@ -160,7 +160,6 @@ public class GeneralTab extends JPanel implements ITab{
         CCColor tintColor = config.getColor(ConfigHelper.PROFILE.tintColor);
         GradientJButton tintColorButton = new GradientJButton("Color", tintColor);
         tintColor.addChangeListener(e -> {
-            System.out.println(((CCColor)e.getSource()).toSaveString());
             config.set(ConfigHelper.PROFILE.tintColor, ((CCColor)e.getSource()).toSaveString());
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
