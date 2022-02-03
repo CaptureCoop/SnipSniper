@@ -1,9 +1,10 @@
 package net.snipsniper.sceditor;
 
+import org.capturecoop.cccolorutils.CCColor;
+import org.capturecoop.cccolorutils.gui.CCColorChooser;
 import org.capturecoop.ccutils.utils.CCMathUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.utils.*;
-import net.snipsniper.colorchooser.ColorChooser;
 import org.capturecoop.ccutils.utils.ICCClosable;
 
 import javax.swing.*;
@@ -55,9 +56,9 @@ public class NewImageWindow extends JFrame implements ICCClosable {
             heightTextField.setText(gd.getDisplayMode().getHeight() + "");
         });
         add(pickResolution, gbc);
-        SSColor color = new SSColor(Color.WHITE);
+        CCColor color = new CCColor(Color.WHITE);
         GradientJButton colorButton= new GradientJButton("Color", color);
-        colorButton.addActionListener(e -> cWindows.add(new ColorChooser(null, "Color", color, null, (int) getLocation().getX() + getWidth() / 2, (int) getLocation().getY() + getHeight() / 2, true, null)));
+        colorButton.addActionListener(e -> cWindows.add(new CCColorChooser(color, "Color", (int) getLocation().getX() + getWidth() / 2, (int) getLocation().getY() + getHeight() / 2, true, null, null)));
         add(colorButton, gbc);
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {

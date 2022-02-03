@@ -1,11 +1,11 @@
 package net.snipsniper.sceditor.stamps;
 
+import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.utils.InputContainer;
-import net.snipsniper.utils.SSColor;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -25,7 +25,7 @@ public class CounterStamp implements IStamp{
     private int speedHeight;
     private int speed;
 
-    private SSColor color;
+    private CCColor color;
 
     private float fontSizeModifier;
     private int count;
@@ -96,7 +96,7 @@ public class CounterStamp implements IStamp{
             Paint oldFillColor = g.getPaint();
             g.setPaint(color.getGradientPaint(drawWidth, drawHeight, x, y));
             if (solidColor) {
-                SSColor colorToUse = new SSColor(color);
+                CCColor colorToUse = new CCColor(color);
                 colorToUse.setPrimaryColor(color.getPrimaryColor(), 255);
                 colorToUse.setSecondaryColor(color.getSecondaryColor(), 255);
                 g.setPaint(colorToUse.getGradientPaint(drawWidth, drawHeight, x, y));
@@ -202,13 +202,13 @@ public class CounterStamp implements IStamp{
     }
 
     @Override
-    public void setColor(SSColor color) {
+    public void setColor(CCColor color) {
         this.color = color;
         alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
-    public SSColor getColor() {
+    public CCColor getColor() {
         return color;
     }
 

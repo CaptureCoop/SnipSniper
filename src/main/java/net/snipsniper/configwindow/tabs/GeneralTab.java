@@ -3,7 +3,6 @@ package net.snipsniper.configwindow.tabs;
 import net.snipsniper.ImageManager;
 import net.snipsniper.LangManager;
 import net.snipsniper.SnipSniper;
-import net.snipsniper.colorchooser.ColorChooser;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.configwindow.ConfigWindow;
@@ -14,6 +13,8 @@ import net.snipsniper.configwindow.textpreviewwindow.SaveFormatPreviewRenderer;
 import net.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
 import net.snipsniper.utils.*;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;
+import org.capturecoop.cccolorutils.CCColor;
+import org.capturecoop.cccolorutils.gui.CCColorChooser;
 import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.swing.*;
@@ -35,7 +36,7 @@ public class GeneralTab extends JPanel implements ITab{
         removeAll();
         isDirty = false;
 
-        final ColorChooser[] colorChooser = {null};
+        final CCColorChooser[] colorChooser = {null};
 
         final Function[] cleanDirtyFunction = {null};
 
@@ -156,11 +157,11 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 0;
         options.add(configWindow.createJLabel("Tint color", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
-        SSColor tintColor = config.getColor(ConfigHelper.PROFILE.tintColor);
+        CCColor tintColor = config.getColor(ConfigHelper.PROFILE.tintColor);
         GradientJButton tintColorButton = new GradientJButton("Color", tintColor);
         tintColor.addChangeListener(e -> {
-            System.out.println(((SSColor)e.getSource()).toSaveString());
-            config.set(ConfigHelper.PROFILE.tintColor, ((SSColor)e.getSource()).toSaveString());
+            System.out.println(((CCColor)e.getSource()).toSaveString());
+            config.set(ConfigHelper.PROFILE.tintColor, ((CCColor)e.getSource()).toSaveString());
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         tintColorButton.addActionListener(e -> {
@@ -169,7 +170,7 @@ public class GeneralTab extends JPanel implements ITab{
             BufferedImage image = ImageManager.getImage("preview/code_light.png");
             if(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme).equals("dark"))
                 image = ImageManager.getImage("preview/code_dark.png");
-            ColorChooser chooser = new ColorChooser(null, "Tint Color", tintColor, null, x, y, false, image);
+            CCColorChooser chooser = new CCColorChooser(tintColor, "Tint Color", x, y, false, image, null);
             configWindow.addCWindow(chooser);
         });
         options.add(tintColorButton, gbc);
@@ -219,18 +220,23 @@ public class GeneralTab extends JPanel implements ITab{
         });
         borderSizePanel.add(borderSize);
 
-        SSColor borderColor = SSColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor));
+        CCColor borderColor = CCColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor));
         GradientJButton colorBtn = new GradientJButton("Color", borderColor);
         borderColor.addChangeListener(e -> {
-            config.set(ConfigHelper.PROFILE.borderColor, ((SSColor)e.getSource()).toSaveString());
+            config.set(ConfigHelper.PROFILE.borderColor, ((CCColor)e.getSource()).toSaveString());
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         colorBtn.addActionListener(e -> {
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
                 int x = (int)((configWindow.getLocation().getX() + getWidth()/2));
                 int y = (int)((configWindow.getLocation().getY() + getHeight()/2));
-                colorChooser[0] = new ColorChooser(config, LangManager.getItem("config_label_bordercolor"), borderColor, null, x, y, true, null);
-                colorChooser[0].addWindowListener(() -> colorChooser[0] = null);
+                colorChooser[0] = new CCColorChooser(borderColor, LangManager.getItem("config_label_bordercolor"), x, y, true, null, null);
+                colorChooser[0].addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        colorChooser[0] = null;
+                    }
+                });
                 configWindow.addCWindow(colorChooser[0]);
             }
         });

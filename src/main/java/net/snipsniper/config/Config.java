@@ -8,12 +8,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cclogger.CCLogLevel;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
-import net.snipsniper.utils.SSColor;
 import net.snipsniper.utils.Utils;
-import org.capturecoop.ccutils.utils.CCStringUtils;
 import org.capturecoop.ccutils.utils.CCMathUtils;
 
 public class Config {
@@ -156,13 +155,13 @@ public class Config {
 		return false;
 	}
 
-	public SSColor getColor(Enum key) {
+	public CCColor getColor(Enum key) {
 		return getColor(key.toString());
 	}
 
-	public SSColor getColor(String key) {
+	public CCColor getColor(String key) {
 		if(getString(key) != null)
-			return SSColor.fromSaveString(getString(key));
+			return CCColor.fromSaveString(getString(key));
 		return null;
 	}
 

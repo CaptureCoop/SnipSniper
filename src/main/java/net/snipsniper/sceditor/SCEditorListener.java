@@ -1,12 +1,12 @@
 package net.snipsniper.sceditor;
 
+import org.capturecoop.cccolorutils.gui.CCColorChooser;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.stamps.TextStamp;
 import net.snipsniper.utils.ImageUtils;
 import net.snipsniper.utils.InputContainer;
 import net.snipsniper.utils.Utils;
-import net.snipsniper.colorchooser.ColorChooser;
 import net.snipsniper.sceditor.stamps.IStamp;
 import net.snipsniper.snipscope.SnipScopeListener;
 import org.capturecoop.cclogger.CCLogLevel;
@@ -130,7 +130,9 @@ public class SCEditorListener extends SnipScopeListener {
             scEditorWindow.getInputContainer().resetKeys();
             int x = (int)((scEditorWindow.getLocation().getX() + scEditorWindow.getWidth()/2));
             int y = (int)((scEditorWindow.getLocation().getY() + scEditorWindow.getHeight()/2));
-            scEditorWindow.addClosableWindow(new ColorChooser(scEditorWindow.getConfig(), "Marker Color", scEditorWindow.getSelectedStamp().getColor(), scEditorWindow.getSelectedStamp().getID() + "DefaultColor", x, y, true, null));
+            //TODO: Do we want the save button back?
+            //scEditorWindow.addClosableWindow(new CCColorChooser(scEditorWindow.getConfig(), "Marker Color", scEditorWindow.getSelectedStamp().getColor(), scEditorWindow.getSelectedStamp().getID() + "DefaultColor", x, y, true, null));
+            scEditorWindow.addClosableWindow(new CCColorChooser(scEditorWindow.getSelectedStamp().getColor(), "Marker color", x, y, true, null, null));
         }
 
         if(openSaveAsWindow) {

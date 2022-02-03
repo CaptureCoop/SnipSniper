@@ -1,8 +1,8 @@
 package net.snipsniper.sceditor.stamps;
 
+import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.utils.InputContainer;
-import net.snipsniper.utils.SSColor;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -23,8 +23,8 @@ public interface IStamp {
 
     String getID();
 
-    void setColor(SSColor color);
-    SSColor getColor();
+    void setColor(CCColor color);
+    CCColor getColor();
     StampType getType();
 
     void addChangeListener(IStampUpdateListener listener);

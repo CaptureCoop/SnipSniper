@@ -1,11 +1,12 @@
 package net.snipsniper.configwindow;
 
+import org.capturecoop.cccolorutils.CCColor;
+import org.capturecoop.cccolorutils.gui.CCColorChooser;
 import org.capturecoop.ccutils.utils.CCMathUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.LangManager;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
-import net.snipsniper.colorchooser.ColorChooser;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.configwindow.tabs.*;
@@ -375,11 +376,11 @@ public class ConfigWindow extends JFrame implements ICCClosable {
     }
 
     public GradientJButton setupColorButton(String title, Config config, ConfigHelper.PROFILE configKey, ChangeListener whenChange) {
-        SSColor startColorPBR = SSColor.fromSaveString(config.getString(configKey));
+        CCColor startColorPBR = CCColor.fromSaveString(config.getString(configKey));
         GradientJButton colorButton = new GradientJButton(title, startColorPBR);
         startColorPBR.addChangeListener(e -> config.set(configKey, startColorPBR.toSaveString()));
         startColorPBR.addChangeListener(whenChange);
-        colorButton.addActionListener(e -> cWindows.add(new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2), true, null)));
+        colorButton.addActionListener(e -> cWindows.add(new CCColorChooser(startColorPBR, "Stamp color", (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2), true, null,null)));
         return colorButton;
     }
 

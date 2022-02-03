@@ -1,11 +1,11 @@
 package net.snipsniper.sceditor.stamps;
 
+import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.utils.InputContainer;
-import net.snipsniper.utils.SSColor;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -24,7 +24,7 @@ public class CubeStamp implements IStamp{
     private int speedWidth;
     private int speedHeight;
 
-    private SSColor color;
+    private CCColor color;
 
     private BufferedImage smartPixelBuffer;
 
@@ -124,7 +124,7 @@ public class CubeStamp implements IStamp{
                 g.setColor(Color.BLACK); //TODO: Add to config
 
             if(isSmartPixel && !isCensor) {
-                SSColor smartPixelPreview = new SSColor(color);
+                CCColor smartPixelPreview = new CCColor(color);
                 smartPixelPreview.setPrimaryColor(smartPixelPreview.getPrimaryColor(), 150);
                 smartPixelPreview.setSecondaryColor(smartPixelPreview.getSecondaryColor(), 150);
                 g.setPaint(smartPixelPreview.getGradientPaint(drawWidth, drawHeight, x, y));
@@ -193,13 +193,13 @@ public class CubeStamp implements IStamp{
     }
 
     @Override
-    public void setColor(SSColor color) {
+    public void setColor(CCColor color) {
         this.color = color;
         alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
-    public SSColor getColor() {
+    public CCColor getColor() {
         return color;
     }
 

@@ -1,12 +1,12 @@
 package net.snipsniper.sceditor.stamps;
 
+import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.ccutils.math.CCVector2Int;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.config.Config;
 import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.InputContainer;
-import net.snipsniper.utils.SSColor;
 import org.capturecoop.cclogger.CCLogLevel;
 
 import java.awt.*;
@@ -17,7 +17,7 @@ public class TextStamp implements IStamp{
     private final Config config;
     private final SCEditorWindow scEditorWindow;
 
-    private SSColor color;
+    private CCColor color;
     private int fontSize;
     private int fontSizeSpeed;
     private String text;
@@ -207,13 +207,13 @@ public class TextStamp implements IStamp{
     }
 
     @Override
-    public void setColor(SSColor color) {
+    public void setColor(CCColor color) {
         this.color = color;
         alertChangeListeners(IStampUpdateListener.TYPE.SETTER);
     }
 
     @Override
-    public SSColor getColor() {
+    public CCColor getColor() {
         return color;
     }
 
