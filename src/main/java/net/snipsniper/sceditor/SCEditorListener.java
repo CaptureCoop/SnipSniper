@@ -1,6 +1,6 @@
 package net.snipsniper.sceditor;
 
-import org.capturecoop.cccolorutils.gui.CCColorChooser;
+import org.capturecoop.cccolorutils.chooser.CCColorChooser;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.stamps.TextStamp;

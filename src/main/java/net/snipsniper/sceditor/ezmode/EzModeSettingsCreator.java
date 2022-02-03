@@ -6,9 +6,9 @@ import javax.swing.event.DocumentListener;
 
 import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
-import org.capturecoop.cccolorutils.gui.parts.CCAlphaBar;
-import org.capturecoop.cccolorutils.gui.parts.CCHSBHueBar;
-import org.capturecoop.cccolorutils.gui.parts.CCHSBPicker;
+import org.capturecoop.cccolorutils.chooser.gui.CCAlphaBar;
+import org.capturecoop.cccolorutils.chooser.gui.CCHSBHueBar;
+import org.capturecoop.cccolorutils.chooser.gui.CCHSBPicker;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.configwindow.StampJPanel;

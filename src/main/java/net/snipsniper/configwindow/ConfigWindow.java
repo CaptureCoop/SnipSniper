@@ -1,7 +1,7 @@
 package net.snipsniper.configwindow;
 
 import org.capturecoop.cccolorutils.CCColor;
-import org.capturecoop.cccolorutils.gui.CCColorChooser;
+import org.capturecoop.cccolorutils.chooser.CCColorChooser;
 import org.capturecoop.ccutils.utils.CCMathUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.LangManager;
