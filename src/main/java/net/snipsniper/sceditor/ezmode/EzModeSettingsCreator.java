@@ -4,8 +4,10 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import net.snipsniper.utils.GradientJButton;
 import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
+import org.capturecoop.cccolorutils.chooser.CCColorChooser;
 import org.capturecoop.cccolorutils.chooser.gui.CCAlphaBar;
 import org.capturecoop.cccolorutils.chooser.gui.CCHSBHueBar;
 import org.capturecoop.cccolorutils.chooser.gui.CCHSBPicker;
@@ -17,6 +19,7 @@ import net.snipsniper.sceditor.stamps.*;
 import net.snipsniper.utils.DropdownItem;
 import net.snipsniper.utils.Function;
 import org.capturecoop.cclogger.CCLogLevel;
+import org.capturecoop.ccutils.utils.ICCClosable;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -70,74 +73,19 @@ public class EzModeSettingsCreator {
     }
 
     public void addColorSettings(JPanel panel, IStamp stamp) {
-        panel.add(new JLabel("color"));
-        Color color = stamp.getColor().getPrimaryColor();
-        JSlider redSlider = createEZModeSlider(0, 255, color.getRed(), new Function() {
-            @Override
-            public boolean run(Integer... args) {
-                Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(args[0], cColor.getGreen(), cColor.getBlue(), cColor.getAlpha()));
-                stampPreviewPanel.repaint();
-                return true;
-            }
-        });
-        JSlider greenSlider = createEZModeSlider(0, 255, color.getGreen(), new Function() {
-            @Override
-            public boolean run(Integer... args) {
-                Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), args[0], cColor.getBlue(), cColor.getAlpha()));
-                stampPreviewPanel.repaint();
-                return true;
-            }
-        });
-        JSlider blueSlider = createEZModeSlider(0, 255, color.getBlue(), new Function() {
-            @Override
-            public boolean run(Integer... args) {
-                Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), cColor.getGreen(), args[0], cColor.getAlpha()));
-                stampPreviewPanel.repaint();
-                return true;
-            }
-        });
-
-        panel.add(redSlider);
-        panel.add(greenSlider);
-        panel.add(blueSlider);
-
-        panel.add(createJSeperator());
-
-        int barWidth = 30;
         CCColor stampColor = stamp.getColor();
+        GradientJButton button = new GradientJButton("Color", stampColor);
+        button.addActionListener(e -> {
+            int x = scEditorWindow.getLocation().x + scEditorWindow.getWidth() / 2;
+            int y = scEditorWindow.getLocation().y + scEditorWindow.getHeight() / 2;
 
-        //TODO: This doesnt work yet. add Listeners and possibly remove sliders
-
-        CCHSBPicker colorChooserPanel = new CCHSBPicker(stampColor.getPrimaryColor(), true);
-        Dimension dim = new Dimension(scEditorWindow.getEzModeWidth() - barWidth, scEditorWindow.getEzModeWidth() - barWidth);
-        colorChooserPanel.setPreferredSize(dim);
-        colorChooserPanel.setMinimumSize(dim);
-        colorChooserPanel.setMaximumSize(dim);
-        panel.add(colorChooserPanel);
-
-        CCHSBHueBar colorChooserBar = new CCHSBHueBar(stampColor.getPrimaryColor(), CCColorUtils.DIRECTION.VERTICAL, true);
-        Dimension dim2 = new Dimension(barWidth, scEditorWindow.getEzModeWidth() - barWidth);
-        colorChooserBar.setPreferredSize(dim2);
-        colorChooserBar.setMinimumSize(dim2);
-        colorChooserBar.setMaximumSize(dim2);
-        panel.add(colorChooserBar);
-
-        CCAlphaBar alphaBar = new CCAlphaBar(stampColor.getPrimaryColor(), CCColorUtils.DIRECTION.HORIZONTAL, true);
-        Dimension dim3 = new Dimension(scEditorWindow.getEzModeWidth(), barWidth);
-        alphaBar.setPreferredSize(dim3);
-        alphaBar.setMaximumSize(dim3);
-        alphaBar.setMinimumSize(dim3);
-        panel.add(alphaBar);
-
-        stampColor.addChangeListener(e -> {
-            redSlider.setValue(stampColor.getPrimaryColor().getRed());
-            greenSlider.setValue(stampColor.getPrimaryColor().getGreen());
-            blueSlider.setValue(stampColor.getPrimaryColor().getBlue());
-            scEditorWindow.repaint();
+            ICCClosable closable = new CCColorChooser(stampColor, "Stamp color", x, y, true, scEditorWindow.getOriginalImage(), null);
+            scEditorWindow.addClosableWindow(closable);
         });
+
+        panel.add(button);
+
+        stampColor.addChangeListener(e -> scEditorWindow.repaint());
     }
 
     public void addWidthHeightSettings(JPanel panel, IStamp stamp) {
