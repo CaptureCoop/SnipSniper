@@ -144,7 +144,7 @@ public class SCEditorWindow extends SnipScopeWindow implements ICCClosable {
         ezModeTitle.setVerticalAlignment(JLabel.CENTER);
         ezModeTitlePanel.add(ezModeTitle);
 
-        ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp());
+        ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp(), ezModeWidth);
 
         ezModeStampSettingsScrollPane = new JScrollPane(ezModeStampSettingsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ezModeStampSettingsScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -407,7 +407,7 @@ public class SCEditorWindow extends SnipScopeWindow implements ICCClosable {
 
     public void updateEzUI(boolean reset) {
         if(ezMode && reset)
-            ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp());
+            ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp(), ezModeWidth);
         else if(!ezMode && reset)
             ezModeStampSettingsPanel.removeAll();
     }
