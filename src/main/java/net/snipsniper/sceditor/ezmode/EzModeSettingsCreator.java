@@ -4,19 +4,19 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import net.snipsniper.utils.GradientJButton;
+import org.capturecoop.cccolorutils.CCColor;
+import org.capturecoop.cccolorutils.chooser.CCColorChooser;
+import org.capturecoop.cccolorutils.chooser.gui.CCHSBHueBar;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
-import net.snipsniper.colorchooser.SSColorChooserAlphaBar;
-import net.snipsniper.colorchooser.SSColorChooserHSBHueBar;
-import net.snipsniper.colorchooser.SSColorChooserHSBPicker;
 import net.snipsniper.configwindow.StampJPanel;
 import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.sceditor.stamps.*;
-import net.snipsniper.utils.DrawUtils;
 import net.snipsniper.utils.DropdownItem;
 import net.snipsniper.utils.Function;
-import net.snipsniper.utils.SSColor;
 import org.capturecoop.cclogger.CCLogLevel;
+import org.capturecoop.ccutils.utils.CCIClosable;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -30,18 +30,18 @@ public class EzModeSettingsCreator {
         this.scEditorWindow = scEditorWindow;
     }
 
-    public void addSettingsToPanel(JPanel panel, IStamp stamp) {
+    public void addSettingsToPanel(JPanel panel, IStamp stamp, int width) {
         panel.removeAll();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.add(createJSeperator());
         switch(stamp.getType()) {
-            case CUBE: cube(panel, stamp); break;
-            case COUNTER: counter(panel, stamp); break;
-            case CIRCLE: circle(panel, stamp); break;
-            case SIMPLE_BRUSH: brush(panel, stamp); break;
-            case TEXT: text(panel, stamp); break;
-            case RECTANGLE: rectangle(panel, stamp); break;
-            case ERASER: eraser(panel, stamp); break;
+            case CUBE: cube(panel, stamp, width); break;
+            case COUNTER: counter(panel, stamp, width); break;
+            case CIRCLE: circle(panel, stamp, width); break;
+            case SIMPLE_BRUSH: brush(panel, stamp, width); break;
+            case TEXT: text(panel, stamp, width); break;
+            case RECTANGLE: rectangle(panel, stamp, width); break;
+            case ERASER: eraser(panel, stamp, width); break;
         }
         panel.add(createJSeperator());
         panel.add(new JLabel("preview"));
@@ -63,78 +63,30 @@ public class EzModeSettingsCreator {
     public int getLastCorrectHeight() {
         int height = 0;
         for(Component comp : lastPanel.getComponents()) {
-            if(!(comp instanceof SSColorChooserHSBHueBar))
+            if(!(comp instanceof CCHSBHueBar))
                 height += comp.getHeight();
         }
         return height;
     }
 
-    public void addColorSettings(JPanel panel, IStamp stamp) {
-        panel.add(new JLabel("color"));
-        Color color = stamp.getColor().getPrimaryColor();
-        JSlider redSlider = createEZModeSlider(0, 255, color.getRed(), new Function() {
-            @Override
-            public boolean run(Integer... args) {
-                Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(args[0], cColor.getGreen(), cColor.getBlue(), cColor.getAlpha()));
-                stampPreviewPanel.repaint();
-                return true;
-            }
-        });
-        JSlider greenSlider = createEZModeSlider(0, 255, color.getGreen(), new Function() {
-            @Override
-            public boolean run(Integer... args) {
-                Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), args[0], cColor.getBlue(), cColor.getAlpha()));
-                stampPreviewPanel.repaint();
-                return true;
-            }
-        });
-        JSlider blueSlider = createEZModeSlider(0, 255, color.getBlue(), new Function() {
-            @Override
-            public boolean run(Integer... args) {
-                Color cColor = stamp.getColor().getPrimaryColor();
-                stamp.getColor().setPrimaryColor(new Color(cColor.getRed(), cColor.getGreen(), args[0], cColor.getAlpha()));
-                stampPreviewPanel.repaint();
-                return true;
-            }
+    public void addColorSettings(JPanel panel, IStamp stamp, int width) {
+        CCColor stampColor = stamp.getColor();
+        JPanel cPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        cPanel.setPreferredSize(new Dimension(width, 40));
+        GradientJButton button = new GradientJButton("Color", stampColor);
+        button.setPreferredSize(new Dimension(width / 2, 30));
+        button.addActionListener(e -> {
+            int x = scEditorWindow.getLocation().x + scEditorWindow.getWidth() / 2;
+            int y = scEditorWindow.getLocation().y + scEditorWindow.getHeight() / 2;
+
+            CCIClosable closable = new CCColorChooser(stampColor, "Stamp color", x, y, true, scEditorWindow.getOriginalImage(), null);
+            scEditorWindow.addClosableWindow(closable);
         });
 
-        panel.add(redSlider);
-        panel.add(greenSlider);
-        panel.add(blueSlider);
+        cPanel.add(button);
+        panel.add(cPanel);
 
-        panel.add(createJSeperator());
-
-        int barWidth = 30;
-        SSColor stampColor = stamp.getColor();
-        SSColorChooserHSBPicker colorChooserPanel = new SSColorChooserHSBPicker(stampColor, true);
-        Dimension dim = new Dimension(scEditorWindow.getEzModeWidth() - barWidth, scEditorWindow.getEzModeWidth() - barWidth);
-        colorChooserPanel.setPreferredSize(dim);
-        colorChooserPanel.setMinimumSize(dim);
-        colorChooserPanel.setMaximumSize(dim);
-        panel.add(colorChooserPanel);
-
-        SSColorChooserHSBHueBar colorChooserBar = new SSColorChooserHSBHueBar(stampColor, DrawUtils.DIRECTION.VERTICAL, true);
-        Dimension dim2 = new Dimension(barWidth, scEditorWindow.getEzModeWidth() - barWidth);
-        colorChooserBar.setPreferredSize(dim2);
-        colorChooserBar.setMinimumSize(dim2);
-        colorChooserBar.setMaximumSize(dim2);
-        panel.add(colorChooserBar);
-
-        SSColorChooserAlphaBar alphaBar = new SSColorChooserAlphaBar(stampColor, DrawUtils.DIRECTION.HORIZONTAL, true);
-        Dimension dim3 = new Dimension(scEditorWindow.getEzModeWidth(), barWidth);
-        alphaBar.setPreferredSize(dim3);
-        alphaBar.setMaximumSize(dim3);
-        alphaBar.setMinimumSize(dim3);
-        panel.add(alphaBar);
-
-        stampColor.addChangeListener(e -> {
-            redSlider.setValue(stampColor.getPrimaryColor().getRed());
-            greenSlider.setValue(stampColor.getPrimaryColor().getGreen());
-            blueSlider.setValue(stampColor.getPrimaryColor().getBlue());
-            scEditorWindow.repaint();
-        });
+        stampColor.addChangeListener(e -> scEditorWindow.repaint());
     }
 
     public void addWidthHeightSettings(JPanel panel, IStamp stamp) {
@@ -171,12 +123,12 @@ public class EzModeSettingsCreator {
         panel.add(createJSeperator());
     }
 
-    public void addBasicBoxSettings(JPanel panel, IStamp stamp) {
+    public void addBasicBoxSettings(JPanel panel, IStamp stamp, int width) {
         addWidthHeightSettings(panel, stamp);
-        addColorSettings(panel, stamp);
+        addColorSettings(panel, stamp, width);
     }
 
-    public void addBasicCircleSettings(JPanel panel, IStamp stamp, boolean addColor) {
+    public void addBasicCircleSettings(JPanel panel, IStamp stamp, boolean addColor, int width) {
         panel.add(new JLabel("size"));
         JSlider sizeSlider = createEZModeSlider(1, 400, stamp.getWidth(), new Function() {
             @Override
@@ -195,7 +147,7 @@ public class EzModeSettingsCreator {
         if(!addColor)
             return;
         panel.add(createJSeperator());
-        addColorSettings(panel, stamp);
+        addColorSettings(panel, stamp, width);
     }
 
     public JSlider createEZModeSlider(int min, int max, int currentValue, Function onChange) {
@@ -234,16 +186,16 @@ public class EzModeSettingsCreator {
         return sep;
     }
 
-    private void cube(JPanel panel, IStamp stamp) {
-        addBasicBoxSettings(panel, stamp);
+    private void cube(JPanel panel, IStamp stamp, int width) {
+        addBasicBoxSettings(panel, stamp, width);
     }
 
-    private void counter(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel, stamp, true);
+    private void counter(JPanel panel, IStamp stamp, int width) {
+        addBasicCircleSettings(panel, stamp, true, width);
     }
 
-    private void circle(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel, stamp, false);
+    private void circle(JPanel panel, IStamp stamp, int width) {
+        addBasicCircleSettings(panel, stamp, false, width);
         CircleStamp cStamp = (CircleStamp)stamp;
         panel.add(new JLabel("thickness"));
         JSlider thicknessSlider = createEZModeSlider(1, 200, cStamp.getThickness(), new Function() {
@@ -259,14 +211,14 @@ public class EzModeSettingsCreator {
             if(type == IStampUpdateListener.TYPE.INPUT)
                 thicknessSlider.setValue(cStamp.getThickness());
         });
-        addColorSettings(panel, stamp);
+        addColorSettings(panel, stamp, width);
     }
 
-    private void brush(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel, stamp, true);
+    private void brush(JPanel panel, IStamp stamp, int width) {
+        addBasicCircleSettings(panel, stamp, true, width);
     }
 
-    private void text(JPanel panel, IStamp stamp) {
+    private void text(JPanel panel, IStamp stamp, int width) {
         panel.add(new JLabel("font size"));
         //Font size = height
         JSlider sizeSlider = createEZModeSlider(5, 200, stamp.getHeight(), new Function() {
@@ -383,10 +335,10 @@ public class EzModeSettingsCreator {
 
         panel.add(textInput);
 
-        addColorSettings(panel, stamp);
+        addColorSettings(panel, stamp, width);
     }
 
-    private void rectangle(JPanel panel, IStamp stamp) {
+    private void rectangle(JPanel panel, IStamp stamp, int width) {
         addWidthHeightSettings(panel, stamp);
         RectangleStamp rStamp = (RectangleStamp)stamp;
         panel.add(new JLabel("thickness"));
@@ -403,10 +355,10 @@ public class EzModeSettingsCreator {
                 thicknessSlider.setValue(rStamp.getThickness());
         });
         panel.add(createJSeperator());
-        addColorSettings(panel, stamp);
+        addColorSettings(panel, stamp, width);
     }
 
-    private void eraser(JPanel panel, IStamp stamp) {
-        addBasicCircleSettings(panel, stamp, false);
+    private void eraser(JPanel panel, IStamp stamp, int width) {
+        addBasicCircleSettings(panel, stamp, false, width);
     }
 }

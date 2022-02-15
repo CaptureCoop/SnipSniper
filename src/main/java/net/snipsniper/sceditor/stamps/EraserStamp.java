@@ -1,11 +1,11 @@
 package net.snipsniper.sceditor.stamps;
 
+import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.utils.InputContainer;
-import net.snipsniper.utils.SSColor;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -126,10 +126,10 @@ public class EraserStamp implements IStamp {
     }
 
     @Override
-    public void setColor(SSColor color) { }
+    public void setColor(CCColor color) { }
 
     @Override
-    public SSColor getColor() {
+    public CCColor getColor() {
         return null;
     }
 

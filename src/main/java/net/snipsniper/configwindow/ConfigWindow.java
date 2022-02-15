@@ -1,11 +1,12 @@
 package net.snipsniper.configwindow;
 
+import org.capturecoop.cccolorutils.CCColor;
+import org.capturecoop.cccolorutils.chooser.CCColorChooser;
 import org.capturecoop.ccutils.utils.CCMathUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.LangManager;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
-import net.snipsniper.colorchooser.ColorChooser;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.configwindow.tabs.*;
@@ -13,6 +14,7 @@ import net.snipsniper.systray.Sniper;
 import net.snipsniper.utils.*;
 import net.snipsniper.utils.enums.ConfigSaveButtonState;
 import org.capturecoop.cclogger.CCLogLevel;
+import org.capturecoop.ccutils.utils.CCIClosable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -21,7 +23,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 
-public class ConfigWindow extends JFrame implements IClosable {
+public class ConfigWindow extends JFrame implements CCIClosable {
     private final ArrayList<CustomWindowListener> listeners = new ArrayList<>();
     private final ArrayList<File> configFiles = new ArrayList<>();
     private Config lastSelectedConfig;
@@ -36,7 +38,7 @@ public class ConfigWindow extends JFrame implements IClosable {
     private int activeTabIndex;
     private int activeDropdownIndex = 0;
 
-    private final ArrayList<IClosable> cWindows = new ArrayList<>();
+    private final ArrayList<CCIClosable> cWindows = new ArrayList<>();
 
     public ConfigWindow(Config config, PAGE page) {
         CCLogger.log("Creating config window");
@@ -374,11 +376,11 @@ public class ConfigWindow extends JFrame implements IClosable {
     }
 
     public GradientJButton setupColorButton(String title, Config config, ConfigHelper.PROFILE configKey, ChangeListener whenChange) {
-        SSColor startColorPBR = SSColor.fromSaveString(config.getString(configKey));
+        CCColor startColorPBR = CCColor.fromSaveString(config.getString(configKey));
         GradientJButton colorButton = new GradientJButton(title, startColorPBR);
         startColorPBR.addChangeListener(e -> config.set(configKey, startColorPBR.toSaveString()));
         startColorPBR.addChangeListener(whenChange);
-        colorButton.addActionListener(e -> cWindows.add(new ColorChooser(config, "Stamp color", startColorPBR, null, (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2), true, null)));
+        colorButton.addActionListener(e -> cWindows.add(new CCColorChooser(startColorPBR, "Stamp color", (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2), true, null,null)));
         return colorButton;
     }
 
@@ -424,12 +426,12 @@ public class ConfigWindow extends JFrame implements IClosable {
     public void close() {
         for(CustomWindowListener listener : listeners)
             listener.windowClosed();
-        for(IClosable wnd : cWindows)
+        for(CCIClosable wnd : cWindows)
             wnd.close();
         dispose();
     }
 
-    public void addCWindow(IClosable cWindow) {
+    public void addCWindow(CCIClosable cWindow) {
         cWindows.add(cWindow);
     }
 

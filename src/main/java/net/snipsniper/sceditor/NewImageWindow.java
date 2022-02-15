@@ -1,9 +1,11 @@
 package net.snipsniper.sceditor;
 
+import org.capturecoop.cccolorutils.CCColor;
+import org.capturecoop.cccolorutils.chooser.CCColorChooser;
 import org.capturecoop.ccutils.utils.CCMathUtils;
 import net.snipsniper.ImageManager;
 import net.snipsniper.utils.*;
-import net.snipsniper.colorchooser.ColorChooser;
+import org.capturecoop.ccutils.utils.CCIClosable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,11 +14,11 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class NewImageWindow extends JFrame implements IClosable {
+public class NewImageWindow extends JFrame implements CCIClosable {
     private final NewImageWindow instance;
     private BufferedImage image;
     private IFunction onSubmit;
-    private final ArrayList<IClosable> cWindows = new ArrayList<>();
+    private final ArrayList<CCIClosable> cWindows = new ArrayList<>();
 
     public NewImageWindow() {
         instance = this;
@@ -54,9 +56,9 @@ public class NewImageWindow extends JFrame implements IClosable {
             heightTextField.setText(gd.getDisplayMode().getHeight() + "");
         });
         add(pickResolution, gbc);
-        SSColor color = new SSColor(Color.WHITE);
+        CCColor color = new CCColor(Color.WHITE);
         GradientJButton colorButton= new GradientJButton("Color", color);
-        colorButton.addActionListener(e -> cWindows.add(new ColorChooser(null, "Color", color, null, (int) getLocation().getX() + getWidth() / 2, (int) getLocation().getY() + getHeight() / 2, true, null)));
+        colorButton.addActionListener(e -> cWindows.add(new CCColorChooser(color, "Color", (int) getLocation().getX() + getWidth() / 2, (int) getLocation().getY() + getHeight() / 2, true, null, null)));
         add(colorButton, gbc);
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {
@@ -91,7 +93,7 @@ public class NewImageWindow extends JFrame implements IClosable {
 
     @Override
     public void close() {
-        for(IClosable wnd : cWindows)
+        for(CCIClosable wnd : cWindows)
             wnd.close();
         dispose();
     }

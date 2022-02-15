@@ -1,8 +1,8 @@
 package net.snipsniper.configwindow.textpreviewwindow;
 
 import net.snipsniper.LangManager;
-import net.snipsniper.utils.IClosable;
 import net.snipsniper.utils.IFunction;
+import org.capturecoop.ccutils.utils.CCIClosable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -14,7 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
-public class TextPreviewWindow extends JFrame implements IClosable {
+public class TextPreviewWindow extends JFrame implements CCIClosable {
     private String text;
     private JTextField input;
     private final JPanel renderer;

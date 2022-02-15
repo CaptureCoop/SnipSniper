@@ -1,5 +1,7 @@
 package net.snipsniper.utils;
 
+import org.capturecoop.cccolorutils.CCColor;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -7,10 +9,10 @@ import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
 
 public class GradientJButton extends JButton {
-    private final SSColor color;
+    private final CCColor color;
     private final String title;
 
-    public GradientJButton(String title, SSColor color) {
+    public GradientJButton(String title, CCColor color) {
         super(title);
         this.color = color;
         this.title = title;
