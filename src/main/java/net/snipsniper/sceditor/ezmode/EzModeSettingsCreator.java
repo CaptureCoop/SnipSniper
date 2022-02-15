@@ -16,7 +16,7 @@ import net.snipsniper.sceditor.stamps.*;
 import net.snipsniper.utils.DropdownItem;
 import net.snipsniper.utils.Function;
 import org.capturecoop.cclogger.CCLogLevel;
-import org.capturecoop.ccutils.utils.ICCClosable;
+import org.capturecoop.ccutils.utils.CCIClosable;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -79,7 +79,7 @@ public class EzModeSettingsCreator {
             int x = scEditorWindow.getLocation().x + scEditorWindow.getWidth() / 2;
             int y = scEditorWindow.getLocation().y + scEditorWindow.getHeight() / 2;
 
-            ICCClosable closable = new CCColorChooser(stampColor, "Stamp color", x, y, true, scEditorWindow.getOriginalImage(), null);
+            CCIClosable closable = new CCColorChooser(stampColor, "Stamp color", x, y, true, scEditorWindow.getOriginalImage(), null);
             scEditorWindow.addClosableWindow(closable);
         });
 

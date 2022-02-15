@@ -6,7 +6,7 @@ import net.snipsniper.SnipSniper;
 import net.snipsniper.utils.*;
 import org.capturecoop.cclogger.CCLogLevel;
 import org.capturecoop.ccutils.utils.CCStringUtils;
-import org.capturecoop.ccutils.utils.ICCClosable;
+import org.capturecoop.ccutils.utils.CCIClosable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class IconWindow extends JFrame implements ICCClosable {
+public class IconWindow extends JFrame implements CCIClosable {
     private final IconWindow instance;
     private final IFunction onSelectIcon;
 
