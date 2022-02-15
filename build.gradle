@@ -37,7 +37,7 @@ dependencies {
 
     implementation 'org.capturecoop:CCUtils:1.9.4'
     implementation 'org.capturecoop:CCLogger:1.6.2'
-    implementation 'org.capturecoop:CCColorUtils:1.0.2'
+    implementation 'org.capturecoop:CCColorUtils:1.0.3'
 }
 
 void refreshWiki() {
