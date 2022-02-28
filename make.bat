@@ -68,7 +68,7 @@ goto :EOF
 	call :prepare
 
 	cd release\raw\
-		"%zip%" a ..\output\SnipSniper_Win_Portable.zip *
+		"%zip%" a ..\output\SnipSniper_Portable_Win.zip *
 	cd %initialPath%
 goto :EOF
 

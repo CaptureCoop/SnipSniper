@@ -12,7 +12,7 @@
 
 	Name "${PRODUCT}"
 
-	OutFile "release\output\SnipSniper_Win_installer.exe"
+	OutFile "release\output\SnipSniper_Installer_Win.exe"
 
 	InstallDir "$PROGRAMFILES\${PRODUCT}"
 
