@@ -47,11 +47,15 @@ goto :EOF
 	)
 goto :EOF
 
+:compileJar
+set /p type=Jar Release type:
+call gradlew build -Dtype=%type%
+goto :EOF
+
 :jar
-	set /p type=Release type:
 	call :clean
 	echo Compiling jar...
-	call gradlew build -Dtype=%type%
+	call :compileJar
 	call :prepare
 
 	cd release\raw\
@@ -63,7 +67,7 @@ goto :EOF
 :portable
 	echo Creating portable...
 	call :clean
-	call gradlew build
+	call :compileJar
 	call exe-creator/make build WIN
 	call jvm-creator/make build
 	call :prepare
@@ -76,7 +80,7 @@ goto :EOF
 :installer
 	echo Creating installer...
 	call :clean
-	call gradlew build
+	call :compileJar
 	call exe-creator/make build WIN_INSTALLED
 	call jvm-creator/make build
 	call :prepare
