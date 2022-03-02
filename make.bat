@@ -48,9 +48,10 @@ goto :EOF
 goto :EOF
 
 :jar
+	set /p type=Release type:
 	call :clean
 	echo Compiling jar...
-	call gradlew build
+	call gradlew build -Dtype=%type%
 	call :prepare
 
 	cd release\raw\
