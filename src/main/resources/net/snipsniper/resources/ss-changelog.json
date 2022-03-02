@@ -1,0 +1,509 @@
+{
+	"__comment": "Looking for a way to get this exported into other formats?",
+	"__comment": "Check out https://json-cl.capturecoop.org!",
+	
+	"title": "Changelog",
+	"description": "All releases are listed here",
+	"releases": [
+		{
+			"release_time": "1633509240",
+			"version": "3.9.4",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.4",
+			"title": "After drag update",
+			"added": [
+				"AfterDrag, allowing you to optionally fine tune your captured area",
+				"Responsive save buttons",
+				"Config Window now notifies you in multiple situations if you have unsaved changes",
+				"Fancy flag icons",
+				"Custom title setting for each profile",
+				"Wiki system, starting with some of the info buttons"
+			],
+			"changed": [
+				"Better Icon Window (Tabs, drag & drop)",
+				"'Open image folder' now opens last folder you screenshotted in",
+				"Fixed issue with CTRL + V not working in editor",
+				"Fixed bug with Capture Window getting stuck if message popup is open"
+			]
+		},
+		
+		{
+			"release_time": "1632504720",
+			"version": "3.9.2",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.2",
+			"title": "The update update!",
+			"added": [
+				"Update button",
+				"Profile icons to dropdown in config window"
+			],
+			"changed": [
+				"You can now have as many custom icons in your icon chooser as you want"
+			]
+		},
+		
+		{
+			"release_time": "1632503100",
+			"version": "3.9.1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.1",
+			"title": "This release has been removed due to a critical bug, please use [3.9.2](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.2)"
+		},
+		
+		{
+			"release_time": "1632502020",
+			"version": "3.9.0",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.0",
+			"title": "This release has been removed due to a critical bug, please use [3.9.2](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.2)"
+		},
+		
+		{
+			"release_time": "1631218140",
+			"version": "3.7.0",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.7.0",
+			"added": [
+				"Eraser stamp",
+				"Import/Export buttons in Config Window",
+				"Custom icons for your profile"
+			],
+			"changed": [
+				"Changed version styling"
+			]
+		},
+		
+		{
+			"release_time": "1630623660",
+			"version": "3.6.0",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.6.0",
+			"title": "Ƨ no more, uploader and more",
+			"added": [
+				"Kofi Button in about window",
+				"You can now further customize where screenshots are stored",
+				"EzMode is now in beta, toggle it with '.' in the Editor",
+				"Uploading to SnipSniper.net/jars/ with every commit",
+				"GIF Support for custom icons"
+			],
+			"changed": [
+				"S Icon was mirrored, oops! (How did we never notice this)",
+				"Log files are now saved as .log",
+				"Better logging, changing format"
+			],
+			"removed": ["Removed ID for classes system"]
+		},
+		
+		{
+			"release_time": "1628427720",
+			"version": "3.5.1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.5.1",
+			"changed": ["Changed how tray icon popup menu is positioned"]
+		},
+		
+		{
+            "release_time": "1628196300",
+            "version": "3.5.0",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.5.0",
+            "added": [
+				"Something was added to the about window...",
+				"Spyglass feature to Capture window",
+				"? (InfoButton) button without text for now",
+				"profile create/remove buttons to config window",
+				"Language dropdown to config window",
+				"Rotate button to Viewer",
+				"New fancy popup when right clicking tray icon",
+				"Gradient JButton to go along with the new color chooser"
+			],
+            "changed": [
+				"Changed how we render things in Capture window",
+				"We now use our own color format to save color gradients",
+				"Revamped color window",
+				"SmartPixel supports gradients",
+				"'Open Editor' setting is now always true"
+			],
+            "removed": [
+				"Language dropdown in trayicon",
+				"Profile dropdown in trayicon"
+			]
+        },
+		
+		{
+            "release_time": "1625516760",
+            "version": "3.4.5",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.5",
+            "title": "Versioning update",
+            "changed": [
+				"Using new 'Version' system.\n\t- 3 Types of Versions: <code>release</code>, <code>dev</code> and <code>dirty</code>\n\t- Tracking that and other settings like build date and build nr"
+			]
+		},
+		
+		{
+            "release_time": "1625452140",
+            "version": "3.4.3",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.3",
+            "changed": ["Fixed small bug related to the about page"]
+        },
+		
+		{
+            "release_time": "1625449440",
+            "version": "3.4.2",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.2",
+            "title": "This release has been deleted",
+            "added": ["GitHub action files"],
+            "changed": ["Tray icons are only created if we are running on a supported platform"]
+        },
+		
+		{
+            "release_time": "1625153820",
+            "version": "3.4.1",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.1",
+            "added": ["Basic linux functionality, bugs are expected!"]
+        },
+		
+		{
+            "release_time": "1625062680",
+            "version": "3.4.0",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.4.0",
+            "changed": ["All stamps are now available in the editor tab in the config window"]
+        },
+		
+		{
+            "release_time": "1625008440",
+            "version": "3.3.0",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.3.0",
+            "added": [
+				"Added a few stamps to the config window",
+				"Editor now has a config button at the top"
+			]
+        },
+		
+		{
+            "release_time": "1624450020",
+            "version": "3.2.0",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.2.0",
+            "added": ["Global Tab in config window, there you can set the language, theme and if debug is enabled"],
+            "changed": ["Debug Console can be opened from tasktray if debug is enabled"]
+        },
+		
+		{
+            "release_time": "1624266060",
+            "version": "3.1.0",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.1.0",
+            "changed": [
+				"Changed old config window for a newer fancier one with multiple tabs (coming soon) and a profile dropdown",
+				"Using FlatLaf theme now"
+			]
+        },
+		
+		{
+            "release_time": "1621198920",
+            "version": "3.0.1",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.0.1",
+            "changed": [
+				"Switching from Viewer to Editor works again",
+				"Viewer closes on right click now",
+				"Zoom in Viewer now works without holding the movement button"
+			]        
+		},
+		
+		{
+            "release_time": "1620857880",
+            "version": "3.0.0",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.0.0",
+            "title": "SnipScope update",
+            "added": ["SnipScope: A window system that allows zooming and moving of an image"],
+            "changed": ["Using SnipScope for Editor and Viewer"]
+        },
+		
+		{
+            "release_time": "1620219300",
+            "version": "2.5.0",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/2.5.0",
+            "title": "Viewer update",
+            "added": ["Viewer (We know, crazy"]
+        },
+		
+		{
+            "release_time": "1619957040",
+            "version": "2.4.1",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/2.4.1",
+            "added": [
+				"Text stamp",
+				"You can now drop images in editor"
+			]
+        },
+		
+		{
+            "release_time": "1619599440",
+            "version": "2.4.0",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/2.4.0",
+            "title": "Standalone Editor update",
+            "added": ["Standalone editor"]
+        },
+		
+		{
+            "release_time": "1619385840",
+            "version": "2.3.14",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/2.3.14.20210425.1",
+            "added": ["Windows versions (Installer & Portable)"],
+            "changed": ["Changed version styling"]
+        },
+		
+		{
+            "release_time": "1619174580",
+            "version": "20210423_3",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210423_3",
+            "added": [
+				"Smarter encoding, only restarting if needed",
+				"New -language argument"
+			]
+        },
+		
+		{
+            "release_time": "1619136360",
+            "version": "20210423_2",
+            "url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210423_2",
+            "added": ["Added language support:\n\t- English\n\t- German\n\t- French\n\t- Italian\n\t- Japanese\n\t- Russian\n\t- Chinese"]
+        },
+		
+		{
+			"release_time": "1619113860",
+			"version": "20210422_7",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210422_7",
+			"changed": ["Translated main interface and config window"]
+		},
+		
+		{
+			"release_time": "1619109960",
+			"version": "20210422_6",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210422_6",
+			"added": ["Made Config class modular, causing renamed configs, language is set in main.cfg"]
+		},
+		
+		{
+			"release_time": "1619104500",
+			"version": "20210422_4",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210422_4",
+			"added": ["Added command line arguments (Run ```java -jar SnipSniper.jar -help``` to find out more)"]
+		},
+		
+		{
+			"release_time": "1619092440",
+			"version": "20210422_3",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210422_3",
+			"changed": ["Fixed bug with editor window appearing over the screen"]
+		},
+		
+		{
+			"release_time": "1619049480",
+			"version": "20210422_2",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210422_2",
+			"changed": [
+				"You are now able to use mouse buttons for capture hotkeys",
+				"Editor Window Color Picker now allows you to save default color for that stamp",
+				"Editor Window now only saves if you have atleast made one change once!"
+			]
+		},
+		
+		{
+			"release_time": "1617836820",
+			"version": "20210408_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210408_1",
+			"added": ["Paintbrush stamp"]
+		},
+		
+		{
+			"release_time": "1617758340",
+			"version": "20210407_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210407_1",
+			"changed": [
+				"Each stamp now saves its own color",
+				"HSV Color switcher now starts from the correct origin color"
+			]
+		},
+		
+		{
+			"release_time": "1617614340",
+			"version": "20210405_7",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_7",
+			"added": ["Added Undo function to editor (CTRL + Z)"]
+		},
+		
+		{
+			"release_time": "1617581520",
+			"version": "20210405_5",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_5",
+			"changed": ["Fixed bug with Smart Pixel when over Counter Stamp"]
+		},
+		
+		{
+			"release_time": "1617579600",
+			"version": "20210405_4",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_4",
+			"changed": ["Fixed issue with Tab & Alt key not working properly in the editor window"]
+		},
+		
+		{
+			"release_time": "1617577860",
+			"version": "20210405_3",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_3",
+			"changed": ["Renamed old Circle Stamp to counter stamp and added a new circle stamp, which is hollow"]
+		},
+		
+		{
+			"release_time": "1617575640",
+			"version": "20210405_2",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_2",
+			"changed": ["Orange tint to trayicons waiting to capture"]
+		},
+		
+		{
+			"release_time": "1617574620",
+			"version": "20210405_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210405_1",
+			"added": ["Language system (supporting english and german)"]
+		},
+		
+		{
+			"release_time": "1617539520",
+			"version": "20210404_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210404_1",
+			"added": ["Circle stamp! It has a number in the middle and counts up with every stamp!"],
+			"changed": ["Stamps are now modular"]
+		},
+		
+		{
+			"release_time": "1617435480",
+			"version": "20210403_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210403_1",
+			"changed": [
+				"HSV color switcher: Fixed bug with color loosing transparency when switching",
+				"HSV color switcher: Fixed bug where color could not be switched into different 'direction' by using another mouse wheel direction"
+			]
+		},
+		
+		{
+			"release_time": "1617359040",
+			"version": "20210402_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210402_1",
+			"changed": ["Fixed issue with HSV/HSB Color switcher. Thanks jess!"]
+		},
+		
+		{
+			"release_time": "1617184320",
+			"version": "20210401_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210401_1",
+			"changed": ["Fixed issue with images not getting saved"]
+		},
+		
+		{
+			"release_time": "1617171504",
+			"version": "20210331_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210331_1",
+			"changed": ["Fixed bug with censor mode in editor window"]
+		},
+		
+		{
+			"release_time": "1617128460",
+			"version": "20210330_5",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210330_5",
+			"changed": ["Updated about window"]
+		},
+		
+		{
+			"release_time": "1617121680",
+			"version": "20210330_4",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210330_4",
+			"changed": ["Fixed bug with smart pixel"]
+		},
+		
+		{
+			"release_time": "1617106440",
+			"version": "20210330_3",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210330_3",
+			"added": [
+				"Better rendering into buffer to avoid flickering",
+				"Variable \"directDraw\" to avoid the above, which makes it slightly faster"
+			]
+		},
+		
+		{
+			"release_time": "1617104760",
+			"version": "20210330_2",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210330_2",
+			"added": ["Censor button (middle mouse) to editor window"]
+		},
+		
+		{
+			"release_time": "1617103800",
+			"version": "20210330_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20210330_1",
+			"changed": [
+				"Fixed issue when launching multiple screenshots",
+				"Solved lag issue when taking screenshot"
+			]
+		},
+		
+		{
+			"release_time": "1609207080",
+			"version": "20201229_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20201229_1",
+			"added": ["Smart Pixel Feature"]
+		},
+		
+		{
+			"release_time": "1604603940",
+			"version": "20201105_2",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20201105_2",
+			"changed": ["Fixed issue with editor window position when main monitor is not on the most left side"]
+		},
+		
+		{
+			"release_time": "1604584500",
+			"version": "20200511_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20200511_1",
+			"title": "This update has an error in its versioning styling",
+			"changed": ["Fixed issue regarding loading profiles"]
+		},
+		
+		{
+			"release_time": "1600967460",
+			"version": "20200924_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20200924_1",
+			"title": "Unknown changes"
+		},
+		
+		{
+			"release_time": "1600079460",
+			"version": "20200914_2",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20200914_2",
+			"added": ["New fancy color chooser"]
+		},
+		
+		{
+			"release_time": "1600038960",
+			"version": "20200913_4",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20200913_4",
+			"changed": [
+				"Using game style loop for rendering",
+				"Changed to separate mouse listener"
+			]
+		},
+		
+		{
+			"release_time": "1599826920",
+			"version": "20200911_4",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20200911_4",
+			"added": ["SnipSniper Editor"]
+		},
+		
+		{
+			"release_time": "1599265320",
+			"version": "20200905_18",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20200905_18",
+			"changed": ["Set icon for taskbar"]
+		},
+		
+		{
+			"release_time": "1598959680",
+			"version": "20200901_1",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/20200901_1",
+			"title": "Initial release"
+		}
+	]
+}
