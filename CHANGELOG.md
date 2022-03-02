@@ -3,6 +3,28 @@
 
 # Changelog
 All releases are listed here
+## [3.10.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.10.0) - 02.03.2022 15:30 (Europe/Berlin)
+
+### EzMode Update!
+
+### Added
+- EzMode for the SnipSniper Editor
+- Custom color chooser with more options
+- Custom Windows versions, using our own C++ code
+- Trimming for after drag
+- ConfigWindow: Added options for EzMode, Save format and tint color
+- Stamp JPanel that allows us to easily preview stamps
+- Save format preview window
+
+### Changed
+- New domain! We now primarely use SnipSniper.net!
+- We made our own libraries! (CCUtils, CCLogger, CCColorUtils). This allows us to be more modular in our future applications
+- Better error handling! We now also log unexpected errors
+- Hotkey button: We now seperate locations (for example numpad)
+- SnipScopeRenderer now activates antialising depending on zoom level
+- Technical changes related to stamps to make them easier to work with
+- Stamps are now sorted differently in the code, allowing us to move their index around freely
+
 ## [3.9.4](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.9.4) - 06.10.2021 10:34 (Europe/Berlin)
 
 ### After drag update
