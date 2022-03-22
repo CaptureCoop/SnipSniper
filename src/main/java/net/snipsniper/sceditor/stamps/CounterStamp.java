@@ -4,7 +4,6 @@ import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.ccutils.math.CCVector2Int;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
-import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.utils.InputContainer;
 
 import java.awt.*;
