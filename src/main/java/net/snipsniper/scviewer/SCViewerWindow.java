@@ -178,7 +178,7 @@ public class SCViewerWindow extends SnipScopeWindow {
 
     public void openEditor() {
         if(currentFile != null) {
-            SCEditorWindow editor = new SCEditorWindow(getImage(), (int) getLocation().getX(), (int) getLocation().getY(), "SnipSniper Editor", config, false, currentFile.getAbsolutePath(), false, false);
+            SCEditorWindow editor = new SCEditorWindow(getImage(), getLocation().x, getLocation().y, "SnipSniper Editor", config, false, currentFile.getAbsolutePath(), false, false);
             editor.setSize(getSize());
             if (config.getBool(ConfigHelper.PROFILE.closeViewerOnOpenEditor))
                 dispose();

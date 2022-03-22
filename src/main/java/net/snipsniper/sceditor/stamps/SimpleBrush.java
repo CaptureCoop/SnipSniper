@@ -53,7 +53,7 @@ public class SimpleBrush implements IStamp {
         if(bounds == null && scEditorWindow != null)
             bounds = new Rectangle(0, 0, scEditorWindow.getImage().getWidth(), scEditorWindow.getImage().getHeight());
 
-        Paint paint = new CCColor(color, 255).getGradientPaint((int)bounds.getWidth(), (int)bounds.getHeight());
+        Paint paint = new CCColor(color, 255).getGradientPaint(bounds.width, bounds.height);
         g.setPaint(paint);
         g.fillOval(position.getX() - newSize / 2, position.getY() - newSize / 2, newSize, newSize);
 

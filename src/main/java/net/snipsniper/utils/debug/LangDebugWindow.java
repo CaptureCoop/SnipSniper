@@ -26,8 +26,8 @@ public class LangDebugWindow extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setIconImage(ImageManager.getImage("icons/config.png"));
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) screenSize.getWidth();
-        int height = (int) screenSize.getHeight();
+        int width = screenSize.width;
+        int height = screenSize.height;
         setLocation(width / 2 - getWidth() / 2, height / 2 - getHeight() / 2);
         scrollPane = setup();
         add(scrollPane);

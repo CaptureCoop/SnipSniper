@@ -48,8 +48,8 @@ public class TextPreviewWindow extends JFrame implements CCIClosable {
         setVisible(true);
         requestFocus();
         pack();
-        int x = (int) (parent.getLocation().getX() + parent.getWidth() / 2) - getWidth() / 2;
-        int y = (int) (parent.getLocation().getY() + parent.getHeight() / 2) - getHeight() / 2;
+        int x = (parent.getLocation().x + parent.getWidth() / 2) - getWidth() / 2;
+        int y = (parent.getLocation().y + parent.getHeight() / 2) - getHeight() / 2;
         setLocation(x, y);
     }
 

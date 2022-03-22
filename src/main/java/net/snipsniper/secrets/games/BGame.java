@@ -95,9 +95,7 @@ public class BGame extends JFrame {
         gamePanel.setPreferredSize(new Dimension(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT));
         pack();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) screenSize.getWidth();
-        int height = (int) screenSize.getHeight();
-        setLocation(width / 2 - getWidth() / 2, height / 2 - getHeight() / 2);
+        setLocation(screenSize.width / 2 - getWidth() / 2, screenSize.height / 2 - getHeight() / 2);
         start();
         loop();
     }

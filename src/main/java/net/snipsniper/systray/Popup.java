@@ -24,8 +24,6 @@ import java.util.ArrayList;
 public class Popup extends JFrame{
     private final static int TASKBAR_HEIGHT = 40;
 
-    ArrayList<net.snipsniper.systray.PopupMenu> menus = new ArrayList<>();
-
     public Popup(Sniper sniper) {
         Config config = sniper.getConfig();
         setUndecorated(true);
@@ -38,6 +36,8 @@ public class Popup extends JFrame{
         title.setVerticalTextPosition(JLabel.BOTTOM);
         title.setHorizontalTextPosition(JLabel.CENTER);
         add(title);
+
+        ArrayList<PopupMenu> menus = new ArrayList<>();
         add(new PopupMenuButton("Viewer", ImageManager.getImage("icons/viewer.png"), this, args -> new SCViewerWindow(null, config, false), menus));
         add(new PopupMenuButton("Editor", ImageManager.getImage("icons/editor.png"), this, args -> new SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false), menus));
         add(new JSeparator());
@@ -96,7 +96,7 @@ public class Popup extends JFrame{
                 if(!Utils.containsRectangleFully(screenRect, getBounds())) {
                     //Fallback
                     //TODO: Find prettier way
-                    setLocation((int)screenRect.getWidth() / 2 - getWidth() / 2, (int)screenRect.getHeight() / 2 - getHeight() / 2);
+                    setLocation(screenRect.width / 2 - getWidth() / 2, screenRect.height / 2 - getHeight() / 2);
                 }
             } else {
                 if (insets.bottom != 0)

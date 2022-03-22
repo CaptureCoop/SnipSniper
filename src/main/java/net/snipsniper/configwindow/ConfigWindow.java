@@ -380,7 +380,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
         GradientJButton colorButton = new GradientJButton(title, startColorPBR);
         startColorPBR.addChangeListener(e -> config.set(configKey, startColorPBR.toSaveString()));
         startColorPBR.addChangeListener(whenChange);
-        colorButton.addActionListener(e -> cWindows.add(new CCColorChooser(startColorPBR, "Stamp color", (int) (getLocation().getX() + getWidth() / 2), (int) (getLocation().getY() + getHeight() / 2), true, null,null)));
+        colorButton.addActionListener(e -> cWindows.add(new CCColorChooser(startColorPBR, "Stamp color", getLocation().x + getWidth() / 2, getLocation().y + getHeight() / 2, true, null,null)));
         return colorButton;
     }
 

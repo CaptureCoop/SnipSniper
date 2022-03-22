@@ -164,8 +164,8 @@ public class GeneralTab extends JPanel implements ITab{
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         tintColorButton.addActionListener(e -> {
-            int x = (int)((configWindow.getLocation().getX() + getWidth()/2));
-            int y = (int)((configWindow.getLocation().getY() + getHeight()/2));
+            int x = configWindow.getLocation().x + getWidth() / 2;
+            int y = configWindow.getLocation().y + getHeight() / 2;
             BufferedImage image = ImageManager.getImage("preview/code_light.png");
             if(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme).equals("dark"))
                 image = ImageManager.getImage("preview/code_dark.png");
@@ -227,8 +227,8 @@ public class GeneralTab extends JPanel implements ITab{
         });
         colorBtn.addActionListener(e -> {
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
-                int x = (int)((configWindow.getLocation().getX() + getWidth()/2));
-                int y = (int)((configWindow.getLocation().getY() + getHeight()/2));
+                int x = configWindow.getLocation().x + getWidth() / 2;
+                int y = configWindow.getLocation().y + getHeight() / 2;
                 colorChooser[0] = new CCColorChooser(borderColor, LangManager.getItem("config_label_bordercolor"), x, y, true, null, null);
                 colorChooser[0].addWindowListener(new WindowAdapter() {
                     @Override

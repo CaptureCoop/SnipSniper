@@ -149,7 +149,7 @@ public class AboutWindow extends JFrame {
         add(panel);
 
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((int)((size.getWidth()/2) - getWidth()/2), (int)((size.getHeight()/2) - getHeight()/2));
+        setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
 
         setVisible(true);
     }

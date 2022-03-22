@@ -40,7 +40,7 @@ public class IconWindow extends JFrame implements CCIClosable {
         setSize(512, 256);
         setTitle(title);
         setIconImage(ImageManager.getImage("icons/folder.png"));
-        setLocation((int)parent.getLocation().getX() + parent.getWidth() / 2 - getWidth() / 2, (int)parent.getLocation().getY() + parent.getHeight() / 2 - getHeight() / 2);
+        setLocation(parent.getLocation().x + parent.getWidth() / 2 - getWidth() / 2, parent.getLocation().y + parent.getHeight() / 2 - getHeight() / 2);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -60,7 +60,7 @@ public class IconWindow extends JFrame implements CCIClosable {
             public void mouseExited(MouseEvent mouseEvent) {
                 super.mouseExited(mouseEvent);
                 if(listenForExit) {
-                    Rectangle bounds = new Rectangle(0, 0, (int)getBounds().getWidth(), (int)getBounds().getHeight());
+                    Rectangle bounds = new Rectangle(0, 0, getBounds().width, getBounds().height);
                     if(!bounds.contains(mouseEvent.getPoint()))
                         dispose();
                 }

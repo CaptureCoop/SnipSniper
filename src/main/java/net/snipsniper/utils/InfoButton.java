@@ -20,15 +20,15 @@ public class InfoButton extends JButton {
 
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e) {
+            public void mouseEntered(MouseEvent mouseEvent) {
                 if(!isEnabled())
                     return;
-                super.mouseEntered(e);
+                super.mouseEntered(mouseEvent);
                 new java.util.Timer().schedule(new java.util.TimerTask() {
                     @Override
                     public void run() {
                         if(isShowing()) {
-                            Rectangle rect = new Rectangle((int) getLocationOnScreen().getX(), (int) getLocationOnScreen().getY(), getBounds().width, getBounds().height);
+                            Rectangle rect = new Rectangle(getLocationOnScreen().x, getLocationOnScreen().y, getBounds().width, getBounds().height);
                             if (rect.contains(MouseInfo.getPointerInfo().getLocation())) {
                                 openWindow();
                             }
@@ -38,8 +38,8 @@ public class InfoButton extends JButton {
             }
 
             @Override
-            public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
+            public void mouseExited(MouseEvent mouseEvent) {
+                super.mouseExited(mouseEvent);
                 closeWindow();
             }
         });
@@ -69,7 +69,7 @@ public class InfoButton extends JButton {
         }
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        window.setLocation((int) (getLocationOnScreen().getX() + getWidth()), (int) (getLocationOnScreen().getY()));
+        window.setLocation(getLocationOnScreen().x + getWidth(), getLocationOnScreen().y);
         window.getContentPane().setBackground(Color.WHITE);
         window.setUndecorated(true);
         JLabel content = new JLabel("<html><p style=\"width:256px;\">" + info + "</p></html>");

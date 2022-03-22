@@ -28,8 +28,8 @@ public class SnipScopeRenderer extends JPanel {
         Dimension optimalDimension = snipScopeWindow.getOptimalImageDimension();
         BufferedImage image = snipScopeWindow.getImage();
         if(image != null && optimalDimension != null) {
-            int x = getWidth()/2 - (int)(optimalDimension.getWidth()/2);
-            int y = getHeight()/2 - (int)(optimalDimension.getHeight()/2);
+            int x = getWidth() / 2 - optimalDimension.width / 2;
+            int y = getHeight() / 2 - optimalDimension.height / 2;
 
             x -= snipScopeWindow.getZoomOffset().getX();
             y -= snipScopeWindow.getZoomOffset().getY();
@@ -39,7 +39,7 @@ public class SnipScopeRenderer extends JPanel {
             y -= posModifier.getY();
 
             float zoom = snipScopeWindow.getZoom();
-            lastRectangle = new Rectangle(x, y, (int)(optimalDimension.getWidth()*zoom), (int)(optimalDimension.getHeight()*zoom));
+            lastRectangle = new Rectangle(x, y, (int)(optimalDimension.width * zoom), (int)(optimalDimension.height * zoom));
             g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height, this);
             g.setColor(Color.BLACK);
             //TODO: add config option for outline

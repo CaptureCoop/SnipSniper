@@ -128,8 +128,8 @@ public class SCEditorListener extends SnipScopeListener {
             //This fixes an issue with the ALT key getting "stuck" since the key up event is not being received if the color window is in the front.
             openColorChooser = false;
             scEditorWindow.getInputContainer().resetKeys();
-            int x = (int)((scEditorWindow.getLocation().getX() + scEditorWindow.getWidth()/2));
-            int y = (int)((scEditorWindow.getLocation().getY() + scEditorWindow.getHeight()/2));
+            int x = scEditorWindow.getLocation().x + scEditorWindow.getWidth() / 2;
+            int y = scEditorWindow.getLocation().y + scEditorWindow.getHeight() / 2;
             //TODO: Do we want the save button back?
             //scEditorWindow.addClosableWindow(new CCColorChooser(scEditorWindow.getConfig(), "Marker Color", scEditorWindow.getSelectedStamp().getColor(), scEditorWindow.getSelectedStamp().getID() + "DefaultColor", x, y, true, null));
             scEditorWindow.addClosableWindow(new CCColorChooser(scEditorWindow.getSelectedStamp().getColor(), "Marker color", x, y, true, null, null));

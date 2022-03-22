@@ -58,7 +58,7 @@ public class NewImageWindow extends JFrame implements CCIClosable {
         add(pickResolution, gbc);
         CCColor color = new CCColor(Color.WHITE);
         GradientJButton colorButton= new GradientJButton("Color", color);
-        colorButton.addActionListener(e -> cWindows.add(new CCColorChooser(color, "Color", (int) getLocation().getX() + getWidth() / 2, (int) getLocation().getY() + getHeight() / 2, true, null, null)));
+        colorButton.addActionListener(e -> cWindows.add(new CCColorChooser(color, "Color", getLocation().x + getWidth() / 2, getLocation().y + getHeight() / 2, true, null, null)));
         add(colorButton, gbc);
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {

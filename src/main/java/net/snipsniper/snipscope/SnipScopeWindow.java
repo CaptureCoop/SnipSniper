@@ -62,7 +62,7 @@ public class SnipScopeWindow extends JFrame {
     public void setLocationAuto() {
         Dimension dimension = getOptimalImageDimension();
         Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((int)(screenDimension.getWidth()/2 - dimension.getWidth()/2), (int)(screenDimension.getHeight()/2 - dimension.getHeight()/2));
+        setLocation(screenDimension.width / 2 - dimension.width / 2, screenDimension.height / 2 - dimension.height / 2);
     }
 
     public void calculateZoom() {

@@ -236,7 +236,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
 
         if(ezMode) {
             setSize(getWidth() + ezModeWidth, getHeight() + ezModeHeight);
-            setLocation((int)getLocation().getX() - ezModeWidth, (int)getLocation().getY() - ezModeHeight);
+            setLocation(getLocation().x - ezModeWidth, getLocation().y - ezModeHeight);
         }
 
         if(!isStandalone) {
@@ -249,7 +249,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
                     if(!found) {
                         Rectangle bounds = graphicsConfiguration.getBounds();
 
-                        Point testLocation = new Point((int) (getLocation().getX() + SAFETY_OFFSET_X), (int) getLocation().getY());
+                        Point testLocation = new Point(getLocation().x + SAFETY_OFFSET_X, getLocation().y);
 
                         if (bounds.contains(testLocation))
                             found = true;
@@ -262,7 +262,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
             }
 
             if(!found && bestMonitor != null) {
-                setLocation((int) getLocation().getX(), bestMonitor.getBounds().y);
+                setLocation(getLocation().x, bestMonitor.getBounds().y);
             }
         }
 
@@ -319,8 +319,8 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
     public void openNewImageWindow() {
         NewImageWindow window = new NewImageWindow();
         cWindows.add(window);
-        int posX = (int) (getLocation().getX() + getWidth() / 2) - window.getWidth() / 2;
-        int posY = (int) (getLocation().getY() + getHeight() / 2) - window.getHeight() / 2;
+        int posX = (getLocation().x + getWidth() / 2) - window.getWidth() / 2;
+        int posY = (getLocation().y + getHeight() / 2) - window.getHeight() / 2;
         window.setLocation(posX, posY);
         window.setOnSubmit(args -> {
             setImage(window.getImage(), true, true);
