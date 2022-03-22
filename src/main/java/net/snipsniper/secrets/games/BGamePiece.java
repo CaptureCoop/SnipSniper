@@ -18,7 +18,7 @@ public class BGamePiece {
     private int moveCooldown = 0;
     private final int moveCooldownMax = 10;
 
-    public int index;
+    public final int index;
 
     public BGamePiece(BGame game) {
         index = BGame.randomRange(0,game.getResources().getSize() - 1);
@@ -176,10 +176,6 @@ public class BGamePiece {
             }
         }
         return rotated;
-    }
-
-    public void setPosX(int x) {
-        posX = x;
     }
 
     public int getPosX() {

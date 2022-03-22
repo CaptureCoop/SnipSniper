@@ -1,7 +1,7 @@
 package net.snipsniper.secrets.games;
 
 public class BGameBlock {
-    int index;
+    final int index;
 
     public BGameBlock(int index) {
         this.index = index;

@@ -9,7 +9,7 @@ import java.awt.*;
 public class SaveFormatPreviewRenderer extends JPanel {
     private TextPreviewWindow textPreviewWindow;
 
-    public static String DEFAULT_FORMAT = "%year%-%month%-%day%__%hour%_%minute%_%second%";
+    public static final String DEFAULT_FORMAT = "%year%-%month%-%day%__%hour%_%minute%_%second%";
 
     public SaveFormatPreviewRenderer(int minWidth, int minHeight) {
         Dimension min = new Dimension(minWidth, minHeight);

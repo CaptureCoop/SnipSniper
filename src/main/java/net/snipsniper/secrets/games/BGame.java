@@ -211,8 +211,8 @@ public class BGame extends JFrame {
         spawnPiece();
     }
 
-    int dropCooldown = 0;
-    int dropCooldownMax = 25;
+    private int dropCooldown = 0;
+    private final int dropCooldownMax = 25;
     public void input() {
         if(dropCooldown > 0)
             dropCooldown--;

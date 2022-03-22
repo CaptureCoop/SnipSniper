@@ -21,7 +21,7 @@ import net.snipsniper.configwindow.ConfigWindow;
 import org.jnativehook.mouse.NativeMouseEvent;
 
 public class Sniper {
-	public int profileID; //0 = default
+	public final int profileID; //0 = default
 	
 	private CaptureWindow captureWindow;
 	private ConfigWindow configWindow;

@@ -66,7 +66,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
 
     private final JTabbedPane ezModeStampPanelTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 
-    private boolean isStandalone;
+    private final boolean isStandalone;
     public SCEditorWindow(BufferedImage image, int x, int y, String title, Config config, boolean isLeftToRight, String saveLocation, boolean inClipboard, boolean isStandalone) {
         instance = this;
         this.config = config;
@@ -183,52 +183,46 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
             newItem.addActionListener(e -> openNewImageWindow());
             topBar.add(newItem);
             JMenuItem whatsappTest = new JMenuItem("Border test");
-            whatsappTest.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int borderThickness = 10;
-                    //Fix to have this work without originalImage. As we will remove/Change this anyways i dont care if this affects anything for now.
-                    BufferedImage imageToUse = getImage();
-                    BufferedImage test = new BufferedImage(imageToUse.getWidth() + borderThickness, imageToUse.getHeight() + borderThickness, BufferedImage.TYPE_INT_ARGB);
-                    Graphics2D g = (Graphics2D) test.getGraphics();
-                    g.setRenderingHints(qualityHints);
-                    for(int y = 0; y < imageToUse.getHeight(); y++) {
-                        for(int x = 0; x < imageToUse.getWidth(); x++) {
-                            if(new Color(imageToUse.getRGB(x, y), true).getAlpha() > 10) {
-                                g.setColor(Color.WHITE);
-                                g.fillOval((x + borderThickness / 2) - borderThickness / 2, (y + borderThickness / 2) - borderThickness / 2, borderThickness, borderThickness);
-                            }
+            whatsappTest.addActionListener(e -> {
+                int borderThickness = 10;
+                //Fix to have this work without originalImage. As we will remove/Change this anyways i dont care if this affects anything for now.
+                BufferedImage imageToUse = getImage();
+                BufferedImage test = new BufferedImage(imageToUse.getWidth() + borderThickness, imageToUse.getHeight() + borderThickness, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g = (Graphics2D) test.getGraphics();
+                g.setRenderingHints(qualityHints);
+                for(int y1 = 0; y1 < imageToUse.getHeight(); y1++) {
+                    for(int x1 = 0; x1 < imageToUse.getWidth(); x1++) {
+                        if(new Color(imageToUse.getRGB(x1, y1), true).getAlpha() > 10) {
+                            g.setColor(Color.WHITE);
+                            g.fillOval((x1 + borderThickness / 2) - borderThickness / 2, (y1 + borderThickness / 2) - borderThickness / 2, borderThickness, borderThickness);
                         }
                     }
-                    g.drawImage(imageToUse, borderThickness / 2 , borderThickness / 2, imageToUse.getWidth(), imageToUse.getHeight(), null);
-                    g.dispose();
-
-                    setImage(test, true, true);
-                    isDirty = true;
-                    repaint();
-                    refreshTitle();
                 }
+                g.drawImage(imageToUse, borderThickness / 2 , borderThickness / 2, imageToUse.getWidth(), imageToUse.getHeight(), null);
+                g.dispose();
+
+                setImage(test, true, true);
+                isDirty = true;
+                repaint();
+                refreshTitle();
             });
             topBar.add(whatsappTest);
             JMenuItem whatsappBox = new JMenuItem("Box test");
-            whatsappBox.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int width = 512;
-                    int height = 512;
-                    BufferedImage test = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-                    Graphics2D g = (Graphics2D) test.getGraphics();
-                    g.setRenderingHints(qualityHints);
+            whatsappBox.addActionListener(e -> {
+                int width = 512;
+                int height = 512;
+                BufferedImage test = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g = (Graphics2D) test.getGraphics();
+                g.setRenderingHints(qualityHints);
 
-                    Dimension optimalDimension = Utils.getScaledDimension(originalImage, new Dimension(width, height));
-                    g.drawImage(originalImage, test.getWidth() / 2 - optimalDimension.width / 2, test.getHeight() / 2 - optimalDimension.height / 2, optimalDimension.width, optimalDimension.height, null);
+                Dimension optimalDimension = Utils.getScaledDimension(originalImage, new Dimension(width, height));
+                g.drawImage(originalImage, test.getWidth() / 2 - optimalDimension.width / 2, test.getHeight() / 2 - optimalDimension.height / 2, optimalDimension.width, optimalDimension.height, null);
 
-                    g.dispose();
-                    setImage(test, true, true);
-                    isDirty = true;
-                    repaint();
-                    refreshTitle();
-                }
+                g.dispose();
+                setImage(test, true, true);
+                isDirty = true;
+                repaint();
+                refreshTitle();
             });
             topBar.add(whatsappBox);
             setJMenuBar(topBar);

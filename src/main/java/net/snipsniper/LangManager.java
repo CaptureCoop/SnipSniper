@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LangManager {
-    public static String DEFAULT_LANGUAGE = "en";
-    public static String MISSING_STRING_CHAR = "~";
-    public static ArrayList<String> languages = new ArrayList<>();
+    public static final String DEFAULT_LANGUAGE = "en";
+    public static final String MISSING_STRING_CHAR = "~";
+    public static final ArrayList<String> languages = new ArrayList<>();
     private static final HashMap<String, JSONObject> langMap = new HashMap<>();
 
     private LangManager() { }

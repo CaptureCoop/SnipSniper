@@ -38,7 +38,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 	public boolean isRunning = true;
 
 	public boolean isAfterDragHotkeyPressed = false;
-	private int dottedLineDistance;
+	private final int dottedLineDistance;
 
 	public CaptureWindow(Sniper sniperInstance) {
 		this.sniperInstance = sniperInstance;
