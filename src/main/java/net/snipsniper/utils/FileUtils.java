@@ -19,18 +19,21 @@ public class FileUtils {
 
     public static boolean deleteRecursively(File folder) {
         if(!folder.isDirectory()) {
-            FileUtils.delete(folder);
-            return true;
+            return FileUtils.delete(folder);
         }
 
+        boolean success = true;
         for(File file : FileUtils.listFiles(folder)) {
             if(file.isDirectory()) {
-                deleteRecursively(file);
+                if(!deleteRecursively(file))
+                    success = false;
             }
-            FileUtils.delete(file);
+            if(!FileUtils.delete(file))
+                success = false;
         }
-        FileUtils.delete(folder);
-        return true;
+        if(!FileUtils.delete(folder))
+            success = false;
+        return success;
     }
 
     public static boolean delete(String file) {
