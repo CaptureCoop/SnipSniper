@@ -26,13 +26,11 @@ public class CircleStamp implements IStamp{
     private CCColor color;
 
     private final Config config;
-    private final SCEditorWindow scEditorWindow;
 
     private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
-    public CircleStamp(Config config, SCEditorWindow scEditorWindow) {
+    public CircleStamp(Config config) {
         this.config = config;
-        this.scEditorWindow = scEditorWindow;
         reset();
     }
 

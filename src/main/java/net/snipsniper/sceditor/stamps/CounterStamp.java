@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class CounterStamp implements IStamp{
     private final Config config;
-    private final SCEditorWindow scEditorWindow;
 
     private int width;
     private int height;
@@ -35,9 +34,8 @@ public class CounterStamp implements IStamp{
 
     private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
-    public CounterStamp(Config config, SCEditorWindow scEditorWindow) {
+    public CounterStamp(Config config) {
         this.config = config;
-        this.scEditorWindow = scEditorWindow;
         reset();
     }
 

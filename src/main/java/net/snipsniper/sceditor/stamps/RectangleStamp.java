@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class RectangleStamp implements IStamp {
     private final Config config;
-    private final SCEditorWindow scEditorWindow;
 
     private int width;
     private int height;
@@ -30,9 +29,8 @@ public class RectangleStamp implements IStamp {
 
     private final ArrayList<IStampUpdateListener> changeListeners = new ArrayList<>();
 
-    public RectangleStamp(Config config, SCEditorWindow scEditorWindow) {
+    public RectangleStamp(Config config) {
         this.config = config;
-        this.scEditorWindow = scEditorWindow;
         reset();
     }
 
@@ -115,9 +113,7 @@ public class RectangleStamp implements IStamp {
     public void editorUndo(int historyPoint) { }
 
     @Override
-    public void mousePressedEvent(int button, boolean pressed) {
-
-    }
+    public void mousePressedEvent(int button, boolean pressed) { }
 
     @Override
     public void reset() {

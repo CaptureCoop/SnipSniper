@@ -50,11 +50,11 @@ public enum StampType {
     public IStamp getIStamp(Config config, SCEditorWindow scEditorWindow) {
         switch(this) {
             case CUBE: return new CubeStamp(config, scEditorWindow);
-            case COUNTER: return new CounterStamp(config, scEditorWindow);
-            case CIRCLE: return new CircleStamp(config, scEditorWindow);
+            case COUNTER: return new CounterStamp(config);
+            case CIRCLE: return new CircleStamp(config);
             case SIMPLE_BRUSH: return new SimpleBrush(config, scEditorWindow);
             case TEXT: return new TextStamp(config, scEditorWindow);
-            case RECTANGLE: return new RectangleStamp(config, scEditorWindow);
+            case RECTANGLE: return new RectangleStamp(config);
             case ERASER: return new EraserStamp(scEditorWindow, config);
         }
         return null;

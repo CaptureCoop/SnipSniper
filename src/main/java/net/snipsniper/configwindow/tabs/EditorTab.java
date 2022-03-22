@@ -222,7 +222,7 @@ public class EditorTab extends JPanel implements ITab{
         } else if(stamp instanceof CounterStamp) {
             panel.add(configWindow.createJLabel(LangManager.getItem("config_label_startcolor"), JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
-            panel.add(configWindow.setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCounterDefaultColor, e -> previewPanel.setStamp(new CounterStamp(config, null))), gbc);
+            panel.add(configWindow.setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCounterDefaultColor, e -> previewPanel.setStamp(new CounterStamp(config))), gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
             gbc.gridx = 0;
@@ -241,7 +241,7 @@ public class EditorTab extends JPanel implements ITab{
             cbSolidColor.setSelected(config.getBool(ConfigHelper.PROFILE.editorStampCounterSolidColor));
             cbSolidColor.addChangeListener(e -> {
                 config.set(ConfigHelper.PROFILE.editorStampCounterSolidColor, cbSolidColor.isSelected() + "");
-                previewPanel.setStamp(new CounterStamp(config, null));
+                previewPanel.setStamp(new CounterStamp(config));
                 onUpdate.run();
             });
             gbc.gridx = 1;
@@ -256,7 +256,7 @@ public class EditorTab extends JPanel implements ITab{
             cbBorder.setSelected(config.getBool(ConfigHelper.PROFILE.editorStampCounterBorderEnabled));
             cbBorder.addChangeListener(e -> {
                 config.set(ConfigHelper.PROFILE.editorStampCounterBorderEnabled, cbBorder.isSelected() + "");
-                previewPanel.setStamp(new CounterStamp(config, null));
+                previewPanel.setStamp(new CounterStamp(config));
                 onUpdate.run();
             });
             panel.add(cbBorder, gbc);
@@ -268,7 +268,7 @@ public class EditorTab extends JPanel implements ITab{
         } else if(stamp instanceof CircleStamp) {
             panel.add(configWindow.createJLabel(LangManager.getItem("config_label_startcolor"), JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
-            panel.add(configWindow.setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCircleDefaultColor, e -> previewPanel.setStamp(new CircleStamp(config, null))), gbc);
+            panel.add(configWindow.setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCircleDefaultColor, e -> previewPanel.setStamp(new CircleStamp(config))), gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
 
@@ -308,7 +308,7 @@ public class EditorTab extends JPanel implements ITab{
         } else if(stamp instanceof RectangleStamp) {
             panel.add(configWindow.createJLabel(LangManager.getItem("config_label_startcolor"), JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
-            panel.add(configWindow.setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampRectangleDefaultColor, e -> previewPanel.setStamp(new RectangleStamp(config, null))), gbc);
+            panel.add(configWindow.setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampRectangleDefaultColor, e -> previewPanel.setStamp(new RectangleStamp(config))), gbc);
             gbc.gridx = 2;
             panel.add(new InfoButton(null), gbc);
 
