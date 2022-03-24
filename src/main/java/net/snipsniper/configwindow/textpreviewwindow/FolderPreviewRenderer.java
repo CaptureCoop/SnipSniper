@@ -1,7 +1,7 @@
 package net.snipsniper.configwindow.textpreviewwindow;
 
 import net.snipsniper.ImageManager;
-import org.capturecoop.ccutils.utils.CCStringUtils;;
+import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.swing.*;
 import java.awt.*;

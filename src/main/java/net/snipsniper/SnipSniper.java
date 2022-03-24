@@ -158,7 +158,7 @@ public final class SnipSniper {
 		CCLogger.log("========================================", CCLogLevel.DEBUG);
 
 		if(!LangManager.languages.contains(SnipSniper.config.getString(ConfigHelper.MAIN.language))) {
-			CCLogger.log("Language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> not found. Available languages: " + LangManager.languages.toString(), CCLogLevel.ERROR);
+			CCLogger.log("Language <" + SnipSniper.config.getString(ConfigHelper.MAIN.language) + "> not found. Available languages: " + LangManager.languages, CCLogLevel.ERROR);
 			exit(false);
 		}
 
