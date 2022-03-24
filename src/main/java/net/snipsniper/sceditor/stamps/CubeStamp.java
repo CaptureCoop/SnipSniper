@@ -98,6 +98,10 @@ public class CubeStamp implements IStamp{
                 smartPixelBufferGraphics.dispose();
             }
 
+            //TODO: This fix seems like a hack, go over this again
+            final int gradientXStart = -size.getX() - 1;
+            int gradientX = gradientXStart;
+            int gradientY = -size.getY() - 1;
             for (int y = 0; y < -size.getY(); y++) {
                 for (int x = 0; x < -size.getX(); x++) {
                     int posX = pos.getX() - x;
@@ -108,11 +112,14 @@ public class CubeStamp implements IStamp{
                         int alpha = (int)((205F/765F) * total + 25);
                         Color oC = color.getPrimaryColor();
                         if(color.isGradient())
-                            oC = new Color(smartPixelBuffer.getRGB(x, y));
+                            oC = new Color(smartPixelBuffer.getRGB(gradientX, gradientY));
                         g.setColor(new Color(oC.getRed(), oC.getGreen(), oC.getBlue(), alpha));
                         g.drawLine(posX, posY, posX, posY);
                     }
+                    gradientX--;
                 }
+                gradientX = gradientXStart;
+                gradientY--;
             }
         } else {
             Color oldColor = g.getColor();
