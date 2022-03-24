@@ -140,12 +140,10 @@ public class GlobalTab extends JPanel implements ITab{
 
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 10, 0, 10);
-        String version = SnipSniper.getVersion().getDigits();
+        String version = SnipSniper.getVersion().toString();
         ReleaseType releaseType = Utils.getReleaseType(SnipSniper.getConfig().getString(ConfigHelper.MAIN.updateChannel));
-        if(releaseType == ReleaseType.DEV)
-            version = SnipSniper.getVersion().getGithash();
         String channel = releaseType.toString().toLowerCase();
-        options.add(configWindow.createJLabel(CCStringUtils.format("Current Version: %c (%c)", version, channel), JLabel.CENTER, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(CCStringUtils.format("<html><p>Current Version: %c</p><p>Update Channel: %c</p></html>", version, channel), JLabel.CENTER, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         options.add(new UpdateButton(), gbc);
 

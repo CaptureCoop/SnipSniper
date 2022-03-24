@@ -21,15 +21,27 @@ public class UpdateButton extends IDJButton {
     private final Image checkmark = ImageManager.getImage("icons/checkmark.png").getScaledInstance(16, 16, 0);
     private final Image download = ImageManager.getImage("icons/download.png").getScaledInstance(16, 16, 0);
 
-
     public UpdateButton() {
         super("");
         setID(STATE_WAITING);
         setText("Check for update");
         setIcon(new ImageIcon(roundArrows));
         addActionListener(e -> {
+            if(getID().equals(STATE_DOUPDATE)) {
+                UpdateUtils.update();
+                return;
+            }
+
+            Version version = SnipSniper.getVersion();
             ReleaseType updateChannel = Utils.getReleaseType(SnipSniper.getConfig().getString(ConfigHelper.MAIN.updateChannel));
-            if(updateChannel == ReleaseType.DEV && SnipSniper.getVersion().getPlatformType() == PlatformType.JAR) {
+            boolean isJar = version.getPlatformType() == PlatformType.JAR;
+            boolean isDev = version.getReleaseType() == ReleaseType.DEV;
+            boolean isStable = version.getReleaseType() == ReleaseType.STABLE;
+
+            boolean isJarAndDev = isDev && isJar;
+            boolean isJarAndDevButStableBranch = updateChannel == ReleaseType.STABLE && !isStable && isJar;
+
+            if(isJarAndDev) {
                 if(getID().equals(STATE_WAITING)) {
                     setText("Checking for update...");
                     String newestHash = Utils.getShortGitHash(Utils.getHashFromAPI(Links.API_LATEST_COMMIT));
@@ -46,8 +58,11 @@ public class UpdateButton extends IDJButton {
                         setID(STATE_DOUPDATE);
                         setIcon(new ImageIcon(download));
                     }
-                } else if(getID().equals(STATE_DOUPDATE)) {
-                    UpdateUtils.update();
+                }
+            } else if(isJarAndDevButStableBranch) {
+                if(getID().equals(STATE_WAITING)) {
+                    setText("<html><p align='center'>Switch to stable</p></html>");
+                    setID(STATE_DOUPDATE);
                 }
             } else {
                 if(getID().equals(STATE_WAITING)) {
@@ -78,8 +93,6 @@ public class UpdateButton extends IDJButton {
                         setID(STATE_IDLE);
                         setIcon(null);
                     }
-                } else if(getID().equals(STATE_DOUPDATE)) {
-                    UpdateUtils.update();
                 }
             }
         });
