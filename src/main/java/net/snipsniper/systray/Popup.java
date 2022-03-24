@@ -61,6 +61,7 @@ public class Popup extends JFrame{
 
         add(new PopupMenuButton(LangManager.getItem("menu_about"), ImageManager.getImage("icons/about.png"), this, args -> new AboutWindow(sniper), menus));
         add(new JSeparator());
+        add(new PopupMenuButton("Restart", ImageManager.getImage("icons/redx.png"), this, args -> SnipSniper.restart(), menus));
         add(new PopupMenuButton(LangManager.getItem("menu_quit"), ImageManager.getImage("icons/redx.png"), this, args -> SnipSniper.exit(false), menus));
 
         setIconImage(ImageManager.getImage("icons/snipsniper.png"));

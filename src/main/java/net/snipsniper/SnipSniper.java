@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -55,7 +56,11 @@ public final class SnipSniper {
 
 	private static Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
 
+	private static String[] args;
+
 	public static void start(String[] args) {
+		SnipSniper.args = args;
+
 		if(!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
 			System.out.println("SnipSniper is currently only available for Windows and Linux (In development, use with caution). Sorry!");
 			System.exit(0);
@@ -375,6 +380,20 @@ public final class SnipSniper {
 		Thread thread = new Thread(() -> function.run());
 		thread.setUncaughtExceptionHandler(uncaughtExceptionHandler);
 		return thread;
+	}
+
+	public static void restart() {
+		try {
+			//TODO: Add for other platform types!
+			switch (version.getPlatformType()) {
+				case JAR:
+					Utils.restartApplication(args);
+					break;
+			}
+		} catch(Exception exception) {
+			CCLogger.log("Error restarting!");
+			CCLogger.logStacktrace(exception, CCLogLevel.ERROR);
+		}
 	}
 
 	public static boolean isDebug() {
