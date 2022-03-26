@@ -253,29 +253,21 @@ public class GlobalTab extends JPanel implements ITab{
     }
 
     private void globalSave(Config config, IFunction autostart) {
-        boolean doRestartProfiles = !config.getString(ConfigHelper.MAIN.language).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.language));
         boolean didThemeChange = !config.getString(ConfigHelper.MAIN.theme).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme));
         boolean didDebugChange = config.getBool(ConfigHelper.MAIN.debug) != SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug);
 
         if(autostart != null)
             autostart.run();
 
-        if(didDebugChange && config.getBool(ConfigHelper.MAIN.debug)) {
-            doRestartProfiles = true;
-        } else if(didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)){
+        if(didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)){
             CCLogger.enableDebugConsole(false);
-            doRestartProfiles = true;
         }
 
         SnipSniper.getConfig().loadFromConfig(config);
         config.save();
 
         if(didThemeChange) {
-            doRestartProfiles = true;
             SnipSniper.refreshTheme();
         }
-
-        if(doRestartProfiles)
-            SnipSniper.resetProfiles();
     }
 }
