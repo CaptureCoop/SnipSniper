@@ -166,13 +166,4 @@ public class Sniper {
 	public TrayIcon getTrayIcon() {
 		return trayIcon;
 	}
-
-	public void openConfigWindow() {
-		if(configWindow == null) {
-			configWindow = new ConfigWindow(config, ConfigWindow.PAGE.generalPanel);
-			configWindow.addCustomWindowListener(() -> configWindow = null);
-		} else {
-			configWindow.requestFocus();
-		}
-	}
 }

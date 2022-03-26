@@ -99,8 +99,8 @@ public class GlobalTab extends JPanel implements ITab{
             SnipSniper.refreshGlobalConfigFromDisk();
             SnipSniper.refreshTheme();
             SnipSniper.resetProfiles();
-            new ConfigWindow(null, ConfigWindow.PAGE.globalPanel);
             configWindow.close();
+            SnipSniper.openConfigWindow(null, ConfigWindow.PAGE.globalPanel);
         });
         JButton exportButton = new JButton("Export Configs");
         exportButton.addActionListener(e -> {
@@ -226,8 +226,8 @@ public class GlobalTab extends JPanel implements ITab{
             globalSave(config, autostart[0]);
 
             if(restartConfig || didThemeChange) {
-                new ConfigWindow(configWindow.getLastSelectedConfig(), ConfigWindow.PAGE.globalPanel);
                 configWindow.close();
+                SnipSniper.openConfigWindow(configWindow.getLastSelectedConfig(), ConfigWindow.PAGE.globalPanel);
             }
             saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         };

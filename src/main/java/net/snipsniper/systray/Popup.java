@@ -48,7 +48,7 @@ public class Popup extends JFrame{
             }
             FileUtils.openFolder(folderToOpen);
         }, menus));
-        add(new PopupMenuButton(LangManager.getItem("menu_config"), ImageManager.getImage("icons/config.png"), this, args -> sniper.openConfigWindow(), menus));
+        add(new PopupMenuButton(LangManager.getItem("menu_config"), ImageManager.getImage("icons/config.png"), this, args -> SnipSniper.openConfigWindow(sniper), menus));
 
         if (SnipSniper.isDebug()) {
             net.snipsniper.systray.PopupMenu debugMenu = new PopupMenu("Debug", ImageManager.getImage("icons/debug.png"));

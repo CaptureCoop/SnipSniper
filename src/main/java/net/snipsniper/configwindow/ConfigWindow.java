@@ -317,10 +317,9 @@ public class ConfigWindow extends JFrame implements CCIClosable {
                     beforeSave.run();
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
-                for(CustomWindowListener listener : listeners)
-                    listener.windowClosed();
 
                 SnipSniper.resetProfiles();
+                
                 if(reloadOtherDropdowns) {
                     generalTab.setup(configOriginal);
                     editorTab.setup(configOriginal);

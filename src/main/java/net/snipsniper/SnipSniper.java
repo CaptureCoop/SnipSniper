@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -45,6 +44,8 @@ public final class SnipSniper {
 	private static String configFolder;
 	private static String logFolder;
 	private static String imgFolder;
+
+	private static ConfigWindow configWindow;
 
 	private final static int PROFILE_COUNT = 8;
 
@@ -239,7 +240,7 @@ public final class SnipSniper {
 		profiles[0] = new Sniper(0);
 		profiles[0].getConfig().save();
 
-		if(!SystemTray.isSupported()) new ConfigWindow(profiles[0].getConfig(), ConfigWindow.PAGE.generalPanel);
+		if(!SystemTray.isSupported()) openConfigWindow(profiles[0].getConfig(), ConfigWindow.PAGE.generalPanel);
 		for (int i = 1; i < PROFILE_COUNT; i++) {
 			if (new File(configFolder + "profile" + (i) + ".cfg").exists()) {
 				profiles[i] = new Sniper(i);
@@ -393,6 +394,26 @@ public final class SnipSniper {
 		} catch(Exception exception) {
 			CCLogger.log("Error restarting!");
 			CCLogger.logStacktrace(exception, CCLogLevel.ERROR);
+		}
+	}
+
+	public static void openConfigWindow(Sniper sniper) {
+		openConfigWindow(sniper.getConfig(), ConfigWindow.PAGE.generalPanel);
+	}
+
+	public static void openConfigWindow(SCEditorWindow scEditorWindow) {
+		openConfigWindow(scEditorWindow.getConfig(), ConfigWindow.PAGE.editorPanel);
+	}
+
+	public static void openConfigWindow(Config config, ConfigWindow.PAGE page) {
+		if(configWindow == null) {
+			configWindow = new ConfigWindow(config, page);
+			configWindow.addCustomWindowListener(() -> {
+				System.out.println("Deleting");
+				configWindow = null;
+			});
+		} else {
+			configWindow.requestFocus();
 		}
 	}
 

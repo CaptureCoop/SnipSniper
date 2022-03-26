@@ -177,7 +177,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
         if(SystemUtils.IS_OS_WINDOWS) {
             JMenuBar topBar = new JMenuBar();
             JMenuItem configItem = new JMenuItem("Config");
-            configItem.addActionListener(e -> cWindows.add(new ConfigWindow(config, ConfigWindow.PAGE.editorPanel)));
+            configItem.addActionListener(e -> SnipSniper.openConfigWindow(this));
             topBar.add(configItem);
             JMenuItem newItem = new JMenuItem("New");
             newItem.addActionListener(e -> openNewImageWindow());
