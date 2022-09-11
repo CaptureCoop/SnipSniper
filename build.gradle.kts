@@ -79,7 +79,7 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    manifest { attributes["Main-Class"] = "net.snipsniper.Main" }
+    manifest { attributes["Main-Class"] = "net.snipsniper.MainKt" }
 
     dependsOn(configurations.runtimeClasspath)
     from({
@@ -89,5 +89,5 @@ tasks.withType<Jar> {
 }
 
 application {
-    mainClass.set("net.snipsniper.Main")
+    mainClass.set("net.snipsniper.MainKt")
 }
