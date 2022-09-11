@@ -167,7 +167,7 @@ public class GeneralTab extends JPanel implements ITab{
             int x = configWindow.getLocation().x + getWidth() / 2;
             int y = configWindow.getLocation().y + getHeight() / 2;
             BufferedImage image = ImageManager.getImage("preview/code_light.png");
-            if(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme).equals("dark"))
+            if(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.theme).equals("dark"))
                 image = ImageManager.getImage("preview/code_dark.png");
             CCColorChooser chooser = new CCColorChooser(tintColor, "Tint Color", x, y, false, image, null);
             configWindow.addCWindow(chooser);

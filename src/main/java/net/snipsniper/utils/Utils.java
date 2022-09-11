@@ -64,9 +64,9 @@ public class Utils {
 	}
 
 	public static int showPopup(Component parent, String message, String title, int optionType, int messageType, BufferedImage icon, boolean blockScreenshot) {
-		if(blockScreenshot) SnipSniper.setIdle(false);
+		if(blockScreenshot) SnipSniper.Companion.setIdle(false);
 		int result = JOptionPane.showConfirmDialog(parent, message, title, optionType, messageType, new ImageIcon(icon.getScaledInstance(32, 32, 0)));
-		if(blockScreenshot) SnipSniper.setIdle(true);
+		if(blockScreenshot) SnipSniper.Companion.setIdle(true);
 		return result;
 	}
 
@@ -134,7 +134,7 @@ public class Utils {
 
 		final ProcessBuilder builder = new ProcessBuilder(command);
 		builder.start();
-		SnipSniper.exit(true);
+		SnipSniper.Companion.exit(true);
 		return true;
 	}
 

@@ -252,7 +252,7 @@ public class EzModeSettingsCreator {
             @Override
             public void focusGained(FocusEvent focusEvent) {
                 super.focusGained(focusEvent);
-                SnipSniper.getNewThread(args -> {
+                SnipSniper.Companion.getNewThread(args -> {
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException ex) {

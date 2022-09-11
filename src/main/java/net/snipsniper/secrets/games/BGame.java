@@ -49,7 +49,7 @@ public class BGame extends JFrame {
     public BGame(Sniper sniper) {
         this.sniper = sniper;
         StatsManager.incrementCount(StatsManager.BGAME_STARTED_AMOUNT);
-        SnipSniper.getNewThread(args -> launch()).start();
+        SnipSniper.Companion.getNewThread(args -> launch()).start();
     }
 
     private void launch() {

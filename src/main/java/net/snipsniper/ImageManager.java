@@ -33,7 +33,7 @@ public class ImageManager {
 						images.put(list.getString(i), ImageIO.read(url));
 					} else {
 						CCLogger.log("Could not load image %c. This should not happen. Exiting...", CCLogLevel.ERROR, list.getString(i));
-						SnipSniper.exit(false);
+						SnipSniper.Companion.exit(false);
 					}
 				} else {
 					URL url = ImageManager.class.getResource("/net/snipsniper/resources/img/" + list.getString(i));
@@ -42,7 +42,7 @@ public class ImageManager {
 						animatedImages.put(list.getString(i), img);
 					} else {
 						CCLogger.log("Could not load image %c. This should not happen. Exiting...", CCLogLevel.ERROR, list.getString(i));
-						SnipSniper.exit(false);
+						SnipSniper.Companion.exit(false);
 					}
 				}
 			}
@@ -87,7 +87,7 @@ public class ImageManager {
 	}
 
 	public static BufferedImage getCodePreview() {
-		switch(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme)) {
+		switch(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.theme)) {
 			case "light": return ImageManager.getImage("preview/code_light.png");
 			case "dark": return ImageManager.getImage("preview/code_dark.png");
 		}

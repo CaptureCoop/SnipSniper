@@ -87,9 +87,9 @@ public class LangDebugWindow extends JFrame {
                     toEdit.remove(key);
                 toEdit.put(key, textArea.getText());
             }
-            FileUtils.printFile(SnipSniper.getMainFolder() + "//" + lastLanguage + ".json", currentEdit.toString());
-            FileUtils.openFolder(SnipSniper.getMainFolder());
-            SnipSniper.resetProfiles();
+            FileUtils.printFile(SnipSniper.Companion.getMainFolder() + "//" + lastLanguage + ".json", currentEdit.toString());
+            FileUtils.openFolder(SnipSniper.Companion.getMainFolder());
+            SnipSniper.Companion.resetProfiles();
         });
         gbc.gridwidth = 2;
         gbc.gridx = 0;

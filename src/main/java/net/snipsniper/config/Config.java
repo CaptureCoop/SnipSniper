@@ -48,7 +48,7 @@ public class Config {
 		try {
 			String defaultPath = "/net/snipsniper/resources/cfg/" + defaultFile;
 			if(!ignoreLocal) {
-				String filePath = SnipSniper.getConfigFolder() + filename;
+				String filePath = SnipSniper.Companion.getConfigFolder() + filename;
 				if (new File(filePath).exists()) {
 					CCLogger.log(idPrefix + "Config file found locally! Using that one.", CCLogLevel.DEBUG);
 					loadFile(filePath, settings, false);
@@ -103,7 +103,7 @@ public class Config {
 		} else if(defaults.containsKey(key)) {
 			returnVal = defaults.get(key);
 		} else {
-			CCLogger.log("No value found for <%c> in Config <%c>.", CCLogLevel.ERROR, key, SnipSniper.getConfigFolder() + filename);
+			CCLogger.log("No value found for <%c> in Config <%c>.", CCLogLevel.ERROR, key, SnipSniper.Companion.getConfigFolder() + filename);
 			CCLogger.logStacktrace(CCLogLevel.ERROR);
 		}
 		return returnVal;
@@ -182,14 +182,14 @@ public class Config {
 	}
 	
 	public void deleteFile() {
-		File file = new File(SnipSniper.getConfigFolder() + "/" + filename);
+		File file = new File(SnipSniper.Companion.getConfigFolder() + "/" + filename);
 		if(!file.delete())
 			CCLogger.log("Could not delete profile config!", CCLogLevel.WARNING);
 	}
 	
 	private void saveFile(ConfigContainer container) {
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(SnipSniper.getConfigFolder() + "/" + filename));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(SnipSniper.Companion.getConfigFolder() + "/" + filename));
 			for(ConfigOption option : container.getList())
 				writer.write(option.toString() + "\n");
 
@@ -201,7 +201,7 @@ public class Config {
 	}
 	
 	public void save() {
-		if(!SnipSniper.isDemo()) {
+		if(!SnipSniper.Companion.isDemo()) {
 			if (settings.isEmpty())
 				saveFile(defaults);
 			else

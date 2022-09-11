@@ -32,11 +32,11 @@ public class CommandLineHelper {
                     break;
                 case "-version":
                 case "-v":
-                    System.out.println(SnipSniper.getVersion());
+                    System.out.println(SnipSniper.Companion.getVersion());
                     doExit = true;
                     break;
                 case "-demo":
-                    SnipSniper.setDemo(true);
+                    SnipSniper.Companion.setDemo(true);
                     break;
                 case "-language":
                 case "-lang":
@@ -75,7 +75,7 @@ public class CommandLineHelper {
     }
 
     public void helpText() {
-        System.out.println("SnipSniper " + SnipSniper.getVersion() + "\n");
+        System.out.println("SnipSniper " + SnipSniper.Companion.getVersion() + "\n");
         System.out.println("General commands:");
         System.out.println("-help / -?     = Displays this");
         System.out.println("-version / -v  = Displays version");

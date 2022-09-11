@@ -82,7 +82,7 @@ public class StatsManager {
 
     private static Connection getConnection() {
         try {
-            return DriverManager.getConnection("jdbc:sqlite:" + SnipSniper.getMainFolder() + "\\stats.db");
+            return DriverManager.getConnection("jdbc:sqlite:" + SnipSniper.Companion.getMainFolder() + "\\stats.db");
         } catch (SQLException e) {
             e.printStackTrace();
         }

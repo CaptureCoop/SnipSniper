@@ -108,7 +108,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 					lastTimer += 1000;
 			}
 		};
-		SnipSniper.getNewThread(loopFunction).start();
+		SnipSniper.Companion.getNewThread(loopFunction).start();
 	}
 	
 	public void specialRepaint() {

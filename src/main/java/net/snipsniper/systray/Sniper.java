@@ -76,9 +76,9 @@ public class Sniper {
 					@Override
 					public void mouseClicked(MouseEvent mouseEvent) {
 						if (mouseEvent.getButton() == 1) {
-							if (captureWindow == null && SnipSniper.isIdle()) {
+							if (captureWindow == null && SnipSniper.Companion.isIdle()) {
 								captureWindow = new CaptureWindow(instance);
-								SnipSniper.setIdle(false);
+								SnipSniper.Companion.setIdle(false);
 							}
 						}
 					}
@@ -117,7 +117,7 @@ public class Sniper {
 	public void killCaptureWindow() {
 		if(captureWindow != null) {
 			if(SystemTray.isSupported() && getIconString().equals("none")) trayIcon.setImage(ImageManager.getImage("systray/icon" + profileID + ".png"));
-			SnipSniper.setIdle(true);
+			SnipSniper.Companion.setIdle(true);
 			captureWindow.screenshot = null;
 			captureWindow.screenshotTinted = null;
 			captureWindow.isRunning = false;
@@ -139,9 +139,9 @@ public class Sniper {
 				}
 				int key = Integer.parseInt(hotkey.replace(identifier, ""));
 				if(pressedKey == key && (location == -1 || location == pressedLocation)) {
-					if(captureWindow == null && SnipSniper.isIdle()) {
+					if(captureWindow == null && SnipSniper.Companion.isIdle()) {
 						captureWindow = new CaptureWindow(instance);
-						SnipSniper.setIdle(false);
+						SnipSniper.Companion.setIdle(false);
 					}
 				}
 			}

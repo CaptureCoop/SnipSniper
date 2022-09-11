@@ -118,7 +118,7 @@ public class SCViewerWindow extends SnipScopeWindow {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                 if(isStandalone)
-                    SnipSniper.exit(false);
+                    SnipSniper.Companion.exit(false);
             }
         });
         setEnableInteraction(!isDefaultImage());

@@ -231,11 +231,11 @@ public class ImageUtils {
                     }
                     return image;
                 case LOCAL:
-                    String path = SnipSniper.getImageFolder() + "/" + iconFile.getPath();
+                    String path = SnipSniper.Companion.getImgFolder() + "/" + iconFile.getPath();
                     if(!FileUtils.exists(path))
                         CCLogger.log("Couldnt find icon. Path: " + path, CCLogLevel.ERROR);
                     else
-                        image = ImageUtils.getImageFromDisk(SnipSniper.getImageFolder() + "/" + iconFile.getPath());
+                        image = ImageUtils.getImageFromDisk(SnipSniper.Companion.getImgFolder() + "/" + iconFile.getPath());
                     return image;
             }
         }

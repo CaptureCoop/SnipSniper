@@ -70,7 +70,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
 
     public void refreshConfigFiles() {
         configFiles.clear();
-        File cfgFolder = new File(SnipSniper.getConfigFolder());
+        File cfgFolder = new File(SnipSniper.Companion.getConfigFolder());
         File[] files = cfgFolder.listFiles();
         if(files != null) {
             for (File file : files) {
@@ -194,7 +194,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
                 if(img == null)
                     img = ImageUtils.getDefaultIcon(nr);
                 String title = "Profile " + nr;
-                Sniper sniper = SnipSniper.getProfile(nr);
+                Sniper sniper = SnipSniper.Companion.getProfile(nr);
                 if(sniper != null)
                     title = sniper.getTitle();
                 profiles.add(new DropdownItem(title, file.getName(), img));
@@ -246,7 +246,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
         gbc.gridx = 2;
         JPanel profilePlusMinus = new JPanel(new GridLayout(0, 2));
         JButton profileAddButton = new JButton("+");
-        if(SnipSniper.getProfileCount() == SnipSniper.getProfileCountMax())
+        if(SnipSniper.Companion.getProfileCount() == SnipSniper.PROFILE_COUNT)
             profileAddButton.setEnabled(false);
         profileAddButton.addActionListener(actionEvent -> {
             if(tabs[activeTabIndex].isDirty()) {
@@ -255,10 +255,10 @@ public class ConfigWindow extends JFrame implements CCIClosable {
                     return;
                 }
             }
-            for(int i = 0; i < SnipSniper.getProfileCountMax(); i++) {
-                if(SnipSniper.getProfile(i) == null) {
-                    SnipSniper.setProfile(i, new Sniper(i));
-                    Config newProfileConfig = SnipSniper.getProfile(i).getConfig();
+            for(int i = 0; i < SnipSniper.PROFILE_COUNT; i++) {
+                if(SnipSniper.Companion.getProfile(i) == null) {
+                    SnipSniper.Companion.setProfile(i, new Sniper(i));
+                    Config newProfileConfig = SnipSniper.Companion.getProfile(i).getConfig();
                     newProfileConfig.save();
 
                     refreshConfigFiles();
@@ -286,7 +286,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
             DropdownItem item = (DropdownItem) dropdown.getSelectedItem();
             if(!item.getID().contains("profile0") || !item.getID().contains("editor")) {
                 config.deleteFile();
-                SnipSniper.resetProfiles();
+                SnipSniper.Companion.resetProfiles();
                 refreshConfigFiles();
                 parentPanel.removeAll();
                 int newIndex = dropdown.getSelectedIndex() - 1;
@@ -318,7 +318,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
                 configOriginal.loadFromConfig(config);
                 configOriginal.save();
 
-                SnipSniper.resetProfiles();
+                SnipSniper.Companion.resetProfiles();
                 
                 if(reloadOtherDropdowns) {
                     generalTab.setup(configOriginal);

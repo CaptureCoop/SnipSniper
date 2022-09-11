@@ -48,12 +48,12 @@ public class Popup extends JFrame{
             }
             FileUtils.openFolder(folderToOpen);
         }, menus));
-        add(new PopupMenuButton(LangManager.getItem("menu_config"), ImageManager.getImage("icons/config.png"), this, args -> SnipSniper.openConfigWindow(sniper), menus));
+        add(new PopupMenuButton(LangManager.getItem("menu_config"), ImageManager.getImage("icons/config.png"), this, args -> SnipSniper.Companion.openConfigWindow(sniper), menus));
 
-        if (SnipSniper.isDebug()) {
+        if (SnipSniper.Companion.isDebug()) {
             net.snipsniper.systray.PopupMenu debugMenu = new PopupMenu("Debug", ImageManager.getImage("icons/debug.png"));
             debugMenu.add(new PopupMenuButton("Console", ImageManager.getImage("icons/console.png"), this, args -> CCLogger.enableDebugConsole(true), menus));
-            debugMenu.add(new PopupMenuButton("Open log folder", ImageManager.getImage("icons/folder.png"), this, args -> FileUtils.openFolder(SnipSniper.getLogFolder()), menus));
+            debugMenu.add(new PopupMenuButton("Open log folder", ImageManager.getImage("icons/folder.png"), this, args -> FileUtils.openFolder(SnipSniper.Companion.getLogFolder()), menus));
             debugMenu.add(new PopupMenuButton("Language test", ImageManager.getImage("icons/config.png"), this, args -> new LangDebugWindow(), menus));
             add(debugMenu);
             menus.add(debugMenu);
@@ -61,8 +61,8 @@ public class Popup extends JFrame{
 
         add(new PopupMenuButton(LangManager.getItem("menu_about"), ImageManager.getImage("icons/about.png"), this, args -> new AboutWindow(sniper), menus));
         add(new JSeparator());
-        add(new PopupMenuButton("Restart", ImageManager.getImage("icons/redx.png"), this, args -> SnipSniper.restart(), menus));
-        add(new PopupMenuButton(LangManager.getItem("menu_quit"), ImageManager.getImage("icons/redx.png"), this, args -> SnipSniper.exit(false), menus));
+        add(new PopupMenuButton("Restart", ImageManager.getImage("icons/redx.png"), this, args -> SnipSniper.Companion.restart(), menus));
+        add(new PopupMenuButton(LangManager.getItem("menu_quit"), ImageManager.getImage("icons/redx.png"), this, args -> SnipSniper.Companion.exit(false), menus));
 
         setIconImage(ImageManager.getImage("icons/snipsniper.png"));
         addFocusListener(new FocusAdapter() {

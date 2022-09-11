@@ -104,7 +104,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
         setLayout(null);
 
         String ezIconType = "black";
-        if(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme).equals("dark")) {
+        if(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.theme).equals("dark")) {
             ezIconType = "white";
         }
 
@@ -177,7 +177,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
         if(SystemUtils.IS_OS_WINDOWS) {
             JMenuBar topBar = new JMenuBar();
             JMenuItem configItem = new JMenuItem("Config");
-            configItem.addActionListener(e -> SnipSniper.openConfigWindow(this));
+            configItem.addActionListener(e -> SnipSniper.Companion.openConfigWindow(this));
             topBar.add(configItem);
             JMenuItem newItem = new JMenuItem("New");
             newItem.addActionListener(e -> openNewImageWindow());
@@ -450,7 +450,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
             wnd.close();
         dispose();
         if(isStandalone)
-            SnipSniper.exit(false);
+            SnipSniper.Companion.exit(false);
     }
 
     public void setStampVisible(boolean enabled) {

@@ -32,8 +32,8 @@ public class UpdateButton extends IDJButton {
                 return;
             }
 
-            Version version = SnipSniper.getVersion();
-            ReleaseType updateChannel = Utils.getReleaseType(SnipSniper.getConfig().getString(ConfigHelper.MAIN.updateChannel));
+            Version version = SnipSniper.Companion.getVersion();
+            ReleaseType updateChannel = Utils.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
             boolean isJar = version.getPlatformType() == PlatformType.JAR;
             boolean isDev = version.getReleaseType() == ReleaseType.DEV;
             boolean isStable = version.getReleaseType() == ReleaseType.STABLE;
@@ -49,7 +49,7 @@ public class UpdateButton extends IDJButton {
                         setText("Error - No connection");
                         setID(STATE_WAITING);
                         setIcon(new ImageIcon(roundArrows));
-                    } else if(newestHash.equals(SnipSniper.getVersion().getGithash())) {
+                    } else if(newestHash.equals(SnipSniper.Companion.getVersion().getGithash())) {
                         setText("Up to date!");
                         setID(STATE_IDLE);
                         setIcon(new ImageIcon(checkmark));
@@ -69,7 +69,7 @@ public class UpdateButton extends IDJButton {
                     setText("Checking for update...");
                     String versionString = Utils.getTextFromWebsite(Links.STABLE_VERSION_TXT);
                     Version onlineVersion = new Version(versionString);
-                    Version currentVersion = SnipSniper.getVersion();
+                    Version currentVersion = SnipSniper.Companion.getVersion();
                     if(versionString == null || versionString.isEmpty()) {
                         setText("Error - No connection");
                         setID(STATE_WAITING);
@@ -79,7 +79,7 @@ public class UpdateButton extends IDJButton {
                         setID(STATE_IDLE);
                         setIcon(new ImageIcon(checkmark));
                     } else if (onlineVersion.isNewerThan(currentVersion)) {
-                        if(SnipSniper.getVersion().getPlatformType() == PlatformType.STEAM) {
+                        if(SnipSniper.Companion.getVersion().getPlatformType() == PlatformType.STEAM) {
                             setText(CCStringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Check Steam to update!</p></html>", onlineVersion.getDigits()));
                             setID(STATE_IDLE);
                         } else {

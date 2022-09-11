@@ -59,11 +59,11 @@ public class LangManager {
     }
 
     public static String getItem(String key) {
-        return getItem(SnipSniper.getConfig().getString(ConfigHelper.MAIN.language), key);
+        return getItem(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.language), key);
     }
 
     public static String getLanguage() {
-        return SnipSniper.getConfig().getString(ConfigHelper.MAIN.language);
+        return SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.language);
     }
 
 }

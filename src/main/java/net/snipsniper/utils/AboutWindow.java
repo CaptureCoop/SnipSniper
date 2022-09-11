@@ -107,15 +107,15 @@ public class AboutWindow extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(SnipSniper.getVersion().getPlatformType() == PlatformType.JAR && onC) {
-                    ReleaseType channel = Utils.getReleaseType(SnipSniper.getConfig().getString(ConfigHelper.MAIN.updateChannel));
+                if(SnipSniper.Companion.getVersion().getPlatformType() == PlatformType.JAR && onC) {
+                    ReleaseType channel = Utils.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
                     switch(channel) {
                         case STABLE: channel = ReleaseType.DEV; break;
                         case DEV: channel = ReleaseType.STABLE; break;
                     }
 
-                    SnipSniper.getConfig().set(ConfigHelper.MAIN.updateChannel, channel.toString().toLowerCase());
-                    SnipSniper.getConfig().save();
+                    SnipSniper.Companion.getConfig().set(ConfigHelper.MAIN.updateChannel, channel.toString().toLowerCase());
+                    SnipSniper.Companion.getConfig().save();
                     Utils.showPopup(instance, "New update channel: " + channel.toString().toLowerCase(), "Channel unlocked!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, ImageManager.getImage("icons/checkmark.png"), true);
                 }
             }
@@ -169,7 +169,7 @@ public class AboutWindow extends JFrame {
 
         inputStream.close();
         streamReader.close();
-        Version v = SnipSniper.getVersion();
+        Version v = SnipSniper.Companion.getVersion();
         html = html.replace("%VERSION%", v.getDigits());
         html = html.replace("%TYPE%", v.getReleaseType().toString().toLowerCase());
         html = html.replace("%BUILDDATE%", v.getBuildDate());
@@ -177,7 +177,7 @@ public class AboutWindow extends JFrame {
         html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming"));
         html = html.replace("%ABOUT_CD%", LangManager.getItem("about_cd"));
         html = html.replace("%ABOUT_MATH%", LangManager.getItem("about_math"));
-        String theme = SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme);
+        String theme = SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.theme);
         String color = "";
         switch(theme) {
             case "dark": color = "white"; break;

@@ -51,7 +51,7 @@ public class GlobalTab extends JPanel implements ITab{
         gbc.gridwidth = 1;
         gbc.insets.bottom = 20;
 
-        Config config = new Config(SnipSniper.getConfig());
+        Config config = new Config(SnipSniper.Companion.getConfig());
 
         JButton importConfigs = new JButton("Import Configs");
         importConfigs.addActionListener(e -> {
@@ -60,8 +60,8 @@ public class GlobalTab extends JPanel implements ITab{
                 return;
             }
 
-            File imgFolder = new File(SnipSniper.getImageFolder());
-            File cfgFolder = new File(SnipSniper.getConfigFolder());
+            File imgFolder = new File(SnipSniper.Companion.getImgFolder());
+            File cfgFolder = new File(SnipSniper.Companion.getConfigFolder());
             FileUtils.delete(imgFolder); FileUtils.mkdirs(imgFolder);
             FileUtils.delete(cfgFolder); FileUtils.mkdirs(cfgFolder);
 
@@ -77,7 +77,7 @@ public class GlobalTab extends JPanel implements ITab{
                     ZipEntry ze;
 
                     while ((ze = zis.getNextEntry()) != null) {
-                        Path filePath = Paths.get(SnipSniper.getMainFolder()).resolve(ze.getName());
+                        Path filePath = Paths.get(SnipSniper.Companion.getMainFolder()).resolve(ze.getName());
                         try (FileOutputStream fos = new FileOutputStream(filePath.toFile());
                              BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length)) {
                             int len;
@@ -96,11 +96,11 @@ public class GlobalTab extends JPanel implements ITab{
             }
 
             configWindow.refreshConfigFiles();
-            SnipSniper.refreshGlobalConfigFromDisk();
-            SnipSniper.refreshTheme();
-            SnipSniper.resetProfiles();
+            SnipSniper.Companion.refreshGlobalConfigFromDisk();
+            SnipSniper.Companion.refreshTheme();
+            SnipSniper.Companion.resetProfiles();
             configWindow.close();
-            SnipSniper.openConfigWindow(null, ConfigWindow.PAGE.globalPanel);
+            SnipSniper.Companion.openConfigWindow(null, ConfigWindow.PAGE.globalPanel);
         });
         JButton exportButton = new JButton("Export Configs");
         exportButton.addActionListener(e -> {
@@ -112,7 +112,7 @@ public class GlobalTab extends JPanel implements ITab{
                 String path = chooser.getSelectedFile().getAbsolutePath();
                 if(!path.endsWith(".zip")) path += ".zip";
                 File zip = new File(path);
-                String mainFolder = SnipSniper.getMainFolder();
+                String mainFolder = SnipSniper.Companion.getMainFolder();
                 ArrayList<String> files = FileUtils.getFilesInFolders(mainFolder);
                 try {
                     ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip));
@@ -140,8 +140,8 @@ public class GlobalTab extends JPanel implements ITab{
 
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 10, 0, 10);
-        String version = SnipSniper.getVersion().toString();
-        ReleaseType releaseType = Utils.getReleaseType(SnipSniper.getConfig().getString(ConfigHelper.MAIN.updateChannel));
+        String version = SnipSniper.Companion.getVersion().toString();
+        ReleaseType releaseType = Utils.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
         String channel = releaseType.toString().toLowerCase();
         options.add(configWindow.createJLabel(CCStringUtils.format("<html><p>Current Version: %c</p><p>Update Channel: %c</p></html>", version, channel), JLabel.CENTER, JLabel.CENTER), gbc);
         gbc.gridx = 1;
@@ -189,7 +189,7 @@ public class GlobalTab extends JPanel implements ITab{
         options.add(debugCheckBox, gbc);
 
         IFunction[] autostart = {null};
-        if(SystemUtils.IS_OS_WINDOWS && SnipSniper.getVersion().getPlatformType() == PlatformType.JAR) {
+        if(SystemUtils.IS_OS_WINDOWS && SnipSniper.Companion.getVersion().getPlatformType() == PlatformType.JAR) {
             gbc.gridx = 0;
             options.add(configWindow.createJLabel("Start with Windows", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;
@@ -207,9 +207,10 @@ public class GlobalTab extends JPanel implements ITab{
                 if(autostartCheckbox.isSelected()) {
                     autostart[0] = args -> {
                         FileUtils.mkdirs(startup);
-                        FileUtils.copyFromJar("net/snipsniper/resources/batch/" + batchMain, SnipSniper.getJarFolder() + "/" + batchMain);
-                        FileUtils.copyFromJar("net/snipsniper/resources/img/icons/" + icoMain.toLowerCase(), SnipSniper.getJarFolder() + "/" + icoMain);
-                        ShellLinkUtils.createShellLink(startup + linkMain, SnipSniper.getJarFolder() + batchMain, SnipSniper.getJarFolder() + "/" + icoMain);
+                        String jarFolder = SnipSniper.Companion.getJarFolder();
+                        FileUtils.copyFromJar("net/snipsniper/resources/batch/" + batchMain, jarFolder + "/" + batchMain);
+                        FileUtils.copyFromJar("net/snipsniper/resources/img/icons/" + icoMain.toLowerCase(), jarFolder + "/" + icoMain);
+                        ShellLinkUtils.createShellLink(startup + linkMain, jarFolder + batchMain, jarFolder + "/" + icoMain);
                     };
                 } else {
                     autostart[0] = args -> FileUtils.deleteRecursively(startup + linkMain);
@@ -220,19 +221,19 @@ public class GlobalTab extends JPanel implements ITab{
         }
 
         IFunction beforeSave = args -> {
-            boolean restartConfig = !config.getString(ConfigHelper.MAIN.language).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.language));
-            boolean didThemeChange = !config.getString(ConfigHelper.MAIN.theme).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme));
+            boolean restartConfig = !config.getString(ConfigHelper.MAIN.language).equals(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.language));
+            boolean didThemeChange = !config.getString(ConfigHelper.MAIN.theme).equals(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.theme));
 
             globalSave(config, autostart[0]);
 
             if(restartConfig || didThemeChange) {
                 configWindow.close();
-                SnipSniper.openConfigWindow(configWindow.getLastSelectedConfig(), ConfigWindow.PAGE.globalPanel);
+                SnipSniper.Companion.openConfigWindow(configWindow.getLastSelectedConfig(), ConfigWindow.PAGE.globalPanel);
             }
             saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         };
 
-        saveButtonUpdate[0] = configWindow.setupSaveButtons(options, this, gbc, config, SnipSniper.getConfig(), beforeSave, false);
+        saveButtonUpdate[0] = configWindow.setupSaveButtons(options, this, gbc, config, SnipSniper.Companion.getConfig(), beforeSave, false);
 
         add(options);
     }
@@ -253,8 +254,8 @@ public class GlobalTab extends JPanel implements ITab{
     }
 
     private void globalSave(Config config, IFunction autostart) {
-        boolean didThemeChange = !config.getString(ConfigHelper.MAIN.theme).equals(SnipSniper.getConfig().getString(ConfigHelper.MAIN.theme));
-        boolean didDebugChange = config.getBool(ConfigHelper.MAIN.debug) != SnipSniper.getConfig().getBool(ConfigHelper.MAIN.debug);
+        boolean didThemeChange = !config.getString(ConfigHelper.MAIN.theme).equals(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.theme));
+        boolean didDebugChange = config.getBool(ConfigHelper.MAIN.debug) != SnipSniper.Companion.getConfig().getBool(ConfigHelper.MAIN.debug);
 
         if(autostart != null)
             autostart.run();
@@ -263,11 +264,11 @@ public class GlobalTab extends JPanel implements ITab{
             CCLogger.enableDebugConsole(false);
         }
 
-        SnipSniper.getConfig().loadFromConfig(config);
+        SnipSniper.Companion.getConfig().loadFromConfig(config);
         config.save();
 
         if(didThemeChange) {
-            SnipSniper.refreshTheme();
+            SnipSniper.Companion.refreshTheme();
         }
     }
 }
