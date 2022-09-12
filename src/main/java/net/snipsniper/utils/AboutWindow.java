@@ -90,7 +90,7 @@ public class AboutWindow extends JFrame {
         gbc.gridy = 1;
         gbc.insets = new Insets(20, 0, 0, 0);
         JButton buyCoffee = new JButton("Buy us a coffee");
-        buyCoffee.addActionListener(e -> Links.openLink(Links.KOFI));
+        buyCoffee.addActionListener(e -> Links.Companion.openLink(Links.KOFI));
         Image coffeeIcon = ImageManager.getAnimatedImage("icons/coffee.gif");
         buyCoffee.setIcon(new ImageIcon(coffeeIcon.getScaledInstance(coffeeIcon.getWidth(null) / 16, coffeeIcon.getHeight(null) / 16, Image.SCALE_DEFAULT)));
         buyCoffee.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -138,7 +138,7 @@ public class AboutWindow extends JFrame {
                         secretCount.getAndIncrement();
                     }
                 } else {
-                    Links.openLink(hle.getURL().toString());
+                    Links.Companion.openLink(hle.getURL().toString());
                 }
             }
         });
