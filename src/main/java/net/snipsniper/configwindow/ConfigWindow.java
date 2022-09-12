@@ -44,7 +44,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
         CCLogger.log("Creating config window");
 
         setSize(512, 512);
-        setTitle(LangManager.getItem("config_label_config"));
+        setTitle(LangManager.Companion.getItem("config_label_config"));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setIconImage(ImageManager.getImage("icons/config.png"));
         addWindowListener(new WindowAdapter() {
@@ -153,7 +153,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
     }
 
     public void msgError(String msg) {
-        Utils.showPopup(this, msg, LangManager.getItem("config_sanitation_error"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
+        Utils.showPopup(this, msg, LangManager.Companion.getItem("config_sanitation_error"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
     }
 
     public void setupPaneDynamic(Config config, PAGE page) {
@@ -310,7 +310,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
     public Function setupSaveButtons(JPanel panel, ITab tab, GridBagConstraints gbc, Config config, Config configOriginal, IFunction beforeSave, boolean reloadOtherDropdowns) {
         final boolean[] allowSaving = {true};
         final boolean[] isDirty = {false};
-        JButton save = new JButton(LangManager.getItem("config_label_save"));
+        JButton save = new JButton(LangManager.Companion.getItem("config_label_save"));
         save.addActionListener(e -> {
             if(allowSaving[0] && configOriginal != null) {
                 if(beforeSave != null)
@@ -328,7 +328,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
             }
         });
 
-        JButton close = new JButton(LangManager.getItem("config_label_close"));
+        JButton close = new JButton(LangManager.Companion.getItem("config_label_close"));
         close.addActionListener(e -> {
             if(isDirty[0]) {
                 if (showDirtyWarning() == JOptionPane.NO_OPTION)
@@ -346,9 +346,9 @@ public class ConfigWindow extends JFrame implements CCIClosable {
                     case NO_SAVE: allowSaving[0] = false; break;
                 }
                 if(isDirty[0])
-                    close.setText(LangManager.getItem("config_label_cancel"));
+                    close.setText(LangManager.Companion.getItem("config_label_cancel"));
                 else
-                    close.setText(LangManager.getItem("config_label_close"));
+                    close.setText(LangManager.Companion.getItem("config_label_close"));
 
                 return true;
             }

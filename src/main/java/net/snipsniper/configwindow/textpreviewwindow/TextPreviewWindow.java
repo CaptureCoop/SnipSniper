@@ -18,7 +18,7 @@ public class TextPreviewWindow extends JFrame implements CCIClosable {
     private String text;
     private JTextField input;
     private final JPanel renderer;
-    private final JButton saveButton = new JButton(LangManager.getItem("config_label_save"));
+    private final JButton saveButton = new JButton(LangManager.Companion.getItem("config_label_save"));
     private final JLabel explanationLabel = new JLabel("%hour%, %minute%, %second%, %day%, %month%, %year%, %random%");
     private IFunction onSave;
 

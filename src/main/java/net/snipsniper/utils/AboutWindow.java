@@ -174,9 +174,9 @@ public class AboutWindow extends JFrame {
         html = html.replace("%TYPE%", v.getReleaseType().toString().toLowerCase());
         html = html.replace("%BUILDDATE%", v.getBuildDate());
         html = html.replaceAll("%HASH%", v.getGithash());
-        html = html.replace("%ABOUT_PROGRAMMING%", LangManager.getItem("about_programming"));
-        html = html.replace("%ABOUT_CD%", LangManager.getItem("about_cd"));
-        html = html.replace("%ABOUT_MATH%", LangManager.getItem("about_math"));
+        html = html.replace("%ABOUT_PROGRAMMING%", LangManager.Companion.getItem("about_programming"));
+        html = html.replace("%ABOUT_CD%", LangManager.Companion.getItem("about_cd"));
+        html = html.replace("%ABOUT_MATH%", LangManager.Companion.getItem("about_math"));
         String theme = SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.theme);
         String color = "";
         switch(theme) {

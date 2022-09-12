@@ -14,18 +14,18 @@ public class DebugUtils {
             System.out.println("Could not create folder. Aborting");
             return;
         }
-        LangManager.load();
+        LangManager.Companion.load();
 
-        JSONObject en = LangManager.getJSON("en");
+        JSONObject en = LangManager.Companion.getJSON("en");
         FileUtils.printFile("lang/en.json", en.toString());
 
-        for(String language : LangManager.languages) {
+        for(String language : LangManager.Companion.getLanguages()) {
             boolean successful = true;
             JSONObject strings = en.getJSONObject("strings");
             Iterator<String> keys = strings.keys();
             while(keys.hasNext()) {
                 String key = keys.next();
-                JSONObject obj = LangManager.getJSON(language).getJSONObject("strings");
+                JSONObject obj = LangManager.Companion.getJSON(language).getJSONObject("strings");
                 if(!obj.has(key)) {
                     successful = false;
                     System.out.println(language + ".json is missing <" + key + ">");
@@ -33,7 +33,7 @@ public class DebugUtils {
                 }
             }
             if(!successful) {
-                FileUtils.printFile("lang/" + language + ".json", LangManager.getJSON(language).toString());
+                FileUtils.printFile("lang/" + language + ".json", LangManager.Companion.getJSON(language).toString());
                 System.out.println("Missing lines found for " + language + ".json\n");
             }
         }

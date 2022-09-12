@@ -64,17 +64,17 @@ public class LangDebugWindow extends JFrame {
         gbc.gridx = 1;
         content.add(getEmptyPanel(), gbc);
         gbc.fill = GridBagConstraints.BOTH;
-        JSONObject enJSON = LangManager.getJSON("en").getJSONObject("strings");
-        currentEdit = LangManager.getJSON(language);
+        JSONObject enJSON = LangManager.Companion.getJSON("en").getJSONObject("strings");
+        currentEdit = LangManager.Companion.getJSON(language);
         enJSON.keySet().forEach(keyStr -> {
             gbc.gridx = 0;
             gbc.insets.top = 5;
             gbc.insets.right = 5;
-            content.add(createLabel(LangManager.getItem("en", keyStr ), false, null), gbc);
+            content.add(createLabel(LangManager.Companion.getItem("en", keyStr ), false, null), gbc);
             gbc.gridx = 1;
             gbc.insets.right = 0;
             gbc.insets.left = 5;
-            content.add(createLabel(LangManager.getItem(language, keyStr), true, keyStr), gbc);
+            content.add(createLabel(LangManager.Companion.getItem(language, keyStr), true, keyStr), gbc);
             gbc.insets.right = 0;
             gbc.insets.left = 0;
         });

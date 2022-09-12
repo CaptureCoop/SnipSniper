@@ -63,7 +63,7 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 10, 0, 10);
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_title"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_title"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JPanel titleContent = new JPanel(new GridLayout(0, 2));
         JTextField titleInput = new JTextField(config.getString(ConfigHelper.PROFILE.title));
@@ -77,7 +77,7 @@ public class GeneralTab extends JPanel implements ITab{
             }
         });
         titleContent.add(titleInput);
-        JButton titleReset = new JButton(LangManager.getItem("config_label_reset"));
+        JButton titleReset = new JButton(LangManager.Companion.getItem("config_label_reset"));
         titleReset.addActionListener(e -> {
             titleInput.setText("none");
             config.set(ConfigHelper.PROFILE.title, titleInput.getText());
@@ -93,7 +93,7 @@ public class GeneralTab extends JPanel implements ITab{
         options.add(configWindow.createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JPanel iconPanel = new JPanel(new GridLayout(0, 2));
-        JButton iconButton = new JButton(LangManager.getItem("config_label_seticon"));
+        JButton iconButton = new JButton(LangManager.Companion.getItem("config_label_seticon"));
         DropdownItem item = ((DropdownItem)dropdown.getSelectedItem());
         if(item != null) {
             Icon icon = ((DropdownItem)dropdown.getSelectedItem()).getIcon();
@@ -109,7 +109,7 @@ public class GeneralTab extends JPanel implements ITab{
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         })));
         iconPanel.add(iconButton);
-        JButton iconReset = new JButton(LangManager.getItem("config_label_reset"));
+        JButton iconReset = new JButton(LangManager.Companion.getItem("config_label_reset"));
         iconReset.addActionListener(e -> {
             //TODO: Barf, duplicated code
             config.set(ConfigHelper.PROFILE.icon, "none");
@@ -127,7 +127,7 @@ public class GeneralTab extends JPanel implements ITab{
 
         //BEGIN HOTKEY
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JPanel hotkeyPanel = new JPanel(new GridLayout(0, 2));
         HotKeyButton hotKeyButton = new HotKeyButton(config.getString(ConfigHelper.PROFILE.hotkey));
@@ -140,9 +140,9 @@ public class GeneralTab extends JPanel implements ITab{
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
         hotkeyPanel.add(hotKeyButton);
-        JButton deleteHotKey = new JButton(LangManager.getItem("config_label_delete"));
+        JButton deleteHotKey = new JButton(LangManager.Companion.getItem("config_label_delete"));
         deleteHotKey.addActionListener(e -> {
-            hotKeyButton.setText(LangManager.getItem("config_label_none"));
+            hotKeyButton.setText(LangManager.Companion.getItem("config_label_none"));
             hotKeyButton.setHotKey(-1);
             config.set(ConfigHelper.PROFILE.hotkey, "NONE");
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
@@ -179,7 +179,7 @@ public class GeneralTab extends JPanel implements ITab{
 
         //BEGIN SAVEIMAGES
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER), gbc);
         JCheckBox saveToDisk = new JCheckBox();
         saveToDisk.setSelected(config.getBool(ConfigHelper.PROFILE.saveToDisk));
         saveToDisk.addActionListener(e -> {
@@ -194,7 +194,7 @@ public class GeneralTab extends JPanel implements ITab{
 
         //BEGIN COPYCLIPBOARD
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_copyclipboard"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_copyclipboard"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JCheckBox copyToClipboard = new JCheckBox();
         copyToClipboard.setSelected(config.getBool(ConfigHelper.PROFILE.copyToClipboard));
@@ -209,7 +209,7 @@ public class GeneralTab extends JPanel implements ITab{
 
         //BEGIN BORDERSIZE
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_bordersize"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_bordersize"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JPanel borderSizePanel = new JPanel(new GridLayout(0, 2));
         JSpinner borderSize = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.borderSize), 0.0, 999, 1.0)); //TODO: Extend JSpinner class to notify user of too large number
@@ -229,7 +229,7 @@ public class GeneralTab extends JPanel implements ITab{
             if(colorChooser[0] == null || !colorChooser[0].isDisplayable()) {
                 int x = configWindow.getLocation().x + getWidth() / 2;
                 int y = configWindow.getLocation().y + getHeight() / 2;
-                colorChooser[0] = new CCColorChooser(borderColor, LangManager.getItem("config_label_bordercolor"), x, y, true, null, null);
+                colorChooser[0] = new CCColorChooser(borderColor, LangManager.Companion.getItem("config_label_bordercolor"), x, y, true, null, null);
                 colorChooser[0].addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {
@@ -272,7 +272,7 @@ public class GeneralTab extends JPanel implements ITab{
 
         //BEGIN LOCATION
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JTextField pictureLocation = new JTextField(CCStringUtils.correctSlashes(config.getRawString(ConfigHelper.PROFILE.pictureFolder)));
         pictureLocation.setPreferredSize(new Dimension(200, pictureLocation.getHeight()));
@@ -288,12 +288,12 @@ public class GeneralTab extends JPanel implements ITab{
                 File saveLocationCheck = new File(saveLocationFinal);
                 if(!saveLocationCheck.exists()) {
                     cleanDirtyFunction[0].run(ConfigSaveButtonState.NO_SAVE);
-                    int dialogResult = Utils.showPopup(configWindow, LangManager.getItem("config_sanitation_directory_notexist") + " Create?", LangManager.getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/folder.png"), true);
+                    int dialogResult = Utils.showPopup(configWindow, LangManager.Companion.getItem("config_sanitation_directory_notexist") + " Create?", LangManager.Companion.getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/folder.png"), true);
                     if(dialogResult == JOptionPane.YES_OPTION) {
                         boolean allow = new File(saveLocationFinal).mkdirs();
 
                         if(!allow) {
-                            configWindow.msgError(LangManager.getItem("config_sanitation_failed_createdirectory"));
+                            configWindow.msgError(LangManager.Companion.getItem("config_sanitation_failed_createdirectory"));
                             cleanDirtyFunction[0].run(ConfigSaveButtonState.NO_SAVE);
                         } else {
                             config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationRaw);
@@ -341,7 +341,7 @@ public class GeneralTab extends JPanel implements ITab{
 
         //BEGIN SNIPE DELAY
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JSpinner snipeDelay = new JSpinner(new SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.snipeDelay), 0.0, 100, 1.0));
         snipeDelay.addChangeListener(e -> {
@@ -355,7 +355,7 @@ public class GeneralTab extends JPanel implements ITab{
 
         //BEGIN OPEN EDITOR
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_openeditor"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_openeditor"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JCheckBox openEditor = new JCheckBox();
         openEditor.setSelected(config.getBool(ConfigHelper.PROFILE.openEditor));
@@ -370,11 +370,11 @@ public class GeneralTab extends JPanel implements ITab{
 
         //BEGIN SPYGLASS
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_spyglass"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_spyglass"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
 
-        JComboBox<Object> spyglassDropdownEnabled = new JComboBox<>(new String[]{LangManager.getItem("config_label_disabled"), LangManager.getItem("config_label_enabled"), LangManager.getItem("config_label_hold"), LangManager.getItem("config_label_toggle")});
-        JComboBox<Object> spyglassDropdownHotkey = new JComboBox<>(new String[]{LangManager.getItem("config_label_control"), LangManager.getItem("config_label_shift")});
+        JComboBox<Object> spyglassDropdownEnabled = new JComboBox<>(new String[]{LangManager.Companion.getItem("config_label_disabled"), LangManager.Companion.getItem("config_label_enabled"), LangManager.Companion.getItem("config_label_hold"), LangManager.Companion.getItem("config_label_toggle")});
+        JComboBox<Object> spyglassDropdownHotkey = new JComboBox<>(new String[]{LangManager.Companion.getItem("config_label_control"), LangManager.Companion.getItem("config_label_shift")});
         String startMode = config.getString(ConfigHelper.PROFILE.spyglassMode);
         boolean startEnabled = config.getBool(ConfigHelper.PROFILE.enableSpyglass);
         spyglassDropdownHotkey.setVisible(false);
@@ -443,7 +443,7 @@ public class GeneralTab extends JPanel implements ITab{
 
         //BEGIN SPYGLASS ZOOM
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_spyglasszoom"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_spyglasszoom"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         JComboBox<Object> spyglassZoomDropdown = new JComboBox<>(new String[]{"8x8", "16x16", "32x32", "64x64"});
         switch(config.getInt(ConfigHelper.PROFILE.spyglassZoom)) {
@@ -473,8 +473,8 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 0;
         options.add(configWindow.createJLabel("After Drag", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
-        JComboBox<Object> afterDragDropdownMode = new JComboBox<>(new String[]{LangManager.getItem("config_label_disabled"), LangManager.getItem("config_label_enabled"), LangManager.getItem("config_label_hold")});
-        JComboBox<Object> afterDragDropdownHotkey = new JComboBox<>(new String[]{LangManager.getItem("config_label_control"), LangManager.getItem("config_label_shift")});
+        JComboBox<Object> afterDragDropdownMode = new JComboBox<>(new String[]{LangManager.Companion.getItem("config_label_disabled"), LangManager.Companion.getItem("config_label_enabled"), LangManager.Companion.getItem("config_label_hold")});
+        JComboBox<Object> afterDragDropdownHotkey = new JComboBox<>(new String[]{LangManager.Companion.getItem("config_label_control"), LangManager.Companion.getItem("config_label_shift")});
         switch(config.getString(ConfigHelper.PROFILE.afterDragMode).toLowerCase()) {
             case "none": afterDragDropdownMode.setSelectedIndex(0); afterDragDropdownHotkey.setVisible(false); break;
             case "enabled": afterDragDropdownMode.setSelectedIndex(1); afterDragDropdownHotkey.setVisible(false); break;

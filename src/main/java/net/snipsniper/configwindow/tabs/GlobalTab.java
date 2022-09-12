@@ -148,14 +148,14 @@ public class GlobalTab extends JPanel implements ITab{
         options.add(new UpdateButton(), gbc);
 
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_language"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_language"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         options.add(Utils.getLanguageDropdown(config.getString(ConfigHelper.MAIN.language), args -> {
             config.set(ConfigHelper.MAIN.language, args[0]);
             saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         }), gbc);
 
-        String[] themes = {LangManager.getItem("config_label_theme_light"), LangManager.getItem("config_label_theme_dark")};
+        String[] themes = {LangManager.Companion.getItem("config_label_theme_light"), LangManager.Companion.getItem("config_label_theme_dark")};
         JComboBox<Object> themeDropdown = new JComboBox<>(themes);
         int themeIndex = 0; //Light theme
         if(config.getString(ConfigHelper.MAIN.theme).equals("dark"))
@@ -173,12 +173,12 @@ public class GlobalTab extends JPanel implements ITab{
         });
 
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_theme"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_theme"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         options.add(themeDropdown, gbc);
 
         gbc.gridx = 0;
-        options.add(configWindow.createJLabel(LangManager.getItem("config_label_debug"), JLabel.RIGHT, JLabel.CENTER), gbc);
+        options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_debug"), JLabel.RIGHT, JLabel.CENTER), gbc);
         JCheckBox debugCheckBox = new JCheckBox();
         debugCheckBox.setSelected(config.getBool(ConfigHelper.MAIN.debug));
         debugCheckBox.addActionListener(e -> {

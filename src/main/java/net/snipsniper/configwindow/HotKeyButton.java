@@ -32,7 +32,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 		}
 
 		if(key.startsWith("NONE")) {
-			this.setText(LangManager.getItem("config_label_none"));
+			this.setText(LangManager.Companion.getItem("config_label_none"));
 			hotkey = -1;
 		} else if(key.startsWith("KB")) {
 			hotkey = Integer.parseInt(key.replace("KB", ""));
@@ -40,7 +40,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 		} else if (key.startsWith("M")) {
 			hotkey = Integer.parseInt(key.replace("M", ""));
 			isKeyboard = false;
-			this.setText(LangManager.getItem("config_label_mouse") + " " + hotkey);
+			this.setText(LangManager.Companion.getItem("config_label_mouse") + " " + hotkey);
 		}
 
 		instance = this;
@@ -48,7 +48,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 		GlobalScreen.addNativeMouseListener(this);
 		this.addActionListener(listener -> {
 			listening = true;
-			instance.setText(LangManager.getItem("config_label_hotkey_listening"));
+			instance.setText(LangManager.Companion.getItem("config_label_hotkey_listening"));
 		});
 
 		oldLabel = instance.getText();
@@ -91,7 +91,7 @@ public class HotKeyButton extends JButton implements NativeKeyListener, NativeMo
 			isKeyboard = false;
 			listening = false;
 			notifyListeners();
-			instance.setText(LangManager.getItem("config_label_mouse") + " " + hotkey);
+			instance.setText(LangManager.Companion.getItem("config_label_mouse") + " " + hotkey);
 			oldLabel = instance.getText();
 		}
 	}

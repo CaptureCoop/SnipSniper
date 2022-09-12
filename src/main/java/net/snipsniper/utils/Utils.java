@@ -181,13 +181,13 @@ public class Utils {
 	}
 
 	public static JComboBox<DropdownItem> getLanguageDropdown(String selectedLanguage, IFunction onSelect) {
-		DropdownItem[] langItems = new DropdownItem[LangManager.languages.size()];
-		Collections.sort(LangManager.languages);
+		DropdownItem[] langItems = new DropdownItem[LangManager.Companion.getLanguages().size()];
+		Collections.sort(LangManager.Companion.getLanguages());
 		DropdownItem selectedItem = null;
 		int index = 0;
-		for(String lang : LangManager.languages) {
-			String translated = LangManager.getItem(lang, "lang_" + lang);
-			langItems[index] = new DropdownItem(translated, lang, LangManager.getIcon(lang));
+		for(String lang : LangManager.Companion.getLanguages()) {
+			String translated = LangManager.Companion.getItem(lang, "lang_" + lang);
+			langItems[index] = new DropdownItem(translated, lang, LangManager.Companion.getIcon(lang));
 			if(lang.equals(selectedLanguage))
 				selectedItem = langItems[index];
 			index++;
