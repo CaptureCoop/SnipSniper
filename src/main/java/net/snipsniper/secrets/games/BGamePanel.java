@@ -83,14 +83,14 @@ public class BGamePanel extends JPanel {
             g.setColor(new Color(0,0,0,100));
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.WHITE);
-            DrawUtils.drawCenteredString(g, "GAME OVER", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
+            DrawUtils.Companion.drawCenteredString(g, "GAME OVER", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
         }
 
         if(game.isPaused() && !isScreenshot) {
             g.setColor(new Color(0,0,0,100));
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.WHITE);
-            DrawUtils.drawCenteredString(g, "PAUSED", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
+            DrawUtils.Companion.drawCenteredString(g, "PAUSED", new Rectangle(0,0, getWidth(), getHeight()), new Font("Monospaced", Font.BOLD, getHeight()/20));
         }
     }
 
@@ -103,7 +103,7 @@ public class BGamePanel extends JPanel {
     public int drawScoreText(Graphics g, int offsetX, int ts, int index, String text) {
         int height = getHeight() / 20;
         Rectangle rect = new Rectangle(offsetX + game.BOARD_WIDTH * ts, height * index, getWidth() - (offsetX + game.BOARD_WIDTH * ts), height);
-        DrawUtils.drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, height));
+        DrawUtils.Companion.drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, height));
         return rect.y + rect.height;
     }
 
@@ -111,6 +111,6 @@ public class BGamePanel extends JPanel {
         float height = getHeight() / 20F;
         height *= fontMultiplier;
         Rectangle rect = new Rectangle(0, (int)height * index, offsetX, (int)height);
-        DrawUtils.drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, (int)height));
+        DrawUtils.Companion.drawCenteredString(g, text, rect, new Font("Monospaced", Font.BOLD, (int)height));
     }
 }
