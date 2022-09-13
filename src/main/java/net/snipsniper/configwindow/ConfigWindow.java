@@ -213,7 +213,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
         if(configOriginal == null)
             dropdown.setSelectedIndex(0);
         else
-            activeDropdownIndex = DropdownItem.setSelected(dropdown, config.getFilename());
+            activeDropdownIndex = DropdownItem.Companion.setSelected(dropdown, config.getFilename());
 
         final ItemListener[] dropdownListener = {null};
         dropdownListener[0] = e -> {
@@ -229,7 +229,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
                     dropdown.setSelectedIndex(requestedItem);
                 }
                 parentPanel.removeAll();
-                Config newConfig = new Config(((DropdownItem)e.getItem()).getID(), "profile_defaults.cfg");
+                Config newConfig = new Config(((DropdownItem)e.getItem()).getId(), "profile_defaults.cfg");
                 setupPaneDynamic(newConfig, page);
                 lastSelectedConfig = newConfig;
                 activeDropdownIndex = dropdown.getSelectedIndex();
@@ -278,13 +278,13 @@ public class ConfigWindow extends JFrame implements CCIClosable {
         JButton profileRemoveButton = new JButton("-");
         DropdownItem selectedItem = (DropdownItem) dropdown.getSelectedItem();
         if(selectedItem != null) {
-            if (selectedItem.getID().contains("profile0") || selectedItem.getID().contains("editor"))
+            if (selectedItem.getId().contains("profile0") || selectedItem.getId().contains("editor"))
                 profileRemoveButton.setEnabled(false);
         }
         profileRemoveButton.addActionListener(actionEvent -> {
             //No dirty check needs to be performed, we are deleting it anyways
             DropdownItem item = (DropdownItem) dropdown.getSelectedItem();
-            if(!item.getID().contains("profile0") || !item.getID().contains("editor")) {
+            if(!item.getId().contains("profile0") || !item.getId().contains("editor")) {
                 config.deleteFile();
                 SnipSniper.Companion.resetProfiles();
                 refreshConfigFiles();
@@ -292,7 +292,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
                 int newIndex = dropdown.getSelectedIndex() - 1;
                 if(newIndex < 0)
                     newIndex = dropdown.getSelectedIndex() + 1;
-                Config newConfig = new Config(dropdown.getItemAt(newIndex).getID(), "profile_defaults.cfg");
+                Config newConfig = new Config(dropdown.getItemAt(newIndex).getId(), "profile_defaults.cfg");
 
                 generalTab.setup(newConfig);
                 editorTab.setup(newConfig);
