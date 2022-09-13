@@ -340,7 +340,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
             public boolean run(ConfigSaveButtonState state) {
                 if(configOriginal == null) return false;
                 switch (state) {
-                    case UPDATE_CLEAN_STATE: isDirty[0] = !config.equals(configOriginal); tab.setDirty(isDirty[0]); break;
+                    case UPDATE_CLEAN_STATE: isDirty[0] = !config.settingsEquals(configOriginal); tab.setDirty(isDirty[0]); break;
                     case YES_SAVE: allowSaving[0] = true; break;
                     case NO_SAVE: allowSaving[0] = false; break;
                 }
