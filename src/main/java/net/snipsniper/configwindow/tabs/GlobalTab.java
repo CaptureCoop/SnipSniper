@@ -207,7 +207,7 @@ public class GlobalTab extends JPanel implements ITab{
                         String jarFolder = SnipSniper.Companion.getJarFolder();
                         FileUtils.copyFromJar("net/snipsniper/resources/batch/" + batchMain, jarFolder + "/" + batchMain);
                         FileUtils.copyFromJar("net/snipsniper/resources/img/icons/" + icoMain.toLowerCase(), jarFolder + "/" + icoMain);
-                        ShellLinkUtils.Companion.createShellLink(startup + linkMain, jarFolder + batchMain, jarFolder + "/" + icoMain);
+                        Utils.Companion.createShellLink(startup + linkMain, jarFolder + batchMain, jarFolder + "/" + icoMain);
                     };
                 } else {
                     autostart[0] = args -> FileUtils.deleteRecursively(startup + linkMain);

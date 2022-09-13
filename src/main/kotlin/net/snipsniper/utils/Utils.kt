@@ -1,5 +1,6 @@
 package net.snipsniper.utils
 
+import com.erigir.mslinks.ShellLink
 import net.snipsniper.LangManager
 import net.snipsniper.SnipSniper
 import org.apache.commons.lang3.SystemUtils
@@ -192,6 +193,12 @@ class Utils {
                 }
             }
             return dropdown
+        }
+
+        fun createShellLink(linkLocation: String, originalLocation: String, icon: String) {
+            val sl = ShellLink.createLink(originalLocation)
+            sl.iconLocation = icon
+            sl.saveTo(linkLocation)
         }
     }
 
