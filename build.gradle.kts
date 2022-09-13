@@ -64,6 +64,7 @@ tasks.register("preBuild") {
     """.trimIndent()
 
     val f = File(rootProject.projectDir.absolutePath, "//src//main//resources//net//snipsniper//resources//cfg//buildinfo.cfg")
+    if(f.exists()) f.delete()
     f.createNewFile()
     f.writeText(buildInfo)
 }
