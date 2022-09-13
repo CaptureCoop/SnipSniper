@@ -1,9 +1,9 @@
-package net.snipsniper.config;
-public class ConfigHelper { 
+package net.snipsniper.config; 
+class ConfigHelper { 
    /* 
    This was created using the CreateConfigHelper.bat file at the root folder. Leave formatting as is and use the bat file whenever you make any changes to any config 
    */ 
-public enum MAIN { 
+enum class MAIN { 
 language, 
 debug, 
 theme, 
@@ -11,7 +11,7 @@ updateChannel,
 colorChooserType, 
 logFormat, 
 } 
-public enum PROFILE { 
+enum class PROFILE { 
 title, 
 hotkey, 
 tintColor, 
@@ -95,7 +95,7 @@ editorStampEraserDistance,
 editorStampEraserSize, 
 editorStampEraserSizeSpeed, 
 } 
-public enum BUILDINFO { 
+enum class BUILDINFO { 
 type, 
 version, 
 builddate, 
