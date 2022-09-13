@@ -19,3 +19,7 @@ enum class PlatformType {
 enum class ReleaseType {
     STABLE, DEV, DIRTY, UNKNOWN
 }
+
+enum class PointType {
+    NORMAL, TOTAL, LIVE
+}

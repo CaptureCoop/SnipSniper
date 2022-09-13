@@ -1,6 +1,7 @@
 package net.snipsniper.capturewindow;
 
 import net.snipsniper.config.ConfigHelper;
+import net.snipsniper.utils.PointType;
 
 import javax.swing.*;
 import java.awt.*;
