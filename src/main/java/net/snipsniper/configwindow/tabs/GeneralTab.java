@@ -12,7 +12,6 @@ import net.snipsniper.configwindow.iconwindow.IconWindow;
 import net.snipsniper.configwindow.textpreviewwindow.SaveFormatPreviewRenderer;
 import net.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow;
 import net.snipsniper.utils.*;
-import net.snipsniper.utils.enums.ConfigSaveButtonState;
 import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.chooser.CCColorChooser;
 import org.capturecoop.ccutils.utils.CCStringUtils;

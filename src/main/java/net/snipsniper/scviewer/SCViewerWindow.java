@@ -1,6 +1,7 @@
 package net.snipsniper.scviewer;
 
 import net.snipsniper.ImageManager;
+import net.snipsniper.utils.ClockDirection;
 import org.capturecoop.cclogger.CCLogger;
 import net.snipsniper.SnipSniper;
 import net.snipsniper.StatsManager;
@@ -10,7 +11,6 @@ import net.snipsniper.utils.FileUtils;
 import net.snipsniper.utils.ImageUtils;
 import net.snipsniper.sceditor.SCEditorWindow;
 import net.snipsniper.snipscope.SnipScopeWindow;
-import net.snipsniper.utils.enums.ClockDirection;
 import org.apache.commons.lang3.SystemUtils;
 import org.capturecoop.cclogger.CCLogLevel;
 

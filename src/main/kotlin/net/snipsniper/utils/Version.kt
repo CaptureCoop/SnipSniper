@@ -1,9 +1,5 @@
 package net.snipsniper.utils
 
-import net.snipsniper.utils.enums.PlatformType
-import net.snipsniper.utils.enums.ReleaseType
-import org.capturecoop.ccutils.utils.CCStringUtils
-
 class Version {
     private val maxDigits = 3
     private val digits: Array<Int>

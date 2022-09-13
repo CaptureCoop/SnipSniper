@@ -2,9 +2,6 @@ package net.snipsniper.utils
 
 import net.snipsniper.LangManager
 import net.snipsniper.SnipSniper
-import net.snipsniper.utils.enums.LaunchType
-import net.snipsniper.utils.enums.PlatformType
-import net.snipsniper.utils.enums.ReleaseType
 import org.apache.commons.lang3.SystemUtils
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger

@@ -3,9 +3,9 @@ package net.snipsniper.configwindow.tabs;
 import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.configwindow.ConfigWindow;
+import net.snipsniper.utils.ConfigSaveButtonState;
 import net.snipsniper.utils.Function;
 import net.snipsniper.utils.InfoButton;
-import net.snipsniper.utils.enums.ConfigSaveButtonState;
 
 import javax.swing.*;
 import java.awt.*;

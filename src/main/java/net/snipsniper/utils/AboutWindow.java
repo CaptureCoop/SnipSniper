@@ -6,8 +6,6 @@ import net.snipsniper.secrets.games.BGame;
 import net.snipsniper.systray.Sniper;
 import org.capturecoop.cclogger.CCLogger;
 import org.capturecoop.cclogger.CCLogLevel;
-import net.snipsniper.utils.enums.PlatformType;
-import net.snipsniper.utils.enums.ReleaseType;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;

@@ -6,8 +6,6 @@ import net.snipsniper.SnipSniper;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.utils.*;
 import org.capturecoop.cclogger.CCLogLevel;
-import net.snipsniper.utils.enums.PlatformType;
-import net.snipsniper.utils.enums.ReleaseType;
 import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.swing.*;

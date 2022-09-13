@@ -10,10 +10,7 @@ import net.snipsniper.config.Config;
 import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.configwindow.ConfigWindow;
 import net.snipsniper.configwindow.UpdateButton;
-import net.snipsniper.utils.enums.ConfigSaveButtonState;
 import org.capturecoop.cclogger.CCLogLevel;
-import net.snipsniper.utils.enums.PlatformType;
-import net.snipsniper.utils.enums.ReleaseType;
 import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import javax.swing.*;

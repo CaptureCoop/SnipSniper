@@ -1,7 +1,5 @@
 package net.snipsniper.utils;
 
-import net.snipsniper.utils.enums.ConfigSaveButtonState;
-
 public abstract class Function {
     public boolean run() { return true; }
     public boolean run(String... args) { return true; }

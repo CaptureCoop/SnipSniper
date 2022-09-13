@@ -9,8 +9,6 @@ import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.scviewer.SCViewerWindow
 import net.snipsniper.systray.Sniper
 import net.snipsniper.utils.*
-import net.snipsniper.utils.enums.LaunchType
-import net.snipsniper.utils.enums.PlatformType
 import org.apache.commons.lang3.SystemUtils
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger

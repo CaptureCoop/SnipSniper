@@ -12,7 +12,6 @@ import net.snipsniper.config.ConfigHelper;
 import net.snipsniper.configwindow.tabs.*;
 import net.snipsniper.systray.Sniper;
 import net.snipsniper.utils.*;
-import net.snipsniper.utils.enums.ConfigSaveButtonState;
 import org.capturecoop.cclogger.CCLogLevel;
 import org.capturecoop.ccutils.utils.CCIClosable;
 
