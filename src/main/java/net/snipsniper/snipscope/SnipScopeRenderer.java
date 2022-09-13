@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 
 public class SnipScopeRenderer extends JPanel {
     private final SnipScopeWindow snipScopeWindow;
-    private final RenderingHints qualityHints = Utils.getRenderingHints();
+    private final RenderingHints qualityHints = Utils.Companion.getRenderingHints();
     private final double zoomAntialisingKickIn = 2D;
 
     public Rectangle lastRectangle;

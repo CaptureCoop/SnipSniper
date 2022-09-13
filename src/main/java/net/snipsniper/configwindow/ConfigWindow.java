@@ -153,7 +153,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
     }
 
     public void msgError(String msg) {
-        Utils.showPopup(this, msg, LangManager.Companion.getItem("config_sanitation_error"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
+        Utils.Companion.showPopup(this, msg, LangManager.Companion.getItem("config_sanitation_error"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
     }
 
     public void setupPaneDynamic(Config config, PAGE page) {
@@ -362,7 +362,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
     }
 
     private int showDirtyWarning() {
-        return Utils.showPopup(this, "Unsaved changes, are you sure you want to cancel?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
+        return Utils.Companion.showPopup(this, "Unsaved changes, are you sure you want to cancel?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
     }
 
     public int getIDFromFilename(String name) {

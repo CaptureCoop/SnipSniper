@@ -116,7 +116,7 @@ public class Config {
 	public String getString(String key) {
 		String str = getRawString(key);
 		if(str != null) {
-			str = Utils.replaceVars(str);
+			str = Utils.Companion.replaceVars(str);
 		}
 		return str;
 	}

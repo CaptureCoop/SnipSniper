@@ -17,19 +17,19 @@ public class UpdateUtils {
             case JAR:
                 FileUtils.copyFromJar(pathInJar, updaterLocation);
                 String jarLink = Links.STABLE_JAR;
-                ReleaseType relType = Utils.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
+                ReleaseType relType = Utils.Companion.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
                 if(relType == ReleaseType.DEV) jarLink = Links.DEV_JAR;
-                Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", jarLink, "-gui", "-exec", "SnipSniper.jar", "-dir", SnipSniper.Companion.getJarFolder());
+                Utils.Companion.executeProcess(false, "java", "-jar", updaterLocation, "-url", jarLink, "-gui", "-exec", "SnipSniper.jar", "-dir", SnipSniper.Companion.getJarFolder());
                 SnipSniper.Companion.exit(false);
                 break;
             case WIN:
                 FileUtils.copyFromJar(pathInJar, updaterLocation);
-                Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", Links.STABLE_PORTABLE, "-gui", "-extract", "-exec", "SnipSniper.exe", "-dir", FileUtils.getCanonicalPath("."), "-deleteFile");
+                Utils.Companion.executeProcess(false, "java", "-jar", updaterLocation, "-url", Links.STABLE_PORTABLE, "-gui", "-extract", "-exec", "SnipSniper.exe", "-dir", FileUtils.getCanonicalPath("."), "-deleteFile");
                 SnipSniper.Companion.exit(false);
                 break;
             case WIN_INSTALLED:
                 FileUtils.copyFromJar(pathInJar, updaterLocation);
-                Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", Links.STABLE_INSTALLER, "-gui", "-exec", "SnipSniper_Installer_Win.exe", "-dir", System.getProperty("java.io.tmpdir"));
+                Utils.Companion.executeProcess(false, "java", "-jar", updaterLocation, "-url", Links.STABLE_INSTALLER, "-gui", "-exec", "SnipSniper_Installer_Win.exe", "-dir", System.getProperty("java.io.tmpdir"));
                 SnipSniper.Companion.exit(false);
                 break;
         }

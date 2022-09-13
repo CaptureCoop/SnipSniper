@@ -27,7 +27,7 @@ import org.capturecoop.ccutils.utils.CCStringUtils;
 public class CaptureWindow extends JFrame implements WindowListener{
 	private final Sniper sniperInstance;
 	private final Config config;
-	private final RenderingHints qualityHints = Utils.getRenderingHints();
+	private final RenderingHints qualityHints = Utils.Companion.getRenderingHints();
 	private final CaptureWindowListener listener;
 
 	private Rectangle bounds = null;
@@ -328,7 +328,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 			if(cPoint != null && startPoint != null) {
 				selectArea = new Rectangle(startPoint.x, startPoint.y, cPoint.x, cPoint.y);
-				allBounds.addRectangle(Utils.fixRectangle(selectArea));
+				allBounds.addRectangle(Utils.Companion.fixRectangle(selectArea));
 			}
 
 			if(cPoint != null && selectArea != null) {
@@ -337,7 +337,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 			if(config.getBool(ConfigHelper.PROFILE.dottedOutline) && cPoint != null && startPoint != null && selectArea != null) {
 				final int thickness = 1;
-				Rectangle rec = Utils.fixRectangle(selectArea);
+				Rectangle rec = Utils.Companion.fixRectangle(selectArea);
 				allBounds.addRectangle(new Rectangle(rec.x - thickness, rec.y - thickness, rec.width + thickness * 2, rec.height + thickness * 2));
 				drawDashedLine(globalBuffer, rec.x - thickness, rec.y - thickness, rec.width, rec.y - thickness, thickness);
 				drawDashedLine(globalBuffer, rec.x - thickness, rec.y, rec.x - thickness, rec.height, thickness);

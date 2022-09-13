@@ -44,7 +44,7 @@ public class ImageUtils {
 
     public static String saveImage(BufferedImage finalImg, String format, String modifier, Config config) {
         File file;
-        String filename = Utils.constructFilename(format, modifier);
+        String filename = Utils.Companion.constructFilename(format, modifier);
         String savePath = config.getString(ConfigHelper.PROFILE.pictureFolder);
         String pathCustom = config.getString(ConfigHelper.PROFILE.saveFolderCustom);
         if(!pathCustom.startsWith("/"))

@@ -108,7 +108,7 @@ public class AboutWindow extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if(SnipSniper.Companion.getVersion().getPlatformType() == PlatformType.JAR && onC) {
-                    ReleaseType channel = Utils.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
+                    ReleaseType channel = Utils.Companion.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
                     switch(channel) {
                         case STABLE: channel = ReleaseType.DEV; break;
                         case DEV: channel = ReleaseType.STABLE; break;
@@ -116,7 +116,7 @@ public class AboutWindow extends JFrame {
 
                     SnipSniper.Companion.getConfig().set(ConfigHelper.MAIN.updateChannel, channel.toString().toLowerCase());
                     SnipSniper.Companion.getConfig().save();
-                    Utils.showPopup(instance, "New update channel: " + channel.toString().toLowerCase(), "Channel unlocked!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, ImageManager.getImage("icons/checkmark.png"), true);
+                    Utils.Companion.showPopup(instance, "New update channel: " + channel.toString().toLowerCase(), "Channel unlocked!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, ImageManager.getImage("icons/checkmark.png"), true);
                 }
             }
         });

@@ -94,7 +94,7 @@ public class Popup extends JFrame{
                 //TODO: ^^^^^^^^^^^^^^^^^^
                 //IDEA: Take half of the screens width to determine if we are left right bottom or top and then calculate position based on that, if possible
                 setLocation(getX(), getY() - getHeight() - insets.bottom);
-                if(!Utils.containsRectangleFully(screenRect, getBounds())) {
+                if(!Utils.Companion.containsRectangleFully(screenRect, getBounds())) {
                     //Fallback
                     //TODO: Find prettier way
                     setLocation(screenRect.width / 2 - getWidth() / 2, screenRect.height / 2 - getHeight() / 2);

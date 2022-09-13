@@ -44,7 +44,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
 
     public boolean isDirty = false;
 
-    private final RenderingHints qualityHints = Utils.getRenderingHints();
+    private final RenderingHints qualityHints = Utils.Companion.getRenderingHints();
 
     public static final String FILENAME_MODIFIER = "_edited";
 
@@ -215,7 +215,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
                 Graphics2D g = (Graphics2D) test.getGraphics();
                 g.setRenderingHints(qualityHints);
 
-                Dimension optimalDimension = Utils.getScaledDimension(originalImage, new Dimension(width, height));
+                Dimension optimalDimension = Utils.Companion.getScaledDimension(originalImage, new Dimension(width, height));
                 g.drawImage(originalImage, test.getWidth() / 2 - optimalDimension.width / 2, test.getHeight() / 2 - optimalDimension.height / 2, optimalDimension.width, optimalDimension.height, null);
 
                 g.dispose();

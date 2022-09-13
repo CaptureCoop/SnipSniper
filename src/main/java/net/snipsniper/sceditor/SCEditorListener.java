@@ -139,7 +139,7 @@ public class SCEditorListener extends SnipScopeListener {
             openSaveAsWindow = false;
             scEditorWindow.getInputContainer().resetKeys();
             JFileChooser chooser = new JFileChooser();
-            chooser.setSelectedFile(new File(Utils.constructFilename(scEditorWindow.getConfig().getString(ConfigHelper.PROFILE.saveFormat), SCEditorWindow.FILENAME_MODIFIER)));
+            chooser.setSelectedFile(new File(Utils.Companion.constructFilename(scEditorWindow.getConfig().getString(ConfigHelper.PROFILE.saveFormat), SCEditorWindow.FILENAME_MODIFIER)));
             if(chooser.showSaveDialog(chooser) == JFileChooser.APPROVE_OPTION){
                 try {
                     if(chooser.getSelectedFile().createNewFile())

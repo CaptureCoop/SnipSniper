@@ -26,7 +26,7 @@ public class GradientJButton extends JButton {
         g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g2.setPaint(color.getGradientPaint(getWidth(), getHeight()));
         if(!isEnabled())
-            g2.setPaint(Utils.getDisabledColor());
+            g2.setPaint(Utils.Companion.getDisabledColor());
         g2.fillRect(0, 0, getWidth(), getHeight());
         g2.setColor(Color.BLACK);
         g2.drawRect(0, 0, getWidth()-1, getHeight()-1);
@@ -46,7 +46,7 @@ public class GradientJButton extends JButton {
         g2.setTransform(oldTransform);
 
         if(!isEnabled()) {
-            g2.setColor(Utils.getDisabledColor());
+            g2.setColor(Utils.Companion.getDisabledColor());
             g2.fillRect(0, 0, getWidth(), getHeight());
         }
 

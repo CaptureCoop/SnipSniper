@@ -33,7 +33,7 @@ public class UpdateButton extends IDJButton {
             }
 
             Version version = SnipSniper.Companion.getVersion();
-            ReleaseType updateChannel = Utils.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
+            ReleaseType updateChannel = Utils.Companion.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
             boolean isJar = version.getPlatformType() == PlatformType.JAR;
             boolean isDev = version.getReleaseType() == ReleaseType.DEV;
             boolean isStable = version.getReleaseType() == ReleaseType.STABLE;
@@ -44,7 +44,7 @@ public class UpdateButton extends IDJButton {
             if(isJarAndDev) {
                 if(getID().equals(STATE_WAITING)) {
                     setText("Checking for update...");
-                    String newestHash = Utils.getShortGitHash(Utils.getHashFromAPI(Links.API_LATEST_COMMIT));
+                    String newestHash = Utils.Companion.getShortGitHash(Utils.Companion.getHashFromAPI(Links.API_LATEST_COMMIT));
                     if(newestHash == null || newestHash.isEmpty()) {
                         setText("Error - No connection");
                         setID(STATE_WAITING);
@@ -67,7 +67,7 @@ public class UpdateButton extends IDJButton {
             } else {
                 if(getID().equals(STATE_WAITING)) {
                     setText("Checking for update...");
-                    String versionString = Utils.getTextFromWebsite(Links.STABLE_VERSION_TXT);
+                    String versionString = Utils.Companion.getTextFromWebsite(Links.STABLE_VERSION_TXT);
                     Version onlineVersion = new Version(versionString);
                     Version currentVersion = SnipSniper.Companion.getVersion();
                     if(versionString == null || versionString.isEmpty()) {

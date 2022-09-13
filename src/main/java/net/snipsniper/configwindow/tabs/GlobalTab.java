@@ -55,7 +55,7 @@ public class GlobalTab extends JPanel implements ITab{
 
         JButton importConfigs = new JButton("Import Configs");
         importConfigs.addActionListener(e -> {
-            int dialogResult = Utils.showPopup(configWindow, "This will overwrite all current configs. Do you want to continue?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/questionmark.png"), true);
+            int dialogResult = Utils.Companion.showPopup(configWindow, "This will overwrite all current configs. Do you want to continue?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/questionmark.png"), true);
             if(dialogResult == JOptionPane.NO_OPTION){
                 return;
             }
@@ -141,7 +141,7 @@ public class GlobalTab extends JPanel implements ITab{
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 10, 0, 10);
         String version = SnipSniper.Companion.getVersion().toString();
-        ReleaseType releaseType = Utils.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
+        ReleaseType releaseType = Utils.Companion.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
         String channel = releaseType.toString().toLowerCase();
         options.add(configWindow.createJLabel(CCStringUtils.format("<html><p>Current Version: %c</p><p>Update Channel: %c</p></html>", version, channel), JLabel.CENTER, JLabel.CENTER), gbc);
         gbc.gridx = 1;
@@ -150,7 +150,7 @@ public class GlobalTab extends JPanel implements ITab{
         gbc.gridx = 0;
         options.add(configWindow.createJLabel(LangManager.Companion.getItem("config_label_language"), JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
-        options.add(Utils.getLanguageDropdown(config.getString(ConfigHelper.MAIN.language), args -> {
+        options.add(Utils.Companion.getLanguageDropdown(config.getString(ConfigHelper.MAIN.language), args -> {
             config.set(ConfigHelper.MAIN.language, args[0]);
             saveButtonUpdate[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         }), gbc);

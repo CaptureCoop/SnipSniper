@@ -13,7 +13,7 @@ public class StampJPanel extends JPanel {
     private IStamp stamp;
     private BufferedImage background;
     private boolean backgroundEnabled = true;
-    private final RenderingHints qualityHints = Utils.getRenderingHints();
+    private final RenderingHints qualityHints = Utils.Companion.getRenderingHints();
 
     private int margin = 0;
 
@@ -61,7 +61,7 @@ public class StampJPanel extends JPanel {
             g2d.setColor(oldColor);
         }
         if(!isEnabled())
-            g2d.setColor(Utils.getDisabledColor());
+            g2d.setColor(Utils.Companion.getDisabledColor());
         g2d.drawRect(0,0,getWidth() - 1,getHeight() -1);
 
         if(stamp != null)

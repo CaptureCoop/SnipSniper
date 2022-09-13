@@ -250,7 +250,7 @@ public class GeneralTab extends JPanel implements ITab{
         options.add(configWindow.createJLabel("Save format", JLabel.RIGHT, JLabel.CENTER), gbc);
         gbc.gridx = 1;
         String currentSaveFormat = config.getString(ConfigHelper.PROFILE.saveFormat);
-        JButton saveFormatButton = new JButton(Utils.constructFilename(currentSaveFormat, ""));
+        JButton saveFormatButton = new JButton(Utils.Companion.constructFilename(currentSaveFormat, ""));
         saveFormatButton.addActionListener(e -> {
             SaveFormatPreviewRenderer saveFormatRenderer = new SaveFormatPreviewRenderer(512, 256);
             TextPreviewWindow saveFormatPreview = new TextPreviewWindow("Save format", config.getString(ConfigHelper.PROFILE.saveFormat), saveFormatRenderer, ImageManager.getImage("icons/folder.png"), configWindow, "%hour%, %minute%, %second%, %day%, %month%, %year%, %random%");
@@ -261,7 +261,7 @@ public class GeneralTab extends JPanel implements ITab{
                     text = SaveFormatPreviewRenderer.DEFAULT_FORMAT;
                 }
                 config.set(ConfigHelper.PROFILE.saveFormat, text);
-                saveFormatButton.setText(Utils.constructFilename(text, ""));
+                saveFormatButton.setText(Utils.Companion.constructFilename(text, ""));
             });
             configWindow.addCWindow(saveFormatPreview);
         });
@@ -283,12 +283,12 @@ public class GeneralTab extends JPanel implements ITab{
                 String saveLocationRaw = pictureLocation.getText();
                 CCStringUtils.correctSlashes(saveLocationRaw);
 
-                String saveLocationFinal = Utils.replaceVars(saveLocationRaw);
+                String saveLocationFinal = Utils.Companion.replaceVars(saveLocationRaw);
 
                 File saveLocationCheck = new File(saveLocationFinal);
                 if(!saveLocationCheck.exists()) {
                     cleanDirtyFunction[0].run(ConfigSaveButtonState.NO_SAVE);
-                    int dialogResult = Utils.showPopup(configWindow, LangManager.Companion.getItem("config_sanitation_directory_notexist") + " Create?", LangManager.Companion.getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/folder.png"), true);
+                    int dialogResult = Utils.Companion.showPopup(configWindow, LangManager.Companion.getItem("config_sanitation_directory_notexist") + " Create?", LangManager.Companion.getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/folder.png"), true);
                     if(dialogResult == JOptionPane.YES_OPTION) {
                         boolean allow = new File(saveLocationFinal).mkdirs();
 

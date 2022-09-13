@@ -41,7 +41,7 @@ public class RectangleCollection {
     public Rectangle getBounds() {
         if(bounds == null) return null;
 
-        return Utils.fixRectangle(bounds);
+        return Utils.Companion.fixRectangle(bounds);
     }
 
     public int getX() {

@@ -45,7 +45,7 @@ public class SnipScopeWindow extends JFrame {
     public void setSizeAuto() {
         Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         if(image.getWidth() >= screenDimension.getWidth() || image.getHeight() > screenDimension.getHeight()) {
-            Dimension newDimension = Utils.getScaledDimension(image, screenDimension);
+            Dimension newDimension = Utils.Companion.getScaledDimension(image, screenDimension);
             setOptimalImageDimension(newDimension);
             setSize(newDimension);
         } else {
@@ -115,13 +115,13 @@ public class SnipScopeWindow extends JFrame {
     }
 
     public void resizeTrigger() {
-        setOptimalImageDimension(Utils.getScaledDimension(image, renderer.getSize()));
+        setOptimalImageDimension(Utils.Companion.getScaledDimension(image, renderer.getSize()));
         calculateZoom();
     }
 
     public void setImage(BufferedImage image) {
         this.image = image;
-        optimalImageDimension = Utils.getScaledDimension(image, renderer.getSize());
+        optimalImageDimension = Utils.Companion.getScaledDimension(image, renderer.getSize());
     }
 
     public void addUIComponent(SnipScopeUIComponent component) {
