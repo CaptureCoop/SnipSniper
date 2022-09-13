@@ -297,8 +297,8 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			spyglassBuffer = (Graphics2D) g;
 		}
 
-		Rectangle clearRect = allBounds.getBounds();
-		if(clearRect != null) {
+		if(!allBounds.isEmpty()) {
+			Rectangle clearRect = allBounds.getBounds();
 			globalBuffer.drawImage(screenshotTinted, clearRect.x, clearRect.y, clearRect.width, clearRect.height, clearRect.x, clearRect.y, clearRect.width, clearRect.height, this);
 		}
 		allBounds.clear();
