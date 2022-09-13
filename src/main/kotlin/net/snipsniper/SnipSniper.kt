@@ -149,7 +149,7 @@ class SnipSniper {
             LangManager.load()
             WikiManager.load(LangManager.getLanguage())
 
-            CCLogger.log("Launching SnipSniper Version ${version.digits} (rev-${version.githash})")
+            CCLogger.log("Launching SnipSniper Version ${version.digitsToString()} (rev-${version.githash})")
             if (SystemUtils.IS_OS_LINUX) {
                 CCLogger.log("=================================================================================", CCLogLevel.WARNING)
                 CCLogger.log("= SnipSniper Linux is still in development and may not work properly or at all. =", CCLogLevel.WARNING)

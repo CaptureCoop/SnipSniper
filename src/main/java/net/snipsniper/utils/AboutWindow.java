@@ -170,7 +170,7 @@ public class AboutWindow extends JFrame {
         inputStream.close();
         streamReader.close();
         Version v = SnipSniper.Companion.getVersion();
-        html = html.replace("%VERSION%", v.getDigits());
+        html = html.replace("%VERSION%", v.digitsToString());
         html = html.replace("%TYPE%", v.getReleaseType().toString().toLowerCase());
         html = html.replace("%BUILDDATE%", v.getBuildDate());
         html = html.replaceAll("%HASH%", v.getGithash());

@@ -80,16 +80,16 @@ public class UpdateButton extends IDJButton {
                         setIcon(new ImageIcon(checkmark));
                     } else if (onlineVersion.isNewerThan(currentVersion)) {
                         if(SnipSniper.Companion.getVersion().getPlatformType() == PlatformType.STEAM) {
-                            setText(CCStringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Check Steam to update!</p></html>", onlineVersion.getDigits()));
+                            setText(CCStringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Check Steam to update!</p></html>", onlineVersion.digitsToString()));
                             setID(STATE_IDLE);
                         } else {
-                            setText(CCStringUtils.format("<html><p align='center'>Update available! (%c)</p></html>", onlineVersion.getDigits()));
+                            setText(CCStringUtils.format("<html><p align='center'>Update available! (%c)</p></html>", onlineVersion.digitsToString()));
                             setID(STATE_DOUPDATE);
                         }
                         setIcon(new ImageIcon(download));
                     } else {
                         setText("Error. Check console.");
-                        CCLogger.log("Issue checking for updates. Our Version: %c, Online version: %c", CCLogLevel.ERROR, currentVersion.getDigits(), onlineVersion.getDigits());
+                        CCLogger.log("Issue checking for updates. Our Version: %c, Online version: %c", CCLogLevel.ERROR, currentVersion.digitsToString(), onlineVersion.digitsToString());
                         setID(STATE_IDLE);
                         setIcon(null);
                     }
