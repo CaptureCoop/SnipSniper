@@ -107,7 +107,7 @@ class Config {
 
     fun save() {
         if(SnipSniper.isDemo) return
-        saveFile(if(settings.isEmpty) defaults else settings)
+        saveFile(if(settings.isEmpty()) defaults else settings)
     }
 
     private fun saveFile(container: ConfigContainer) {
@@ -116,7 +116,7 @@ class Config {
         writer.close()
     }
 
-    fun settingsEquals(other: Config): Boolean = settings.equals(other.settings)
+    fun settingsEquals(other: Config): Boolean = settings == other.settings
 
     fun getFilename(): String = filename
 }
