@@ -38,8 +38,10 @@ class DropdownItemRenderer(items: Array<DropdownItem>): DefaultListCellRenderer(
 
     override fun getListCellRendererComponent(list: JList<*>?, value: Any?, index: Int, isSelected: Boolean, cellHasFocus: Boolean): Component {
         val label = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus) as JLabel
-        val item = value as DropdownItem
-        label.icon = item.icon
+        if(value != null) {
+            val item = value as DropdownItem
+            label.icon = item.icon
+        }
         return label
     }
 }
