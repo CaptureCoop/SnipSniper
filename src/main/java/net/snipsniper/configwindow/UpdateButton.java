@@ -26,7 +26,7 @@ public class UpdateButton extends IDJButton {
         setIcon(new ImageIcon(roundArrows));
         addActionListener(e -> {
             if(getID().equals(STATE_DOUPDATE)) {
-                UpdateUtils.update();
+                UpdateUtils.Companion.update();
                 return;
             }
 
