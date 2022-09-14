@@ -100,5 +100,9 @@ type,
 version, 
 builddate, 
 githash, 
+system, 
+arch, 
+javavendor, 
+javaver, 
 } 
 } 

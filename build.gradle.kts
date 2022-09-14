@@ -61,6 +61,10 @@ tasks.register("preBuild") {
         version=$projectVersion
         builddate=$buildDate (${TimeZone.getDefault().id})
         githash=${grgit.head().abbreviatedId}
+        system=${System.getProperty("os.name")}
+        arch=${System.getProperty("os.arch")}
+        javavendor=${System.getProperty("java.vendor")}
+        javaver=${System.getProperty("java.version")}
     """.trimIndent()
 
     val f = File(rootProject.projectDir.absolutePath, "//src//main//resources//net//snipsniper//resources//cfg//buildinfo.cfg")
