@@ -45,7 +45,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		config = sniperInstance.getConfig();
 		dottedLineDistance = config.getInt(ConfigHelper.PROFILE.dottedOutlineDistance);
 
-		if(SystemTray.isSupported() && sniperInstance.getIconString().equals("none")) sniperInstance.getTrayIcon().setImage(ImageManager.Companion.getImage("systray/alt_icon" + sniperInstance.profileID + ".png"));
+		if(SystemTray.isSupported() && sniperInstance.getIconString().equals("none")) sniperInstance.getTrayIcon().setImage(ImageManager.Companion.getImage("systray/alt_icon" + sniperInstance.getProfileID() + ".png"));
 		if(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) != 0) {
 			try {
 				Thread.sleep(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L);
