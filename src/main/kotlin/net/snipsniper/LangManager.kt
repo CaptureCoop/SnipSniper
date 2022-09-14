@@ -8,6 +8,7 @@ import org.json.JSONObject
 import java.awt.image.BufferedImage
 
 class LangManager {
+    //TODO: On first start use user.language property to check if we can use the users language
     companion object {
         const val DEFAULT_LANGUAGE = "en"
         const val MISSING_STRING_CHAR = "~"
