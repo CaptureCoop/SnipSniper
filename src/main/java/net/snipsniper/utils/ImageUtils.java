@@ -24,7 +24,7 @@ import java.time.LocalDate;
 
 public class ImageUtils {
     public static Image getDefaultIcon(int profileID) {
-        return ImageManager.getImage("systray/icon" + profileID + ".png");
+        return ImageManager.Companion.getImage("systray/icon" + profileID + ".png");
     }
 
     public static Image getIconDynamically(Config config) {
@@ -220,14 +220,14 @@ public class ImageUtils {
         } else {
             switch (iconFile.getLocation()) {
                 case JAR:
-                    if(!ImageManager.hasImage(iconFile.getPath())) {
+                    if(!ImageManager.Companion.hasImage(iconFile.getPath())) {
                         CCLogger.log("Couldnt find jar icon. Path: " + iconFile.getPath(), CCLogLevel.ERROR);
                         return null;
                     }
                     if(icon.endsWith(".gif")) {
-                        image = ImageManager.getAnimatedImage(iconFile.getPath());
+                        image = ImageManager.Companion.getAnimatedImage(iconFile.getPath());
                     } else {
-                        image = ImageManager.getImage(iconFile.getPath());
+                        image = ImageManager.Companion.getImage(iconFile.getPath());
                     }
                     return image;
                 case LOCAL:

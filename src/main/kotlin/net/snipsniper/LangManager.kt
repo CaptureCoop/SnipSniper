@@ -49,9 +49,11 @@ class LangManager {
             val size = 16
 
             val icon = BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB)
-            val g = icon.createGraphics()
-            g.drawImage(flag, size / 2 - flag.width / 2, size / 2 - flag.height / 2, null)
-            g.dispose()
+            if(flag != null) {
+                val g = icon.createGraphics()
+                g.drawImage(flag, size / 2 - flag.width / 2, size / 2 - flag.height / 2, null)
+                g.dispose()
+            }
             return icon
         }
 

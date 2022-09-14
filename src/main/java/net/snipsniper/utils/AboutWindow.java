@@ -35,7 +35,7 @@ public class AboutWindow extends JFrame {
         setSize(512,256);
         setTitle("About");
         setResizable(true);
-        setIconImage(ImageManager.getImage("icons/snipsniper.png"));
+        setIconImage(ImageManager.Companion.getImage("icons/snipsniper.png"));
 
         JPanel panel = new JPanel(new GridLayout(1,0));
 
@@ -43,12 +43,12 @@ public class AboutWindow extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0; gbc.gridy = 0;
         int iconSize = 100;
-        ImageIcon icon = new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(iconSize,iconSize,Image.SCALE_SMOOTH));
+        ImageIcon icon = new ImageIcon(ImageManager.Companion.getImage("icons/snipsniper.png").getScaledInstance(iconSize,iconSize,Image.SCALE_SMOOTH));
         JLabel label = new JLabel(icon);
         label.addMouseListener(new MouseAdapter() {
             int index = 0;
 
-            final BufferedImage[] icons = {ImageManager.getImage("icons/snipsniper.png"), ImageManager.getImage("icons/editor.png"), ImageManager.getImage("icons/viewer.png"), ImageManager.getImage("icons/console.png")};
+            final BufferedImage[] icons = {ImageManager.Companion.getImage("icons/snipsniper.png"), ImageManager.Companion.getImage("icons/editor.png"), ImageManager.Companion.getImage("icons/viewer.png"), ImageManager.Companion.getImage("icons/console.png")};
             final HashMap<String, Image> cache = new HashMap<>();
 
             @Override
@@ -89,7 +89,7 @@ public class AboutWindow extends JFrame {
         gbc.insets = new Insets(20, 0, 0, 0);
         JButton buyCoffee = new JButton("Buy us a coffee");
         buyCoffee.addActionListener(e -> Links.Companion.openLink(Links.KOFI));
-        Image coffeeIcon = ImageManager.getAnimatedImage("icons/coffee.gif");
+        Image coffeeIcon = ImageManager.Companion.getAnimatedImage("icons/coffee.gif");
         buyCoffee.setIcon(new ImageIcon(coffeeIcon.getScaledInstance(coffeeIcon.getWidth(null) / 16, coffeeIcon.getHeight(null) / 16, Image.SCALE_DEFAULT)));
         buyCoffee.setHorizontalTextPosition(SwingConstants.LEFT);
         buyCoffee.setFocusable(false);
@@ -99,7 +99,7 @@ public class AboutWindow extends JFrame {
 
         JPanel rightSide = new JPanel(new GridLayout(2, 0));
 
-        BufferedImage splash = ImageManager.getImage("splash.png");
+        BufferedImage splash = ImageManager.Companion.getImage("splash.png");
         JLabel splashLabel = new JLabel(new ImageIcon(splash.getScaledInstance((int)(splash.getWidth()/2.2F),(int)(splash.getHeight()/2.2F),Image.SCALE_DEFAULT)));
         splashLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -114,7 +114,7 @@ public class AboutWindow extends JFrame {
 
                     SnipSniper.Companion.getConfig().set(ConfigHelper.MAIN.updateChannel, channel.toString().toLowerCase());
                     SnipSniper.Companion.getConfig().save();
-                    Utils.Companion.showPopup(instance, "New update channel: " + channel.toString().toLowerCase(), "Channel unlocked!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, ImageManager.getImage("icons/checkmark.png"), true);
+                    Utils.Companion.showPopup(instance, "New update channel: " + channel.toString().toLowerCase(), "Channel unlocked!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, ImageManager.Companion.getImage("icons/checkmark.png"), true);
                 }
             }
         });

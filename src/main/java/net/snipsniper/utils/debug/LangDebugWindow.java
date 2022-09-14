@@ -24,7 +24,7 @@ public class LangDebugWindow extends JFrame {
         setTitle("Debug Language Window");
         setSize(512, 512);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setIconImage(ImageManager.getImage("icons/config.png"));
+        setIconImage(ImageManager.Companion.getImage("icons/config.png"));
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenSize.width;
         int height = screenSize.height;

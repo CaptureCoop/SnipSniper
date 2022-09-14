@@ -50,7 +50,7 @@ public class StampJPanel extends JPanel {
 
         if(background != null && backgroundEnabled) {
             if(!(background.getWidth() >= getWidth() && background.getHeight() >= getHeight()))
-                background = ImageManager.getCodePreview();
+                background = ImageManager.Companion.getCodePreview();
             int pos = margin / 2;
             int width = sizeX + margin / 2;
             int height = sizeY + margin / 2;

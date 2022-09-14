@@ -45,7 +45,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
         setSize(512, 512);
         setTitle(LangManager.Companion.getItem("config_label_config"));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setIconImage(ImageManager.getImage("icons/config.png"));
+        setIconImage(ImageManager.Companion.getImage("icons/config.png"));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -91,14 +91,14 @@ public class ConfigWindow extends JFrame implements CCIClosable {
         generalTab = new GeneralTab(this);
         generalTab.setup(config);
         tabPane.addTab("SnipSniper",  generateScrollPane(generalTab));
-        tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)));
+        tabPane.setIconAt(index, new ImageIcon(ImageManager.Companion.getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)));
         tabs[index] = generalTab;
         index++;
 
         editorTab = new EditorTab(this);
         editorTab.setup(config);
         tabPane.addTab("Editor",  generateScrollPane(editorTab));
-        tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/editor.png").getScaledInstance(iconSize,iconSize,0)));
+        tabPane.setIconAt(index, new ImageIcon(ImageManager.Companion.getImage("icons/editor.png").getScaledInstance(iconSize,iconSize,0)));
         tabs[index] = editorTab;
         if(page == PAGE.editorPanel)
             activeTabIndex = index;
@@ -107,7 +107,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
         viewerTab = new ViewerTab(this);
         viewerTab.setup(config);
         tabPane.addTab("Viewer", generateScrollPane(viewerTab));
-        tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/viewer.png").getScaledInstance(iconSize,iconSize,0)));
+        tabPane.setIconAt(index, new ImageIcon(ImageManager.Companion.getImage("icons/viewer.png").getScaledInstance(iconSize,iconSize,0)));
         tabs[index] = viewerTab;
         if(page == PAGE.viewerPanel)
             activeTabIndex = index;
@@ -116,7 +116,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
         globalTab = new GlobalTab(this);
         globalTab.setup(config);
         tabPane.addTab("Global", generateScrollPane(globalTab));
-        tabPane.setIconAt(index, new ImageIcon(ImageManager.getImage("icons/config.png").getScaledInstance(iconSize, iconSize, 0)));
+        tabPane.setIconAt(index, new ImageIcon(ImageManager.Companion.getImage("icons/config.png").getScaledInstance(iconSize, iconSize, 0)));
         tabs[index] = globalTab;
         if(page == PAGE.globalPanel)
             activeTabIndex = index;
@@ -152,7 +152,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
     }
 
     public void msgError(String msg) {
-        Utils.Companion.showPopup(this, msg, LangManager.Companion.getItem("config_sanitation_error"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
+        Utils.Companion.showPopup(this, msg, LangManager.Companion.getItem("config_sanitation_error"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, ImageManager.Companion.getImage("icons/redx.png"), true);
     }
 
     public void setupPaneDynamic(Config config, PAGE page) {
@@ -177,7 +177,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
                         break;
                     }
                 if(add)
-                    profiles.add(0, new DropdownItem("Standalone Viewer", file.getName(), ImageManager.getImage("icons/viewer.png")));
+                    profiles.add(0, new DropdownItem("Standalone Viewer", file.getName(), ImageManager.Companion.getImage("icons/viewer.png")));
             } else if(file.getName().contains("editor")) {
                 boolean add = true;
                 for(String str : blacklist)
@@ -186,7 +186,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
                         break;
                     }
                 if(add)
-                    profiles.add(0, new DropdownItem("Standalone Editor", file.getName(), ImageManager.getImage("icons/editor.png")));
+                    profiles.add(0, new DropdownItem("Standalone Editor", file.getName(), ImageManager.Companion.getImage("icons/editor.png")));
             } else if(file.getName().contains("profile")) {
                 int nr = getIDFromFilename(file.getName());
                 Image img = ImageUtils.getIconDynamically(new Config(file.getName(), "profile_defaults.cfg"));
@@ -361,7 +361,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
     }
 
     private int showDirtyWarning() {
-        return Utils.Companion.showPopup(this, "Unsaved changes, are you sure you want to cancel?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
+        return Utils.Companion.showPopup(this, "Unsaved changes, are you sure you want to cancel?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.Companion.getImage("icons/redx.png"), true);
     }
 
     public int getIDFromFilename(String name) {

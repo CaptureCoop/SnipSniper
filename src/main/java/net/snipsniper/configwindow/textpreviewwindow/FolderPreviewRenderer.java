@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class FolderPreviewRenderer extends JPanel {
     private TextPreviewWindow textPreviewWindow;
-    private final BufferedImage folderIcon = ImageManager.getImage("icons/folder.png");
+    private final BufferedImage folderIcon = ImageManager.Companion.getImage("icons/folder.png");
 
     public FolderPreviewRenderer(int minWidth, int minHeight) {
         Dimension min = new Dimension(minWidth, minHeight);

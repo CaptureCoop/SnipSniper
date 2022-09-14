@@ -15,9 +15,9 @@ public class UpdateButton extends IDJButton {
     final String STATE_WAITING = "waiting";
     final String STATE_DOUPDATE = "update";
     final String STATE_IDLE = "idle";
-    private final Image roundArrows = ImageManager.getImage("icons/roundarrows.png").getScaledInstance(16, 16, 0);
-    private final Image checkmark = ImageManager.getImage("icons/checkmark.png").getScaledInstance(16, 16, 0);
-    private final Image download = ImageManager.getImage("icons/download.png").getScaledInstance(16, 16, 0);
+    private final Image roundArrows = ImageManager.Companion.getImage("icons/roundarrows.png").getScaledInstance(16, 16, 0);
+    private final Image checkmark = ImageManager.Companion.getImage("icons/checkmark.png").getScaledInstance(16, 16, 0);
+    private final Image download = ImageManager.Companion.getImage("icons/download.png").getScaledInstance(16, 16, 0);
 
     public UpdateButton() {
         super("");

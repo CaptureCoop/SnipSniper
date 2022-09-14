@@ -29,7 +29,7 @@ public class Popup extends JFrame{
         setUndecorated(true);
         getRootPane().setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
         setLayout(new BoxLayout(getContentPane(),BoxLayout.PAGE_AXIS));
-        BufferedImage splash = ImageManager.getImage("splash.png");
+        BufferedImage splash = ImageManager.Companion.getImage("splash.png");
         JLabel title = new JLabel(new ImageIcon(splash.getScaledInstance((int)(splash.getWidth()/3F),(int)(splash.getHeight()/3F), Image.SCALE_SMOOTH)));
         title.setText(sniper.getTitle());
         title.setAlignmentX(JPanel.CENTER_ALIGNMENT);
@@ -38,33 +38,33 @@ public class Popup extends JFrame{
         add(title);
 
         ArrayList<PopupMenu> menus = new ArrayList<>();
-        add(new PopupMenuButton("Viewer", ImageManager.getImage("icons/viewer.png"), this, args -> new SCViewerWindow(null, config, false), menus));
-        add(new PopupMenuButton("Editor", ImageManager.getImage("icons/editor.png"), this, args -> new SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false), menus));
+        add(new PopupMenuButton("Viewer", ImageManager.Companion.getImage("icons/viewer.png"), this, args -> new SCViewerWindow(null, config, false), menus));
+        add(new PopupMenuButton("Editor", ImageManager.Companion.getImage("icons/editor.png"), this, args -> new SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false), menus));
         add(new JSeparator());
-        add(new PopupMenuButton(LangManager.Companion.getItem("menu_open_image_folder"), ImageManager.getImage("icons/folder.png"), this, args -> {
+        add(new PopupMenuButton(LangManager.Companion.getItem("menu_open_image_folder"), ImageManager.Companion.getImage("icons/folder.png"), this, args -> {
             String folderToOpen = sniper.getConfig().getString(ConfigHelper.PROFILE.lastSaveFolder);
             if(folderToOpen.isEmpty() || folderToOpen.equalsIgnoreCase("none") || !new File(folderToOpen).exists()) {
                 folderToOpen = sniper.getConfig().getString(ConfigHelper.PROFILE.pictureFolder);
             }
             FileUtils.openFolder(folderToOpen);
         }, menus));
-        add(new PopupMenuButton(LangManager.Companion.getItem("menu_config"), ImageManager.getImage("icons/config.png"), this, args -> SnipSniper.Companion.openConfigWindow(sniper), menus));
+        add(new PopupMenuButton(LangManager.Companion.getItem("menu_config"), ImageManager.Companion.getImage("icons/config.png"), this, args -> SnipSniper.Companion.openConfigWindow(sniper), menus));
 
         if (SnipSniper.Companion.isDebug()) {
-            net.snipsniper.systray.PopupMenu debugMenu = new PopupMenu("Debug", ImageManager.getImage("icons/debug.png"));
-            debugMenu.add(new PopupMenuButton("Console", ImageManager.getImage("icons/console.png"), this, args -> CCLogger.enableDebugConsole(true), menus));
-            debugMenu.add(new PopupMenuButton("Open log folder", ImageManager.getImage("icons/folder.png"), this, args -> FileUtils.openFolder(SnipSniper.Companion.getLogFolder()), menus));
-            debugMenu.add(new PopupMenuButton("Language test", ImageManager.getImage("icons/config.png"), this, args -> new LangDebugWindow(), menus));
+            net.snipsniper.systray.PopupMenu debugMenu = new PopupMenu("Debug", ImageManager.Companion.getImage("icons/debug.png"));
+            debugMenu.add(new PopupMenuButton("Console", ImageManager.Companion.getImage("icons/console.png"), this, args -> CCLogger.enableDebugConsole(true), menus));
+            debugMenu.add(new PopupMenuButton("Open log folder", ImageManager.Companion.getImage("icons/folder.png"), this, args -> FileUtils.openFolder(SnipSniper.Companion.getLogFolder()), menus));
+            debugMenu.add(new PopupMenuButton("Language test", ImageManager.Companion.getImage("icons/config.png"), this, args -> new LangDebugWindow(), menus));
             add(debugMenu);
             menus.add(debugMenu);
         }
 
-        add(new PopupMenuButton(LangManager.Companion.getItem("menu_about"), ImageManager.getImage("icons/about.png"), this, args -> new AboutWindow(sniper), menus));
+        add(new PopupMenuButton(LangManager.Companion.getItem("menu_about"), ImageManager.Companion.getImage("icons/about.png"), this, args -> new AboutWindow(sniper), menus));
         add(new JSeparator());
-        add(new PopupMenuButton("Restart", ImageManager.getImage("icons/redx.png"), this, args -> SnipSniper.Companion.restart(), menus));
-        add(new PopupMenuButton(LangManager.Companion.getItem("menu_quit"), ImageManager.getImage("icons/redx.png"), this, args -> SnipSniper.Companion.exit(false), menus));
+        add(new PopupMenuButton("Restart", ImageManager.Companion.getImage("icons/redx.png"), this, args -> SnipSniper.Companion.restart(), menus));
+        add(new PopupMenuButton(LangManager.Companion.getItem("menu_quit"), ImageManager.Companion.getImage("icons/redx.png"), this, args -> SnipSniper.Companion.exit(false), menus));
 
-        setIconImage(ImageManager.getImage("icons/snipsniper.png"));
+        setIconImage(ImageManager.Companion.getImage("icons/snipsniper.png"));
         addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent focusEvent) {

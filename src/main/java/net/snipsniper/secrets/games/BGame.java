@@ -57,7 +57,7 @@ public class BGame extends JFrame {
         resources.init();
         setTitle("Block Game");
         add(gamePanel);
-        setIconImage(ImageManager.getImage("icons/random/kiwi.png"));
+        setIconImage(ImageManager.Companion.getImage("icons/random/kiwi.png"));
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent keyEvent) {

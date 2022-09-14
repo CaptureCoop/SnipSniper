@@ -116,7 +116,7 @@ public class Sniper {
 
 	public void killCaptureWindow() {
 		if(captureWindow != null) {
-			if(SystemTray.isSupported() && getIconString().equals("none")) trayIcon.setImage(ImageManager.getImage("systray/icon" + profileID + ".png"));
+			if(SystemTray.isSupported() && getIconString().equals("none")) trayIcon.setImage(ImageManager.Companion.getImage("systray/icon" + profileID + ".png"));
 			SnipSniper.Companion.setIdle(true);
 			captureWindow.screenshot = null;
 			captureWindow.screenshotTinted = null;

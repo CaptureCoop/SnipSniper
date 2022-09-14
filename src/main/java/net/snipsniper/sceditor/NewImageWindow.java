@@ -24,7 +24,7 @@ public class NewImageWindow extends JFrame implements CCIClosable {
         instance = this;
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setLayout(new GridBagLayout());
-        setIconImage(ImageManager.getImage("icons/editor.png"));
+        setIconImage(ImageManager.Companion.getImage("icons/editor.png"));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
@@ -65,7 +65,7 @@ public class NewImageWindow extends JFrame implements CCIClosable {
             String widthString = widthTextField.getText();
             String heightString = heightTextField.getText();
             if(!CCMathUtils.isInteger(widthString) || !CCMathUtils.isInteger(heightString)) {
-                Utils.Companion.showPopup(instance, "Bad input! Not a valid number.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, ImageManager.getImage("icons/redx.png"), true);
+                Utils.Companion.showPopup(instance, "Bad input! Not a valid number.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, ImageManager.Companion.getImage("icons/redx.png"), true);
             } else {
                 int width = Integer.parseInt(widthString);
                 int height = Integer.parseInt(heightString);

@@ -165,9 +165,9 @@ public class GeneralTab extends JPanel implements ITab{
         tintColorButton.addActionListener(e -> {
             int x = configWindow.getLocation().x + getWidth() / 2;
             int y = configWindow.getLocation().y + getHeight() / 2;
-            BufferedImage image = ImageManager.getImage("preview/code_light.png");
+            BufferedImage image = ImageManager.Companion.getImage("preview/code_light.png");
             if(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.theme).equals("dark"))
-                image = ImageManager.getImage("preview/code_dark.png");
+                image = ImageManager.Companion.getImage("preview/code_dark.png");
             CCColorChooser chooser = new CCColorChooser(tintColor, "Tint Color", x, y, false, image, null);
             configWindow.addCWindow(chooser);
         });
@@ -252,7 +252,7 @@ public class GeneralTab extends JPanel implements ITab{
         JButton saveFormatButton = new JButton(Utils.Companion.constructFilename(currentSaveFormat, ""));
         saveFormatButton.addActionListener(e -> {
             SaveFormatPreviewRenderer saveFormatRenderer = new SaveFormatPreviewRenderer(512, 256);
-            TextPreviewWindow saveFormatPreview = new TextPreviewWindow("Save format", config.getString(ConfigHelper.PROFILE.saveFormat), saveFormatRenderer, ImageManager.getImage("icons/folder.png"), configWindow, "%hour%, %minute%, %second%, %day%, %month%, %year%, %random%");
+            TextPreviewWindow saveFormatPreview = new TextPreviewWindow("Save format", config.getString(ConfigHelper.PROFILE.saveFormat), saveFormatRenderer, ImageManager.Companion.getImage("icons/folder.png"), configWindow, "%hour%, %minute%, %second%, %day%, %month%, %year%, %random%");
             saveFormatRenderer.setTextPreviewWindow(saveFormatPreview);
             saveFormatPreview.setOnSave(args -> {
                 String text = saveFormatPreview.getText();
@@ -287,7 +287,7 @@ public class GeneralTab extends JPanel implements ITab{
                 File saveLocationCheck = new File(saveLocationFinal);
                 if(!saveLocationCheck.exists()) {
                     cleanDirtyFunction[0].run(ConfigSaveButtonState.NO_SAVE);
-                    int dialogResult = Utils.Companion.showPopup(configWindow, LangManager.Companion.getItem("config_sanitation_directory_notexist") + " Create?", LangManager.Companion.getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/folder.png"), true);
+                    int dialogResult = Utils.Companion.showPopup(configWindow, LangManager.Companion.getItem("config_sanitation_directory_notexist") + " Create?", LangManager.Companion.getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.Companion.getImage("icons/folder.png"), true);
                     if(dialogResult == JOptionPane.YES_OPTION) {
                         boolean allow = new File(saveLocationFinal).mkdirs();
 
@@ -321,7 +321,7 @@ public class GeneralTab extends JPanel implements ITab{
         JButton customSaveButton = new JButton(CCStringUtils.formatDateTimeString(config.getString(ConfigHelper.PROFILE.saveFolderCustom)));
         customSaveButton.addActionListener(e -> {
             FolderPreviewRenderer renderer = new FolderPreviewRenderer(512, 512);
-            TextPreviewWindow preview = new TextPreviewWindow("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom), renderer, ImageManager.getImage("icons/folder.png"), configWindow, "%day% = 1, %month% = 8, %year% = 2021");
+            TextPreviewWindow preview = new TextPreviewWindow("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom), renderer, ImageManager.Companion.getImage("icons/folder.png"), configWindow, "%day% = 1, %month% = 8, %year% = 2021");
             configWindow.addCWindow(preview);
             renderer.setTextPreviewWindow(preview);
             preview.setOnSave(args -> {

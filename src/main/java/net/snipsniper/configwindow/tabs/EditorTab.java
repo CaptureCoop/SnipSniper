@@ -91,7 +91,7 @@ public class EditorTab extends JPanel implements ITab{
         JPanel row3_stampConfig = new JPanel(new GridBagLayout());
         StampJPanel row3_stampPreview = new StampJPanel();
         row3_stampPreview.setMargin(10);
-        row3_stampPreview.setBackground(ImageManager.getCodePreview());
+        row3_stampPreview.setBackground(ImageManager.Companion.getCodePreview());
         IStamp stamp = StampType.getByIndex(0).getIStamp(config, null);
         row3_stampPreview.setStamp(stamp);
 

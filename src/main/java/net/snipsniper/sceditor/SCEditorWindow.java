@@ -92,7 +92,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
                 imgG.fillRect(0, 0, image.getWidth(), image.getHeight());
                 imgG.dispose();
             } else {
-                image = ImageUtils.getDragPasteImage(ImageManager.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
+                image = ImageUtils.getDragPasteImage(ImageManager.Companion.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
                 defaultImage = image;
             }
         }
@@ -157,7 +157,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
 
         listener.resetHistory();
 
-        setIconImage(ImageManager.getImage("icons/editor.png"));
+        setIconImage(ImageManager.Companion.getImage("icons/editor.png"));
 
         setFocusTraversalKeysEnabled(false);
         setVisible(true);
@@ -274,7 +274,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
 
     public void addEZModeStampButton(String title, String iconName, String theme, int stampIndex) {
         ezModeStampPanelTabs.addTab(title, null);
-        BufferedImage ezIconMarker = ImageManager.getImage(CCStringUtils.format("ui/editor/%c/%c.png", theme, iconName));
+        BufferedImage ezIconMarker = ImageManager.Companion.getImage(CCStringUtils.format("ui/editor/%c/%c.png", theme, iconName));
         ezModeStampPanelTabs.setTabComponentAt(stampIndex, new EzModeStampTab(ezIconMarker, 32, this, stampIndex));
         ezModeStampPanelTabs.setIconAt(stampIndex, new ImageIcon(ezIconMarker));
     }

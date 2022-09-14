@@ -39,7 +39,7 @@ public class IconWindow extends JFrame implements CCIClosable {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(512, 256);
         setTitle(title);
-        setIconImage(ImageManager.getImage("icons/folder.png"));
+        setIconImage(ImageManager.Companion.getImage("icons/folder.png"));
         setLocation(parent.getLocation().x + parent.getWidth() / 2 - getWidth() / 2, parent.getLocation().y + parent.getHeight() / 2 - getHeight() / 2);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -97,7 +97,7 @@ public class IconWindow extends JFrame implements CCIClosable {
         gbc.gridx = 0;
         final int MAX_X = 4;
         ArrayList<SSFile> list = new ArrayList<>();
-        for(String file : ImageManager.getListAsString()) {
+        for(String file : ImageManager.Companion.getListAsString()) {
             if (type == ICON_TYPE.GENERAL && file.contains("icons") && !file.contains("icons/random/"))
                 list.add(new SSFile(file, SSFile.LOCATION.JAR));
             if (type == ICON_TYPE.RANDOM && file.contains("icons/random/"))
@@ -122,9 +122,9 @@ public class IconWindow extends JFrame implements CCIClosable {
             switch(file.getLocation()) {
                 case JAR:
                     if(file.getPath().endsWith(".png"))
-                        button.setIcon(new ImageIcon(ImageManager.getImage(file.getPath()).getScaledInstance(size, size, 0)));
+                        button.setIcon(new ImageIcon(ImageManager.Companion.getImage(file.getPath()).getScaledInstance(size, size, 0)));
                     else if(file.getPath().endsWith(".gif"))
-                        button.setIcon(new ImageIcon(ImageManager.getAnimatedImage(file.getPath()).getScaledInstance(size, size, 0)));
+                        button.setIcon(new ImageIcon(ImageManager.Companion.getAnimatedImage(file.getPath()).getScaledInstance(size, size, 0)));
                     break;
                 case LOCAL:
                     button.setIcon(new ImageIcon(ImageUtils.getImageFromDisk(SnipSniper.Companion.getImgFolder() + "/" + file.getPath()).getScaledInstance(size, size, Image.SCALE_SMOOTH)));

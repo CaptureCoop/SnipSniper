@@ -52,7 +52,7 @@ public class InfoButton extends JButton {
         g.setColor(new Color(0, 0, 0, 0));
         g.drawRect(0, 0, getWidth(), getHeight());
         int iconSize = 16;
-        g.drawImage(ImageManager.getImage("icons/questionmark.png").getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH), getWidth() /2 - iconSize / 2, getHeight() / 2 - iconSize / 2, iconSize, iconSize, this);
+        g.drawImage(ImageManager.Companion.getImage("icons/questionmark.png").getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH), getWidth() /2 - iconSize / 2, getHeight() / 2 - iconSize / 2, iconSize, iconSize, this);
     }
 
     public void closeWindow() {

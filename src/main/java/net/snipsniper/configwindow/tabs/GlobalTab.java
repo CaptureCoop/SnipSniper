@@ -52,7 +52,7 @@ public class GlobalTab extends JPanel implements ITab{
 
         JButton importConfigs = new JButton("Import Configs");
         importConfigs.addActionListener(e -> {
-            int dialogResult = Utils.Companion.showPopup(configWindow, "This will overwrite all current configs. Do you want to continue?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.getImage("icons/questionmark.png"), true);
+            int dialogResult = Utils.Companion.showPopup(configWindow, "This will overwrite all current configs. Do you want to continue?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, ImageManager.Companion.getImage("icons/questionmark.png"), true);
             if(dialogResult == JOptionPane.NO_OPTION){
                 return;
             }
