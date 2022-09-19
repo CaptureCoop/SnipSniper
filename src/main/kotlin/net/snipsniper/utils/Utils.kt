@@ -68,8 +68,9 @@ class Utils {
         private fun getTextFromWebsite(url: URL): String? {
             val result = StringBuilder()
             try {
-                val reader = BufferedReader(InputStreamReader(url.openStream()))
-                reader.lineSequence().forEach { result.append(it) }
+                BufferedReader(InputStreamReader(url.openStream())).also { reader ->
+                    reader.lineSequence().forEach { result.append(it) }
+                }
             } catch(e: Exception) {
                 CCLogger.log("Error requesting content from website (${url}): ${e.message}", CCLogLevel.ERROR)
                 return null
@@ -83,9 +84,9 @@ class Utils {
         }
 
         fun getRenderingHints(): RenderingHints {
-            val hints = RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-            hints[RenderingHints.KEY_RENDERING] = RenderingHints.VALUE_RENDER_QUALITY
-            return hints
+            return RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON).also {
+                it[RenderingHints.KEY_RENDERING] = RenderingHints.VALUE_RENDER_QUALITY
+            }
         }
 
         fun getDisabledColor(): Color = Color(128, 128, 128, 100)
@@ -120,12 +121,12 @@ class Utils {
         fun containsRectangleFully(rect: Rectangle, contains: Rectangle): Boolean = (contains.x + contains.width) < (rect.x + rect.width) && (contains.x) > (rect.x) && (contains.y) > (rect.y) && (contains.y + contains.height) < (rect.y + rect.height)
 
         fun fixRectangle(rect: Rectangle): Rectangle {
-            val result = Rectangle()
-            result.x = min(rect.x, rect.width)
-            result.y = min(rect.y, rect.height)
-            result.width = max(rect.x, rect.width)
-            result.height = max(rect.y, rect.height)
-            return result
+            return Rectangle().also {
+                it.x = min(rect.x, rect.width)
+                it.y = min(rect.y, rect.height)
+                it.width = max(rect.x, rect.width)
+                it.height = max(rect.y, rect.height)
+            }
         }
 
         //TODO: This should probably have a better name, since this just prepares screenshots no?
@@ -161,10 +162,10 @@ class Utils {
             val langItems = ArrayList<DropdownItem>()
             var selectedItem: DropdownItem? = null
             LangManager.languages.forEach {
-                val translated = LangManager.getItem(it, "lang_$it")
-                val item = DropdownItem(translated, it, LangManager.getIcon(it))
-                langItems.add(item)
-                if(it == selectedLanguage) selectedItem = item
+                DropdownItem(LangManager.getItem(it, "lang_$it"), it, LangManager.getIcon(it)).also { item ->
+                    langItems.add(item)
+                    if(it == selectedLanguage) selectedItem = item
+                }
             }
             return JComboBox(langItems.toTypedArray()).also {
                 it.renderer = DropdownItemRenderer(langItems.toTypedArray())
