@@ -163,7 +163,7 @@ class Utils {
             val langItems = ArrayList<DropdownItem>()
             var selectedItem: DropdownItem? = null
             LangManager.languages.forEach {
-                DropdownItem(LangManager.getItem(it, "lang_$it"), it, LangManager.getIcon(it)).also { item ->
+                DropdownItem(LangManager.getItem(it, "lang_$it"), it, LangManager.getFlag(it)).also { item ->
                     langItems.add(item)
                     if(it == selectedLanguage) selectedItem = item
                 }
