@@ -7,6 +7,7 @@ import org.json.JSONArray
 import java.awt.Color
 import java.awt.Image
 import java.awt.image.BufferedImage
+import java.net.URL
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 
@@ -26,16 +27,13 @@ class ImageManager {
             val filenameListTemp = ArrayList<String>()
             for(i in 0 until list.length()) {
                 val str = list.getString(i)
-                val url = SnipSniper::class.java.getResource("/net/snipsniper/resources/img/$str")
-                if(url == null) {
-                    CCLogger.log("Could not load image $str!")
-                    continue
-                }
+                val url = SnipSniper::class.java.getResource("/net/snipsniper/resources/img/$str") ?: CCLogger.log("Could not load image $str!")
+                if(url !is URL) continue
+
                 filenameListTemp.add(str)
-                if(!str.endsWith(".gif")) {
-                    images[str] = ImageIO.read(url)
-                } else {
-                    animatedImages[str] = ImageIcon(url).image
+                when(str.endsWith(".gif")) {
+                    true -> animatedImages[str] = ImageIcon(url).image
+                    false -> images[str] = ImageIO.read(url)
                 }
             }
             filenameList = filenameListTemp.toTypedArray()
