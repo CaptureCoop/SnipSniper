@@ -188,6 +188,7 @@ class Utils {
         }
 
         fun getGraphicsConfiguration(x: Int, y: Int): GraphicsConfiguration {
+            //TODO: Look for better way of getting this, also we might not need to dispose af ter getting graphicsConfiguration
             JFrame().also { jf ->
                 jf.isUndecorated = true
                 jf.location = Point(x, y)
