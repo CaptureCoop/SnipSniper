@@ -17,6 +17,7 @@ import java.lang.StringBuilder
 import java.net.URL
 import javax.swing.ImageIcon
 import javax.swing.JComboBox
+import javax.swing.JFrame
 import javax.swing.JOptionPane
 import kotlin.collections.ArrayList
 import kotlin.math.max
@@ -183,6 +184,15 @@ class Utils {
             ShellLink.createLink(originalLocation).also {
                 it.iconLocation = icon
                 it.saveTo(linkLocation)
+            }
+        }
+
+        fun getGraphicsConfiguration(x: Int, y: Int): GraphicsConfiguration {
+            JFrame().also { jf ->
+                jf.isUndecorated = true
+                jf.location = Point(x, y)
+                jf.isVisible = true
+                return jf.graphicsConfiguration.also { jf.dispose() }
             }
         }
     }

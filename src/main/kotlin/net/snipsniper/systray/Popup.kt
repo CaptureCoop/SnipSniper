@@ -11,13 +11,9 @@ import net.snipsniper.utils.FileUtils
 import net.snipsniper.utils.Utils
 import net.snipsniper.utils.debug.LangDebugWindow
 import org.capturecoop.cclogger.CCLogger
-import java.awt.Color
-import java.awt.Image
-import java.awt.Point
-import java.awt.Toolkit
+import java.awt.*
 import java.awt.event.FocusAdapter
 import java.awt.event.FocusEvent
-import java.io.File
 import javax.swing.*
 
 class Popup(private val sniper: Sniper): JFrame() {
@@ -28,33 +24,38 @@ class Popup(private val sniper: Sniper): JFrame() {
         isUndecorated = true
         rootPane.border = BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK)
         layout = BoxLayout(contentPane, BoxLayout.PAGE_AXIS)
-        val splash = ImageManager.getImage("splash.png")
-        val title = JLabel(ImageIcon(splash.getScaledInstance((splash.width / 3F).toInt(), (splash.height / 3F).toInt(), Image.SCALE_SMOOTH)))
-        title.text = sniper.getTitle()
-        title.alignmentX = JPanel.CENTER_ALIGNMENT
-        title.verticalTextPosition = JLabel.BOTTOM
-        title.horizontalTextPosition = JLabel.CENTER
-        add(title)
+        ImageManager.getImage("splash.png").also { splash ->
+            val w = (splash.width / 3F).toInt()
+            val h = (splash.height / 3F).toInt()
+            JLabel(ImageIcon(splash.getScaledInstance(w, h, Image.SCALE_SMOOTH))).also {
+                it.text = sniper.getTitle()
+                it.alignmentX = JPanel.CENTER_ALIGNMENT
+                it.verticalTextPosition = JLabel.BOTTOM
+                it.horizontalTextPosition = JLabel.CENTER
+                add(it)
+            }
+        }
 
         val menus = ArrayList<PopupMenu>()
         add(PopupMenuButton("Viewer", "icons/viewer.png", this, { SCViewerWindow(null, config, false) }, menus))
         add(PopupMenuButton("Editor", "icons/editor.png", this, { SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false) }, menus))
         add(JSeparator())
         add(PopupMenuButton(LangManager.getItem("menu_open_image_folder"), "icons/folder.png", this, {
-            var folderToOpen = sniper.config.getString(ConfigHelper.PROFILE.lastSaveFolder)
-            if(folderToOpen.isEmpty() || folderToOpen == "none" || !File(folderToOpen).exists())
-                folderToOpen = sniper.config.getString(ConfigHelper.PROFILE.pictureFolder)
-            FileUtils.openFolder(folderToOpen)
+            config.getString(ConfigHelper.PROFILE.lastSaveFolder).also { lsf ->
+                if(lsf.isEmpty() || lsf == "none" || !FileUtils.exists(lsf))
+                    FileUtils.openFolder(config.getString(ConfigHelper.PROFILE.pictureFolder))
+                else FileUtils.openFolder(lsf)
+            }
         }, menus))
         add(PopupMenuButton(LangManager.getItem("menu_config"), "icons/config.png", this, { SnipSniper.openConfigWindow(sniper) }, menus))
 
         if(SnipSniper.isDebug()) {
-            val debugMenu = PopupMenu("Debug", ImageManager.getImage("icons/debug.png"))
-            debugMenu.add(PopupMenuButton("Console", "icons/console.png", this, { CCLogger.enableDebugConsole(true) }, menus))
-            debugMenu.add(PopupMenuButton("Open log folder", "icons/folder.png", this, { FileUtils.openFolder(SnipSniper.logFolder) }, menus))
-            debugMenu.add(PopupMenuButton("Language test", "icons/config.png", this, { LangDebugWindow() }, menus))
-            add(debugMenu)
-            menus.add(debugMenu)
+            PopupMenu("Debug", ImageManager.getImage("icons/debug.png")).also { pm ->
+                pm.add(PopupMenuButton("Console", "icons/console.png", this, { CCLogger.enableDebugConsole(true) }, menus))
+                pm.add(PopupMenuButton("Open log folder", "icons/folder.png", this, { FileUtils.openFolder(SnipSniper.logFolder) }, menus))
+                pm.add(PopupMenuButton("Language test", "icons/config.png", this, { LangDebugWindow() }, menus))
+                add(pm).also { menus.add(pm) }
+            }
         }
 
         add(PopupMenuButton(LangManager.getItem("menu_about"), "icons/about.png", this, { AboutWindow(sniper) }, menus))
@@ -76,13 +77,7 @@ class Popup(private val sniper: Sniper): JFrame() {
         pack()
 
         //We do this in order to know which monitor the mouse position is on, before actually placing the popup jframe
-        val testGC = JFrame()
-        testGC.isUndecorated = true
-        testGC.location = Point(x, y)
-        testGC.isVisible = true
-        val gc = testGC.graphicsConfiguration
-        testGC.dispose()
-
+        val gc = Utils.getGraphicsConfiguration(x, y)
         val insets = Toolkit.getDefaultToolkit().getScreenInsets(gc)
         val screenRect = gc.bounds
 
