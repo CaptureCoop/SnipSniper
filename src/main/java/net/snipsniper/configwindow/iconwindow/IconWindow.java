@@ -97,7 +97,7 @@ public class IconWindow extends JFrame implements CCIClosable {
         gbc.gridx = 0;
         final int MAX_X = 4;
         ArrayList<SSFile> list = new ArrayList<>();
-        for(String file : ImageManager.Companion.getListAsString()) {
+        for(String file : ImageManager.Companion.getFilenameList()) {
             if (type == ICON_TYPE.GENERAL && file.contains("icons") && !file.contains("icons/random/"))
                 list.add(new SSFile(file, SSFile.LOCATION.JAR));
             if (type == ICON_TYPE.RANDOM && file.contains("icons/random/"))

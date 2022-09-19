@@ -10,15 +10,15 @@ import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 
-//TODO: Draw missing texture in code so that we can always return non null images
 class ImageManager {
     companion object {
         private val images = HashMap<String, BufferedImage>()
         private val animatedImages = HashMap<String, Image>()
-        private lateinit var filenameList: Array<String>
-        private val missingImgSize = 16
+        lateinit var filenameList: Array<String>
+            private set
+        private const val missingImgSize = 16
         private val missingImgColor = Color(255, 1, 254)
-        private val missingImg = getErrorImage()
+        private val missingImg = getMissingImg()
 
         fun loadResources() {
             CCLogger.log("Loading images...")
@@ -41,8 +41,6 @@ class ImageManager {
             filenameList = filenameListTemp.toTypedArray()
             CCLogger.log("Done!")
         }
-
-        fun getListAsString(): Array<String> = filenameList
 
         fun getImage(path: String): BufferedImage = images[path] ?: missingImg.also { CCLogger.log("Could not find image under path $path") }
         fun getAnimatedImage(path: String): Image = animatedImages[path] ?: missingImg.also { CCLogger.log("Could not find image under path $path") }
