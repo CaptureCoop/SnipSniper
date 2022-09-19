@@ -14,6 +14,7 @@ class LangManager {
         private const val DEFAULT_LANGUAGE = "en"
         private const val MISSING_STRING_CHAR = "~"
         private const val FLAG_SIZE = 16
+        private val flagCache = HashMap<String, BufferedImage>()
         private val langMap = HashMap<String, JSONObject>()
         val languages = ArrayList<String>()
 
@@ -46,12 +47,13 @@ class LangManager {
             val file = langMap[language]?.getString("icon")
             val flag = ImageManager.getImage("flags/$file.png")
 
-            return BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB).also { img ->
+            return flagCache[language] ?: BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB).also { img ->
                 img.createGraphics().also { g ->
                     fun sz(s: Int): Int = FLAG_SIZE / 2 - s / 2
                     g.drawImage(flag, sz(flag.width), sz(flag.height), null)
                     g.dispose()
                 }
+                flagCache[language] = img
             }
         }
 
