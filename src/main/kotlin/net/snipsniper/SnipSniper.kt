@@ -88,12 +88,13 @@ class SnipSniper {
 
             version = Version(digits, releaseType, platformType, buildDate, githash)
 
-            val cmdline = CommandLineHelper()
-            cmdline.handle(args)
-            if (platformType == PlatformType.STEAM || platformType == PlatformType.WIN_INSTALLED)
-                setSaveLocationToDocuments()
-            else
-                setSaveLocationToJar()
+            //This is done here, not further below so that if we run a command like -version we dont save anything to disk!
+            val cmdline = CommandLineHelper().also { it.handle(args) }
+
+            when(platformType) {
+                PlatformType.STEAM, PlatformType.WIN_INSTALLED -> setSaveLocationToDocuments()
+                else -> setSaveLocationToJar()
+            }
 
             if (!isDemo) {
                 if (!FileUtils.mkdirs(configFolder, logFolder, imgFolder)) {
@@ -159,10 +160,11 @@ class SnipSniper {
             CCLogger.log("= SnipSniper is running in debug mode! =", CCLogLevel.DEBUG)
             CCLogger.log("========================================", CCLogLevel.DEBUG)
 
-            val language = config.getString(ConfigHelper.MAIN.language)
-            if (!LangManager.languages.contains(language)) {
-                CCLogger.log("Language <$language> not found. Available languages: ${LangManager.languages}", CCLogLevel.ERROR)
-                exit(false)
+            config.getString(ConfigHelper.MAIN.language).also {
+                if (!LangManager.languages.contains(it)) {
+                    CCLogger.log("Language <$it> not found. Available languages: ${LangManager.languages}", CCLogLevel.ERROR)
+                    exit(false)
+                }
             }
 
             config.save()
