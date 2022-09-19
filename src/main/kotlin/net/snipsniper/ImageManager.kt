@@ -16,6 +16,8 @@ class ImageManager {
         private val images = HashMap<String, BufferedImage>()
         private val animatedImages = HashMap<String, Image>()
         private lateinit var filenameList: Array<String>
+        private val missingImgSize = 16
+        private val missingImgColor = Color(255, 1, 254)
         private val missingImg = getErrorImage()
 
         fun loadResources() {
@@ -54,15 +56,14 @@ class ImageManager {
             }
         }
 
-        private fun getErrorImage(): BufferedImage {
-            val image = BufferedImage(8, 8, BufferedImage.TYPE_INT_RGB)
+        private fun getMissingImg(): BufferedImage {
+            val image = BufferedImage(missingImgSize, missingImgSize, BufferedImage.TYPE_INT_RGB)
             val g = image.createGraphics()
             var printBlack = true
-            val pinkColor = Color(255, 1, 254)
-            for(y in 0 until 8) {
-                for(x in 0 until 8) {
+            for(y in 0 until missingImgSize) {
+                for(x in 0 until missingImgSize) {
                     printBlack = !printBlack
-                    g.color = if(printBlack) Color.BLACK else pinkColor
+                    g.color = if(printBlack) Color.BLACK else missingImgColor
                     g.drawLine(x, y, x, y)
                 }
                 printBlack = !printBlack
