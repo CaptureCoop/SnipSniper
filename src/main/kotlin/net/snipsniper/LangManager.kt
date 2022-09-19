@@ -22,10 +22,10 @@ class LangManager {
             CCLogger.log("Loading language files...")
             JSONObject(FileUtils.loadFileFromJar("lang/languages.json")).getJSONArray("languages").also { arr ->
                 for (i in 0 until arr.length()) {
-                    val content = FileUtils.loadFileFromJar("lang/${arr.getString(i)}.json")
-                    val langID = arr.getString(i)
-                    langMap[langID] = JSONObject(content)
-                    languages.add(langID)
+                    arr.getString(i).also {
+                        langMap[it] = JSONObject(FileUtils.loadFileFromJar("lang/${arr.getString(i)}.json"))
+                        languages.add(it)
+                    }
                 }
             }
             CCLogger.log("Done!")
