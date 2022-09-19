@@ -33,14 +33,11 @@ class LangManager {
         fun getJSON(language: String): JSONObject? = langMap[language]
 
         fun getItem(language: String, key: String): String {
-            langMap[Utils.replaceVars(language)]?.getJSONObject("strings").also {
-                if (it != null && it.has(key)) return it.getString(key)
+            val preferred = langMap[Utils.replaceVars(language)]?.getJSONObject("strings")?.getString(key)
+            val default = langMap[DEFAULT_LANGUAGE]?.getJSONObject("strings")?.getString(key)
+            return preferred ?: default ?: "LM<$key>".also {
+                CCLogger.log("Could not find key <$key> in language file <$language>", CCLogLevel.ERROR)
             }
-            langMap[DEFAULT_LANGUAGE]?.getJSONObject("strings").also {
-                if (it != null && it.has(key)) return it.getString(key)
-            }
-            CCLogger.log("Could not find key <$key> in language file <$language>", CCLogLevel.ERROR)
-            return "LM<$key>"
         }
 
         fun getItem(key: String): String = getItem(SnipSniper.config.getString(ConfigHelper.MAIN.language), key)
