@@ -56,9 +56,10 @@ class Utils {
         }
 
         fun replaceVars(string: String): String {
-            val userProfile = if(SystemUtils.IS_OS_WINDOWS) System.getenv("USERPROFILE") else System.getProperty("user.home")
-            val result = string.replace("%username%", System.getProperty("user.name"))
-            return result.replace("%userprofile%", userProfile)
+            var result = string.replace("%username%", System.getProperty("user.name"))
+            result = result.replace("%userprofile%", System.getProperty("user.home"))
+            result = result.replace("%userlang%", System.getProperty("user.language"))
+            return result
         }
 
         fun getShortGitHash(longHash: String): String = longHash.substring(0, 7)

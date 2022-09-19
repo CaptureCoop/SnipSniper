@@ -2,6 +2,7 @@ package net.snipsniper
 
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.FileUtils
+import net.snipsniper.utils.Utils
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
 import org.json.JSONObject
@@ -30,7 +31,7 @@ class LangManager {
         fun getJSON(language: String): JSONObject? = langMap[language]
 
         fun getItem(language: String, key: String): String {
-            val strings = langMap[language]?.getJSONObject("strings")
+            val strings = langMap[Utils.replaceVars(language)]?.getJSONObject("strings")
             val stringsDefault = langMap[DEFAULT_LANGUAGE]?.getJSONObject("strings")
             if (strings != null && strings.has(key))
                 return strings.getString(key)
