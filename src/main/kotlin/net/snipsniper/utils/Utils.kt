@@ -3,7 +3,6 @@ package net.snipsniper.utils
 import com.erigir.mslinks.ShellLink
 import net.snipsniper.LangManager
 import net.snipsniper.SnipSniper
-import org.apache.commons.lang3.SystemUtils
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
 import org.capturecoop.ccutils.utils.CCStringUtils
@@ -64,14 +63,9 @@ class Utils {
 
         fun getShortGitHash(longHash: String): String = longHash.substring(0, 7)
 
-        fun getContrastColor(color: Color): Color {
-            val y = (299f * color.red + 587 * color.green + 114 * color.blue) / 1000
-            return if(y >= 128) Color.black else Color.white
-        }
-
         fun getTextFromWebsite(url: String): String? = getTextFromWebsite(URL(url))
 
-        fun getTextFromWebsite(url: URL): String? {
+        private fun getTextFromWebsite(url: URL): String? {
             val result = StringBuilder()
             try {
                 val reader = BufferedReader(InputStreamReader(url.openStream()))
@@ -97,7 +91,7 @@ class Utils {
         fun getDisabledColor(): Color = Color(128, 128, 128, 100)
 
         //https://stackoverflow.com/a/10245583
-        fun getScaledDimension(toFit: Dimension, boundary: Dimension): Dimension {
+        private fun getScaledDimension(toFit: Dimension, boundary: Dimension): Dimension {
             val originalWidth = toFit.width
             val originalHeight = toFit.height
             val boundWidth = boundary.width
@@ -119,12 +113,8 @@ class Utils {
 
         fun getScaledDimension(image: BufferedImage, boundary: Dimension): Dimension = getScaledDimension(Dimension(image.width, image.height), boundary)
 
-        fun rgb2hex(color: Color): String = String.format("#%02x%02x%02x", color.red, color.green, color.blue)
-        fun hex2rgb(hex: String): Color = Color(Integer.valueOf(hex.substring(1, 3), 16), Integer.valueOf(hex.substring(3, 5), 16), Integer.valueOf(hex.substring(5, 7), 16))
-
         fun executeProcess(waitTillDone: Boolean, vararg args: String) {
-            val process = ProcessBuilder(*args).start()
-            if(waitTillDone) process.waitFor()
+            ProcessBuilder(*args).start().also { if(waitTillDone) it.waitFor() }
         }
 
         fun containsRectangleFully(rect: Rectangle, contains: Rectangle): Boolean = (contains.x + contains.width) < (rect.x + rect.width) && (contains.x) > (rect.x) && (contains.y) > (rect.y) && (contains.y + contains.height) < (rect.y + rect.height)
@@ -147,20 +137,14 @@ class Utils {
 
         //https://stackoverflow.com/questions/4159802/how-can-i-restart-a-java-application
         fun restartApplication(vararg args: String): Boolean {
+            //TODO: Check if this actually uses the supplied jdk if we use a differnet one
             val javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java"
             //TODO: better way to locate jar? Also put inside SnipSniper.kt
             val currentJar = File((SnipSniper::class as Any).javaClass.protectionDomain.codeSource.location.toURI())
-
             if(!currentJar.name.endsWith(".jar")) return false
 
-            val command = ArrayList<String>()
-            command.add(javaBin)
-            command.add("-jar")
-            command.add(currentJar.path)
-            command.add("-r")
-            command.addAll(args)
-
-            executeProcess(false, *command.toTypedArray())
+            val command = arrayOf(javaBin, "-jar", currentJar.path, "-r", *args)
+            executeProcess(false, *command)
             SnipSniper.exit(true)
             return true
         }
@@ -168,15 +152,13 @@ class Utils {
         fun showPopup(parent: Component, message: String, title: String, optionType: Int, messageType: Int, icon: BufferedImage, blockScreenshot: Boolean): Int {
             //TODO: Is this correct? This is how it was in the java file...
             if(blockScreenshot) SnipSniper.isIdle = false
-            val result = JOptionPane.showConfirmDialog(parent, message, title, optionType, messageType, ImageIcon(icon.getScaledInstance(32, 32, 0)));
+            val result = JOptionPane.showConfirmDialog(parent, message, title, optionType, messageType, ImageIcon(icon.getScaledInstance(32, 32, 0)))
             if(blockScreenshot) SnipSniper.isIdle = true
             return result
         }
 
         fun getLanguageDropdown(selectedLanguage: String, onSelect: IFunction): JComboBox<DropdownItem> {
             val langItems = ArrayList<DropdownItem>()
-            //TODO: Does this do anything?
-            LangManager.languages.sort()
             var selectedItem: DropdownItem? = null
             LangManager.languages.forEach {
                 val translated = LangManager.getItem(it, "lang_$it")
@@ -184,22 +166,23 @@ class Utils {
                 langItems.add(item)
                 if(it == selectedLanguage) selectedItem = item
             }
-            val dropdown = JComboBox(langItems.toTypedArray())
-            dropdown.renderer = DropdownItemRenderer(langItems.toTypedArray())
-            dropdown.selectedItem = selectedItem
-            dropdown.addItemListener {
-                if(it.stateChange == ItemEvent.SELECTED) {
-                    val item = dropdown.selectedItem as DropdownItem
-                    onSelect.run(item.id)
+            return JComboBox(langItems.toTypedArray()).also {
+                it.renderer = DropdownItemRenderer(langItems.toTypedArray())
+                it.selectedItem = selectedItem
+                it.addItemListener { event ->
+                    if(event.stateChange == ItemEvent.SELECTED) {
+                        val item = it.selectedItem as DropdownItem
+                        onSelect.run(item.id)
+                    }
                 }
             }
-            return dropdown
         }
 
         fun createShellLink(linkLocation: String, originalLocation: String, icon: String) {
-            val sl = ShellLink.createLink(originalLocation)
-            sl.iconLocation = icon
-            sl.saveTo(linkLocation)
+            ShellLink.createLink(originalLocation).also {
+                it.iconLocation = icon
+                it.saveTo(linkLocation)
+            }
         }
     }
 
