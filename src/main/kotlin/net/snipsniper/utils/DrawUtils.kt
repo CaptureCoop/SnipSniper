@@ -19,8 +19,9 @@ class DrawUtils {
             var fontSize = height
             do {
                 fontSize--
-                val font = Font("Arial", Font.PLAIN, fontSize)
-                rect = getStringBoundsRectangle2D(g, title, font)
+                Font("Arial", Font.PLAIN, fontSize).also {
+                    rect = getStringBoundsRectangle2D(g, title, it)
+                }
             } while (rect.width >= width || rect.height >= height)
             return fontSize
         }
