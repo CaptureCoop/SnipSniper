@@ -1,6 +1,5 @@
 package net.snipsniper.systray
 
-import net.snipsniper.ImageManager
 import net.snipsniper.utils.IFunction
 import net.snipsniper.utils.scaled
 import net.snipsniper.utils.toImageIcon
@@ -13,8 +12,6 @@ import javax.swing.JMenuItem
 
 class PopupMenuButton(title: String, icon: BufferedImage, popup: JFrame, private var onClick: IFunction?, closeWhenClicked: ArrayList<PopupMenu>?): JMenuItem() {
     private var isMenuChild = false
-
-    constructor(title: String, icon: String, popup: JFrame, onClick: IFunction?, closeWhenClicked: ArrayList<PopupMenu>?) : this(title, ImageManager.getImage(icon), popup, onClick, closeWhenClicked)
 
     init {
         text = title

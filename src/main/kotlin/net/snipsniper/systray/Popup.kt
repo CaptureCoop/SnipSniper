@@ -35,33 +35,33 @@ class Popup(private val sniper: Sniper): JFrame() {
         }
 
         val menus = ArrayList<PopupMenu>()
-        add(PopupMenuButton("Viewer", "icons/viewer.png", this, { SCViewerWindow(null, config, false) }, menus))
-        add(PopupMenuButton("Editor", "icons/editor.png", this, { SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false) }, menus))
+        add(PopupMenuButton("Viewer", "icons/viewer.png".getImage(), this, { SCViewerWindow(null, config, false) }, menus))
+        add(PopupMenuButton("Editor", "icons/editor.png".getImage(), this, { SCEditorWindow(null, -1, -1, "SnipSniper Editor", config, true, null, false, false) }, menus))
         add(JSeparator())
-        add(PopupMenuButton(LangManager.getItem("menu_open_image_folder"), "icons/folder.png", this, {
+        add(PopupMenuButton("menu_open_image_folder".translate(), "icons/folder.png".getImage(), this, {
             config.getString(ConfigHelper.PROFILE.lastSaveFolder).also { lsf ->
                 if(lsf.isEmpty() || lsf == "none" || !FileUtils.exists(lsf))
                     FileUtils.openFolder(config.getString(ConfigHelper.PROFILE.pictureFolder))
                 else FileUtils.openFolder(lsf)
             }
         }, menus))
-        add(PopupMenuButton(LangManager.getItem("menu_config"), "icons/config.png", this, { SnipSniper.openConfigWindow(sniper) }, menus))
+        add(PopupMenuButton("menu_config".translate(), "icons/config.png".getImage(), this, { SnipSniper.openConfigWindow(sniper) }, menus))
 
         if(SnipSniper.isDebug()) {
-            PopupMenu("Debug", ImageManager.getImage("icons/debug.png")).also { pm ->
-                pm.add(PopupMenuButton("Console", "icons/console.png", this, { CCLogger.enableDebugConsole(true) }, menus))
-                pm.add(PopupMenuButton("Open log folder", "icons/folder.png", this, { FileUtils.openFolder(SnipSniper.logFolder) }, menus))
-                pm.add(PopupMenuButton("Language test", "icons/config.png", this, { LangDebugWindow() }, menus))
+            PopupMenu("Debug", "icons/debug.png".getImage()).also { pm ->
+                pm.add(PopupMenuButton("Console", "icons/console.png".getImage(), this, { CCLogger.enableDebugConsole(true) }, menus))
+                pm.add(PopupMenuButton("Open log folder", "icons/folder.png".getImage(), this, { FileUtils.openFolder(SnipSniper.logFolder) }, menus))
+                pm.add(PopupMenuButton("Language test", "icons/config.png".getImage(), this, { LangDebugWindow() }, menus))
                 add(pm).also { menus.add(pm) }
             }
         }
 
-        add(PopupMenuButton(LangManager.getItem("menu_about"), "icons/about.png", this, { AboutWindow(sniper) }, menus))
+        add(PopupMenuButton("menu_about".translate(), "icons/about.png".getImage(), this, { AboutWindow(sniper) }, menus))
         add(JSeparator())
-        add(PopupMenuButton("Restart", "icons/redx.png", this, { SnipSniper.restart() }, menus))
-        add(PopupMenuButton(LangManager.getItem("menu_quit"), "icons/redx.png", this, { SnipSniper.exit(false) }, menus))
+        add(PopupMenuButton("Restart", "icons/redx.png".getImage(), this, { SnipSniper.restart() }, menus))
+        add(PopupMenuButton("menu_quit".translate(), "icons/redx.png".getImage(), this, { SnipSniper.exit(false) }, menus))
 
-        iconImage = ImageManager.getImage("icons/snipsniper.png")
+        iconImage = "icons/snipsniper.png".getImage()
         addFocusListener(object: FocusAdapter() {
             override fun focusLost(e: FocusEvent?) {
                 super.focusLost(e)

@@ -1,6 +1,7 @@
 package net.snipsniper.utils
 
 import net.snipsniper.ImageManager
+import net.snipsniper.LangManager
 import java.awt.Image
 import java.awt.image.BufferedImage
 import javax.swing.ImageIcon
@@ -23,3 +24,4 @@ fun Image.toBufferedImage(): BufferedImage = if(this is BufferedImage) this else
 fun String.getImage(): BufferedImage = ImageManager.getImage(this)
 fun String.getImage(width: Int, height: Int): BufferedImage = this.getImage().scaled(width, height)
 fun String.getAnimatedImage(): Image = ImageManager.getAnimatedImage(this)
+fun String.translate(): String = LangManager.getItem(this)
