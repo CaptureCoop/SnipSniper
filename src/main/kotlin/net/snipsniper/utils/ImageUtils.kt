@@ -174,7 +174,7 @@ class ImageUtils {
                     g.font = Font("Meiryo", Font.BOLD, 20)
                     g.drawString(text, w / 2 - g.fontMetrics.stringWidth(text) / 2, h / 2)
                     g.drawImage(icon, w / 3,h / 10, w / 3, h / 3, null)
-                    g.dispose();
+                    g.dispose()
                 }
             }
         }
