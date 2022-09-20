@@ -52,17 +52,21 @@ class ImageUtils {
             }
         }
 
-        fun rotateClockwise90(src: BufferedImage): BufferedImage {
+        fun rotateClockwise90(src: BufferedImage, times: Int): BufferedImage {
             val w = src.width
             val h = src.height
             return BufferedImage(w, h, src.type).also {
                 (it.createGraphics() as Graphics2D).also { g2d ->
-                    g2d.translate((h - w) / 2, (h - w) / 2)
-                    g2d.rotate(Math.PI / 2, (h / 2f).toDouble(), (w / 2f).toDouble())
+                    for(i in 0 until times) {
+                        g2d.translate((h - w) / 2, (h - w) / 2)
+                        g2d.rotate(Math.PI / 2, (h / 2f).toDouble(), (w / 2f).toDouble())
+                    }
                     g2d.drawRenderedImage(src, null)
                 }
             }
         }
+
+        fun rotateClockwise90(src: BufferedImage): BufferedImage = rotateClockwise90(src, 1)
 
         fun getImageFromClipboard(): BufferedImage? {
             //TODO: check if we need try catch here

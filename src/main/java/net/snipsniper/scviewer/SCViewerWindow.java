@@ -127,8 +127,8 @@ public class SCViewerWindow extends SnipScopeWindow {
     public void rotateImage(ClockDirection direction) {
         if(direction == ClockDirection.CLOCKWISE)
             setImage(ImageUtils.Companion.rotateClockwise90(getImage()));
-        else //TODO: Ugly hack, figure out better solution
-            setImage(ImageUtils.Companion.rotateClockwise90(ImageUtils.Companion.rotateClockwise90(ImageUtils.Companion.rotateClockwise90(getImage()))));
+        else
+            setImage(ImageUtils.Companion.rotateClockwise90(getImage(), 3));
         if(currentFile != null)
             saveItem.setEnabled(true);
         repaint();
