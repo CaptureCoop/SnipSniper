@@ -1,5 +1,7 @@
 package net.snipsniper.systray
 
+import net.snipsniper.utils.scale
+import net.snipsniper.utils.toImageIcon
 import java.awt.Image
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -10,7 +12,7 @@ import javax.swing.JMenu
 class PopupMenu(text: String, icon: BufferedImage): JMenu() {
     init {
         setText(text)
-        setIcon(ImageIcon(icon.getScaledInstance(16, 16, Image.SCALE_DEFAULT)))
+        setIcon(icon.scale(16, 16).toImageIcon())
         addMouseListener(object: MouseAdapter() {
             override fun mouseEntered(e: MouseEvent?) {
                 super.mouseEntered(e)

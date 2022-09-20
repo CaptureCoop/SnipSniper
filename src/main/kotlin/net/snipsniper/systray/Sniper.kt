@@ -6,6 +6,7 @@ import net.snipsniper.capturewindow.CaptureWindow
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.ImageUtils
+import net.snipsniper.utils.scaleSmooth
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
 import org.jnativehook.GlobalScreen
@@ -35,7 +36,7 @@ class Sniper(val profileID: Int) {
         if(SystemTray.isSupported()) {
             val popup = Popup(this)
             val tray = SystemTray.getSystemTray()
-            val image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.getScaledInstance(16, 16, Image.SCALE_SMOOTH) ?: ImageUtils.getDefaultIcon(profileID)
+            val image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaleSmooth(16, 16) ?: ImageUtils.getDefaultIcon(profileID)
             image.flush()
             trayIcon = TrayIcon(image, "SnipSniper(${getTitle()})")
             trayIcon.isImageAutoSize = true

@@ -6,9 +6,7 @@ import net.snipsniper.SnipSniper
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.scviewer.SCViewerWindow
-import net.snipsniper.utils.AboutWindow
-import net.snipsniper.utils.FileUtils
-import net.snipsniper.utils.Utils
+import net.snipsniper.utils.*
 import net.snipsniper.utils.debug.LangDebugWindow
 import org.capturecoop.cclogger.CCLogger
 import java.awt.*
@@ -27,7 +25,7 @@ class Popup(private val sniper: Sniper): JFrame() {
         ImageManager.getImage("splash.png").also { splash ->
             val w = (splash.width / 3F).toInt()
             val h = (splash.height / 3F).toInt()
-            JLabel(ImageIcon(splash.getScaledInstance(w, h, Image.SCALE_SMOOTH))).also {
+            JLabel(splash.scaleSmooth(w, h).toImageIcon()).also {
                 it.text = sniper.getTitle()
                 it.alignmentX = JPanel.CENTER_ALIGNMENT
                 it.verticalTextPosition = JLabel.BOTTOM

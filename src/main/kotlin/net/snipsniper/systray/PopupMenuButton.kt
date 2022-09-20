@@ -2,6 +2,8 @@ package net.snipsniper.systray
 
 import net.snipsniper.ImageManager
 import net.snipsniper.utils.IFunction
+import net.snipsniper.utils.scale
+import net.snipsniper.utils.toImageIcon
 import java.awt.Image
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -38,5 +40,5 @@ class PopupMenuButton(title: String, icon: BufferedImage, popup: JFrame, private
     }
 
     fun setIsMenuChild(value: Boolean) { isMenuChild = value }
-    private fun getPopupIcon(image: BufferedImage): ImageIcon = ImageIcon(image.getScaledInstance(16, 16, Image.SCALE_DEFAULT))
+    private fun getPopupIcon(image: BufferedImage): ImageIcon = image.scale(16, 16).toImageIcon()
 }
