@@ -24,7 +24,7 @@ public class IconButton extends IDJButton {
         this.location = location;
         addActionListener(e -> {
             if(onRedX && location == SSFile.LOCATION.LOCAL) {
-                FileUtils.delete(SnipSniper.Companion.getImgFolder() + "/" + new SSFile(getID()).getPath());
+                FileUtils.delete(SnipSniper.Companion.getImgFolder() + "/" + new SSFile(id).getPath());
                 onDelete.run();
             } else {
                 onSelect.run();

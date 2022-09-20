@@ -113,7 +113,7 @@ public class IconWindow extends JFrame implements CCIClosable {
         for (SSFile file : list) {
             IconButton button = new IconButton(file.getPathWithLocation(), file.getLocation());
             button.setOnSelect(args -> {
-                onSelectIcon.run(button.getID());
+                onSelectIcon.run(button.getId());
                 dispose();
             });
 

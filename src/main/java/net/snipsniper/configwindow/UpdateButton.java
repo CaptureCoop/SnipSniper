@@ -21,11 +21,11 @@ public class UpdateButton extends IDJButton {
 
     public UpdateButton() {
         super("");
-        setID(STATE_WAITING);
+        setId(STATE_WAITING);
         setText("Check for update");
         setIcon(new ImageIcon(roundArrows));
         addActionListener(e -> {
-            if(getID().equals(STATE_DOUPDATE)) {
+            if(getId().equals(STATE_DOUPDATE)) {
                 UpdateUtils.Companion.update();
                 return;
             }
@@ -40,55 +40,55 @@ public class UpdateButton extends IDJButton {
             boolean isJarAndDevButStableBranch = updateChannel == ReleaseType.STABLE && !isStable && isJar;
 
             if(isJarAndDev) {
-                if(getID().equals(STATE_WAITING)) {
+                if(getId().equals(STATE_WAITING)) {
                     setText("Checking for update...");
                     String newestHash = Utils.Companion.getShortGitHash(Utils.Companion.getHashFromAPI(Links.API_LATEST_COMMIT));
                     if(newestHash == null || newestHash.isEmpty()) {
                         setText("Error - No connection");
-                        setID(STATE_WAITING);
+                        setId(STATE_WAITING);
                         setIcon(new ImageIcon(roundArrows));
                     } else if(newestHash.equals(SnipSniper.Companion.getVersion().getGithash())) {
                         setText("Up to date!");
-                        setID(STATE_IDLE);
+                        setId(STATE_IDLE);
                         setIcon(new ImageIcon(checkmark));
                     } else {
                         setText(CCStringUtils.format("<html><p align='center'>Update available! (%c)</p></html>", newestHash));
-                        setID(STATE_DOUPDATE);
+                        setId(STATE_DOUPDATE);
                         setIcon(new ImageIcon(download));
                     }
                 }
             } else if(isJarAndDevButStableBranch) {
-                if(getID().equals(STATE_WAITING)) {
+                if(getId().equals(STATE_WAITING)) {
                     setText("<html><p align='center'>Switch to stable</p></html>");
-                    setID(STATE_DOUPDATE);
+                    setId(STATE_DOUPDATE);
                 }
             } else {
-                if(getID().equals(STATE_WAITING)) {
+                if(getId().equals(STATE_WAITING)) {
                     setText("Checking for update...");
                     String versionString = Utils.Companion.getTextFromWebsite(Links.STABLE_VERSION_TXT);
                     Version onlineVersion = new Version(versionString);
                     Version currentVersion = SnipSniper.Companion.getVersion();
                     if(versionString == null || versionString.isEmpty()) {
                         setText("Error - No connection");
-                        setID(STATE_WAITING);
+                        setId(STATE_WAITING);
                         setIcon(new ImageIcon(roundArrows));
                     } else if (onlineVersion.equals(currentVersion) || currentVersion.isNewerThan(onlineVersion)) {
                         setText("Up to date!");
-                        setID(STATE_IDLE);
+                        setId(STATE_IDLE);
                         setIcon(new ImageIcon(checkmark));
                     } else if (onlineVersion.isNewerThan(currentVersion)) {
                         if(SnipSniper.Companion.getVersion().getPlatformType() == PlatformType.STEAM) {
                             setText(CCStringUtils.format("<html><p align='center'>Update available! (%c)</p><p align='center'>Check Steam to update!</p></html>", onlineVersion.digitsToString()));
-                            setID(STATE_IDLE);
+                            setId(STATE_IDLE);
                         } else {
                             setText(CCStringUtils.format("<html><p align='center'>Update available! (%c)</p></html>", onlineVersion.digitsToString()));
-                            setID(STATE_DOUPDATE);
+                            setId(STATE_DOUPDATE);
                         }
                         setIcon(new ImageIcon(download));
                     } else {
                         setText("Error. Check console.");
                         CCLogger.log("Issue checking for updates. Our Version: %c, Online version: %c", CCLogLevel.ERROR, currentVersion.digitsToString(), onlineVersion.digitsToString());
-                        setID(STATE_IDLE);
+                        setId(STATE_IDLE);
                         setIcon(null);
                     }
                 }
