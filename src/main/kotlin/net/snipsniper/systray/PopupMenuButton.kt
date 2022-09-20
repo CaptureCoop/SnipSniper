@@ -1,6 +1,7 @@
 package net.snipsniper.systray
 
 import net.snipsniper.utils.IFunction
+import net.snipsniper.utils.getImage
 import net.snipsniper.utils.scaled
 import net.snipsniper.utils.toImageIcon
 import java.awt.event.MouseAdapter
@@ -12,6 +13,8 @@ import javax.swing.JMenuItem
 
 class PopupMenuButton(title: String, icon: BufferedImage, popup: JFrame, private var onClick: IFunction?, closeWhenClicked: ArrayList<PopupMenu>?): JMenuItem() {
     private var isMenuChild = false
+
+    constructor(title: String, iconPath: String, popup: JFrame, onClick: IFunction?, closeWhenClicked: ArrayList<PopupMenu>?) : this(title, iconPath.getImage(), popup, onClick, closeWhenClicked)
 
     init {
         text = title
