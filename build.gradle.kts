@@ -1,7 +1,11 @@
+import org.gradle.internal.os.OperatingSystem
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.TimeZone
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
 
 plugins {
     kotlin("jvm") version "1.5.31"
@@ -61,8 +65,11 @@ tasks.register("preBuild") {
         version=$projectVersion
         builddate=$buildDate (${TimeZone.getDefault().id})
         githash=${grgit.head().abbreviatedId}
-        system=${System.getProperty("os.name")}
-        arch=${System.getProperty("os.arch")}
+        githashfull=${grgit.head().id}
+        branch=${grgit.branch.current().name}
+        osname=${System.getProperty("os.name")}
+        osversion=${getSystemVersion()}
+        osarch=${System.getProperty("os.arch")}
         javavendor=${System.getProperty("java.vendor")}
         javaver=${System.getProperty("java.version")}
     """.trimIndent()
@@ -95,4 +102,15 @@ tasks.withType<Jar> {
 
 application {
     mainClass.set("net.snipsniper.MainKt")
+}
+
+fun getSystemVersion(): String {
+    if(!OperatingSystem.current().isWindows) return System.getProperty("os.version")
+    Runtime.getRuntime().exec("cmd.exe /c ver").also {
+        BufferedReader(InputStreamReader(it.inputStream)).also { reader ->
+            var output = ""
+            reader.readLines().forEach {l -> if(l.isNotEmpty()) output += l}
+            return Regex("(?<=\\[)(.*?)(?=\\])").find(output)?.value?.toLowerCase()?.replace("version ", "") ?: output
+        }
+    }
 }
