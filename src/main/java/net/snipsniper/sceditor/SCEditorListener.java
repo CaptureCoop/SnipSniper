@@ -57,7 +57,8 @@ public class SCEditorListener extends SnipScopeListener {
             scEditorWindow.setSaveLocation("");
             scEditorWindow.setInClipboard(true);
             scEditorWindow.refreshTitle();
-            scEditorWindow.setImage(ImageUtils.Companion.imageToBufferedImage(ImageUtils.Companion.getImageFromClipboard()), true, true);
+            //TODO: Check if null and tell user if paste is bad
+            scEditorWindow.setImage(ImageUtils.Companion.getImageFromClipboard(), true, true);
         }
 
         if(!scEditorWindow.isEnableInteraction()) return;

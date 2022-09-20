@@ -64,11 +64,11 @@ class ImageUtils {
             }
         }
 
-        fun getImageFromClipboard(): Image? {
+        fun getImageFromClipboard(): BufferedImage? {
             //TODO: check if we need try catch here
             Toolkit.getDefaultToolkit().systemClipboard.getContents(null).let {
                 if(it.isDataFlavorSupported(DataFlavor.imageFlavor))
-                    return it.getTransferData(DataFlavor.imageFlavor) as Image
+                    return it.getTransferData(DataFlavor.imageFlavor) as BufferedImage
             }
             return null
         }
