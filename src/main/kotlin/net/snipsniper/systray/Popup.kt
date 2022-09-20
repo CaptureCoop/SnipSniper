@@ -25,7 +25,7 @@ class Popup(private val sniper: Sniper): JFrame() {
         ImageManager.getImage("splash.png").also { splash ->
             val w = (splash.width / 3F).toInt()
             val h = (splash.height / 3F).toInt()
-            JLabel(splash.scaleSmooth(w, h).toImageIcon()).also {
+            JLabel(splash.scaledSmooth(w, h).toImageIcon()).also {
                 it.text = sniper.getTitle()
                 it.alignmentX = JPanel.CENTER_ALIGNMENT
                 it.verticalTextPosition = JLabel.BOTTOM

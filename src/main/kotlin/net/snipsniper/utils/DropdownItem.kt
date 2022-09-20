@@ -9,7 +9,7 @@ class DropdownItem(private val label: String, val id: String) {
         private set
 
     constructor(label: String, id: String, icon: Image) : this(label, id) {
-        this.icon = icon.scaleTo(16, 16).toImageIcon()
+        this.icon = icon.scaled(16, 16).toImageIcon()
     }
 
     fun compare(other: DropdownItem) = compare(other.id)

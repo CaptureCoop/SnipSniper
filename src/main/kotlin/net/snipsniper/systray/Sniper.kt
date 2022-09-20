@@ -6,7 +6,7 @@ import net.snipsniper.capturewindow.CaptureWindow
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.ImageUtils
-import net.snipsniper.utils.scaleSmooth
+import net.snipsniper.utils.scaledSmooth
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
 import org.jnativehook.GlobalScreen
@@ -14,7 +14,6 @@ import org.jnativehook.keyboard.NativeKeyAdapter
 import org.jnativehook.keyboard.NativeKeyEvent
 import org.jnativehook.mouse.NativeMouseAdapter
 import org.jnativehook.mouse.NativeMouseEvent
-import java.awt.Image
 import java.awt.SystemTray
 import java.awt.TrayIcon
 import java.awt.event.MouseAdapter
@@ -36,7 +35,7 @@ class Sniper(val profileID: Int) {
         if(SystemTray.isSupported()) {
             val popup = Popup(this)
             val tray = SystemTray.getSystemTray()
-            val image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaleSmooth(16, 16) ?: ImageUtils.getDefaultIcon(profileID)
+            val image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaledSmooth(16, 16) ?: ImageUtils.getDefaultIcon(profileID)
             image.flush()
             trayIcon = TrayIcon(image, "SnipSniper(${getTitle()})")
             trayIcon.isImageAutoSize = true
