@@ -3,6 +3,7 @@ package net.snipsniper.utils
 import com.erigir.mslinks.ShellLink
 import net.snipsniper.LangManager
 import net.snipsniper.SnipSniper
+import org.apache.commons.lang3.SystemUtils
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
 import org.capturecoop.ccutils.utils.CCStringUtils
@@ -157,6 +158,17 @@ class Utils {
             val result = JOptionPane.showConfirmDialog(parent, message, title, optionType, messageType, ImageIcon(icon.scaled(16, 16)))
             if(blockScreenshot) SnipSniper.isIdle = true
             return result
+        }
+
+        fun getSystemVersion(): String {
+            if(!SystemUtils.IS_OS_WINDOWS) return System.getProperty("os.version")
+            Runtime.getRuntime().exec("cmd.exe /c ver").also {
+                BufferedReader(InputStreamReader(it.inputStream)).also { reader ->
+                    var output = ""
+                    reader.readLines().forEach {l -> if(l.isNotEmpty()) output += l}
+                    return Regex("(?<=\\[)(.*?)(?=])").find(output)?.value?.lowercase()?.replace("version ", "") ?: output
+                }
+            }
         }
 
         fun getLanguageDropdown(selectedLanguage: String, onSelect: IFunction): JComboBox<DropdownItem> {
