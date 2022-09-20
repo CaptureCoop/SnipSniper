@@ -116,7 +116,7 @@ class SnipSniper {
                 CCLogger.log("SnipSniper encountered an uncaught exception. This may be fatal!", CCLogLevel.ERROR)
                 CCLogger.logStacktrace(throwable, CCLogLevel.ERROR)
             }
-            Thread.currentThread().uncaughtExceptionHandler = uncaughtExceptionHandler
+            Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler)
 
             GlobalScreen.registerNativeHook()
 
