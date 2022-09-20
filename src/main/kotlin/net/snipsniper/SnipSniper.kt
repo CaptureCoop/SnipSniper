@@ -22,6 +22,7 @@ import java.io.IOException
 import java.net.URLDecoder
 import java.nio.file.Paths
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -149,6 +150,32 @@ class SnipSniper {
             WikiManager.load(LangManager.getLanguage())
 
             CCLogger.log("Launching SnipSniper Version ${version.digitsToString()} (rev-${version.githash})")
+            CCLogger.log("")
+            CCLogger.log("== Build Info ==")
+            CCLogger.log("Type: ${buildInfo.getString(ConfigHelper.BUILDINFO.type)}")
+            CCLogger.log("Version: ${buildInfo.getString(ConfigHelper.BUILDINFO.version)}")
+            CCLogger.log("Build date: ${buildInfo.getString(ConfigHelper.BUILDINFO.builddate)}")
+            CCLogger.log("GitHash: ${buildInfo.getString(ConfigHelper.BUILDINFO.githash)}")
+            CCLogger.log("GitHash Full: ${buildInfo.getString(ConfigHelper.BUILDINFO.githashfull)}")
+            CCLogger.log("Branch: ${buildInfo.getString(ConfigHelper.BUILDINFO.branch)}")
+            CCLogger.log("OS Name: ${buildInfo.getString(ConfigHelper.BUILDINFO.osname)}")
+            CCLogger.log("OS Version: ${buildInfo.getString(ConfigHelper.BUILDINFO.osversion)}")
+            CCLogger.log("OS Arch: ${buildInfo.getString(ConfigHelper.BUILDINFO.osarch)}")
+            CCLogger.log("Java Vendor: ${buildInfo.getString(ConfigHelper.BUILDINFO.javavendor)}")
+            CCLogger.log("Java Version: ${buildInfo.getString(ConfigHelper.BUILDINFO.javaver)}")
+            CCLogger.log("")
+
+            CCLogger.log("== System Info ==")
+            CCLogger.log("OS Name: ${System.getProperty("os.name")}")
+            CCLogger.log("OS Version: ${Utils.getSystemVersion()}")
+            CCLogger.log("OS Arch: ${System.getProperty("os.arch")}")
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")).also {
+                CCLogger.log("OS Date/Time: $it (${TimeZone.getDefault().id})")
+            }
+            CCLogger.log("Java Vendor: ${System.getProperty("java.vendor")}")
+            CCLogger.log("Java Version: ${System.getProperty("java.version")}")
+            CCLogger.log("Java Version: ${System.getProperty("java.version")}")
+            CCLogger.log("")
             if (SystemUtils.IS_OS_LINUX) {
                 CCLogger.log("=================================================================================", CCLogLevel.WARNING)
                 CCLogger.log("= SnipSniper Linux is still in development and may not work properly or at all. =", CCLogLevel.WARNING)

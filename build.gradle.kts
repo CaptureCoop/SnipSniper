@@ -38,7 +38,7 @@ fun refreshWiki() {
     val workingDir = "src//main//resources//net//snipsniper//resources//wiki//"
     exec {
         workingDir(workingDir)
-        commandLine( "git", "checkout", "master")
+        commandLine("git", "checkout", "master")
     }
     exec {
         workingDir(workingDir)
