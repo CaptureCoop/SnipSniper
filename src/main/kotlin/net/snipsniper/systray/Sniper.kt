@@ -108,8 +108,8 @@ class Sniper(val profileID: Int) {
     }
 
     fun getTitle(): String {
-        var title = config.getString(ConfigHelper.PROFILE.title)
-        if(title == "none") title = "Profile $profileID"
-        return title
+        config.getString(ConfigHelper.PROFILE.title).also {
+            return if(it == "none") "Profile $profileID" else it
+        }
     }
 }
