@@ -39,7 +39,7 @@ public class SCEditorListener extends SnipScopeListener {
     public void resetHistory() {
         CCLogger.log("Reset editor history");
         history.clear();
-        history.add(ImageUtils.copyImage(scEditorWindow.getImage()));
+        history.add(ImageUtils.Companion.copyImage(scEditorWindow.getImage()));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class SCEditorListener extends SnipScopeListener {
             scEditorWindow.setSaveLocation("");
             scEditorWindow.setInClipboard(true);
             scEditorWindow.refreshTitle();
-            scEditorWindow.setImage(ImageUtils.imageToBufferedImage(ImageUtils.getImageFromClipboard()), true, true);
+            scEditorWindow.setImage(ImageUtils.Companion.imageToBufferedImage(ImageUtils.Companion.getImageFromClipboard()), true, true);
         }
 
         if(!scEditorWindow.isEnableInteraction()) return;
@@ -101,7 +101,7 @@ public class SCEditorListener extends SnipScopeListener {
                 size--;
                 history.remove(size);
                 size--;
-                scEditorWindow.setImage(ImageUtils.copyImage(history.get(size)), false, false);
+                scEditorWindow.setImage(ImageUtils.Companion.copyImage(history.get(size)), false, false);
                 for(IStamp cStamp : scEditorWindow.getStamps())
                     cStamp.editorUndo(history.size());
             }
@@ -177,7 +177,7 @@ public class SCEditorListener extends SnipScopeListener {
             JFileChooser fileChooser = new JFileChooser();
             int option = fileChooser.showOpenDialog(scEditorWindow);
             if(option == JFileChooser.APPROVE_OPTION) {
-                scEditorWindow.setImage(ImageUtils.imageToBufferedImage(new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()).getImage()), true, true);
+                scEditorWindow.setImage(ImageUtils.Companion.imageToBufferedImage(new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()).getImage()), true, true);
             }
         }
 
@@ -211,7 +211,7 @@ public class SCEditorListener extends SnipScopeListener {
         scEditorWindow.repaint();
         g2.dispose();
         g.dispose();
-        history.add(ImageUtils.copyImage(scEditorWindow.getImage()));
+        history.add(ImageUtils.Companion.copyImage(scEditorWindow.getImage()));
     }
 
     @Override

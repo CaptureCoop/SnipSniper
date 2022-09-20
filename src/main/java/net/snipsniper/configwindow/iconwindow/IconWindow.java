@@ -127,7 +127,7 @@ public class IconWindow extends JFrame implements CCIClosable {
                         button.setIcon(new ImageIcon(ImageManager.Companion.getAnimatedImage(file.getPath()).getScaledInstance(size, size, 0)));
                     break;
                 case LOCAL:
-                    button.setIcon(new ImageIcon(ImageUtils.getImageFromDisk(SnipSniper.Companion.getImgFolder() + "/" + file.getPath()).getScaledInstance(size, size, Image.SCALE_SMOOTH)));
+                    button.setIcon(new ImageIcon(ImageUtils.Companion.getImageFromDisk(SnipSniper.Companion.getImgFolder() + "/" + file.getPath()).getScaledInstance(size, size, Image.SCALE_SMOOTH)));
                     break;
             }
 
@@ -201,7 +201,7 @@ public class IconWindow extends JFrame implements CCIClosable {
         } else {
             try {
                 BufferedImage img = ImageIO.read(file);
-                img = ImageUtils.imageToBufferedImage(img.getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+                img = ImageUtils.Companion.imageToBufferedImage(img.getScaledInstance(16, 16, Image.SCALE_SMOOTH));
                 ImageIO.write(img, FileUtils.getFileExtension(file, false), new File(SnipSniper.Companion.getImgFolder() + "/" + file.getName()));
             } catch (IOException ioException) {
                 CCLogger.log("Could not load file for IconWindow! File: %c", CCLogLevel.ERROR, file.getAbsolutePath());

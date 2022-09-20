@@ -101,9 +101,9 @@ public class GeneralTab extends JPanel implements ITab{
         }
         iconButton.addActionListener(e -> configWindow.addCWindow(new IconWindow("Custom Profile Icon", configWindow, args -> {
             config.set(ConfigHelper.PROFILE.icon, args[0]); //TODO: We have duplicated code here, uuuuugh. I miss having functions in functions :(
-            Image img = ImageUtils.getIconDynamically(config);
+            Image img = ImageUtils.Companion.getIconDynamically(config);
             if(img == null)
-                img = ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()));
+                img = ImageUtils.Companion.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()));
             iconButton.setIcon(new ImageIcon(img.getScaledInstance(16, 16, 0)));
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         })));
@@ -112,9 +112,9 @@ public class GeneralTab extends JPanel implements ITab{
         iconReset.addActionListener(e -> {
             //TODO: Barf, duplicated code
             config.set(ConfigHelper.PROFILE.icon, "none");
-            Image img = ImageUtils.getIconDynamically(config);
+            Image img = ImageUtils.Companion.getIconDynamically(config);
             if(img == null)
-                img = ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()));
+                img = ImageUtils.Companion.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()));
             iconButton.setIcon(new ImageIcon(img.getScaledInstance(16, 16, 0)));
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });

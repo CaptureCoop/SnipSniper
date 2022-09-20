@@ -68,7 +68,7 @@ public class BGamePiece {
             }
         }
         g.dispose();
-        return ImageUtils.trimImage(image);
+        return ImageUtils.Companion.trimImage(image);
     }
 
     //returns true if the piece hit something

@@ -20,7 +20,7 @@ public class BGamePanel extends JPanel {
         Graphics g = screenshot.createGraphics();
         render(g, true);
         g.dispose();
-        ImageUtils.saveImage(screenshot, game.getSniper().getConfig().getString(ConfigHelper.PROFILE.saveFormat), "_bgame", game.getSniper().getConfig());
+        ImageUtils.Companion.saveImage(screenshot, game.getSniper().getConfig().getString(ConfigHelper.PROFILE.saveFormat), "_bgame", game.getSniper().getConfig());
     }
 
     public void render(Graphics g, boolean isScreenshot) {

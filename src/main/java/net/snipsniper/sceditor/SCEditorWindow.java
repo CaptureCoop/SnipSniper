@@ -75,7 +75,8 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
         this.inClipboard = inClipboard;
         this.isStandalone = isStandalone;
 
-        image = ImageUtils.ensureAlphaLayer(image);
+        if(image != null)
+            image = ImageUtils.Companion.ensureAlphaLayer(image);
 
         ezMode = config.getBool(ConfigHelper.PROFILE.ezMode);
 
@@ -92,14 +93,14 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
                 imgG.fillRect(0, 0, image.getWidth(), image.getHeight());
                 imgG.dispose();
             } else {
-                image = ImageUtils.getDragPasteImage(ImageManager.Companion.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
+                image = ImageUtils.Companion.getDragPasteImage(ImageManager.Companion.getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!");
                 defaultImage = image;
             }
         }
         renderer = new SCEditorRenderer(this);
         listener = new SCEditorListener(this);
 
-        originalImage = ImageUtils.copyImage(image);
+        originalImage = ImageUtils.Companion.copyImage(image);
         init(image, renderer, listener);
         setLayout(null);
 
@@ -329,14 +330,14 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
         Graphics g = finalImg.getGraphics();
         g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), this);
         g.dispose();
-        String location = ImageUtils.saveImage(finalImg, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config);
+        String location = ImageUtils.Companion.saveImage(finalImg, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config);
         if(location != null) {
             String folder = location.replace(new File(location).getName(), "");
             config.set(ConfigHelper.PROFILE.lastSaveFolder, folder);
             config.save();
         }
         if(config.getBool(ConfigHelper.PROFILE.copyToClipboard))
-            ImageUtils.copyToClipboard(finalImg);
+            ImageUtils.Companion.copyToClipboard(finalImg);
     }
 
     public void refreshTitle() {
@@ -352,7 +353,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
     }
 
     public void setImage(BufferedImage image, boolean resetHistory, boolean isNewImage) {
-        image = ImageUtils.ensureAlphaLayer(image);
+        image = ImageUtils.Companion.ensureAlphaLayer(image);
         super.setImage(image);
         CCLogger.log("Setting new Image");
         setEnableInteraction(!isDefaultImage());
@@ -366,7 +367,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
         if(isNewImage) {
             resetZoom();
             renderer.resetPreview();
-            originalImage = ImageUtils.copyImage(image);
+            originalImage = ImageUtils.Companion.copyImage(image);
         }
     }
 

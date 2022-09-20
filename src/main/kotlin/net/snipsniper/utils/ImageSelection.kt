@@ -5,6 +5,7 @@ import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.Transferable
 import java.awt.datatransfer.UnsupportedFlavorException
 
+//TODO: Is this the cause for the issue when copying images with alpha?
 class ImageSelection(private val image: Image): Transferable {
     override fun getTransferDataFlavors(): Array<DataFlavor> = arrayOf(DataFlavor.imageFlavor)
     override fun isDataFlavorSupported(flavor: DataFlavor?): Boolean = DataFlavor.imageFlavor.equals(flavor)

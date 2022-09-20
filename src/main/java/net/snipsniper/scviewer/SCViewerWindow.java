@@ -53,7 +53,7 @@ public class SCViewerWindow extends SnipScopeWindow {
             refreshFolder();
             image = getImageFromFile(currentFile);
         } else {
-            image = ImageUtils.getDragPasteImage(ImageManager.Companion.getImage("icons/viewer.png"), "Drop image here!");
+            image = ImageUtils.Companion.getDragPasteImage(ImageManager.Companion.getImage("icons/viewer.png"), "Drop image here!");
             defaultImage = image;
         }
 
@@ -126,9 +126,9 @@ public class SCViewerWindow extends SnipScopeWindow {
 
     public void rotateImage(ClockDirection direction) {
         if(direction == ClockDirection.CLOCKWISE)
-            setImage(ImageUtils.rotateClockwise90(getImage()));
+            setImage(ImageUtils.Companion.rotateClockwise90(getImage()));
         else //TODO: Ugly hack, figure out better solution
-            setImage(ImageUtils.rotateClockwise90(ImageUtils.rotateClockwise90(ImageUtils.rotateClockwise90(getImage()))));
+            setImage(ImageUtils.Companion.rotateClockwise90(ImageUtils.Companion.rotateClockwise90(ImageUtils.Companion.rotateClockwise90(getImage()))));
         if(currentFile != null)
             saveItem.setEnabled(true);
         repaint();
@@ -186,7 +186,7 @@ public class SCViewerWindow extends SnipScopeWindow {
     }
 
     public void setImage(File file) {
-        BufferedImage newImage = ImageUtils.imageToBufferedImage(new ImageIcon(file.getAbsolutePath()).getImage());
+        BufferedImage newImage = ImageUtils.Companion.imageToBufferedImage(new ImageIcon(file.getAbsolutePath()).getImage());
         super.setImage(newImage);
         currentFile = new File(file.getAbsolutePath());
         setEnableInteraction(!isDefaultImage());

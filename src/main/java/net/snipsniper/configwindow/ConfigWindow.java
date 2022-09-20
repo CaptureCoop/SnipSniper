@@ -189,9 +189,9 @@ public class ConfigWindow extends JFrame implements CCIClosable {
                     profiles.add(0, new DropdownItem("Standalone Editor", file.getName(), ImageManager.Companion.getImage("icons/editor.png")));
             } else if(file.getName().contains("profile")) {
                 int nr = getIDFromFilename(file.getName());
-                Image img = ImageUtils.getIconDynamically(new Config(file.getName(), "profile_defaults.cfg"));
+                Image img = ImageUtils.Companion.getIconDynamically(new Config(file.getName(), "profile_defaults.cfg"));
                 if(img == null)
-                    img = ImageUtils.getDefaultIcon(nr);
+                    img = ImageUtils.Companion.getDefaultIcon(nr);
                 String title = "Profile " + nr;
                 Sniper sniper = SnipSniper.Companion.getProfile(nr);
                 if(sniper != null)

@@ -135,7 +135,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 			CCLogger.log("Couldn't take screenshot. Message:", CCLogLevel.ERROR);
 			CCLogger.logStacktrace(exception, CCLogLevel.ERROR);
 		}
-		screenshotTinted = ImageUtils.copyImage(screenshot);
+		screenshotTinted = ImageUtils.Companion.copyImage(screenshot);
 		Graphics g2 = screenshotTinted.getGraphics();
 		g2.setColor(config.getColor(ConfigHelper.PROFILE.tintColor).getPrimaryColor());
 		g2.fillRect(0, 0, screenshotTinted.getWidth(), screenshotTinted.getHeight());
@@ -210,7 +210,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 		if(config.getBool(ConfigHelper.PROFILE.saveToDisk) || saveOverride) {
 			if(!enforceOverride || saveOverride) {
-				finalLocation = ImageUtils.saveImage(finalImg, config.getString(ConfigHelper.PROFILE.saveFormat), "", config);
+				finalLocation = ImageUtils.Companion.saveImage(finalImg, config.getString(ConfigHelper.PROFILE.saveFormat), "", config);
 				if (finalLocation != null) {
 					String folder = finalLocation.replace(new File(finalLocation).getName(), "");
 					config.set(ConfigHelper.PROFILE.lastSaveFolder, folder);
@@ -221,7 +221,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 
 		if(config.getBool(ConfigHelper.PROFILE.copyToClipboard) || copyOverride) {
 			if(!enforceOverride || copyOverride) {
-				ImageUtils.copyToClipboard(finalImg);
+				ImageUtils.Companion.copyToClipboard(finalImg);
 				inClipboard = true;
 			}
 		}
