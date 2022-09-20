@@ -17,6 +17,7 @@ fun BufferedImage.copyToClipboard() = ImageUtils.copyToClipboard(this)
 fun BufferedImage.ensureAlphaLayer() = ImageUtils.ensureAlphaLayer(this)
 fun BufferedImage.rotateClockwise90() = ImageUtils.rotateClockwise90(this)
 fun BufferedImage.rotateClockwise90(times: Int) = ImageUtils.rotateClockwise90(this, times)
+fun BufferedImage.trim(): BufferedImage = ImageUtils.trimImage(this)
 
 fun Image.scaled(width: Int, height: Int, hints: Int): Image = this.getScaledInstance(width, height, hints)
 fun Image.scaled(width: Int, height: Int): Image = this.scaled(width, height, Image.SCALE_DEFAULT)

@@ -118,7 +118,7 @@ class ImageUtils {
 
         //https://stackoverflow.com/a/36938923
         //Converted by IntelliJ
-        fun trimImage(image: BufferedImage): BufferedImage? {
+        fun trimImage(image: BufferedImage): BufferedImage {
             val raster = image.alphaRaster
             val width = raster.width
             val height = raster.height
