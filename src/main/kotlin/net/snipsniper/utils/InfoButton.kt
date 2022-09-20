@@ -45,7 +45,7 @@ class InfoButton(): JButton() {
         g.drawRect(0, 0, width, height)
         val iconSize = 16
         fun fk(n: Int): Int = n / 2 - iconSize / 2
-        g.drawImage(ImageManager.getImage("icons/questionmark.png").scaleSmooth(iconSize, iconSize), fk(width), fk(height), iconSize, iconSize, this)
+        g.drawImage("icons/questionmark.png".getImage(iconSize, iconSize), fk(width), fk(height), iconSize, iconSize, this)
     }
 
     fun closeWindow() {
