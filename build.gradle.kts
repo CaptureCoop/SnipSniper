@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 plugins {
-    kotlin("jvm") version "1.5.31"
+    kotlin("jvm") version "1.7.10"
     id("application")
     id("org.ajoberstar.grgit") version "4.1.1"
 }
@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    //testImplementation("org.jetbrains.kotlin:kotlin-test:1.7.10")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.1stleg:jnativehook:2.1.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
