@@ -45,7 +45,6 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		config = sniperInstance.getConfig();
 		dottedLineDistance = config.getInt(ConfigHelper.PROFILE.dottedOutlineDistance);
 
-		if(SystemTray.isSupported() && sniperInstance.getIconString().equals("none")) sniperInstance.getTrayIcon().setImage(ImageManager.Companion.getImage("systray/alt_icon" + sniperInstance.getProfileID() + ".png"));
 		if(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) != 0) {
 			try {
 				Thread.sleep(sniperInstance.getConfig().getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L);
@@ -183,7 +182,7 @@ public class CaptureWindow extends JFrame implements WindowListener{
 		Rectangle captureArea = calcRectangle();
 
 		if (captureArea.width == 0 || captureArea.height == 0) {
-			sniperInstance.getTrayIcon().displayMessage("Error: Screenshot width or height is 0!", "ERROR", MessageType.ERROR);
+			sniperInstance.alert("Error: Screenshot width or height is 0!", "ERROR", MessageType.ERROR);
 			sniperInstance.killCaptureWindow();
 			return;
 		}

@@ -5,8 +5,7 @@ import net.snipsniper.SnipSniper
 import net.snipsniper.capturewindow.CaptureWindow
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
-import net.snipsniper.utils.ImageUtils
-import net.snipsniper.utils.scaledSmooth
+import net.snipsniper.utils.*
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
 import org.jnativehook.GlobalScreen
@@ -14,28 +13,30 @@ import org.jnativehook.keyboard.NativeKeyAdapter
 import org.jnativehook.keyboard.NativeKeyEvent
 import org.jnativehook.mouse.NativeMouseAdapter
 import org.jnativehook.mouse.NativeMouseEvent
+import java.awt.Image
 import java.awt.SystemTray
 import java.awt.TrayIcon
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 
-class Sniper(val profileID: Int) {
+class Sniper(private val profileID: Int) {
     private var captureWindow: CaptureWindow? = null
     var config: Config = Config("profile${profileID}.cfg", "profile_defaults.cfg")
         private set
-    lateinit var trayIcon: TrayIcon
-        private set
+    private lateinit var trayIcon: TrayIcon
     private val instance = this
 
     private var nativeKeyAdapter: NativeKeyAdapter
     private var nativeMouseAdapter: NativeMouseAdapter
     //TODO: Maybe make a function for opening the capture window so that we call isIdle = false at a unified place?
+    //TODO: We check twice if iconString or whatever is none, we should not statically check that but maybe check with the defaults?
     init {
         CCLogger.log("Loading profile $profileID", CCLogLevel.DEBUG)
         if(SystemTray.isSupported()) {
             val popup = Popup(this)
             val tray = SystemTray.getSystemTray()
-            val image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaledSmooth(16, 16) ?: ImageUtils.getDefaultIcon(profileID)
+            //val image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaledSmooth(16, 16) ?: ImageUtils.getDefaultIcon(profileID)
+            val image = getProfileIcon()
             image.flush()
             trayIcon = TrayIcon(image, "SnipSniper(${getTitle()})")
             trayIcon.isImageAutoSize = true
@@ -44,12 +45,7 @@ class Sniper(val profileID: Int) {
 
                 override fun mouseReleased(e: MouseEvent) = showPopup(e)
                 override fun mousePressed(e: MouseEvent) = showPopup(e)
-                override fun mouseClicked(e: MouseEvent) {
-                    if(e.button == 1 && captureWindow == null && SnipSniper.isIdle) {
-                        captureWindow = CaptureWindow(instance)
-                        SnipSniper.isIdle = false
-                    }
-                }
+                override fun mouseClicked(e: MouseEvent) { if(e.button == 1) openCaptureWindow() }
             })
             tray.add(trayIcon)
         }
@@ -75,16 +71,7 @@ class Sniper(val profileID: Int) {
         SystemTray.getSystemTray().remove(trayIcon)
     }
 
-    fun getIconString(): String = config.getString(ConfigHelper.PROFILE.icon)
-
-    fun killCaptureWindow() {
-        if(captureWindow != null) {
-            if(SystemTray.isSupported() && getIconString() == "none") trayIcon.image = ImageManager.getImage("systray/icon$profileID.png")
-            SnipSniper.isIdle = true
-            captureWindow = null
-            System.gc()
-        }
-    }
+    private fun getIconString(): String = config.getString(ConfigHelper.PROFILE.icon)
 
     fun checkNativeKey(identifier: String, pressedKey: Int, pressedLocation: Int) {
         var hotkey = config.getString(ConfigHelper.PROFILE.hotkey)
@@ -98,10 +85,7 @@ class Sniper(val profileID: Int) {
                 }
                 val key = Integer.parseInt(hotkey.replace(identifier, ""))
                 if(pressedKey == key && (location == -1 || location == pressedLocation)) {
-                    if(captureWindow == null && SnipSniper.isIdle) {
-                        captureWindow = CaptureWindow(instance)
-                        SnipSniper.isIdle = false
-                    }
+                    openCaptureWindow()
                 }
             }
         }
@@ -112,4 +96,27 @@ class Sniper(val profileID: Int) {
             return if(it == "none") "Profile $profileID" else it
         }
     }
+
+    private fun openCaptureWindow() {
+        if(captureWindow == null && SnipSniper.isIdle) {
+            if(SystemTray.isSupported() && getIconString() == "none") trayIcon.image = ImageManager.getImage("systray/alt_icon$profileID.png")
+            captureWindow = CaptureWindow(instance)
+            SnipSniper.isIdle = false
+        } else {
+            captureWindow?.requestFocus()
+        }
+    }
+
+    fun killCaptureWindow() {
+        if(captureWindow != null) {
+            if(SystemTray.isSupported() && getIconString() == "none") trayIcon.image = getProfileIcon()
+            SnipSniper.isIdle = true
+            captureWindow = null
+            System.gc()
+        }
+    }
+
+    private fun getProfileIcon(): Image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaledSmooth(16, 16) ?: ImageUtils.getDefaultIcon(profileID)
+
+    fun alert(message: String, title: String, type: TrayIcon.MessageType) = trayIcon.displayMessage(message, title, type)
 }
