@@ -154,16 +154,16 @@ class SnipSniper {
                 CCLogger.log("")
                 CCLogger.log("== Build Info ==")
                 CCLogger.log("Type: $releaseType")
-                CCLogger.log("Version: $version")
+                CCLogger.log("Version: ${getVersionString()}")
                 CCLogger.log("Build date: $buildDate")
                 CCLogger.log("GitHash: $gitHash")
                 CCLogger.log("GitHash Full: $gitHashFull")
                 CCLogger.log("Branch: $branch")
-                CCLogger.log("OS Name: $osName}")
-                CCLogger.log("OS Version: $osVersion}")
-                CCLogger.log("OS Arch: $osArch}")
-                CCLogger.log("Java Vendor: $javaVendor}")
-                CCLogger.log("Java Version: $javaVersion}")
+                CCLogger.log("OS Name: $osName")
+                CCLogger.log("OS Version: $osVersion")
+                CCLogger.log("OS Arch: $osArch")
+                CCLogger.log("Java Vendor: $javaVendor")
+                CCLogger.log("Java Version: $javaVersion")
                 CCLogger.log("")
             }
 
@@ -173,6 +173,7 @@ class SnipSniper {
                 CCLogger.log("OS Version: ${getVersion()}")
                 CCLogger.log("OS Arch: ${getArch()}")
                 CCLogger.log("OS Date/Time: ${getTimeAndDate()} (${getTimeZone()})")
+                CCLogger.log("OS Memory: Free(${getFreePhysicalMemory().prettyPrintBytes()}), Total(${getPhysicalMemory().prettyPrintBytes()})")
                 CCLogger.log("Java Vendor: ${getJavaVendor()}")
                 CCLogger.log("Java Version: ${getJavaVersion()}")
                 CCLogger.log("Java Memory: Free(${getFreeJavaMemory().prettyPrintBytes()}), Total Allocated(${getTotalJavaMemory().prettyPrintBytes()}), Max(${getMaxJavaMemory().prettyPrintBytes()})")
@@ -341,5 +342,7 @@ class SnipSniper {
         fun openConfigWindow(editor: SCEditorWindow) = openConfigWindow(editor.config, ConfigWindow.PAGE.editorPanel)
 
         fun isDebug(): Boolean = config.getBool(ConfigHelper.MAIN.debug)
+
+        fun getVersionString(): String = "${buildInfo.version.digitsToString()}-${buildInfo.releaseType} rev-${buildInfo.gitHash}"
     }
 }

@@ -17,7 +17,8 @@ enum class PlatformType {
 }
 
 enum class ReleaseType {
-    STABLE, DEV, DIRTY, UNKNOWN
+    STABLE, DEV, DIRTY, UNKNOWN;
+    override fun toString(): String = super.toString().lowercase()
 }
 
 enum class PointType {

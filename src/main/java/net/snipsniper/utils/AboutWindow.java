@@ -112,9 +112,9 @@ public class AboutWindow extends JFrame {
                         case DEV: channel = ReleaseType.STABLE; break;
                     }
 
-                    SnipSniper.Companion.getConfig().set(ConfigHelper.MAIN.updateChannel, channel.toString().toLowerCase());
+                    SnipSniper.Companion.getConfig().set(ConfigHelper.MAIN.updateChannel, channel.toString());
                     SnipSniper.Companion.getConfig().save();
-                    Utils.Companion.showPopup(instance, "New update channel: " + channel.toString().toLowerCase(), "Channel unlocked!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, ImageManager.Companion.getImage("icons/checkmark.png"), true);
+                    Utils.Companion.showPopup(instance, "New update channel: " + channel, "Channel unlocked!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, ImageManager.Companion.getImage("icons/checkmark.png"), true);
                 }
             }
         });
@@ -170,7 +170,7 @@ public class AboutWindow extends JFrame {
         BuildInfo bi = SnipSniper.Companion.getBuildInfo();
         Version v = bi.getVersion();
         html = html.replace("%VERSION%", v.digitsToString());
-        html = html.replace("%TYPE%", bi.getReleaseType().toString().toLowerCase());
+        html = html.replace("%TYPE%", bi.getReleaseType().toString());
         html = html.replace("%BUILDDATE%", bi.getBuildDate());
         html = html.replaceAll("%HASH%", bi.getGitHash());
         html = html.replace("%ABOUT_PROGRAMMING%", LangManager.Companion.getItem("about_programming"));

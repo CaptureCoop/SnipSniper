@@ -32,9 +32,7 @@ public class CommandLineHelper {
                     break;
                 case "-version":
                 case "-v":
-                    BuildInfo bi = SnipSniper.Companion.getBuildInfo();
-                    Version v = bi.getVersion();
-                    System.out.printf("%s-%s rev-%s%n", v.digitsToString(), bi.getReleaseType().toString().toLowerCase(), bi.getGitHash());
+                    System.out.println(SnipSniper.Companion.getVersionString());
                     doExit = true;
                     break;
                 case "-demo":
