@@ -30,3 +30,5 @@ fun String.getImage(): BufferedImage = ImageManager.getImage(this)
 fun String.getImage(width: Int, height: Int): BufferedImage = this.getImage().scaled(width, height)
 fun String.getAnimatedImage(): Image = ImageManager.getAnimatedImage(this)
 fun String.translate(): String = LangManager.getItem(this)
+
+fun Long.prettyPrintBytes(): String = Utils.prettyPrintBytes(this)

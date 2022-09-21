@@ -208,6 +208,16 @@ class Utils {
                 return jf.graphicsConfiguration.also { jf.dispose() }
             }
         }
+
+        fun prettyPrintBytes(value: Long): String {
+            val kb = value / 1024
+            val mb = kb / 1024
+            val gb = mb / 1024
+
+            return if(gb > 0)   "$gb GB"
+            else if(mb > 0)     "$mb MB"
+            else                "$kb KB"
+        }
     }
 
 }
