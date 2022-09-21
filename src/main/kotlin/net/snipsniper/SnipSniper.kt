@@ -207,17 +207,18 @@ class SnipSniper {
                 val editorConfig = SCEditorWindow.getStandaloneEditorConfig()
                 editorConfig.save()
 
-                val fileExists: Boolean
                 var img: BufferedImage? = null
                 var path = ""
                 if ((cmdline.editorFile != null && cmdline.editorFile.isNotEmpty()) || (launchType == LaunchType.EDITOR && args.isNotEmpty())) {
                     try {
-                        path = if (cmdline.editorFile != null && cmdline.editorFile.isNotEmpty()) cmdline.editorFile
-                        else args[0]
+                        path = if (cmdline.editorFile != null && cmdline.editorFile.isNotEmpty())
+                            cmdline.editorFile
+                        else
+                            args[0]
 
-                        val file = File(path)
-                        fileExists = file.exists()
-                        if (fileExists) img = ImageIO.read(file)
+                        File(path).also {
+                            if(it.exists()) img = ImageIO.read(it)
+                        }
                     } catch (ioException: IOException) {
                         CCLogger.log("Error reading image file for editor, path: %c", CCLogLevel.ERROR, path)
                         CCLogger.logStacktrace(ioException, CCLogLevel.ERROR)
