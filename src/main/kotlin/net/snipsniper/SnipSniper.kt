@@ -175,6 +175,7 @@ class SnipSniper {
                 CCLogger.log("OS Date/Time: ${getTimeAndDate()} (${getTimeZone()})")
                 CCLogger.log("Java Vendor: ${getJavaVendor()}")
                 CCLogger.log("Java Version: ${getJavaVersion()}")
+                CCLogger.log("Java Memory: Free(${getFreeJavaMemory().prettyPrintBytes()}), Total Allocated(${getTotalJavaMemory().prettyPrintBytes()}), Max(${getMaxJavaMemory().prettyPrintBytes()})")
                 CCLogger.log("")
             }
 

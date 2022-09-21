@@ -210,6 +210,7 @@ class Utils {
         }
 
         fun prettyPrintBytes(value: Long): String {
+            if(value == Long.MAX_VALUE) return "No Limit"
             val kb = value / 1024
             val mb = kb / 1024
             val gb = mb / 1024
