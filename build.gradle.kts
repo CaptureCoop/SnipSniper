@@ -67,6 +67,12 @@ fun prepare() {
     if(!grgit.status().isClean && System.getenv("GITHUB_RUN_NUMBER") == null)
         type = "dirty"
 
+    if(type != "stable" || type != "release") {
+        sourceSets.getByName("main") {
+            resources.srcDir("src/main/resources-dev")
+        }
+    }
+
     val projectVersion = File("version.txt").readLines()[0]
     val buildDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
     val buildInfo = """
