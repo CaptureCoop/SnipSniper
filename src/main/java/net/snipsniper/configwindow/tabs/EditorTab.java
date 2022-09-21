@@ -88,12 +88,9 @@ public class EditorTab extends JPanel implements ITab{
 
         gbc.gridx = 0;
         gbc.insets.top = 20;
-        JPanel row3_stampConfig = new JPanel(new GridBagLayout());
-        StampJPanel row3_stampPreview = new StampJPanel();
-        row3_stampPreview.setMargin(10);
-        row3_stampPreview.setBackground(ImageManager.Companion.getCodePreview());
         IStamp stamp = StampType.getByIndex(0).getIStamp(config, null);
-        row3_stampPreview.setStamp(stamp);
+        JPanel row3_stampConfig = new JPanel(new GridBagLayout());
+        StampJPanel row3_stampPreview = new StampJPanel(stamp, ImageManager.Companion.getCodePreview(), 10);
 
         final Function[] onUpdate = {null};
 
