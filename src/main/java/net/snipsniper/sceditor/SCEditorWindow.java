@@ -321,6 +321,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
             setImage(window.getImage(), true, true);
             isDirty = true;
             repaint();
+            refreshTitle();
         });
     }
 
