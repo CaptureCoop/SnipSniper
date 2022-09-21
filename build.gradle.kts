@@ -6,14 +6,24 @@ import java.time.format.DateTimeFormatter
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-
 plugins {
     kotlin("jvm") version "1.5.31"
-    id("application")
     id("org.ajoberstar.grgit") version "4.1.1"
+    id("application")
 }
 
+tasks.test {
+    useJUnit()
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+val ssMain = "net.snipsniper.MainKt"
 group = "net.snipsniper"
+
+application { mainClass.set(ssMain) }
 
 repositories {
     mavenCentral()
@@ -50,7 +60,7 @@ fun refreshWiki() {
     }
 }
 
-tasks.register("preBuild") {
+fun prepare() {
     refreshWiki()
 
     var type = System.getProperty("type") ?: "dev"
@@ -80,30 +90,6 @@ tasks.register("preBuild") {
     f.writeText(buildInfo)
 }
 
-tasks.test {
-    useJUnit()
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
-tasks.withType<Jar> {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    manifest { attributes["Main-Class"] = "net.snipsniper.MainKt" }
-
-    dependsOn(configurations.runtimeClasspath)
-    from({
-        sourceSets.main.get().output
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-    })
-}
-
-application {
-    mainClass.set("net.snipsniper.MainKt")
-}
-
 fun getSystemVersion(): String {
     if(!OperatingSystem.current().isWindows) return System.getProperty("os.version")
     Runtime.getRuntime().exec("cmd.exe /c ver").also {
@@ -113,4 +99,15 @@ fun getSystemVersion(): String {
             return Regex("(?<=\\[)(.*?)(?=\\])").find(output)?.value?.toLowerCase()?.replace("version ", "") ?: output
         }
     }
+}
+
+tasks.withType<Jar> {
+    prepare()
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest { attributes["Main-Class"] = ssMain }
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        sourceSets.main.get().output
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
 }
