@@ -53,13 +53,6 @@ class ImageManager {
             }
         }
 
-        //Note: This does not handle custom images, that is done in Sniper.kt
-        fun getTrayIcon(profileID: Int, alt: Boolean = false): Image {
-            if(alt) return getImage("systray/alt_icon$profileID.png")
-            if(SnipSniper.buildInfo.releaseType == ReleaseType.STABLE) return getImage("systray/icon$profileID.png")
-            return getImage("systray/white_icon$profileID.png")
-        }
-
         private fun getMissingImg(): BufferedImage {
             val image = BufferedImage(missingImgSize, missingImgSize, BufferedImage.TYPE_INT_RGB)
             val g = image.createGraphics()

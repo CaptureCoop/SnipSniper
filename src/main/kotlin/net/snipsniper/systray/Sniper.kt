@@ -28,6 +28,7 @@ class Sniper(private val profileID: Int) {
 
     private var nativeKeyAdapter: NativeKeyAdapter
     private var nativeMouseAdapter: NativeMouseAdapter
+    private var isCustomIcon = false
     //TODO: Maybe make a function for opening the capture window so that we call isIdle = false at a unified place?
     //TODO: We check twice if iconString or whatever is none, we should not statically check that but maybe check with the defaults?
     init {
@@ -35,7 +36,7 @@ class Sniper(private val profileID: Int) {
         if(SystemTray.isSupported()) {
             val popup = Popup(this)
             val tray = SystemTray.getSystemTray()
-            val image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaledSmooth(16, 16) ?: ImageManager.getTrayIcon(profileID)
+            val image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaledSmooth(16, 16).also { isCustomIcon = true } ?: getTrayIcon(profileID)
             image.flush()
             trayIcon = TrayIcon(image, "SnipSniper(${getTitle()})")
             trayIcon.isImageAutoSize = true
@@ -70,9 +71,6 @@ class Sniper(private val profileID: Int) {
         SystemTray.getSystemTray().remove(trayIcon)
     }
 
-    private fun getIconString(): String = config.getString(ConfigHelper.PROFILE.icon)
-    private fun isNotCustomIcon(): Boolean = config.getString(ConfigHelper.PROFILE.icon) == config.getDefault(ConfigHelper.PROFILE.icon)
-
     fun checkNativeKey(identifier: String, pressedKey: Int, pressedLocation: Int) {
         var hotkey = config.getString(ConfigHelper.PROFILE.hotkey)
         if(hotkey != "NONE") {
@@ -99,7 +97,7 @@ class Sniper(private val profileID: Int) {
 
     private fun openCaptureWindow() {
         if(captureWindow == null && SnipSniper.isIdle) {
-            if(SystemTray.isSupported() && isNotCustomIcon()) trayIcon.image = ImageManager.getTrayIcon(profileID, true)
+            if(SystemTray.isSupported() && isCustomIcon) trayIcon.image = getTrayIcon(profileID, true)
             captureWindow = CaptureWindow(instance)
             SnipSniper.isIdle = false
         } else {
@@ -109,11 +107,18 @@ class Sniper(private val profileID: Int) {
 
     fun killCaptureWindow() {
         if(captureWindow != null) {
-            if(SystemTray.isSupported() && isNotCustomIcon()) trayIcon.image = ImageManager.getTrayIcon(profileID)
+            if(SystemTray.isSupported() && isCustomIcon) trayIcon.image = getTrayIcon(profileID)
             SnipSniper.isIdle = true
             captureWindow = null
             System.gc()
         }
+    }
+
+    //Note: This does not handle custom images
+    private fun getTrayIcon(profileID: Int, alt: Boolean = false): Image {
+        if(alt) return ImageManager.getImage("systray/alt_icon$profileID.png")
+        if(SnipSniper.buildInfo.releaseType == ReleaseType.STABLE) return ImageManager.getImage("systray/icon$profileID.png")
+        return ImageManager.getImage("systray/white_icon$profileID.png")
     }
 
     fun alert(message: String, title: String, type: TrayIcon.MessageType) = trayIcon.displayMessage(message, title, type)
