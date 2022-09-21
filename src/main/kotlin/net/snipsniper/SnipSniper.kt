@@ -227,7 +227,7 @@ class SnipSniper {
                         CCLogger.logStacktrace(ioException, CCLogLevel.ERROR)
                     }
                 }
-                SCEditorWindow(img, -1, -1, "SnipSniper Editor", config, false, path, false, true)
+                SCEditorWindow(img, -1, -1, "SnipSniper Editor", editorConfig, false, path, false, true)
             } else if(cmdline.isViewerOnly || launchType == LaunchType.VIEWER) {
                 var file: File? = null
                 if(cmdline.viewerFile != null && cmdline.viewerFile.isNotEmpty())
