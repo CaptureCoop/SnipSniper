@@ -68,6 +68,9 @@ class SnipSniper {
         fun start(args: Array<String>) {
             this.args = args
 
+            System.setProperty("sun.java2d.uiScale.enabled", "false")
+            System.setProperty("sun.java2d.uiScale", "1")
+
             if (!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
                 println("SnipSniper is currently only supported fully on Windows! Proceed at your own caution!")
                 exitProcess(0)
