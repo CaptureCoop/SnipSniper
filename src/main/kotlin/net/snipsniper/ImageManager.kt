@@ -2,6 +2,7 @@ package net.snipsniper
 
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.FileUtils
+import net.snipsniper.utils.ReleaseType
 import org.capturecoop.cclogger.CCLogger
 import org.json.JSONArray
 import java.awt.Color
@@ -50,6 +51,13 @@ class ImageManager {
                 "light" -> images["preview/code_light.png"] ?: missingImg
                 else -> missingImg
             }
+        }
+
+        //Note: This does not handle custom images, that is done in Sniper.kt
+        fun getTrayIcon(profileID: Int, alt: Boolean = false): Image {
+            if(alt) return getImage("systray/alt_icon$profileID.png")
+            if(SnipSniper.buildInfo.releaseType == ReleaseType.STABLE) return getImage("systray/icon$profileID.png")
+            return getImage("systray/white_icon$profileID.png")
         }
 
         private fun getMissingImg(): BufferedImage {
