@@ -105,7 +105,7 @@ public class AboutWindow extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(SnipSniper.Companion.getVersion().getPlatformType() == PlatformType.JAR && onC) {
+                if(SnipSniper.Companion.getPlatformType() == PlatformType.JAR && onC) {
                     ReleaseType channel = Utils.Companion.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
                     switch(channel) {
                         case STABLE: channel = ReleaseType.DEV; break;
@@ -167,11 +167,12 @@ public class AboutWindow extends JFrame {
 
         inputStream.close();
         streamReader.close();
-        Version v = SnipSniper.Companion.getVersion();
+        BuildInfo bi = SnipSniper.Companion.getBuildInfo();
+        Version v = bi.getVersion();
         html = html.replace("%VERSION%", v.digitsToString());
-        html = html.replace("%TYPE%", v.getReleaseType().toString().toLowerCase());
-        html = html.replace("%BUILDDATE%", v.getBuildDate());
-        html = html.replaceAll("%HASH%", v.getGithash());
+        html = html.replace("%TYPE%", bi.getReleaseType().toString().toLowerCase());
+        html = html.replace("%BUILDDATE%", bi.getBuildDate());
+        html = html.replaceAll("%HASH%", bi.getGitHash());
         html = html.replace("%ABOUT_PROGRAMMING%", LangManager.Companion.getItem("about_programming"));
         html = html.replace("%ABOUT_CD%", LangManager.Companion.getItem("about_cd"));
         html = html.replace("%ABOUT_MATH%", LangManager.Companion.getItem("about_math"));

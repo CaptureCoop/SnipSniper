@@ -137,7 +137,7 @@ public class GlobalTab extends JPanel implements ITab{
 
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 10, 0, 10);
-        String version = SnipSniper.Companion.getVersion().toString();
+        String version = SnipSniper.Companion.getBuildInfo().getVersion().toString();
         ReleaseType releaseType = Utils.Companion.getReleaseType(SnipSniper.Companion.getConfig().getString(ConfigHelper.MAIN.updateChannel));
         String channel = releaseType.toString().toLowerCase();
         options.add(configWindow.createJLabel(CCStringUtils.format("<html><p>Current Version: %c</p><p>Update Channel: %c</p></html>", version, channel), JLabel.CENTER, JLabel.CENTER), gbc);
@@ -186,7 +186,7 @@ public class GlobalTab extends JPanel implements ITab{
         options.add(debugCheckBox, gbc);
 
         IFunction[] autostart = {null};
-        if(SystemUtils.IS_OS_WINDOWS && SnipSniper.Companion.getVersion().getPlatformType() == PlatformType.JAR) {
+        if(SystemUtils.IS_OS_WINDOWS && SnipSniper.Companion.getPlatformType() == PlatformType.JAR) {
             gbc.gridx = 0;
             options.add(configWindow.createJLabel("Start with Windows", JLabel.RIGHT, JLabel.CENTER), gbc);
             gbc.gridx = 1;

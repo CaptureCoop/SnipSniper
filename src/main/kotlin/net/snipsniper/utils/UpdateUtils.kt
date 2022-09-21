@@ -8,7 +8,7 @@ import org.capturecoop.cclogger.CCLogger
 class UpdateUtils {
     companion object {
         fun update() {
-            val type = SnipSniper.version.platformType
+            val type = SnipSniper.platformType
             if(type == PlatformType.UNKNOWN) return
 
             val pathInJar = "net/snipsniper/resources/SnipUpdater.jar"

@@ -22,7 +22,6 @@ import java.io.IOException
 import java.net.URLDecoder
 import java.nio.file.Paths
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -36,8 +35,6 @@ import kotlin.system.exitProcess
 class SnipSniper {
     companion object {
         const val PROFILE_COUNT: Int = 8
-        lateinit var version: Version
-            private set
         lateinit var config: Config
             private set
         private lateinit var args: Array<String>
@@ -62,6 +59,10 @@ class SnipSniper {
 
         private var configWindow: ConfigWindow? = null
         private val profiles = arrayOfNulls<Sniper>(PROFILE_COUNT)
+        lateinit var buildInfo: BuildInfo
+            private set
+        lateinit var platformType: PlatformType
+            private set
 
         private lateinit var uncaughtExceptionHandler: Thread.UncaughtExceptionHandler
 
@@ -82,15 +83,11 @@ class SnipSniper {
             Logger.getLogger(GlobalScreen::class.java.`package`.name).level = Level.OFF
 
             val launchType = Utils.getLaunchType(System.getProperty("launchType"))
+            platformType = Utils.getPlatformType(System.getProperty("platformType"))
 
-            val buildInfo = Config("buildinfo.cfg", "buildinfo.cfg", true)
-            val releaseType = Utils.getReleaseType(buildInfo.getString(ConfigHelper.BUILDINFO.type))
-            val platformType = Utils.getPlatformType(System.getProperty("platform"))
-            val digits = buildInfo.getString(ConfigHelper.BUILDINFO.version)
-            val buildDate = buildInfo.getString(ConfigHelper.BUILDINFO.builddate)
-            val githash = buildInfo.getString(ConfigHelper.BUILDINFO.githash)
-
-            version = Version(digits, releaseType, platformType, buildDate, githash)
+            Config("buildinfo.cfg", "buildinfo.cfg", true).also {
+                buildInfo = BuildInfo(it)
+            }
 
             //This is done here, not further below so that if we run a command like -version we dont save anything to disk!
             val cmdline = CommandLineHelper().also { it.handle(args) }
@@ -112,7 +109,7 @@ class SnipSniper {
             val logFileName = LocalDateTime.now().toString().replace(".", "_").replace(":", "_") + ".log"
             CCLogger.setLogFormat(config.getString(ConfigHelper.MAIN.logFormat))
             CCLogger.setLogFile(File(logFolder, logFileName))
-            CCLogger.setGitHubCodePathURL("https://github.com/CaptureCoop/SnipSniper/tree/${version.githash}/src/main/java/")
+            CCLogger.setGitHubCodePathURL("https://github.com/CaptureCoop/SnipSniper/tree/${buildInfo.gitHash}/src/main/java/")
             CCLogger.setGitHubCodeClassPath("net.snipsniper")
             CCLogger.setPaused(false)
 
@@ -152,32 +149,35 @@ class SnipSniper {
             LangManager.load()
             WikiManager.load(LangManager.getLanguage())
 
-            CCLogger.log("Launching SnipSniper Version ${version.digitsToString()} (rev-${version.githash})")
-            CCLogger.log("")
-            CCLogger.log("== Build Info ==")
-            CCLogger.log("Type: ${buildInfo.getString(ConfigHelper.BUILDINFO.type)}")
-            CCLogger.log("Version: ${buildInfo.getString(ConfigHelper.BUILDINFO.version)}")
-            CCLogger.log("Build date: ${buildInfo.getString(ConfigHelper.BUILDINFO.builddate)}")
-            CCLogger.log("GitHash: ${buildInfo.getString(ConfigHelper.BUILDINFO.githash)}")
-            CCLogger.log("GitHash Full: ${buildInfo.getString(ConfigHelper.BUILDINFO.githashfull)}")
-            CCLogger.log("Branch: ${buildInfo.getString(ConfigHelper.BUILDINFO.branch)}")
-            CCLogger.log("OS Name: ${buildInfo.getString(ConfigHelper.BUILDINFO.osname)}")
-            CCLogger.log("OS Version: ${buildInfo.getString(ConfigHelper.BUILDINFO.osversion)}")
-            CCLogger.log("OS Arch: ${buildInfo.getString(ConfigHelper.BUILDINFO.osarch)}")
-            CCLogger.log("Java Vendor: ${buildInfo.getString(ConfigHelper.BUILDINFO.javavendor)}")
-            CCLogger.log("Java Version: ${buildInfo.getString(ConfigHelper.BUILDINFO.javaver)}")
-            CCLogger.log("")
-
-            CCLogger.log("== System Info ==")
-            CCLogger.log("OS Name: ${System.getProperty("os.name")}")
-            CCLogger.log("OS Version: ${Utils.getSystemVersion()}")
-            CCLogger.log("OS Arch: ${System.getProperty("os.arch")}")
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")).also {
-                CCLogger.log("OS Date/Time: $it (${TimeZone.getDefault().id})")
+            CCLogger.log("Launching SnipSniper Version ${buildInfo.version.digitsToString()} (rev-${buildInfo.gitHash})")
+            buildInfo.run {
+                CCLogger.log("")
+                CCLogger.log("== Build Info ==")
+                CCLogger.log("Type: $releaseType")
+                CCLogger.log("Version: $version")
+                CCLogger.log("Build date: $buildDate")
+                CCLogger.log("GitHash: $gitHash")
+                CCLogger.log("GitHash Full: $gitHashFull")
+                CCLogger.log("Branch: $branch")
+                CCLogger.log("OS Name: $osName}")
+                CCLogger.log("OS Version: $osVersion}")
+                CCLogger.log("OS Arch: $osArch}")
+                CCLogger.log("Java Vendor: $javaVendor}")
+                CCLogger.log("Java Version: $javaVersion}")
+                CCLogger.log("")
             }
-            CCLogger.log("Java Vendor: ${System.getProperty("java.vendor")}")
-            CCLogger.log("Java Version: ${System.getProperty("java.version")}")
-            CCLogger.log("")
+
+            SystemInfo.run {
+                CCLogger.log("== System Info ==")
+                CCLogger.log("OS Name: ${getName()}")
+                CCLogger.log("OS Version: ${getVersion()}")
+                CCLogger.log("OS Arch: ${getArch()}")
+                CCLogger.log("OS Date/Time: ${getTimeAndDate()} (${getTimeZone()})")
+                CCLogger.log("Java Vendor: ${getJavaVendor()}")
+                CCLogger.log("Java Version: ${getJavaVersion()}")
+                CCLogger.log("")
+            }
+
             if (SystemUtils.IS_OS_LINUX) {
                 CCLogger.log("=================================================================================", CCLogLevel.WARNING)
                 CCLogger.log("= SnipSniper Linux is still in development and may not work properly or at all. =", CCLogLevel.WARNING)
@@ -329,9 +329,9 @@ class SnipSniper {
 
         fun restart() {
             //TODO: Add for other platform types!
-            when(version.platformType) {
+            when(platformType) {
                 PlatformType.JAR -> Utils.restartApplication(*args)
-                else -> CCLogger.log("Warning: Restart has not been implemented for this platform! (${version.platformType})", CCLogLevel.WARNING)
+                else -> CCLogger.log("Warning: Restart has not been implemented for this platform! ($platformType)", CCLogLevel.WARNING)
             }
         }
 
