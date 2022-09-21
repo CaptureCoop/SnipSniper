@@ -24,12 +24,26 @@ class Popup(private val sniper: Sniper): JFrame() {
             val w = (splash.width / 3F).toInt()
             val h = (splash.height / 3F).toInt()
             JLabel(splash.scaledSmooth(w, h).toImageIcon()).also {
-                it.text = sniper.getTitle()
+                it.alignmentX = JPanel.CENTER_ALIGNMENT
+                add(it)
+            }
+        }
+
+        if(SnipSniper.buildInfo.releaseType != ReleaseType.STABLE) {
+            JLabel(SnipSniper.getVersionString()).also {
                 it.alignmentX = JPanel.CENTER_ALIGNMENT
                 it.verticalTextPosition = JLabel.BOTTOM
                 it.horizontalTextPosition = JLabel.CENTER
+                it.font = it.font.deriveFont(it.font.size / 1.25F)
                 add(it)
             }
+        }
+
+        JLabel(sniper.getTitle()).also {
+            it.alignmentX = JPanel.CENTER_ALIGNMENT
+            it.verticalTextPosition = JLabel.BOTTOM
+            it.horizontalTextPosition = JLabel.CENTER
+            add(it)
         }
 
         val menus = ArrayList<PopupMenu>()
