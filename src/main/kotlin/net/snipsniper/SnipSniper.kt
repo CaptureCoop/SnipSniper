@@ -212,16 +212,10 @@ class SnipSniper {
 
                 var img: BufferedImage? = null
                 var path = ""
-                if ((cmdline.editorFile != null && cmdline.editorFile.isNotEmpty()) || (launchType == LaunchType.EDITOR && args.isNotEmpty())) {
+                if (!cmdline.editorFile.isNullOrEmpty() || (launchType == LaunchType.EDITOR && args.isNotEmpty())) {
                     try {
-                        path = if (cmdline.editorFile != null && cmdline.editorFile.isNotEmpty())
-                            cmdline.editorFile
-                        else
-                            args[0]
-
-                        File(path).also {
-                            if(it.exists()) img = ImageIO.read(it)
-                        }
+                        path = cmdline.editorFile.ifEmpty { args[0] }
+                        File(path).also { if(it.exists()) img = ImageIO.read(it) }
                     } catch (ioException: IOException) {
                         CCLogger.log("Error reading image file for editor, path: %c", CCLogLevel.ERROR, path)
                         CCLogger.logStacktrace(ioException, CCLogLevel.ERROR)
