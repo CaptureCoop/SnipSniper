@@ -2,7 +2,6 @@ package net.snipsniper
 
 import com.formdev.flatlaf.FlatDarculaLaf
 import com.formdev.flatlaf.FlatIntelliJLaf
-import com.sun.management.OperatingSystemMXBean
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.configwindow.ConfigWindow
@@ -20,7 +19,6 @@ import java.awt.SystemTray
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
-import java.lang.management.ManagementFactory
 import java.net.URLDecoder
 import java.nio.file.Paths
 import java.time.LocalDateTime
@@ -178,7 +176,6 @@ class SnipSniper {
                 CCLogger.log("OS Date/Time: $it (${TimeZone.getDefault().id})")
             }
             CCLogger.log("Java Vendor: ${System.getProperty("java.vendor")}")
-            CCLogger.log("Java Version: ${System.getProperty("java.version")}")
             CCLogger.log("Java Version: ${System.getProperty("java.version")}")
             CCLogger.log("")
             if (SystemUtils.IS_OS_LINUX) {
