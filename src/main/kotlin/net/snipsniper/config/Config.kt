@@ -9,8 +9,8 @@ import java.io.*
 
 class Config {
     private lateinit var filename: String
-    private var settings = ConfigContainer()
-    private var defaults = ConfigContainer()
+    private val settings = ConfigContainer()
+    private val defaults = ConfigContainer()
 
     companion object {
         const val EXTENSION = "cfg"
@@ -102,6 +102,8 @@ class Config {
     fun set(key: Any, value: String) = set(key.toString(), value)
     fun set(key: Any, value: Int) = set(key.toString(), value.toString())
     fun set(key: Any, value: Boolean) = set(key.toString(), value.toString())
+
+    fun getDefault(key: Any): String? = defaults.get(key.toString())
 
     fun deleteFile() = File(getSavePath()).delete()
 
