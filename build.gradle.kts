@@ -7,7 +7,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 plugins {
-    kotlin("jvm") version "1.5.31"
+    kotlin("jvm") version "1.7.10"
     id("org.ajoberstar.grgit") version "4.1.1"
     id("application")
 }
@@ -30,7 +30,6 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.1stleg:jnativehook:2.1.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
@@ -63,7 +62,7 @@ fun prepare() {
     if(!grgit.status().isClean && System.getenv("GITHUB_RUN_NUMBER") == null)
         type = "dirty"
 
-    if(type != "stable" || type != "release") {
+    if(type != "stable" && type != "release") {
         sourceSets.getByName("main") {
             resources.srcDir("src/main/resources-dev")
         }
