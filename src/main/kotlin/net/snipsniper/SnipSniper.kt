@@ -34,6 +34,9 @@ import kotlin.system.exitProcess
 
 class SnipSniper {
     companion object {
+        val defaultProfileConfig = Config("", "profile_defaults.cfg", true)
+        val defaultGlobalConfig = Config("", "main_defaults.cfg", true)
+
         const val PROFILE_COUNT: Int = 8
         lateinit var config: Config
             private set
