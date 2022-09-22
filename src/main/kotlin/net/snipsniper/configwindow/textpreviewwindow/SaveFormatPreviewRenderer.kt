@@ -1,23 +1,24 @@
 package net.snipsniper.configwindow.textpreviewwindow
 
+import net.snipsniper.SnipSniper
+import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.DrawUtils
 import net.snipsniper.utils.Utils
 import java.awt.*
 import javax.swing.JPanel
 
 class SaveFormatPreviewRenderer(width: Int, height: Int) : JPanel() {
-    //TODO: Shouldnt this be in a config?
     lateinit var textPreviewWindow: TextPreviewWindow
-
-    companion object {
-        val DEFAULT_FORMAT = "%year%-%month%-%day%__%hour%_%minute%_%second%"
-    }
 
     init {
         Dimension(width, height).also {
             preferredSize = it
             minimumSize = it
         }
+    }
+
+    companion object {
+        val DEFAULT_FORMAT = SnipSniper.defaultProfileConfig.getString(ConfigHelper.PROFILE.saveFormat)
     }
 
     override fun paint(g: Graphics) {
