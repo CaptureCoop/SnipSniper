@@ -27,7 +27,7 @@ import kotlin.math.min
 class Utils {
     companion object {
         fun getPlatformType(string: String?): PlatformType {
-            if(string == null || string.isEmpty()) return PlatformType.JAR
+            if(string.isNullOrEmpty()) return PlatformType.JAR
 
             return when(string.lowercase()) {
                 "jar" -> PlatformType.JAR
@@ -153,7 +153,6 @@ class Utils {
         }
 
         fun showPopup(parent: Component, message: String, title: String, optionType: Int, messageType: Int, icon: BufferedImage, blockScreenshot: Boolean): Int {
-            //TODO: Is this correct? This is how it was in the java file...
             if(blockScreenshot) SnipSniper.isIdle = false
             val result = JOptionPane.showConfirmDialog(parent, message, title, optionType, messageType, ImageIcon(icon.scaled(16, 16)))
             if(blockScreenshot) SnipSniper.isIdle = true
