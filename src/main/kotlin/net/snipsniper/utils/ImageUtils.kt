@@ -109,7 +109,6 @@ class ImageUtils {
                         }
                     }
                     SSFile.LOCATION.LOCAL -> getImageFromDisk(SnipSniper.imgFolder + "/" + it.path)
-                    null -> null
                 }
             }
         }
