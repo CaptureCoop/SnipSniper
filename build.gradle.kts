@@ -45,19 +45,15 @@ dependencies {
 }
 
 fun refreshWiki() {
-    val workingDir = "src//main//resources//net//snipsniper//resources//wiki//"
-    exec {
-        workingDir(workingDir)
-        commandLine("git", "checkout", "master")
+    fun d(vararg commands: String) {
+        exec {
+            workingDir("src/main/resources/net/snipsniper/resources/wiki/")
+            commandLine(*commands)
+        }
     }
-    exec {
-        workingDir(workingDir)
-        commandLine("git", "submodule", "update")
-    }
-    exec {
-        workingDir(workingDir)
-        commandLine("git", "pull")
-    }
+    d("git", "checkout", "master")
+    d("git", "submodule", "update")
+    d("git", "pull")
 }
 
 fun prepare() {
