@@ -1,9 +1,9 @@
 package net.snipsniper.utils
 
-interface IFunction {
+fun interface IFunction {
     fun run(vararg args: String)
 }
 
-interface CustomWindowListener {
+fun interface CustomWindowListener {
     fun windowClosed()
 }
