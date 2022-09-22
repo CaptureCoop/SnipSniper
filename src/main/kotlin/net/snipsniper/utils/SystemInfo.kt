@@ -1,7 +1,6 @@
-package net.snipsniper
+package net.snipsniper.utils
 
 import com.sun.management.OperatingSystemMXBean
-import net.snipsniper.utils.Utils
 import java.lang.management.ManagementFactory
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
