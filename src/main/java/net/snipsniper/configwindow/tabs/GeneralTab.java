@@ -257,7 +257,7 @@ public class GeneralTab extends JPanel implements ITab{
             saveFormatPreview.setOnSave(args -> {
                 String text = saveFormatPreview.getText();
                 if(text.isEmpty()) {
-                    text = SaveFormatPreviewRenderer.DEFAULT_FORMAT;
+                    text = SaveFormatPreviewRenderer.Companion.getDEFAULT_FORMAT();
                 }
                 config.set(ConfigHelper.PROFILE.saveFormat, text);
                 saveFormatButton.setText(Utils.Companion.constructFilename(text, ""));
