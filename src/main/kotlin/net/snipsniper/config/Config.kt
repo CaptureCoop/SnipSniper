@@ -22,11 +22,12 @@ class Config {
         loadFromConfig(config)
     }
 
+    //TODO: Remove once no java classes use this anymore!
     constructor(filename: String, defaultFile: String) {
         loadFromDisk(filename, defaultFile, false)
     }
 
-    constructor(filename: String, defaultFile: String, ignoreLocal: Boolean) {
+    constructor(filename: String, defaultFile: String, ignoreLocal: Boolean = false) {
         loadFromDisk(filename, defaultFile, ignoreLocal)
     }
 
@@ -58,7 +59,8 @@ class Config {
     }
 
     private fun loadFile(filename: String, container: ConfigContainer, inJar: Boolean) {
-        val reader = if(inJar) BufferedReader(InputStreamReader(javaClass.getResourceAsStream(filename))) else BufferedReader(FileReader(filename))
+        val stream = javaClass.getResourceAsStream(filename) ?: throw FileNotFoundException("$filename not found!")
+        val reader = if(inJar) BufferedReader(InputStreamReader(stream)) else BufferedReader(FileReader(filename))
         reader.lineSequence().forEach {
             if(it.startsWith("#")) {
                 container.set(it)
@@ -76,7 +78,7 @@ class Config {
 
     //TODO: In the old config file we used way more checking if values are the type they are asking for, and if they are null
     //Make sure this works!
-    fun getRawString(key: String): String {
+    private fun getRawString(key: String): String {
         val def = "<NULL> ($key)"
         val result = settings.get(key) ?: defaults.get(key) ?: def
         if(result == def) CCLogger.log("No value found for <$key> in Config <${SnipSniper.configFolder + filename}>.", CCLogLevel.ERROR)
