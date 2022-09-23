@@ -112,7 +112,6 @@ val buildTask = task("buildJar", type = Jar::class) {
     sourceSets.create("mainSet") {
         java.srcDir("src/main/java")
         java.srcDir("src/main/kotlin")
-        compileClasspath = runtimeClasspath
     }
 
     archiveFileName.set("${project.name}.jar")
