@@ -8,12 +8,8 @@ import java.io.InputStreamReader
 
 plugins {
     kotlin("jvm") version "1.7.10"
-    id("org.ajoberstar.grgit") version "4.1.1"
+    id("org.ajoberstar.grgit") version "4.1.1" //Used to determine the status of the repo
     id("application")
-}
-
-tasks.test {
-    useJUnit()
 }
 
 tasks.withType<KotlinCompile> {
@@ -22,6 +18,10 @@ tasks.withType<KotlinCompile> {
 
 val ssMain = "net.snipsniper.MainKt"
 group = "net.snipsniper"
+//The type of release, either stable/release, dev or release. Used to determine how to build & passed onto SnipSniper
+//Dev = "Clean build", but not stable
+//Dirty = Uncommitted changes
+val type = System.getProperty("type") ?: if(!grgit.status().isClean && System.getenv("GITHUB_RUN_NUMBER") == null) "dirty" else "dev"
 
 application { mainClass.set(ssMain) }
 
@@ -31,18 +31,21 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("com.1stleg:jnativehook:2.1.0")
+    implementation("com.1stleg:jnativehook:2.1.0") //Used for global keyboard and mouse events
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.apache.commons:commons-text:1.9")
     implementation("org.json:json:20220320")
-    implementation("com.formdev:flatlaf:1.6")
-    implementation("com.erigir:mslinks:0.0.2+5")
+    implementation("com.formdev:flatlaf:1.6") //Swing Theme
+    implementation("com.erigir:mslinks:0.0.2+5") //Utility for windows shortcuts
 
-    implementation("org.capturecoop:CCUtils:1.9.4")
-    implementation("org.capturecoop:CCLogger:1.6.2")
-    implementation("org.capturecoop:CCColorUtils:1.0.3")
+    implementation("org.capturecoop:CCUtils:1.9.4") //CaptureCoop Common Utils
+    implementation("org.capturecoop:CCLogger:1.6.2") //CaptureCoop logger
+    implementation("org.capturecoop:CCColorUtils:1.0.3") //CaptureCoop Color utils & Color Chooser
 }
 
+//SnipSniper includes another repository where we store json files with information about SnipSniper
+//The idea is that we have one common place where we explain SnipSniper features which we can then bind into the executable & a website
+//This function itself refreshes the sub-repository
 fun refreshWiki() {
     fun d(vararg commands: String) {
         exec {
@@ -55,18 +58,10 @@ fun refreshWiki() {
     d("git", "pull")
 }
 
+//This function calls refreshWiki() and creates buildinfo.cfg. A file which is included in SnipSniper with information related to the build
+//This is how SnipSniper determines its version and so on
 fun prepare() {
     refreshWiki()
-
-    var type = System.getProperty("type") ?: "dev"
-    if(!grgit.status().isClean && System.getenv("GITHUB_RUN_NUMBER") == null)
-        type = "dirty"
-
-    if(type != "stable" && type != "release") {
-        sourceSets.getByName("main") {
-            resources.srcDir("src/main/resources-dev")
-        }
-    }
 
     val projectVersion = File("version.txt").readLines()[0]
     val buildDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
@@ -91,6 +86,8 @@ fun prepare() {
     f.writeText(buildInfo)
 }
 
+//This returns os.version or the detailed windows build, if on windows
+//(Thanks microsoft for returning 10 while linux returns a detailed build nr!)
 fun getSystemVersion(): String {
     if(!OperatingSystem.current().isWindows) return System.getProperty("os.version")
     Runtime.getRuntime().exec("cmd.exe /c ver").also {
@@ -102,13 +99,39 @@ fun getSystemVersion(): String {
     }
 }
 
-tasks.withType<Jar> {
+//Main build task, made seperate from <Jar> task so that we can choose what to include and how
+val buildTask = task("buildJar", type = Jar::class) {
     prepare()
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    manifest { attributes["Main-Class"] = ssMain }
+
+    //Dev Source set, allowed to overwrite main resources
+    //TODO: Make dev only once working
+    sourceSets.create("devSet") {
+        resources.srcDir("src/main/resources-dev")
+    }
+    //Main resources
+    sourceSets.create("mainSet") {
+        java.srcDir("src/main/java")
+        java.srcDir("src/main/kotlin")
+        compileClasspath = runtimeClasspath
+    }
+
+    archiveFileName.set("${project.name}.jar")
+    manifest {
+        attributes["Main-Class"] = ssMain
+    }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     dependsOn(configurations.runtimeClasspath)
     from({
-        sourceSets.main.get().output
+        //Include sourceSets
+        sourceSets.getByName("mainSet").output
+        sourceSets.getByName("devSet").output
+        //Include libraries
         configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
     })
+}
+
+tasks {
+    "build" {
+        dependsOn(buildTask)
+    }
 }
