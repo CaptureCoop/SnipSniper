@@ -18,7 +18,7 @@ tasks.withType<KotlinCompile> {
 
 val ssMain = "net.snipsniper.MainKt"
 group = "net.snipsniper"
-//The type of release, either stable/release, dev or release. Used to determine how to build & passed onto SnipSniper
+//The type of release, either stable/release, dev or dirty. Used to determine how to build & passed onto SnipSniper
 //Dev = "Clean build", but not stable
 //Dirty = Uncommitted changes
 val type = System.getProperty("type") ?: if(!grgit.status().isClean && System.getenv("GITHUB_RUN_NUMBER") == null) "dirty" else "dev"
