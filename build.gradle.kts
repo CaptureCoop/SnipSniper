@@ -63,12 +63,6 @@ fun refreshWiki() {
 fun prepare() {
     refreshWiki()
 
-    if(type != "stable" && type != "release") {
-        sourceSets.getByName("main") {
-            resources.srcDir("src/main/resources-dev")
-        }
-    }
-
     val projectVersion = File("version.txt").readLines()[0]
     val buildDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
     val buildInfo = """
@@ -111,6 +105,8 @@ tasks.processResources {
 
 tasks.withType<Jar> {
     prepare()
+    if(type != "stable" && type != "release")
+        sourceSets.main.get().resources.srcDir("src/main/resources-dev")
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest { attributes["Main-Class"] = ssMain }
     dependsOn(configurations.runtimeClasspath)
