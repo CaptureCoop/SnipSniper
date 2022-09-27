@@ -59,8 +59,11 @@ class Config {
     }
 
     private fun loadFile(filename: String, container: ConfigContainer, inJar: Boolean) {
-        val stream = javaClass.getResourceAsStream(filename) ?: throw FileNotFoundException("$filename not found!")
-        val reader = if(inJar) BufferedReader(InputStreamReader(stream)) else BufferedReader(FileReader(filename))
+        val reader = if(inJar) {
+            val stream = javaClass.getResourceAsStream(filename) ?: throw FileNotFoundException("$filename not found!")
+            BufferedReader(InputStreamReader(stream))
+        }  else BufferedReader(FileReader(filename))
+
         reader.lineSequence().forEach {
             if(it.startsWith("#")) {
                 container.set(it)
