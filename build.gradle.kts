@@ -63,6 +63,12 @@ fun refreshWiki() {
 fun prepare() {
     refreshWiki()
 
+    if(type != "stable" && type != "release") {
+        sourceSets.getByName("main") {
+            resources.srcDir("src/main/resources-dev")
+        }
+    }
+
     val projectVersion = File("version.txt").readLines()[0]
     val buildDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
     val buildInfo = """
@@ -99,38 +105,17 @@ fun getSystemVersion(): String {
     }
 }
 
-//Main build task, made seperate from <Jar> task so that we can choose what to include and how
-val buildTask = task("buildJar", type = Jar::class) {
-    prepare()
-
-    //Dev Source set, allowed to overwrite main resources
-    //TODO: Make dev only once working
-    sourceSets.create("devSet") {
-        resources.srcDir("src/main/resources-dev")
-    }
-    //Main resources
-    sourceSets.create("mainSet") {
-        java.srcDir("src/main/java")
-        java.srcDir("src/main/kotlin")
-    }
-
-    archiveFileName.set("${project.name}.jar")
-    manifest {
-        attributes["Main-Class"] = ssMain
-    }
+tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    dependsOn(configurations.runtimeClasspath)
-    from({
-        //Include sourceSets
-        sourceSets.getByName("mainSet").output
-        sourceSets.getByName("devSet").output
-        //Include libraries
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-    })
 }
 
-tasks {
-    "build" {
-        dependsOn(buildTask)
-    }
+tasks.withType<Jar> {
+    prepare()
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    manifest { attributes["Main-Class"] = ssMain }
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        sourceSets.main.get().output
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
 }
