@@ -117,8 +117,7 @@ class Sniper(private val profileID: Int) {
     //Note: This does not handle custom images
     private fun getTrayIcon(profileID: Int, alt: Boolean = false): Image {
         if(alt) return ImageManager.getImage("systray/alt_icon$profileID.png")
-        if(SnipSniper.buildInfo.releaseType == ReleaseType.STABLE) return ImageManager.getImage("systray/icon$profileID.png")
-        return ImageManager.getImage("systray/white_icon$profileID.png")
+        return ImageManager.getImage("systray/icon$profileID.png")
     }
 
     fun alert(message: String, title: String, type: TrayIcon.MessageType) = trayIcon.displayMessage(message, title, type)
