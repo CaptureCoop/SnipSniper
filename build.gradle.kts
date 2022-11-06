@@ -75,11 +75,10 @@ val taskRun = tasks.create("run", JavaExec::class) {
 //(Thanks microsoft for returning 10 while linux returns a detailed build nr!)
 fun getSystemVersion(): String {
     if(!OperatingSystem.current().isWindows) return System.getProperty("os.version")
-    Runtime.getRuntime().exec("cmd.exe /c ver").also {
-        BufferedReader(InputStreamReader(it.inputStream)).also { reader ->
-            var output = ""
-            reader.readLines().forEach {l -> if(l.isNotEmpty()) output += l}
-            return Regex("(?<=\\[)(.*?)(?=\\])").find(output)?.value?.toLowerCase()?.replace("version ", "") ?: output
+    BufferedReader(InputStreamReader(Runtime.getRuntime().exec("cmd.exe /c ver").inputStream)).also { reader ->
+        StringBuilder().also { sb ->
+            reader.readLines().forEach {l -> if(l.isNotEmpty()) sb.append(l)}
+            return sb.toString()
         }
     }
 }
