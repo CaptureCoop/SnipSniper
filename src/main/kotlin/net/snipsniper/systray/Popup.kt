@@ -70,7 +70,7 @@ class Popup(private val sniper: Sniper): JFrame() {
 
         add(PopupMenuButton("menu_about".translate(), "icons/about.png", this, { AboutWindow(sniper) }, menus))
         add(JSeparator())
-        add(PopupMenuButton("Restart", "icons/redx.png", this, { SnipSniper.restart() }, menus))
+        add(PopupMenuButton("Restart", "icons/restart.png", this, { SnipSniper.restart() }, menus))
         add(PopupMenuButton("menu_quit".translate(), "icons/redx.png", this, { SnipSniper.exit(false) }, menus))
 
         iconImage = "icons/snipsniper.png".getImage()
