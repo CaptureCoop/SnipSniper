@@ -66,6 +66,8 @@ val taskRun = tasks.create("run", JavaExec::class) {
         File(project.buildDir, "libs").copyRecursively(runDir, true)
         classpath(File(runDir, artifactName).absolutePath)
         standardInput = System.`in` //This allows input in our IDE
+        minHeapSize = properties["snipsniper.run.xms"] as String
+        maxHeapSize = properties["snipsniper.run.xmx"] as String
     }
 }
 
