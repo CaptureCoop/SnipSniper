@@ -17,11 +17,11 @@ tasks.withType<KotlinCompile> {
 
 group = "net.snipsniper"
 version = File("version.txt").readLines()[0]
-val type = System.getProperty("type") ?: if(!grgit.status().isClean && System.getenv("GITHUB_RUN_NUMBER") == null) "dirty" else "dev"
-val artifactName = "${project.name} $version-$type rev-${grgit.head().abbreviatedId}.jar"
 //The type of release, either stable/release, dev or dirty. Used to determine how to build & passed onto SnipSniper
 //Dev = "Clean build", but not stable
 //Dirty = Uncommitted changes
+val type = System.getProperty("type") ?: if(!grgit.status().isClean && System.getenv("GITHUB_RUN_NUMBER") == null) "dirty" else "dev"
+val artifactName = "${project.name} $version-$type rev-${grgit.head().abbreviatedId}.jar"
 
 repositories {
     mavenCentral()
