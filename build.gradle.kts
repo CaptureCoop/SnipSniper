@@ -9,21 +9,19 @@ import java.io.InputStreamReader
 plugins {
     kotlin("jvm") version "1.7.10"
     id("org.ajoberstar.grgit") version "4.1.1" //Used to determine the status of the repo
-    id("application")
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val ssMain = "net.snipsniper.MainKt"
 group = "net.snipsniper"
+version = File("version.txt").readLines()[0]
+val type = System.getProperty("type") ?: if(!grgit.status().isClean && System.getenv("GITHUB_RUN_NUMBER") == null) "dirty" else "dev"
+val artifactName = "${project.name} $version-$type rev-${grgit.head().abbreviatedId}.jar"
 //The type of release, either stable/release, dev or dirty. Used to determine how to build & passed onto SnipSniper
 //Dev = "Clean build", but not stable
 //Dirty = Uncommitted changes
-val type = System.getProperty("type") ?: if(!grgit.status().isClean && System.getenv("GITHUB_RUN_NUMBER") == null) "dirty" else "dev"
-
-application { mainClass.set(ssMain) }
 
 repositories {
     mavenCentral()
@@ -59,6 +57,18 @@ val taskRefreshWiki = tasks.create("refreshWiki") {
     d("git", "pull")
 }
 
+val taskRun = tasks.create("run", JavaExec::class) {
+    group = "SnipSniper"
+    dependsOn(tasks.build)
+    doFirst {
+        val runDir = File(project.buildDir, "run").also { it.mkdirs() }
+        workingDir = runDir
+        File(project.buildDir, "libs").copyRecursively(runDir, true)
+        classpath(File(runDir, artifactName).absolutePath)
+        standardInput = System.`in` //This allows input in our IDE
+    }
+}
+
 //This returns os.version or the detailed windows build, if on windows
 //(Thanks microsoft for returning 10 while linux returns a detailed build nr!)
 fun getSystemVersion(): String {
@@ -78,10 +88,9 @@ tasks.processResources {
         include("net/snipsniper/resources/cfg/buildinfo.cfg")
 
         val buildDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
-        val projectVersion = File("version.txt").readLines()[0]
         expand (
             "buildType" to type,
-            "version" to projectVersion,
+            "version" to version,
             "buildDate" to "$buildDate (${TimeZone.getDefault().id})",
             "githash" to grgit.head().abbreviatedId,
             "githashFull" to grgit.head().id,
@@ -97,10 +106,11 @@ tasks.processResources {
 
 tasks.withType<Jar> {
     dependsOn(taskRefreshWiki)
+    archiveFileName.set(artifactName)
     if(type != "stable" && type != "release")
         sourceSets.main.get().resources.srcDir("src/main/resources-dev")
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    manifest { attributes["Main-Class"] = ssMain }
+    manifest { attributes["Main-Class"] = "net.snipsniper.MainKt" }
     dependsOn(configurations.runtimeClasspath)
     from({
         sourceSets.main.get().output
