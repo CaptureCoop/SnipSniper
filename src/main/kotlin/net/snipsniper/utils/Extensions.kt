@@ -14,9 +14,9 @@ fun BufferedImage.scaledFast(width: Int, height: Int): BufferedImage = this.scal
 fun BufferedImage.scaledSmooth(width: Int, height: Int): BufferedImage = this.scaled(width, height, Image.SCALE_SMOOTH)
 fun BufferedImage.toImageIcon(): ImageIcon = ImageIcon(this)
 fun BufferedImage.copyToClipboard() = ImageUtils.copyToClipboard(this)
-fun BufferedImage.ensureAlphaLayer() = ImageUtils.ensureAlphaLayer(this)
-fun BufferedImage.rotateClockwise90() = ImageUtils.rotateClockwise90(this)
-fun BufferedImage.rotateClockwise90(times: Int) = ImageUtils.rotateClockwise90(this, times)
+fun BufferedImage.ensureAlphaLayer(): BufferedImage = ImageUtils.ensureAlphaLayer(this)
+fun BufferedImage.rotateClockwise90(): BufferedImage = ImageUtils.rotateClockwise90(this)
+fun BufferedImage.rotateClockwise90(times: Int): BufferedImage = ImageUtils.rotateClockwise90(this, times)
 fun BufferedImage.trim(): BufferedImage = ImageUtils.trimImage(this)
 fun BufferedImage.clone(): BufferedImage = ImageUtils.copyImage(this)
 
@@ -34,4 +34,4 @@ fun String.translate(): String = LangManager.getItem(this)
 
 fun Long.prettyPrintBytes(): String = Utils.prettyPrintBytes(this)
 
-fun Int.isEven() = this % 2 == 0
+fun Int.isEven(): Boolean = this % 2 == 0
