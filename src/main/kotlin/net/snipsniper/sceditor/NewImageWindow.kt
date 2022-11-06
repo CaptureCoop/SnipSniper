@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage
 import javax.swing.*
 
 class NewImageWindow: JFrame(), CCIClosable  {
-    var image: BufferedImage? = null
+    lateinit var image: BufferedImage
     var onSubmit: IFunction? = null
     private val cWindows = ArrayList<CCIClosable>()
 
@@ -66,16 +66,15 @@ class NewImageWindow: JFrame(), CCIClosable  {
                 val widthInput = widthTextField.text.toIntOrNull()
                 val heightInput = heightTextField.text.toIntOrNull()
                 if(widthInput == null || heightInput == null) {
-                    Utils.showPopup(this, "Bad input! Not a valid number.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, "icons/redx.png".getImage(), true);
+                    Utils.showPopup(this, "Bad input! Not a valid number.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, "icons/redx.png".getImage(), true)
                 } else {
                     image = BufferedImage(widthInput, heightInput, BufferedImage.TYPE_INT_ARGB)
-                    image?.createGraphics().also { g ->
-                        if(g == null) throw Exception("Oops! image is null in NewImageWindow!")
-                        g.paint = color.getGradientPaint(width, height);
-                        g.fillRect(0, 0, width, height);
-                        g.dispose();
-                        onSubmit?.run();
-                        dispose();
+                    image.createGraphics().also { g ->
+                        g.paint = color.getGradientPaint(widthInput, heightInput)
+                        g.fillRect(0, 0, widthInput, heightInput)
+                        g.dispose()
+                        onSubmit?.run()
+                        dispose()
                     }
                 }
             }
