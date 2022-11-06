@@ -57,6 +57,22 @@ val taskRefreshWiki = tasks.create("refreshWiki") {
     d("git", "pull")
 }
 
+//This returns os.version or the detailed windows build, if on windows
+//(Thanks microsoft for returning 10 while linux returns a detailed build nr!)
+fun getSystemVersion(): String {
+    if(!OperatingSystem.current().isWindows) return System.getProperty("os.version")
+    BufferedReader(InputStreamReader(Runtime.getRuntime().exec("cmd.exe /c ver").inputStream)).also { reader ->
+        StringBuilder().also { sb ->
+            reader.readLines().forEach {l -> if(l.isNotEmpty()) sb.append(l)}
+            return sb.toString()
+        }
+    }
+}
+
+tasks.build {
+    group = "SnipSniper"
+}
+
 val taskRun = tasks.create("run", JavaExec::class) {
     group = "SnipSniper"
     dependsOn(tasks.build)
@@ -71,16 +87,9 @@ val taskRun = tasks.create("run", JavaExec::class) {
     }
 }
 
-//This returns os.version or the detailed windows build, if on windows
-//(Thanks microsoft for returning 10 while linux returns a detailed build nr!)
-fun getSystemVersion(): String {
-    if(!OperatingSystem.current().isWindows) return System.getProperty("os.version")
-    BufferedReader(InputStreamReader(Runtime.getRuntime().exec("cmd.exe /c ver").inputStream)).also { reader ->
-        StringBuilder().also { sb ->
-            reader.readLines().forEach {l -> if(l.isNotEmpty()) sb.append(l)}
-            return sb.toString()
-        }
-    }
+tasks.create("runClean") {
+    group = "SnipSniper"
+    dependsOn("clean", taskRun)
 }
 
 tasks.processResources {
