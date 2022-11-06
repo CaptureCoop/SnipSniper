@@ -33,3 +33,5 @@ fun String.getAnimatedImage(): Image = ImageManager.getAnimatedImage(this)
 fun String.translate(): String = LangManager.getItem(this)
 
 fun Long.prettyPrintBytes(): String = Utils.prettyPrintBytes(this)
+
+fun Int.isEven() = this % 2 == 0
