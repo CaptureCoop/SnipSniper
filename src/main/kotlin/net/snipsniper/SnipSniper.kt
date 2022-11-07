@@ -299,6 +299,7 @@ class SnipSniper {
                     Desktop.getDesktop().open(CCLogger.getLogFile())
             }
             CCLogger.log("Exit requested. Goodbye!")
+            GlobalScreen.unregisterNativeHook()
             exitProcess(0)
         }
 
