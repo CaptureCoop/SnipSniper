@@ -17,6 +17,7 @@ import net.snipsniper.utils.DropdownItem;
 import net.snipsniper.utils.Function;
 import org.capturecoop.cclogger.CCLogLevel;
 import org.capturecoop.ccutils.utils.CCIClosable;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -92,7 +93,7 @@ public class EzModeSettingsCreator {
         panel.add(new JLabel("width"));
         JSlider widthSlider = createEZModeSlider(boxMinimum, boxMaximum, stamp.getWidth(), new Function() {
             @Override
-            public boolean run(Integer... args) {
+            public boolean run(@NotNull int... args) {
                 stamp.setWidth(args[0]);
                 stampPreviewPanel.repaint();
                 return true;
@@ -103,7 +104,7 @@ public class EzModeSettingsCreator {
         panel.add(new JLabel("height"));
         JSlider heightSlider = createEZModeSlider(boxMinimum, boxMaximum, stamp.getHeight(), new Function() {
             @Override
-            public boolean run(Integer... args) {
+            public boolean run(@NotNull int... args) {
                 stamp.setHeight(args[0]);
                 stampPreviewPanel.repaint();
                 return true;
@@ -129,7 +130,7 @@ public class EzModeSettingsCreator {
         panel.add(new JLabel("size"));
         JSlider sizeSlider = createEZModeSlider(1, 400, stamp.getWidth(), new Function() {
             @Override
-            public boolean run(Integer... args) {
+            public boolean run(@NotNull int... args) {
                 stamp.setWidth(args[0]);
                 stamp.setHeight(args[0]);
                 stampPreviewPanel.repaint();
@@ -197,7 +198,7 @@ public class EzModeSettingsCreator {
         panel.add(new JLabel("thickness"));
         JSlider thicknessSlider = createEZModeSlider(1, 200, cStamp.getThickness(), new Function() {
             @Override
-            public boolean run(Integer... args) {
+            public boolean run(@NotNull int... args) {
                 cStamp.setThickness(args[0]);
                 return true;
             }
@@ -220,7 +221,7 @@ public class EzModeSettingsCreator {
         //Font size = height
         JSlider sizeSlider = createEZModeSlider(5, 200, stamp.getHeight(), new Function() {
             @Override
-            public boolean run(Integer... args) {
+            public boolean run(@NotNull int... args) {
                 stamp.setHeight(args[0]);
                 return true;
             }
@@ -341,7 +342,7 @@ public class EzModeSettingsCreator {
         panel.add(new JLabel("thickness"));
         JSlider thicknessSlider = createEZModeSlider(1, 200, rStamp.getThickness(), new Function() {
             @Override
-            public boolean run(Integer... args) {
+            public boolean run(@NotNull int... args) {
                 rStamp.setThickness(args[0]);
                 return true;
             }
