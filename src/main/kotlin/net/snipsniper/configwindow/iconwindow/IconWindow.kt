@@ -26,11 +26,13 @@ import javax.swing.filechooser.FileFilter
 
 class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunction): JFrame(), CCIClosable {
     enum class ICON_TYPE {GENERAL, RANDOM, CUSTOM}
+    private val rows = 4
 
     init {
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
         size = Dimension(512, 256)
         iconImage = "icons/folder.png".getImage()
+        this.title = title
         setLocation(parent.location.x + parent.width / 2 - width / 2, parent.location.y + parent.height / 2 - height / 2)
         addWindowListener(object: WindowAdapter() {
             override fun windowClosing(windowEvent: WindowEvent) {
@@ -38,6 +40,8 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
                 close()
             }
         })
+
+        //TODO: This listener doesnt work?
         addMouseListener(object: MouseAdapter() {
             var listenForExit = false
             override fun mouseEntered(mouseEvent: MouseEvent) = kotlin.run { listenForExit = true }
@@ -61,14 +65,12 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
 
     private fun setupPanel(type: ICON_TYPE): JScrollPane {
         JPanel(GridBagLayout()).also { content ->
-            JScrollPane(content).also { scrollPane ->
+            popuplateButtons(content, type)
+            return JScrollPane(content).also { scrollPane ->
                 scrollPane.horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
                 scrollPane.verticalScrollBarPolicy = JScrollPane.VERTICAL_SCROLLBAR_ALWAYS
                 scrollPane.border = BorderFactory.createEmptyBorder()
                 scrollPane.verticalScrollBar.unitIncrement = 20
-
-                popuplateButtons(content, type)
-                return scrollPane
             }
         }
     }
@@ -78,7 +80,6 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
         val gbc = GridBagConstraints()
         gbc.fill = GridBagConstraints.BOTH
         gbc.gridx = 0
-        val MAX_X = 4
         val list = ArrayList<SSFile>()
         ImageManager.filenameList.forEach { file ->
             if (type == ICON_TYPE.GENERAL && file.contains("icons") && !file.contains("icons/random/"))
@@ -87,9 +88,8 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
                 list.add(SSFile(file, SSFile.LOCATION.JAR))
         }
         if (type == ICON_TYPE.CUSTOM) {
-            //TODO: Use filewalker?
-            FileUtils.listFiles(SnipSniper.mainFolder + "/img/").forEach { localFile ->
-                list.add(SSFile(localFile.name, SSFile.LOCATION.LOCAL));
+            File(SnipSniper.imgFolder!!).walk().filter { it.isFile }.forEach { localFile ->
+                list.add(SSFile(localFile.name, SSFile.LOCATION.LOCAL))
             }
         }
         val size = rootPane.width / 5
@@ -115,7 +115,7 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
                 }
                 content.add(btn, gbc)
                 gbc.gridx++
-                if (gbc.gridx >= MAX_X) gbc.gridx = 0
+                if (gbc.gridx >= rows) gbc.gridx = 0
             }
         }
         if (type == ICON_TYPE.CUSTOM) {
