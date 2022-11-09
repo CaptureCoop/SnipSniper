@@ -55,13 +55,13 @@ class SCViewerWindow(private var file: File?, private var config: Config?, isSta
         }
 
         isRequireMovementKeyForZoom = false
-        val listener = SCViewerListener(this);
-        val renderer = SCViewerRenderer(this);
+        val listener = SCViewerListener(this)
+        val renderer = SCViewerRenderer(this)
         renderer.dropTarget = object: DropTarget() {
             override fun drop(evt: DropTargetDropEvent) {
                 evt.acceptDrop(DnDConstants.ACTION_COPY)
                 val droppedFiles = evt.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<*>
-                setImage(droppedFiles.get(0) as File)
+                setImage(droppedFiles[0] as File)
             }
         }
 
@@ -104,7 +104,7 @@ class SCViewerWindow(private var file: File?, private var config: Config?, isSta
         isEnableInteraction = !isDefaultImage()
     }
 
-    fun rotateImage(direction: ClockDirection) {
+    private fun rotateImage(direction: ClockDirection) {
         image = when(direction) {
             ClockDirection.CLOCKWISE -> ImageUtils.rotateClockwise90(image)
             ClockDirection.COUNTERCLOCKWISE -> ImageUtils.rotateClockwise90(image, 3)
@@ -113,9 +113,9 @@ class SCViewerWindow(private var file: File?, private var config: Config?, isSta
         repaint()
     }
 
-    fun refreshTitle() {
-        title = "SnipSniper Viewer";
-        if(file != null) title += " (${file?.absolutePath})";
+    private fun refreshTitle() {
+        title = "SnipSniper Viewer"
+        if(file != null) title += " (${file?.absolutePath})"
     }
 
     fun refreshFolder() {
@@ -128,20 +128,20 @@ class SCViewerWindow(private var file: File?, private var config: Config?, isSta
 
     fun slideImage(direction: Int) {
         if(locked) return
-        locked = true;
+        locked = true
         var index = files.indexOf(file?.absolutePath)
         if(direction == -1) {
-            if(index > 0) index--;
-            else index = files.size - 1;
+            if(index > 0) index--
+            else index = files.size - 1
         } else if(direction == 1) {
-            if(index < files.size - 1) index++;
-            else index = 0;
+            if(index < files.size - 1) index++
+            else index = 0
         }
         File(files[index]).also { newFile ->
             if(!file?.absolutePath.equals(newFile.absolutePath))
                 setImage(newFile)
         }
-        locked = false;
+        locked = false
         resetZoom()
     }
 
@@ -151,19 +151,19 @@ class SCViewerWindow(private var file: File?, private var config: Config?, isSta
             it.size = size
         }
         if (config!!.getBool(ConfigHelper.PROFILE.closeViewerOnOpenEditor))
-            dispose();
+            dispose()
     }
 
     fun setImage(file: File) {
-        super.setImage(ImageIcon(file.absolutePath).image.toBufferedImage());
-        this.file = File(file.absolutePath);
-        isEnableInteraction = !isDefaultImage();
-        refreshTitle();
-        refreshFolder();
-        repaint();
+        super.setImage(ImageIcon(file.absolutePath).image.toBufferedImage())
+        this.file = File(file.absolutePath)
+        isEnableInteraction = !isDefaultImage()
+        refreshTitle()
+        refreshFolder()
+        repaint()
     }
 
-    fun getImageFromFile(file: File): BufferedImage? {
+    private fun getImageFromFile(file: File): BufferedImage? {
         if(!file.exists() || !extensions.contains(file.extension)) return null
         image = ImageIO.read(file)
         return image
