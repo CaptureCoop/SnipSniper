@@ -14,7 +14,7 @@ class SCViewerListener(private val scViewerWindow: SCViewerWindow): SnipScopeLis
 
     override fun mouseReleased(mouseEvent: MouseEvent) {
         super.mouseReleased(mouseEvent)
-        if(scViewerWindow.isDefaultImage) {
+        if(scViewerWindow.isDefaultImage()) {
             JFileChooser().also {
                 if(it.showOpenDialog(scViewerWindow) == JFileChooser.APPROVE_OPTION)
                     scViewerWindow.setImage(it.selectedFile)
