@@ -37,7 +37,7 @@ public class SCEditorListener extends SnipScopeListener {
     }
 
     public void resetHistory() {
-        CCLogger.log("Reset editor history");
+        CCLogger.Companion.info("Reset editor history");
         history.clear();
         history.add(ImageUtils.Companion.copyImage(scEditorWindow.getImage()));
     }
@@ -146,8 +146,8 @@ public class SCEditorListener extends SnipScopeListener {
                     if(chooser.getSelectedFile().createNewFile())
                         ImageIO.write(scEditorWindow.getImage(), "png", chooser.getSelectedFile());
                 } catch (IOException ioException) {
-                    CCLogger.log("Error with loading image chosen for editor!", CCLogLevel.ERROR);
-                    CCLogger.logStacktrace(ioException, CCLogLevel.ERROR);
+                    CCLogger.Companion.log("Error with loading image chosen for editor!", CCLogLevel.ERROR);
+                    CCLogger.Companion.logStacktrace(ioException, CCLogLevel.ERROR);
                 }
             }
         }

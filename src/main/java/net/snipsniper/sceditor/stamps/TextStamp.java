@@ -172,7 +172,7 @@ public class TextStamp implements IStamp{
 
     @Override
     public void setWidth(int width) {
-        CCLogger.log("setWidth called on TextStamp. This does not do anything! Use setHeight() instead.", CCLogLevel.WARNING);
+        CCLogger.Companion.log("setWidth called on TextStamp. This does not do anything! Use setHeight() instead.", CCLogLevel.WARNING);
     }
 
     @Override

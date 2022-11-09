@@ -11,7 +11,7 @@ class WikiManager {
         private val strings = HashMap<String, JSONObject>()
 
         fun load(language: String) {
-            CCLogger.log("Loading wiki files...")
+            CCLogger.info("Loading wiki files...")
             val languagesJSON = FileUtils.loadFileFromJar("wiki/languages.json") ?: throw Exception("languages.json could not be loaded!")
 
             val languages = JSONArray(languagesJSON)
@@ -22,7 +22,7 @@ class WikiManager {
                 }
             }
             finalLoad(languageToLoad)
-            CCLogger.log("Done!")
+            CCLogger.info("Done!")
         }
 
         private fun finalLoad(language: String) {

@@ -19,7 +19,7 @@ class LangManager {
         val languages = ArrayList<String>()
 
         fun load() {
-            CCLogger.log("Loading language files...")
+            CCLogger.info("Loading language files...")
             JSONObject(FileUtils.loadFileFromJar("lang/languages.json")).getJSONArray("languages").also { arr ->
                 for (i in 0 until arr.length()) {
                     arr.getString(i).also {
@@ -28,7 +28,7 @@ class LangManager {
                     }
                 }
             }
-            CCLogger.log("Done!")
+            CCLogger.info("Done!")
         }
 
         fun getJSON(language: String): JSONObject? = langMap[language]
@@ -37,7 +37,7 @@ class LangManager {
             val preferred = langMap[Utils.replaceVars(language)]?.getJSONObject("strings")?.getString(key)
             val default = langMap[DEFAULT_LANGUAGE]?.getJSONObject("strings")?.getString(key)
             return preferred ?: default ?: "LM<$key>".also {
-                CCLogger.log("Could not find key <$key> in language file <$language>", CCLogLevel.ERROR)
+                CCLogger.error("Could not find key <$key> in language file <$language>")
             }
         }
 

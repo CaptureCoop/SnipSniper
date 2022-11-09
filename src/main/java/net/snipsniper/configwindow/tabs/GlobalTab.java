@@ -87,8 +87,8 @@ public class GlobalTab extends JPanel implements ITab{
                     bis.close();
                     zis.close();
                 } catch (IOException ex) {
-                    CCLogger.log("Could not import zip file!", CCLogLevel.ERROR);
-                    CCLogger.logStacktrace(ex, CCLogLevel.ERROR);
+                    CCLogger.Companion.log("Could not import zip file!", CCLogLevel.ERROR);
+                    CCLogger.Companion.logStacktrace(ex, CCLogLevel.ERROR);
                 }
             }
 
@@ -126,8 +126,8 @@ public class GlobalTab extends JPanel implements ITab{
                     }
                     out.close();
                 } catch (IOException ex) {
-                    CCLogger.log("Could not export zip file!", CCLogLevel.ERROR);
-                    CCLogger.logStacktrace(ex, CCLogLevel.ERROR);
+                    CCLogger.Companion.log("Could not export zip file!", CCLogLevel.ERROR);
+                    CCLogger.Companion.logStacktrace(ex, CCLogLevel.ERROR);
                 }
             }
         });
@@ -258,7 +258,7 @@ public class GlobalTab extends JPanel implements ITab{
             autostart.run();
 
         if(didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)){
-            CCLogger.enableDebugConsole(false);
+            CCLogger.Companion.enableDebugConsole(false);
         }
 
         SnipSniper.Companion.getConfig().loadFromConfig(config);

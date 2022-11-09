@@ -80,7 +80,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
 
         ezMode = config.getBool(ConfigHelper.PROFILE.ezMode);
 
-        CCLogger.log("Creating new editor window...");
+        CCLogger.Companion.info("Creating new editor window...");
 
         StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT);
 
@@ -167,7 +167,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
             int borderSize = config.getInt(ConfigHelper.PROFILE.borderSize);
             if (!isLeftToRight) borderSize = -borderSize;
             setLocation((x - X_OFFSET) + borderSize, y - getInsets().top + borderSize);
-            CCLogger.log("Setting location to " + getLocation());
+            CCLogger.Companion.info("Setting location to " + getLocation());
         }
 
         refreshTitle();
@@ -270,7 +270,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
         });
         setEnableInteraction(!isDefaultImage());
         requestFocus();
-        CCLogger.log("Started new editor window. (%c)", CCLogLevel.INFO, this);
+        CCLogger.Companion.info("Started new editor window. (" + this + ")");
     }
 
     public void addEZModeStampButton(String title, String iconName, String theme, int stampIndex) {
@@ -342,7 +342,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
     }
 
     public void refreshTitle() {
-        CCLogger.log("Refreshing title");
+        CCLogger.Companion.info("Refreshing title");
         String newTitle = title;
         if(saveLocation != null && !saveLocation.isEmpty())
             newTitle += " (" + saveLocation + ")";
@@ -356,7 +356,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
     public void setImage(BufferedImage image, boolean resetHistory, boolean isNewImage) {
         image = ImageUtils.Companion.ensureAlphaLayer(image);
         super.setImage(image);
-        CCLogger.log("Setting new Image");
+        CCLogger.Companion.info("Setting new Image");
         setEnableInteraction(!isDefaultImage());
 
         if(listener != null && resetHistory) {

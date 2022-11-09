@@ -34,8 +34,8 @@ public class SCEditorRenderer extends SnipScopeRenderer {
                     scEditorWindow.refreshTitle();
                     scEditorWindow.setImage(image, true, true);
                 } catch (UnsupportedFlavorException | IOException e) {
-                    CCLogger.log("Error setting up Drop Target for editor window!", CCLogLevel.ERROR);
-                    CCLogger.logStacktrace(e, CCLogLevel.ERROR);
+                    CCLogger.Companion.log("Error setting up Drop Target for editor window!", CCLogLevel.ERROR);
+                    CCLogger.Companion.logStacktrace(e, CCLogLevel.ERROR);
                 }
 
             }

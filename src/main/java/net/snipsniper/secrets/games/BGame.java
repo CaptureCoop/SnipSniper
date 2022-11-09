@@ -143,8 +143,8 @@ public class BGame extends JFrame {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
-                CCLogger.log("Error sleeping thread for BGame!", CCLogLevel.ERROR);
-                CCLogger.logStacktrace(e, CCLogLevel.ERROR);
+                CCLogger.Companion.log("Error sleeping thread for BGame!", CCLogLevel.ERROR);
+                CCLogger.Companion.logStacktrace(e, CCLogLevel.ERROR);
             }
         }
     }

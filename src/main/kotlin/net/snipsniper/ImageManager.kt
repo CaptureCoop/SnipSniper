@@ -23,12 +23,12 @@ class ImageManager {
         private val missingImg = getMissingImg()
 
         fun loadResources() {
-            CCLogger.log("Loading images...")
+            CCLogger.info("Loading images...")
             val list = JSONArray(FileUtils.loadFileFromJar("img.json"))
             val filenameListTemp = ArrayList<String>()
             for(i in 0 until list.length()) {
                 val str = list.getString(i)
-                val url = SnipSniper::class.java.getResource("/net/snipsniper/resources/img/$str") ?: CCLogger.log("Could not load image $str!")
+                val url = SnipSniper::class.java.getResource("/net/snipsniper/resources/img/$str") ?: CCLogger.warn("Could not load image $str!")
                 if(url !is URL) continue
 
                 filenameListTemp.add(str)
@@ -38,11 +38,11 @@ class ImageManager {
                 }
             }
             filenameList = filenameListTemp.toTypedArray()
-            CCLogger.log("Done!")
+            CCLogger.info("Done!")
         }
 
-        fun getImage(path: String): BufferedImage = images[path] ?: missingImg.also { CCLogger.log("Could not find image under path $path") }
-        fun getAnimatedImage(path: String): Image = animatedImages[path] ?: missingImg.also { CCLogger.log("Could not find image under path $path") }
+        fun getImage(path: String): BufferedImage = images[path] ?: missingImg.also { CCLogger.warn("Could not find image under path $path") }
+        fun getAnimatedImage(path: String): Image = animatedImages[path] ?: missingImg.also { CCLogger.warn("Could not find image under path $path") }
         fun hasImage(path: String): Boolean = animatedImages.containsKey(path) || images.containsKey(path)
 
         fun getCodePreview(): BufferedImage {

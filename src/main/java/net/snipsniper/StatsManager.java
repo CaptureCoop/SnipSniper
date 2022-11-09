@@ -25,7 +25,7 @@ public class StatsManager {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
-            CCLogger.log("StatsManager is disabled for now. This should not be called!", CCLogLevel.WARNING);
+            CCLogger.Companion.log("StatsManager is disabled for now. This should not be called!", CCLogLevel.WARNING);
         }
         try {
             Connection connection = getConnection();
@@ -35,7 +35,7 @@ public class StatsManager {
                 connection.close();
             }
         } catch (SQLException sqlException) {
-            CCLogger.log("Issue setting up StatsManager! Message: " + sqlException.getMessage(), CCLogLevel.ERROR);
+            CCLogger.Companion.log("Issue setting up StatsManager! Message: " + sqlException.getMessage(), CCLogLevel.ERROR);
             enabled = false;
         }
     }
@@ -62,7 +62,7 @@ public class StatsManager {
 
             connection.close();
         } catch(SQLException sqlException) {
-            CCLogger.log("Error incrementing id: " + id + "! Message: " + sqlException.getMessage(), CCLogLevel.ERROR);
+            CCLogger.Companion.log("Error incrementing id: " + id + "! Message: " + sqlException.getMessage(), CCLogLevel.ERROR);
         }
     }
 

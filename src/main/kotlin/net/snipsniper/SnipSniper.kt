@@ -80,8 +80,8 @@ class SnipSniper {
                 exitProcess(0)
             }
 
-            CCLogger.setEnabled(true)
-            CCLogger.setPaused(true) //Allows us setting up things like log file and format before having it log
+            CCLogger.enabled = true
+            CCLogger.paused = true //Allows us setting up things like log file and format before having it log
 
             Logger.getLogger(GlobalScreen::class.java.`package`.name).level = Level.OFF
 
@@ -110,14 +110,14 @@ class SnipSniper {
             config = Config("main.cfg", "main_defaults.cfg")
 
             val logFileName = LocalDateTime.now().toString().replace(".", "_").replace(":", "_") + ".log"
-            CCLogger.setLogFormat(config.getString(ConfigHelper.MAIN.logFormat))
-            CCLogger.setLogFile(File(logFolder, logFileName))
-            CCLogger.setGitHubCodePathURL("https://github.com/CaptureCoop/SnipSniper/tree/${buildInfo.gitHash}/src/main/java/")
-            CCLogger.setGitHubCodeClassPath("net.snipsniper")
-            CCLogger.setPaused(false)
+            CCLogger.logFormat = config.getString(ConfigHelper.MAIN.logFormat)
+            CCLogger.logFile = File(logFolder, logFileName)
+            CCLogger.gitHubCodePathURL = "https://github.com/CaptureCoop/SnipSniper/tree/${buildInfo.gitHash}/src/main/java/"
+            CCLogger.gitHubCodeClassPath = "net.snipsniper"
+            CCLogger.paused = false
 
             uncaughtExceptionHandler = Thread.UncaughtExceptionHandler { _, throwable ->
-                CCLogger.log("SnipSniper encountered an uncaught exception. This may be fatal!", CCLogLevel.ERROR)
+                CCLogger.error("SnipSniper encountered an uncaught exception. This may be fatal!")
                 CCLogger.logStacktrace(throwable, CCLogLevel.ERROR)
             }
             Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler)
@@ -152,51 +152,53 @@ class SnipSniper {
             LangManager.load()
             WikiManager.load(LangManager.getLanguage())
 
-            CCLogger.log("Launching SnipSniper Version ${buildInfo.version.digitsToString()} (rev-${buildInfo.gitHash})")
+            CCLogger.info("Launching SnipSniper Version ${buildInfo.version.digitsToString()} (rev-${buildInfo.gitHash})")
             buildInfo.run {
-                CCLogger.log("")
-                CCLogger.log("== Build Info ==")
-                CCLogger.log("Type: $releaseType")
-                CCLogger.log("Version: ${getVersionString()}")
-                CCLogger.log("Build date: $buildDate")
-                CCLogger.log("GitHash: $gitHash")
-                CCLogger.log("GitHash Full: $gitHashFull")
-                CCLogger.log("Branch: $branch")
-                CCLogger.log("OS Name: $osName")
-                CCLogger.log("OS Version: $osVersion")
-                CCLogger.log("OS Arch: $osArch")
-                CCLogger.log("Java Vendor: $javaVendor")
-                CCLogger.log("Java Version: $javaVersion")
-                CCLogger.log("")
+                CCLogger.info("")
+                CCLogger.info("== Build Info ==")
+                CCLogger.info("Type: $releaseType")
+                CCLogger.info("Version: ${getVersionString()}")
+                CCLogger.info("Build date: $buildDate")
+                CCLogger.info("GitHash: $gitHash")
+                CCLogger.info("GitHash Full: $gitHashFull")
+                CCLogger.info("Branch: $branch")
+                CCLogger.info("OS Name: $osName")
+                CCLogger.info("OS Version: $osVersion")
+                CCLogger.info("OS Arch: $osArch")
+                CCLogger.info("Java Vendor: $javaVendor")
+                CCLogger.info("Java Version: $javaVersion")
+                CCLogger.info("")
             }
 
             SystemInfo.run {
-                CCLogger.log("== System Info ==")
-                CCLogger.log("OS Name: ${getName()}")
-                CCLogger.log("OS Version: ${getVersion()}")
-                CCLogger.log("OS Arch: ${getArch()}")
-                CCLogger.log("OS Date/Time: ${getTimeAndDate()} (${getTimeZone()})")
-                CCLogger.log("OS Memory: Free(${getFreePhysicalMemory().prettyPrintBytes()}), Total(${getPhysicalMemory().prettyPrintBytes()})")
-                CCLogger.log("Java Vendor: ${getJavaVendor()}")
-                CCLogger.log("Java Version: ${getJavaVersion()}")
-                CCLogger.log("Java Memory: Free(${getFreeJavaMemory().prettyPrintBytes()}), Total Allocated(${getTotalJavaMemory().prettyPrintBytes()}), Max(${getMaxJavaMemory().prettyPrintBytes()})")
-                CCLogger.log("")
+                CCLogger.info("== System Info ==")
+                CCLogger.info("OS Name: ${getName()}")
+                CCLogger.info("OS Version: ${getVersion()}")
+                CCLogger.info("OS Arch: ${getArch()}")
+                CCLogger.info("OS Date/Time: ${getTimeAndDate()} (${getTimeZone()})")
+                CCLogger.info("OS Memory: Free(${getFreePhysicalMemory().prettyPrintBytes()}), Total(${getPhysicalMemory().prettyPrintBytes()})")
+                CCLogger.info("Java Vendor: ${getJavaVendor()}")
+                CCLogger.info("Java Version: ${getJavaVersion()}")
+                CCLogger.info("Java Memory: Free(${getFreeJavaMemory().prettyPrintBytes()}), Total Allocated(${getTotalJavaMemory().prettyPrintBytes()}), Max(${getMaxJavaMemory().prettyPrintBytes()})")
+                CCLogger.info("")
             }
 
             if (SystemUtils.IS_OS_LINUX) {
-                CCLogger.log("=================================================================================", CCLogLevel.WARNING)
-                CCLogger.log("= SnipSniper Linux is still in development and may not work properly or at all. =", CCLogLevel.WARNING)
-                CCLogger.log("=                        !!!!! USE WITH CAUTION !!!!                            =", CCLogLevel.WARNING)
-                CCLogger.log("=================================================================================", CCLogLevel.WARNING)
+                CCLogger.warn("=================================================================================")
+                CCLogger.warn("= SnipSniper Linux is still in development and may not work properly or at all. =")
+                CCLogger.warn("=                        !!!!! USE WITH CAUTION !!!!                            =")
+                CCLogger.warn("=================================================================================")
             }
 
-            CCLogger.log("========================================", CCLogLevel.DEBUG)
-            CCLogger.log("= SnipSniper is running in debug mode! =", CCLogLevel.DEBUG)
-            CCLogger.log("========================================", CCLogLevel.DEBUG)
+            if(isDebug()) {
+                CCLogger.debug("========================================")
+                CCLogger.debug("= SnipSniper is running in debug mode! =")
+                CCLogger.debug("========================================")
+            }
 
             config.getString(ConfigHelper.MAIN.language).also {
                 if (!LangManager.languages.contains(it)) {
-                    CCLogger.log("Language <$it> not found. Available languages: ${LangManager.languages}", CCLogLevel.ERROR)
+                    CCLogger.error("Language <$it> not found. Available languages: ${LangManager.languages}")
                     exit(false)
                 }
             }
@@ -204,10 +206,10 @@ class SnipSniper {
             config.save()
 
             if (isDemo) {
-                CCLogger.log("============================================================")
-                CCLogger.log("= SnipSniper is running in DEMO mode                       =")
-                CCLogger.log("= This means that no files will be created and/or modified =")
-                CCLogger.log("============================================================")
+                CCLogger.warn("============================================================")
+                CCLogger.warn("= SnipSniper is running in DEMO mode                       =")
+                CCLogger.warn("= This means that no files will be created and/or modified =")
+                CCLogger.warn("============================================================")
             }
 
             if (cmdline.isEditorOnly || launchType == LaunchType.EDITOR) {
@@ -221,7 +223,7 @@ class SnipSniper {
                         path = cmdline.editorFile.ifEmpty { args[0] }
                         File(path).also { if(it.exists()) img = ImageIO.read(it) }
                     } catch (ioException: IOException) {
-                        CCLogger.log("Error reading image file for editor, path: %c", CCLogLevel.ERROR, path)
+                        CCLogger.error("Error reading image file for editor, path: $path")
                         CCLogger.logStacktrace(ioException, CCLogLevel.ERROR)
                     }
                 }
@@ -244,7 +246,7 @@ class SnipSniper {
         }
 
         fun resetProfiles() {
-            CCLogger.log("Resetting/Starting profiles...")
+            CCLogger.info("Resetting/Starting profiles...")
             if(SystemTray.isSupported()) {
                 val tray = SystemTray.getSystemTray()
                 tray.trayIcons.forEach { tray.remove(it) }
@@ -296,9 +298,9 @@ class SnipSniper {
         fun exit(exitForRestart: Boolean) {
             if(config.getBool(ConfigHelper.MAIN.debug)) {
                 if (!exitForRestart && Desktop.isDesktopSupported())
-                    Desktop.getDesktop().open(CCLogger.getLogFile())
+                    Desktop.getDesktop().open(CCLogger.logFile)
             }
-            CCLogger.log("Exit requested. Goodbye!")
+            CCLogger.info("Exit requested. Goodbye!")
             GlobalScreen.unregisterNativeHook()
             exitProcess(0)
         }

@@ -40,7 +40,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
     private final ArrayList<CCIClosable> cWindows = new ArrayList<>();
 
     public ConfigWindow(Config config, PAGE page) {
-        CCLogger.log("Creating config window");
+        CCLogger.Companion.info("Creating config window");
 
         setSize(512, 512);
         setTitle(LangManager.Companion.getItem("config_label_config"));
@@ -369,7 +369,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
         if(CCMathUtils.isInteger(idString)) {
             return Integer.parseInt(idString);
         }
-        CCLogger.log("Issue parsing Filename to id: " + name, CCLogLevel.ERROR);
+        CCLogger.Companion.log("Issue parsing Filename to id: " + name, CCLogLevel.ERROR);
         return -1;
     }
 

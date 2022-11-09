@@ -39,7 +39,7 @@ class ImageUtils {
         fun copyToClipboard(image: BufferedImage) {
             ImageSelection(image).let {
                 Toolkit.getDefaultToolkit().systemClipboard.setContents(it, null)
-                CCLogger.log("Copied Image to clipboard")
+                CCLogger.info("Copied Image to clipboard")
             }
         }
 
@@ -213,7 +213,7 @@ class ImageUtils {
                 }
                 if (file.createNewFile()) {
                     ImageIO.write(finalImg, "png", file)
-                    CCLogger.log("Saved image on disk. Location: $file")
+                    CCLogger.info("Saved image on disk. Location: $file")
                     return file.absolutePath
                 }
             } catch (exception: IOException) {
