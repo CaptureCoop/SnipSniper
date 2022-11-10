@@ -10,6 +10,7 @@ import net.snipsniper.scviewer.SCViewerWindow
 import net.snipsniper.systray.Sniper
 import net.snipsniper.utils.*
 import org.apache.commons.lang3.SystemUtils
+import org.capturecoop.cclogger.CCLogFilter
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
 import org.capturecoop.ccutils.utils.CCStringUtils
@@ -131,8 +132,10 @@ class SnipSniper {
             if (!cmdline.language.isNullOrEmpty())
                 config.set(ConfigHelper.MAIN.language, cmdline.language)
 
-            if (cmdline.isDebug)
+            if (cmdline.isDebug) {
                 config.set(ConfigHelper.MAIN.debug, "true")
+                CCLogger.filter = CCLogFilter.DEBUG //Overwrite
+            }
 
             ImageManager.loadResources()
 
@@ -190,11 +193,9 @@ class SnipSniper {
                 CCLogger.warn("=================================================================================")
             }
 
-            if(isDebug()) {
-                CCLogger.debug("========================================")
-                CCLogger.debug("= SnipSniper is running in debug mode! =")
-                CCLogger.debug("========================================")
-            }
+            CCLogger.debug("========================================")
+            CCLogger.debug("= SnipSniper is running in debug mode! =")
+            CCLogger.debug("========================================")
 
             config.getString(ConfigHelper.MAIN.language).also {
                 if (!LangManager.languages.contains(it)) {

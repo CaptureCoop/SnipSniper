@@ -84,6 +84,7 @@ val taskRun = tasks.create("run", JavaExec::class) {
         standardInput = System.`in` //This allows input in our IDE
         minHeapSize = properties["snipsniper.run.xms"] as String
         maxHeapSize = properties["snipsniper.run.xmx"] as String
+        args("-debug")
     }
 }
 
