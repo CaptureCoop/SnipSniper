@@ -1,7 +1,6 @@
 package net.snipsniper.sceditor
 
 import net.snipsniper.snipscope.SnipScopeRenderer
-import net.snipsniper.utils.clone
 import java.awt.*
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
@@ -29,7 +28,10 @@ class SCEditorRenderer(private val scEditorWindow: SCEditorWindow): SnipScopeRen
         }
     }
 
-    fun resetPreview() = kotlin.run { preview = scEditorWindow.image.clone() }
+    fun resetPreview() = kotlin.run {
+        //We cant just clone the image here for some reason. i dont know why
+        preview = BufferedImage(scEditorWindow.image.width, scEditorWindow.image.height, BufferedImage.TYPE_INT_ARGB)
+    }
 
     override fun paint(g: Graphics) {
         g.color = Color(85, 85, 85) //TODO: This should probably be a constant...
