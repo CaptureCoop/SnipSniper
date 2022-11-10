@@ -12,28 +12,41 @@ class CommandLineHelper {
     var editorFile: String? = null
     var viewerOnly = false
     var viewerFile: String? = null
+    private var ignoreNextArg = false
 
     fun handle(args: Array<String>) {
         if(args.isEmpty()) return
         var doExit = false
         args.forEachIndexed { index, arg ->
+            if(ignoreNextArg) {
+                ignoreNextArg = false
+                return@forEachIndexed
+            }
             when(arg) {
                 "-help", "-?" -> helpText().also { doExit = true }
                 "-version", "-v" -> println(SnipSniper.getVersionString()).also { doExit = true }
                 "-demo" -> SnipSniper.isDemo = true //TODO: Put this in here and make SnipSniper pull it
                 "-language", "-lang", "-l" -> {
-                    if(args.size > index + 1) language = args[index + 1]
-                    else println("Missing argument after $arg!")
+                    if(args.size > index + 1) {
+                        language = args[index + 1]
+                        ignoreNextArg = true
+                    } else println("Missing argument after $arg!")
                 }
                 "-r" -> isRestartedInstance = true
                 "-d", "-debug" -> isDebug = true
                 "-editor" -> {
                     editorOnly = true
-                    if(args.size > index + 1) editorFile = args[index + 1]
+                    if(args.size > index + 1) {
+                        editorFile = args[index + 1]
+                        ignoreNextArg = true
+                    }
                 }
                 "-viewer" -> {
                     viewerOnly = true
-                    if(args.size > index + 1) viewerFile = args[index + 1]
+                    if(args.size > index + 1) {
+                        viewerFile = args[index + 1]
+                        ignoreNextArg = true
+                    }
                 }
                 "-debugLang" -> DebugUtils.jsonLang().also { doExit = true }
                 else -> println("Unrecognized argument <$arg>. Use argument -help to see all the commands!");
