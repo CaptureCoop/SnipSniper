@@ -130,7 +130,7 @@ class SnipSniper {
 
             //TODO: Try not expression
             if (!cmdline.language.isNullOrEmpty())
-                config.set(ConfigHelper.MAIN.language, cmdline.language)
+                config.set(ConfigHelper.MAIN.language, cmdline.language ?: throw Exception("Language is set per argument bus is null!"))
 
             if (cmdline.isDebug) {
                 config.set(ConfigHelper.MAIN.debug, "true")
@@ -213,7 +213,7 @@ class SnipSniper {
                 CCLogger.warn("============================================================")
             }
 
-            if (cmdline.isEditorOnly || launchType == LaunchType.EDITOR) {
+            if (cmdline.editorOnly || launchType == LaunchType.EDITOR) {
                 val editorConfig = SCEditorWindow.getStandaloneEditorConfig()
                 editorConfig.save()
 
@@ -221,7 +221,7 @@ class SnipSniper {
                 var path = ""
                 if (!cmdline.editorFile.isNullOrEmpty() || (launchType == LaunchType.EDITOR && args.isNotEmpty())) {
                     try {
-                        path = cmdline.editorFile.ifEmpty { args[0] }
+                        path = cmdline.editorFile!!.ifEmpty { args[0] }
                         File(path).also { if(it.exists()) img = ImageIO.read(it) }
                     } catch (ioException: IOException) {
                         CCLogger.error("Error reading image file for editor, path: $path")
@@ -229,9 +229,9 @@ class SnipSniper {
                     }
                 }
                 SCEditorWindow(img, -1, -1, "SnipSniper Editor", editorConfig, false, path, false, true)
-            } else if(cmdline.isViewerOnly || launchType == LaunchType.VIEWER) {
+            } else if(cmdline.viewerOnly || launchType == LaunchType.VIEWER) {
                 var file: File? = null
-                if(cmdline.viewerFile != null && cmdline.viewerFile.isNotEmpty())
+                if(cmdline.viewerFile != null && cmdline.viewerFile!!.isNotEmpty())
                     file = File(cmdline.viewerFile)
 
                 if(launchType == LaunchType.VIEWER) {
