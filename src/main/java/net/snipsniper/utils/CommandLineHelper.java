@@ -60,7 +60,7 @@ public class CommandLineHelper {
                     if(args.length > index + 1) viewerFile = args[index + 1];
                     break;
                 case "-debugLang":
-                    DebugUtils.jsonLang();
+                    DebugUtils.Companion.jsonLang();
                     doExit = true;
                     break;
                 default:
