@@ -2,10 +2,8 @@ package net.snipsniper.configwindow
 
 import net.snipsniper.utils.translate
 import org.jnativehook.GlobalScreen
-import org.jnativehook.keyboard.NativeKeyAdapter
 import org.jnativehook.keyboard.NativeKeyEvent
 import org.jnativehook.keyboard.NativeKeyListener
-import org.jnativehook.mouse.NativeMouseAdapter
 import org.jnativehook.mouse.NativeMouseEvent
 import org.jnativehook.mouse.NativeMouseListener
 import javax.swing.JButton
@@ -39,7 +37,7 @@ class HotKeyButton(key: String): JButton(), NativeKeyListener, NativeMouseListen
             text = NativeKeyEvent.getKeyText(hotkey)
         } else if (tempKey.startsWith("M")) {
             hotkey = tempKey.replace("M", "").toInt()
-            isKeyboard = false;
+            isKeyboard = false
             text = "${"config_label_mouse".translate()} $hotkey"
         }
 
@@ -58,16 +56,16 @@ class HotKeyButton(key: String): JButton(), NativeKeyListener, NativeMouseListen
     override fun nativeKeyPressed(nativeKeyEvent: NativeKeyEvent) {
         if(listening) {
             if(nativeKeyEvent.keyCode == NativeKeyEvent.VC_ESCAPE) {
-                listening = false;
+                listening = false
                 text = oldLabel
             } else {
-                isKeyboard = true;
-                hotkey = nativeKeyEvent.keyCode;
-                location = nativeKeyEvent.keyLocation;
-                listening = false;
+                isKeyboard = true
+                hotkey = nativeKeyEvent.keyCode
+                location = nativeKeyEvent.keyLocation
+                listening = false
                 text = NativeKeyEvent.getKeyText(hotkey)
                 oldLabel = text
-                notifyListeners();
+                notifyListeners()
             }
         }
     }
@@ -78,15 +76,15 @@ class HotKeyButton(key: String): JButton(), NativeKeyListener, NativeMouseListen
 
     override fun nativeMousePressed(nativeMouseEvent: NativeMouseEvent) {
         if(listening) {
-            hotkey = nativeMouseEvent.button;
+            hotkey = nativeMouseEvent.button
             if(hotkey == 1 || hotkey == 2) {
-                hotkey = -1;
-                return;
+                hotkey = -1
+                return
             }
-            location = -1;
-            isKeyboard = false;
-            listening = false;
-            notifyListeners();
+            location = -1
+            isKeyboard = false
+            listening = false
+            notifyListeners()
             text = "${"config_label_mouse".translate()} $hotkey"
             oldLabel = text
         }
@@ -99,6 +97,6 @@ class HotKeyButton(key: String): JButton(), NativeKeyListener, NativeMouseListen
     fun getHotKeyString(): String {
         val hotkeyModifier = if(isKeyboard) "KB" else "M"
         val locationModifier = if(location != -1) "_$location" else ""
-        return hotkeyModifier + hotkey + locationModifier;
+        return hotkeyModifier + hotkey + locationModifier
     }
 }
