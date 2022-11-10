@@ -76,11 +76,6 @@ class SnipSniper {
             System.setProperty("sun.java2d.uiScale.enabled", "false")
             System.setProperty("sun.java2d.uiScale", "1")
 
-            if (!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_LINUX) {
-                println("SnipSniper is currently only supported fully on Windows! Proceed at your own caution!")
-                exitProcess(0)
-            }
-
             CCLogger.enabled = true
             CCLogger.paused = true //Allows us setting up things like log file and format before having it log
 
@@ -186,7 +181,7 @@ class SnipSniper {
                 CCLogger.info("")
             }
 
-            if (SystemUtils.IS_OS_LINUX) {
+            if (!SystemUtils.IS_OS_WINDOWS) {
                 CCLogger.warn("=================================================================================")
                 CCLogger.warn("= SnipSniper Linux is still in development and may not work properly or at all. =")
                 CCLogger.warn("=                        !!!!! USE WITH CAUTION !!!!                            =")
