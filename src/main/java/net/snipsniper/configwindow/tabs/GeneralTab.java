@@ -130,7 +130,7 @@ public class GeneralTab extends JPanel implements ITab{
         gbc.gridx = 1;
         JPanel hotkeyPanel = new JPanel(new GridLayout(0, 2));
         HotKeyButton hotKeyButton = new HotKeyButton(config.getString(ConfigHelper.PROFILE.hotkey));
-        hotKeyButton.addDoneCapturingListener(e -> {
+        hotKeyButton.addChangeListener(e -> {
             if(hotKeyButton.getHotkey() != -1) {
                 config.set(ConfigHelper.PROFILE.hotkey, hotKeyButton.getHotKeyString());
             } else {
@@ -142,7 +142,7 @@ public class GeneralTab extends JPanel implements ITab{
         JButton deleteHotKey = new JButton(LangManager.Companion.getItem("config_label_delete"));
         deleteHotKey.addActionListener(e -> {
             hotKeyButton.setText(LangManager.Companion.getItem("config_label_none"));
-            hotKeyButton.setHotKey(-1);
+            hotKeyButton.setHotkey(-1);
             config.set(ConfigHelper.PROFILE.hotkey, "NONE");
             cleanDirtyFunction[0].run(ConfigSaveButtonState.UPDATE_CLEAN_STATE);
         });
