@@ -34,7 +34,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
 
     private final static int X_OFFSET = 8;
 
-    private final IStamp[] stamps = new IStamp[StampType.getSize()];
+    private final IStamp[] stamps = new IStamp[StampType.Companion.getSize()];
     private int selectedStamp = 0;
 
     private final SCEditorListener listener;
@@ -109,7 +109,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
 
         //Setting up stamp array and stamp ui buttons
         for(int i = 0; i < stamps.length; i++) {
-            StampType type = StampType.getByIndex(i);
+            StampType type = StampType.Companion.getByIndex(i);
             stamps[i] = type.getIStamp(config, this);
             addEZModeStampButton(type.getTitle(), type.getIconFile(), ezIconType, i);
         }

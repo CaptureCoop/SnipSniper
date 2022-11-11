@@ -88,7 +88,7 @@ public class EditorTab extends JPanel implements ITab{
 
         gbc.gridx = 0;
         gbc.insets.top = 20;
-        IStamp stamp = StampType.getByIndex(0).getIStamp(config, null);
+        IStamp stamp = StampType.Companion.getByIndex(0).getIStamp(config, null);
         JPanel row3_stampConfig = new JPanel(new GridBagLayout());
         StampJPanel row3_stampPreview = new StampJPanel(stamp, ImageManager.Companion.getCodePreview(), 10);
 
@@ -101,7 +101,7 @@ public class EditorTab extends JPanel implements ITab{
         JComboBox<Object> stampDropdown = new JComboBox<>(stampTitles);
         stampDropdown.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                IStamp newStamp = StampType.getByIndex(stampDropdown.getSelectedIndex()).getIStamp(config, null);
+                IStamp newStamp = StampType.Companion.getByIndex(stampDropdown.getSelectedIndex()).getIStamp(config, null);
                 row3_stampPreview.setStamp(newStamp);
                 setupStampConfigPanel(row3_stampConfig, newStamp, row3_stampPreview, config, onUpdate[0]);
                 saveButtonUpdate[0].run();
@@ -163,7 +163,7 @@ public class EditorTab extends JPanel implements ITab{
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(Double.parseDouble(config.getFloat(configKey)+""), min, max, stepSize));
         spinner.addChangeListener(e -> {
             config.set(configKey, (int)Double.parseDouble(spinner.getValue().toString()));
-            previewPanel.setStamp(StampType.getByIndex(stampIndex).getIStamp(config, null));
+            previewPanel.setStamp(StampType.Companion.getByIndex(stampIndex).getIStamp(config, null));
             onUpdate.run();
         });
         return spinner;
