@@ -165,10 +165,10 @@ class CaptureWindowListener(private val wnd: CaptureWindow) : KeyListener, Mouse
         val CUT_MARGIN = 1 //This makes the outline show up when cutting screenshot off outside the bounds
         if (startPoint!!.x < 0) startPoint!!.x = CUT_MARGIN
         if (startPoint!!.y < 0) startPoint!!.y = CUT_MARGIN
-        if (cPoint!!.x > wnd.screenshotBounds.width) cPoint!!.x =
-            wnd.screenshotBounds.width - CUT_MARGIN
-        if (cPoint!!.y > wnd.screenshotBounds.height) cPoint!!.y =
-            wnd.screenshotBounds.height - CUT_MARGIN
+        if (cPoint!!.x > wnd.screenshotBounds!!.width) cPoint!!.x =
+            wnd.screenshotBounds!!.width - CUT_MARGIN
+        if (cPoint!!.y > wnd.screenshotBounds!!.height) cPoint!!.y =
+            wnd.screenshotBounds!!.height - CUT_MARGIN
     }
 
     private fun checkMovement(mouseEvent: MouseEvent) {
