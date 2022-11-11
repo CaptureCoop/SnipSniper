@@ -22,7 +22,6 @@ import java.io.File
 import java.lang.Exception
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
-import javax.swing.JFrame
 import javax.swing.JMenuBar
 import javax.swing.JMenuItem
 
@@ -36,7 +35,7 @@ class SCViewerWindow(private var file: File?, private var config: Config?, isSta
     // eg: image, file etc are used by SnipScopeWindow and this class too
     init {
         StatsManager.incrementCount(StatsManager.VIEWER_STARTED_AMOUNT)
-        defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
+        defaultCloseOperation = DISPOSE_ON_CLOSE
         refreshTitle()
         iconImage = "icons/viewer.png".getImage()
 
@@ -71,7 +70,7 @@ class SCViewerWindow(private var file: File?, private var config: Config?, isSta
         setSizeAuto()
         setLocationAuto()
         if(config!!.getBool(ConfigHelper.PROFILE.openViewerInFullscreen))
-            extendedState = JFrame.MAXIMIZED_BOTH
+            extendedState = MAXIMIZED_BOTH
 
         if(SystemUtils.IS_OS_WINDOWS) {
             JMenuBar().also { menu ->
@@ -155,7 +154,7 @@ class SCViewerWindow(private var file: File?, private var config: Config?, isSta
     }
 
     fun setImage(file: File) {
-        super.setImage(ImageIcon(file.absolutePath).image.toBufferedImage())
+        super.image = ImageIcon(file.absolutePath).image.toBufferedImage()
         this.file = File(file.absolutePath)
         isEnableInteraction = !isDefaultImage()
         refreshTitle()

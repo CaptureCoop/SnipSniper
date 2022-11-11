@@ -17,26 +17,25 @@ open class SnipScopeRenderer(private val snipScopeWindow: SnipScopeWindow): JPan
         if (snipScopeWindow.zoom < zoomAntialisingKickIn)
             g.setRenderingHints(qualityHints)
 
-        val optimalDimension = snipScopeWindow.optimalImageDimension
+        val optimalDimension = snipScopeWindow.optimalImageDimension ?: return
         val image = snipScopeWindow.image
-        if (image != null && optimalDimension != null) {
-            var x = width / 2 - optimalDimension.width / 2
-            var y = height / 2 - optimalDimension.height / 2
 
-            x -= snipScopeWindow.zoomOffset.x
-            y -= snipScopeWindow.zoomOffset.y
+        var x = width / 2 - optimalDimension.width / 2
+        var y = height / 2 - optimalDimension.height / 2
 
-            val posModifier = snipScopeWindow.position
-            x -= posModifier.x
-            y -= posModifier.y
+        x -= snipScopeWindow.zoomOffset.x
+        y -= snipScopeWindow.zoomOffset.y
 
-            val zoom = snipScopeWindow.zoom
-            lastRectangle = Rectangle(x, y, (optimalDimension.width * zoom).toInt(), (optimalDimension.height * zoom).toInt())
-            g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height, this)
-            g.setColor(Color.BLACK)
-            //TODO: add config option for outline
-            g.drawRect(lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height)
-        }
+        val posModifier = snipScopeWindow.position
+        x -= posModifier.x
+        y -= posModifier.y
+
+        val zoom = snipScopeWindow.zoom
+        lastRectangle = Rectangle(x, y, (optimalDimension.width * zoom).toInt(), (optimalDimension.height * zoom).toInt())
+        g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height, this)
+        g.setColor(Color.BLACK)
+        //TODO: add config option for outline
+        g.drawRect(lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height)
     }
 
     fun renderUI(g: Graphics2D) {

@@ -10,12 +10,10 @@ import net.snipsniper.sceditor.stamps.*;
 import net.snipsniper.utils.ImageUtils;
 import org.capturecoop.ccutils.utils.CCStringUtils;
 import net.snipsniper.utils.Utils;
-import net.snipsniper.configwindow.ConfigWindow;
 import net.snipsniper.sceditor.ezmode.EzModeSettingsCreator;
 import net.snipsniper.sceditor.ezmode.EzModeStampTab;
 import net.snipsniper.snipscope.SnipScopeWindow;
 import org.apache.commons.lang3.SystemUtils;
-import org.capturecoop.cclogger.CCLogLevel;
 import org.capturecoop.ccutils.utils.CCIClosable;
 
 import javax.swing.*;
