@@ -9,15 +9,15 @@ import java.awt.event.KeyEvent
 
 interface IStamp {
     fun update(input: InputContainer?, mouseWheelDirection: Int, keyEvent: KeyEvent?)
-    fun render(g: Graphics, input: InputContainer, position: CCVector2Int, difference: Array<Double?>?, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle?
+    fun render(g: Graphics, input: InputContainer?, position: CCVector2Int?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle?
 
     fun editorUndo(historyPoint: Int)
     fun mousePressedEvent(button: Int, pressed: Boolean)
     fun reset()
     var width: Int
     var height: Int
-    val iD: String?
-    var color: CCColor?
+    val id: String?
+    var color: CCColor
     val type: StampType?
     fun addChangeListener(listener: IStampUpdateListener?)
     fun doAlwaysRender(): Boolean

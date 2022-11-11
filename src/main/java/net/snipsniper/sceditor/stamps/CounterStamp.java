@@ -194,7 +194,7 @@ public class CounterStamp implements IStamp{
     }
 
     @Override
-    public String getID() {
+    public String getId() {
         return "editorStampCounter";
     }
 

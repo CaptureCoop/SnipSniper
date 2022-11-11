@@ -195,7 +195,7 @@ public class CubeStamp implements IStamp{
     }
 
     @Override
-    public String getID() {
+    public String getId() {
         return "editorStampCube";
     }
 

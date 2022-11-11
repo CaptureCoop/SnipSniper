@@ -202,7 +202,7 @@ public class TextStamp implements IStamp{
     }
 
     @Override
-    public String getID() {
+    public String getId() {
         return "editorStampText";
     }
 
