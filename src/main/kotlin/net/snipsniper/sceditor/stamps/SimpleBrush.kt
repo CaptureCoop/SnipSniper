@@ -20,12 +20,10 @@ class SimpleBrush(private val config: Config, private val scEditorWindow: SCEdit
         }
     private var speed = 0
     private val changeListeners = ArrayList<IStampUpdateListener?>()
-    private var _color: CCColor? = null
     override var height = 0
-    override var color: CCColor
-        get() = _color!!
+    override var color: CCColor? = null
         set(value) {
-            _color = value
+            field = value
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
         }
     init {

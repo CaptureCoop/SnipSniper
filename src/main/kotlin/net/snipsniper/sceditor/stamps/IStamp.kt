@@ -17,7 +17,7 @@ interface IStamp {
     var width: Int
     var height: Int
     val id: String?
-    var color: CCColor
+    var color: CCColor?
     val type: StampType?
     fun addChangeListener(listener: IStampUpdateListener?)
     fun doAlwaysRender(): Boolean

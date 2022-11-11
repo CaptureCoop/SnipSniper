@@ -35,11 +35,9 @@ class CircleStamp(private val config: Config) : IStamp {
     private var speedWidth = 0
     private var speedHeight = 0
     private var speed = 0
-    private var _color: CCColor? = null
-    override var color: CCColor
-        get() = _color!!
+    override var color: CCColor? = null
         set(value) {
-            _color = value
+            field = value
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
         }
     private val changeListeners = ArrayList<IStampUpdateListener?>()
@@ -94,7 +92,7 @@ class CircleStamp(private val config: Config) : IStamp {
         val oldPaint = g.paint
         val x = position!!.x - drawWidth / 2
         val y = position.y - drawHeight / 2
-        g.paint = color.getGradientPaint(drawWidth, drawHeight, x, y)
+        g.paint = color?.getGradientPaint(drawWidth, drawHeight, x, y)
         val rectangle = Rectangle(x, y, drawWidth, drawHeight)
         g.drawOval(rectangle.x, rectangle.y, rectangle.width, rectangle.height)
         g.paint = oldPaint

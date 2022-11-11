@@ -31,12 +31,10 @@ class RectangleStamp(private val config: Config) : IStamp {
     private var minimumHeight = 0
     private var speedWidth = 0
     private var speedHeight = 0
-    private var _color: CCColor? = null
-    override var color: CCColor
-        get() = _color!!
+    override var color: CCColor? = null
         set(value) {
-            _color = value
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
+            field = value
         }
     private val changeListeners = ArrayList<IStampUpdateListener?>()
 
@@ -91,7 +89,7 @@ class RectangleStamp(private val config: Config) : IStamp {
         val x = position!!.x - drawWidth / 2
         val y = position.y - drawHeight / 2
         val oldColor = g.paint
-        g.paint = color.getGradientPaint(drawWidth, drawHeight, x, y)
+        g.paint = color?.getGradientPaint(drawWidth, drawHeight, x, y)
         val rectangle = Rectangle(x, y, drawWidth, drawHeight)
         g.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height)
         g.paint = oldColor

@@ -196,10 +196,10 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
 
         val input = scEditorWindow.inputContainer
 
-        if(input.isKeyPressed(KeyEvent.VK_ALT)) {
+        if(input.isKeyPressed(KeyEvent.VK_ALT) && scEditorWindow.selectedStamp.color != null) {
             val stamp = scEditorWindow.selectedStamp
-            val oldColor = stamp.color.primaryColor
-            val alpha = stamp.color.primaryColor.alpha
+            val oldColor = stamp.color!!.primaryColor
+            val alpha = stamp.color!!.primaryColor.alpha
             val hsv = Array(3) { 0.0F }.toFloatArray()
             Color.RGBtoHSB(oldColor.red, oldColor.green, oldColor.blue, hsv)
 
@@ -211,7 +211,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
             }
 
             val newColor = Color.getHSBColor(hsv[0], hsv[1], hsv[2])
-            stamp.color.setPrimaryColor(newColor, alpha)
+            stamp.color!!.setPrimaryColor(newColor, alpha)
             scEditorWindow.repaint()
             return
         }
