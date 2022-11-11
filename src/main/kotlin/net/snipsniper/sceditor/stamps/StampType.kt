@@ -23,13 +23,13 @@ enum class StampType(val title: String, val iconFile: String) {
             return -1
         }
 
-    fun getIStamp(config: Config?, scEditorWindow: SCEditorWindow?) = when (this) {
+    fun getIStamp(config: Config, scEditorWindow: SCEditorWindow?) = when (this) {
         CUBE -> CubeStamp(config, scEditorWindow)
         COUNTER -> CounterStamp(config)
-        CIRCLE -> CircleStamp(config!!)
+        CIRCLE -> CircleStamp(config)
         SIMPLE_BRUSH -> SimpleBrush(config, scEditorWindow)
         TEXT -> TextStamp(config, scEditorWindow)
-        RECTANGLE -> RectangleStamp(config!!)
+        RECTANGLE -> RectangleStamp(config)
         ERASER -> EraserStamp(scEditorWindow, config)
     }
 
