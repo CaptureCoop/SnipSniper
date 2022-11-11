@@ -29,7 +29,7 @@ enum class StampType(val title: String, val iconFile: String) {
         CIRCLE -> CircleStamp(config!!)
         SIMPLE_BRUSH -> SimpleBrush(config, scEditorWindow)
         TEXT -> TextStamp(config, scEditorWindow)
-        RECTANGLE -> RectangleStamp(config)
+        RECTANGLE -> RectangleStamp(config!!)
         ERASER -> EraserStamp(scEditorWindow, config)
     }
 
