@@ -79,7 +79,7 @@ class LangDebugWindow : JFrame() {
                     toEdit.put(key, textArea.text)
                 }
                 FileUtils.printFile(SnipSniper.mainFolder + "//" + lastLanguage + ".json", currentEdit.toString())
-                FileUtils.openFolder(SnipSniper.mainFolder)
+                FileUtils.openFolder(SnipSniper.mainFolder!!)
                 SnipSniper.resetProfiles()
             }
             gbc.gridwidth = 2

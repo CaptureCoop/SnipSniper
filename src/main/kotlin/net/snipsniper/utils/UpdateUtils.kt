@@ -27,7 +27,7 @@ class UpdateUtils {
                 }
                 PlatformType.WIN -> {
                     FileUtils.copyFromJar(pathInJar, updaterLocation)
-                    Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", Links.STABLE_PORTABLE, "-gui", "-extract", "-exec", "SnipSniper.exe", "-dir", FileUtils.getCanonicalPath("."), "-deleteFile")
+                    Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", Links.STABLE_PORTABLE, "-gui", "-extract", "-exec", "SnipSniper.exe", "-dir", FileUtils.getCanonicalPath(".")!!, "-deleteFile")
                     SnipSniper.exit(false)
                 }
                 PlatformType.WIN_INSTALLED -> {

@@ -97,7 +97,7 @@ class SnipSniper {
             }
 
             if (!isDemo) {
-                if (!FileUtils.mkdirs(configFolder, logFolder, imgFolder)) {
+                if (!FileUtils.mkdirs(configFolder!!, logFolder!!, imgFolder!!)) {
                     CCLogger.log("Could not create required folders! Exiting...", CCLogLevel.ERROR)
                     exit(false)
                 }

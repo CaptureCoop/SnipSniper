@@ -59,8 +59,8 @@ public class GlobalTab extends JPanel implements ITab{
 
             File imgFolder = new File(SnipSniper.Companion.getImgFolder());
             File cfgFolder = new File(SnipSniper.Companion.getConfigFolder());
-            FileUtils.delete(imgFolder); FileUtils.mkdirs(imgFolder);
-            FileUtils.delete(cfgFolder); FileUtils.mkdirs(cfgFolder);
+            FileUtils.Companion.delete(imgFolder); FileUtils.Companion.mkdirs(imgFolder);
+            FileUtils.Companion.delete(cfgFolder); FileUtils.Companion.mkdirs(cfgFolder);
 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileFilter(new FileNameExtensionFilter("ZIP File", "zip"));
@@ -110,7 +110,7 @@ public class GlobalTab extends JPanel implements ITab{
                 if(!path.endsWith(".zip")) path += ".zip";
                 File zip = new File(path);
                 String mainFolder = SnipSniper.Companion.getMainFolder();
-                ArrayList<String> files = FileUtils.getFilesInFolders(mainFolder);
+                ArrayList<String> files = FileUtils.Companion.getFilesInFolders(mainFolder);
                 try {
                     ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip));
                     for(String file : files) {
@@ -197,19 +197,19 @@ public class GlobalTab extends JPanel implements ITab{
             final String icoMain = "SnipSniper.ico";
 
             JCheckBox autostartCheckbox = new JCheckBox();
-            autostartCheckbox.setSelected(FileUtils.exists(startup + linkMain));
+            autostartCheckbox.setSelected(FileUtils.Companion.exists(startup + linkMain));
 
             autostartCheckbox.addActionListener(e -> {
                 if(autostartCheckbox.isSelected()) {
                     autostart[0] = args -> {
-                        FileUtils.mkdirs(startup);
+                        FileUtils.Companion.mkdirs(startup);
                         String jarFolder = SnipSniper.Companion.getJarFolder();
-                        FileUtils.copyFromJar("net/snipsniper/resources/batch/" + batchMain, jarFolder + "/" + batchMain);
-                        FileUtils.copyFromJar("net/snipsniper/resources/img/icons/" + icoMain.toLowerCase(), jarFolder + "/" + icoMain);
+                        FileUtils.Companion.copyFromJar("net/snipsniper/resources/batch/" + batchMain, jarFolder + "/" + batchMain);
+                        FileUtils.Companion.copyFromJar("net/snipsniper/resources/img/icons/" + icoMain.toLowerCase(), jarFolder + "/" + icoMain);
                         Utils.Companion.createShellLink(startup + linkMain, jarFolder + batchMain, jarFolder + "/" + icoMain);
                     };
                 } else {
-                    autostart[0] = args -> FileUtils.deleteRecursively(startup + linkMain);
+                    autostart[0] = args -> FileUtils.Companion.deleteRecursively(startup + linkMain);
                 }
             });
 

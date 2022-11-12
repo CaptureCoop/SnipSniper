@@ -73,7 +73,7 @@ public class ConfigWindow extends JFrame implements CCIClosable {
         File[] files = cfgFolder.listFiles();
         if(files != null) {
             for (File file : files) {
-                if (FileUtils.getFileExtension(file).equals(Config.DOT_EXTENSION))
+                if (FileUtils.Companion.getFileExtension(file).equals(Config.DOT_EXTENSION))
                     configFiles.add(file);
             }
         }
