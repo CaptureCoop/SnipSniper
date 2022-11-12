@@ -23,7 +23,7 @@ interface IStamp {
     fun doAlwaysRender(): Boolean
 }
 
-interface IStampUpdateListener {
+fun interface IStampUpdateListener {
     //The type here is used when updating the EzMode UI for example
     //Obviously we only want to update the sliders if the input is not coming from the slider
     //The sliders cause SETTER, while editor input is triggered with INPUT

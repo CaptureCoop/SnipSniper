@@ -293,7 +293,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
             ezModeStampPanel.setBounds(ezModeWidthToUse, 0, getContentPane().getWidth() - ezModeWidthToUse, ezModeHeight);
             ezModeStampPanelTabs.setBounds(0, 0, ezModeStampPanel.getWidth(), ezModeStampPanel.getHeight());
 
-            int ezModeSettingsHeight = ezModeSettingsCreator.getLastCorrectHeight();
+            int ezModeSettingsHeight = ezModeSettingsCreator.lastCorrectHeight();
             ezModeStampSettingsPanel.setPreferredSize(new Dimension(ezModeWidthToUse, ezModeSettingsHeight));
             ezModeStampSettingsPanel.setMinimumSize(new Dimension(ezModeWidthToUse, ezModeSettingsHeight));
             ezModeStampSettingsPanel.setMaximumSize(new Dimension(ezModeWidthToUse, ezModeSettingsHeight));
