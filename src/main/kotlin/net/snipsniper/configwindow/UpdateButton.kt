@@ -31,7 +31,6 @@ class UpdateButton: IDJButton("") {
             val isStable = bi.releaseType === ReleaseType.STABLE
             val isJarAndDev = isDev && isJar
             val isJarAndDevButStableBranch = updateChannel === ReleaseType.STABLE && !isStable && isJar
-            println(isJarAndDev)
             if (isJarAndDev) {
                 if (id == STATE_WAITING) {
                     text = "Checking for update..."
