@@ -92,20 +92,20 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             gbc.gridx = 1
             val iconPanel = JPanel(GridLayout(0, 2))
             val iconButton = JButton(getItem("config_label_seticon"))
-            val item = dropdown.selectedItem as DropdownItem
+            val item = dropdown.selectedItem as DropdownItem?
             if (item != null) {
-                val icon = (dropdown.selectedItem as DropdownItem).icon
+                val icon = (dropdown.selectedItem as DropdownItem?)?.icon
                 if (icon != null) iconButton.icon = icon
             }
             iconButton.addActionListener {
-                configWindow.addCWindow(IconWindow("Custom Profile Icon", configWindow, {
+                configWindow.addCWindow(IconWindow("Custom Profile Icon", configWindow) {
                     config.set(ConfigHelper.PROFILE.icon, it[0])
                     //TODO: We have duplicated code here, uuuuugh. I miss having functions in functions :(
                     var img = getIconDynamically(config)
                     if (img == null) img = getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
                     iconButton.icon = ImageIcon(img.getScaledInstance(16, 16, 0))
                     cleanDirtyFunction?.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-                }))
+                })
             }
             iconPanel.add(iconButton)
             val iconReset = JButton(getItem("config_label_reset"))
@@ -231,7 +231,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     colorChooser!!.addWindowListener(object : WindowAdapter() {
                         override fun windowClosing(e: WindowEvent) = kotlin.run { colorChooser = null }
                     })
-                    configWindow.addCWindow(colorChooser)
+                    configWindow.addCWindow(colorChooser!!)
                 }
             }
             borderSizePanel.add(colorBtn, gbc)
