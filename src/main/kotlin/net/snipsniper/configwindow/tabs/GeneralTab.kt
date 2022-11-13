@@ -57,298 +57,287 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
 
         //BEGIN ELEMENTS
 
-        //BEGIN TITLE
-        gbc.gridx = 0
-        gbc.gridwidth = 1
-        gbc.fill = GridBagConstraints.BOTH
-        gbc.insets = Insets(0, 10, 0, 10)
-        options.add(configWindow.createJLabel(getItem("config_label_title"), JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val titleContent = JPanel(GridLayout(0, 2))
-        val titleInput = JTextField(config.getString(ConfigHelper.PROFILE.title))
-        titleInput.addFocusListener(object : FocusAdapter() {
-            override fun focusLost(e: FocusEvent) {
-                super.focusLost(e)
-                if (CCStringUtils.removeWhitespace(titleInput.text).isEmpty()) titleInput.text = "none"
+        //profile title setting
+        kotlin.run {
+            gbc.gridx = 0
+            gbc.gridwidth = 1
+            gbc.fill = GridBagConstraints.BOTH
+            gbc.insets = Insets(0, 10, 0, 10)
+            options.add(configWindow.createJLabel(getItem("config_label_title"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val titleContent = JPanel(GridLayout(0, 2))
+            val titleInput = JTextField(config.getString(ConfigHelper.PROFILE.title))
+            titleInput.addFocusListener(object : FocusAdapter() {
+                override fun focusLost(e: FocusEvent) {
+                    super.focusLost(e)
+                    if (CCStringUtils.removeWhitespace(titleInput.text).isEmpty()) titleInput.text = "none"
+                    config.set(ConfigHelper.PROFILE.title, titleInput.text)
+                }
+            })
+            titleContent.add(titleInput)
+            val titleReset = JButton(getItem("config_label_reset"))
+            titleReset.addActionListener {
+                titleInput.text = "none"
                 config.set(ConfigHelper.PROFILE.title, titleInput.text)
             }
-        })
-        titleContent.add(titleInput)
-        val titleReset = JButton(getItem("config_label_reset"))
-        titleReset.addActionListener {
-            titleInput.text = "none"
-            config.set(ConfigHelper.PROFILE.title, titleInput.text)
+            titleContent.add(titleReset)
+            options.add(titleContent, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/title.json")), gbc)
         }
-        titleContent.add(titleReset)
-        options.add(titleContent, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/title.json")), gbc)
-        //END TITLE
 
-        //BEGIN ICON
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val iconPanel = JPanel(GridLayout(0, 2))
-        val iconButton = JButton(getItem("config_label_seticon"))
-        val item = dropdown.selectedItem as DropdownItem
-        if (item != null) {
-            val icon = (dropdown.selectedItem as DropdownItem).icon
-            if (icon != null) iconButton.icon = icon
-        }
-        iconButton.addActionListener {
-            configWindow.addCWindow(IconWindow("Custom Profile Icon", configWindow, IFunction {
-                config.set(ConfigHelper.PROFILE.icon, it[0]!!)
-                //TODO: We have duplicated code here, uuuuugh. I miss having functions in functions :(
+        //Icon setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val iconPanel = JPanel(GridLayout(0, 2))
+            val iconButton = JButton(getItem("config_label_seticon"))
+            val item = dropdown.selectedItem as DropdownItem
+            if (item != null) {
+                val icon = (dropdown.selectedItem as DropdownItem).icon
+                if (icon != null) iconButton.icon = icon
+            }
+            iconButton.addActionListener {
+                configWindow.addCWindow(IconWindow("Custom Profile Icon", configWindow, {
+                    config.set(ConfigHelper.PROFILE.icon, it[0])
+                    //TODO: We have duplicated code here, uuuuugh. I miss having functions in functions :(
+                    var img = getIconDynamically(config)
+                    if (img == null) img = getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
+                    iconButton.icon = ImageIcon(img.getScaledInstance(16, 16, 0))
+                    cleanDirtyFunction?.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                }))
+            }
+            iconPanel.add(iconButton)
+            val iconReset = JButton(getItem("config_label_reset"))
+            iconReset.addActionListener {
+                //TODO: Barf, duplicated code
+                config.set(ConfigHelper.PROFILE.icon, "none")
                 var img = getIconDynamically(config)
                 if (img == null) img = getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
-                iconButton.icon = ImageIcon(img.getScaledInstance(16, 16, 0))
-                cleanDirtyFunction?.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-            }))
-        }
-        iconPanel.add(iconButton)
-        val iconReset = JButton(getItem("config_label_reset"))
-        iconReset.addActionListener {
-            //TODO: Barf, duplicated code
-            config.set(ConfigHelper.PROFILE.icon, "none")
-            var img = getIconDynamically(config)
-            if (img == null) img = getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
-            iconButton.icon = ImageIcon(img!!.getScaledInstance(16, 16, 0))
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        iconPanel.add(iconReset)
-        options.add(iconPanel, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/icon.json")), gbc)
-        //END ICON
-
-        //BEGIN HOTKEY
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel(getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val hotkeyPanel = JPanel(GridLayout(0, 2))
-        val hotKeyButton = HotKeyButton(config.getString(ConfigHelper.PROFILE.hotkey))
-        hotKeyButton.addChangeListener {
-            (if(hotKeyButton.hotkey != -1) hotKeyButton.getHotKeyString() else "NONE").also { newValue -> config.set(ConfigHelper.PROFILE.hotkey, newValue) }
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        hotkeyPanel.add(hotKeyButton)
-        val deleteHotKey = JButton(getItem("config_label_delete"))
-        deleteHotKey.addActionListener {
-            hotKeyButton.text = getItem("config_label_none")
-            hotKeyButton.hotkey = -1
-            config.set(ConfigHelper.PROFILE.hotkey, "NONE")
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        hotkeyPanel.add(deleteHotKey)
-        options.add(hotkeyPanel, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/hotkey.json")), gbc)
-        //END HOTKEY
-
-        //BEGIN TINT COLOR
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel("Tint color", JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val tintColor = config.getColor(ConfigHelper.PROFILE.tintColor)
-        val tintColorButton = GradientJButton("Color", tintColor)
-        tintColor.addChangeListener { e: ChangeEvent ->
-            config.set(ConfigHelper.PROFILE.tintColor, (e.source as CCColor).toSaveString())
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        tintColorButton.addActionListener {
-            val x = configWindow.location.x + width / 2
-            val y = configWindow.location.y + height / 2
-            var image = getImage("preview/code_light.png")
-            if (SnipSniper.config.getString(ConfigHelper.MAIN.theme) == "dark") image =
-                getImage("preview/code_dark.png")
-            val chooser = CCColorChooser(tintColor, "Tint Color", x, y, false, image, null)
-            configWindow.addCWindow(chooser)
-        }
-        options.add(tintColorButton, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(null), gbc)
-        //END TINT COLOR
-
-        //BEGIN SAVEIMAGES
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel(getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER), gbc)
-        val saveToDisk = JCheckBox()
-        saveToDisk.isSelected = config.getBool(ConfigHelper.PROFILE.saveToDisk)
-        saveToDisk.addActionListener {
-            config.set(ConfigHelper.PROFILE.saveToDisk, saveToDisk.isSelected.toString() + "")
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        gbc.gridx = 1
-        options.add(saveToDisk, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/saveimage.json")), gbc)
-        //END SAVEIMAGES
-
-        //BEGIN COPYCLIPBOARD
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel(getItem("config_label_copyclipboard"), JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val copyToClipboard = JCheckBox()
-        copyToClipboard.isSelected = config.getBool(ConfigHelper.PROFILE.copyToClipboard)
-        copyToClipboard.addActionListener {
-            config.set(ConfigHelper.PROFILE.copyToClipboard, copyToClipboard.isSelected.toString() + "")
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        options.add(copyToClipboard, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/copyimage.json")), gbc)
-        //END COPYCLIPBOARD
-
-        //BEGIN BORDERSIZE
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel(getItem("config_label_bordersize"), JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val borderSizePanel = JPanel(GridLayout(0, 2))
-        val borderSize = JSpinner(SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.borderSize).toDouble(), 0.0, 999.0, 1.0)) //TODO: Extend JSpinner class to notify user of too large number
-        borderSize.addChangeListener {
-            config.set(ConfigHelper.PROFILE.borderSize, (borderSize.value as Double).toInt().toString() + "")
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        borderSizePanel.add(borderSize)
-        val borderColor = CCColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor))
-        val colorBtn = GradientJButton("Color", borderColor)
-        borderColor.addChangeListener {
-            config.set(ConfigHelper.PROFILE.borderColor, (it.source as CCColor).toSaveString())
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        colorBtn.addActionListener {
-            if (colorChooser == null || !colorChooser!!.isDisplayable) {
-                val x = configWindow.location.x + width / 2
-                val y = configWindow.location.y + height / 2
-                colorChooser = CCColorChooser(borderColor, getItem("config_label_bordercolor"), x, y, true, null, null)
-                colorChooser!!.addWindowListener(object : WindowAdapter() {
-                    override fun windowClosing(e: WindowEvent) = kotlin.run { colorChooser = null }
-                })
-                configWindow.addCWindow(colorChooser)
-            }
-        }
-        borderSizePanel.add(colorBtn, gbc)
-        options.add(borderSizePanel, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/bordersize.json")), gbc)
-        //END BORDERSIZE
-
-        //START SAVEFORMAT
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel("Save format", JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val currentSaveFormat = config.getString(ConfigHelper.PROFILE.saveFormat)
-        val saveFormatButton = JButton(constructFilename(currentSaveFormat, ""))
-        saveFormatButton.addActionListener {
-            val saveFormatRenderer = SaveFormatPreviewRenderer(512, 256)
-            val saveFormatPreview = TextPreviewWindow(
-                "Save format",
-                config.getString(ConfigHelper.PROFILE.saveFormat),
-                saveFormatRenderer,
-                getImage("icons/folder.png"),
-                configWindow,
-                "%hour%, %minute%, %second%, %day%, %month%, %year%, %random%"
-            )
-            saveFormatRenderer.textPreviewWindow = saveFormatPreview
-            saveFormatPreview.onSave = IFunction {
-                var text = saveFormatPreview.text
-                if (text.isEmpty()) {
-                    text = DEFAULT_FORMAT
-                }
-                config.set(ConfigHelper.PROFILE.saveFormat, text)
-                saveFormatButton.text = constructFilename(text, "")
-            }
-            configWindow.addCWindow(saveFormatPreview)
-        }
-        options.add(saveFormatButton, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(null), gbc)
-        //END SAVEFORMAT
-
-        //BEGIN LOCATION
-        gbc.gridx = 0
-        options.add(
-            configWindow.createJLabel(getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER),
-            gbc
-        )
-        gbc.gridx = 1
-        val pictureLocation =
-            JTextField(CCStringUtils.correctSlashes(config.getRawString(ConfigHelper.PROFILE.pictureFolder)))
-        pictureLocation.preferredSize = Dimension(200, pictureLocation.height)
-        pictureLocation.maximumSize = Dimension(200, pictureLocation.height)
-        pictureLocation.addFocusListener(object : FocusAdapter() {
-            override fun focusLost(focusEvent: FocusEvent) {
-                val saveLocationRaw = pictureLocation.text
-                CCStringUtils.correctSlashes(saveLocationRaw)
-                val saveLocationFinal = replaceVars(saveLocationRaw)
-                val saveLocationCheck = File(saveLocationFinal)
-                if (!saveLocationCheck.exists()) {
-                    cleanDirtyFunction!!.run(ConfigSaveButtonState.NO_SAVE)
-                    val dialogResult = showPopup(
-                        configWindow,
-                        getItem("config_sanitation_directory_notexist") + " Create?",
-                        getItem("config_sanitation_error"),
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE,
-                        getImage("icons/folder.png"),
-                        true
-                    )
-                    if (dialogResult == JOptionPane.YES_OPTION) {
-                        val allow = File(saveLocationFinal).mkdirs()
-                        if (!allow) {
-                            configWindow.msgError(getItem("config_sanitation_failed_createdirectory"))
-                            cleanDirtyFunction!!.run(ConfigSaveButtonState.NO_SAVE)
-                        } else {
-                            config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationRaw)
-                            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-                            cleanDirtyFunction!!.run(ConfigSaveButtonState.YES_SAVE)
-                        }
-                    } else {
-                        if (configOriginal != null) pictureLocation.text =
-                            configOriginal.getRawString(ConfigHelper.PROFILE.pictureFolder)
-                    }
-                } else {
-                    cleanDirtyFunction!!.run(ConfigSaveButtonState.YES_SAVE)
-                    config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationRaw)
-                }
-            }
-        })
-        options.add(pictureLocation, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/imagefolder.json")), gbc)
-        //END LOCATION
-
-        //BEGIN CUSTOM MODIFIER
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel("Save folder modifier", JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val customSaveButton =
-            JButton(CCStringUtils.formatDateTimeString(config.getString(ConfigHelper.PROFILE.saveFolderCustom)))
-        customSaveButton.addActionListener {
-            val renderer = FolderPreviewRenderer(512, 512)
-            val preview = TextPreviewWindow(
-                "Custom save folder modifier",
-                config.getString(ConfigHelper.PROFILE.saveFolderCustom),
-                renderer,
-                getImage("icons/folder.png"),
-                configWindow,
-                "%day% = 1, %month% = 8, %year% = 2021"
-            )
-            configWindow.addCWindow(preview)
-            renderer.textPreviewWindow = preview
-            preview.onSave = IFunction {
-                var text = preview.text
-                if (text.isEmpty()) text = "/"
-                config.set(ConfigHelper.PROFILE.saveFolderCustom, text)
-                customSaveButton.text = CCStringUtils.formatDateTimeString(text)
+                iconButton.icon = ImageIcon(img!!.getScaledInstance(16, 16, 0))
                 cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
+            iconPanel.add(iconReset)
+            options.add(iconPanel, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/icon.json")), gbc)
         }
-        options.add(customSaveButton, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/savefoldermodifier.json")), gbc)
-        //END CUSTOM MODIFIER
+
+        //Hotkey setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel(getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val hotkeyPanel = JPanel(GridLayout(0, 2))
+            val hotKeyButton = HotKeyButton(config.getString(ConfigHelper.PROFILE.hotkey))
+            hotKeyButton.addChangeListener {
+                (if(hotKeyButton.hotkey != -1) hotKeyButton.getHotKeyString() else "NONE").also { newValue -> config.set(ConfigHelper.PROFILE.hotkey, newValue) }
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            hotkeyPanel.add(hotKeyButton)
+            val deleteHotKey = JButton(getItem("config_label_delete"))
+            deleteHotKey.addActionListener {
+                hotKeyButton.text = getItem("config_label_none")
+                hotKeyButton.hotkey = -1
+                config.set(ConfigHelper.PROFILE.hotkey, "NONE")
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            hotkeyPanel.add(deleteHotKey)
+            options.add(hotkeyPanel, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/hotkey.json")), gbc)
+        }
+
+        //Tint color setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel("Tint color", JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val tintColor = config.getColor(ConfigHelper.PROFILE.tintColor)
+            val tintColorButton = GradientJButton("Color", tintColor)
+            tintColor.addChangeListener { e: ChangeEvent ->
+                config.set(ConfigHelper.PROFILE.tintColor, (e.source as CCColor).toSaveString())
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            tintColorButton.addActionListener {
+                val x = configWindow.location.x + width / 2
+                val y = configWindow.location.y + height / 2
+                var image = getImage("preview/code_light.png")
+                if (SnipSniper.config.getString(ConfigHelper.MAIN.theme) == "dark") image =
+                    getImage("preview/code_dark.png")
+                val chooser = CCColorChooser(tintColor, "Tint Color", x, y, false, image, null)
+                configWindow.addCWindow(chooser)
+            }
+            options.add(tintColorButton, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(null), gbc)
+        }
+
+        //save-images toggle setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel(getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            val saveToDisk = JCheckBox()
+            saveToDisk.isSelected = config.getBool(ConfigHelper.PROFILE.saveToDisk)
+            saveToDisk.addActionListener {
+                config.set(ConfigHelper.PROFILE.saveToDisk, saveToDisk.isSelected.toString() + "")
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            gbc.gridx = 1
+            options.add(saveToDisk, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/saveimage.json")), gbc)
+        }
+
+        //Copy to clipboard setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel(getItem("config_label_copyclipboard"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val copyToClipboard = JCheckBox()
+            copyToClipboard.isSelected = config.getBool(ConfigHelper.PROFILE.copyToClipboard)
+            copyToClipboard.addActionListener {
+                config.set(ConfigHelper.PROFILE.copyToClipboard, copyToClipboard.isSelected.toString() + "")
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            options.add(copyToClipboard, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/copyimage.json")), gbc)
+        }
+
+        //border-size setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel(getItem("config_label_bordersize"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val borderSizePanel = JPanel(GridLayout(0, 2))
+            val borderSize = JSpinner(SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.borderSize).toDouble(), 0.0, 999.0, 1.0)) //TODO: Extend JSpinner class to notify user of too large number
+            borderSize.addChangeListener {
+                config.set(ConfigHelper.PROFILE.borderSize, (borderSize.value as Double).toInt().toString() + "")
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            borderSizePanel.add(borderSize)
+            val borderColor = CCColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor))
+            val colorBtn = GradientJButton("Color", borderColor)
+            borderColor.addChangeListener {
+                config.set(ConfigHelper.PROFILE.borderColor, (it.source as CCColor).toSaveString())
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            colorBtn.addActionListener {
+                if (colorChooser == null || !colorChooser!!.isDisplayable) {
+                    val x = configWindow.location.x + width / 2
+                    val y = configWindow.location.y + height / 2
+                    colorChooser = CCColorChooser(borderColor, getItem("config_label_bordercolor"), x, y, true, null, null)
+                    colorChooser!!.addWindowListener(object : WindowAdapter() {
+                        override fun windowClosing(e: WindowEvent) = kotlin.run { colorChooser = null }
+                    })
+                    configWindow.addCWindow(colorChooser)
+                }
+            }
+            borderSizePanel.add(colorBtn, gbc)
+            options.add(borderSizePanel, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/bordersize.json")), gbc)
+        }
+
+        //Saveformat setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel("Save format", JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val currentSaveFormat = config.getString(ConfigHelper.PROFILE.saveFormat)
+            val saveFormatButton = JButton(constructFilename(currentSaveFormat, ""))
+            saveFormatButton.addActionListener {
+                val saveFormatRenderer = SaveFormatPreviewRenderer(512, 256)
+                val saveFormatPreview = TextPreviewWindow(
+                    "Save format",
+                    config.getString(ConfigHelper.PROFILE.saveFormat),
+                    saveFormatRenderer,
+                    getImage("icons/folder.png"),
+                    configWindow,
+                    "%hour%, %minute%, %second%, %day%, %month%, %year%, %random%"
+                )
+                saveFormatRenderer.textPreviewWindow = saveFormatPreview
+                saveFormatPreview.onSave = IFunction {
+                    var text = saveFormatPreview.text
+                    if (text.isEmpty()) {
+                        text = DEFAULT_FORMAT
+                    }
+                    config.set(ConfigHelper.PROFILE.saveFormat, text)
+                    saveFormatButton.text = constructFilename(text, "")
+                }
+                configWindow.addCWindow(saveFormatPreview)
+            }
+            options.add(saveFormatButton, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(null), gbc)
+        }
+
+        //Location setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel(getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val pictureLocation = JTextField(CCStringUtils.correctSlashes(config.getRawString(ConfigHelper.PROFILE.pictureFolder)))
+            pictureLocation.preferredSize = Dimension(200, pictureLocation.height)
+            pictureLocation.maximumSize = Dimension(200, pictureLocation.height)
+            pictureLocation.addFocusListener(object : FocusAdapter() {
+                override fun focusLost(focusEvent: FocusEvent) {
+                    val saveLocationRaw = pictureLocation.text
+                    CCStringUtils.correctSlashes(saveLocationRaw)
+                    val saveLocationFinal = replaceVars(saveLocationRaw)
+                    val saveLocationCheck = File(saveLocationFinal)
+                    if (!saveLocationCheck.exists()) {
+                        cleanDirtyFunction!!.run(ConfigSaveButtonState.NO_SAVE)
+                        val dialogResult = showPopup(configWindow, getItem("config_sanitation_directory_notexist") + " Create?", getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, getImage("icons/folder.png"), true)
+                        if (dialogResult == JOptionPane.YES_OPTION) {
+                            val allow = File(saveLocationFinal).mkdirs()
+                            if (!allow) {
+                                configWindow.msgError(getItem("config_sanitation_failed_createdirectory"))
+                                cleanDirtyFunction!!.run(ConfigSaveButtonState.NO_SAVE)
+                            } else {
+                                config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationRaw)
+                                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                                cleanDirtyFunction!!.run(ConfigSaveButtonState.YES_SAVE)
+                            }
+                        } else {
+                            if (configOriginal != null) pictureLocation.text = configOriginal.getRawString(ConfigHelper.PROFILE.pictureFolder)
+                        }
+                    } else {
+                        cleanDirtyFunction!!.run(ConfigSaveButtonState.YES_SAVE)
+                        config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationRaw)
+                    }
+                }
+            })
+            options.add(pictureLocation, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/imagefolder.json")), gbc)
+        }
+
+        //Save folder modifier setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel("Save folder modifier", JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val customSaveButton = JButton(CCStringUtils.formatDateTimeString(config.getString(ConfigHelper.PROFILE.saveFolderCustom)))
+            customSaveButton.addActionListener {
+                val renderer = FolderPreviewRenderer(512, 512)
+                val preview = TextPreviewWindow("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom), renderer, getImage("icons/folder.png"), configWindow, "%day% = 1, %month% = 8, %year% = 2021")
+                configWindow.addCWindow(preview)
+                renderer.textPreviewWindow = preview
+                preview.onSave = IFunction {
+                    var text = preview.text
+                    if (text.isEmpty()) text = "/"
+                    config.set(ConfigHelper.PROFILE.saveFolderCustom, text)
+                    customSaveButton.text = CCStringUtils.formatDateTimeString(text)
+                    cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                }
+            }
+            options.add(customSaveButton, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/savefoldermodifier.json")), gbc)
+        }
 
         //BEGIN SNIPE DELAY
         gbc.gridx = 0
