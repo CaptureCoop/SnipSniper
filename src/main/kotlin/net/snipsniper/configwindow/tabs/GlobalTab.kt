@@ -53,9 +53,10 @@ import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
 
 class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
-    private var isDirty = false
+    override var isDirty = false
+    override val page = PAGE.globalPanel
 
-    override fun setup(configOriginal: Config) {
+    override fun setup(configOriginal: Config?) {
         removeAll()
         isDirty = false
         var saveButtonUpdate: Function? = null
@@ -230,18 +231,6 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         }
         saveButtonUpdate = configWindow.setupSaveButtons(options, this, gbc, config, SnipSniper.config, beforeSave, false)
         add(options)
-    }
-
-    override fun getPage(): PAGE {
-        return PAGE.globalPanel
-    }
-
-    override fun setDirty(isDirty: Boolean) {
-        this.isDirty = isDirty
-    }
-
-    override fun isDirty(): Boolean {
-        return isDirty
     }
 
     private fun globalSave(config: Config, autostart: IFunction?) {

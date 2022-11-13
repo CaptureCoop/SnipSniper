@@ -33,7 +33,8 @@ import javax.swing.*
 import javax.swing.event.ChangeEvent
 
 class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
-    private var isDirty = false
+    override var isDirty = false
+    override val page = PAGE.generalPanel
 
     override fun setup(configOriginal: Config?) {
         removeAll()
@@ -564,17 +565,5 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         //END SAVE
         add(options)
         if (disablePage) configWindow.setEnabledAll(options, false, dropdown)
-    }
-
-    override fun getPage(): PAGE {
-        return PAGE.generalPanel
-    }
-
-    override fun setDirty(isDirty: Boolean) {
-        this.isDirty = isDirty
-    }
-
-    override fun isDirty(): Boolean {
-        return isDirty
     }
 }

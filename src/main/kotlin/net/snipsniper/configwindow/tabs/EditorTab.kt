@@ -21,7 +21,8 @@ import javax.swing.*
 import javax.swing.event.ChangeEvent
 
 class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
-    private var isDirty = false
+    override var isDirty = false
+    override val page = PAGE.editorPanel
 
     override fun setup(configOriginal: Config?) {
         removeAll()
@@ -62,7 +63,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             hsvSlider.minimum = -100
             hsvSlider.maximum = 100
             hsvSlider.snapToTicks = true
-            hsvSlider.addChangeListener { e: ChangeEvent? ->
+            hsvSlider.addChangeListener {
                 hsvPercentage.text = hsvSlider.value.toString() + "%"
                 config.set(PROFILE.hsvColorSwitchSpeed, hsvSlider.value.toString() + "")
                 saveButtonUpdate?.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
@@ -123,18 +124,6 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         setupStampConfigPanel(row3_stampConfig, stamp, row3_stampPreview, config, onUpdate[0])
         add(options)
         if (disablePage) configWindow.setEnabledAll(options, false, dropdown)
-    }
-
-    override fun getPage(): PAGE {
-        return PAGE.editorPanel
-    }
-
-    override fun setDirty(isDirty: Boolean) {
-        this.isDirty = isDirty
-    }
-
-    override fun isDirty(): Boolean {
-        return isDirty
     }
 
     private fun setupStampConfigPanelSpinner(configKey: PROFILE, min: Double, max: Double, stepSize: Double, previewPanel: StampJPanel, config: Config, stampIndex: Int, onUpdate: Function?): JSpinner {

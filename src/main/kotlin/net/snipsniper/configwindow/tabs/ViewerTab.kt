@@ -16,7 +16,8 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 
 class ViewerTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
-    private var isDirty = false
+    override var isDirty = false
+    override val page = PAGE.viewerPanel
 
     //TODO: Disable save button if nothing is saveable?
     //TODO: Should this be nullable? Do some testing :^)
@@ -73,10 +74,4 @@ class ViewerTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         add(options)
         if (disablePage) configWindow.setEnabledAll(options, false, dropdown)
     }
-
-    override fun getPage() = PAGE.viewerPanel
-
-    override fun setDirty(isDirty: Boolean) = kotlin.run { this.isDirty = isDirty }
-
-    override fun isDirty() = isDirty
 }
