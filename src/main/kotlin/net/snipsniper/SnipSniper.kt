@@ -300,7 +300,7 @@ class SnipSniper {
             exitProcess(0)
         }
 
-        fun openConfigWindow(config: Config, page: ConfigWindow.PAGE) {
+        fun openConfigWindow(config: Config?, page: ConfigWindow.PAGE) {
             if(configWindow == null) {
                 configWindow = ConfigWindow(config, page)
                 configWindow?.addCustomWindowListener { configWindow = null }
