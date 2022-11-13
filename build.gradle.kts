@@ -37,7 +37,7 @@ dependencies {
     implementation("com.erigir:mslinks:0.0.2+5") //Utility for windows shortcuts
 
     implementation("org.capturecoop:CCUtils:1.9.4") //CaptureCoop Common Utils
-    implementation("org.capturecoop:CCLogger:1.6.2") //CaptureCoop logger
+    implementation("org.capturecoop:CCLogger:1.6.3") //CaptureCoop logger
     implementation("org.capturecoop:CCColorUtils:1.0.3") //CaptureCoop Color utils & Color Chooser
 }
 
