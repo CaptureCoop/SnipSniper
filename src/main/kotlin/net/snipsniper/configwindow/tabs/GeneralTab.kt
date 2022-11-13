@@ -55,8 +55,6 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         val options = JPanel(GridBagLayout())
         val dropdown = configWindow.setupProfileDropdown(options, this, configOriginal, config, PAGE.generalPanel, "editor", "viewer")
 
-        //BEGIN ELEMENTS
-
         //profile title setting
         kotlin.run {
             gbc.gridx = 0
@@ -339,244 +337,227 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             options.add(InfoButton(getContent("config/general/savefoldermodifier.json")), gbc)
         }
 
-        //BEGIN SNIPE DELAY
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel(getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val snipeDelay =
-            JSpinner(SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.snipeDelay).toDouble(), 0.0, 100.0, 1.0))
-        snipeDelay.addChangeListener {
-            config.set(ConfigHelper.PROFILE.snipeDelay, (snipeDelay.value as Double).toInt().toString() + "")
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        options.add(snipeDelay, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/snapdelay.json")), gbc)
-        //END SNIPE DELAY
-
-        //BEGIN OPEN EDITOR
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel(getItem("config_label_openeditor"), JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val openEditor = JCheckBox()
-        openEditor.isSelected = config.getBool(ConfigHelper.PROFILE.openEditor)
-        openEditor.addActionListener {
-            config.set(ConfigHelper.PROFILE.openEditor, openEditor.isSelected.toString() + "")
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        options.add(openEditor, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/openeditor.json")), gbc)
-        //END OPEN EDITOR
-
-        //BEGIN SPYGLASS
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel(getItem("config_label_spyglass"), JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val spyglassDropdownEnabled = JComboBox<Any>(
-            arrayOf(
-                getItem("config_label_disabled"),
-                getItem("config_label_enabled"),
-                getItem("config_label_hold"),
-                getItem("config_label_toggle")
-            )
-        )
-        val spyglassDropdownHotkey =
-            JComboBox<Any>(arrayOf(getItem("config_label_control"), getItem("config_label_shift")))
-        val startMode = config.getString(ConfigHelper.PROFILE.spyglassMode)
-        val startEnabled = config.getBool(ConfigHelper.PROFILE.enableSpyglass)
-        spyglassDropdownHotkey.isVisible = false
-        if (startMode != "none" && startEnabled) {
-            when (startMode) {
-                "hold" -> spyglassDropdownEnabled.setSelectedIndex(2)
-                "toggle" -> spyglassDropdownEnabled.setSelectedIndex(3)
+        //Capture delay setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel(getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val snipeDelay =
+                JSpinner(SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.snipeDelay).toDouble(), 0.0, 100.0, 1.0))
+            snipeDelay.addChangeListener {
+                config.set(ConfigHelper.PROFILE.snipeDelay, (snipeDelay.value as Double).toInt().toString() + "")
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
-            spyglassDropdownHotkey.setVisible(true)
-        } else if (startMode == "none" && startEnabled) {
-            spyglassDropdownEnabled.setSelectedIndex(1)
-        } else {
-            spyglassDropdownEnabled.setSelectedIndex(0)
+            options.add(snipeDelay, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/snapdelay.json")), gbc)
         }
-        when (config.getInt(ConfigHelper.PROFILE.spyglassHotkey)) {
-            KeyEvent.VK_CONTROL -> spyglassDropdownHotkey.setSelectedIndex(0)
-            KeyEvent.VK_SHIFT -> spyglassDropdownHotkey.setSelectedIndex(1)
+
+        //Open editor after capture setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel(getItem("config_label_openeditor"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val openEditor = JCheckBox()
+            openEditor.isSelected = config.getBool(ConfigHelper.PROFILE.openEditor)
+            openEditor.addActionListener {
+                config.set(ConfigHelper.PROFILE.openEditor, openEditor.isSelected.toString() + "")
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            options.add(openEditor, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/openeditor.json")), gbc)
         }
-        spyglassDropdownEnabled.addItemListener {
-            val enableSpyglass: Boolean
-            val spyglassMode: String
-            when (spyglassDropdownEnabled.selectedIndex) {
-                0 -> {
-                    spyglassDropdownHotkey.isVisible = false
-                    enableSpyglass = false
-                    spyglassMode = "none"
+
+        //Spyglass settings
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel(getItem("config_label_spyglass"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val spyglassDropdownEnabled = JComboBox<Any>(arrayOf("config_label_disabled".translate(), "config_label_enabled".translate(), "config_label_hold".translate(), "config_label_toggle".translate()))
+            val spyglassDropdownHotkey = JComboBox<Any>(arrayOf("config_label_control".translate(), "config_label_shift".translate()))
+            val startMode = config.getString(ConfigHelper.PROFILE.spyglassMode)
+            val startEnabled = config.getBool(ConfigHelper.PROFILE.enableSpyglass)
+            spyglassDropdownHotkey.isVisible = false
+            if (startMode != "none" && startEnabled) {
+                when (startMode) {
+                    "hold" -> spyglassDropdownEnabled.setSelectedIndex(2)
+                    "toggle" -> spyglassDropdownEnabled.setSelectedIndex(3)
                 }
-
-                1 -> {
-                    spyglassDropdownHotkey.isVisible = false
-                    enableSpyglass = true
-                    spyglassMode = "none"
+                spyglassDropdownHotkey.setVisible(true)
+            } else if (startMode == "none" && startEnabled) {
+                spyglassDropdownEnabled.setSelectedIndex(1)
+            } else {
+                spyglassDropdownEnabled.setSelectedIndex(0)
+            }
+            when (config.getInt(ConfigHelper.PROFILE.spyglassHotkey)) {
+                KeyEvent.VK_CONTROL -> spyglassDropdownHotkey.setSelectedIndex(0)
+                KeyEvent.VK_SHIFT -> spyglassDropdownHotkey.setSelectedIndex(1)
+            }
+            spyglassDropdownEnabled.addItemListener {
+                val enableSpyglass: Boolean
+                val spyglassMode: String
+                when (spyglassDropdownEnabled.selectedIndex) {
+                    0 -> {
+                        spyglassDropdownHotkey.isVisible = false
+                        enableSpyglass = false
+                        spyglassMode = "none"
+                    }
+                    1 -> {
+                        spyglassDropdownHotkey.isVisible = false
+                        enableSpyglass = true
+                        spyglassMode = "none"
+                    }
+                    2 -> {
+                        spyglassDropdownHotkey.isVisible = true
+                        enableSpyglass = true
+                        spyglassMode = "hold"
+                    }
+                    3 -> {
+                        spyglassDropdownHotkey.isVisible = true
+                        enableSpyglass = true
+                        spyglassMode = "toggle"
+                    }
+                    else -> {
+                        enableSpyglass = false
+                        spyglassMode = "none"
+                    }
                 }
-
-                2 -> {
-                    spyglassDropdownHotkey.isVisible = true
-                    enableSpyglass = true
-                    spyglassMode = "hold"
+                config.set(ConfigHelper.PROFILE.enableSpyglass, enableSpyglass)
+                config.set(ConfigHelper.PROFILE.spyglassMode, spyglassMode)
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            spyglassDropdownHotkey.addItemListener {
+                when (spyglassDropdownHotkey.selectedIndex) {
+                    0 -> config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_CONTROL)
+                    1 -> config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_SHIFT)
                 }
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            JPanel(configWindow.getGridLayoutWithMargin(0, 2, 0)).also { spyglassPanel ->
+                spyglassPanel.add(spyglassDropdownEnabled)
+                spyglassPanel.add(spyglassDropdownHotkey)
+                options.add(spyglassPanel, gbc)
+            }
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/usespyglass.json")), gbc)
+        }
 
-                3 -> {
-                    spyglassDropdownHotkey.isVisible = true
-                    enableSpyglass = true
-                    spyglassMode = "toggle"
+        //Spyglass zoom setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel(getItem("config_label_spyglasszoom"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val spyglassZoomDropdown = JComboBox<Any>(arrayOf("8x8", "16x16", "32x32", "64x64"))
+            when (config.getInt(ConfigHelper.PROFILE.spyglassZoom)) {
+                8 -> spyglassZoomDropdown.setSelectedIndex(0)
+                16 -> spyglassZoomDropdown.setSelectedIndex(1)
+                32 -> spyglassZoomDropdown.setSelectedIndex(2)
+                64 -> spyglassZoomDropdown.setSelectedIndex(3)
+            }
+            spyglassZoomDropdown.addItemListener {
+                var zoom = 16
+                when (spyglassZoomDropdown.selectedIndex) {
+                    0 -> zoom = 8
+                    1 -> zoom = 16
+                    2 -> zoom = 32
+                    3 -> zoom = 64
                 }
-
-                else -> {
-                    enableSpyglass = false
-                    spyglassMode = "none"
-                }
+                config.set(ConfigHelper.PROFILE.spyglassZoom, zoom)
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
-            config.set(ConfigHelper.PROFILE.enableSpyglass, enableSpyglass)
-            config.set(ConfigHelper.PROFILE.spyglassMode, spyglassMode)
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            options.add(spyglassZoomDropdown, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(getContent("config/general/spyglasszoom.json")), gbc)
         }
-        spyglassDropdownHotkey.addItemListener {
-            when (spyglassDropdownHotkey.selectedIndex) {
-                0 -> config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_CONTROL)
-                1 -> config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_SHIFT)
-            }
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        val spyglassPanel = JPanel(configWindow.getGridLayoutWithMargin(0, 2, 0))
-        spyglassPanel.add(spyglassDropdownEnabled)
-        spyglassPanel.add(spyglassDropdownHotkey)
-        options.add(spyglassPanel, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/usespyglass.json")), gbc)
-        //END SPYGLASS
 
-        //BEGIN SPYGLASS ZOOM
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel(getItem("config_label_spyglasszoom"), JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val spyglassZoomDropdown = JComboBox<Any>(arrayOf("8x8", "16x16", "32x32", "64x64"))
-        when (config.getInt(ConfigHelper.PROFILE.spyglassZoom)) {
-            8 -> spyglassZoomDropdown.setSelectedIndex(0)
-            16 -> spyglassZoomDropdown.setSelectedIndex(1)
-            32 -> spyglassZoomDropdown.setSelectedIndex(2)
-            64 -> spyglassZoomDropdown.setSelectedIndex(3)
-        }
-        spyglassZoomDropdown.addItemListener {
-            var zoom = 16
-            when (spyglassZoomDropdown.selectedIndex) {
-                0 -> zoom = 8
-                1 -> zoom = 16
-                2 -> zoom = 32
-                3 -> zoom = 64
-            }
-            config.set(ConfigHelper.PROFILE.spyglassZoom, zoom)
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        options.add(spyglassZoomDropdown, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(getContent("config/general/spyglasszoom.json")), gbc)
-        //END SPYGLASS ZOOM
-
-        //BEGIN AFTERDRAG
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel("After Drag", JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val afterDragDropdownMode = JComboBox<Any>(
-            arrayOf(
-                getItem("config_label_disabled"),
-                getItem("config_label_enabled"),
-                getItem("config_label_hold")
-            )
-        )
-        val afterDragDropdownHotkey =
-            JComboBox<Any>(arrayOf(getItem("config_label_control"), getItem("config_label_shift")))
-        when (config.getString(ConfigHelper.PROFILE.afterDragMode).lowercase(Locale.getDefault())) {
-            "none" -> {
-                afterDragDropdownMode.selectedIndex = 0
-                afterDragDropdownHotkey.setVisible(false)
-            }
-
-            "enabled" -> {
-                afterDragDropdownMode.selectedIndex = 1
-                afterDragDropdownHotkey.setVisible(false)
-            }
-
-            "hold" -> afterDragDropdownMode.setSelectedIndex(2)
-        }
-        when (config.getInt(ConfigHelper.PROFILE.afterDragHotkey)) {
-            KeyEvent.VK_CONTROL -> afterDragDropdownHotkey.setSelectedIndex(0)
-            KeyEvent.VK_SHIFT -> afterDragDropdownHotkey.setSelectedIndex(1)
-        }
-        afterDragDropdownMode.addItemListener {
-            when (afterDragDropdownMode.selectedIndex) {
-                0 -> {
-                    config.set(ConfigHelper.PROFILE.afterDragMode, "none")
+        //Afterdrag setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel("After Drag", JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val afterDragDropdownMode = JComboBox<Any>(arrayOf("config_label_disabled".translate(), "config_label_enabled".translate(), "config_label_hold".translate()))
+            val afterDragDropdownHotkey = JComboBox<Any>(arrayOf(getItem("config_label_control"), getItem("config_label_shift")))
+            when (config.getString(ConfigHelper.PROFILE.afterDragMode).lowercase(Locale.getDefault())) {
+                "none" -> {
+                    afterDragDropdownMode.selectedIndex = 0
                     afterDragDropdownHotkey.setVisible(false)
                 }
-
-                1 -> {
-                    config.set(ConfigHelper.PROFILE.afterDragMode, "enabled")
+                "enabled" -> {
+                    afterDragDropdownMode.selectedIndex = 1
                     afterDragDropdownHotkey.setVisible(false)
                 }
-
-                2 -> {
-                    config.set(ConfigHelper.PROFILE.afterDragMode, "hold")
-                    afterDragDropdownHotkey.setVisible(true)
-                }
+                "hold" -> afterDragDropdownMode.setSelectedIndex(2)
             }
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        afterDragDropdownHotkey.addItemListener {
-            when (afterDragDropdownHotkey.selectedIndex) {
-                0 -> {
-                    config.set(ConfigHelper.PROFILE.afterDragHotkey, KeyEvent.VK_CONTROL)
-                    config.set(ConfigHelper.PROFILE.afterDragHotkey, KeyEvent.VK_SHIFT)
-                }
-
-                1 -> config.set(ConfigHelper.PROFILE.afterDragHotkey, KeyEvent.VK_SHIFT)
+            when (config.getInt(ConfigHelper.PROFILE.afterDragHotkey)) {
+                KeyEvent.VK_CONTROL -> afterDragDropdownHotkey.setSelectedIndex(0)
+                KeyEvent.VK_SHIFT -> afterDragDropdownHotkey.setSelectedIndex(1)
             }
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            afterDragDropdownMode.addItemListener {
+                when (afterDragDropdownMode.selectedIndex) {
+                    0 -> {
+                        config.set(ConfigHelper.PROFILE.afterDragMode, "none")
+                        afterDragDropdownHotkey.setVisible(false)
+                    }
+                    1 -> {
+                        config.set(ConfigHelper.PROFILE.afterDragMode, "enabled")
+                        afterDragDropdownHotkey.setVisible(false)
+                    }
+                    2 -> {
+                        config.set(ConfigHelper.PROFILE.afterDragMode, "hold")
+                        afterDragDropdownHotkey.setVisible(true)
+                    }
+                }
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            afterDragDropdownHotkey.addItemListener {
+                when (afterDragDropdownHotkey.selectedIndex) {
+                    0 -> {
+                        config.set(ConfigHelper.PROFILE.afterDragHotkey, KeyEvent.VK_CONTROL)
+                        config.set(ConfigHelper.PROFILE.afterDragHotkey, KeyEvent.VK_SHIFT)
+                    }
+                    1 -> config.set(ConfigHelper.PROFILE.afterDragHotkey, KeyEvent.VK_SHIFT)
+                }
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            val afterDragPanel = JPanel(GridLayout(0, 2))
+            afterDragPanel.add(afterDragDropdownMode)
+            afterDragPanel.add(afterDragDropdownHotkey)
+            options.add(afterDragPanel, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(null), gbc)
         }
-        val afterDragPanel = JPanel(GridLayout(0, 2))
-        afterDragPanel.add(afterDragDropdownMode)
-        afterDragPanel.add(afterDragDropdownHotkey)
-        options.add(afterDragPanel, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(null), gbc)
-        //END AFTERDRAG
-        //BEGIN AFTERDRAG DEADZONE
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel("AfterDrag deadzone", JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val afterDragDeadzoneSpinner =
-            JSpinner(SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.afterDragDeadzone), 1, 50, 1))
-        afterDragDeadzoneSpinner.addChangeListener { e: ChangeEvent? ->
-            config.set(ConfigHelper.PROFILE.afterDragDeadzone, afterDragDeadzoneSpinner.value.toString().toInt())
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-        }
-        options.add(afterDragDeadzoneSpinner, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(null), gbc)
-        //END AFTERDRAG DEADZONE
 
-        //START DOTTED LINE
-        gbc.gridx = 0
-        options.add(configWindow.createJLabel("Enable dotted outline", JLabel.RIGHT, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        val enableOutline = JCheckBox()
-        enableOutline.isSelected = config.getBool(ConfigHelper.PROFILE.dottedOutline)
-        enableOutline.addActionListener {
-            config.set(ConfigHelper.PROFILE.dottedOutline, enableOutline.isSelected)
-            cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+        //Afterdrag deadzon setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel("AfterDrag deadzone", JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val afterDragDeadzoneSpinner = JSpinner(SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.afterDragDeadzone), 1, 50, 1))
+            afterDragDeadzoneSpinner.addChangeListener {
+                config.set(ConfigHelper.PROFILE.afterDragDeadzone, afterDragDeadzoneSpinner.value.toString().toInt())
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            options.add(afterDragDeadzoneSpinner, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(null), gbc)
         }
-        options.add(enableOutline, gbc)
-        gbc.gridx = 2
-        options.add(InfoButton(null), gbc)
-        //END DOTTED LINE
-        //END ELEMENTS
+
+        //Afterdrag dotted line setting
+        kotlin.run {
+            gbc.gridx = 0
+            options.add(configWindow.createJLabel("Enable dotted outline", JLabel.RIGHT, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            val enableOutline = JCheckBox()
+            enableOutline.isSelected = config.getBool(ConfigHelper.PROFILE.dottedOutline)
+            enableOutline.addActionListener {
+                config.set(ConfigHelper.PROFILE.dottedOutline, enableOutline.isSelected)
+                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+            options.add(enableOutline, gbc)
+            gbc.gridx = 2
+            options.add(InfoButton(null), gbc)
+        }
 
         //BEGIN SAVE
         cleanDirtyFunction = configWindow.setupSaveButtons(options, this, gbc, config, configOriginal, null, true)
