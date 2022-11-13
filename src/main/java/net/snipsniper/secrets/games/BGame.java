@@ -48,7 +48,7 @@ public class BGame extends JFrame {
 
     public BGame(Sniper sniper) {
         this.sniper = sniper;
-        StatsManager.incrementCount(StatsManager.BGAME_STARTED_AMOUNT);
+        StatsManager.Companion.incrementCount(StatsManager.BGAME_STARTED_AMOUNT);
         SnipSniper.Companion.getNewThread(args -> launch()).start();
     }
 
@@ -181,7 +181,7 @@ public class BGame extends JFrame {
     }
 
     public void spawnPiece() {
-        StatsManager.incrementCount(StatsManager.BGAME_STARTED_SPAWNED_PIECES_AMOUNT);
+        StatsManager.Companion.incrementCount(StatsManager.BGAME_STARTED_SPAWNED_PIECES_AMOUNT);
         BGamePiece newPiece = new BGamePiece(this);
         if(gameOver) {
             cPiece = null;

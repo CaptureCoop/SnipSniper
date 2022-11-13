@@ -80,7 +80,7 @@ public class SCEditorWindow extends SnipScopeWindow implements CCIClosable {
 
         CCLogger.Companion.info("Creating new editor window...");
 
-        StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT);
+        StatsManager.Companion.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT);
 
         if(image == null) {
             if (config.getBool(ConfigHelper.PROFILE.standaloneStartWithEmpty)) {
