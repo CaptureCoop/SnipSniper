@@ -113,7 +113,6 @@ class SnipSniper {
             CCLogger.paused = false
 
             uncaughtExceptionHandler = Thread.UncaughtExceptionHandler { _, throwable ->
-                CCLogger.error("SnipSniper encountered an uncaught exception. This may be fatal!")
                 CCLogger.logStacktrace(throwable, CCLogLevel.ERROR)
             }
             Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler)
