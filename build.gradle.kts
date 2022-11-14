@@ -73,8 +73,8 @@ tasks.build {
     group = "SnipSniper"
 }
 
-val taskRun = tasks.create("run", JavaExec::class) {
-    group = "SnipSniper"
+tasks.withType<JavaExec> {
+    group = "SnipSniper Run"
     dependsOn(tasks.build)
     doFirst {
         val runDir = File(project.buildDir, "run").also { it.mkdirs() }
@@ -84,14 +84,12 @@ val taskRun = tasks.create("run", JavaExec::class) {
         standardInput = System.`in` //This allows input in our IDE
         minHeapSize = properties["snipsniper.run.xms"] as String
         maxHeapSize = properties["snipsniper.run.xmx"] as String
-        args("-debug")
     }
 }
-
-tasks.create("runClean") {
-    group = "SnipSniper"
-    dependsOn("clean", taskRun)
-}
+tasks.create("run", JavaExec::class) { }
+tasks.create("runDebug", JavaExec::class) { args("-debug") }
+tasks.create("runEditor", JavaExec::class) { args("-editor") }
+tasks.create("runViewer", JavaExec::class) { args("-viewer") }
 
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
