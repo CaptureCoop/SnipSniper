@@ -43,7 +43,7 @@ class SCEditorRenderer(private val scEditorWindow: SCEditorWindow): SnipScopeRen
         //Helper variables
         val wnd = scEditorWindow
         val ic = wnd.inputContainer
-        val stmp = wnd.selectedStamp
+        val stmp = wnd.getSelectedStamp()
 
         val previewGraphics =  preview!!.graphics as Graphics2D
         previewGraphics.setRenderingHints(wnd.qualityHints) //TODO: Make this toggleable per stamp, for example not for rect stamp, but do it for counter stamp ^^ (Also add it to render function of each stamp..)

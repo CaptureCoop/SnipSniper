@@ -56,7 +56,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         if(!scEditorWindow.isEnableInteraction) return
 
         if(input.isKeyPressed(KeyEvent.VK_PERIOD))
-            scEditorWindow.isEzMode = !scEditorWindow.isEzMode
+            scEditorWindow.ezMode = !scEditorWindow.ezMode
 
         var textState = TextStamp.TextState.TYPING
         scEditorWindow.stamps.forEach {
@@ -99,7 +99,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
             }
         }
 
-        scEditorWindow.selectedStamp.update(scEditorWindow.inputContainer, 0, keyEvent)
+        scEditorWindow.getSelectedStamp().update(scEditorWindow.inputContainer, 0, keyEvent)
         scEditorWindow.repaint()
     }
 
@@ -122,7 +122,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
             val x = scEditorWindow.location.x + scEditorWindow.width / 2
             val y = scEditorWindow.location.y + scEditorWindow.height / 2
             //TODO: Do we want the save button back?
-            scEditorWindow.addClosableWindow(CCColorChooser(scEditorWindow.selectedStamp.color, "Marker color", x, y, true, null, null))
+            scEditorWindow.addClosableWindow(CCColorChooser(scEditorWindow.getSelectedStamp().color, "Marker color", x, y, true, null, null))
         }
 
         if(openSaveAsWindow) {
@@ -142,7 +142,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         if(!scEditorWindow.isEnableInteraction) return
 
         if(!scEditorWindow.isPointOnUiComponents(mouseEvent.point))
-            scEditorWindow.selectedStamp.mousePressedEvent(mouseEvent.button, true)
+            scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.button, true)
 
         if(mouseEvent.button == 3) {
             if(scEditorWindow.isDirty) scEditorWindow.saveImage()
@@ -155,7 +155,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
     override fun mouseReleased(mouseEvent: MouseEvent) {
         super.mouseReleased(mouseEvent)
 
-        if(scEditorWindow.isDefaultImage) {
+        if(scEditorWindow.isDefaultImage()) {
             JFileChooser().also {
                 if(it.showOpenDialog(scEditorWindow) == JFileChooser.APPROVE_OPTION)
                     scEditorWindow.setImage(ImageIcon(it.selectedFile.absolutePath).image.toBufferedImage(), true, true)
@@ -165,7 +165,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         if(!scEditorWindow.isEnableInteraction) return
 
         if (!scEditorWindow.isPointOnUiComponents(mouseEvent.point)) {
-            scEditorWindow.selectedStamp.mousePressedEvent(mouseEvent.button, false)
+            scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.button, false)
 
             scEditorWindow.inputContainer.clearMousePath()
             if (!scEditorWindow.inputContainer.isKeyPressed(scEditorWindow.movementKey)) {
@@ -185,7 +185,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         scEditorWindow.isDirty = true
         g as Graphics2D
         g.setRenderingHints(scEditorWindow.qualityHints)
-        scEditorWindow.selectedStamp.render(g, scEditorWindow.inputContainer, scEditorWindow.getPointOnImage(Point(input.mouseX, input.mouseY)), scEditorWindow.differenceFromImage, true, censor, history.size)
+        scEditorWindow.getSelectedStamp().render(g, scEditorWindow.inputContainer, scEditorWindow.getPointOnImage(Point(input.mouseX, input.mouseY)), scEditorWindow.differenceFromImage, true, censor, history.size)
         scEditorWindow.repaint()
         history.add(scEditorWindow.image.clone())
     }
@@ -196,8 +196,8 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
 
         val input = scEditorWindow.inputContainer
 
-        if(input.isKeyPressed(KeyEvent.VK_ALT) && scEditorWindow.selectedStamp.color != null) {
-            val stamp = scEditorWindow.selectedStamp
+        if(input.isKeyPressed(KeyEvent.VK_ALT) && scEditorWindow.getSelectedStamp().color != null) {
+            val stamp = scEditorWindow.getSelectedStamp()
             val oldColor = stamp.color!!.primaryColor
             val alpha = stamp.color!!.primaryColor.alpha
             val hsv = Array(3) { 0.0F }.toFloatArray()
@@ -217,7 +217,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         }
 
         if(!input.isKeyPressed(scEditorWindow.movementKey))
-            scEditorWindow.selectedStamp.update(input, mouseWheelEvent.wheelRotation, null)
+            scEditorWindow.getSelectedStamp().update(input, mouseWheelEvent.wheelRotation, null)
         scEditorWindow.repaint()
     }
 

@@ -208,7 +208,7 @@ class SnipSniper {
             }
 
             if (cmdline.editorOnly || launchType == LaunchType.EDITOR) {
-                val editorConfig = SCEditorWindow.getStandaloneEditorConfig()
+                val editorConfig = SCEditorWindow.standaloneEditorConfig
                 editorConfig.save()
 
                 var img: BufferedImage? = null

@@ -146,9 +146,7 @@ class SCViewerWindow(private var file: File?, private var config: Config?, isSta
 
     fun openEditor() {
         if(file == null) return
-        SCEditorWindow(image, location.x, location.y, "SnipSniper Editor", config, false, file?.absolutePath, false, false).also {
-            it.size = size
-        }
+        SCEditorWindow(image, location.x, location.y, "SnipSniper Editor", config!!, false, file?.absolutePath, false, false).also { it.size = size }
         if (config!!.getBool(ConfigHelper.PROFILE.closeViewerOnOpenEditor))
             dispose()
     }

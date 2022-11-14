@@ -74,7 +74,7 @@ class TextStamp(private val config: Config, private val scEditorWindow: SCEditor
             fontMode++
             if (fontMode > 2) fontMode = 0
         }
-        if (scEditorWindow!!.isEzMode) {
+        if (scEditorWindow!!.ezMode) {
             alertChangeListeners(IStampUpdateListener.TYPE.INPUT)
             return
         }
@@ -119,7 +119,7 @@ class TextStamp(private val config: Config, private val scEditorWindow: SCEditor
 
     override fun editorUndo(historyPoint: Int) {}
     override fun mousePressedEvent(button: Int, pressed: Boolean) {
-        if (scEditorWindow!!.isEzMode) {
+        if (scEditorWindow!!.ezMode) {
             doSaveNextRender = true
             alertChangeListeners(IStampUpdateListener.TYPE.INPUT)
             return
