@@ -253,7 +253,7 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
         info("Started new editor window. ($this)")
     }
 
-    fun addEZModeStampButton(title: String?, iconName: String?, theme: String?, stampIndex: Int) {
+    private fun addEZModeStampButton(title: String?, iconName: String?, theme: String?, stampIndex: Int) {
         ezModeStampPanelTabs.addTab(title, null)
         val ezIconMarker = getImage(CCStringUtils.format("ui/editor/%c/%c.png", theme, iconName))
         ezModeStampPanelTabs.setTabComponentAt(stampIndex, EzModeStampTab(ezIconMarker, 32, this, stampIndex))
@@ -270,22 +270,13 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
             ezModeTitle.font = Font("Arial", Font.PLAIN, ezModeHeight - titleMargin)
             ezModeStampPanel.setBounds(ezModeWidthToUse, 0, contentPane.width - ezModeWidthToUse, ezModeHeight)
             ezModeStampPanelTabs.setBounds(0, 0, ezModeStampPanel.width, ezModeStampPanel.height)
-            val ezModeSettingsHeight = ezModeSettingsCreator.lastCorrectHeight()
-            ezModeStampSettingsPanel.preferredSize = Dimension(ezModeWidthToUse, ezModeSettingsHeight)
-            ezModeStampSettingsPanel.minimumSize = Dimension(ezModeWidthToUse, ezModeSettingsHeight)
-            ezModeStampSettingsPanel.maximumSize = Dimension(ezModeWidthToUse, ezModeSettingsHeight)
-            ezModeStampSettingsScrollPane.setBounds(
-                0,
-                ezModeHeight,
-                ezModeWidthToUse,
-                contentPane.height - ezModeHeight
-            )
-            renderer.setBounds(
-                ezModeWidthToUse,
-                ezModeHeight,
-                contentPane.width - ezModeWidthToUse,
-                contentPane.height - ezModeHeight
-            )
+            Dimension(ezModeWidthToUse, ezModeSettingsCreator.lastCorrectHeight()).also { dim ->
+                ezModeStampSettingsPanel.preferredSize = dim
+                ezModeStampSettingsPanel.minimumSize = dim
+                ezModeStampSettingsPanel.maximumSize = dim
+            }
+            ezModeStampSettingsScrollPane.setBounds(0, ezModeHeight, ezModeWidthToUse, contentPane.height - ezModeHeight)
+            renderer.setBounds(ezModeWidthToUse, ezModeHeight, contentPane.width - ezModeWidthToUse, contentPane.height - ezModeHeight)
         } else {
             ezModeTitlePanel.setBounds(0, 0, 0, 0)
             ezModeStampPanel.setBounds(0, 0, 0, 0)
