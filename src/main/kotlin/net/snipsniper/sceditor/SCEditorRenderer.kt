@@ -19,8 +19,8 @@ class SCEditorRenderer(private val scEditorWindow: SCEditorWindow): SnipScopeRen
                 evt.acceptDrop(DnDConstants.ACTION_COPY)
                 val droppedFiles = evt.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<*>
                 (droppedFiles[0] as File).also { file ->
-                    scEditorWindow.setSaveLocation(file.absolutePath)
-                    scEditorWindow.setInClipboard(false)
+                    scEditorWindow.saveLocation = file.absolutePath
+                    scEditorWindow.inClipboard = false
                     scEditorWindow.refreshTitle()
                     scEditorWindow.setImage(ImageIO.read(file), true, true)
                 }

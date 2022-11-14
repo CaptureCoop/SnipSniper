@@ -46,8 +46,8 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
             openNewImageWindow = true
 
         if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
-            scEditorWindow.setSaveLocation("")
-            scEditorWindow.setInClipboard(true)
+            scEditorWindow.saveLocation = ""
+            scEditorWindow.inClipboard = true
             scEditorWindow.refreshTitle()
             //TODO: Check if null and tell user if paste is bad
             scEditorWindow.setImage(ImageUtils.getImageFromClipboard(), true, true)

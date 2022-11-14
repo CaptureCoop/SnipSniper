@@ -33,8 +33,8 @@ import javax.swing.*
 
 class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), CCIClosable {
     val config: Config
-    private var saveLocation: String?
-    private var inClipboard: Boolean
+    var saveLocation: String?
+    var inClipboard: Boolean
     var originalImage: BufferedImage
         private set
     val stamps = Array(StampType.size) { i -> StampType.getByIndex(i).getIStamp(config, this) }
@@ -326,11 +326,11 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
     fun refreshTitle() {
         info("Refreshing title")
         var newTitle: String? = title
-        if (saveLocation != null && !saveLocation!!.isEmpty()) newTitle += " ($saveLocation)"
+        if (saveLocation != null && saveLocation!!.isNotEmpty()) newTitle += " ($saveLocation)"
         if (inClipboard) {
             newTitle += " (Clipboard)"
         }
-        newTitle += CCStringUtils.format(" %cx%c", image.width, image.height)
+        newTitle += " ${image.width}x${image.height}"
         title = newTitle
     }
 
@@ -349,21 +349,9 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
         }
     }
 
-    fun setSaveLocation(saveLocation: String?) {
-        this.saveLocation = saveLocation
-    }
+    fun getSelectedStamp() = stamps[selectedStamp]
 
-    fun setInClipboard(inClipboard: Boolean) {
-        this.inClipboard = inClipboard
-    }
-
-    fun getSelectedStamp(): IStamp {
-        return stamps[selectedStamp]
-    }
-
-    fun setEzModeTitle(title: String?) {
-        ezModeTitle.text = title
-    }
+    fun setEzModeTitle(title: String?) = kotlin.run { ezModeTitle.text = title }
 
     fun setSelectedStamp(i: Int) {
         if (selectedStamp == i) return
