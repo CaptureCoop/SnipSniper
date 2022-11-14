@@ -18,9 +18,9 @@ class BGamePiece(game: BGame) {
     val index: Int
 
     init {
-        index = BGame.randomRange(0, game.resources.getSize() - 1)
+        index = BGame.randomRange(0, game.resources!!.getSize() - 1)
         //index = 0;
-        figure = game.resources.getPiece(index)
+        figure = game.resources!!.getPiece(index)
         this.game = game
         posX = this.game.BOARD_WIDTH / 2 - figure[0].size / 2
         for (y in figure.indices) {
@@ -55,7 +55,7 @@ class BGamePiece(game: BGame) {
         for (y in figure[0].indices) {
             for (x in figure.indices) {
                 if (figure[y][x] != 0) {
-                    g.drawImage(game.resources.getImage(index), x * size, y * size, size, size, null)
+                    g.drawImage(game.resources!!.getImage(index), x * size, y * size, size, size, null)
                 }
             }
         }

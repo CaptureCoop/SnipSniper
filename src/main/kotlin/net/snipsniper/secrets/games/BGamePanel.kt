@@ -32,25 +32,23 @@ class BGamePanel(private val game: BGame) : JPanel() {
         val offsetX = width / 2 - game.BOARD_WIDTH * ts / 2
         g.color = Color.BLACK
         if (game.currentPiece != null) {
-            val cp = game.currentPiece
+            val cp = game.currentPiece!!
             for (y in cp.figure[0].indices) {
                 for (x in cp.figure.indices) {
                     if (cp.figure[y][x] != 0) {
-                        g.drawImage(game.resources.getImage(cp.index), offsetX + (cp.posX + x) * ts, (cp.posY + y) * ts, ts, ts, null)
+                        g.drawImage(game.resources?.getImage(cp.index), offsetX + (cp.posX + x) * ts, (cp.posY + y) * ts, ts, ts, null)
                     }
                 }
             }
         }
         for (y in 0 until game.BOARD_HEIGHT) {
             for (x in 0 until game.BOARD_WIDTH) {
-                if (game.board != null) {
-                    val cBlock = game.board[x][y]
-                    if (cBlock != null) {
-                        g.drawImage(game.resources.getImage(cBlock.index), offsetX + x * ts, y * ts, ts, ts, null)
-                        g.color = Color.BLACK
-                    }
-                    g.drawRect(offsetX + x * ts, y * ts, ts, ts)
+                val cBlock = game.board[x][y]
+                if (cBlock != null) {
+                    g.drawImage(game.resources?.getImage(cBlock.index), offsetX + x * ts, y * ts, ts, ts, null)
+                    g.color = Color.BLACK
                 }
+                g.drawRect(offsetX + x * ts, y * ts, ts, ts)
             }
         }
         drawScoreText(g, offsetX, ts, 0, "Level")
