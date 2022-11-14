@@ -1,5 +1,10 @@
 # SnipSniper
 
+This branch (Kotlin) is a port to Kotlin.</br>
+It should not be considered Stable till it is done.</br>
+Once that is done it will replace the Java Version
+----
+
 The Screenshot Tool
 
   - Up to 7 profiles!
