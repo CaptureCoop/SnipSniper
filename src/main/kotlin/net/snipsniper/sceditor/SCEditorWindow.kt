@@ -21,6 +21,7 @@ import net.snipsniper.utils.ImageUtils.Companion.getDragPasteImage
 import net.snipsniper.utils.ImageUtils.Companion.saveImage
 import net.snipsniper.utils.Utils
 import net.snipsniper.utils.Utils.Companion.getScaledDimension
+import net.snipsniper.utils.getImage
 import org.apache.commons.lang3.SystemUtils
 import org.capturecoop.cclogger.CCLogger.Companion.info
 import org.capturecoop.ccutils.utils.CCIClosable
@@ -255,9 +256,10 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
 
     private fun addEZModeStampButton(title: String?, iconName: String?, theme: String?, stampIndex: Int) {
         ezModeStampPanelTabs.addTab(title, null)
-        val ezIconMarker = getImage(CCStringUtils.format("ui/editor/%c/%c.png", theme, iconName))
-        ezModeStampPanelTabs.setTabComponentAt(stampIndex, EzModeStampTab(ezIconMarker, 32, this, stampIndex))
-        ezModeStampPanelTabs.setIconAt(stampIndex, ImageIcon(ezIconMarker))
+        "ui/editor/$theme/$iconName.png".getImage().also { ezIconMarker ->
+            ezModeStampPanelTabs.setTabComponentAt(stampIndex, EzModeStampTab(ezIconMarker, 32, this, stampIndex))
+            ezModeStampPanelTabs.setIconAt(stampIndex, ImageIcon(ezIconMarker))
+        }
     }
 
     override fun resizeTrigger() {

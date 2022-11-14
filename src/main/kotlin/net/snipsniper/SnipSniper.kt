@@ -50,16 +50,16 @@ class SnipSniper {
             get() {return CCStringUtils.correctSlashes(field)}
         var mainFolder: String? = null
             private set
-            get() {return CCStringUtils.correctSlashes(field)}
+            get() {return CCStringUtils.correctSlashes(field!!)}
         var configFolder: String? = null
             private set
-            get() {return CCStringUtils.correctSlashes(field)}
+            get() {return CCStringUtils.correctSlashes(field!!)}
         var logFolder: String? = null
             private set
-            get() {return CCStringUtils.correctSlashes(field)}
+            get() {return CCStringUtils.correctSlashes(field!!)}
         var imgFolder: String? = null
             private set
-            get() {return CCStringUtils.correctSlashes(field)}
+            get() {return CCStringUtils.correctSlashes(field!!)}
 
         private var configWindow: ConfigWindow? = null
         private val profiles = arrayOfNulls<Sniper>(PROFILE_COUNT)

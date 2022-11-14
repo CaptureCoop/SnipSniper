@@ -66,7 +66,7 @@ open class SnipScopeListener(private val snipScopeWindow: SnipScopeWindow): KeyL
             lastPoint?.let {
                 val x = lastPoint!!.getX() - mouseEvent.point.getX()
                 val y = lastPoint!!.getY() - mouseEvent.point.getY()
-                snipScopeWindow.position = CCVector2Int.add(snipScopeWindow.position, CCVector2Int(x, y))
+                snipScopeWindow.position += CCVector2Int(x, y)
             }
             lastPoint = mouseEvent.point
             snipScopeWindow.repaint()

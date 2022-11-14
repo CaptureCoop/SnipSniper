@@ -323,12 +323,11 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
     private fun showDirtyWarning() = showPopup(this, "Unsaved changes, are you sure you want to cancel?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, "icons/redx.png".getImage(), true)
 
     fun getIDFromFilename(name: String): Int {
-        val idString = name.replace(Config.DOT_EXTENSION.toRegex(), "").replace("profile", "")
-        if (CCMathUtils.isInteger(idString)) {
-            return idString.toInt()
+        val idString = name.replace(Config.DOT_EXTENSION, "").replace("profile", "")
+        (idString.toIntOrNull() ?: -1).also { result ->
+            if(result == -1) CCLogger.error("Issue parsing Filename to id: $name")
+            return result
         }
-        CCLogger.error("Issue parsing Filename to id: $name")
-        return -1
     }
 
     fun setupColorButton(title: String?, config: Config, configKey: PROFILE?, whenChange: ChangeListener?): GradientJButton {
