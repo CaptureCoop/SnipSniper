@@ -68,7 +68,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
 
     fun refreshConfigFiles() {
         configFiles.clear()
-        File(configFolder!!).listFiles()?.forEach { file ->
+        File(configFolder).listFiles()?.forEach { file ->
             if (getFileExtension(file) == Config.DOT_EXTENSION) configFiles.add(file)
         }
     }

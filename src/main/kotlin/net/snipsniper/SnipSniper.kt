@@ -20,8 +20,6 @@ import java.awt.SystemTray
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
-import java.net.URLDecoder
-import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.util.*
 import java.util.logging.Level
@@ -45,21 +43,21 @@ class SnipSniper {
         var isDemo = false
         var isIdle = true
 
-        var jarFolder: String? = null
+        var jarFolder: String = ""
             private set
-            get() {return CCStringUtils.correctSlashes(field!!)}
-        var mainFolder: String? = null
+            get() {return CCStringUtils.correctSlashes(field)}
+        var mainFolder: String = ""
             private set
-            get() {return CCStringUtils.correctSlashes(field!!)}
-        var configFolder: String? = null
+            get() {return CCStringUtils.correctSlashes(field)}
+        var configFolder: String = ""
             private set
-            get() {return CCStringUtils.correctSlashes(field!!)}
-        var logFolder: String? = null
+            get() {return CCStringUtils.correctSlashes(field)}
+        var logFolder: String = ""
             private set
-            get() {return CCStringUtils.correctSlashes(field!!)}
-        var imgFolder: String? = null
+            get() {return CCStringUtils.correctSlashes(field)}
+        var imgFolder: String = ""
             private set
-            get() {return CCStringUtils.correctSlashes(field!!)}
+            get() {return CCStringUtils.correctSlashes(field)}
 
         private var configWindow: ConfigWindow? = null
         private val profiles = arrayOfNulls<Sniper>(PROFILE_COUNT)
@@ -91,13 +89,20 @@ class SnipSniper {
             //This is done here, not further below so that if we run a command like -version we dont save anything to disk!
             val cmdline = CommandLineHelper().also { it.handle(args) }
 
-            when(platformType) {
-                PlatformType.STEAM, PlatformType.WIN_INSTALLED -> setSaveLocationToDocuments()
-                else -> setSaveLocationToJar()
+            //Set folders
+            kotlin.run {
+                jarFolder = when(platformType) {
+                    PlatformType.STEAM, PlatformType.WIN_INSTALLED -> System.getProperty("user.home")
+                    else -> FileUtils.getJarFolder()
+                }
+                mainFolder =    "$jarFolder/SnipSniper"
+                configFolder =  "$mainFolder/cfg/"
+                logFolder =     "$mainFolder/logs/"
+                imgFolder =     "$mainFolder/img/"
             }
 
             if (!isDemo) {
-                if (!FileUtils.mkdirs(configFolder!!, logFolder!!, imgFolder!!)) {
+                if (!FileUtils.mkdirs(configFolder, logFolder, imgFolder)) {
                     CCLogger.log("Could not create required folders! Exiting...", CCLogLevel.ERROR)
                     exit(false)
                 }
@@ -226,7 +231,7 @@ class SnipSniper {
             } else if(cmdline.viewerOnly || launchType == LaunchType.VIEWER) {
                 var file: File? = null
                 if(cmdline.viewerFile != null && cmdline.viewerFile!!.isNotEmpty())
-                    file = File(cmdline.viewerFile)
+                    file = File(cmdline.viewerFile!!)
 
                 if(launchType == LaunchType.VIEWER) {
                     if(args.isNotEmpty()) {
@@ -256,37 +261,6 @@ class SnipSniper {
             for(i in 1 until PROFILE_COUNT) {
                 if(File(configFolder, "profile${i}.cfg").exists())
                     profiles[i] = Sniper(i)
-            }
-        }
-
-        private fun setSaveLocationToDocuments() {
-            jarFolder = System.getProperty("user.home")
-            mainFolder =    "$jarFolder/.SnipSniper"
-            configFolder =  "$mainFolder/cfg/"
-            logFolder =     "$mainFolder/logs/"
-            imgFolder =     "$mainFolder/img/"
-        }
-
-        private fun setSaveLocationToJar() {
-            //TODO: Test other ways of finding out the jar location
-            var folderToUseString: String? = null
-            try {
-                folderToUseString = URLDecoder.decode(Paths.get(SnipSniper::class.java.protectionDomain.codeSource.location.toURI()).toString(), "UTF-8")
-            } catch (exception: Exception) {
-                CCLogger.log("Could not set profiles folder. Error: ${exception.message}", CCLogLevel.ERROR)
-                exit(false)
-            }
-
-            if(folderToUseString != null) {
-                val folderToUse = File(folderToUseString)
-                jarFolder = if (folderToUse.name.endsWith(".jar"))
-                    folderToUseString.replace(folderToUse.name, "")
-                else folderToUseString
-
-                mainFolder =    "$jarFolder/SnipSniper"
-                configFolder =  "$mainFolder/cfg/"
-                logFolder =     "$mainFolder/logs/"
-                imgFolder =     "$mainFolder/img/"
             }
         }
 

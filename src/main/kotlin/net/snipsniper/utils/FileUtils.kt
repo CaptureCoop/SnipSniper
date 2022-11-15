@@ -1,12 +1,15 @@
 package net.snipsniper.utils
 
+import net.snipsniper.SnipSniper
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
 import org.capturecoop.ccutils.utils.CCStringUtils
 import java.awt.Desktop
 import java.io.*
+import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
 class FileUtils {
@@ -123,6 +126,14 @@ class FileUtils {
                 CCLogger.logStacktrace(ioException, CCLogLevel.ERROR)
             }
             return null
+        }
+
+        fun getJarFolder(): String {
+            URLDecoder.decode(Paths.get(SnipSniper::class.java.protectionDomain.codeSource.location.toURI()).toString(), "UTF-8")!!.also { fullPath ->
+                File(fullPath).also { file ->
+                    return if(file.isFile) fullPath.replace(file.name, "") else fullPath
+                }
+            }
         }
 
         fun copyFromJar(jarPath: String, path: String): Boolean {

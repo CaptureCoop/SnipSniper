@@ -18,11 +18,9 @@ class UpdateUtils {
                 PlatformType.JAR -> {
                     FileUtils.copyFromJar(pathInJar, updaterLocation)
                     Utils.getReleaseType(SnipSniper.config.getString(ConfigHelper.MAIN.updateChannel)).also { channel ->
-                        SnipSniper.jarFolder?.let {
-                            val jarLink = if(channel == ReleaseType.DEV) Links.DEV_JAR else Links.STABLE_JAR
-                            Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", jarLink, "-gui", "-exec", "SnipSniper.jar", "-dir", it)
-                            SnipSniper.exit(false)
-                        }
+                        val jarLink = if(channel == ReleaseType.DEV) Links.DEV_JAR else Links.STABLE_JAR
+                        Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", jarLink, "-gui", "-exec", "SnipSniper.jar", "-dir", SnipSniper.jarFolder)
+                        SnipSniper.exit(false)
                     }
                 }
                 PlatformType.WIN -> {
