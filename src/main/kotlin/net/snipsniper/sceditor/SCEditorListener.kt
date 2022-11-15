@@ -120,10 +120,9 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
             //This fixes an issue with the ALT key getting "stuck" since the key up event is not being received if the color window is in the front.
             openColorChooser = false
             scEditorWindow.inputContainer.resetKeys()
-            val x = scEditorWindow.location.x + scEditorWindow.width / 2
-            val y = scEditorWindow.location.y + scEditorWindow.height / 2
+            val wnd = CCColorChooser(scEditorWindow.getSelectedStamp().color!!, "Marker color", parent = scEditorWindow, useGradient = true)
             //TODO: Do we want the save button back?
-            scEditorWindow.addClosableWindow(CCColorChooser(scEditorWindow.getSelectedStamp().color!!, "Marker color", x, y, true, null, null))
+            scEditorWindow.addClosableWindow(wnd)
         }
 
         if(openSaveAsWindow) {

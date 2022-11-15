@@ -159,12 +159,9 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             tintColorButton.addActionListener {
-                val x = configWindow.location.x + width / 2
-                val y = configWindow.location.y + height / 2
                 var image = getImage("preview/code_light.png")
-                if (SnipSniper.config.getString(ConfigHelper.MAIN.theme) == "dark") image =
-                    getImage("preview/code_dark.png")
-                val chooser = CCColorChooser(tintColor, "Tint Color", x, y, false, image, null)
+                if (SnipSniper.config.getString(ConfigHelper.MAIN.theme) == "dark") image = getImage("preview/code_dark.png")
+                val chooser = CCColorChooser(tintColor, "Tint Color", parent = configWindow, useGradient = false, backgroundImage = image)
                 configWindow.addCWindow(chooser)
             }
             options.add(tintColorButton, gbc)
@@ -224,9 +221,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             }
             colorBtn.addActionListener {
                 if (colorChooser == null || !colorChooser!!.isDisplayable) {
-                    val x = configWindow.location.x + width / 2
-                    val y = configWindow.location.y + height / 2
-                    colorChooser = CCColorChooser(borderColor, getItem("config_label_bordercolor"), x, y, true, null, null)
+                    colorChooser = CCColorChooser(borderColor, getItem("config_label_bordercolor"), parent = configWindow, useGradient = true)
                     colorChooser!!.addWindowListener(object : WindowAdapter() {
                         override fun windowClosing(e: WindowEvent) = kotlin.run { colorChooser = null }
                     })

@@ -331,7 +331,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         startColorPBR.addChangeListener { config.set(configKey, startColorPBR.toSaveString()) }
         startColorPBR.addChangeListener(whenChange)
         colorButton.addActionListener {
-            cWindows.add(CCColorChooser(startColorPBR, "Stamp color", location.x + width / 2, location.y + height / 2, true, null, null))
+            cWindows.add(CCColorChooser(startColorPBR, "Stamp color", this, useGradient = true))
         }
         return colorButton
     }

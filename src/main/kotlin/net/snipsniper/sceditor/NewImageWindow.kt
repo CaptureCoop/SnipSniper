@@ -57,7 +57,7 @@ class NewImageWindow: JFrame(), CCIClosable  {
         val color = CCColor(Color.WHITE)
         GradientJButton("Color", color).also {
             it.addActionListener {
-                cWindows.add(CCColorChooser(color, "Color", location.x + width / 2, location.y + height / 2, true, null, null))
+                cWindows.add(CCColorChooser(color, "Color", parent = this, useGradient = true))
             }
             add(it, gbc)
         }

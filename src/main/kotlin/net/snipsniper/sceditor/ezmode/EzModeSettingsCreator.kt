@@ -66,9 +66,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         val button = GradientJButton("Color", stampColor!!)
         button.preferredSize = Dimension(width / 2, 30)
         button.addActionListener {
-            val x = scEditorWindow.location.x + scEditorWindow.width / 2
-            val y = scEditorWindow.location.y + scEditorWindow.height / 2
-            CCColorChooser(stampColor, "Stamp color", x, y, true, scEditorWindow.originalImage, null).also {
+            CCColorChooser(stampColor, "Stamp color", parent = scEditorWindow, useGradient = true, backgroundImage = scEditorWindow.originalImage).also {
                 scEditorWindow.addClosableWindow(it)
             }
         }
