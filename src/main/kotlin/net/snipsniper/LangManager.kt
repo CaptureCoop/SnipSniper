@@ -12,7 +12,6 @@ class LangManager {
     //TODO: On first start use user.language property to check if we can use the users language
     companion object {
         private const val DEFAULT_LANGUAGE = "en"
-        private const val MISSING_STRING_CHAR = "~"
         private const val FLAG_SIZE = 16
         private val flagCache = HashMap<String, BufferedImage>()
         private val langMap = HashMap<String, JSONObject>()

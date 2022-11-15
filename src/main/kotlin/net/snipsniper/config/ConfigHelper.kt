@@ -1,4 +1,5 @@
-package net.snipsniper.config; 
+package net.snipsniper.config
+
 class ConfigHelper { 
    /* 
    This was created using the CreateConfigHelper.bat file at the root folder. Leave formatting as is and use the bat file whenever you make any changes to any config 

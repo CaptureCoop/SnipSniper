@@ -88,7 +88,7 @@ class BGamePiece(game: BGame) {
                     val nPosX = posX + x
                     val nPosY = posY + y
                     if(!(nPosX < 0 || nPosX >= game.BOARD_WIDTH || nPosY < 0 || nPosY >= game.BOARD_HEIGHT))
-                        game.board[posX + x][posY + y] = BGameBlock(index);
+                        game.board[posX + x][posY + y] = BGameBlock(index)
                 }
             }
         }
@@ -133,7 +133,7 @@ class BGamePiece(game: BGame) {
                 }
                 if(!(nPosX < 0 || nPosX >= game.BOARD_WIDTH || nPosY < 0 || nPosY >= game.BOARD_HEIGHT))
                     if(game.board[nPosX][nPosY] != null)
-                        return false;
+                        return false
             }
         }
         return true

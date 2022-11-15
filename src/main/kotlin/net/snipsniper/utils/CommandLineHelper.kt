@@ -49,23 +49,23 @@ class CommandLineHelper {
                     }
                 }
                 "-debugLang" -> DebugUtils.jsonLang().also { doExit = true }
-                else -> println("Unrecognized argument <$arg>. Use argument -help to see all the commands!");
+                else -> println("Unrecognized argument <$arg>. Use argument -help to see all the commands!")
             }
         }
         if(doExit) exitProcess(0)
     }
 
     private fun helpText() {
-        println("SnipSniper ${SnipSniper.getVersionString()}\n");
-        println("General commands:");
-        println("-help / -?     = Displays this");
-        println("-version / -v  = Displays version");
-        println("-demo          = Starts SnipSniper in demo mode (No configs are being created)");
-        println("-language / -l = Sets the language. Useful for demo mode");
-        println("-editor        = Starts the standalone editor (You can enter a path after -editor)");
-        println("-viewer        = Starts the standalone viewer (You can enter a path after -viewer)");
-        println("\nDebug Commands:");
-        println("-debug         = Starts SnipSniper in Debug mode");
-        println("-debugLang     = Test language files for missing strings");
+        println("SnipSniper ${SnipSniper.getVersionString()}\n")
+        println("General commands:")
+        println("-help / -?     = Displays this")
+        println("-version / -v  = Displays version")
+        println("-demo          = Starts SnipSniper in demo mode (No configs are being created)")
+        println("-language / -l = Sets the language. Useful for demo mode")
+        println("-editor        = Starts the standalone editor (You can enter a path after -editor)")
+        println("-viewer        = Starts the standalone viewer (You can enter a path after -viewer)")
+        println("\nDebug Commands:")
+        println("-debug         = Starts SnipSniper in Debug mode")
+        println("-debugLang     = Test language files for missing strings")
     }
 }

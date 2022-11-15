@@ -6,7 +6,7 @@ del %javaFile%
 
 set configLocation=src\main\resources\net\snipsniper\resources\cfg\
 
-echo package net.snipsniper.config; >> %javaFile%
+echo package net.snipsniper.config >> %javaFile%
 echo class ConfigHelper { >> %javaFile%
 
 echo    /* >> %javaFile%

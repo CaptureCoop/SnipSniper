@@ -37,7 +37,7 @@ class WikiManager {
             }
         }
 
-        fun getContent(string: String): String? {
+        fun getContent(string: String): String {
             return strings[string]?.getString("content") ?: "key <$string> not found".also {
                 CCLogger.log("WikiManager error: $string not found!", CCLogLevel.ERROR)
             }
