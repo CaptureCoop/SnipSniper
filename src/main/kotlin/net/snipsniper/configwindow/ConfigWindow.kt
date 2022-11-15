@@ -37,10 +37,10 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
 
     enum class PAGE { GeneralPanel, EditorPanel, ViewerPanel, GlobalPanel }
 
-    private var generalTab: GeneralTab? = null
-    private var editorTab: EditorTab? = null
-    private var viewerTab: ViewerTab? = null
-    private var globalTab: GlobalTab? = null
+    private lateinit var generalTab: GeneralTab
+    private lateinit var editorTab: EditorTab
+    private lateinit var viewerTab: ViewerTab
+    private lateinit var globalTab: GlobalTab
     private val tabs = arrayOfNulls<ITab>(4)
     private var activeTabIndex = 0
     private var activeDropdownIndex = 0
@@ -63,7 +63,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         setup(config, page)
         isVisible = true
         Toolkit.getDefaultToolkit().screenSize.let { setLocation(it.width / 2 - width / 2, it.height / 2 - height / 2) }
-        setSize((generalTab!!.width * 1.25f).toInt(), height)
+        setSize((generalTab.width * 1.25f).toInt(), height)
     }
 
     fun refreshConfigFiles() {
@@ -80,27 +80,27 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         activeTabIndex = index
         lastSelectedConfig = config
         generalTab = GeneralTab(this)
-        generalTab!!.setup(config)
+        generalTab.setup(config)
         tabPane.addTab("SnipSniper", generateScrollPane(generalTab))
         tabPane.setIconAt(index, ImageIcon(getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)))
         tabs[index] = generalTab
         index++
         editorTab = EditorTab(this)
-        editorTab!!.setup(config)
+        editorTab.setup(config)
         tabPane.addTab("Editor", generateScrollPane(editorTab))
         tabPane.setIconAt(index, ImageIcon(getImage("icons/editor.png").getScaledInstance(iconSize, iconSize, 0)))
         tabs[index] = editorTab
         if (page == PAGE.EditorPanel) activeTabIndex = index
         index++
         viewerTab = ViewerTab(this)
-        viewerTab!!.setup(config)
+        viewerTab.setup(config)
         tabPane.addTab("Viewer", generateScrollPane(viewerTab))
         tabPane.setIconAt(index, ImageIcon(getImage("icons/viewer.png").getScaledInstance(iconSize, iconSize, 0)))
         tabs[index] = viewerTab
         if (page == PAGE.ViewerPanel) activeTabIndex = index
         index++
         globalTab = GlobalTab(this)
-        globalTab!!.setup(config)
+        globalTab.setup(config)
         tabPane.addTab("Global", generateScrollPane(globalTab))
         tabPane.setIconAt(index, ImageIcon(getImage("icons/config.png").getScaledInstance(iconSize, iconSize, 0)))
         tabs[index] = globalTab
@@ -131,24 +131,24 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
     private fun setupPaneDynamic(config: Config?, page: PAGE?) {
         when (page) {
             PAGE.GeneralPanel -> {
-                generalTab!!.setup(config)
-                editorTab!!.setup(config)
-                viewerTab!!.setup(config)
-                globalTab!!.setup(config)
+                generalTab.setup(config)
+                editorTab.setup(config)
+                viewerTab.setup(config)
+                globalTab.setup(config)
             }
 
             PAGE.EditorPanel -> {
-                editorTab!!.setup(config)
-                viewerTab!!.setup(config)
-                globalTab!!.setup(config)
+                editorTab.setup(config)
+                viewerTab.setup(config)
+                globalTab.setup(config)
             }
 
             PAGE.ViewerPanel -> {
-                viewerTab!!.setup(config)
-                globalTab!!.setup(config)
+                viewerTab.setup(config)
+                globalTab.setup(config)
             }
 
-            PAGE.GlobalPanel -> globalTab!!.setup(config)
+            PAGE.GlobalPanel -> globalTab.setup(config)
             else -> throw Exception("Bad page")
         }
     }
@@ -231,9 +231,9 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
                     newProfileConfig.save()
                     refreshConfigFiles()
                     parentPanel.removeAll()
-                    generalTab!!.setup(newProfileConfig)
-                    editorTab!!.setup(newProfileConfig)
-                    viewerTab!!.setup(newProfileConfig)
+                    generalTab.setup(newProfileConfig)
+                    editorTab.setup(newProfileConfig)
+                    viewerTab.setup(newProfileConfig)
                     lastSelectedConfig = newProfileConfig
                     break
                 }
@@ -255,9 +255,9 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
                 var newIndex = dropdown.selectedIndex - 1
                 if (newIndex < 0) newIndex = dropdown.selectedIndex + 1
                 val newConfig = Config(dropdown.getItemAt(newIndex)!!.id, "profile_defaults.cfg")
-                generalTab!!.setup(newConfig)
-                editorTab!!.setup(newConfig)
-                viewerTab!!.setup(newConfig)
+                generalTab.setup(newConfig)
+                editorTab.setup(newConfig)
+                viewerTab.setup(newConfig)
                 lastSelectedConfig = newConfig
             }
         }
@@ -278,9 +278,9 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
                 configOriginal.save()
                 resetProfiles()
                 if (reloadOtherDropdowns) {
-                    generalTab!!.setup(configOriginal)
-                    editorTab!!.setup(configOriginal)
-                    viewerTab!!.setup(configOriginal)
+                    generalTab.setup(configOriginal)
+                    editorTab.setup(configOriginal)
+                    viewerTab.setup(configOriginal)
                 }
             }
         }
