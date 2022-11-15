@@ -36,9 +36,9 @@ dependencies {
     implementation("com.formdev:flatlaf:1.6") //Swing Theme
     implementation("com.erigir:mslinks:0.0.2+5") //Utility for windows shortcuts
 
-    implementation("org.capturecoop:CCUtils:1.9.4") //CaptureCoop Common Utils
-    implementation("org.capturecoop:CCLogger:1.6.4") //CaptureCoop logger
-    implementation("org.capturecoop:CCColorUtils:1.0.3") //CaptureCoop Color utils & Color Chooser
+    implementation("org.capturecoop:CCUtils:1.9.6") //CaptureCoop Common Utils
+    implementation("org.capturecoop:CCLogger:1.6.6") //CaptureCoop logger
+    implementation("org.capturecoop:CCColorUtils:1.0.4") //CaptureCoop Color utils & Color Chooser
 }
 
 //SnipSniper includes another repository where we store json files with information about SnipSniper
