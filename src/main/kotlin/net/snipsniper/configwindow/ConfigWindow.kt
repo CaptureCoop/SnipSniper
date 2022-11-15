@@ -330,7 +330,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         }
     }
 
-    fun setupColorButton(title: String?, config: Config, configKey: PROFILE?, whenChange: ChangeListener?): GradientJButton {
+    fun setupColorButton(title: String?, config: Config, configKey: PROFILE?, whenChange: ChangeListener): GradientJButton {
         val startColorPBR = CCColor.fromSaveString(config.getString(configKey!!))
         val colorButton = GradientJButton(title!!, startColorPBR)
         startColorPBR.addChangeListener { config.set(configKey, startColorPBR.toSaveString()) }

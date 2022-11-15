@@ -47,7 +47,7 @@ class SnipSniper {
 
         var jarFolder: String? = null
             private set
-            get() {return CCStringUtils.correctSlashes(field)}
+            get() {return CCStringUtils.correctSlashes(field!!)}
         var mainFolder: String? = null
             private set
             get() {return CCStringUtils.correctSlashes(field!!)}
