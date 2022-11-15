@@ -8,6 +8,7 @@ import net.snipsniper.utils.Utils
 import net.snipsniper.utils.clone
 import net.snipsniper.utils.toBufferedImage
 import org.capturecoop.cccolorutils.chooser.CCColorChooser
+import org.capturecoop.cccolorutils.setAlpha
 import org.capturecoop.cclogger.CCLogger
 import java.awt.Color
 import java.awt.Graphics
@@ -122,7 +123,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
             val x = scEditorWindow.location.x + scEditorWindow.width / 2
             val y = scEditorWindow.location.y + scEditorWindow.height / 2
             //TODO: Do we want the save button back?
-            scEditorWindow.addClosableWindow(CCColorChooser(scEditorWindow.getSelectedStamp().color, "Marker color", x, y, true, null, null))
+            scEditorWindow.addClosableWindow(CCColorChooser(scEditorWindow.getSelectedStamp().color!!, "Marker color", x, y, true, null, null))
         }
 
         if(openSaveAsWindow) {
@@ -211,7 +212,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
             }
 
             val newColor = Color.getHSBColor(hsv[0], hsv[1], hsv[2])
-            stamp.color!!.setPrimaryColor(newColor, alpha)
+            stamp.color!!.primaryColor = newColor.setAlpha(alpha)
             scEditorWindow.repaint()
             return
         }

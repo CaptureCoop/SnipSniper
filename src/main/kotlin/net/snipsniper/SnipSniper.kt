@@ -252,7 +252,7 @@ class SnipSniper {
 
             profiles[0] = Sniper(0).also { it.config.save() }
 
-            if(!SystemTray.isSupported()) profiles[0]?.let { profile -> openConfigWindow(profile.config, ConfigWindow.PAGE.generalPanel) }
+            if(!SystemTray.isSupported()) profiles[0]?.let { profile -> openConfigWindow(profile.config, ConfigWindow.PAGE.GeneralPanel) }
             for(i in 1 until PROFILE_COUNT) {
                 if(File(configFolder, "profile${i}.cfg").exists())
                     profiles[i] = Sniper(i)
@@ -338,9 +338,9 @@ class SnipSniper {
             }
         }
 
-        fun openConfigWindow(sniper: Sniper) = openConfigWindow(sniper.config, ConfigWindow.PAGE.generalPanel)
+        fun openConfigWindow(sniper: Sniper) = openConfigWindow(sniper.config, ConfigWindow.PAGE.GeneralPanel)
 
-        fun openConfigWindow(editor: SCEditorWindow) = openConfigWindow(editor.config, ConfigWindow.PAGE.editorPanel)
+        fun openConfigWindow(editor: SCEditorWindow) = openConfigWindow(editor.config, ConfigWindow.PAGE.EditorPanel)
 
         fun isDebug(): Boolean = config.getBool(ConfigHelper.MAIN.debug)
 

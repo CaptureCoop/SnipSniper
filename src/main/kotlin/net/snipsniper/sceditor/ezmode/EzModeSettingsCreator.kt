@@ -38,7 +38,6 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
             StampType.TEXT -> text(panel, stamp, width)
             StampType.RECTANGLE -> rectangle(panel, stamp, width)
             StampType.ERASER -> eraser(panel, stamp, width)
-            else -> { CCLogger.error("Bad stamp: ${stamp.type}") }
         }
         panel.add(createJSeperator())
         panel.add(JLabel("preview"))

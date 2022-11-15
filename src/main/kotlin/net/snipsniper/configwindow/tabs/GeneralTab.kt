@@ -24,7 +24,6 @@ import net.snipsniper.utils.WikiManager.Companion.getContent
 import org.capturecoop.cccolorutils.CCColor
 import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.ccutils.utils.CCStringUtils
-import org.capturecoop.ccutils.utils.CCIClosable
 import java.awt.*
 import java.awt.event.*
 import java.io.File
@@ -34,7 +33,7 @@ import javax.swing.event.ChangeEvent
 
 class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
     override var isDirty = false
-    override val page = PAGE.generalPanel
+    override val page = PAGE.GeneralPanel
 
     override fun setup(configOriginal: Config?) {
         removeAll()
@@ -54,7 +53,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         }
         val gbc = GridBagConstraints()
         val options = JPanel(GridBagLayout())
-        val dropdown = configWindow.setupProfileDropdown(options, this, configOriginal, config, PAGE.generalPanel, "editor", "viewer")
+        val dropdown = configWindow.setupProfileDropdown(options, this, configOriginal, config, PAGE.GeneralPanel, "editor", "viewer")
 
         //profile title setting
         kotlin.run {

@@ -17,7 +17,7 @@ import javax.swing.JPanel
 
 class ViewerTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
     override var isDirty = false
-    override val page = PAGE.viewerPanel
+    override val page = PAGE.ViewerPanel
 
     //TODO: Disable save button if nothing is saveable?
     //TODO: Should this be nullable? Do some testing :^)
@@ -38,7 +38,7 @@ class ViewerTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         val gbc = GridBagConstraints()
         gbc.fill = GridBagConstraints.BOTH
         val options = JPanel(GridBagLayout())
-        val dropdown: JComponent = configWindow.setupProfileDropdown(options, this, configOriginal, config, PAGE.viewerPanel, "editor")
+        val dropdown: JComponent = configWindow.setupProfileDropdown(options, this, configOriginal, config, PAGE.ViewerPanel, "editor")
         //BEGIN ELEMENTS
         gbc.gridx = 0
         gbc.gridwidth = 1

@@ -40,7 +40,6 @@ import org.capturecoop.ccutils.utils.CCStringUtils
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import java.awt.Insets
-import java.awt.event.ActionEvent
 import java.awt.event.ItemEvent
 import java.io.*
 import java.nio.file.Files
@@ -54,7 +53,7 @@ import javax.swing.filechooser.FileNameExtensionFilter
 
 class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
     override var isDirty = false
-    override val page = PAGE.globalPanel
+    override val page = PAGE.GlobalPanel
 
     override fun setup(configOriginal: Config?) {
         removeAll()
@@ -111,7 +110,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             refreshTheme()
             resetProfiles()
             configWindow.close()
-            openConfigWindow(null, PAGE.globalPanel)
+            openConfigWindow(null, PAGE.GlobalPanel)
         }
         val exportButton = JButton("Export Configs")
         exportButton.addActionListener {
@@ -225,7 +224,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             globalSave(config, autostart)
             if (restartConfig || didThemeChange) {
                 configWindow.close()
-                openConfigWindow(configWindow.lastSelectedConfig, PAGE.globalPanel)
+                openConfigWindow(configWindow.lastSelectedConfig, PAGE.GlobalPanel)
             }
             saveButtonUpdate!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
         }

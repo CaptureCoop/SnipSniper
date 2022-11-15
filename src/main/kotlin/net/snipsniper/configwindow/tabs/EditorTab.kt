@@ -18,11 +18,10 @@ import java.awt.GridLayout
 import java.awt.Insets
 import java.awt.event.ItemEvent
 import javax.swing.*
-import javax.swing.event.ChangeEvent
 
 class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
     override var isDirty = false
-    override val page = PAGE.editorPanel
+    override val page = PAGE.EditorPanel
 
     override fun setup(configOriginal: Config?) {
         removeAll()
@@ -41,7 +40,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         gbc.fill = GridBagConstraints.BOTH
         gbc.insets = Insets(0, 10, 0, 10)
         val options = JPanel(GridBagLayout())
-        val dropdown: JComponent = configWindow.setupProfileDropdown(options, this, configOriginal, config, PAGE.editorPanel, "viewer")
+        val dropdown: JComponent = configWindow.setupProfileDropdown(options, this, configOriginal, config, PAGE.EditorPanel, "viewer")
         //BEGIN ELEMENTS
         JCheckBox().also { ezModeCheckBox ->
             gbc.gridx = 0

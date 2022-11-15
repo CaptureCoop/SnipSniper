@@ -5,6 +5,7 @@ import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.utils.InputContainer
 import org.capturecoop.cccolorutils.CCColor
+import org.capturecoop.cccolorutils.setAlpha
 import org.capturecoop.ccutils.math.CCVector2Int
 import java.awt.Color
 import java.awt.Graphics
@@ -116,9 +117,9 @@ class CubeStamp(private val config: Config, private val scEditorWindow: SCEditor
             val y = position.y - drawHeight / 2
             if (!isCensor) g.paint = color!!.getGradientPaint(drawWidth, drawHeight, x, y) else g.color = Color.BLACK //TODO: Add to config
             if (isSmartPixel && !isCensor) {
-                CCColor(color).also {
-                    it.setPrimaryColor(it.primaryColor, 150)
-                    it.setSecondaryColor(it.secondaryColor, 150)
+                CCColor(color!!).also {
+                    it.primaryColor = it.primaryColor.setAlpha(150)
+                    it.secondaryColor = it.secondaryColor!!.setAlpha(150)
                     g.paint = it.getGradientPaint(drawWidth, drawHeight, x, y)
                 }
             }

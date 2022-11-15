@@ -47,7 +47,7 @@ class SimpleBrush(private val config: Config, private val scEditorWindow: SCEdit
         var bounds = g.clipBounds
         if (bounds == null && scEditorWindow != null) bounds =
             Rectangle(0, 0, scEditorWindow.image.width, scEditorWindow.image.height)
-        val paint = CCColor(color, 255).getGradientPaint(bounds!!.width, bounds.height)
+        val paint = CCColor(color!!, 255).getGradientPaint(bounds!!.width, bounds.height)
         g.paint = paint
         g.fillOval(position!!.x - newSize / 2, position.y - newSize / 2, newSize, newSize)
         if (scEditorWindow != null && input != null && !input.isKeyPressed(scEditorWindow.movementKey)) {

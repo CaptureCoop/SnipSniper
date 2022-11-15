@@ -21,17 +21,12 @@ import net.snipsniper.utils.ImageUtils.Companion.getIconDynamically
 import net.snipsniper.utils.Utils.Companion.showPopup
 import org.capturecoop.cccolorutils.CCColor
 import org.capturecoop.cccolorutils.chooser.CCColorChooser
-import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
-import org.capturecoop.cclogger.CCLogger.Companion.info
-import org.capturecoop.cclogger.CCLogger.Companion.log
 import org.capturecoop.ccutils.utils.CCIClosable
-import org.capturecoop.ccutils.utils.CCMathUtils
 import java.awt.*
 import java.awt.event.*
 import java.io.File
 import javax.swing.*
-import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
 class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
@@ -40,7 +35,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
     var lastSelectedConfig: Config? = null
         private set
 
-    enum class PAGE { generalPanel, editorPanel, viewerPanel, globalPanel}
+    enum class PAGE { GeneralPanel, EditorPanel, ViewerPanel, GlobalPanel }
 
     private var generalTab: GeneralTab? = null
     private var editorTab: EditorTab? = null
@@ -78,7 +73,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         }
     }
 
-    fun setup(config: Config?, page: PAGE) {
+    private fun setup(config: Config?, page: PAGE) {
         val tabPane = JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT)
         val iconSize = 16
         var index = 0
@@ -95,22 +90,22 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         tabPane.addTab("Editor", generateScrollPane(editorTab))
         tabPane.setIconAt(index, ImageIcon(getImage("icons/editor.png").getScaledInstance(iconSize, iconSize, 0)))
         tabs[index] = editorTab
-        if (page == PAGE.editorPanel) activeTabIndex = index
+        if (page == PAGE.EditorPanel) activeTabIndex = index
         index++
         viewerTab = ViewerTab(this)
         viewerTab!!.setup(config)
         tabPane.addTab("Viewer", generateScrollPane(viewerTab))
         tabPane.setIconAt(index, ImageIcon(getImage("icons/viewer.png").getScaledInstance(iconSize, iconSize, 0)))
         tabs[index] = viewerTab
-        if (page == PAGE.viewerPanel) activeTabIndex = index
+        if (page == PAGE.ViewerPanel) activeTabIndex = index
         index++
         globalTab = GlobalTab(this)
         globalTab!!.setup(config)
         tabPane.addTab("Global", generateScrollPane(globalTab))
         tabPane.setIconAt(index, ImageIcon(getImage("icons/config.png").getScaledInstance(iconSize, iconSize, 0)))
         tabs[index] = globalTab
-        if (page == PAGE.globalPanel) activeTabIndex = index
-        tabPane.addChangeListener { e: ChangeEvent? ->
+        if (page == PAGE.GlobalPanel) activeTabIndex = index
+        tabPane.addChangeListener {
             if (tabs[activeTabIndex]!!.isDirty) {
                 tabs[activeTabIndex]!!.isDirty = false
                 val requestedIndex = tabPane.selectedIndex
@@ -133,27 +128,27 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         showPopup(this, msg!!, "config_sanitation_error".translate(), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, "icons/redx.png".getImage(), true)
     }
 
-    fun setupPaneDynamic(config: Config?, page: PAGE?) {
+    private fun setupPaneDynamic(config: Config?, page: PAGE?) {
         when (page) {
-            PAGE.generalPanel -> {
+            PAGE.GeneralPanel -> {
                 generalTab!!.setup(config)
                 editorTab!!.setup(config)
                 viewerTab!!.setup(config)
                 globalTab!!.setup(config)
             }
 
-            PAGE.editorPanel -> {
+            PAGE.EditorPanel -> {
                 editorTab!!.setup(config)
                 viewerTab!!.setup(config)
                 globalTab!!.setup(config)
             }
 
-            PAGE.viewerPanel -> {
+            PAGE.ViewerPanel -> {
                 viewerTab!!.setup(config)
                 globalTab!!.setup(config)
             }
 
-            PAGE.globalPanel -> globalTab!!.setup(config)
+            PAGE.GlobalPanel -> globalTab!!.setup(config)
             else -> throw Exception("Bad page")
         }
     }
@@ -190,7 +185,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         if (configOriginal == null) profiles.add(0, DropdownItem("Select a profile", "select_profile"))
         val items = Array(profiles.size) { i -> profiles[i] }
         val dropdown = JComboBox(items)
-        dropdown.setRenderer(DropdownItemRenderer(items))
+        dropdown.renderer = DropdownItemRenderer(items)
         if (configOriginal == null) dropdown.setSelectedIndex(0) else activeDropdownIndex = setSelected(dropdown, config.getFilename())
         val dropdownListener = arrayOf<ItemListener?>(null)
         dropdownListener[0] = ItemListener { e: ItemEvent ->
@@ -222,7 +217,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         val profilePlusMinus = JPanel(GridLayout(0, 2))
         val profileAddButton = JButton("+")
         if (getProfileCount() == SnipSniper.PROFILE_COUNT) profileAddButton.isEnabled = false
-        profileAddButton.addActionListener { actionEvent: ActionEvent? ->
+        profileAddButton.addActionListener {
             if (tabs[activeTabIndex]!!.isDirty) {
                 val result = showDirtyWarning()
                 if (result == JOptionPane.NO_OPTION) {
@@ -249,7 +244,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         val selectedItem = dropdown.selectedItem as DropdownItem?
         if (selectedItem != null)
             if (selectedItem.id.contains("profile0") || selectedItem.id.contains("editor")) profileRemoveButton.isEnabled = false
-        profileRemoveButton.addActionListener { actionEvent: ActionEvent? ->
+        profileRemoveButton.addActionListener {
             //No dirty check needs to be performed, we are deleting it anyways
             val item = dropdown.selectedItem as DropdownItem
             if (!item.id.contains("profile0") || !item.id.contains("editor")) {
@@ -276,7 +271,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         val allowSaving = booleanArrayOf(true)
         val isDirty = booleanArrayOf(false)
         val save = JButton(getItem("config_label_save"))
-        save.addActionListener { e: ActionEvent? ->
+        save.addActionListener {
             if (allowSaving[0] && configOriginal != null) {
                 beforeSave?.run()
                 configOriginal.loadFromConfig(config)
