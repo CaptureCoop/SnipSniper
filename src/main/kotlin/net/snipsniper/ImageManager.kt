@@ -2,6 +2,7 @@ package net.snipsniper
 
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.FileUtils
+import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.ReleaseType
 import org.capturecoop.cclogger.CCLogger
 import org.json.JSONArray
@@ -18,7 +19,6 @@ class ImageManager {
         private val animatedImages = HashMap<String, Image>()
         lateinit var filenameList: Array<String>
             private set
-        private const val missingImgSize = 16
         private val missingImgColor = Color(255, 1, 254)
         private val missingImg = getMissingImg()
 
@@ -45,28 +45,22 @@ class ImageManager {
         fun getAnimatedImage(path: String): Image = animatedImages[path] ?: missingImg.also { CCLogger.warn("Could not find image under path $path") }
         fun hasImage(path: String): Boolean = animatedImages.containsKey(path) || images.containsKey(path)
 
-        fun getCodePreview(): BufferedImage {
-            return when(SnipSniper.config.getString(ConfigHelper.MAIN.theme)) {
-                "dark" -> images["preview/code_dark.png"] ?: missingImg
-                "light" -> images["preview/code_light.png"] ?: missingImg
-                else -> missingImg
-            }
+        fun getCodePreview() = when(SnipSniper.config.getString(ConfigHelper.MAIN.theme)) {
+            "dark" -> getImage("preview/code_dark.png")
+            "light" -> getImage("preview/code_light.png")
+            else -> missingImg
         }
 
-        private fun getMissingImg(): BufferedImage {
-            val image = BufferedImage(missingImgSize, missingImgSize, BufferedImage.TYPE_INT_RGB)
-            val g = image.createGraphics()
+        private fun getMissingImg(size: Int = 16) = ImageUtils.newBufferedImage(size, size, BufferedImage.TYPE_INT_RGB) {
             var printBlack = true
-            for(y in 0 until missingImgSize) {
-                for(x in 0 until missingImgSize) {
+            for(y in 0 until size) {
+                for(x in 0 until size) {
                     printBlack = !printBlack
-                    g.color = if(printBlack) Color.BLACK else missingImgColor
-                    g.drawLine(x, y, x, y)
+                    it.color = if(printBlack) Color.BLACK else missingImgColor
+                    it.drawLine(x, y, x, y)
                 }
                 printBlack = !printBlack
             }
-            g.dispose()
-            return image
         }
     }
 }

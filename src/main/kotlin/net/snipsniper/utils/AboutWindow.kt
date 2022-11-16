@@ -137,8 +137,7 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
     private fun loadHTML() {
         html = StringBuilder().also { sb ->
             //Streams
-            val inputStream = ClassLoader.getSystemResourceAsStream("net/snipsniper/resources/about.html")
-                ?: throw FileNotFoundException("Could not load about.html inside jar!")
+            val inputStream = ClassLoader.getSystemResourceAsStream("net/snipsniper/resources/about.html") ?: throw FileNotFoundException("Could not load about.html inside jar!")
             val streamReader = InputStreamReader(inputStream, StandardCharsets.UTF_8)
             //Read file
             BufferedReader(streamReader).readLines().forEach { sb.append(it) }
@@ -164,12 +163,8 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
         html = html.replace("%TEXT_COLOR%", color)
     }
 
-    private fun resizeImageButRetainSize(image: BufferedImage, oldSize: Int, newSize: Int): BufferedImage {
-        return BufferedImage(oldSize, oldSize, BufferedImage.TYPE_INT_ARGB).also {
-            val g = it.createGraphics()
-            val difference = oldSize - newSize
-            g.drawImage(image.getScaledInstance(newSize, newSize,  0), difference / 2, difference / 2, null)
-            g.dispose()
-        }
+    private fun resizeImageButRetainSize(image: BufferedImage, oldSize: Int, newSize: Int) = ImageUtils.newBufferedImage(oldSize, oldSize) {
+        val difference = (oldSize - newSize) / 2
+        it.drawImage(image.scaled(newSize, newSize), difference, difference, null)
     }
 }
