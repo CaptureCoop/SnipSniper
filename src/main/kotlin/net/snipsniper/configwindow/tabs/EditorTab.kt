@@ -125,24 +125,39 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         if (disablePage) configWindow.setEnabledAll(options, false, dropdown)
     }
 
-    private fun setupStampConfigPanelSpinner(configKey: ConfigHelper.PROFILE, min: Double, max: Double, stepSize: Double, previewPanel: StampJPanel, config: Config, stampIndex: Int, onUpdate: Function?): JSpinner {
-        return JSpinner(SpinnerNumberModel((config.getFloat(configKey).toString() + "").toDouble(), min, max, stepSize)).also { spinner ->
-            spinner.addChangeListener {
-                config.set(configKey, spinner.value.toString().toDouble().toInt())
-                previewPanel.stamp = StampType.getByIndex(stampIndex).getIStamp(config, null)
-                onUpdate!!.run()
+    //This saves us alot of duplicate code :^)
+    private class Creator(
+        private val configWindow: ConfigWindow,
+        private val panel: JPanel,
+        private var minOverride: Double = 1.0,
+        private var maxOverride: Double = 999.0,
+        private var stepSizeOverride: Double = 1.0,
+        private val previewPanel: StampJPanel,
+        private val config: Config,
+        private val constraints: GridBagConstraints,
+        private val stampIndex: Int,
+        private val onUpdate: Function?
+    ) {
+        private fun setupStampConfigPanelSpinner(configKey: ConfigHelper.PROFILE, min: Double, max: Double, stepSize: Double, previewPanel: StampJPanel, config: Config, stampIndex: Int, onUpdate: Function?): JSpinner {
+            return JSpinner(SpinnerNumberModel((config.getFloat(configKey).toString() + "").toDouble(), min, max, stepSize)).also { spinner ->
+                spinner.addChangeListener {
+                    config.set(configKey, spinner.value.toString().toDouble().toInt())
+                    previewPanel.stamp = StampType.getByIndex(stampIndex).getIStamp(config, null)
+                    onUpdate!!.run()
+                }
             }
         }
-    }
 
-    private fun setupStampConfigPanelSpinnerWithLabel(panel: JPanel, title: String, configKey: ConfigHelper.PROFILE, min: Double, max: Double, stepSize: Double, previewPanel: StampJPanel, config: Config, stampIndex: Int, constraints: GridBagConstraints, infoText: String?, onUpdate: Function?) {
-        constraints.gridx = 0
-        panel.add(configWindow.createJLabel(title, JLabel.RIGHT, JLabel.CENTER), constraints)
-        constraints.gridx = 1
-        panel.add(setupStampConfigPanelSpinner(configKey, min, max, stepSize, previewPanel, config, stampIndex, onUpdate), constraints)
-        constraints.gridx = 2
-        panel.add(InfoButton(infoText), constraints)
-        constraints.gridx = 0
+        //setupStampConfigPanelSpinnerWithLabel
+        fun setup(title: String, configKey: ConfigHelper.PROFILE, infoText: String? = null, min: Double = minOverride, max: Double = maxOverride, stepSize: Double = stepSizeOverride) {
+            constraints.gridx = 0
+            panel.add(configWindow.createJLabel(title, JLabel.RIGHT, JLabel.CENTER), constraints)
+            constraints.gridx = 1
+            panel.add(setupStampConfigPanelSpinner(configKey, min, max, stepSize, previewPanel, config, stampIndex, onUpdate), constraints)
+            constraints.gridx = 2
+            panel.add(InfoButton(infoText), constraints)
+            constraints.gridx = 0
+        }
     }
 
     private fun setupStampConfigPanel(panel: JPanel, stamp: IStamp?, previewPanel: StampJPanel, config: Config, onUpdate: Function?) {
@@ -172,13 +187,14 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 gbc.gridx = 2
                 panel.add(InfoButton(null), gbc)
                 gbc.gridx = 0
-                val stampIndex = StampType.CUBE.index
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_startwidth".translate(), ConfigHelper.PROFILE.editorStampCubeWidth, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_startheight".translate(), ConfigHelper.PROFILE.editorStampCubeHeight, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_widthspeed".translate(), ConfigHelper.PROFILE.editorStampCubeWidthSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_heightspeed".translate(), ConfigHelper.PROFILE.editorStampCubeHeightSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_widthminimum".translate(), ConfigHelper.PROFILE.editorStampCubeWidthMinimum, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_heightminimum".translate(), ConfigHelper.PROFILE.editorStampCubeHeightMinimum, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
+                Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.CUBE.index, constraints = gbc, onUpdate = onUpdate).also {
+                    it.setup("config_label_startwidth".translate(), ConfigHelper.PROFILE.editorStampCubeWidth)
+                    it.setup("config_label_startheight".translate(), ConfigHelper.PROFILE.editorStampCubeHeight)
+                    it.setup("config_label_widthspeed".translate(), ConfigHelper.PROFILE.editorStampCubeWidthSpeed)
+                    it.setup("config_label_heightspeed".translate(), ConfigHelper.PROFILE.editorStampCubeHeightSpeed)
+                    it.setup("config_label_widthminimum".translate(), ConfigHelper.PROFILE.editorStampCubeWidthMinimum)
+                    it.setup("config_label_heightminimum".translate(), ConfigHelper.PROFILE.editorStampCubeHeightMinimum)
+                }
             }
             is CounterStamp -> {
                 panel.add(configWindow.createJLabel("config_label_startcolor".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
@@ -187,14 +203,15 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 gbc.gridx = 2
                 panel.add(InfoButton(null), gbc)
                 gbc.gridx = 0
-                val stampIndex = StampType.COUNTER.index
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_startwidth".translate(), ConfigHelper.PROFILE.editorStampCounterWidth, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_startheight".translate(), ConfigHelper.PROFILE.editorStampCounterHeight, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_generalspeed".translate(), ConfigHelper.PROFILE.editorStampCounterSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_widthspeed".translate(), ConfigHelper.PROFILE.editorStampCounterWidthSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_heightspeed".translate(), ConfigHelper.PROFILE.editorStampCounterHeightSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_widthminimum".translate(), ConfigHelper.PROFILE.editorStampCounterWidthMinimum, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_heightminimum".translate(), ConfigHelper.PROFILE.editorStampCounterHeightMinimum, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
+                val c = Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.COUNTER.index, constraints = gbc, onUpdate = onUpdate).also {
+                    it.setup("config_label_startwidth".translate(), ConfigHelper.PROFILE.editorStampCounterWidth)
+                    it.setup("config_label_startheight".translate(), ConfigHelper.PROFILE.editorStampCounterHeight)
+                    it.setup("config_label_generalspeed".translate(), ConfigHelper.PROFILE.editorStampCounterSpeed)
+                    it.setup("config_label_widthspeed".translate(), ConfigHelper.PROFILE.editorStampCounterWidthSpeed)
+                    it.setup("config_label_heightspeed".translate(), ConfigHelper.PROFILE.editorStampCounterHeightSpeed)
+                    it.setup("config_label_widthminimum".translate(), ConfigHelper.PROFILE.editorStampCounterWidthMinimum)
+                    it.setup("config_label_heightminimum".translate(), ConfigHelper.PROFILE.editorStampCounterHeightMinimum)
+                }
                 panel.add(configWindow.createJLabel("config_label_solidcolor".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
                 val cbSolidColor = JCheckBox()
                 cbSolidColor.isSelected = config.getBool(ConfigHelper.PROFILE.editorStampCounterSolidColor)
@@ -220,8 +237,8 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 panel.add(cbBorder, gbc)
                 gbc.gridx = 2
                 panel.add(InfoButton(null), gbc)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_fontsizemodifier".translate(), ConfigHelper.PROFILE.editorStampCounterFontSizeModifier, 0.1, 10.0, 0.01, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_bordermofizier".translate(), ConfigHelper.PROFILE.editorStampCounterBorderModifier, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
+                c.setup("config_label_fontsizemodifier".translate(), ConfigHelper.PROFILE.editorStampCounterFontSizeModifier, min = 0.1, max = 10.0, stepSize = 0.01)
+                c.setup("config_label_bordermofizier".translate(), ConfigHelper.PROFILE.editorStampCounterBorderModifier)
             }
             is CircleStamp -> {
                 panel.add(configWindow.createJLabel("config_label_startcolor".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
@@ -229,15 +246,16 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 panel.add(configWindow.setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCircleDefaultColor) { previewPanel.stamp = CircleStamp(config) }, gbc)
                 gbc.gridx = 2
                 panel.add(InfoButton(null), gbc)
-                val stampIndex = StampType.CIRCLE.index
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_startwidth".translate(), ConfigHelper.PROFILE.editorStampCircleWidth, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_startheight".translate(), ConfigHelper.PROFILE.editorStampCircleHeight, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_generalspeed".translate(), ConfigHelper.PROFILE.editorStampCircleSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_widthspeed".translate(), ConfigHelper.PROFILE.editorStampCircleWidthSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_heightspeed".translate(), ConfigHelper.PROFILE.editorStampCircleHeightSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_widthminimum".translate(), ConfigHelper.PROFILE.editorStampCircleWidthMinimum, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_heightminimum".translate(), ConfigHelper.PROFILE.editorStampCircleHeightMinimum, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_thickness".translate(), ConfigHelper.PROFILE.editorStampCircleThickness, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
+                Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.CIRCLE.index, constraints = gbc, onUpdate = onUpdate).also {
+                    it.setup("config_label_startwidth".translate(), ConfigHelper.PROFILE.editorStampCircleWidth)
+                    it.setup("config_label_startheight".translate(), ConfigHelper.PROFILE.editorStampCircleHeight)
+                    it.setup("config_label_generalspeed".translate(), ConfigHelper.PROFILE.editorStampCircleSpeed)
+                    it.setup("config_label_widthspeed".translate(), ConfigHelper.PROFILE.editorStampCircleWidthSpeed)
+                    it.setup("config_label_heightspeed".translate(), ConfigHelper.PROFILE.editorStampCircleHeightSpeed)
+                    it.setup("config_label_widthminimum".translate(), ConfigHelper.PROFILE.editorStampCircleWidthMinimum)
+                    it.setup("config_label_heightminimum".translate(), ConfigHelper.PROFILE.editorStampCircleHeightMinimum)
+                    it.setup("config_label_thickness".translate(), ConfigHelper.PROFILE.editorStampCircleThickness)
+                }
             }
             is SimpleBrush -> {
                 panel.add(configWindow.createJLabel("config_label_startcolor".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
@@ -245,10 +263,11 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 panel.add(configWindow.setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampSimpleBrushDefaultColor) { previewPanel.stamp = SimpleBrush(config, null) }, gbc)
                 gbc.gridx = 2
                 panel.add(InfoButton(null), gbc)
-                val stampIndex = StampType.SIMPLE_BRUSH.index
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_brushsize".translate(), ConfigHelper.PROFILE.editorStampSimpleBrushSize, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_brushsizespeed".translate(), ConfigHelper.PROFILE.editorStampSimpleBrushSizeSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_linepointdistance".translate(), ConfigHelper.PROFILE.editorStampSimpleBrushDistance, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
+                Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.SIMPLE_BRUSH.index, constraints = gbc, onUpdate = onUpdate).also {
+                    it.setup("config_label_brushsize".translate(), ConfigHelper.PROFILE.editorStampSimpleBrushSize)
+                    it.setup("config_label_brushsizespeed".translate(), ConfigHelper.PROFILE.editorStampSimpleBrushSizeSpeed)
+                    it.setup("config_label_linepointdistance".translate(), ConfigHelper.PROFILE.editorStampSimpleBrushDistance)
+                }
                 panel.add(JPanel()) //Padding
             }
             is TextStamp -> {
@@ -257,9 +276,10 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 panel.add(configWindow.setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampTextDefaultColor) { previewPanel.stamp = TextStamp(config, null) }, gbc)
                 gbc.gridx = 2
                 panel.add(InfoButton(null), gbc)
-                val stampIndex = StampType.TEXT.index
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_defaultfontsize".translate(), ConfigHelper.PROFILE.editorStampTextDefaultFontSize, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_fontsizechangespeed".translate(), ConfigHelper.PROFILE.editorStampTextDefaultSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
+                Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.TEXT.index, constraints = gbc, onUpdate = onUpdate).also {
+                    it.setup("config_label_defaultfontsize".translate(), ConfigHelper.PROFILE.editorStampTextDefaultFontSize)
+                    it.setup("config_label_fontsizechangespeed".translate(), ConfigHelper.PROFILE.editorStampTextDefaultSpeed)
+                }
                 for (i in 0..5) panel.add(JPanel(), gbc) //Padding
                 //TODO: Draw it in the middle, possibly by giving TextStamp a getTextWidth() function and adding an edgecase to the Stamp Renderer, to move it to the left
             }
@@ -269,14 +289,15 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 panel.add(configWindow.setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampRectangleDefaultColor) { previewPanel.stamp = RectangleStamp(config) }, gbc)
                 gbc.gridx = 2
                 panel.add(InfoButton(null), gbc)
-                val stampIndex = StampType.RECTANGLE.index
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_startwidth".translate(), ConfigHelper.PROFILE.editorStampRectangleWidth, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_startheight".translate(), ConfigHelper.PROFILE.editorStampRectangleHeight, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_widthspeed".translate(), ConfigHelper.PROFILE.editorStampRectangleWidthSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_heightspeed".translate(), ConfigHelper.PROFILE.editorStampRectangleHeightSpeed, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_widthminimum".translate(), ConfigHelper.PROFILE.editorStampRectangleWidthMinimum, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_heightminimum".translate(), ConfigHelper.PROFILE.editorStampRectangleHeightMinimum, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
-                setupStampConfigPanelSpinnerWithLabel(panel, "config_label_thickness".translate(), ConfigHelper.PROFILE.editorStampRectangleThickness, 1.0, 999.0, 1.0, previewPanel, config, stampIndex, gbc, null, onUpdate)
+                Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.RECTANGLE.index, constraints = gbc, onUpdate = onUpdate).also {
+                    it.setup("config_label_startwidth".translate(), ConfigHelper.PROFILE.editorStampRectangleWidth)
+                    it.setup("config_label_startheight".translate(), ConfigHelper.PROFILE.editorStampRectangleHeight)
+                    it.setup("config_label_widthspeed".translate(), ConfigHelper.PROFILE.editorStampRectangleWidthSpeed)
+                    it.setup("config_label_heightspeed".translate(), ConfigHelper.PROFILE.editorStampRectangleHeightSpeed)
+                    it.setup("config_label_widthminimum".translate(), ConfigHelper.PROFILE.editorStampRectangleWidthMinimum)
+                    it.setup("config_label_heightminimum".translate(), ConfigHelper.PROFILE.editorStampRectangleHeightMinimum)
+                    it.setup("config_label_thickness".translate(), ConfigHelper.PROFILE.editorStampRectangleThickness)
+                }
             }
             else -> {
                 panel.add(configWindow.createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER))
