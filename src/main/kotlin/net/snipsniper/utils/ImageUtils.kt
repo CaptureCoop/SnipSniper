@@ -28,13 +28,7 @@ class ImageUtils {
 
         fun ensureAlphaLayer(image: BufferedImage): BufferedImage {
             if(image.type == BufferedImage.TYPE_INT_ARGB) return image
-
-            return BufferedImage(image.width, image.height, BufferedImage.TYPE_INT_ARGB).also {
-                it.graphics.also { g ->
-                    g.drawImage(image, 0, 0, null)
-                    g.dispose()
-                }
-            }
+            return newBufferedImage(image.width, image.height) { it.drawImage(image, 0, 0, null) }
         }
 
         fun copyToClipboard(image: BufferedImage) {
@@ -49,26 +43,24 @@ class ImageUtils {
             }
         }
 
-        @Synchronized fun copyImage(source: BufferedImage): BufferedImage {
-            return BufferedImage(source.width, source.height, source.type).also {
-                it.graphics.also { g ->
-                    g.drawImage(source, 0, 0, source.width, source.height, null)
-                    g.dispose()
-                }
-            }
+        fun newBufferedImage(width: Int, height: Int, type: Int = BufferedImage.TYPE_INT_ARGB, action: (Graphics) -> Unit): BufferedImage {
+            return BufferedImage(width, height, type).also { action.invoke(it.graphics) }
+        }
+
+        @Synchronized fun copyImage(source: BufferedImage) = newBufferedImage(source.width, source.height, source.type) {
+            it.drawImage(source, 0, 0, source.width, source.height, null)
         }
 
         fun rotateClockwise90(src: BufferedImage, times: Int): BufferedImage {
             val w = src.width
             val h = src.height
-            return BufferedImage(w, h, src.type).also {
-                (it.createGraphics() as Graphics2D).also { g2d ->
-                    for(i in 0 until times) {
-                        g2d.translate((h - w) / 2, (h - w) / 2)
-                        g2d.rotate(Math.PI / 2, (h / 2f).toDouble(), (w / 2f).toDouble())
-                    }
-                    g2d.drawRenderedImage(src, null)
+            return newBufferedImage(w, h, src.type) {
+                it as Graphics2D
+                for(i in 0 until times) {
+                    it.translate((h - w) / 2, (h - w) / 2)
+                    it.rotate(Math.PI / 2, (h / 2f).toDouble(), (w / 2f).toDouble())
                 }
+                it.drawRenderedImage(src, null)
             }
         }
 
@@ -96,12 +88,7 @@ class ImageUtils {
 
         fun imageToBufferedImage(image: Image): BufferedImage {
             if(image is BufferedImage) return image
-            return BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB).also {
-                it.createGraphics().also { g ->
-                    g.drawImage(image, 0, 0, null)
-                    g.dispose()
-                }
-            }
+            return newBufferedImage(image.getWidth(null), image.getHeight(null)) { it.drawImage(image, 0, 0, null) }
         }
 
         fun getIconDynamically(icon: String): Image? {

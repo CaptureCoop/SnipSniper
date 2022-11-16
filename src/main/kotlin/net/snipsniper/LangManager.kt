@@ -2,6 +2,7 @@ package net.snipsniper
 
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.FileUtils
+import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.Utils
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
@@ -46,14 +47,10 @@ class LangManager {
             val file = langMap[language]?.getString("icon")
             val flag = ImageManager.getImage("flags/$file.png")
 
-            return flagCache[language] ?: BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB).also { img ->
-                img.createGraphics().also { g ->
-                    fun sz(s: Int): Int = FLAG_SIZE / 2 - s / 2
-                    g.drawImage(flag, sz(flag.width), sz(flag.height), null)
-                    g.dispose()
-                }
-                flagCache[language] = img
-            }
+            return flagCache[language] ?: ImageUtils.newBufferedImage(16, 16) {
+                fun sz(s: Int): Int = FLAG_SIZE / 2 - s / 2
+                it.drawImage(flag, sz(flag.width), sz(flag.height), null)
+            }.also { flagCache[language] = it }
         }
 
         fun getLanguage(): String = SnipSniper.config.getString(ConfigHelper.MAIN.language)
