@@ -10,7 +10,6 @@ import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.ezmode.EzModeSettingsCreator
 import net.snipsniper.sceditor.ezmode.EzModeStampTab
-import net.snipsniper.sceditor.stamps.IStamp
 import net.snipsniper.sceditor.stamps.StampType
 import net.snipsniper.snipscope.SnipScopeWindow
 import net.snipsniper.utils.IFunction
@@ -25,7 +24,6 @@ import net.snipsniper.utils.getImage
 import org.apache.commons.lang3.SystemUtils
 import org.capturecoop.cclogger.CCLogger.Companion.info
 import org.capturecoop.ccutils.utils.CCIClosable
-import org.capturecoop.ccutils.utils.CCStringUtils
 import java.awt.*
 import java.awt.event.*
 import java.awt.image.BufferedImage
@@ -51,7 +49,7 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
         set(value) {
             field = value
             resizeTrigger()
-            updateEzUI(true)
+            if(value) updateEzUI()
         }
     private val ezModeSettingsCreator = EzModeSettingsCreator(this)
     val ezModeWidth = 200
@@ -155,38 +153,22 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
             val whatsappTest = JMenuItem("Border test")
             whatsappTest.addActionListener {
                 val borderThickness = 10
-                //Fix to have this work without originalImage. As we will remove/Change this anyways i dont care if this affects anything for now.
+                //Fix to have this work without originalImage. As we will remove/Change this anyway I don't care if this affects anything for now.
                 val imageToUse = image
-                val test = BufferedImage(
-                    imageToUse.width + borderThickness,
-                    imageToUse.height + borderThickness,
-                    BufferedImage.TYPE_INT_ARGB
-                )
+                val test = BufferedImage(imageToUse.width + borderThickness, imageToUse.height + borderThickness, BufferedImage.TYPE_INT_ARGB)
                 val g = test.graphics as Graphics2D
                 g.setRenderingHints(qualityHints)
                 for (y1 in 0 until imageToUse.height) {
                     for (x1 in 0 until imageToUse.width) {
                         if (Color(imageToUse.getRGB(x1, y1), true).alpha > 10) {
                             g.color = Color.WHITE
-                            g.fillOval(
-                                x1 + borderThickness / 2 - borderThickness / 2,
-                                y1 + borderThickness / 2 - borderThickness / 2,
-                                borderThickness,
-                                borderThickness
-                            )
+                            g.fillOval(x1 + borderThickness / 2 - borderThickness / 2, y1 + borderThickness / 2 - borderThickness / 2, borderThickness, borderThickness)
                         }
                     }
                 }
-                g.drawImage(
-                    imageToUse,
-                    borderThickness / 2,
-                    borderThickness / 2,
-                    imageToUse.width,
-                    imageToUse.height,
-                    null
-                )
+                g.drawImage(imageToUse, borderThickness / 2, borderThickness / 2, imageToUse.width, imageToUse.height, null)
                 g.dispose()
-                setImage(test, true, true)
+                setImage(test, resetHistory = true, isNewImage = true)
                 isDirty = true
                 repaint()
                 refreshTitle()
@@ -209,7 +191,7 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
                     null
                 )
                 g.dispose()
-                setImage(test, true, true)
+                setImage(test, resetHistory = true, isNewImage = true)
                 isDirty = true
                 repaint()
                 refreshTitle()
@@ -225,13 +207,13 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
             val localGE = GraphicsEnvironment.getLocalGraphicsEnvironment()
             var found = false
             var bestMonitor: GraphicsConfiguration? = null
-            val SAFETY_OFFSET_X =
-                10 + config.getInt(ConfigHelper.PROFILE.borderSize) //This prevents this setup not working if you do a screenshot on the top left, which would cause the location not to be in any bounds
+            //This prevents this setup not working if you do a screenshot on the top left, which would cause the location not to be in any bounds
+            val safetyOffsetX = 10 + config.getInt(ConfigHelper.PROFILE.borderSize)
             for (gd in localGE.screenDevices) {
                 for (graphicsConfiguration in gd.configurations) {
                     if (!found) {
                         val bounds = graphicsConfiguration.bounds
-                        val testLocation = Point(location.x + SAFETY_OFFSET_X, location.y)
+                        val testLocation = Point(location.x + safetyOffsetX, location.y)
                         if (bounds.contains(testLocation)) found = true
                         if (testLocation.getX() > bounds.getX() && testLocation.getX() < bounds.getX() + bounds.getWidth() && bestMonitor == null) {
                             bestMonitor = graphicsConfiguration
@@ -294,7 +276,7 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
         val posY = location.y + height / 2 - window.height / 2
         window.setLocation(posX, posY)
         window.onSubmit = IFunction {
-            setImage(window.image, true, true)
+            setImage(window.image, resetHistory = true, isNewImage = true)
             isDirty = true
             repaint()
             refreshTitle()
@@ -304,9 +286,8 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
     fun saveImage() {
         //TODO: Long term: Check if its ok to use image directly, we used to copy the image to finalImg so yeah.. :^) If anything comes up check here
         val location = saveImage(image, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
-        if (location != null) {
-            val folder = location.replace(File(location).name, "")
-            config.set(ConfigHelper.PROFILE.lastSaveFolder, folder)
+        location?.replace(File(location).name, "")?.also { loc ->
+            config.set(ConfigHelper.PROFILE.lastSaveFolder, loc)
             config.save()
         }
         if (config.getBool(ConfigHelper.PROFILE.copyToClipboard)) copyToClipboard(image)
@@ -347,15 +328,12 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
         selectedStamp = i
         ezModeStampPanelTabs.selectedIndex = i
         setEzModeTitle(getSelectedStamp().type.title)
-        updateEzUI(true)
+        updateEzUI()
     }
 
-    private fun updateEzUI(reset: Boolean) {
-        if (ezMode && reset) ezModeSettingsCreator.addSettingsToPanel(
-            ezModeStampSettingsPanel,
-            getSelectedStamp(),
-            ezModeWidth
-        ) else if (!ezMode && reset) ezModeStampSettingsPanel.removeAll()
+    private fun updateEzUI() = when(ezMode) {
+        true -> ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp(), ezModeWidth)
+        false -> ezModeStampSettingsPanel.removeAll()
     }
 
     override fun toString() = "SCEditorWindow Pos:[$location] Path:[$saveLocation]"
