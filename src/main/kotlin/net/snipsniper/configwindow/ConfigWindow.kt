@@ -282,6 +282,8 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
                     editorTab.setup(configOriginal)
                     viewerTab.setup(configOriginal)
                 }
+                //This prevents larger stamp settings leaving artifacts when saving and re-setting the tabs & panels
+                editorTab.repaint()
             }
         }
         val close = JButton(getItem("config_label_close"))
