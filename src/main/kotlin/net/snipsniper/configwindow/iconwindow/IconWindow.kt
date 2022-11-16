@@ -88,7 +88,7 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
                 list.add(SSFile(file, SSFile.LOCATION.JAR))
         }
         if (type == ICON_TYPE.CUSTOM) {
-            File(SnipSniper.imgFolder!!).walk().filter { it.isFile }.forEach { localFile ->
+            File(SnipSniper.imgFolder).walk().filter { it.isFile }.forEach { localFile ->
                 list.add(SSFile(localFile.name, SSFile.LOCATION.LOCAL))
             }
         }

@@ -1,42 +1,15 @@
 package net.snipsniper.configwindow.tabs
 
-import net.snipsniper.ImageManager.Companion.getImage
-import net.snipsniper.LangManager.Companion.getItem
 import net.snipsniper.SnipSniper
-import net.snipsniper.SnipSniper.Companion.config
-import net.snipsniper.SnipSniper.Companion.configFolder
-import net.snipsniper.SnipSniper.Companion.getVersionString
-import net.snipsniper.SnipSniper.Companion.imgFolder
-import net.snipsniper.SnipSniper.Companion.jarFolder
-import net.snipsniper.SnipSniper.Companion.mainFolder
-import net.snipsniper.SnipSniper.Companion.openConfigWindow
-import net.snipsniper.SnipSniper.Companion.platformType
-import net.snipsniper.SnipSniper.Companion.refreshGlobalConfigFromDisk
-import net.snipsniper.SnipSniper.Companion.refreshTheme
-import net.snipsniper.SnipSniper.Companion.resetProfiles
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.configwindow.ConfigWindow
-import net.snipsniper.configwindow.ConfigWindow.PAGE
 import net.snipsniper.configwindow.UpdateButton
-import net.snipsniper.utils.ConfigSaveButtonState
-import net.snipsniper.utils.FileUtils.Companion.copyFromJar
-import net.snipsniper.utils.FileUtils.Companion.delete
-import net.snipsniper.utils.FileUtils.Companion.deleteRecursively
-import net.snipsniper.utils.FileUtils.Companion.exists
-import net.snipsniper.utils.FileUtils.Companion.getFilesInFolders
-import net.snipsniper.utils.FileUtils.Companion.mkdirs
+import net.snipsniper.utils.*
 import net.snipsniper.utils.Function
-import net.snipsniper.utils.IFunction
-import net.snipsniper.utils.PlatformType
-import net.snipsniper.utils.Utils.Companion.createShellLink
-import net.snipsniper.utils.Utils.Companion.getLanguageDropdown
-import net.snipsniper.utils.Utils.Companion.getReleaseType
-import net.snipsniper.utils.Utils.Companion.showPopup
 import org.apache.commons.lang3.SystemUtils
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
-import org.capturecoop.ccutils.utils.CCStringUtils
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import java.awt.Insets
@@ -53,7 +26,7 @@ import javax.swing.filechooser.FileNameExtensionFilter
 
 class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
     override var isDirty = false
-    override val page = PAGE.GlobalPanel
+    override val page = ConfigWindow.PAGE.GlobalPanel
 
     override fun setup(configOriginal: Config?) {
         removeAll()
@@ -65,17 +38,19 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         gbc.fill = GridBagConstraints.BOTH
         gbc.gridwidth = 1
         gbc.insets.bottom = 20
-        val config = Config(config)
+        val config = Config(SnipSniper.config)
         val importConfigs = JButton("Import Configs")
         importConfigs.addActionListener {
-            val dialogResult = showPopup(configWindow, "This will overwrite all current configs. Do you want to continue?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, getImage("icons/questionmark.png"), true)
+            val dialogResult = Utils.showPopup(configWindow, "This will overwrite all current configs. Do you want to continue?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, "icons/questionmark.png".getImage(), true)
             if (dialogResult == JOptionPane.NO_OPTION) return@addActionListener
-            val imgFolder = File(imgFolder)
-            val cfgFolder = File(configFolder)
-            delete(imgFolder)
-            mkdirs(imgFolder)
-            delete(cfgFolder)
-            mkdirs(cfgFolder)
+            File(SnipSniper.imgFolder).also {
+                it.deleteRecursively()
+                it.mkdirs()
+            }
+            File(SnipSniper.configFolder).also {
+                it.deleteRecursively()
+                it.mkdirs()
+            }
             val fileChooser = JFileChooser()
             fileChooser.fileFilter = FileNameExtensionFilter("ZIP File", "zip")
             val option = fileChooser.showOpenDialog(configWindow)
@@ -87,7 +62,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     val zis = ZipInputStream(bis)
                     var ze: ZipEntry
                     while (zis.nextEntry.also { ze = it } != null) {
-                        val filePath = Paths.get(mainFolder).resolve(ze.name)
+                        val filePath = Paths.get(SnipSniper.mainFolder).resolve(ze.name)
                         FileOutputStream(filePath.toFile()).use { fos ->
                             BufferedOutputStream(fos, buffer.size).use { bos ->
                                 var len: Int
@@ -106,11 +81,11 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 }
             }
             configWindow.refreshConfigFiles()
-            refreshGlobalConfigFromDisk()
-            refreshTheme()
-            resetProfiles()
+            SnipSniper.refreshGlobalConfigFromDisk()
+            SnipSniper.refreshTheme()
+            SnipSniper.resetProfiles()
             configWindow.close()
-            openConfigWindow(null, PAGE.GlobalPanel)
+            SnipSniper.openConfigWindow(null, ConfigWindow.PAGE.GlobalPanel)
         }
         val exportButton = JButton("Export Configs")
         exportButton.addActionListener {
@@ -122,10 +97,8 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 var path = chooser.selectedFile.absolutePath
                 if (!path.endsWith(".zip")) path += ".zip"
                 val zip = File(path)
-                val mainFolder = mainFolder
-                val files = getFilesInFolders(
-                    mainFolder!!
-                )
+                val mainFolder = SnipSniper.mainFolder
+                val files = FileUtils.getFilesInFolders(mainFolder)
                 try {
                     val out = ZipOutputStream(FileOutputStream(zip))
                     for (file in files) {
@@ -150,39 +123,36 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         options.add(exportButton, gbc)
         gbc.gridx = 0
         gbc.insets = Insets(0, 10, 0, 10)
-        val releaseType = getReleaseType(SnipSniper.config.getString(ConfigHelper.MAIN.updateChannel))
+        val releaseType = Utils.getReleaseType(SnipSniper.config.getString(ConfigHelper.MAIN.updateChannel))
         val channel = releaseType.toString()
-        options.add(configWindow.createJLabel(CCStringUtils.format("<html><p>Current Version: %c</p><p>Update Channel: %c</p></html>", getVersionString(), channel), JLabel.CENTER, JLabel.CENTER), gbc)
+        options.add(configWindow.createJLabel("<html><p>Current Version: ${SnipSniper.getVersionString()}</p><p>Update Channel: $channel</p></html>", JLabel.CENTER, JLabel.CENTER), gbc)
         gbc.gridx = 1
         options.add(UpdateButton(), gbc)
         gbc.gridx = 0
-        options.add(configWindow.createJLabel(getItem("config_label_language"), JLabel.RIGHT, JLabel.CENTER), gbc)
+        options.add(configWindow.createJLabel("config_label_language".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
         gbc.gridx = 1
-        options.add(getLanguageDropdown(config.getString(ConfigHelper.MAIN.language), IFunction {
-                    config.set(ConfigHelper.MAIN.language, it[0])
-                    saveButtonUpdate!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-                }), gbc)
-        val themes = arrayOf(getItem("config_label_theme_light"), getItem("config_label_theme_dark"))
+        options.add(Utils.getLanguageDropdown(config.getString(ConfigHelper.MAIN.language)) {
+            config.set(ConfigHelper.MAIN.language, it[0])
+            saveButtonUpdate!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+        }, gbc)
+        val themes = arrayOf("config_label_theme_light".translate(), "config_label_theme_dark".translate())
         val themeDropdown = JComboBox<Any>(themes)
-        var themeIndex = 0 //Light theme
-        if (config.getString(ConfigHelper.MAIN.theme) == "dark") themeIndex = 1
-        themeDropdown.selectedIndex = themeIndex
-        themeDropdown.addItemListener { e: ItemEvent ->
-            if (e.stateChange == ItemEvent.SELECTED) {
-                if (themeDropdown.selectedIndex == 0) {
-                    config.set(ConfigHelper.MAIN.theme, "light")
-                } else if (themeDropdown.selectedIndex == 1) {
-                    config.set(ConfigHelper.MAIN.theme, "dark")
+        themeDropdown.selectedIndex = if (config.getString(ConfigHelper.MAIN.theme) == "dark") 1 else 0
+        themeDropdown.addItemListener {
+            if (it.stateChange == ItemEvent.SELECTED) {
+                when(themeDropdown.selectedIndex) {
+                    0 -> config.set(ConfigHelper.MAIN.theme, "light")
+                    1 -> config.set(ConfigHelper.MAIN.theme, "dark")
                 }
                 saveButtonUpdate!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
         }
         gbc.gridx = 0
-        options.add(configWindow.createJLabel(getItem("config_label_theme"), JLabel.RIGHT, JLabel.CENTER), gbc)
+        options.add(configWindow.createJLabel("config_label_theme".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
         gbc.gridx = 1
         options.add(themeDropdown, gbc)
         gbc.gridx = 0
-        options.add(configWindow.createJLabel(getItem("config_label_debug"), JLabel.RIGHT, JLabel.CENTER), gbc)
+        options.add(configWindow.createJLabel("config_label_debug".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
         val debugCheckBox = JCheckBox()
         debugCheckBox.isSelected = config.getBool(ConfigHelper.MAIN.debug)
         debugCheckBox.addActionListener {
@@ -192,7 +162,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         gbc.gridx = 1
         options.add(debugCheckBox, gbc)
         var autostart: IFunction? = null
-        if (SystemUtils.IS_OS_WINDOWS && platformType === PlatformType.JAR) {
+        if (SystemUtils.IS_OS_WINDOWS && SnipSniper.platformType === PlatformType.JAR) {
             gbc.gridx = 0
             options.add(configWindow.createJLabel("Start with Windows", JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
@@ -202,18 +172,18 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             val linkMain = "SnipSniper.lnk"
             val icoMain = "SnipSniper.ico"
             val autostartCheckbox = JCheckBox()
-            autostartCheckbox.isSelected = exists(startup + linkMain)
+            autostartCheckbox.isSelected = File(startup, linkMain).exists()
             autostartCheckbox.addActionListener {
-                if (autostartCheckbox.isSelected) {
-                    autostart = IFunction {
-                        mkdirs(startup)
-                        val jarFolder = jarFolder
-                        copyFromJar("net/snipsniper/resources/batch/$batchMain", "$jarFolder/$batchMain")
-                        copyFromJar("net/snipsniper/resources/img/icons/" + icoMain.lowercase(Locale.getDefault()), "$jarFolder/$icoMain")
-                        createShellLink(startup + linkMain, jarFolder + batchMain, "$jarFolder/$icoMain")
+                autostart = if (autostartCheckbox.isSelected) {
+                    IFunction {
+                        File(startup).mkdirs()
+                        val jarFolder = SnipSniper.jarFolder
+                        FileUtils.copyFromJar("net/snipsniper/resources/batch/$batchMain", "$jarFolder/$batchMain")
+                        FileUtils.copyFromJar("net/snipsniper/resources/img/icons/" + icoMain.lowercase(Locale.getDefault()), "$jarFolder/$icoMain")
+                        Utils.createShellLink(startup + linkMain, jarFolder + batchMain, "$jarFolder/$icoMain")
                     }
                 } else {
-                    autostart = IFunction { deleteRecursively(startup + linkMain) }
+                    IFunction { File(startup, linkMain).deleteRecursively() }
                 }
             }
             options.add(autostartCheckbox, gbc)
@@ -224,7 +194,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             globalSave(config, autostart)
             if (restartConfig || didThemeChange) {
                 configWindow.close()
-                openConfigWindow(configWindow.lastSelectedConfig, PAGE.GlobalPanel)
+                SnipSniper.openConfigWindow(configWindow.lastSelectedConfig, ConfigWindow.PAGE.GlobalPanel)
             }
             saveButtonUpdate!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
         }
@@ -236,13 +206,9 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         val didThemeChange = config.getString(ConfigHelper.MAIN.theme) != SnipSniper.config.getString(ConfigHelper.MAIN.theme)
         val didDebugChange = config.getBool(ConfigHelper.MAIN.debug) != SnipSniper.config.getBool(ConfigHelper.MAIN.debug)
         autostart?.run()
-        if (didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)) {
-           CCLogger.enableDebugConsole(false)
-        }
+        if (didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)) CCLogger.enableDebugConsole(false)
         SnipSniper.config.loadFromConfig(config)
         config.save()
-        if (didThemeChange) {
-            refreshTheme()
-        }
+        if (didThemeChange) SnipSniper.refreshTheme()
     }
 }
