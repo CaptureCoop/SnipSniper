@@ -141,7 +141,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         private fun setupStampConfigPanelSpinner(configKey: ConfigHelper.PROFILE, min: Double, max: Double, stepSize: Double, previewPanel: StampJPanel, config: Config, stampIndex: Int, onUpdate: Function?): JSpinner {
             return JSpinner(SpinnerNumberModel((config.getFloat(configKey).toString() + "").toDouble(), min, max, stepSize)).also { spinner ->
                 spinner.addChangeListener {
-                    config.set(configKey, spinner.value.toString().toDouble().toInt())
+                    config.set(configKey, spinner.value.toString())
                     previewPanel.stamp = StampType.getByIndex(stampIndex).getIStamp(config, null)
                     onUpdate!!.run()
                 }
