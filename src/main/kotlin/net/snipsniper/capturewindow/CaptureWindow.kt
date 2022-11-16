@@ -48,9 +48,10 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
                     specialRepaint()
                 }
                 if (screenshot != null && screenshotTinted != null && !screenshotDone) screenshotDone = true
-                val now = System.nanoTime()
-                delta += (now - lastTime) / nsPerTick
-                lastTime = now
+                System.nanoTime().also { now ->
+                    delta += (now - lastTime) / nsPerTick
+                    lastTime = now
+                }
                 while (delta >= 1) {
                     delta -= 1.0
                     if (screenshotDone) specialRepaint()
@@ -64,12 +65,13 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
 
     private fun specialRepaint() {
         if (selectArea != null) {
-            val rect = selectArea!!
-            val minX = min(rect.x, rect.width)
-            val minY = min(rect.y, rect.height)
-            val maxX = max(rect.x, rect.width)
-            val maxY = max(rect.y, rect.height)
-            repaint(minX, minY, maxX, maxY)
+            selectArea!!.also {
+                val minX = min(it.x, it.width)
+                val minY = min(it.y, it.height)
+                val maxX = max(it.x, it.width)
+                val maxY = max(it.y, it.height)
+                repaint(minX, minY, maxX, maxY)
+            }
         } else {
             repaint()
         }
@@ -79,24 +81,13 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
     fun screenshot() {
         StatsManager.incrementCount(StatsManager.SCREENSHOTS_TAKEN_AMOUNT)
         screenshotBounds = totalBounds
-        try {
-            screenshot = Robot().createScreenCapture(
-                Rectangle(
-                    screenshotBounds!!.x,
-                    screenshotBounds!!.y,
-                    screenshotBounds!!.width,
-                    screenshotBounds!!.height
-                )
-            )
-        } catch (exception: AWTException) {
-            CCLogger.error("Couldn't take screenshot. Message:")
-            CCLogger.logStacktrace(exception, CCLogLevel.ERROR)
+        screenshot = Robot().createScreenCapture(screenshotBounds)
+        screenshotTinted = screenshot!!.clone().also {
+            it.graphics.also { g ->
+                g.color = config.getColor(ConfigHelper.PROFILE.tintColor).primaryColor
+                g.fillRect(0, 0, it.width, it.height)
+            }
         }
-        screenshotTinted = screenshot!!.clone()
-        val g2 = screenshotTinted!!.graphics
-        g2.color = config.getColor(ConfigHelper.PROFILE.tintColor).primaryColor
-        g2.fillRect(0, 0, screenshotTinted!!.width, screenshotTinted!!.height)
-        g2.dispose()
     }
 
     fun setSize() {
@@ -123,14 +114,11 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
 
     private val totalBounds: Rectangle
         get() {
-            val result = Rectangle2D.Double()
-            val localGE = GraphicsEnvironment.getLocalGraphicsEnvironment()
-            for (gd in localGE.screenDevices) {
-                for (graphicsConfiguration in gd.configurations) {
-                    Rectangle2D.union(result, graphicsConfiguration.bounds, result)
+            return Rectangle2D.Double().also { rect ->
+                GraphicsEnvironment.getLocalGraphicsEnvironment().screenDevices.forEach { sd ->
+                    sd.configurations.forEach { cfg -> Rectangle2D.union(rect, cfg.bounds, rect) }
                 }
-            }
-            return result.bounds
+            }.bounds
         }
 
     fun capture(saveOverride: Boolean, copyOverride: Boolean, editorOverride: Boolean, enforceOverride: Boolean) {
@@ -146,12 +134,11 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
         }
         if (captureArea.x < 0) captureArea.x = 0
         if (captureArea.y < 0) captureArea.y = 0
-        if (captureArea.width + captureArea.x > screenshotBounds!!.width) captureArea.width =
-            screenshotBounds!!.width - captureArea.x
-        if (captureArea.height + captureArea.y > screenshotBounds!!.height) captureArea.height =
-            screenshotBounds!!.height - captureArea.y
-        val croppedBuffer =
-            screenshot!!.getSubimage(captureArea.x, captureArea.y, captureArea.width, captureArea.height)
+        if (captureArea.width + captureArea.x > screenshotBounds!!.width)
+            captureArea.width = screenshotBounds!!.width - captureArea.x
+        if (captureArea.height + captureArea.y > screenshotBounds!!.height)
+            captureArea.height = screenshotBounds!!.height - captureArea.y
+        val croppedBuffer = screenshot!!.getSubimage(captureArea.x, captureArea.y, captureArea.width, captureArea.height)
         finalImg = BufferedImage(croppedBuffer.width + borderSize * 2, croppedBuffer.height + borderSize * 2, BufferedImage.TYPE_INT_ARGB)
         (finalImg.graphics as Graphics2D).also { g ->
             g.paint = config.getColor(ConfigHelper.PROFILE.borderColor).getGradientPaint(finalImg.width, finalImg.height)
@@ -243,14 +230,12 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
         if (lastRect == null) lastRect = screenshotBounds
         if (!directDraw && screenshotBounds != null && globalBufferImage == null && selectBufferImage == null) {
             //We are only setting this once, since the size of bounds should not really change
-            globalBufferImage =
-                BufferedImage(screenshotBounds!!.width, screenshotBounds!!.height, BufferedImage.TYPE_INT_RGB)
-            selectBufferImage =
-                BufferedImage(screenshotBounds!!.width, screenshotBounds!!.height, BufferedImage.TYPE_INT_RGB)
+            globalBufferImage = BufferedImage(screenshotBounds!!.width, screenshotBounds!!.height, BufferedImage.TYPE_INT_RGB)
+            selectBufferImage = BufferedImage(screenshotBounds!!.width, screenshotBounds!!.height, BufferedImage.TYPE_INT_RGB)
         }
-        if (spyglassBufferImage == null && config.getBool(ConfigHelper.PROFILE.enableSpyglass)) {
+        if (spyglassBufferImage == null && config.getBool(ConfigHelper.PROFILE.enableSpyglass))
             spyglassBufferImage = BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB)
-        }
+
         var globalBuffer = globalBufferImage!!.graphics as Graphics2D
         globalBuffer.setRenderingHints(qualityHints)
         var selectBuffer = selectBufferImage!!.graphics as Graphics2D

@@ -13,6 +13,7 @@ import java.awt.datatransfer.DataFlavor
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
+import java.lang.Exception
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.time.LocalDate
@@ -37,9 +38,14 @@ class ImageUtils {
         }
 
         fun copyToClipboard(image: BufferedImage) {
-            ImageSelection(image).let {
-                Toolkit.getDefaultToolkit().systemClipboard.setContents(it, null)
-                CCLogger.info("Copied Image to clipboard")
+            try {
+                ImageSelection(image).let {
+                    Toolkit.getDefaultToolkit().systemClipboard.setContents(it, null)
+                    CCLogger.info("Copied Image to clipboard")
+                }
+            } catch (exception: Exception) {
+                CCLogger.warn("ImageUtils.copyToClipboard encountered an IOException error while trying to copy the image. Message: ${exception.message}")
+                CCLogger.warn("This is generally harmless, it can be caused by your jvm not supporting jpgs apparently :^)")
             }
         }
 
