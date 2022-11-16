@@ -159,20 +159,13 @@ class ImageUtils {
             return image.getSubimage(left, top, right - left + 1, bottom - top + 1)
         }
 
-        fun getDragPasteImage(icon: BufferedImage, text: String): BufferedImage {
-            return BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB).also {
-                val w = it.width
-                val h = it.height
-                it.createGraphics().also { g ->
-                    g.color = Color.WHITE
-                    g.fillRect(0,0, w, h)
-                    g.color = Color.BLACK
-                    g.font = Font("Meiryo", Font.BOLD, 20)
-                    g.drawString(text, w / 2 - g.fontMetrics.stringWidth(text) / 2, h / 2)
-                    g.drawImage(icon, w / 3,h / 10, w / 3, h / 3, null)
-                    g.dispose()
-                }
-            }
+        fun getDragPasteImage(icon: BufferedImage, text: String, width: Int = 512, height: Int = 512) = newBufferedImage(width, height){
+            it.color = Color.WHITE
+            it.fillRect(0,0, width, height)
+            it.color = Color.BLACK
+            it.font = Font("Meiryo", Font.BOLD, 20)
+            it.drawString(text, width / 2 - it.fontMetrics.stringWidth(text) / 2, height / 2)
+            it.drawImage(icon, width / 3,height / 10, width / 3, height / 3, null)
         }
 
         //TODO: Cleanup
