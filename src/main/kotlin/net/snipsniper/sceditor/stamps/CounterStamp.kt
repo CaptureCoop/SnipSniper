@@ -5,6 +5,7 @@ import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.InputContainer
 import org.capturecoop.cccolorutils.CCColor
 import org.capturecoop.cccolorutils.setAlpha
+import org.capturecoop.cclogger.CCLogger
 import org.capturecoop.ccutils.math.CCVector2Int
 import java.awt.*
 import java.awt.event.KeyEvent
@@ -83,10 +84,11 @@ class CounterStamp(private val config: Config) : IStamp {
             val oldFillColor = g.paint
             g.paint = color!!.getGradientPaint(drawWidth, drawHeight, x, y)
             if (solidColor) {
-                val colorToUse = CCColor(color!!)
-                colorToUse.primaryColor = color!!.primaryColor.setAlpha(255)
-                colorToUse.secondaryColor = color!!.secondaryColor!!.setAlpha(255)
-                g.paint = colorToUse.getGradientPaint(drawWidth, drawHeight, x, y)
+                CCColor(color!!).also {
+                    it.primaryColor = it.primaryColor.setAlpha(255)
+                    if(it.secondaryColor != null) it.secondaryColor = it.secondaryColor!!.setAlpha(255)
+                    g.paint = it.getGradientPaint(drawWidth, drawHeight, x, y)
+                }
             }
             g.fillOval(x, y, drawWidth, drawHeight)
             g.paint = oldFillColor
