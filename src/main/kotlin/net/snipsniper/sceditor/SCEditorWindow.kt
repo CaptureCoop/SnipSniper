@@ -302,18 +302,13 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
     }
 
     fun saveImage() {
-        val image = image
-        val finalImg = BufferedImage(image.width, image.height, BufferedImage.TYPE_INT_ARGB)
-        val g = finalImg.graphics
-        g.drawImage(image, 0, 0, image.width, image.height, this)
-        g.dispose()
-        val location = saveImage(finalImg, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
+        val location = saveImage(image, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
         if (location != null) {
             val folder = location.replace(File(location).name, "")
             config.set(ConfigHelper.PROFILE.lastSaveFolder, folder)
             config.save()
         }
-        if (config.getBool(ConfigHelper.PROFILE.copyToClipboard)) copyToClipboard(finalImg)
+        if (config.getBool(ConfigHelper.PROFILE.copyToClipboard)) copyToClipboard(image)
     }
 
     fun refreshTitle() {

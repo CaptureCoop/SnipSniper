@@ -1,6 +1,5 @@
 package net.snipsniper.utils
 
-import java.awt.Image
 import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.Transferable
 import java.awt.datatransfer.UnsupportedFlavorException
