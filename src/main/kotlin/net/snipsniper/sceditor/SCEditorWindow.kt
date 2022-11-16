@@ -302,6 +302,7 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
     }
 
     fun saveImage() {
+        //TODO: Long term: Check if its ok to use image directly, we used to copy the image to finalImg so yeah.. :^) If anything comes up check here
         val location = saveImage(image, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
         if (location != null) {
             val folder = location.replace(File(location).name, "")
