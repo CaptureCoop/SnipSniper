@@ -21,7 +21,8 @@ version = File("version.txt").readLines()[0]
 //Dev = "Clean build", but not stable
 //Dirty = Uncommitted changes
 val type = System.getProperty("type") ?: if(!grgit.status().isClean && System.getenv("GITHUB_RUN_NUMBER") == null) "dirty" else "dev"
-val artifactName = "${project.name} $version-$type rev-${grgit.head().abbreviatedId}.jar"
+val fullVersion = "$version-$type rev-${grgit.head().abbreviatedId}"
+val artifactName = "${project.name} $fullVersion.jar"
 
 repositories {
     mavenCentral()
@@ -71,6 +72,11 @@ fun getSystemVersion(): String {
 
 tasks.build {
     group = "SnipSniper"
+}
+
+tasks.create("getVersion") {
+    group = "SnipSniper"
+    doLast { println(fullVersion) }
 }
 
 tasks.withType<JavaExec> {
