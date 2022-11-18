@@ -6,10 +6,7 @@ import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.snipscope.SnipScopeWindow
-import net.snipsniper.utils.ClockDirection
-import net.snipsniper.utils.ImageUtils
-import net.snipsniper.utils.getImage
-import net.snipsniper.utils.toBufferedImage
+import net.snipsniper.utils.*
 import org.apache.commons.lang3.SystemUtils
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
@@ -74,11 +71,14 @@ class SCViewerWindow(private var file: File?, private var config: Config?, isSta
 
         if(SystemUtils.IS_OS_WINDOWS) {
             JMenuBar().also { menu ->
-                JMenuItem("↶").also {
+                val rotate = "icons/restart.png".getImage().scaled(16, 16)
+                JMenuItem().also {
+                    it.icon = rotate.toImageIcon()
                     it.addActionListener { rotateImage(ClockDirection.COUNTERCLOCKWISE) }
                     menu.add(it)
                 }
-                JMenuItem("↷").also {
+                JMenuItem().also {
+                    it.icon = rotate.flipHorizontally().toImageIcon()
                     it.addActionListener { rotateImage(ClockDirection.CLOCKWISE) }
                     menu.add(it)
                 }
