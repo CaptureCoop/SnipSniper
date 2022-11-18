@@ -19,10 +19,8 @@ class DropdownItem(private val label: String, val id: String) {
     companion object {
         fun setSelected(dropdown: JComboBox<DropdownItem>, id: String): Int {
             for(i in 0 until dropdown.itemCount) {
-                if(dropdown.getItemAt(i).compare(id)) {
-                    dropdown.selectedIndex = i
-                    return i
-                }
+                if(dropdown.getItemAt(i).compare(id))
+                    return i.also { dropdown.selectedIndex = it }
             }
             return 0
         }
@@ -32,16 +30,11 @@ class DropdownItem(private val label: String, val id: String) {
 class DropdownItemRenderer(items: Array<DropdownItem>): DefaultListCellRenderer() {
     private val images = HashMap<String, Icon>()
 
-    init {
-        items.forEach { images[it.id] = it.icon }
-    }
+    init { items.forEach { images[it.id] = it.icon } }
 
     override fun getListCellRendererComponent(list: JList<*>?, value: Any?, index: Int, isSelected: Boolean, cellHasFocus: Boolean): Component {
-        val label = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus) as JLabel
-        if(value != null) {
-            val item = value as DropdownItem
-            label.icon = item.icon
+        return (super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus) as JLabel).also {
+            if(value != null && value is DropdownItem) it.icon = value.icon
         }
-        return label
     }
 }
