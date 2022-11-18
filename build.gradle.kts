@@ -24,6 +24,9 @@ val type = System.getProperty("type") ?: if(!grgit.status().isClean && System.ge
 val fullVersion = "$version-$type rev-${grgit.head().abbreviatedId}"
 val artifactName = "${project.name} $fullVersion.jar"
 
+val groupMain = "SnipSniper"
+val groupRun = "SnipSniper run"
+
 repositories {
     mavenCentral()
 }
@@ -46,7 +49,7 @@ dependencies {
 //The idea is that we have one common place where we explain SnipSniper features which we can then bind into the executable & a website
 //This function itself refreshes the sub-repository
 val taskRefreshWiki = tasks.create("refreshWiki") {
-    group = "SnipSniper"
+    group = groupMain
     fun d(vararg commands: String) {
         exec {
             workingDir("src/main/resources/net/snipsniper/resources/wiki/")
@@ -70,17 +73,17 @@ fun getSystemVersion(): String {
     }
 }
 
-tasks.build {
-    group = "SnipSniper"
-}
+tasks.build { group = groupMain }
+
+tasks.clean { group = groupMain }
 
 tasks.create("getVersion") {
-    group = "SnipSniper"
+    group = groupMain
     doLast { println(fullVersion) }
 }
 
 tasks.withType<JavaExec> {
-    group = "SnipSniper Run"
+    group = groupRun
     dependsOn(tasks.build)
     doFirst {
         val runDir = File(project.buildDir, "run").also { it.mkdirs() }
@@ -127,8 +130,6 @@ tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest { attributes["Main-Class"] = "net.snipsniper.MainKt" }
     dependsOn(configurations.runtimeClasspath)
-    from({
-        sourceSets.main.get().output
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-    })
+    from(sourceSets.main.get().output)
+    from(configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) })
 }
