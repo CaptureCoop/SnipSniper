@@ -152,7 +152,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
             JMenu("Edit").also { editItem ->
                 editItem.icon = sizeImage("icons/editor.png")
                 JMenuItem("Flip horizontally").also {
-                    it.icon = sizeImage("icons/questionmark.png")
+                    it.icon = sizeImage("icons/mirror_horizontal.png")
                     it.addActionListener {
                         setImage(image.flipHorizontally(), resetHistory = false, isNewImage = false)
                         historyManager.addHistory()
@@ -160,7 +160,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                     editItem.add(it)
                 }
                 JMenuItem("Flip vertically").also {
-                    it.icon = sizeImage("icons/questionmark.png")
+                    it.icon = sizeImage("icons/mirror_vertical.png")
                     it.addActionListener {
                         setImage(image.flipVertically(), resetHistory = false, isNewImage = false)
                         historyManager.addHistory()
