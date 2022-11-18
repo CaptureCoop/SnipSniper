@@ -221,5 +221,11 @@ class ImageUtils {
                 it.drawImage(image, image.width, 0, -image.width, image.height, null)
             }
         }
+
+        fun flipImageVertically(image: BufferedImage): BufferedImage {
+            return newBufferedImage(image.width, image.height, image.type) {
+                it.drawImage(image, 0, image.height, image.width, -image.height, null)
+            }
+        }
     }
 }

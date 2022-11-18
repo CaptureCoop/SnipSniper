@@ -165,10 +165,16 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
                 editItem.icon = sizeImage("icons/editor.png")
                 JMenuItem("Flip horizontally").also {
                     it.icon = sizeImage("icons/questionmark.png")
+                    it.addActionListener {
+                        setImage(image.flipHorizontally(), resetHistory = false, isNewImage = false)
+                    }
                     editItem.add(it)
                 }
                 JMenuItem("Flip vertically").also {
                     it.icon = sizeImage("icons/questionmark.png")
+                    it.addActionListener {
+                        setImage(ImageUtils.flipImageVertically(image), resetHistory = false, isNewImage = false)
+                    }
                     editItem.add(it)
                 }
                 JMenuItem("Resize").also {
@@ -343,6 +349,7 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
             renderer.resetPreview()
             originalImage = copyImage(image)
         }
+        repaint()
     }
 
     fun getSelectedStamp() = stamps[selectedStamp]
