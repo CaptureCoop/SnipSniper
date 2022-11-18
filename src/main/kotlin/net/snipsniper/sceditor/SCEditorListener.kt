@@ -90,14 +90,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         }
 
         if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_Z)) {
-            var size = history.size
-            if(size > 1) {
-                size--
-                history.removeAt(size)
-                size--
-                scEditorWindow.setImage(history[size].clone(), false, false)
-                scEditorWindow.stamps.forEach { it.editorUndo(history.size) }
-            }
+            undoHistory()
         }
 
         scEditorWindow.getSelectedStamp().update(scEditorWindow.inputContainer, 0, keyEvent)
@@ -191,8 +184,23 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
     }
 
     fun addHistory() {
-        CCLogger.debug("Added image to history")
+        CCLogger.debug("History -> add (${history.size})")
         history.add(scEditorWindow.image.clone())
+    }
+
+    fun undoHistory() {
+        var size = history.size
+        if(size > 1) {
+            size--
+            val startSize = size
+            history.removeAt(size)
+            size--
+            CCLogger.debug("History -> undo ($startSize) -> ($size)")
+            scEditorWindow.setImage(history[size].clone(), resetHistory = false, isNewImage = false)
+            scEditorWindow.stamps.forEach { it.editorUndo(history.size) }
+        } else {
+            CCLogger.debug("History -> undo (Nothing to undo)")
+        }
     }
 
     override fun mouseWheelMoved(mouseWheelEvent: MouseWheelEvent) {

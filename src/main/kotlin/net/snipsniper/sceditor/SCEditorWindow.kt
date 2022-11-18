@@ -1,10 +1,7 @@
 package net.snipsniper.sceditor
 
-import net.snipsniper.ImageManager.Companion.getImage
 import net.snipsniper.SnipSniper
-import net.snipsniper.SnipSniper.Companion.exit
 import net.snipsniper.StatsManager
-import net.snipsniper.StatsManager.Companion.incrementCount
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.ezmode.EzModeSettingsCreator
@@ -12,13 +9,7 @@ import net.snipsniper.sceditor.ezmode.EzModeStampTab
 import net.snipsniper.sceditor.stamps.StampType
 import net.snipsniper.snipscope.SnipScopeWindow
 import net.snipsniper.utils.*
-import net.snipsniper.utils.ImageUtils.Companion.copyImage
-import net.snipsniper.utils.ImageUtils.Companion.copyToClipboard
-import net.snipsniper.utils.ImageUtils.Companion.ensureAlphaLayer
-import net.snipsniper.utils.ImageUtils.Companion.getDragPasteImage
-import net.snipsniper.utils.ImageUtils.Companion.saveImage
-import net.snipsniper.utils.Utils.Companion.getScaledDimension
-import org.capturecoop.cclogger.CCLogger.Companion.info
+import org.capturecoop.cclogger.CCLogger
 import org.capturecoop.ccutils.utils.CCIClosable
 import java.awt.*
 import java.awt.event.*
@@ -64,9 +55,9 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         this.saveLocation = saveLocation
         this.inClipboard = inClipboard
         this.isStandalone = isStandalone
-        if (startImage != null) image = ensureAlphaLayer(startImage)
-        info("Creating new editor window...")
-        incrementCount(StatsManager.EDITOR_STARTED_AMOUNT)
+        if (startImage != null) image = ImageUtils.ensureAlphaLayer(startImage)
+        CCLogger.info("Creating new editor window...")
+        StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT)
         if (startImage == null) {
             if (config.getBool(ConfigHelper.PROFILE.standaloneStartWithEmpty)) {
                 val imgSize = Toolkit.getDefaultToolkit().screenSize
@@ -76,21 +67,18 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                 imgG.fillRect(0, 0, image.width, image.height)
                 imgG.dispose()
             } else {
-                image = getDragPasteImage(getImage("icons/editor.png"), "Drop image here or use CTRL + V to paste one!")
+                image = ImageUtils.getDragPasteImage("icons/editor.png".getImage(), "Drop image here or use CTRL + V to paste one!")
                 defaultImage = image
             }
         }
         renderer = SCEditorRenderer(this)
         listener = SCEditorListener(this)
-        originalImage = copyImage(image)
+        originalImage = image.clone()
         init(image, renderer, listener)
         layout = null
-        var ezIconType = "black"
-        if (SnipSniper.config.getString(ConfigHelper.MAIN.theme) == "dark") {
-            ezIconType = "white"
-        }
 
         //Setting up stamp array and stamp ui buttons
+        val ezIconType = if (SnipSniper.config.getString(ConfigHelper.MAIN.theme) == "dark") "white" else "black"
         stamps.forEach {
             it.type.also { type -> addEZModeStampButton(type.title, type.iconFile, ezIconType, type.index) }
         }
@@ -125,14 +113,14 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         add(ezModeStampSettingsScrollPane)
         add(ezModeTitlePanel)
         listener.resetHistory()
-        iconImage = getImage("icons/editor.png")
+        iconImage = "icons/editor.png".getImage()
         focusTraversalKeysEnabled = false
         isVisible = true
         if (!(x < 0 && y < 0)) {
             var borderSize = config.getInt(ConfigHelper.PROFILE.borderSize)
             if (!isLeftToRight) borderSize = -borderSize
             setLocation(x - X_OFFSET + borderSize, y - insets.top + borderSize)
-            info("Setting location to $location")
+            CCLogger.info("Setting location to $location")
         }
         refreshTitle()
         setSizeAuto()
@@ -218,7 +206,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                         val test = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
                         val g = test.graphics as Graphics2D
                         g.setRenderingHints(qualityHints)
-                        val optimalDimension = getScaledDimension(originalImage, Dimension(width, height))
+                        val optimalDimension = Utils.getScaledDimension(originalImage, Dimension(width, height))
                         g.drawImage(originalImage, test.width / 2 - optimalDimension.width / 2, test.height / 2 - optimalDimension.height / 2, optimalDimension.width, optimalDimension.height, null)
                         g.dispose()
                         setImage(test, resetHistory = true, isNewImage = true)
@@ -266,7 +254,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         })
         isEnableInteraction = !isDefaultImage()
         requestFocus()
-        info("Started new editor window. ($this)")
+        CCLogger.info("Started new editor window. ($this)")
     }
 
     private fun addEZModeStampButton(title: String?, iconName: String?, theme: String?, stampIndex: Int) {
@@ -318,16 +306,16 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
 
     fun saveImage() {
         //TODO: Long term: Check if its ok to use image directly, we used to copy the image to finalImg so yeah.. :^) If anything comes up check here
-        val location = saveImage(image, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
+        val location = ImageUtils.saveImage(image, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
         location?.replace(File(location).name, "")?.also { loc ->
             config.set(ConfigHelper.PROFILE.lastSaveFolder, loc)
             config.save()
         }
-        if (config.getBool(ConfigHelper.PROFILE.copyToClipboard)) copyToClipboard(image)
+        if (config.getBool(ConfigHelper.PROFILE.copyToClipboard)) image.copyToClipboard()
     }
 
     fun refreshTitle() {
-        info("Refreshing title")
+        CCLogger.debug("Refreshing title")
         var newTitle: String? = title
         if (saveLocation != null && saveLocation!!.isNotEmpty()) newTitle += " ($saveLocation)"
         if (inClipboard) {
@@ -338,8 +326,8 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
     }
 
     fun setImage(newImage: BufferedImage?, resetHistory: Boolean, isNewImage: Boolean) {
-        super.image = ensureAlphaLayer(newImage!!)
-        info("Setting new Image")
+        super.image = ImageUtils.ensureAlphaLayer(newImage!!)
+        CCLogger.debug("Setting new Image")
         isEnableInteraction = !isDefaultImage()
         if (listener != null && resetHistory) {
             listener.resetHistory()
@@ -348,7 +336,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         if (isNewImage) {
             resetZoom()
             renderer.resetPreview()
-            originalImage = copyImage(image)
+            originalImage = image.clone()
         }
         repaint()
     }
@@ -379,7 +367,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
     override fun close() {
         cWindows.forEach { it.close() }
         dispose()
-        if (isStandalone) exit(false)
+        if (isStandalone) SnipSniper.exit(false)
     }
 
     companion object {
