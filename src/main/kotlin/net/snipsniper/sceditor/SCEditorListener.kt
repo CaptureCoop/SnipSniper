@@ -33,7 +33,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
     fun resetHistory() {
         CCLogger.info("Reset editor history")
         history.clear()
-        history.add(scEditorWindow.image.clone())
+        addHistory()
     }
 
     override fun keyPressed(keyEvent: KeyEvent) {
@@ -187,6 +187,11 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         g.setRenderingHints(scEditorWindow.qualityHints)
         scEditorWindow.getSelectedStamp().render(g, scEditorWindow.inputContainer, scEditorWindow.getPointOnImage(Point(input.mouseX, input.mouseY)), scEditorWindow.differenceFromImage, true, censor, history.size)
         scEditorWindow.repaint()
+        addHistory()
+    }
+
+    fun addHistory() {
+        CCLogger.debug("Added image to history")
         history.add(scEditorWindow.image.clone())
     }
 

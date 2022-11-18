@@ -166,6 +166,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                     it.icon = sizeImage("icons/questionmark.png")
                     it.addActionListener {
                         setImage(image.flipHorizontally(), resetHistory = false, isNewImage = false)
+                        listener.addHistory()
                     }
                     editItem.add(it)
                 }
@@ -173,6 +174,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                     it.icon = sizeImage("icons/questionmark.png")
                     it.addActionListener {
                         setImage(image.flipVertically(), resetHistory = false, isNewImage = false)
+                        listener.addHistory()
                     }
                     editItem.add(it)
                 }
