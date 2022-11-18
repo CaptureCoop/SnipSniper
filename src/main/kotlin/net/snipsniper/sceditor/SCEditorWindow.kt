@@ -3,7 +3,6 @@ package net.snipsniper.sceditor
 import net.snipsniper.ImageManager.Companion.getImage
 import net.snipsniper.SnipSniper
 import net.snipsniper.SnipSniper.Companion.exit
-import net.snipsniper.SnipSniper.Companion.openConfigWindow
 import net.snipsniper.StatsManager
 import net.snipsniper.StatsManager.Companion.incrementCount
 import net.snipsniper.config.Config
@@ -12,16 +11,13 @@ import net.snipsniper.sceditor.ezmode.EzModeSettingsCreator
 import net.snipsniper.sceditor.ezmode.EzModeStampTab
 import net.snipsniper.sceditor.stamps.StampType
 import net.snipsniper.snipscope.SnipScopeWindow
-import net.snipsniper.utils.IFunction
+import net.snipsniper.utils.*
 import net.snipsniper.utils.ImageUtils.Companion.copyImage
 import net.snipsniper.utils.ImageUtils.Companion.copyToClipboard
 import net.snipsniper.utils.ImageUtils.Companion.ensureAlphaLayer
 import net.snipsniper.utils.ImageUtils.Companion.getDragPasteImage
 import net.snipsniper.utils.ImageUtils.Companion.saveImage
-import net.snipsniper.utils.Utils
 import net.snipsniper.utils.Utils.Companion.getScaledDimension
-import net.snipsniper.utils.getImage
-import org.apache.commons.lang3.SystemUtils
 import org.capturecoop.cclogger.CCLogger.Companion.info
 import org.capturecoop.ccutils.utils.CCIClosable
 import java.awt.*
@@ -142,14 +138,29 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
         refreshTitle()
         setSizeAuto()
         if (x < 0 && y < 0) setLocationAuto()
-        if (SystemUtils.IS_OS_WINDOWS) {
+        //Menu bar
+        kotlin.run {
             val topBar = JMenuBar()
-            val configItem = JMenuItem("Config")
-            configItem.addActionListener { openConfigWindow(this) }
-            topBar.add(configItem)
-            val newItem = JMenuItem("New")
-            newItem.addActionListener { openNewImageWindow() }
-            topBar.add(newItem)
+            fun sizeImage(path: String) = path.getImage().scaled(16, 16).toImageIcon()
+
+            JMenu("File").also { fileItem ->
+                fileItem.icon = sizeImage("icons/folder.png")
+                JMenuItem("New").also { newItem ->
+                    newItem.icon = sizeImage("icons/questionmark.png")
+                    newItem.addActionListener { openNewImageWindow() }
+                    fileItem.add(newItem)
+                }
+                JMenuItem("Open").also { openItem ->
+                    openItem.icon = sizeImage("icons/questionmark.png")
+                    fileItem.add(openItem)
+                }
+                JMenuItem("Close").also { closeItem ->
+                    closeItem.icon = sizeImage("icons/redx.png")
+                    closeItem.addActionListener { close() }
+                    fileItem.add(closeItem)
+                }
+                topBar.add(fileItem)
+            }
             val whatsappTest = JMenuItem("Border test")
             whatsappTest.addActionListener {
                 val borderThickness = 10
