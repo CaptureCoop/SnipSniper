@@ -173,7 +173,7 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
                 JMenuItem("Flip vertically").also {
                     it.icon = sizeImage("icons/questionmark.png")
                     it.addActionListener {
-                        setImage(ImageUtils.flipImageVertically(image), resetHistory = false, isNewImage = false)
+                        setImage(image.flipVertically(), resetHistory = false, isNewImage = false)
                     }
                     editItem.add(it)
                 }
