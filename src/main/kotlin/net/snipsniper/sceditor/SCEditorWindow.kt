@@ -161,53 +161,68 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
                 }
                 topBar.add(fileItem)
             }
-            val whatsappTest = JMenuItem("Border test")
-            whatsappTest.addActionListener {
-                val borderThickness = 10
-                //Fix to have this work without originalImage. As we will remove/Change this anyway I don't care if this affects anything for now.
-                val imageToUse = image
-                val test = BufferedImage(imageToUse.width + borderThickness, imageToUse.height + borderThickness, BufferedImage.TYPE_INT_ARGB)
-                val g = test.graphics as Graphics2D
-                g.setRenderingHints(qualityHints)
-                for (y1 in 0 until imageToUse.height) {
-                    for (x1 in 0 until imageToUse.width) {
-                        if (Color(imageToUse.getRGB(x1, y1), true).alpha > 10) {
-                            g.color = Color.WHITE
-                            g.fillOval(x1 + borderThickness / 2 - borderThickness / 2, y1 + borderThickness / 2 - borderThickness / 2, borderThickness, borderThickness)
-                        }
-                    }
+            JMenu("Edit").also { editItem ->
+                editItem.icon = sizeImage("icons/editor.png")
+                JMenuItem("Flip horizontally").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    editItem.add(it)
                 }
-                g.drawImage(imageToUse, borderThickness / 2, borderThickness / 2, imageToUse.width, imageToUse.height, null)
-                g.dispose()
-                setImage(test, resetHistory = true, isNewImage = true)
-                isDirty = true
-                repaint()
-                refreshTitle()
+                JMenuItem("Flip vertically").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    editItem.add(it)
+                }
+                JMenuItem("Resize").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    editItem.add(it)
+                }
+                topBar.add(editItem)
             }
-            topBar.add(whatsappTest)
-            val whatsappBox = JMenuItem("Box test")
-            whatsappBox.addActionListener {
-                val width = 512
-                val height = 512
-                val test = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
-                val g = test.graphics as Graphics2D
-                g.setRenderingHints(qualityHints)
-                val optimalDimension = getScaledDimension(originalImage, Dimension(width, height))
-                g.drawImage(
-                    originalImage,
-                    test.width / 2 - optimalDimension.width / 2,
-                    test.height / 2 - optimalDimension.height / 2,
-                    optimalDimension.width,
-                    optimalDimension.height,
-                    null
-                )
-                g.dispose()
-                setImage(test, resetHistory = true, isNewImage = true)
-                isDirty = true
-                repaint()
-                refreshTitle()
+            JMenu("Experimental").also { expItem ->
+                expItem.icon = sizeImage("icons/debug.png")
+                JMenuItem("Border test").also {
+                    it.addActionListener {
+                        val borderThickness = 10
+                        //Fix to have this work without originalImage. As we will remove/Change this anyway I don't care if this affects anything for now.
+                        ImageUtils.newBufferedImage(image.width + borderThickness, image.height + borderThickness) { g ->
+                            g as Graphics2D
+                            g.setRenderingHints(qualityHints)
+                            for (y1 in 0 until image.height) {
+                                for (x1 in 0 until image.width) {
+                                    if (Color(image.getRGB(x1, y1), true).alpha > 10) {
+                                        g.color = Color.WHITE
+                                        g.fillOval(x1 + borderThickness / 2 - borderThickness / 2, y1 + borderThickness / 2 - borderThickness / 2, borderThickness, borderThickness)
+                                    }
+                                }
+                            }
+                            g.drawImage(image, borderThickness / 2, borderThickness / 2, image.width, image.height, null)
+                        }.also { img ->
+                            setImage(img, resetHistory = true, isNewImage = true)
+                        }
+                        isDirty = true
+                        repaint()
+                        refreshTitle()
+                    }
+                    expItem.add(it)
+                }
+                JMenuItem("Box test").also {
+                    it.addActionListener {
+                        val width = 512
+                        val height = 512
+                        val test = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+                        val g = test.graphics as Graphics2D
+                        g.setRenderingHints(qualityHints)
+                        val optimalDimension = getScaledDimension(originalImage, Dimension(width, height))
+                        g.drawImage(originalImage, test.width / 2 - optimalDimension.width / 2, test.height / 2 - optimalDimension.height / 2, optimalDimension.width, optimalDimension.height, null)
+                        g.dispose()
+                        setImage(test, resetHistory = true, isNewImage = true)
+                        isDirty = true
+                        repaint()
+                        refreshTitle()
+                    }
+                    expItem.add(it)
+                }
+                topBar.add(expItem)
             }
-            topBar.add(whatsappBox)
             jMenuBar = topBar
         }
         if (ezMode) {
