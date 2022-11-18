@@ -5,11 +5,9 @@ import net.snipsniper.sceditor.stamps.TextStamp
 import net.snipsniper.snipscope.SnipScopeListener
 import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.Utils
-import net.snipsniper.utils.clone
 import net.snipsniper.utils.toBufferedImage
 import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.cccolorutils.setAlpha
-import org.capturecoop.cclogger.CCLogger
 import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -17,7 +15,6 @@ import java.awt.Point
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 import java.awt.event.MouseWheelEvent
-import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
@@ -25,23 +22,16 @@ import javax.swing.JFileChooser
 
 class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeListener(scEditorWindow) {
     private val input = scEditorWindow.inputContainer
-    private val history = ArrayList<BufferedImage>()
     private var openColorChooser = false
     private var openSaveAsWindow = false
     private var openNewImageWindow = false
-
-    fun resetHistory() {
-        CCLogger.info("Reset editor history")
-        history.clear()
-        addHistory()
-    }
 
     override fun keyPressed(keyEvent: KeyEvent) {
         super.keyPressed(keyEvent)
         keyEvent.consume()
         //Hack for CTRL + N to work before isEnableInteraction is true
         //This means that even just pressing n allows you to create a new image
-        //But thats not really bad, since N is not used for anything else in this context before
+        //But that's not really bad, since N is not used for anything else in this context before
         //actually loading an image
         if(!scEditorWindow.isEnableInteraction && keyEvent.keyCode == KeyEvent.VK_N)
             openNewImageWindow = true
@@ -51,7 +41,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
             scEditorWindow.inClipboard = true
             scEditorWindow.refreshTitle()
             //TODO: Check if null and tell user if paste is bad
-            scEditorWindow.setImage(ImageUtils.getImageFromClipboard(), true, true)
+            scEditorWindow.setImage(ImageUtils.getImageFromClipboard(), resetHistory = true, isNewImage = true)
         }
 
         if(!scEditorWindow.isEnableInteraction) return
@@ -90,7 +80,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         }
 
         if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_Z)) {
-            undoHistory()
+            scEditorWindow.historyManager.undoHistory()
         }
 
         scEditorWindow.getSelectedStamp().update(scEditorWindow.inputContainer, 0, keyEvent)
@@ -151,7 +141,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         if(scEditorWindow.isDefaultImage()) {
             JFileChooser().also {
                 if(it.showOpenDialog(scEditorWindow) == JFileChooser.APPROVE_OPTION)
-                    scEditorWindow.setImage(ImageIcon(it.selectedFile.absolutePath).image.toBufferedImage(), true, true)
+                    scEditorWindow.setImage(ImageIcon(it.selectedFile.absolutePath).image.toBufferedImage(), resetHistory = true, isNewImage = true)
             }
         }
 
@@ -178,29 +168,9 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         scEditorWindow.isDirty = true
         g as Graphics2D
         g.setRenderingHints(scEditorWindow.qualityHints)
-        scEditorWindow.getSelectedStamp().render(g, scEditorWindow.inputContainer, scEditorWindow.getPointOnImage(Point(input.mouseX, input.mouseY)), scEditorWindow.differenceFromImage, true, censor, history.size)
+        scEditorWindow.getSelectedStamp().render(g, scEditorWindow.inputContainer, scEditorWindow.getPointOnImage(Point(input.mouseX, input.mouseY)), scEditorWindow.differenceFromImage, true, censor, scEditorWindow.historyManager.size)
         scEditorWindow.repaint()
-        addHistory()
-    }
-
-    fun addHistory() {
-        CCLogger.debug("History -> add (${history.size})")
-        history.add(scEditorWindow.image.clone())
-    }
-
-    fun undoHistory() {
-        var size = history.size
-        if(size > 1) {
-            size--
-            val startSize = size
-            history.removeAt(size)
-            size--
-            CCLogger.debug("History -> undo ($startSize) -> ($size)")
-            scEditorWindow.setImage(history[size].clone(), resetHistory = false, isNewImage = false)
-            scEditorWindow.stamps.forEach { it.editorUndo(history.size) }
-        } else {
-            CCLogger.debug("History -> undo (Nothing to undo)")
-        }
+        scEditorWindow.historyManager.addHistory()
     }
 
     override fun mouseWheelMoved(mouseWheelEvent: MouseWheelEvent) {

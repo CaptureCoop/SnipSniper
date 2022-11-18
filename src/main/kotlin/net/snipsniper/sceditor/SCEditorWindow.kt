@@ -23,6 +23,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
     var inClipboard: Boolean
     var originalImage: BufferedImage
         private set
+    val historyManager = SCEditorHistory(this)
     val stamps = Array(StampType.size) { i -> StampType.getByIndex(i).getIStamp(config, this) }
     private var selectedStamp = 0
     private val listener: SCEditorListener?
@@ -112,7 +113,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         add(ezModeStampPanel)
         add(ezModeStampSettingsScrollPane)
         add(ezModeTitlePanel)
-        listener.resetHistory()
+        historyManager.resetHistory()
         iconImage = "icons/editor.png".getImage()
         focusTraversalKeysEnabled = false
         isVisible = true
@@ -154,7 +155,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                     it.icon = sizeImage("icons/questionmark.png")
                     it.addActionListener {
                         setImage(image.flipHorizontally(), resetHistory = false, isNewImage = false)
-                        listener.addHistory()
+                        historyManager.addHistory()
                     }
                     editItem.add(it)
                 }
@@ -162,7 +163,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                     it.icon = sizeImage("icons/questionmark.png")
                     it.addActionListener {
                         setImage(image.flipVertically(), resetHistory = false, isNewImage = false)
-                        listener.addHistory()
+                        historyManager.addHistory()
                     }
                     editItem.add(it)
                 }
@@ -330,7 +331,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         CCLogger.debug("Setting new Image")
         isEnableInteraction = !isDefaultImage()
         if (listener != null && resetHistory) {
-            listener.resetHistory()
+            historyManager.resetHistory()
             for (stamp in stamps) stamp.reset()
         }
         if (isNewImage) {
