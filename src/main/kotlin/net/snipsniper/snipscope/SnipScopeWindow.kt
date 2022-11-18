@@ -17,12 +17,14 @@ open class SnipScopeWindow : JFrame() {
         get() = _image!!
         set(value) {
             _image = value
-            optimalImageDimension = getScaledDimension(value, renderer.size)
+            //TODO: Renderer realisticly shouldnt ever be null. Figure out a better way for this
+            if(renderer != null)
+                optimalImageDimension = getScaledDimension(value, renderer!!.size)
         }
     var optimalImageDimension: Dimension? = null
     var position = CCVector2Int(0, 0)
     var zoomOffset = CCVector2Int(0, 0)
-    private lateinit var renderer: SnipScopeRenderer
+    private var renderer: SnipScopeRenderer? = null
     var zoom = 1f
     val inputContainer = InputContainer()
     var movementKey = KeyEvent.VK_SPACE
@@ -49,7 +51,7 @@ open class SnipScopeWindow : JFrame() {
             size = newDimension
         } else {
             val insets = insets
-            if (insets.top == 0) insets.top = height - renderer.height - insets.bottom + 1
+            if (insets.top == 0) insets.top = height - renderer!!.height - insets.bottom + 1
             setSize(insets.left + insets.right + image.width, insets.bottom + insets.top + image.height)
             setLocation(location.x, location.y - insets.top)
             optimalImageDimension = Dimension(image.width, image.height)
@@ -87,8 +89,8 @@ open class SnipScopeWindow : JFrame() {
     fun getPointOnImage(point: Point?): CCVector2Int? {
         if (point == null) return null
         val optimalDimension = optimalImageDimension!!
-        var imageX = renderer.width.toDouble() / 2 - optimalDimension.getWidth() / 2
-        var imageY = renderer.height.toDouble() / 2 - optimalDimension.getHeight() / 2
+        var imageX = renderer!!.width.toDouble() / 2 - optimalDimension.getWidth() / 2
+        var imageY = renderer!!.height.toDouble() / 2 - optimalDimension.getHeight() / 2
         imageX -= zoomOffset.x.toDouble()
         imageY -= zoomOffset.y.toDouble()
         imageX -= position.x.toDouble()
@@ -106,7 +108,7 @@ open class SnipScopeWindow : JFrame() {
     }
 
     open fun resizeTrigger() {
-        optimalImageDimension = getScaledDimension(image, renderer.size)
+        optimalImageDimension = getScaledDimension(image, renderer!!.size)
         calculateZoom()
     }
 

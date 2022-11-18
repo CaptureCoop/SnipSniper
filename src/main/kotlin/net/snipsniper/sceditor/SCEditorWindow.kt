@@ -26,7 +26,7 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.swing.*
 
-class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), CCIClosable {
+class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), CCIClosable {
     val config: Config
     var saveLocation: String?
     var inClipboard: Boolean
@@ -59,16 +59,15 @@ class SCEditorWindow(img: BufferedImage?, x: Int, y: Int, title: String, config:
     private val isStandalone: Boolean
 
     init {
-        var image = img
         this.config = config
         this.title = title
         this.saveLocation = saveLocation
         this.inClipboard = inClipboard
         this.isStandalone = isStandalone
-        if (image != null) image = ensureAlphaLayer(image)
+        if (startImage != null) image = ensureAlphaLayer(startImage)
         info("Creating new editor window...")
         incrementCount(StatsManager.EDITOR_STARTED_AMOUNT)
-        if (image == null) {
+        if (startImage == null) {
             if (config.getBool(ConfigHelper.PROFILE.standaloneStartWithEmpty)) {
                 val imgSize = Toolkit.getDefaultToolkit().screenSize
                 image = BufferedImage(imgSize.width / 2, imgSize.height / 2, BufferedImage.TYPE_INT_RGB)
