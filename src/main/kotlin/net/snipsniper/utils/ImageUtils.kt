@@ -215,5 +215,11 @@ class ImageUtils {
             }
             return null
         }
+
+        fun flipImageHorizontally(image: BufferedImage): BufferedImage {
+            return newBufferedImage(image.width, image.height, image.type) {
+                it.drawImage(image, image.width, 0, -image.width, image.height, null)
+            }
+        }
     }
 }
