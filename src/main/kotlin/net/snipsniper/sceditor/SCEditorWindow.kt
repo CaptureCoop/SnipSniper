@@ -4,6 +4,7 @@ import net.snipsniper.SnipSniper
 import net.snipsniper.StatsManager
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
+import net.snipsniper.configwindow.ConfigWindow
 import net.snipsniper.sceditor.ezmode.EzModeSettingsCreator
 import net.snipsniper.sceditor.ezmode.EzModeStampTab
 import net.snipsniper.sceditor.stamps.StampType
@@ -151,6 +152,23 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
             }
             JMenu("Edit").also { editItem ->
                 editItem.icon = sizeImage("icons/editor.png")
+                JMenuItem("Config").also {
+                    it.icon = sizeImage("icons/config.png")
+                    var wnd: ConfigWindow? = null
+                    it.addActionListener {
+                        if(wnd == null) {
+                            wnd = ConfigWindow(config, ConfigWindow.PAGE.EditorPanel).also { cfgWnd ->
+                                addClosableWindow(cfgWnd)
+                                cfgWnd.addCustomWindowListener{
+                                    wnd = null
+                                }
+                            }
+                        } else {
+                            wnd?.requestFocus()
+                        }
+                    }
+                    editItem.add(it)
+                }
                 JMenuItem("Flip horizontally").also {
                     it.icon = sizeImage("icons/mirror_horizontal.png")
                     it.addActionListener {
