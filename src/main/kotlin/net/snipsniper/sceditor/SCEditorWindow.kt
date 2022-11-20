@@ -373,6 +373,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         ezModeStampPanelTabs.selectedIndex = i
         setEzModeTitle(getSelectedStamp().type.title)
         updateEzUI()
+        openStampColorChooser(true)
     }
 
     private fun updateEzUI() = when(ezMode) {
@@ -389,21 +390,29 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         if (isStandalone) SnipSniper.exit(false)
     }
 
-    fun openStampColorChooser() {
+    //This opens a color chooser for the stamp reliably, making sure not to open more then one and to update
+    //The chooser if needed (verifyOnly -> Dont create one even if its null)
+    fun openStampColorChooser(verifyOnly: Boolean = false) {
         val stamp = stamps[selectedStamp]
-        if(stampColorChooser == null) {
-            CCColorChooser(stamp.color!!, "${stamp.type.title} color", parent = this, useGradient = true, backgroundImage = originalImage).also {
-                stampColorChooser = it
-                cWindows.add(it)
-                it.addWindowListener(object: WindowAdapter() {
-                    override fun windowClosing(e: WindowEvent) {
-                        stampColorChooser = null
-                    }
-                })
+        val title = "${stamp.type.title} color"
+        if(stampColorChooser == null && !verifyOnly) {
+            CCColorChooser(stamp.color!!, title, parent = this, useGradient = true, backgroundImage = originalImage).also { chooser ->
+                stampColorChooser = chooser
+                cWindows.add(chooser)
+                chooser.setOnClose {
+                    cWindows.remove(chooser)
+                    stampColorChooser = null
+                }
             }
         } else {
+            if(stampColorChooser == null) return
+
             stampColorChooser.also {
-                it!!.title = "${stamp.type.title} color"
+                if(stamp.color == null) {
+                    it?.close()
+                    return
+                }
+                it!!.title = title
                 it.color = stamp.color!!
                 it.requestFocus()
             }
