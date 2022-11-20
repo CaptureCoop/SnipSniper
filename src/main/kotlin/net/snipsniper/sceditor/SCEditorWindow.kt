@@ -16,6 +16,7 @@ import java.awt.*
 import java.awt.event.*
 import java.awt.image.BufferedImage
 import java.io.File
+import java.util.concurrent.CopyOnWriteArrayList
 import javax.swing.*
 
 class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), CCIClosable {
@@ -32,7 +33,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
     var isDirty = false
     val qualityHints = Utils.getRenderingHints()
     private var defaultImage: BufferedImage? = null
-    private val cWindows = ArrayList<CCIClosable>()
+    val cWindows = CopyOnWriteArrayList<CCIClosable>()
     var isStampVisible = true
     var ezMode: Boolean = config.getBool(ConfigHelper.PROFILE.ezMode)
         set(value) {
@@ -154,18 +155,18 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                 editItem.icon = sizeImage("icons/editor.png")
                 JMenuItem("Config").also {
                     it.icon = sizeImage("icons/config.png")
-                    var wnd: ConfigWindow? = null
+                    var wnd: ConfigWindow? = null //Singleton reference, only allow once of these open at the same time
                     it.addActionListener {
                         if(wnd == null) {
                             wnd = ConfigWindow(config, ConfigWindow.PAGE.EditorPanel).also { cfgWnd ->
-                                addClosableWindow(cfgWnd)
+                                cWindows.add(cfgWnd)
                                 cfgWnd.addCustomWindowListener{
+                                    //Config window is closing by itself, remove it from the listeners and its singleton reference
                                     wnd = null
+                                    cWindows.remove(cfgWnd)
                                 }
                             }
-                        } else {
-                            wnd?.requestFocus()
-                        }
+                        } else wnd!!.requestFocus()
                     }
                     editItem.add(it)
                 }
@@ -381,11 +382,8 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
 
     fun isDefaultImage() = defaultImage === image
 
-    fun addClosableWindow(wnd: CCIClosable) = kotlin.run { cWindows.add(wnd) }
-
     override fun close() {
         cWindows.forEach { it.close() }
-        dispose()
         if (isStandalone) SnipSniper.exit(false)
     }
 

@@ -67,7 +67,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         button.preferredSize = Dimension(width / 2, 30)
         button.addActionListener {
             CCColorChooser(stampColor, "Stamp color", parent = scEditorWindow, useGradient = true, backgroundImage = scEditorWindow.originalImage).also {
-                scEditorWindow.addClosableWindow(it)
+                scEditorWindow.cWindows.add(it)
             }
         }
         cPanel.add(button)

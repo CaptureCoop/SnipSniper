@@ -105,7 +105,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
             scEditorWindow.inputContainer.resetKeys()
             val wnd = CCColorChooser(scEditorWindow.getSelectedStamp().color!!, "Marker color", parent = scEditorWindow, useGradient = true)
             //TODO: Do we want the save button back?
-            scEditorWindow.addClosableWindow(wnd)
+            scEditorWindow.cWindows.add(wnd)
         }
 
         if(openSaveAsWindow) {
