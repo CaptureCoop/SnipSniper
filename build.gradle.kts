@@ -42,7 +42,7 @@ dependencies {
 
     implementation("org.capturecoop:CCUtils:1.9.6") //CaptureCoop Common Utils
     implementation("org.capturecoop:CCLogger:1.6.6") //CaptureCoop logger
-    implementation("org.capturecoop:CCColorUtils:1.0.6") //CaptureCoop Color utils & Color Chooser
+    implementation("org.capturecoop:CCColorUtils:1.0.7") //CaptureCoop Color utils & Color Chooser
 }
 
 //SnipSniper includes another repository where we store json files with information about SnipSniper
