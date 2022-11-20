@@ -160,7 +160,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                         if(wnd == null) {
                             wnd = ConfigWindow(config, ConfigWindow.PAGE.EditorPanel).also { cfgWnd ->
                                 cWindows.add(cfgWnd)
-                                cfgWnd.addCustomWindowListener{
+                                cfgWnd.addCustomWindowListener {
                                     //Config window is closing by itself, remove it from the listeners and its singleton reference
                                     wnd = null
                                     cWindows.remove(cfgWnd)
