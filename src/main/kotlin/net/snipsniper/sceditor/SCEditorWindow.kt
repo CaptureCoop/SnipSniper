@@ -10,6 +10,7 @@ import net.snipsniper.sceditor.ezmode.EzModeStampTab
 import net.snipsniper.sceditor.stamps.StampType
 import net.snipsniper.snipscope.SnipScopeWindow
 import net.snipsniper.utils.*
+import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.cclogger.CCLogger
 import org.capturecoop.ccutils.utils.CCIClosable
 import java.awt.*
@@ -51,6 +52,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
     private val ezModeStampSettingsScrollPane: JScrollPane
     private val ezModeStampPanelTabs = JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT)
     private val isStandalone: Boolean
+    private var stampColorChooser: CCColorChooser? = null
 
     init {
         this.config = config
@@ -385,6 +387,27 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
     override fun close() {
         cWindows.forEach { it.close() }
         if (isStandalone) SnipSniper.exit(false)
+    }
+
+    fun openStampColorChooser() {
+        val stamp = stamps[selectedStamp]
+        if(stampColorChooser == null) {
+            CCColorChooser(stamp.color!!, "${stamp.type.title} color", parent = this, useGradient = true, backgroundImage = originalImage).also {
+                stampColorChooser = it
+                cWindows.add(it)
+                it.addWindowListener(object: WindowAdapter() {
+                    override fun windowClosing(e: WindowEvent) {
+                        stampColorChooser = null
+                    }
+                })
+            }
+        } else {
+            stampColorChooser.also {
+                it!!.title = "${stamp.type.title} color"
+                it.color = stamp.color!!
+                it.requestFocus()
+            }
+        }
     }
 
     companion object {

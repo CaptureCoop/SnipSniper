@@ -8,10 +8,8 @@ import net.snipsniper.utils.DropdownItem
 import net.snipsniper.utils.Function
 import net.snipsniper.utils.GradientJButton
 import net.snipsniper.utils.IFunction
-import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.cccolorutils.chooser.gui.CCHSBHueBar
 import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger
 import org.capturecoop.cclogger.CCLogger.Companion.log
 import org.capturecoop.cclogger.CCLogger.Companion.logStacktrace
 import java.awt.Dimension
@@ -66,9 +64,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         val button = GradientJButton("Color", stampColor!!)
         button.preferredSize = Dimension(width / 2, 30)
         button.addActionListener {
-            CCColorChooser(stampColor, "Stamp color", parent = scEditorWindow, useGradient = true, backgroundImage = scEditorWindow.originalImage).also {
-                scEditorWindow.cWindows.add(it)
-            }
+            scEditorWindow.openStampColorChooser()
         }
         cPanel.add(button)
         panel.add(cPanel)
@@ -221,7 +217,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
             Font.ITALIC -> fontTypeDropdown.setSelectedIndex(2)
         }
 
-        //If we idle for more then 5 seconds remove focus
+        //If we idle for more than 5 seconds remove focus
         fontTypeDropdown.addFocusListener(object : FocusAdapter() {
             override fun focusGained(focusEvent: FocusEvent) {
                 super.focusGained(focusEvent)
