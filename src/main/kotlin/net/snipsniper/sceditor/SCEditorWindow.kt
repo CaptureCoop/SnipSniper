@@ -53,6 +53,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
     private val ezModeStampPanelTabs = JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT)
     private val isStandalone: Boolean
     private var stampColorChooser: CCColorChooser? = null
+    private var historyWindow: SCEditorHistoryWindow? = null
 
     init {
         this.config = config
@@ -190,6 +191,13 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                 }
                 JMenuItem("Resize").also {
                     it.icon = sizeImage("icons/questionmark.png")
+                    editItem.add(it)
+                }
+                JMenuItem("History").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    it.addActionListener {
+                        openHistoryWindow()
+                    }
                     editItem.add(it)
                 }
                 topBar.add(editItem)
@@ -416,6 +424,21 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                 it.color = stamp.color!!
                 it.requestFocus()
             }
+        }
+    }
+
+    private fun openHistoryWindow() {
+        if(historyWindow != null) {
+            historyWindow!!.requestFocus()
+            return
+        }
+        SCEditorHistoryWindow(this).also { newWnd ->
+            cWindows.add(newWnd)
+            newWnd.setOnClose {
+                cWindows.remove(newWnd)
+                historyWindow = null
+            }
+            historyWindow = newWnd
         }
     }
 
