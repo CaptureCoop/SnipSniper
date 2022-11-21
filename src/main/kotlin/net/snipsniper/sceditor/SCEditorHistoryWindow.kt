@@ -1,6 +1,7 @@
 package net.snipsniper.sceditor
 
 import net.snipsniper.utils.getImage
+import org.capturecoop.cclogger.CCLogger
 import org.capturecoop.ccutils.utils.CCIClosable
 import java.awt.Dimension
 import java.awt.GridBagLayout
@@ -25,6 +26,13 @@ class SCEditorHistoryWindow(private val editor: SCEditorWindow): JFrame(), CCICl
             location = Point(it.x + editor.width / 2 - width / 2, it.y + editor.height / 2 - height / 2)
         }
         isVisible = true
+        refresh()
+    }
+
+    fun refresh() {
+        editor.historyManager.forEachIndexed { i, img ->
+            //Update
+        }
     }
 
     fun setOnClose(action: ((SCEditorHistoryWindow) -> (Unit))) = kotlin.run { onClose = action }

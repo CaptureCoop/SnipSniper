@@ -53,7 +53,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
     private val ezModeStampPanelTabs = JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT)
     private val isStandalone: Boolean
     private var stampColorChooser: CCColorChooser? = null
-    private var historyWindow: SCEditorHistoryWindow? = null
+    var historyWindow: SCEditorHistoryWindow? = null
 
     init {
         this.config = config

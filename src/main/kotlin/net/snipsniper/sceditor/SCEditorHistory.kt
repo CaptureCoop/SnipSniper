@@ -14,11 +14,13 @@ class SCEditorHistory(private val editor: SCEditorWindow) {
         CCLogger.debug("History -> reset")
         history.clear()
         addHistory()
+        editor.historyWindow?.refresh()
     }
 
     fun addHistory() {
         CCLogger.debug("History -> add (${history.size})")
         history.add(editor.image.clone())
+        editor.historyWindow?.refresh()
     }
 
     fun undoHistory() {
@@ -34,5 +36,10 @@ class SCEditorHistory(private val editor: SCEditorWindow) {
         } else {
             CCLogger.debug("History -> undo (Nothing to undo)")
         }
+        editor.historyWindow?.refresh()
+    }
+
+    fun forEachIndexed(action: (Int, BufferedImage) -> Unit) {
+        history.forEachIndexed { index, image -> action.invoke(index, image) }
     }
 }
