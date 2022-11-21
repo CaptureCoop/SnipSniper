@@ -5,7 +5,7 @@ import org.capturecoop.cclogger.CCLogger
 import java.awt.image.BufferedImage
 
 class SCEditorHistory(private val editor: SCEditorWindow) {
-    private val history = ArrayList<BufferedImage>()
+    val history = ArrayList<BufferedImage>()
 
     val size: Int
         get() = history.size
@@ -37,9 +37,5 @@ class SCEditorHistory(private val editor: SCEditorWindow) {
             CCLogger.debug("History -> undo (Nothing to undo)")
         }
         editor.historyWindow?.refresh()
-    }
-
-    fun forEachIndexed(action: (Int, BufferedImage) -> Unit) {
-        history.forEachIndexed { index, image -> action.invoke(index, image) }
     }
 }

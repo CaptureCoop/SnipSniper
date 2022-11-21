@@ -3,6 +3,7 @@ package net.snipsniper.sceditor
 import net.snipsniper.utils.DrawUtils
 import net.snipsniper.utils.Utils
 import net.snipsniper.utils.getImage
+import org.capturecoop.cclogger.CCLogger
 import org.capturecoop.ccutils.utils.CCIClosable
 import java.awt.*
 import java.awt.event.ComponentAdapter
@@ -32,28 +33,35 @@ class SCEditorHistoryWindow(private val editor: SCEditorWindow): JFrame(), CCICl
             it.verticalScrollBar.unitIncrement = 16
             add(it)
         }
-        refresh()
-        requestFocus()
-        isVisible = true
         addComponentListener(object: ComponentAdapter() {
             override fun componentResized(e: ComponentEvent) = refresh()
         })
+        isVisible = true
+        refresh()
+        requestFocus()
+        isResizable = false
     }
 
     fun refresh() {
+        CCLogger.debug("refreshing")
         panel.removeAll()
         var totalHeight = 0
-        //panel.layout = GridBagLayout()
-        editor.historyManager.forEachIndexed { i, img ->
-            HistoryWindowButton(i, img).also {
-                Utils.getScaledDimension(img, size).also { dim ->
-                    it.preferredSize = dim
-                    it.minimumSize = dim
-                    it.maximumSize = dim
-                    it.size = dim
-                    totalHeight += dim.height
+        panel.layout = null
+        editor.historyManager.history.also { h ->
+            var index = h.size - 1
+            h.reversed().forEach { img ->
+                HistoryWindowButton(index, img).also {
+                    Utils.getScaledDimension(img, size).also { dim ->
+                        it.preferredSize = dim
+                        it.minimumSize = dim
+                        it.maximumSize = dim
+                        it.size = dim
+                    }
+                    it.location = Point(0, totalHeight)
+                    totalHeight += it.height
+                    panel.add(it)
                 }
-                panel.add(it)
+                index--
             }
         }
         panel.preferredSize = Dimension(panel.width, totalHeight)
@@ -74,6 +82,7 @@ class SCEditorHistoryWindow(private val editor: SCEditorWindow): JFrame(), CCICl
             val text = "($index)"
             g.color = Color.WHITE
             DrawUtils.drawCenteredString(g, text, Rectangle(0, 0, img.width, img.height), g.font)
+            DrawUtils.drawRect(g, Rectangle(0, 0, width, height))
         }
     }
 }
