@@ -8,13 +8,13 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
 import javax.swing.ImageIcon
-import javax.swing.JFrame
+import javax.swing.JDialog
 import javax.swing.JMenuItem
 
-class PopupMenuButton(title: String, icon: BufferedImage, popup: JFrame, private var onClick: IFunction?, closeWhenClicked: ArrayList<PopupMenu>?): JMenuItem() {
+class PopupMenuButton(title: String, icon: BufferedImage, popup: JDialog, private var onClick: IFunction?, closeWhenClicked: ArrayList<PopupMenu>?): JMenuItem() {
     private var isMenuChild = false
 
-    constructor(title: String, iconPath: String, popup: JFrame, onClick: IFunction?, closeWhenClicked: ArrayList<PopupMenu>?) : this(title, iconPath.getImage(), popup, onClick, closeWhenClicked)
+    constructor(title: String, iconPath: String, popup: JDialog, onClick: IFunction?, closeWhenClicked: ArrayList<PopupMenu>?) : this(title, iconPath.getImage(), popup, onClick, closeWhenClicked)
 
     init {
         text = title
@@ -26,15 +26,10 @@ class PopupMenuButton(title: String, icon: BufferedImage, popup: JFrame, private
         }
         addMouseListener(object: MouseAdapter(){
             override fun mouseEntered(e: MouseEvent?) {
-                super.mouseEntered(e)
                 isArmed = true
                 if(!isMenuChild) closeWhenClicked?.forEach { it.isPopupMenuVisible = false }
             }
-
-            override fun mouseExited(e: MouseEvent?) {
-                super.mouseExited(e)
-                isArmed = false
-            }
+            override fun mouseExited(e: MouseEvent?) = kotlin.run { isArmed = false }
         })
     }
 
