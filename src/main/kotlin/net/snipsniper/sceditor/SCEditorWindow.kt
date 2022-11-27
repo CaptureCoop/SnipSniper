@@ -71,12 +71,14 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT)
         if (startImage == null) {
             if (config.getBool(ConfigHelper.PROFILE.standaloneStartWithEmpty)) {
-                val imgSize = Toolkit.getDefaultToolkit().screenSize
-                image = BufferedImage(imgSize.width / 2, imgSize.height / 2, BufferedImage.TYPE_INT_RGB)
-                val imgG = image.graphics
-                imgG.color = Color.WHITE
-                imgG.fillRect(0, 0, image.width, image.height)
-                imgG.dispose()
+                Toolkit.getDefaultToolkit().screenSize.also { ss ->
+                    val w = ss.width / 2
+                    val h = ss.height / 2
+                    image = ImageUtils.newBufferedImage(w, h) {
+                        it.color = Color.WHITE
+                        it.fillRect(0, 0, w, h)
+                    }
+                }
             } else {
                 image = ImageUtils.getDragPasteImage("icons/editor.png".getImage(), "Drop image here or use CTRL + V to paste one!")
                 defaultImage = image
