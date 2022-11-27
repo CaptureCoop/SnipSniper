@@ -54,6 +54,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     private val isStandalone: Boolean
     private var stampColorChooser: CCColorChooser? = null
     var historyWindow: SCEditorHistoryWindow? = null
+    private var configWindow: ConfigWindow? = null
 
     init {
         this.config = config
@@ -139,79 +140,69 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
             fun altStroke(keyCode: Int) = KeyStroke.getKeyStroke(keyCode, InputEvent.ALT_DOWN_MASK)
             val devString = "Disabled menu items are still in development."
 
-            JMenu("File").also { fileItem ->
-                fileItem.icon = sizeImage("icons/folder.png")
+            JMenu("File").also { parent ->
+                parent.icon = sizeImage("icons/folder.png")
                 JMenuItem("New").also {
                     it.icon = sizeImage("icons/questionmark.png")
                     it.accelerator = ctrlStroke(KeyEvent.VK_N)
                     it.addActionListener { openNewImageWindow() }
-                    fileItem.add(it)
+                    parent.add(it)
                 }
                 JMenuItem("Open").also {
                     it.icon = sizeImage("icons/questionmark.png")
                     it.isEnabled = false
                     it.toolTipText = devString
-                    fileItem.add(it)
+                    parent.add(it)
                 }
                 JMenuItem("Save").also {
                     it.icon = sizeImage("icons/questionmark.png")
                     it.accelerator = ctrlStroke(KeyEvent.VK_S)
                     it.addActionListener { save(false) }
-                    fileItem.add(it)
+                    parent.add(it)
                 }
                 JMenuItem("Save and close").also {
                     it.icon = sizeImage("icons/questionmark.png")
                     it.accelerator = altStroke(KeyEvent.VK_S)
                     it.addActionListener { save(true) }
-                    fileItem.add(it)
+                    parent.add(it)
                 }
                 JMenuItem("Close").also { closeItem ->
                     closeItem.icon = sizeImage("icons/redx.png")
                     closeItem.accelerator = KeyStroke.getKeyStroke("ESCAPE")
                     closeItem.addActionListener { close() }
-                    fileItem.add(closeItem)
+                    parent.add(closeItem)
                 }
-                topBar.add(fileItem)
+                topBar.add(parent)
             }
-            JMenu("Edit").also { editItem ->
-                editItem.icon = sizeImage("icons/editor.png")
+            JMenu("Edit").also { parent ->
+                parent.icon = sizeImage("icons/editor.png")
+                JMenuItem("Config").also {
+                    it.icon = sizeImage("icons/config.png")
+                    it.addActionListener { openConfigWindow() }
+                    parent.add(it)
+                }
+                parent.addSeparator()
                 JMenuItem("Undo").also {
                     it.icon = sizeImage("icons/restart.png")
                     it.accelerator = ctrlStroke(KeyEvent.VK_Z)
                     it.addActionListener { undo() }
-                    editItem.add(it)
+                    parent.add(it)
                 }
                 JMenuItem("Redo").also {
                     it.icon = ImageUtils.imageToBufferedImage(sizeImage("icons/restart.png").image).flipHorizontally().toImageIcon()
                     it.accelerator = ctrlStroke(KeyEvent.VK_R)
                     it.isEnabled = false
                     it.toolTipText = devString
-                    editItem.add(it)
+                    parent.add(it)
                 }
-                JMenuItem("Config").also {
-                    it.icon = sizeImage("icons/config.png")
-                    var wnd: ConfigWindow? = null //Singleton reference, only allow once of these open at the same time
-                    it.addActionListener {
-                        if(wnd == null) {
-                            wnd = ConfigWindow(config, ConfigWindow.PAGE.EditorPanel).also { cfgWnd ->
-                                cWindows.add(cfgWnd)
-                                cfgWnd.addCustomWindowListener {
-                                    //Config window is closing by itself, remove it from the listeners and its singleton reference
-                                    wnd = null
-                                    cWindows.remove(cfgWnd)
-                                }
-                            }
-                        } else wnd!!.requestFocus()
-                    }
-                    editItem.add(it)
-                }
+                parent.addSeparator()
                 JMenuItem("Flip horizontally").also {
                     it.icon = sizeImage("icons/mirror_horizontal.png")
                     it.addActionListener {
                         setImage(image.flipHorizontally(), resetHistory = false, isNewImage = false)
                         historyManager.addHistory()
                     }
-                    editItem.add(it)
+                    parent.add(it)
                 }
                 JMenuItem("Flip vertically").also {
                     it.icon = sizeImage("icons/mirror_vertical.png")
@@ -219,27 +210,28 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                         setImage(image.flipVertically(), resetHistory = false, isNewImage = false)
                         historyManager.addHistory()
                     }
-                    editItem.add(it)
+                    parent.add(it)
                 }
                 JMenuItem("Resize").also {
                     it.icon = sizeImage("icons/resize.png")
                     it.isEnabled = false
                     it.toolTipText = devString
-                    editItem.add(it)
+                    parent.add(it)
                 }
+                parent.addSeparator()
                 JMenuItem("History").also {
                     it.icon = sizeImage("icons/clock.png")
                     it.addActionListener {
                         openHistoryWindow()
                     }
-                    editItem.add(it)
+                    parent.add(it)
                 }
-                topBar.add(editItem)
+                topBar.add(parent)
             }
-            JMenu("Experimental").also { expItem ->
-                expItem.icon = sizeImage("icons/debug.png")
+            JMenu("Experimental").also { parent ->
+                parent.icon = sizeImage("icons/debug.png")
                 JMenuItem("Border test").also {
-                    it.icon = expItem.icon
+                    it.icon = parent.icon
                     it.addActionListener {
                         val borderThickness = 10
                         //Fix to have this work without originalImage. As we will remove/Change this anyway I don't care if this affects anything for now.
@@ -262,10 +254,10 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                         repaint()
                         refreshTitle()
                     }
-                    expItem.add(it)
+                    parent.add(it)
                 }
                 JMenuItem("Box test").also {
-                    it.icon = expItem.icon
+                    it.icon = parent.icon
                     it.addActionListener {
                         val width = 512
                         val height = 512
@@ -280,9 +272,9 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                         repaint()
                         refreshTitle()
                     }
-                    expItem.add(it)
+                    parent.add(it)
                 }
-                topBar.add(expItem)
+                topBar.add(parent)
             }
             jMenuBar = topBar
         }
@@ -474,6 +466,19 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     }
 
     private fun undo() = historyManager.undoHistory()
+
+    private fun openConfigWindow() {
+        if(configWindow == null) {
+            configWindow = ConfigWindow(config, ConfigWindow.PAGE.EditorPanel).also { cfgWnd ->
+                cWindows.add(cfgWnd)
+                cfgWnd.addCustomWindowListener {
+                    //Config window is closing by itself, remove it from the listeners and its singleton reference
+                    configWindow = null
+                    cWindows.remove(cfgWnd)
+                }
+            }
+        } else configWindow!!.requestFocus()
+    }
 
     private fun openHistoryWindow() {
         if(historyWindow != null) {
