@@ -59,7 +59,7 @@ class Utils {
         fun replaceVars(string: String): String {
             var result = string.replace("%username%", System.getProperty("user.name"))
             result = result.replace("%userprofile%", System.getProperty("user.home"))
-            result = result.replace("%userlang%", System.getProperty("user.language"))
+            result = result.replace("%userlang%", System.getProperty("user.language") ?: LangManager.DEFAULT_LANGUAGE)
             return result
         }
 

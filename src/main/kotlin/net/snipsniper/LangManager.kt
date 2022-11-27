@@ -9,8 +9,7 @@ import org.json.JSONObject
 import java.awt.image.BufferedImage
 
 object LangManager {
-    //TODO: On first start use user.language property to check if we can use the users language
-    private const val DEFAULT_LANGUAGE = "en"
+    const val DEFAULT_LANGUAGE = "en"
     private const val FLAG_SIZE = 16
     private val flagCache = HashMap<String, BufferedImage>()
     private val langMap = HashMap<String, JSONObject>()
