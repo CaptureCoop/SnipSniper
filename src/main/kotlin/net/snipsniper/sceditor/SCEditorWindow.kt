@@ -135,28 +135,33 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         kotlin.run {
             val topBar = JMenuBar()
             fun sizeImage(path: String) = path.getImage().scaled(16, 16).toImageIcon()
+            fun ctrlStroke(keyCode: Int) = KeyStroke.getKeyStroke(keyCode, InputEvent.CTRL_DOWN_MASK)
+            fun altStroke(keyCode: Int) = KeyStroke.getKeyStroke(keyCode, InputEvent.ALT_DOWN_MASK)
+            val devString = "Disabled menu items are still in development."
 
             JMenu("File").also { fileItem ->
                 fileItem.icon = sizeImage("icons/folder.png")
-                JMenuItem("New").also { newItem ->
-                    newItem.icon = sizeImage("icons/questionmark.png")
-                    newItem.accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
-                    newItem.addActionListener { openNewImageWindow() }
-                    fileItem.add(newItem)
+                JMenuItem("New").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    it.accelerator = ctrlStroke(KeyEvent.VK_N)
+                    it.addActionListener { openNewImageWindow() }
+                    fileItem.add(it)
                 }
-                JMenuItem("Open").also { openItem ->
-                    openItem.icon = sizeImage("icons/questionmark.png")
-                    fileItem.add(openItem)
+                JMenuItem("Open").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    it.isEnabled = false
+                    it.toolTipText = devString
+                    fileItem.add(it)
                 }
                 JMenuItem("Save").also {
                     it.icon = sizeImage("icons/questionmark.png")
-                    it.accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK)
+                    it.accelerator = ctrlStroke(KeyEvent.VK_S)
                     it.addActionListener { save(false) }
                     fileItem.add(it)
                 }
                 JMenuItem("Save and close").also {
                     it.icon = sizeImage("icons/questionmark.png")
-                    it.accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK)
+                    it.accelerator = altStroke(KeyEvent.VK_S)
                     it.addActionListener { save(true) }
                     fileItem.add(it)
                 }
@@ -172,8 +177,15 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 editItem.icon = sizeImage("icons/editor.png")
                 JMenuItem("Undo").also {
                     it.icon = sizeImage("icons/restart.png")
-                    it.accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK)
+                    it.accelerator = ctrlStroke(KeyEvent.VK_Z)
                     it.addActionListener { undo() }
+                    editItem.add(it)
+                }
+                JMenuItem("Redo").also {
+                    it.icon = ImageUtils.imageToBufferedImage(sizeImage("icons/restart.png").image).flipHorizontally().toImageIcon()
+                    it.accelerator = ctrlStroke(KeyEvent.VK_R)
+                    it.isEnabled = false
+                    it.toolTipText = devString
                     editItem.add(it)
                 }
                 JMenuItem("Config").also {
@@ -211,6 +223,8 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 }
                 JMenuItem("Resize").also {
                     it.icon = sizeImage("icons/resize.png")
+                    it.isEnabled = false
+                    it.toolTipText = devString
                     editItem.add(it)
                 }
                 JMenuItem("History").also {
