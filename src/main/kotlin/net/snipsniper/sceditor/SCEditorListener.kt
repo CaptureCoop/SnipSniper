@@ -2,7 +2,6 @@ package net.snipsniper.sceditor
 
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.snipscope.SnipScopeListener
-import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.Utils
 import net.snipsniper.utils.toBufferedImage
 import org.capturecoop.cccolorutils.setAlpha
@@ -32,16 +31,6 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
 
         if(input.isKeyPressed(KeyEvent.VK_ENTER))
             openSaveAsWindow = true
-
-        when (keyEvent.keyCode) {
-            KeyEvent.VK_1 -> scEditorWindow.setSelectedStamp(0)
-            KeyEvent.VK_2 -> scEditorWindow.setSelectedStamp(1)
-            KeyEvent.VK_3 -> scEditorWindow.setSelectedStamp(2)
-            KeyEvent.VK_4 -> scEditorWindow.setSelectedStamp(3)
-            KeyEvent.VK_5 -> scEditorWindow.setSelectedStamp(4)
-            KeyEvent.VK_6 -> scEditorWindow.setSelectedStamp(5)
-            KeyEvent.VK_7 -> scEditorWindow.setSelectedStamp(6)
-        }
 
         scEditorWindow.getSelectedStamp().update(scEditorWindow.inputContainer, 0, keyEvent)
         scEditorWindow.repaint()

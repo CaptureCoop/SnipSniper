@@ -240,10 +240,22 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 parent.addSeparator()
                 JMenuItem("History").also {
                     it.icon = sizeImage("icons/clock.png")
-                    it.addActionListener {
-                        openHistoryWindow()
-                    }
+                    it.addActionListener { openHistoryWindow() }
                     parent.add(it)
+                }
+                topBar.add(parent)
+            }
+            JMenu("Stamps").also { parent->
+                parent.icon = sizeImage("icons/questionmark.png")
+                for(i in 0 until StampType.size) {
+                    StampType.getByIndex(i).also { stamp ->
+                        JMenuItem(stamp.title).also {
+                            it.icon = sizeImage("icons/questionmark.png")
+                            it.accelerator = KeyStroke.getKeyStroke((i + 1).toString())
+                            it.addActionListener { setSelectedStamp(i) }
+                            parent.add(it)
+                        }
+                    }
                 }
                 topBar.add(parent)
             }
