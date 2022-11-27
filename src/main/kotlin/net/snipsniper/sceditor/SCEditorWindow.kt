@@ -396,12 +396,24 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     fun refreshTitle() {
         CCLogger.debug("Refreshing title")
         var newTitle: String? = initialTitle
-        if (saveLocation != null && saveLocation!!.isNotEmpty()) newTitle += " ($saveLocation)"
-        if (inClipboard) {
-            newTitle += " (Clipboard)"
+
+        //Path
+        if (saveLocation != null && saveLocation!!.isNotEmpty()) {
+            newTitle += when(config.getBool(ConfigHelper.PROFILE.fullPathInEditorTitle)) {
+                true -> " ($saveLocation)"
+                false -> " (${File(saveLocation!!).name})"
+            }
         }
+
+        //Clipboard
+        if (inClipboard) newTitle += " (Clipboard)"
+
+        //Size
         newTitle += " ${image.width}x${image.height}"
+
+        //Dirty
         if(isDirty) newTitle += "*"
+        
         title = newTitle
     }
 
