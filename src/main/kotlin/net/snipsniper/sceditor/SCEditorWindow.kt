@@ -196,6 +196,20 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                     parent.add(it)
                 }
                 parent.addSeparator()
+                JMenuItem("Copy").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    it.accelerator = ctrlStroke(KeyEvent.VK_C)
+                    it.addActionListener { image.copyToClipboard() }
+                    parent.add(it)
+                }
+                JMenuItem("Paste").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    it.accelerator = ctrlStroke(KeyEvent.VK_V)
+                    it.isEnabled = false
+                    it.toolTipText = devString
+                    parent.add(it)
+                }
+                parent.addSeparator()
                 JMenuItem("Flip horizontally").also {
                     it.icon = sizeImage("icons/mirror_horizontal.png")
                     it.addActionListener {

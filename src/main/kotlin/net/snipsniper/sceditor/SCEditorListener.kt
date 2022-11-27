@@ -1,12 +1,10 @@
 package net.snipsniper.sceditor
 
 import net.snipsniper.config.ConfigHelper
-import net.snipsniper.sceditor.stamps.TextStamp
 import net.snipsniper.snipscope.SnipScopeListener
 import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.Utils
 import net.snipsniper.utils.toBufferedImage
-import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.cccolorutils.setAlpha
 import java.awt.Color
 import java.awt.Graphics
@@ -22,7 +20,6 @@ import javax.swing.JFileChooser
 
 class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeListener(scEditorWindow) {
     private val input = scEditorWindow.inputContainer
-    private var openColorChooser = false
     private var openSaveAsWindow = false
 
     override fun keyPressed(keyEvent: KeyEvent) {
@@ -40,15 +37,6 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
 
         if(input.isKeyPressed(KeyEvent.VK_PERIOD))
             scEditorWindow.ezMode = !scEditorWindow.ezMode
-
-        var textState = TextStamp.TextState.TYPING
-        scEditorWindow.stamps.forEach {
-            if(it is TextStamp)
-                textState = it.state
-        }
-
-        if(input.isKeyPressed(KeyEvent.VK_C) && textState == TextStamp.TextState.IDLE)
-            openColorChooser = true
 
         if(input.isKeyPressed(KeyEvent.VK_ENTER))
             openSaveAsWindow = true
@@ -71,15 +59,6 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         super.keyReleased(keyEvent)
 
         if(!scEditorWindow.isEnableInteraction) return
-
-        if(openColorChooser) {
-            //This fixes an issue with the ALT key getting "stuck" since the key up event is not being received if the color window is in the front.
-            openColorChooser = false
-            scEditorWindow.inputContainer.resetKeys()
-            val wnd = CCColorChooser(scEditorWindow.getSelectedStamp().color!!, "Marker color", parent = scEditorWindow, useGradient = true)
-            //TODO: Do we want the save button back?
-            scEditorWindow.cWindows.add(wnd)
-        }
 
         if(openSaveAsWindow) {
             openSaveAsWindow = false
