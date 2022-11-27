@@ -1,6 +1,6 @@
 package net.snipsniper.secrets.games
 
-import net.snipsniper.utils.ImageUtils.Companion.trimImage
+import net.snipsniper.utils.trim
 import java.awt.Graphics
 import java.awt.image.BufferedImage
 
@@ -60,7 +60,7 @@ class BGamePiece(game: BGame) {
             }
         }
         g.dispose()
-        return trimImage(image)
+        return image.trim()
     }
 
     //returns true if the piece hit something

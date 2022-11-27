@@ -1,24 +1,12 @@
 package net.snipsniper.configwindow
 
-import net.snipsniper.ImageManager.Companion.getImage
-import net.snipsniper.LangManager.Companion.getItem
 import net.snipsniper.SnipSniper
-import net.snipsniper.SnipSniper.Companion.configFolder
-import net.snipsniper.SnipSniper.Companion.getProfile
-import net.snipsniper.SnipSniper.Companion.getProfileCount
-import net.snipsniper.SnipSniper.Companion.resetProfiles
-import net.snipsniper.SnipSniper.Companion.setProfile
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper.PROFILE
 import net.snipsniper.configwindow.tabs.*
 import net.snipsniper.systray.Sniper
 import net.snipsniper.utils.*
-import net.snipsniper.utils.DropdownItem.Companion.setSelected
-import net.snipsniper.utils.FileUtils.Companion.getFileExtension
 import net.snipsniper.utils.Function
-import net.snipsniper.utils.ImageUtils.Companion.getDefaultIcon
-import net.snipsniper.utils.ImageUtils.Companion.getIconDynamically
-import net.snipsniper.utils.Utils.Companion.showPopup
 import org.capturecoop.cccolorutils.CCColor
 import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.cclogger.CCLogger
@@ -49,9 +37,9 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
     init {
         CCLogger.info("Creating config window")
         setSize(512, 512)
-        title = getItem("config_label_config")
+        title = "config_label_config".translate()
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
-        iconImage = getImage("icons/config.png")
+        iconImage = "icons/config.png".getImage()
         addWindowListener(object : WindowAdapter() {
             override fun windowClosing(e: WindowEvent) {
                 if (tabs[activeTabIndex]!!.isDirty)
@@ -68,8 +56,8 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
 
     fun refreshConfigFiles() {
         configFiles.clear()
-        File(configFolder).listFiles()?.forEach { file ->
-            if (getFileExtension(file) == Config.DOT_EXTENSION) configFiles.add(file)
+        File(SnipSniper.configFolder).listFiles()?.forEach { file ->
+            if (FileUtils.getFileExtension(file) == Config.DOT_EXTENSION) configFiles.add(file)
         }
     }
 
@@ -82,27 +70,27 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         generalTab = GeneralTab(this)
         generalTab.setup(config)
         tabPane.addTab("SnipSniper", generateScrollPane(generalTab))
-        tabPane.setIconAt(index, ImageIcon(getImage("icons/snipsniper.png").getScaledInstance(iconSize, iconSize, 0)))
+        tabPane.setIconAt(index, "icons/snipsniper.png".getImage().scaled(iconSize, iconSize).toImageIcon())
         tabs[index] = generalTab
         index++
         editorTab = EditorTab(this)
         editorTab.setup(config)
         tabPane.addTab("Editor", generateScrollPane(editorTab))
-        tabPane.setIconAt(index, ImageIcon(getImage("icons/editor.png").getScaledInstance(iconSize, iconSize, 0)))
+        tabPane.setIconAt(index, "icons/editor.png".getImage().scaled(iconSize, iconSize).toImageIcon())
         tabs[index] = editorTab
         if (page == PAGE.EditorPanel) activeTabIndex = index
         index++
         viewerTab = ViewerTab(this)
         viewerTab.setup(config)
         tabPane.addTab("Viewer", generateScrollPane(viewerTab))
-        tabPane.setIconAt(index, ImageIcon(getImage("icons/viewer.png").getScaledInstance(iconSize, iconSize, 0)))
+        tabPane.setIconAt(index, "icons/viewer.png".getImage().scaled(iconSize, iconSize).toImageIcon())
         tabs[index] = viewerTab
         if (page == PAGE.ViewerPanel) activeTabIndex = index
         index++
         globalTab = GlobalTab(this)
         globalTab.setup(config)
         tabPane.addTab("Global", generateScrollPane(globalTab))
-        tabPane.setIconAt(index, ImageIcon(getImage("icons/config.png").getScaledInstance(iconSize, iconSize, 0)))
+        tabPane.setIconAt(index, "icons/config.png".getImage().scaled(iconSize, iconSize).toImageIcon())
         tabs[index] = globalTab
         if (page == PAGE.GlobalPanel) activeTabIndex = index
         tabPane.addChangeListener {
@@ -125,7 +113,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
     }
 
     fun msgError(msg: String?) {
-        showPopup(this, msg!!, "config_sanitation_error".translate(), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, "icons/redx.png".getImage(), true)
+        Utils.showPopup(this, msg!!, "config_sanitation_error".translate(), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, "icons/redx.png".getImage(), true)
     }
 
     private fun setupPaneDynamic(config: Config?, page: PAGE?) {
@@ -164,21 +152,24 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
                     add = false
                     break
                 }
-                if (add) profiles.add(0, DropdownItem("Standalone Viewer", file.name, getImage("icons/viewer.png")))
+                if (add) profiles.add(0, DropdownItem("Standalone Viewer", file.name, "icons/viewer.png".getImage()))
             } else if (file.name.contains("editor")) {
                 var add = true
                 for (str in blacklist) if (str.contains("editor")) {
                     add = false
                     break
                 }
-                if (add) profiles.add(0, DropdownItem("Standalone Editor", file.name, getImage("icons/editor.png")))
+                if (add) profiles.add(0, DropdownItem("Standalone Editor", file.name, "icons/editor.png".getImage()))
             } else if (file.name.contains("profile")) {
                 val nr = getIDFromFilename(file.name)
-                var img = getIconDynamically(Config(file.name, "profile_defaults.cfg"))
-                if (img == null) img = getDefaultIcon(nr)
-                var title = "Profile $nr"
-                val sniper = getProfile(nr)
+                var img = ImageUtils.getIconDynamically(Config(file.name, "profile_defaults.cfg"))
+                if (img == null) img = ImageUtils.getDefaultIcon(nr)
+                /*var title = "Profile $nr"
+                val sniper = SnipSniper.getProfile(nr)
                 if (sniper != null) title = sniper.getTitle()
+                profiles.add(DropdownItem(title, file.name, img))*/
+                var title = "Profile $nr"
+                SnipSniper.getProfile(nr)?.also { profile -> title = profile.getTitle() }
                 profiles.add(DropdownItem(title, file.name, img))
             }
         }
@@ -186,7 +177,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         val items = Array(profiles.size) { i -> profiles[i] }
         val dropdown = JComboBox(items)
         dropdown.renderer = DropdownItemRenderer(items)
-        if (configOriginal == null) dropdown.setSelectedIndex(0) else activeDropdownIndex = setSelected(dropdown, config.getFilename())
+        if (configOriginal == null) dropdown.setSelectedIndex(0) else activeDropdownIndex = DropdownItem.setSelected(dropdown, config.getFilename())
         val dropdownListener = arrayOf<ItemListener?>(null)
         dropdownListener[0] = ItemListener { e: ItemEvent ->
             if (e.stateChange == ItemEvent.SELECTED) {
@@ -216,7 +207,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         gbc.gridx = 2
         val profilePlusMinus = JPanel(GridLayout(0, 2))
         val profileAddButton = JButton("+")
-        if (getProfileCount() == SnipSniper.PROFILE_COUNT) profileAddButton.isEnabled = false
+        if (SnipSniper.getProfileCount() == SnipSniper.PROFILE_COUNT) profileAddButton.isEnabled = false
         profileAddButton.addActionListener {
             if (tabs[activeTabIndex]!!.isDirty) {
                 val result = showDirtyWarning()
@@ -225,9 +216,9 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
                 }
             }
             for (i in 0 until SnipSniper.PROFILE_COUNT) {
-                if (getProfile(i) == null) {
-                    setProfile(i, Sniper(i))
-                    val newProfileConfig = getProfile(i)!!.config
+                if (SnipSniper.getProfile(i) == null) {
+                    SnipSniper.setProfile(i, Sniper(i))
+                    val newProfileConfig = SnipSniper.getProfile(i)!!.config
                     newProfileConfig.save()
                     refreshConfigFiles()
                     parentPanel.removeAll()
@@ -249,7 +240,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
             val item = dropdown.selectedItem as DropdownItem
             if (!item.id.contains("profile0") || !item.id.contains("editor")) {
                 config.deleteFile()
-                resetProfiles()
+                SnipSniper.resetProfiles()
                 refreshConfigFiles()
                 parentPanel.removeAll()
                 var newIndex = dropdown.selectedIndex - 1
@@ -270,13 +261,13 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
     fun setupSaveButtons(panel: JPanel, tab: ITab, gbc: GridBagConstraints, config: Config, configOriginal: Config?, beforeSave: IFunction?, reloadOtherDropdowns: Boolean): Function {
         val allowSaving = booleanArrayOf(true)
         val isDirty = booleanArrayOf(false)
-        val save = JButton(getItem("config_label_save"))
+        val save = JButton("config_label_save".translate())
         save.addActionListener {
             if (allowSaving[0] && configOriginal != null) {
                 beforeSave?.run()
                 configOriginal.loadFromConfig(config)
                 configOriginal.save()
-                resetProfiles()
+                SnipSniper.resetProfiles()
                 if (reloadOtherDropdowns) {
                     generalTab.setup(configOriginal)
                     editorTab.setup(configOriginal)
@@ -286,7 +277,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
                 editorTab.repaint()
             }
         }
-        val close = JButton(getItem("config_label_close"))
+        val close = JButton("config_label_close".translate())
         close.addActionListener {
             if (isDirty[0])
                 if (showDirtyWarning() == JOptionPane.NO_OPTION) return@addActionListener
@@ -304,8 +295,8 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
                     ConfigSaveButtonState.YES_SAVE -> allowSaving[0] = true
                     ConfigSaveButtonState.NO_SAVE -> allowSaving[0] = false
                 }
-                if (isDirty[0]) close.text = getItem("config_label_cancel") else close.text =
-                    getItem("config_label_close")
+                if (isDirty[0])
+                    close.text = "config_label_cancel".translate() else close.text = "config_label_close".translate()
                 return true
             }
         }
@@ -317,7 +308,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         return setState
     }
 
-    private fun showDirtyWarning() = showPopup(this, "Unsaved changes, are you sure you want to cancel?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, "icons/redx.png".getImage(), true)
+    private fun showDirtyWarning() = Utils.showPopup(this, "Unsaved changes, are you sure you want to cancel?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, "icons/redx.png".getImage(), true)
 
     fun getIDFromFilename(name: String): Int {
         val idString = name.replace(Config.DOT_EXTENSION, "").replace("profile", "")

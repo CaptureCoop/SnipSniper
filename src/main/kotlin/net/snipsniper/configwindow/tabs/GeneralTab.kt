@@ -1,7 +1,5 @@
 package net.snipsniper.configwindow.tabs
 
-import net.snipsniper.ImageManager.Companion.getImage
-import net.snipsniper.LangManager.Companion.getItem
 import net.snipsniper.SnipSniper
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
@@ -11,22 +9,16 @@ import net.snipsniper.configwindow.HotKeyButton
 import net.snipsniper.configwindow.iconwindow.IconWindow
 import net.snipsniper.configwindow.textpreviewwindow.FolderPreviewRenderer
 import net.snipsniper.configwindow.textpreviewwindow.SaveFormatPreviewRenderer
-import net.snipsniper.configwindow.textpreviewwindow.SaveFormatPreviewRenderer.Companion.DEFAULT_FORMAT
 import net.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow
 import net.snipsniper.utils.*
 import net.snipsniper.utils.Function
-import net.snipsniper.utils.ImageUtils.Companion.getDefaultIcon
-import net.snipsniper.utils.ImageUtils.Companion.getIconDynamically
-import net.snipsniper.utils.Utils.Companion.constructFilename
-import net.snipsniper.utils.Utils.Companion.replaceVars
-import net.snipsniper.utils.Utils.Companion.showPopup
-import net.snipsniper.utils.WikiManager.Companion.getContent
 import org.capturecoop.cccolorutils.CCColor
 import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.ccutils.utils.CCStringUtils
 import java.awt.*
 import java.awt.event.*
 import java.io.File
+import java.lang.Exception
 import java.util.*
 import javax.swing.*
 import javax.swing.event.ChangeEvent
@@ -61,7 +53,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             gbc.gridwidth = 1
             gbc.fill = GridBagConstraints.BOTH
             gbc.insets = Insets(0, 10, 0, 10)
-            options.add(configWindow.createJLabel(getItem("config_label_title"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            options.add(configWindow.createJLabel("config_label_title".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val titleContent = JPanel(GridLayout(0, 2))
             val titleInput = JTextField(config.getString(ConfigHelper.PROFILE.title))
@@ -73,7 +65,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 }
             })
             titleContent.add(titleInput)
-            val titleReset = JButton(getItem("config_label_reset"))
+            val titleReset = JButton("config_label_reset".translate())
             titleReset.addActionListener {
                 titleInput.text = "none"
                 config.set(ConfigHelper.PROFILE.title, titleInput.text)
@@ -81,7 +73,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             titleContent.add(titleReset)
             options.add(titleContent, gbc)
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/title.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/title.json")), gbc)
         }
 
         //Icon setting
@@ -90,7 +82,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             options.add(configWindow.createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val iconPanel = JPanel(GridLayout(0, 2))
-            val iconButton = JButton(getItem("config_label_seticon"))
+            val iconButton = JButton("config_label_seticon".translate())
             val item = dropdown.selectedItem as DropdownItem?
             if (item != null) {
                 val icon = (dropdown.selectedItem as DropdownItem?)?.icon
@@ -100,32 +92,32 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 configWindow.addCWindow(IconWindow("Custom Profile Icon", configWindow) {
                     config.set(ConfigHelper.PROFILE.icon, it[0])
                     //TODO: We have duplicated code here, uuuuugh. I miss having functions in functions :(
-                    var img = getIconDynamically(config)
-                    if (img == null) img = getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
+                    var img = ImageUtils.getIconDynamically(config)
+                    if (img == null) img = ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
                     iconButton.icon = ImageIcon(img.getScaledInstance(16, 16, 0))
                     cleanDirtyFunction?.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
                 })
             }
             iconPanel.add(iconButton)
-            val iconReset = JButton(getItem("config_label_reset"))
+            val iconReset = JButton("config_label_reset".translate())
             iconReset.addActionListener {
                 //TODO: Barf, duplicated code
                 config.set(ConfigHelper.PROFILE.icon, "none")
-                var img = getIconDynamically(config)
-                if (img == null) img = getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
+                var img = ImageUtils.getIconDynamically(config)
+                if (img == null) img = ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
                 iconButton.icon = ImageIcon(img!!.getScaledInstance(16, 16, 0))
                 cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             iconPanel.add(iconReset)
             options.add(iconPanel, gbc)
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/icon.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/icon.json")), gbc)
         }
 
         //Hotkey setting
         kotlin.run {
             gbc.gridx = 0
-            options.add(configWindow.createJLabel(getItem("config_label_hotkey"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            options.add(configWindow.createJLabel("config_label_hotkey".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val hotkeyPanel = JPanel(GridLayout(0, 2))
             val hotKeyButton = HotKeyButton(config.getString(ConfigHelper.PROFILE.hotkey))
@@ -134,9 +126,9 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             hotkeyPanel.add(hotKeyButton)
-            val deleteHotKey = JButton(getItem("config_label_delete"))
+            val deleteHotKey = JButton("config_label_delete".translate())
             deleteHotKey.addActionListener {
-                hotKeyButton.text = getItem("config_label_none")
+                hotKeyButton.text = "config_label_none".translate()
                 hotKeyButton.hotkey = -1
                 config.set(ConfigHelper.PROFILE.hotkey, "NONE")
                 cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
@@ -144,7 +136,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             hotkeyPanel.add(deleteHotKey)
             options.add(hotkeyPanel, gbc)
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/hotkey.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/hotkey.json")), gbc)
         }
 
         //Tint color setting
@@ -159,10 +151,12 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             tintColorButton.addActionListener {
-                var image = getImage("preview/code_light.png")
-                if (SnipSniper.config.getString(ConfigHelper.MAIN.theme) == "dark") image = getImage("preview/code_dark.png")
-                val chooser = CCColorChooser(tintColor, "Tint Color", parent = configWindow, useGradient = false, backgroundImage = image)
-                configWindow.addCWindow(chooser)
+                val image = when(SnipSniper.config.getString(ConfigHelper.MAIN.theme)) {
+                    "dark" -> "preview/code_dark.png".getImage()
+                    "light" ->  "preview/code_light.png".getImage()
+                    else -> throw Exception("Bad theme")
+                }
+                configWindow.addCWindow(CCColorChooser(tintColor, "Tint Color", parent = configWindow, useGradient = false, backgroundImage = image))
             }
             options.add(tintColorButton, gbc)
             gbc.gridx = 2
@@ -172,7 +166,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         //save-images toggle setting
         kotlin.run {
             gbc.gridx = 0
-            options.add(configWindow.createJLabel(getItem("config_label_saveimages"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            options.add(configWindow.createJLabel("config_label_saveimages".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
             val saveToDisk = JCheckBox()
             saveToDisk.isSelected = config.getBool(ConfigHelper.PROFILE.saveToDisk)
             saveToDisk.addActionListener {
@@ -182,13 +176,13 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             gbc.gridx = 1
             options.add(saveToDisk, gbc)
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/saveimage.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/saveimage.json")), gbc)
         }
 
         //Copy to clipboard setting
         kotlin.run {
             gbc.gridx = 0
-            options.add(configWindow.createJLabel(getItem("config_label_copyclipboard"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            options.add(configWindow.createJLabel("config_label_copyclipboard".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val copyToClipboard = JCheckBox()
             copyToClipboard.isSelected = config.getBool(ConfigHelper.PROFILE.copyToClipboard)
@@ -198,13 +192,13 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             }
             options.add(copyToClipboard, gbc)
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/copyimage.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/copyimage.json")), gbc)
         }
 
         //border-size setting
         kotlin.run {
             gbc.gridx = 0
-            options.add(configWindow.createJLabel(getItem("config_label_bordersize"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            options.add(configWindow.createJLabel("config_label_bordersize".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val borderSizePanel = JPanel(GridLayout(0, 2))
             val borderSize = JSpinner(SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.borderSize).toDouble(), 0.0, 999.0, 1.0)) //TODO: Extend JSpinner class to notify user of too large number
@@ -221,7 +215,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             }
             colorBtn.addActionListener {
                 if (colorChooser == null || !colorChooser!!.isDisplayable) {
-                    colorChooser = CCColorChooser(borderColor, getItem("config_label_bordercolor"), parent = configWindow, useGradient = true)
+                    colorChooser = CCColorChooser(borderColor, "config_label_bordercolor".translate(), parent = configWindow, useGradient = true)
                     colorChooser!!.addWindowListener(object : WindowAdapter() {
                         override fun windowClosing(e: WindowEvent) = kotlin.run { colorChooser = null }
                     })
@@ -231,7 +225,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             borderSizePanel.add(colorBtn, gbc)
             options.add(borderSizePanel, gbc)
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/bordersize.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/bordersize.json")), gbc)
         }
 
         //Saveformat setting
@@ -240,25 +234,18 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             options.add(configWindow.createJLabel("Save format", JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val currentSaveFormat = config.getString(ConfigHelper.PROFILE.saveFormat)
-            val saveFormatButton = JButton(constructFilename(currentSaveFormat, ""))
+            val saveFormatButton = JButton(Utils.constructFilename(currentSaveFormat, ""))
             saveFormatButton.addActionListener {
                 val saveFormatRenderer = SaveFormatPreviewRenderer(512, 256)
-                val saveFormatPreview = TextPreviewWindow(
-                    "Save format",
-                    config.getString(ConfigHelper.PROFILE.saveFormat),
-                    saveFormatRenderer,
-                    getImage("icons/folder.png"),
-                    configWindow,
-                    "%hour%, %minute%, %second%, %day%, %month%, %year%, %random%"
-                )
+                val saveFormatPreview = TextPreviewWindow("Save format", config.getString(ConfigHelper.PROFILE.saveFormat), saveFormatRenderer, "icons/folder.png".getImage(), configWindow, "%hour%, %minute%, %second%, %day%, %month%, %year%, %random%")
                 saveFormatRenderer.textPreviewWindow = saveFormatPreview
                 saveFormatPreview.onSave = IFunction {
                     var text = saveFormatPreview.text
                     if (text.isEmpty()) {
-                        text = DEFAULT_FORMAT
+                        text = SaveFormatPreviewRenderer.DEFAULT_FORMAT
                     }
                     config.set(ConfigHelper.PROFILE.saveFormat, text)
-                    saveFormatButton.text = constructFilename(text, "")
+                    saveFormatButton.text = Utils.constructFilename(text, "")
                 }
                 configWindow.addCWindow(saveFormatPreview)
             }
@@ -270,7 +257,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         //Location setting
         kotlin.run {
             gbc.gridx = 0
-            options.add(configWindow.createJLabel(getItem("config_label_picturelocation"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            options.add(configWindow.createJLabel("config_label_picturelocation".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val pictureLocation = JTextField(CCStringUtils.correctSlashes(config.getRawString(ConfigHelper.PROFILE.pictureFolder)))
             pictureLocation.preferredSize = Dimension(200, pictureLocation.height)
@@ -279,15 +266,15 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 override fun focusLost(focusEvent: FocusEvent) {
                     val saveLocationRaw = pictureLocation.text
                     CCStringUtils.correctSlashes(saveLocationRaw)
-                    val saveLocationFinal = replaceVars(saveLocationRaw)
+                    val saveLocationFinal = Utils.replaceVars(saveLocationRaw)
                     val saveLocationCheck = File(saveLocationFinal)
                     if (!saveLocationCheck.exists()) {
                         cleanDirtyFunction!!.run(ConfigSaveButtonState.NO_SAVE)
-                        val dialogResult = showPopup(configWindow, getItem("config_sanitation_directory_notexist") + " Create?", getItem("config_sanitation_error"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, getImage("icons/folder.png"), true)
+                        val dialogResult = Utils.showPopup(configWindow, "config_sanitation_directory_notexist".translate() + " Create?", "config_sanitation_error".translate(), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, "icons/folder.png".getImage(), true)
                         if (dialogResult == JOptionPane.YES_OPTION) {
                             val allow = File(saveLocationFinal).mkdirs()
                             if (!allow) {
-                                configWindow.msgError(getItem("config_sanitation_failed_createdirectory"))
+                                configWindow.msgError("config_sanitation_failed_createdirectory".translate())
                                 cleanDirtyFunction!!.run(ConfigSaveButtonState.NO_SAVE)
                             } else {
                                 config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationRaw)
@@ -305,7 +292,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             })
             options.add(pictureLocation, gbc)
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/imagefolder.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/imagefolder.json")), gbc)
         }
 
         //Save folder modifier setting
@@ -316,7 +303,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             val customSaveButton = JButton(CCStringUtils.formatDateTimeString(config.getString(ConfigHelper.PROFILE.saveFolderCustom)))
             customSaveButton.addActionListener {
                 val renderer = FolderPreviewRenderer(512, 512)
-                val preview = TextPreviewWindow("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom), renderer, getImage("icons/folder.png"), configWindow, "%day% = 1, %month% = 8, %year% = 2021")
+                val preview = TextPreviewWindow("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom), renderer, "icons/folder.png".getImage(), configWindow, "%day% = 1, %month% = 8, %year% = 2021")
                 configWindow.addCWindow(preview)
                 renderer.textPreviewWindow = preview
                 preview.onSave = IFunction {
@@ -329,13 +316,13 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             }
             options.add(customSaveButton, gbc)
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/savefoldermodifier.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/savefoldermodifier.json")), gbc)
         }
 
         //Capture delay setting
         kotlin.run {
             gbc.gridx = 0
-            options.add(configWindow.createJLabel(getItem("config_label_snapdelay"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            options.add(configWindow.createJLabel("config_label_snapdelay".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val snipeDelay =
                 JSpinner(SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.snipeDelay).toDouble(), 0.0, 100.0, 1.0))
@@ -345,13 +332,13 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             }
             options.add(snipeDelay, gbc)
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/snapdelay.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/snapdelay.json")), gbc)
         }
 
         //Open editor after capture setting
         kotlin.run {
             gbc.gridx = 0
-            options.add(configWindow.createJLabel(getItem("config_label_openeditor"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            options.add(configWindow.createJLabel("config_label_openeditor".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val openEditor = JCheckBox()
             openEditor.isSelected = config.getBool(ConfigHelper.PROFILE.openEditor)
@@ -361,13 +348,13 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             }
             options.add(openEditor, gbc)
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/openeditor.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/openeditor.json")), gbc)
         }
 
         //Spyglass settings
         kotlin.run {
             gbc.gridx = 0
-            options.add(configWindow.createJLabel(getItem("config_label_spyglass"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            options.add(configWindow.createJLabel("config_label_spyglass".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val spyglassDropdownEnabled = JComboBox<Any>(arrayOf("config_label_disabled".translate(), "config_label_enabled".translate(), "config_label_hold".translate(), "config_label_toggle".translate()))
             val spyglassDropdownHotkey = JComboBox<Any>(arrayOf("config_label_control".translate(), "config_label_shift".translate()))
@@ -435,13 +422,13 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 options.add(spyglassPanel, gbc)
             }
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/usespyglass.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/usespyglass.json")), gbc)
         }
 
         //Spyglass zoom setting
         kotlin.run {
             gbc.gridx = 0
-            options.add(configWindow.createJLabel(getItem("config_label_spyglasszoom"), JLabel.RIGHT, JLabel.CENTER), gbc)
+            options.add(configWindow.createJLabel("config_label_spyglasszoom".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val spyglassZoomDropdown = JComboBox<Any>(arrayOf("8x8", "16x16", "32x32", "64x64"))
             when (config.getInt(ConfigHelper.PROFILE.spyglassZoom)) {
@@ -463,7 +450,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             }
             options.add(spyglassZoomDropdown, gbc)
             gbc.gridx = 2
-            options.add(InfoButton(getContent("config/general/spyglasszoom.json")), gbc)
+            options.add(InfoButton(WikiManager.getContent("config/general/spyglasszoom.json")), gbc)
         }
 
         //Afterdrag setting
@@ -472,7 +459,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             options.add(configWindow.createJLabel("After Drag", JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
             val afterDragDropdownMode = JComboBox<Any>(arrayOf("config_label_disabled".translate(), "config_label_enabled".translate(), "config_label_hold".translate()))
-            val afterDragDropdownHotkey = JComboBox<Any>(arrayOf(getItem("config_label_control"), getItem("config_label_shift")))
+            val afterDragDropdownHotkey = JComboBox<Any>(arrayOf("config_label_control".translate(), "config_label_shift".translate()))
             when (config.getString(ConfigHelper.PROFILE.afterDragMode).lowercase(Locale.getDefault())) {
                 "none" -> {
                     afterDragDropdownMode.selectedIndex = 0
