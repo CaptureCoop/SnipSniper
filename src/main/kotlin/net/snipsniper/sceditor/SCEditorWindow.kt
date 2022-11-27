@@ -20,7 +20,7 @@ import java.io.File
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.swing.*
 
-class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), CCIClosable {
+class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var initialTitle: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), CCIClosable {
     val config: Config
     var saveLocation: String?
     var inClipboard: Boolean
@@ -57,7 +57,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
 
     init {
         this.config = config
-        this.title = title
+        this.title = initialTitle
         this.saveLocation = saveLocation
         this.inClipboard = inClipboard
         this.isStandalone = isStandalone
@@ -205,6 +205,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
             JMenu("Experimental").also { expItem ->
                 expItem.icon = sizeImage("icons/debug.png")
                 JMenuItem("Border test").also {
+                    it.icon = expItem.icon
                     it.addActionListener {
                         val borderThickness = 10
                         //Fix to have this work without originalImage. As we will remove/Change this anyway I don't care if this affects anything for now.
@@ -230,6 +231,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                     expItem.add(it)
                 }
                 JMenuItem("Box test").also {
+                    it.icon = expItem.icon
                     it.addActionListener {
                         val width = 512
                         val height = 512
@@ -346,7 +348,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
 
     fun refreshTitle() {
         CCLogger.debug("Refreshing title")
-        var newTitle: String? = title
+        var newTitle: String? = initialTitle
         if (saveLocation != null && saveLocation!!.isNotEmpty()) newTitle += " ($saveLocation)"
         if (inClipboard) {
             newTitle += " (Clipboard)"
@@ -395,6 +397,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
 
     override fun close() {
         cWindows.forEach { it.close() }
+        dispose()
         if (isStandalone) SnipSniper.exit(false)
     }
 
