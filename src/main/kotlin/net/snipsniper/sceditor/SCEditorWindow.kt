@@ -151,7 +151,13 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 JMenuItem("Save").also {
                     it.icon = sizeImage("icons/questionmark.png")
                     it.accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK)
-                    it.addActionListener { saveAndClose() }
+                    it.addActionListener { save(false) }
+                    fileItem.add(it)
+                }
+                JMenuItem("Save and close").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    it.accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK)
+                    it.addActionListener { save(true) }
                     fileItem.add(it)
                 }
                 JMenuItem("Close").also { closeItem ->
@@ -344,7 +350,8 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         }
     }
 
-    fun saveAndClose() {
+    fun save(close: Boolean = false) {
+        CCLogger.info("Saving editor, close=$close")
         if(isDirty) {
             val location = ImageUtils.saveImage(image, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
             location?.replace(File(location).name, "")?.also { loc ->
@@ -352,8 +359,9 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 config.save()
             }
             if (config.getBool(ConfigHelper.PROFILE.copyToClipboard)) image.copyToClipboard()
+            isDirty = false
         }
-        close()
+        if(close) close()
     }
 
     fun refreshTitle() {

@@ -104,7 +104,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         if(!scEditorWindow.isPointOnUiComponents(mouseEvent.point))
             scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.button, true)
 
-        if(mouseEvent.button == 3) scEditorWindow.saveAndClose()
+        if(mouseEvent.button == 3) scEditorWindow.save(true)
 
         scEditorWindow.repaint()
     }

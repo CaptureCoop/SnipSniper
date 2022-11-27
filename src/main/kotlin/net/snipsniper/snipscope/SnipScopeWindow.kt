@@ -40,7 +40,7 @@ open class SnipScopeWindow : JFrame() {
         renderer.addMouseMotionListener(listener)
         renderer.addMouseWheelListener(listener)
         add(renderer)
-        defaultCloseOperation = DISPOSE_ON_CLOSE
+        defaultCloseOperation = DO_NOTHING_ON_CLOSE
     }
 
     fun setSizeAuto() {
