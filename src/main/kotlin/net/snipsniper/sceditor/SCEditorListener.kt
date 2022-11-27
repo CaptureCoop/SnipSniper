@@ -25,14 +25,6 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
     override fun keyPressed(keyEvent: KeyEvent) {
         super.keyPressed(keyEvent)
 
-        if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
-            scEditorWindow.saveLocation = ""
-            scEditorWindow.inClipboard = true
-            scEditorWindow.refreshTitle()
-            //TODO: Check if null and tell user if paste is bad
-            scEditorWindow.setImage(ImageUtils.getImageFromClipboard(), resetHistory = true, isNewImage = true)
-        }
-
         if(!scEditorWindow.isEnableInteraction) return
 
         if(input.isKeyPressed(KeyEvent.VK_PERIOD))

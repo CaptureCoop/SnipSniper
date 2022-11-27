@@ -205,8 +205,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 JMenuItem("Paste").also {
                     it.icon = sizeImage("icons/questionmark.png")
                     it.accelerator = ctrlStroke(KeyEvent.VK_V)
-                    it.isEnabled = false
-                    it.toolTipText = devString
+                    it.addActionListener { doPaste() }
                     parent.add(it)
                 }
                 parent.addSeparator()
@@ -433,6 +432,22 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     private fun updateEzUI() = when(ezMode) {
         true -> ezModeSettingsCreator.addSettingsToPanel(ezModeStampSettingsPanel, getSelectedStamp(), ezModeWidth)
         false -> ezModeStampSettingsPanel.removeAll()
+    }
+
+    private fun doPaste() {
+        if(isDirty) {
+            JOptionPane.showConfirmDialog(this, "Changes present, are you sure you want to replace the current image?", "Warning", JOptionPane.YES_NO_OPTION).also {
+                if(it == 1) return
+            }
+        }
+        ImageUtils.getImageFromClipboard().also {
+            if(it == null) return
+            saveLocation = ""
+            inClipboard = true
+            setImage(it, resetHistory = true, isNewImage = true)
+            isDirty = false
+            refreshTitle()
+        }
     }
 
     override fun toString() = "SCEditorWindow Pos:[$location] Path:[$saveLocation]"
