@@ -24,17 +24,9 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
     private val input = scEditorWindow.inputContainer
     private var openColorChooser = false
     private var openSaveAsWindow = false
-    private var openNewImageWindow = false
 
     override fun keyPressed(keyEvent: KeyEvent) {
         super.keyPressed(keyEvent)
-        keyEvent.consume()
-        //Hack for CTRL + N to work before isEnableInteraction is true
-        //This means that even just pressing n allows you to create a new image
-        //But that's not really bad, since N is not used for anything else in this context before
-        //actually loading an image
-        if(!scEditorWindow.isEnableInteraction && keyEvent.keyCode == KeyEvent.VK_N)
-            openNewImageWindow = true
 
         if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
             scEditorWindow.saveLocation = ""
@@ -61,9 +53,6 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         if(input.isKeyPressed(KeyEvent.VK_ENTER))
             openSaveAsWindow = true
 
-        if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_N))
-            openNewImageWindow = true
-
         when (keyEvent.keyCode) {
             KeyEvent.VK_1 -> scEditorWindow.setSelectedStamp(0)
             KeyEvent.VK_2 -> scEditorWindow.setSelectedStamp(1)
@@ -72,11 +61,6 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
             KeyEvent.VK_5 -> scEditorWindow.setSelectedStamp(4)
             KeyEvent.VK_6 -> scEditorWindow.setSelectedStamp(5)
             KeyEvent.VK_7 -> scEditorWindow.setSelectedStamp(6)
-        }
-
-        if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_S)) {
-            if(scEditorWindow.isDirty) scEditorWindow.saveImage()
-            scEditorWindow.close()
         }
 
         if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_Z)) {
@@ -89,13 +73,6 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
 
     override fun keyReleased(keyEvent: KeyEvent) {
         super.keyReleased(keyEvent)
-        if(openNewImageWindow) {
-            //We do this here since creating a new image should not be blocked just because
-            //the default image is still in there
-            scEditorWindow.openNewImageWindow()
-            openNewImageWindow = false
-            scEditorWindow.inputContainer.resetKeys()
-        }
 
         if(!scEditorWindow.isEnableInteraction) return
 
@@ -127,10 +104,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         if(!scEditorWindow.isPointOnUiComponents(mouseEvent.point))
             scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.button, true)
 
-        if(mouseEvent.button == 3) {
-            if(scEditorWindow.isDirty) scEditorWindow.saveImage()
-            scEditorWindow.close()
-        }
+        if(mouseEvent.button == 3) scEditorWindow.saveAndClose()
 
         scEditorWindow.repaint()
     }

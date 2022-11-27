@@ -140,6 +140,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 fileItem.icon = sizeImage("icons/folder.png")
                 JMenuItem("New").also { newItem ->
                     newItem.icon = sizeImage("icons/questionmark.png")
+                    newItem.accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
                     newItem.addActionListener { openNewImageWindow() }
                     fileItem.add(newItem)
                 }
@@ -147,8 +148,15 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                     openItem.icon = sizeImage("icons/questionmark.png")
                     fileItem.add(openItem)
                 }
+                JMenuItem("Save").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    it.accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK)
+                    it.addActionListener { saveAndClose() }
+                    fileItem.add(it)
+                }
                 JMenuItem("Close").also { closeItem ->
                     closeItem.icon = sizeImage("icons/redx.png")
+                    closeItem.accelerator = KeyStroke.getKeyStroke("ESCAPE")
                     closeItem.addActionListener { close() }
                     fileItem.add(closeItem)
                 }
@@ -336,14 +344,16 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         }
     }
 
-    fun saveImage() {
-        //TODO: Long term: Check if its ok to use image directly, we used to copy the image to finalImg so yeah.. :^) If anything comes up check here
-        val location = ImageUtils.saveImage(image, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
-        location?.replace(File(location).name, "")?.also { loc ->
-            config.set(ConfigHelper.PROFILE.lastSaveFolder, loc)
-            config.save()
+    fun saveAndClose() {
+        if(isDirty) {
+            val location = ImageUtils.saveImage(image, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
+            location?.replace(File(location).name, "")?.also { loc ->
+                config.set(ConfigHelper.PROFILE.lastSaveFolder, loc)
+                config.save()
+            }
+            if (config.getBool(ConfigHelper.PROFILE.copyToClipboard)) image.copyToClipboard()
         }
-        if (config.getBool(ConfigHelper.PROFILE.copyToClipboard)) image.copyToClipboard()
+        close()
     }
 
     fun refreshTitle() {
@@ -396,6 +406,11 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     fun isDefaultImage() = defaultImage === image
 
     override fun close() {
+        if(isDirty) {
+            JOptionPane.showConfirmDialog(this, "Changes present, are you sure you want to exit?", "Warning", JOptionPane.YES_NO_OPTION).also {
+                if(it == 1) return
+            }
+        }
         cWindows.forEach { it.close() }
         dispose()
         if (isStandalone) SnipSniper.exit(false)
