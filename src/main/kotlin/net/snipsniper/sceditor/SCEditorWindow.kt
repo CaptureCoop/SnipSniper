@@ -170,6 +170,12 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
             }
             JMenu("Edit").also { editItem ->
                 editItem.icon = sizeImage("icons/editor.png")
+                JMenuItem("Undo").also {
+                    it.icon = sizeImage("icons/restart.png")
+                    it.accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK)
+                    it.addActionListener { undo() }
+                    editItem.add(it)
+                }
                 JMenuItem("Config").also {
                     it.icon = sizeImage("icons/config.png")
                     var wnd: ConfigWindow? = null //Singleton reference, only allow once of these open at the same time
@@ -452,6 +458,8 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
             }
         }
     }
+
+    private fun undo() = historyManager.undoHistory()
 
     private fun openHistoryWindow() {
         if(historyWindow != null) {

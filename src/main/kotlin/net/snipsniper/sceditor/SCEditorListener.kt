@@ -63,10 +63,6 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
             KeyEvent.VK_7 -> scEditorWindow.setSelectedStamp(6)
         }
 
-        if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_Z)) {
-            scEditorWindow.historyManager.undoHistory()
-        }
-
         scEditorWindow.getSelectedStamp().update(scEditorWindow.inputContainer, 0, keyEvent)
         scEditorWindow.repaint()
     }
