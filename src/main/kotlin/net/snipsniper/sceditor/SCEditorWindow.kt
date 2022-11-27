@@ -190,7 +190,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                     editItem.add(it)
                 }
                 JMenuItem("Resize").also {
-                    it.icon = sizeImage("icons/questionmark.png")
+                    it.icon = sizeImage("icons/resize.png")
                     editItem.add(it)
                 }
                 JMenuItem("History").also {
