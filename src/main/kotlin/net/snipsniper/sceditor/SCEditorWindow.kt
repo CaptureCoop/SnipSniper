@@ -32,6 +32,10 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     private val listener: SCEditorListener?
     private val renderer: SCEditorRenderer
     var isDirty = false
+        set(value) {
+            field = value
+            refreshTitle()
+        }
     val qualityHints = Utils.getRenderingHints()
     private var defaultImage: BufferedImage? = null
     val cWindows = CopyOnWriteArrayList<CCIClosable>()
@@ -397,6 +401,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
             newTitle += " (Clipboard)"
         }
         newTitle += " ${image.width}x${image.height}"
+        if(isDirty) newTitle += "*"
         title = newTitle
     }
 
