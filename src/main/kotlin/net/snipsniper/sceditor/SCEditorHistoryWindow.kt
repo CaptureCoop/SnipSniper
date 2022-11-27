@@ -19,7 +19,7 @@ class SCEditorHistoryWindow(private val editor: SCEditorWindow): JFrame(), CCICl
 
     init {
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
-        iconImage = "icons/questionmark.png".getImage()
+        iconImage = "icons/clock.png".getImage()
         title = "Edit History"
         addWindowListener(object: WindowAdapter() {
             override fun windowClosing(e: WindowEvent) { close() }
