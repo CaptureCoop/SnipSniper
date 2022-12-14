@@ -37,3 +37,5 @@ fun String.translate(): String = LangManager.getItem(this)
 fun Long.prettyPrintBytes(): String = Utils.prettyPrintBytes(this)
 
 fun Int.isEven(): Boolean = this % 2 == 0
+
+fun Boolean.toInt() = if(this) 1 else 0
