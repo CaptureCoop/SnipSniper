@@ -1,14 +1,13 @@
 package net.snipsniper.secrets.games
 
-import net.snipsniper.ImageManager.Companion.getImage
 import net.snipsniper.SnipSniper.Companion.getNewThread
 import net.snipsniper.StatsManager
 import net.snipsniper.StatsManager.Companion.incrementCount
 import net.snipsniper.systray.Sniper
 import net.snipsniper.utils.IFunction
+import net.snipsniper.utils.getImage
 import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger.Companion.log
-import org.capturecoop.cclogger.CCLogger.Companion.logStacktrace
+import org.capturecoop.cclogger.CCLogger
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.awt.event.*
@@ -51,7 +50,7 @@ class BGame(val sniper: Sniper) : JFrame() {
         resources!!.init()
         title = "Block Game"
         add(gamePanel)
-        iconImage = getImage("icons/random/kiwi.png")
+        iconImage = "icons/random/kiwi.png".getImage()
         addKeyListener(object : KeyAdapter() {
             override fun keyPressed(keyEvent: KeyEvent) {
                 super.keyPressed(keyEvent)
@@ -127,8 +126,8 @@ class BGame(val sniper: Sniper) : JFrame() {
             try {
                 Thread.sleep(10)
             } catch (e: InterruptedException) {
-                log("Error sleeping thread for BGame!", CCLogLevel.ERROR)
-                logStacktrace(e, CCLogLevel.ERROR)
+                CCLogger.log("Error sleeping thread for BGame!", CCLogLevel.ERROR)
+                CCLogger.logStacktrace(e, CCLogLevel.ERROR)
             }
         }
     }

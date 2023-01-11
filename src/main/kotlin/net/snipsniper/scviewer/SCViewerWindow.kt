@@ -98,6 +98,7 @@ class SCViewerWindow(private var file: File?, private var config: Config?, isSta
             override fun windowClosing(e: WindowEvent) {
                 super.windowClosing(e)
                 if(isStandalone) SnipSniper.exit(false)
+                dispose()
             }
         })
         isEnableInteraction = !isDefaultImage()

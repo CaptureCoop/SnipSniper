@@ -5,7 +5,7 @@ import org.capturecoop.cclogger.CCLogger
 import java.awt.image.BufferedImage
 
 class SCEditorHistory(private val editor: SCEditorWindow) {
-    private val history = ArrayList<BufferedImage>()
+    val history = ArrayList<BufferedImage>()
 
     val size: Int
         get() = history.size
@@ -14,14 +14,17 @@ class SCEditorHistory(private val editor: SCEditorWindow) {
         CCLogger.debug("History -> reset")
         history.clear()
         addHistory()
+        editor.historyWindow?.refresh()
     }
 
     fun addHistory() {
         CCLogger.debug("History -> add (${history.size})")
         history.add(editor.image.clone())
+        editor.historyWindow?.refresh()
     }
 
     fun undoHistory() {
+        if(history.size == 1) return //Don't bother
         var size = history.size
         if(size > 1) {
             size--
@@ -34,5 +37,6 @@ class SCEditorHistory(private val editor: SCEditorWindow) {
         } else {
             CCLogger.debug("History -> undo (Nothing to undo)")
         }
+        editor.historyWindow?.refresh()
     }
 }

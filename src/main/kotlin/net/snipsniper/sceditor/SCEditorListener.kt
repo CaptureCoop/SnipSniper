@@ -1,12 +1,9 @@
 package net.snipsniper.sceditor
 
 import net.snipsniper.config.ConfigHelper
-import net.snipsniper.sceditor.stamps.TextStamp
 import net.snipsniper.snipscope.SnipScopeListener
-import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.Utils
 import net.snipsniper.utils.toBufferedImage
-import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.cccolorutils.setAlpha
 import java.awt.Color
 import java.awt.Graphics
@@ -22,66 +19,18 @@ import javax.swing.JFileChooser
 
 class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeListener(scEditorWindow) {
     private val input = scEditorWindow.inputContainer
-    private var openColorChooser = false
     private var openSaveAsWindow = false
-    private var openNewImageWindow = false
 
     override fun keyPressed(keyEvent: KeyEvent) {
         super.keyPressed(keyEvent)
-        keyEvent.consume()
-        //Hack for CTRL + N to work before isEnableInteraction is true
-        //This means that even just pressing n allows you to create a new image
-        //But that's not really bad, since N is not used for anything else in this context before
-        //actually loading an image
-        if(!scEditorWindow.isEnableInteraction && keyEvent.keyCode == KeyEvent.VK_N)
-            openNewImageWindow = true
-
-        if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_V)) {
-            scEditorWindow.saveLocation = ""
-            scEditorWindow.inClipboard = true
-            scEditorWindow.refreshTitle()
-            //TODO: Check if null and tell user if paste is bad
-            scEditorWindow.setImage(ImageUtils.getImageFromClipboard(), resetHistory = true, isNewImage = true)
-        }
 
         if(!scEditorWindow.isEnableInteraction) return
 
         if(input.isKeyPressed(KeyEvent.VK_PERIOD))
             scEditorWindow.ezMode = !scEditorWindow.ezMode
 
-        var textState = TextStamp.TextState.TYPING
-        scEditorWindow.stamps.forEach {
-            if(it is TextStamp)
-                textState = it.state
-        }
-
-        if(input.isKeyPressed(KeyEvent.VK_C) && textState == TextStamp.TextState.IDLE)
-            openColorChooser = true
-
         if(input.isKeyPressed(KeyEvent.VK_ENTER))
             openSaveAsWindow = true
-
-        if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_N))
-            openNewImageWindow = true
-
-        when (keyEvent.keyCode) {
-            KeyEvent.VK_1 -> scEditorWindow.setSelectedStamp(0)
-            KeyEvent.VK_2 -> scEditorWindow.setSelectedStamp(1)
-            KeyEvent.VK_3 -> scEditorWindow.setSelectedStamp(2)
-            KeyEvent.VK_4 -> scEditorWindow.setSelectedStamp(3)
-            KeyEvent.VK_5 -> scEditorWindow.setSelectedStamp(4)
-            KeyEvent.VK_6 -> scEditorWindow.setSelectedStamp(5)
-            KeyEvent.VK_7 -> scEditorWindow.setSelectedStamp(6)
-        }
-
-        if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_S)) {
-            if(scEditorWindow.isDirty) scEditorWindow.saveImage()
-            scEditorWindow.close()
-        }
-
-        if(scEditorWindow.inputContainer.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_Z)) {
-            scEditorWindow.historyManager.undoHistory()
-        }
 
         scEditorWindow.getSelectedStamp().update(scEditorWindow.inputContainer, 0, keyEvent)
         scEditorWindow.repaint()
@@ -89,24 +38,8 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
 
     override fun keyReleased(keyEvent: KeyEvent) {
         super.keyReleased(keyEvent)
-        if(openNewImageWindow) {
-            //We do this here since creating a new image should not be blocked just because
-            //the default image is still in there
-            scEditorWindow.openNewImageWindow()
-            openNewImageWindow = false
-            scEditorWindow.inputContainer.resetKeys()
-        }
 
         if(!scEditorWindow.isEnableInteraction) return
-
-        if(openColorChooser) {
-            //This fixes an issue with the ALT key getting "stuck" since the key up event is not being received if the color window is in the front.
-            openColorChooser = false
-            scEditorWindow.inputContainer.resetKeys()
-            val wnd = CCColorChooser(scEditorWindow.getSelectedStamp().color!!, "Marker color", parent = scEditorWindow, useGradient = true)
-            //TODO: Do we want the save button back?
-            scEditorWindow.cWindows.add(wnd)
-        }
 
         if(openSaveAsWindow) {
             openSaveAsWindow = false
@@ -127,10 +60,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         if(!scEditorWindow.isPointOnUiComponents(mouseEvent.point))
             scEditorWindow.getSelectedStamp().mousePressedEvent(mouseEvent.button, true)
 
-        if(mouseEvent.button == 3) {
-            if(scEditorWindow.isDirty) scEditorWindow.saveImage()
-            scEditorWindow.close()
-        }
+        if(mouseEvent.button == 3) scEditorWindow.save(true)
 
         scEditorWindow.repaint()
     }

@@ -14,7 +14,6 @@ import org.capturecoop.cclogger.CCLogFilter
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
 import org.capturecoop.ccutils.utils.CCStringUtils
-import org.jnativehook.GlobalScreen
 import java.awt.Desktop
 import java.awt.SystemTray
 import java.awt.image.BufferedImage
@@ -22,8 +21,6 @@ import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.util.*
-import java.util.logging.Level
-import java.util.logging.Logger
 import javax.imageio.ImageIO
 import javax.swing.JDialog
 import javax.swing.JFrame
@@ -77,7 +74,7 @@ class SnipSniper {
             CCLogger.enabled = true
             CCLogger.paused = true //Allows us setting up things like log file and format before having it log
 
-            Logger.getLogger(GlobalScreen::class.java.`package`.name).level = Level.OFF
+            NativeHookManager.disableLogger()
 
             val launchType = Utils.getLaunchType(System.getProperty("launchType"))
             platformType = Utils.getPlatformType(System.getProperty("platformType"))
@@ -121,8 +118,6 @@ class SnipSniper {
                 CCLogger.logStacktrace(throwable, CCLogLevel.ERROR)
             }
             Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler)
-
-            GlobalScreen.registerNativeHook()
 
             StatsManager.init()
             StatsManager.incrementCount(StatsManager.STARTED_AMOUNT)
@@ -270,7 +265,7 @@ class SnipSniper {
                     Desktop.getDesktop().open(CCLogger.logFile)
             }
             CCLogger.info("Exit requested. Goodbye!")
-            GlobalScreen.unregisterNativeHook()
+            NativeHookManager.exit()
             exitProcess(0)
         }
 

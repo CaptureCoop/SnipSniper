@@ -1,8 +1,8 @@
 package net.snipsniper.secrets.games
 
 import net.snipsniper.config.ConfigHelper
-import net.snipsniper.utils.DrawUtils.Companion.drawCenteredString
-import net.snipsniper.utils.ImageUtils.Companion.saveImage
+import net.snipsniper.utils.DrawUtils
+import net.snipsniper.utils.ImageUtils
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics
@@ -12,16 +12,11 @@ import javax.swing.JPanel
 
 class BGamePanel(private val game: BGame) : JPanel() {
     fun screenshot() {
-        val screenshot = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-        val g: Graphics = screenshot.createGraphics()
-        render(g, true)
-        g.dispose()
-        saveImage(
-            screenshot,
-            game.sniper.config.getString(ConfigHelper.PROFILE.saveFormat),
-            "_bgame",
-            game.sniper.config
-        )
+        ImageUtils.newBufferedImage(width, height, BufferedImage.TYPE_INT_RGB) {
+            render(it, true)
+        }.also {
+            ImageUtils.saveImage(it, game.sniper.config.getString(ConfigHelper.PROFILE.saveFormat), "_bgame", game.sniper.config)
+        }
     }
 
     fun render(g: Graphics, isScreenshot: Boolean) {
@@ -78,22 +73,20 @@ class BGamePanel(private val game: BGame) : JPanel() {
             g.color = Color(0, 0, 0, 100)
             g.fillRect(0, 0, width, height)
             g.color = Color.WHITE
-            drawCenteredString(g, "GAME OVER", Rectangle(0, 0, width, height), Font("Monospaced", Font.BOLD, height / 20))
+            DrawUtils.drawCenteredString(g, "GAME OVER", Rectangle(0, 0, width, height), Font("Monospaced", Font.BOLD, height / 20))
         }
         if (game.isPaused && !isScreenshot) {
             g.color = Color(0, 0, 0, 100)
             g.fillRect(0, 0, width, height)
             g.color = Color.WHITE
-            drawCenteredString(g, "PAUSED", Rectangle(0, 0, width, height), Font("Monospaced", Font.BOLD, height / 20))
+            DrawUtils.drawCenteredString(g, "PAUSED", Rectangle(0, 0, width, height), Font("Monospaced", Font.BOLD, height / 20))
         }
     }
 
-    override fun paint(g: Graphics) {
-        render(g, false)
-    }
+    override fun paint(g: Graphics) = render(g, false)
 
     //Returns Y
-    fun drawScoreText(g: Graphics?, offsetX: Int, ts: Int, index: Int, text: String?): Int {
+    private fun drawScoreText(g: Graphics?, offsetX: Int, ts: Int, index: Int, text: String?): Int {
         val height = height / 20
         val rect = Rectangle(
             offsetX + game.BOARD_WIDTH * ts,
@@ -101,14 +94,15 @@ class BGamePanel(private val game: BGame) : JPanel() {
             width - (offsetX + game.BOARD_WIDTH * ts),
             height
         )
-        drawCenteredString(g!!, text!!, rect, Font("Monospaced", Font.BOLD, height))
+        DrawUtils.drawCenteredString(g!!, text!!, rect, Font("Monospaced", Font.BOLD, height))
         return rect.y + rect.height
     }
 
-    fun drawHelpText(g: Graphics?, offsetX: Int, index: Int, text: String?, fontMultiplier: Float) {
+    private fun drawHelpText(g: Graphics?, offsetX: Int, index: Int, text: String?, fontMultiplier: Float) {
         var height = height / 20f
         height *= fontMultiplier
-        val rect = Rectangle(0, height.toInt() * index, offsetX, height.toInt())
-        drawCenteredString(g!!, text!!, rect, Font("Monospaced", Font.BOLD, height.toInt()))
+        Rectangle(0, height.toInt() * index, offsetX, height.toInt()).also {
+            DrawUtils.drawCenteredString(g!!, text!!, it, Font("Monospaced", Font.BOLD, height.toInt()))
+        }
     }
 }

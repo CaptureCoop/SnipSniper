@@ -27,7 +27,6 @@ open class SnipScopeListener(private val snipScopeWindow: SnipScopeWindow): KeyL
         if(!snipScopeWindow.isEnableInteraction) return
         when(keyEvent.keyCode) {
             KeyEvent.VK_R -> snipScopeWindow.resetZoom()
-            KeyEvent.VK_ESCAPE -> snipScopeWindow.dispose()
         }
         snipScopeWindow.repaint()
     }

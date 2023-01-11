@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 import javax.imageio.ImageIO
 import javax.swing.*
 
-class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), CCIClosable {
+class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var initialTitle: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), CCIClosable {
     val config: Config
     var saveLocation: String?
     var inClipboard: Boolean
@@ -33,9 +33,13 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
     private val listener: SCEditorListener?
     private val renderer: SCEditorRenderer
     var isDirty = false
+        set(value) {
+            field = value
+            refreshTitle()
+        }
     val qualityHints = Utils.getRenderingHints()
     private var defaultImage: BufferedImage? = null
-    val cWindows = CopyOnWriteArrayList<CCIClosable>()
+    private val cWindows = CopyOnWriteArrayList<CCIClosable>()
     var isStampVisible = true
     var ezMode: Boolean = config.getBool(ConfigHelper.PROFILE.ezMode)
         set(value) {
@@ -54,10 +58,12 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
     private val ezModeStampPanelTabs = JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT)
     private val isStandalone: Boolean
     private var stampColorChooser: CCColorChooser? = null
+    var historyWindow: SCEditorHistoryWindow? = null
+    private var configWindow: ConfigWindow? = null
 
     init {
         this.config = config
-        this.title = title
+        this.title = initialTitle
         this.saveLocation = saveLocation
         this.inClipboard = inClipboard
         this.isStandalone = isStandalone
@@ -66,12 +72,14 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT)
         if (startImage == null) {
             if (config.getBool(ConfigHelper.PROFILE.standaloneStartWithEmpty)) {
-                val imgSize = Toolkit.getDefaultToolkit().screenSize
-                image = BufferedImage(imgSize.width / 2, imgSize.height / 2, BufferedImage.TYPE_INT_RGB)
-                val imgG = image.graphics
-                imgG.color = Color.WHITE
-                imgG.fillRect(0, 0, image.width, image.height)
-                imgG.dispose()
+                Toolkit.getDefaultToolkit().screenSize.also { ss ->
+                    val w = ss.width / 2
+                    val h = ss.height / 2
+                    image = ImageUtils.newBufferedImage(w, h) {
+                        it.color = Color.WHITE
+                        it.fillRect(0, 0, w, h)
+                    }
+                }
             } else {
                 image = ImageUtils.getDragPasteImage("icons/editor.png".getImage(), "Drop image here or use CTRL + V to paste one!")
                 defaultImage = image
@@ -135,58 +143,91 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         kotlin.run {
             val topBar = JMenuBar()
             fun sizeImage(path: String) = path.getImage().scaled(16, 16).toImageIcon()
+            fun ctrlStroke(keyCode: Int) = KeyStroke.getKeyStroke(keyCode, InputEvent.CTRL_DOWN_MASK)
+            fun altStroke(keyCode: Int) = KeyStroke.getKeyStroke(keyCode, InputEvent.ALT_DOWN_MASK)
+            val devString = "Disabled menu items are still in development."
 
-            JMenu("File").also { fileItem ->
-                fileItem.icon = sizeImage("icons/folder.png")
-                JMenuItem("New").also { newItem ->
-                    newItem.icon = sizeImage("icons/questionmark.png")
-                    newItem.addActionListener { openNewImageWindow() }
-                    fileItem.add(newItem)
+            JMenu("File").also { parent ->
+                parent.icon = sizeImage("icons/folder.png")
+                JMenuItem("New").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    it.accelerator = ctrlStroke(KeyEvent.VK_N)
+                    it.addActionListener { openNewImageWindow() }
+                    parent.add(it)
                 }
-                JMenuItem("Open").also { openItem ->
-                    openItem.icon = sizeImage("icons/questionmark.png")
-                    openItem.addActionListener {
-                        JFileChooser().also {
-                            if(it.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-                                setImage(ImageIO.read(it.selectedFile), resetHistory = true, isNewImage = true)
+                JMenuItem("Open").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    it.addActionListener {
+                        JFileChooser().also { fc ->
+                            if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+                                setImage(ImageIO.read(fc.selectedFile), resetHistory = true, isNewImage = true)
                         }
                     }
-                    fileItem.add(openItem)
+                    parent.add(it)
                 }
-                fileItem.addSeparator()
+                JMenuItem("Save").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    it.accelerator = ctrlStroke(KeyEvent.VK_S)
+                    it.addActionListener { save(false) }
+                    parent.add(it)
+                }
+                JMenuItem("Save and close").also {
+                    it.icon = sizeImage("icons/questionmark.png")
+                    it.accelerator = altStroke(KeyEvent.VK_S)
+                    it.addActionListener { save(true) }
+                    parent.add(it)
+                }
+                parent.addSeparator()
                 JMenuItem("Close").also { closeItem ->
                     closeItem.icon = sizeImage("icons/redx.png")
+                    closeItem.accelerator = KeyStroke.getKeyStroke("ESCAPE")
                     closeItem.addActionListener { close() }
-                    fileItem.add(closeItem)
+                    parent.add(closeItem)
                 }
-                topBar.add(fileItem)
+                topBar.add(parent)
             }
-            JMenu("Edit").also { editItem ->
-                editItem.icon = sizeImage("icons/editor.png")
+            JMenu("Edit").also { parent ->
+                parent.icon = sizeImage("icons/editor.png")
                 JMenuItem("Config").also {
                     it.icon = sizeImage("icons/config.png")
-                    var wnd: ConfigWindow? = null //Singleton reference, only allow once of these open at the same time
-                    it.addActionListener {
-                        if(wnd == null) {
-                            wnd = ConfigWindow(config, ConfigWindow.PAGE.EditorPanel).also { cfgWnd ->
-                                cWindows.add(cfgWnd)
-                                cfgWnd.addCustomWindowListener {
-                                    //Config window is closing by itself, remove it from the listeners and its singleton reference
-                                    wnd = null
-                                    cWindows.remove(cfgWnd)
-                                }
-                            }
-                        } else wnd!!.requestFocus()
-                    }
-                    editItem.add(it)
+                    it.addActionListener { openConfigWindow() }
+                    parent.add(it)
                 }
+                parent.addSeparator()
+                JMenuItem("Undo").also {
+                    it.icon = sizeImage("icons/restart.png")
+                    it.accelerator = ctrlStroke(KeyEvent.VK_Z)
+                    it.addActionListener { undo() }
+                    parent.add(it)
+                }
+                JMenuItem("Redo").also {
+                    it.icon = ImageUtils.imageToBufferedImage(sizeImage("icons/restart.png").image).flipHorizontally().toImageIcon()
+                    it.accelerator = ctrlStroke(KeyEvent.VK_R)
+                    it.isEnabled = false
+                    it.toolTipText = devString
+                    parent.add(it)
+                }
+                parent.addSeparator()
+                JMenuItem("Copy").also {
+                    it.icon = sizeImage("icons/copy.png")
+                    it.accelerator = ctrlStroke(KeyEvent.VK_C)
+                    it.addActionListener { image.copyToClipboard() }
+                    parent.add(it)
+                }
+                JMenuItem("Paste").also {
+                    it.icon = sizeImage("icons/paste.png")
+                    it.accelerator = ctrlStroke(KeyEvent.VK_V)
+                    it.addActionListener { doPaste() }
+                    parent.add(it)
+                }
+                parent.addSeparator()
                 JMenuItem("Flip horizontally").also {
                     it.icon = sizeImage("icons/mirror_horizontal.png")
                     it.addActionListener {
                         setImage(image.flipHorizontally(), resetHistory = false, isNewImage = false)
                         historyManager.addHistory()
                     }
-                    editItem.add(it)
+                    parent.add(it)
                 }
                 JMenuItem("Flip vertically").also {
                     it.icon = sizeImage("icons/mirror_vertical.png")
@@ -194,17 +235,40 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                         setImage(image.flipVertically(), resetHistory = false, isNewImage = false)
                         historyManager.addHistory()
                     }
-                    editItem.add(it)
+                    parent.add(it)
                 }
                 JMenuItem("Resize").also {
-                    it.icon = sizeImage("icons/questionmark.png")
-                    editItem.add(it)
+                    it.icon = sizeImage("icons/resize.png")
+                    it.isEnabled = false
+                    it.toolTipText = devString
+                    parent.add(it)
                 }
-                topBar.add(editItem)
+                parent.addSeparator()
+                JMenuItem("History").also {
+                    it.icon = sizeImage("icons/clock.png")
+                    it.addActionListener { openHistoryWindow() }
+                    parent.add(it)
+                }
+                topBar.add(parent)
             }
-            JMenu("Experimental").also { expItem ->
-                expItem.icon = sizeImage("icons/debug.png")
+            JMenu("Stamps").also { parent->
+                parent.icon = sizeImage("icons/stamp.png")
+                for(i in 0 until StampType.size) {
+                    StampType.getByIndex(i).also { stamp ->
+                        JMenuItem(stamp.title).also {
+                            it.icon = sizeImage("icons/stamp.png")
+                            it.accelerator = KeyStroke.getKeyStroke((i + 1).toString())
+                            it.addActionListener { setSelectedStamp(i) }
+                            parent.add(it)
+                        }
+                    }
+                }
+                topBar.add(parent)
+            }
+            JMenu("Experimental").also { parent ->
+                parent.icon = sizeImage("icons/debug.png")
                 JMenuItem("Border test").also {
+                    it.icon = parent.icon
                     it.addActionListener {
                         val borderThickness = 10
                         //Fix to have this work without originalImage. As we will remove/Change this anyway I don't care if this affects anything for now.
@@ -227,9 +291,10 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                         repaint()
                         refreshTitle()
                     }
-                    expItem.add(it)
+                    parent.add(it)
                 }
                 JMenuItem("Box test").also {
+                    it.icon = parent.icon
                     it.addActionListener {
                         val width = 512
                         val height = 512
@@ -244,9 +309,9 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                         repaint()
                         refreshTitle()
                     }
-                    expItem.add(it)
+                    parent.add(it)
                 }
-                topBar.add(expItem)
+                topBar.add(parent)
             }
             jMenuBar = topBar
         }
@@ -334,24 +399,41 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         }
     }
 
-    fun saveImage() {
-        //TODO: Long term: Check if its ok to use image directly, we used to copy the image to finalImg so yeah.. :^) If anything comes up check here
-        val location = ImageUtils.saveImage(image, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
-        location?.replace(File(location).name, "")?.also { loc ->
-            config.set(ConfigHelper.PROFILE.lastSaveFolder, loc)
-            config.save()
+    fun save(close: Boolean = false) {
+        CCLogger.info("Saving editor, close=$close")
+        if(isDirty) {
+            val location = ImageUtils.saveImage(image, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
+            location?.replace(File(location).name, "")?.also { loc ->
+                config.set(ConfigHelper.PROFILE.lastSaveFolder, loc)
+                config.save()
+            }
+            if (config.getBool(ConfigHelper.PROFILE.copyToClipboard)) image.copyToClipboard()
+            isDirty = false
         }
-        if (config.getBool(ConfigHelper.PROFILE.copyToClipboard)) image.copyToClipboard()
+        if(close) close()
     }
 
     fun refreshTitle() {
         CCLogger.debug("Refreshing title")
-        var newTitle: String? = title
-        if (saveLocation != null && saveLocation!!.isNotEmpty()) newTitle += " ($saveLocation)"
-        if (inClipboard) {
-            newTitle += " (Clipboard)"
+        var newTitle: String? = initialTitle
+
+        //Path
+        if (saveLocation != null && saveLocation!!.isNotEmpty()) {
+            newTitle += when(config.getBool(ConfigHelper.PROFILE.fullPathInEditorTitle)) {
+                true -> " ($saveLocation)"
+                false -> " (${File(saveLocation!!).name})"
+            }
         }
+
+        //Clipboard
+        if (inClipboard) newTitle += " (Clipboard)"
+
+        //Size
         newTitle += " ${image.width}x${image.height}"
+
+        //Dirty
+        if(isDirty) newTitle += "*"
+        
         title = newTitle
     }
 
@@ -389,18 +471,40 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
         false -> ezModeStampSettingsPanel.removeAll()
     }
 
+    private fun doPaste() {
+        if(isDirty) {
+            JOptionPane.showConfirmDialog(this, "Changes present, are you sure you want to replace the current image?", "Warning", JOptionPane.YES_NO_OPTION).also {
+                if(it == 1) return
+            }
+        }
+        ImageUtils.getImageFromClipboard().also {
+            if(it == null) return
+            saveLocation = ""
+            inClipboard = true
+            setImage(it, resetHistory = true, isNewImage = true)
+            isDirty = false
+            refreshTitle()
+        }
+    }
+
     override fun toString() = "SCEditorWindow Pos:[$location] Path:[$saveLocation]"
 
     fun isDefaultImage() = defaultImage === image
 
     override fun close() {
+        if(isDirty) {
+            JOptionPane.showConfirmDialog(this, "Changes present, are you sure you want to exit?", "Warning", JOptionPane.YES_NO_OPTION).also {
+                if(it == 1) return
+            }
+        }
         cWindows.forEach { it.close() }
+        dispose()
         if (isStandalone) SnipSniper.exit(false)
         dispose()
     }
 
-    //This opens a color chooser for the stamp reliably, making sure not to open more then one and to update
-    //The chooser if needed (verifyOnly -> Dont create one even if its null)
+    //This opens a color chooser for the stamp reliably, making sure not to open more than one and to update
+    //The chooser if needed (verifyOnly -> Don't create one even if its null)
     fun openStampColorChooser(verifyOnly: Boolean = false) {
         val stamp = stamps[selectedStamp]
         val title = "${stamp.type.title} color"
@@ -425,6 +529,36 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                 it.color = stamp.color!!
                 it.requestFocus()
             }
+        }
+    }
+
+    private fun undo() = historyManager.undoHistory()
+
+    private fun openConfigWindow() {
+        if(configWindow == null) {
+            configWindow = ConfigWindow(config, ConfigWindow.PAGE.EditorPanel).also { cfgWnd ->
+                cWindows.add(cfgWnd)
+                cfgWnd.addCustomWindowListener {
+                    //Config window is closing by itself, remove it from the listeners and its singleton reference
+                    configWindow = null
+                    cWindows.remove(cfgWnd)
+                }
+            }
+        } else configWindow!!.requestFocus()
+    }
+
+    private fun openHistoryWindow() {
+        if(historyWindow != null) {
+            historyWindow!!.requestFocus()
+            return
+        }
+        SCEditorHistoryWindow(this).also { newWnd ->
+            cWindows.add(newWnd)
+            newWnd.setOnClose {
+                cWindows.remove(newWnd)
+                historyWindow = null
+            }
+            historyWindow = newWnd
         }
     }
 

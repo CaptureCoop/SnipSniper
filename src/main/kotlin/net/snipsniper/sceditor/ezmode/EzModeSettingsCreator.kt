@@ -4,10 +4,8 @@ import net.snipsniper.SnipSniper.Companion.getNewThread
 import net.snipsniper.configwindow.StampJPanel
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.sceditor.stamps.*
-import net.snipsniper.utils.DropdownItem
+import net.snipsniper.utils.*
 import net.snipsniper.utils.Function
-import net.snipsniper.utils.GradientJButton
-import net.snipsniper.utils.IFunction
 import org.capturecoop.cccolorutils.chooser.gui.CCHSBHueBar
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger.Companion.log
@@ -111,6 +109,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         panel.add(JLabel("size"))
         val sizeSlider = createEZModeSlider(1, 400, stamp.width, object : Function() {
             override fun run(vararg args: Int): Boolean {
+                if(args[1] == 0) return true
                 stamp.width = args[0]
                 stamp.height = args[0]
                 stampPreviewPanel.repaint()
@@ -137,7 +136,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
             slider.maximum = max
             slider.value = currentValue
             slider.addChangeListener {
-                onChange.run(slider.value)
+                onChange.run(slider.value, slider.valueIsAdjusting.toInt())
                 stampPreviewPanel.repaint()
                 scEditorWindow.requestFocus()
             }
