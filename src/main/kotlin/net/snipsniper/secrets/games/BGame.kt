@@ -50,7 +50,7 @@ class BGame(val sniper: Sniper) : JFrame() {
         resources!!.init()
         title = "Block Game"
         add(gamePanel)
-        iconImage = "icons/random/kiwi.png".getImage()
+        iconImage = "icons/random/block.png".getImage()
         addKeyListener(object : KeyAdapter() {
             override fun keyPressed(keyEvent: KeyEvent) {
                 super.keyPressed(keyEvent)
