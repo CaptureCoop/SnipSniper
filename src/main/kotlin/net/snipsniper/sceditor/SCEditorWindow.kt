@@ -388,6 +388,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
     override fun close() {
         cWindows.forEach { it.close() }
         if (isStandalone) SnipSniper.exit(false)
+        dispose()
     }
 
     //This opens a color chooser for the stamp reliably, making sure not to open more then one and to update
