@@ -24,6 +24,7 @@ class SCEditorHistory(private val editor: SCEditorWindow) {
     }
 
     fun undoHistory() {
+        if(history.size == 1) return //Don't bother
         var size = history.size
         if(size > 1) {
             size--
