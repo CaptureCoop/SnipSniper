@@ -18,6 +18,7 @@ import java.awt.event.*
 import java.awt.image.BufferedImage
 import java.io.File
 import java.util.concurrent.CopyOnWriteArrayList
+import javax.imageio.ImageIO
 import javax.swing.*
 
 class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), CCIClosable {
@@ -144,8 +145,15 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, title: String, 
                 }
                 JMenuItem("Open").also { openItem ->
                     openItem.icon = sizeImage("icons/questionmark.png")
+                    openItem.addActionListener {
+                        JFileChooser().also {
+                            if(it.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+                                setImage(ImageIO.read(it.selectedFile), resetHistory = true, isNewImage = true)
+                        }
+                    }
                     fileItem.add(openItem)
                 }
+                fileItem.addSeparator()
                 JMenuItem("Close").also { closeItem ->
                     closeItem.icon = sizeImage("icons/redx.png")
                     closeItem.addActionListener { close() }
