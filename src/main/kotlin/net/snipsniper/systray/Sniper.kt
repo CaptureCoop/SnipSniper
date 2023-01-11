@@ -58,19 +58,18 @@ class Sniper(private val profileID: Int) {
 
     private fun checkNativeKey(identifier: String, pressedKey: Int, pressedLocation: Int) {
         var hotkey = config.getString(ConfigHelper.PROFILE.hotkey)
-        if(hotkey != "NONE") {
-            if(hotkey.startsWith(identifier)) {
-                var location = -1
-                if(pressedLocation != -1 && hotkey.contains("_")) {
-                    val parts = hotkey.split("_")
-                    hotkey = parts[0]
-                    location = Integer.parseInt(parts[1])
-                }
-                val key = Integer.parseInt(hotkey.replace(identifier, ""))
-                if(pressedKey == key && (location == -1 || location == pressedLocation)) {
-                    openCaptureWindow()
-                }
+        if(hotkey == "NONE") return
+        if(hotkey.startsWith(identifier)) {
+            var location = -1
+            if(pressedLocation != -1 && hotkey.contains("_")) {
+                val parts = hotkey.split("_")
+                hotkey = parts[0]
+                location = Integer.parseInt(parts[1])
             }
+            if(
+                pressedKey == hotkey.replace(identifier, "").toInt() &&
+                (location == -1 || location == pressedLocation)
+            ) openCaptureWindow()
         }
     }
 
