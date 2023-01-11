@@ -56,7 +56,7 @@ class Sniper(private val profileID: Int) {
         SystemTray.getSystemTray().remove(trayIcon)
     }
 
-    fun checkNativeKey(identifier: String, pressedKey: Int, pressedLocation: Int) {
+    private fun checkNativeKey(identifier: String, pressedKey: Int, pressedLocation: Int) {
         var hotkey = config.getString(ConfigHelper.PROFILE.hotkey)
         if(hotkey != "NONE") {
             if(hotkey.startsWith(identifier)) {

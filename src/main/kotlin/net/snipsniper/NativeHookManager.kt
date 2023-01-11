@@ -62,7 +62,7 @@ object NativeHookManager {
         try {
             GlobalScreen.registerNativeHook()
         } catch (ex: NativeHookException) {
-            CCLogger.error("Could not register NativeHooK! Message: ${ex.message}")
+            CCLogger.error("Could not register NativeHook! Message: ${ex.message}")
         }
     }
 
@@ -74,6 +74,10 @@ object NativeHookManager {
 
     fun unregister(clazz: Any) {
         profiles.remove(clazz)?.unregister()
+        if(profiles.size == 0) {
+            CCLogger.info("All active NativeHookInstances have been killed. Unregistering NativeHook...")
+            GlobalScreen.unregisterNativeHook()
+        }
     }
 
     fun exit() {
