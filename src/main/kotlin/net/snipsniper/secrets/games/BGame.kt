@@ -15,13 +15,6 @@ import java.util.*
 import javax.swing.JFrame
 
 class BGame(val sniper: Sniper) : JFrame() {
-    val INITIAL_SCREEN_WIDTH = 1024
-    val INITIAL_SCREEN_HEIGHT = 512
-    val BOARD_WIDTH = 10
-    val BOARD_HEIGHT = 20
-    private val FALLSPEED_MAX_START = 500
-    private val SCORES = intArrayOf(40, 100, 300, 1200)
-    private val LINES_BEFORE_LVLUP_ADD = 10
     var board = Array<Array<BGameBlock?>>(BOARD_WIDTH) { Array(BOARD_HEIGHT) { null } }
         private set
     private val gamePanel = BGamePanel(this)
@@ -53,26 +46,18 @@ class BGame(val sniper: Sniper) : JFrame() {
         iconImage = "icons/random/block.png".getImage()
         addKeyListener(object : KeyAdapter() {
             override fun keyPressed(keyEvent: KeyEvent) {
-                super.keyPressed(keyEvent)
                 keys[keyEvent.keyCode] = true
                 if (keyEvent.keyCode == KeyEvent.VK_ESCAPE && !isGameOver) isPaused = !isPaused
             }
-
             override fun keyReleased(keyEvent: KeyEvent) {
-                super.keyReleased(keyEvent)
                 keys[keyEvent.keyCode] = false
             }
         })
         addMouseListener(object : MouseAdapter() {
-            override fun mouseClicked(e: MouseEvent) {
-                super.mouseClicked(e)
-                if (e.button == 3) {
-                    gamePanel.screenshot()
-                }
-            }
+            override fun mouseClicked(event: MouseEvent) = kotlin.run { if (event.button == 3) gamePanel.screenshot() }
         })
         addWindowListener(object : WindowAdapter() {
-            override fun windowClosing(e: WindowEvent) {
+            override fun windowClosing(event: WindowEvent) {
                 running = false
                 dispose()
             }
@@ -81,15 +66,16 @@ class BGame(val sniper: Sniper) : JFrame() {
         isVisible = true
         gamePanel.preferredSize = Dimension(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT)
         pack()
-        val screenSize = Toolkit.getDefaultToolkit().screenSize
-        setLocation(screenSize.width / 2 - width / 2, screenSize.height / 2 - height / 2)
+        Toolkit.getDefaultToolkit().screenSize.also {
+            setLocation(it.width / 2 - width / 2, it.height / 2 - height / 2)
+        }
         start()
         loop()
     }
 
-    var fallSpeed = 0
-    var fallSpeedMax = FALLSPEED_MAX_START
-    fun loop() {
+    private var fallSpeed = 0
+    private var fallSpeedMax = FALLSPEED_MAX_START
+    private fun loop() {
         while (running) {
             val ts = tileSize
             minimumSize = Dimension(BOARD_WIDTH * ts, BOARD_HEIGHT * ts)
@@ -132,11 +118,9 @@ class BGame(val sniper: Sniper) : JFrame() {
         }
     }
 
-    fun gameOver() {
-        isGameOver = true
-    }
+    fun gameOver() = kotlin.run { isGameOver = true }
 
-    fun checkRows(): Int {
+    private fun checkRows(): Int {
         var rowsCleared = 0
         for (y in 0 until BOARD_HEIGHT) {
             var hasFull = true
@@ -155,14 +139,13 @@ class BGame(val sniper: Sniper) : JFrame() {
         return rowsCleared
     }
 
-    fun spawnPiece() {
+    private fun spawnPiece() {
         incrementCount(StatsManager.BGAME_STARTED_SPAWNED_PIECES_AMOUNT)
-        val newPiece = BGamePiece(this)
         if (isGameOver) {
             currentPiece = null
             return
         }
-        if (nextPiece == null) currentPiece = newPiece else currentPiece = nextPiece
+        currentPiece = nextPiece ?: BGamePiece(this)
         nextPiece = BGamePiece(this)
     }
 
@@ -211,20 +194,19 @@ class BGame(val sniper: Sniper) : JFrame() {
         }
     }
 
-    fun isPressed(keyCode: Int): Boolean {
-        return keys[keyCode]
-    }
+    private fun isPressed(keyCode: Int) = keys[keyCode]
 
-    fun isPressedAny(vararg keyCodes: Int): Boolean {
-        for (keyCode in keyCodes) {
-            if (keys[keyCode]) return true
-        }
-        return false
-    }
+    private fun isPressedAny(vararg keyCodes: Int) = keyCodes.any { keys[it] }
 
     companion object {
-        fun randomRange(min: Int, max: Int): Int {
-            return Random().nextInt(max - min + 1) + min
-        }
+        private const val INITIAL_SCREEN_WIDTH = 1024
+        private const val INITIAL_SCREEN_HEIGHT = 512
+        const val BOARD_WIDTH = 10
+        const val BOARD_HEIGHT = 20
+        private const val FALLSPEED_MAX_START = 500
+        private val SCORES = intArrayOf(40, 100, 300, 1200)
+        private const val LINES_BEFORE_LVLUP_ADD = 10
+
+        fun randomRange(min: Int, max: Int) = Random().nextInt(max - min + 1) + min
     }
 }

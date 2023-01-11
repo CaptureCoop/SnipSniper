@@ -1,8 +1,10 @@
 package net.snipsniper.secrets.games
 
 import net.snipsniper.utils.trim
+import org.capturecoop.ccutils.math.CCVector2Int
 import java.awt.Graphics
 import java.awt.image.BufferedImage
+import java.util.Vector
 
 class BGamePiece(game: BGame) {
     private val game: BGame
@@ -22,7 +24,7 @@ class BGamePiece(game: BGame) {
         //index = 0;
         figure = game.resources!!.getPiece(index)
         this.game = game
-        posX = this.game.BOARD_WIDTH / 2 - figure[0].size / 2
+        posX = BGame.BOARD_WIDTH / 2 - figure[0].size / 2
         for (y in figure.indices) {
             for (x in figure[y].indices) {
                 if (game.board[posX + x][posY + y] != null) {
@@ -70,11 +72,11 @@ class BGamePiece(game: BGame) {
                 if (figure[y][x] != 0) {
                     val nPosX = posX + x
                     val nPosY = posY + y
-                    if (nPosX > -1 && nPosX < game.BOARD_WIDTH && nPosY > 0 && nPosY < game.BOARD_HEIGHT - 1) {
+                    if (nPosX > -1 && nPosX < BGame.BOARD_WIDTH && nPosY > 0 && nPosY < BGame.BOARD_HEIGHT - 1) {
                         val cBlock = game.board[posX + x][posY + y + 1]
                         if (cBlock != null) return true
                     }
-                    if (posY + y >= game.BOARD_HEIGHT - 1) return true
+                    if (posY + y >= BGame.BOARD_HEIGHT - 1) return true
                 }
             }
         }
@@ -87,7 +89,7 @@ class BGamePiece(game: BGame) {
                 if (figure[y][x] != 0) {
                     val nPosX = posX + x
                     val nPosY = posY + y
-                    if(!(nPosX < 0 || nPosX >= game.BOARD_WIDTH || nPosY < 0 || nPosY >= game.BOARD_HEIGHT))
+                    if(!(nPosX < 0 || nPosX >= BGame.BOARD_WIDTH || nPosY < 0 || nPosY >= BGame.BOARD_HEIGHT))
                         game.board[posX + x][posY + y] = BGameBlock(index)
                 }
             }
@@ -101,7 +103,7 @@ class BGamePiece(game: BGame) {
                 val piecePosY = posY + y
                 if (figure[y][x] != 0) {
                     if (piecePosX <= -1) return false
-                    if (piecePosX >= game.BOARD_WIDTH) return false
+                    if (piecePosX >= BGame.BOARD_WIDTH) return false
                     if (game.board[piecePosX][piecePosY] != null) return false
                 }
             }
@@ -126,24 +128,24 @@ class BGamePiece(game: BGame) {
     private fun checkRotation(newFigure: Array<IntArray>): Boolean {
         for (y in newFigure[0].indices) {
             for (x in newFigure.indices) {
-                val nPosX = posX + x
-                val nPosY = posY + y
-                if (nPosX <= -1 || nPosX >= game.BOARD_WIDTH || nPosY <= 0 || nPosY >= game.BOARD_HEIGHT - 1) {
-                    if (newFigure[y][x] == 1) return false
+                CCVector2Int(posX + x, posY + y).also { v ->
+                    if (v.x <= -1 || v.x >= BGame.BOARD_WIDTH || v.y <= 0 || v.y >= BGame.BOARD_HEIGHT - 1) {
+                        if (newFigure[y][x] == 1) return false
+                    }
+                    if(!(v.x < 0 || v.x >= BGame.BOARD_WIDTH || v.y < 0 || v.y >= BGame.BOARD_HEIGHT))
+                        if(game.board[v.x][v.y] != null)
+                            return false
                 }
-                if(!(nPosX < 0 || nPosX >= game.BOARD_WIDTH || nPosY < 0 || nPosY >= game.BOARD_HEIGHT))
-                    if(game.board[nPosX][nPosY] != null)
-                        return false
             }
         }
         return true
     }
 
     fun rotate(dir: Int) {
-        if (rotationCooldown == 0) {
-            val newFigure = rotateMatrix(figure, dir)
-            if (checkRotation(newFigure)) {
-                figure = newFigure
+        if(rotationCooldown != 0) return
+        rotateMatrix(figure, dir).also {
+            if (checkRotation(it)) {
+                figure = it
                 rotationCooldown = rotationCooldownMax
             }
         }

@@ -24,7 +24,7 @@ class BGamePanel(private val game: BGame) : JPanel() {
         g.clearRect(0, 0, width, height)
         g.color = Color.CYAN
         g.fillRect(0, 0, width, height)
-        val offsetX = width / 2 - game.BOARD_WIDTH * ts / 2
+        val offsetX = width / 2 - BGame.BOARD_WIDTH * ts / 2
         g.color = Color.BLACK
         if (game.currentPiece != null) {
             val cp = game.currentPiece!!
@@ -36,8 +36,8 @@ class BGamePanel(private val game: BGame) : JPanel() {
                 }
             }
         }
-        for (y in 0 until game.BOARD_HEIGHT) {
-            for (x in 0 until game.BOARD_WIDTH) {
+        for (y in 0 until BGame.BOARD_HEIGHT) {
+            for (x in 0 until BGame.BOARD_WIDTH) {
                 val cBlock = game.board[x][y]
                 if (cBlock != null) {
                     g.drawImage(game.resources?.getImage(cBlock.index), offsetX + x * ts, y * ts, ts, ts, null)
@@ -53,7 +53,7 @@ class BGamePanel(private val game: BGame) : JPanel() {
         drawScoreText(g, offsetX, ts, 6, "Lines cleared")
         drawScoreText(g, offsetX, ts, 7, game.linesCleared.toString() + "")
         val offY = drawScoreText(g, offsetX, ts, 9, "Next piece:")
-        val npX = width - (offsetX + game.BOARD_WIDTH * ts) + game.BOARD_WIDTH * ts
+        val npX = width - (offsetX + BGame.BOARD_WIDTH * ts) + BGame.BOARD_WIDTH * ts
         val npOffsetX = width - npX
         val np = game.nextPiece
         if (np != null) {
@@ -88,21 +88,15 @@ class BGamePanel(private val game: BGame) : JPanel() {
     //Returns Y
     private fun drawScoreText(g: Graphics?, offsetX: Int, ts: Int, index: Int, text: String?): Int {
         val height = height / 20
-        val rect = Rectangle(
-            offsetX + game.BOARD_WIDTH * ts,
-            height * index,
-            width - (offsetX + game.BOARD_WIDTH * ts),
-            height
-        )
+        val rect = Rectangle(offsetX + BGame.BOARD_WIDTH * ts, height * index, width - (offsetX + BGame.BOARD_WIDTH * ts), height)
         DrawUtils.drawCenteredString(g!!, text!!, rect, Font("Monospaced", Font.BOLD, height))
         return rect.y + rect.height
     }
 
-    private fun drawHelpText(g: Graphics?, offsetX: Int, index: Int, text: String?, fontMultiplier: Float) {
-        var height = height / 20f
-        height *= fontMultiplier
-        Rectangle(0, height.toInt() * index, offsetX, height.toInt()).also {
-            DrawUtils.drawCenteredString(g!!, text!!, it, Font("Monospaced", Font.BOLD, height.toInt()))
+    private fun drawHelpText(g: Graphics, offsetX: Int, index: Int, text: String, fontMultiplier: Float) {
+        val height = ((height / 20f) * fontMultiplier).toInt()
+        Rectangle(0, height * index, offsetX, height).also {
+            DrawUtils.drawCenteredString(g, text, it, Font("Monospaced", Font.BOLD, height))
         }
     }
 }
