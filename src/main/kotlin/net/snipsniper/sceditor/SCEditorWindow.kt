@@ -209,13 +209,13 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 }
                 parent.addSeparator()
                 JMenuItem("Copy").also {
-                    it.icon = sizeImage("icons/questionmark.png")
+                    it.icon = sizeImage("icons/copy.png")
                     it.accelerator = ctrlStroke(KeyEvent.VK_C)
                     it.addActionListener { image.copyToClipboard() }
                     parent.add(it)
                 }
                 JMenuItem("Paste").also {
-                    it.icon = sizeImage("icons/questionmark.png")
+                    it.icon = sizeImage("icons/paste.png")
                     it.accelerator = ctrlStroke(KeyEvent.VK_V)
                     it.addActionListener { doPaste() }
                     parent.add(it)
