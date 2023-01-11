@@ -1,13 +1,11 @@
 package net.snipsniper.secrets.games
 
+import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.trim
 import org.capturecoop.ccutils.math.CCVector2Int
-import java.awt.Graphics
 import java.awt.image.BufferedImage
-import java.util.Vector
 
-class BGamePiece(game: BGame) {
-    private val game: BGame
+class BGamePiece(private val game: BGame) {
     var figure: Array<IntArray>
     var posX: Int
         private set
@@ -17,13 +15,10 @@ class BGamePiece(game: BGame) {
     private val rotationCooldownMax = 10
     private var moveCooldown = 0
     private val moveCooldownMax = 10
-    val index: Int
+    val index: Int = BGame.randomRange(0, game.resources!!.getSize() - 1)
 
     init {
-        index = BGame.randomRange(0, game.resources!!.getSize() - 1)
-        //index = 0;
         figure = game.resources!!.getPiece(index)
-        this.game = game
         posX = BGame.BOARD_WIDTH / 2 - figure[0].size / 2
         for (y in figure.indices) {
             for (x in figure[y].indices) {
@@ -43,39 +38,36 @@ class BGamePiece(game: BGame) {
         return checkCollision()
     }
 
-    fun moveDown(): Boolean {
-        if (!checkCollision()) {
+    fun moveDown() = when(checkCollision()) {
+        false -> {
             posY++
-            return false
+            false
         }
-        return true
+        true -> true
     }
 
     fun getRawImage(size: Int): BufferedImage {
-        val image = BufferedImage(figure[0].size * size, figure[1].size * size, BufferedImage.TYPE_INT_ARGB)
-        val g: Graphics = image.createGraphics()
-        for (y in figure[0].indices) {
-            for (x in figure.indices) {
-                if (figure[y][x] != 0) {
-                    g.drawImage(game.resources!!.getImage(index), x * size, y * size, size, size, null)
+        return ImageUtils.newBufferedImage(figure[0].size * size, figure[1].size * size) {
+            for (y in figure[0].indices) {
+                for (x in figure.indices) {
+                    if(figure[y][x] == 0) continue
+                    it.drawImage(game.resources!!.getImage(index), x * size, y * size, size, size, null)
                 }
             }
-        }
-        g.dispose()
-        return image.trim()
+        }.trim()
     }
 
     //returns true if the piece hit something
     fun checkCollision(): Boolean {
         for (y in figure[0].indices) {
             for (x in figure.indices) {
-                if (figure[y][x] != 0) {
-                    val nPosX = posX + x
-                    val nPosY = posY + y
-                    if (nPosX > -1 && nPosX < BGame.BOARD_WIDTH && nPosY > 0 && nPosY < BGame.BOARD_HEIGHT - 1) {
-                        val cBlock = game.board[posX + x][posY + y + 1]
-                        if (cBlock != null) return true
-                    }
+                if(figure[y][x] == 0) continue
+                CCVector2Int(posX + x, posY + y).also { v ->
+                    if (
+                        v.x > -1 && v.x < BGame.BOARD_WIDTH &&
+                        v.y > 0 && v.y < BGame.BOARD_HEIGHT - 1 &&
+                        game.board[posX + x][posY + y + 1] != null
+                    ) return true
                     if (posY + y >= BGame.BOARD_HEIGHT - 1) return true
                 }
             }
