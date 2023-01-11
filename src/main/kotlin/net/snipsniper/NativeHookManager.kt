@@ -1,6 +1,5 @@
 package net.snipsniper
 
-import net.snipsniper.systray.Sniper
 import org.capturecoop.cclogger.CCLogger
 import org.jnativehook.GlobalScreen
 import org.jnativehook.NativeHookException
@@ -18,7 +17,7 @@ data class NativeHookEvent(val code: Int, val type: Type, val location: Int) {
     enum class Type(val code: String) { MOUSE("M"), KEYBOARD("KB")}
 }
 
-class NativeHookInstance(private val sniper: Sniper) {
+class NativeHookInstance(private val clazz: Any) {
     private val keyListener: NativeKeyListener
     private val mouseListener: NativeMouseListener
     private val listeners = ArrayList<(NativeHookEvent) -> Unit>()
@@ -40,7 +39,7 @@ class NativeHookInstance(private val sniper: Sniper) {
         }
         GlobalScreen.addNativeKeyListener(keyListener)
         GlobalScreen.addNativeMouseListener(mouseListener)
-        CCLogger.info("$sniper is now listening")
+        CCLogger.info("$clazz is now listening")
     }
 
     fun addListener(action: (NativeHookEvent) -> (Unit)) = listeners.add(action)
@@ -48,12 +47,13 @@ class NativeHookInstance(private val sniper: Sniper) {
     fun unregister() {
         GlobalScreen.removeNativeKeyListener(keyListener)
         GlobalScreen.removeNativeMouseListener(mouseListener)
-        CCLogger.info("$sniper is no longer listening")
+        CCLogger.info("$clazz is no longer listening")
     }
 }
 
 object NativeHookManager {
-    private val profiles = HashMap<Sniper, NativeHookInstance>()
+    const val VC_ESCAPE = NativeKeyEvent.VC_ESCAPE
+    private val profiles = HashMap<Any, NativeHookInstance>()
 
     private fun verifyRegistered() {
         if(GlobalScreen.isNativeHookRegistered()) return
@@ -66,14 +66,14 @@ object NativeHookManager {
         }
     }
 
-    fun register(sniper: Sniper): NativeHookInstance {
-        CCLogger.info("$sniper is trying to register a NativeHookInstance")
+    fun register(clazz: Any): NativeHookInstance {
+        CCLogger.info("$clazz is trying to register a NativeHookInstance")
         verifyRegistered()
-        return NativeHookInstance(sniper).also { profiles[sniper] = it }
+        return NativeHookInstance(clazz).also { profiles[clazz] = it }
     }
 
-    fun unregister(sniper: Sniper) {
-        profiles.remove(sniper)?.unregister()
+    fun unregister(clazz: Any) {
+        profiles.remove(clazz)?.unregister()
     }
 
     fun exit() {
@@ -86,4 +86,6 @@ object NativeHookManager {
         LogManager.getLogManager().reset()
         Logger.getLogger(GlobalScreen::class.java.`package`.name).level = Level.OFF
     }
+
+    fun getKeyText(key: Int): String = NativeKeyEvent.getKeyText(key)
 }
