@@ -39,7 +39,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         }
     val qualityHints = Utils.getRenderingHints()
     private var defaultImage: BufferedImage? = null
-    val cWindows = CopyOnWriteArrayList<CCIClosable>()
+    private val cWindows = CopyOnWriteArrayList<CCIClosable>()
     var isStampVisible = true
     var ezMode: Boolean = config.getBool(ConfigHelper.PROFILE.ezMode)
         set(value) {
@@ -158,9 +158,9 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 JMenuItem("Open").also {
                     it.icon = sizeImage("icons/questionmark.png")
                     it.addActionListener {
-                        JFileChooser().also {
-                            if(it.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-                                setImage(ImageIO.read(it.selectedFile), resetHistory = true, isNewImage = true)
+                        JFileChooser().also { fc ->
+                            if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+                                setImage(ImageIO.read(fc.selectedFile), resetHistory = true, isNewImage = true)
                         }
                     }
                     parent.add(it)
@@ -503,8 +503,8 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         dispose()
     }
 
-    //This opens a color chooser for the stamp reliably, making sure not to open more then one and to update
-    //The chooser if needed (verifyOnly -> Dont create one even if its null)
+    //This opens a color chooser for the stamp reliably, making sure not to open more than one and to update
+    //The chooser if needed (verifyOnly -> Don't create one even if its null)
     fun openStampColorChooser(verifyOnly: Boolean = false) {
         val stamp = stamps[selectedStamp]
         val title = "${stamp.type.title} color"

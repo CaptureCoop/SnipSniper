@@ -1,6 +1,5 @@
 package net.snipsniper.utils
 
-import net.snipsniper.ImageManager
 import java.awt.*
 import java.awt.event.*
 import java.util.*
