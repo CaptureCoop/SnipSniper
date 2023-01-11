@@ -15,7 +15,7 @@ import java.util.*
 import javax.swing.JFrame
 
 class BGame(val sniper: Sniper) : JFrame() {
-    var board = Array<Array<BGameBlock?>>(BOARD_WIDTH) { Array(BOARD_HEIGHT) { null } }
+    lateinit var board: Array<Array<BGameBlock?>>
         private set
     private val gamePanel = BGamePanel(this)
     var currentPiece: BGamePiece? = null
@@ -153,6 +153,7 @@ class BGame(val sniper: Sniper) : JFrame() {
         get() = gamePanel.height / BOARD_HEIGHT
 
     fun start() {
+        board = Array(BOARD_WIDTH) { Array(BOARD_HEIGHT) { null } }
         isGameOver = false
         fallSpeedMax = FALLSPEED_MAX_START
         nextPiece = null
