@@ -122,8 +122,6 @@ class SnipSniper {
             }
             Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler)
 
-            GlobalScreen.registerNativeHook()
-
             StatsManager.init()
             StatsManager.incrementCount(StatsManager.STARTED_AMOUNT)
 
@@ -270,7 +268,7 @@ class SnipSniper {
                     Desktop.getDesktop().open(CCLogger.logFile)
             }
             CCLogger.info("Exit requested. Goodbye!")
-            GlobalScreen.unregisterNativeHook()
+            NativeHookManager.exit()
             exitProcess(0)
         }
 
