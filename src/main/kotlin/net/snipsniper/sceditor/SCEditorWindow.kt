@@ -18,6 +18,7 @@ import java.awt.event.*
 import java.awt.image.BufferedImage
 import java.io.File
 import java.util.concurrent.CopyOnWriteArrayList
+import javax.imageio.ImageIO
 import javax.swing.*
 
 class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var initialTitle: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), CCIClosable {
@@ -156,8 +157,12 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 }
                 JMenuItem("Open").also {
                     it.icon = sizeImage("icons/questionmark.png")
-                    it.isEnabled = false
-                    it.toolTipText = devString
+                    it.addActionListener {
+                        JFileChooser().also {
+                            if(it.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+                                setImage(ImageIO.read(it.selectedFile), resetHistory = true, isNewImage = true)
+                        }
+                    }
                     parent.add(it)
                 }
                 JMenuItem("Save").also {
@@ -172,6 +177,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                     it.addActionListener { save(true) }
                     parent.add(it)
                 }
+                parent.addSeparator()
                 JMenuItem("Close").also { closeItem ->
                     closeItem.icon = sizeImage("icons/redx.png")
                     closeItem.accelerator = KeyStroke.getKeyStroke("ESCAPE")
@@ -494,6 +500,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         cWindows.forEach { it.close() }
         dispose()
         if (isStandalone) SnipSniper.exit(false)
+        dispose()
     }
 
     //This opens a color chooser for the stamp reliably, making sure not to open more then one and to update
