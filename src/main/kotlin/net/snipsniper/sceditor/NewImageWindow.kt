@@ -1,9 +1,6 @@
 package net.snipsniper.sceditor
 
-import net.snipsniper.utils.GradientJButton
-import net.snipsniper.utils.IFunction
-import net.snipsniper.utils.Utils
-import net.snipsniper.utils.getImage
+import net.snipsniper.utils.*
 import org.capturecoop.cccolorutils.CCColor
 import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.ccutils.utils.CCIClosable
@@ -68,14 +65,13 @@ class NewImageWindow: JFrame(), CCIClosable  {
                 if(widthInput == null || heightInput == null) {
                     Utils.showPopup(this, "Bad input! Not a valid number.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, "icons/redx.png".getImage(), true)
                 } else {
-                    image = BufferedImage(widthInput, heightInput, BufferedImage.TYPE_INT_ARGB)
-                    image.createGraphics().also { g ->
+                    image = ImageUtils.newBufferedImage(widthInput, heightInput) { g ->
+                        g as Graphics2D
                         g.paint = color.getGradientPaint(widthInput, heightInput)
                         g.fillRect(0, 0, widthInput, heightInput)
-                        g.dispose()
-                        onSubmit?.run()
-                        dispose()
                     }
+                    onSubmit?.run()
+                    dispose()
                 }
             }
             add(it, gbc)
