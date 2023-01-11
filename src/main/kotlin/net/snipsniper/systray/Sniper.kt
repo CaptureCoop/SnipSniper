@@ -1,6 +1,7 @@
 package net.snipsniper.systray
 
 import net.snipsniper.ImageManager
+import net.snipsniper.NativeHookManager
 import net.snipsniper.SnipSniper
 import net.snipsniper.capturewindow.CaptureWindow
 import net.snipsniper.config.Config
@@ -8,11 +9,6 @@ import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.*
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
-import org.jnativehook.GlobalScreen
-import org.jnativehook.keyboard.NativeKeyAdapter
-import org.jnativehook.keyboard.NativeKeyEvent
-import org.jnativehook.mouse.NativeMouseAdapter
-import org.jnativehook.mouse.NativeMouseEvent
 import java.awt.Image
 import java.awt.SystemTray
 import java.awt.TrayIcon
@@ -26,8 +22,6 @@ class Sniper(private val profileID: Int) {
     private lateinit var trayIcon: TrayIcon
     private val instance = this
 
-    private var nativeKeyAdapter: NativeKeyAdapter
-    private var nativeMouseAdapter: NativeMouseAdapter
     private var isCustomIcon = false
     //TODO: Maybe make a function for opening the capture window so that we call isIdle = false at a unified place?
     //TODO: We check twice if iconString or whatever is none, we should not statically check that but maybe check with the defaults?
@@ -49,25 +43,14 @@ class Sniper(private val profileID: Int) {
             })
             tray.add(trayIcon)
         }
-
-        nativeKeyAdapter = object : NativeKeyAdapter() {
-            override fun nativeKeyPressed(e: NativeKeyEvent) {
-                checkNativeKey("KB", e.keyCode, e.keyLocation)
-            }
+        //Register and listen
+        NativeHookManager.register(this).addListener {
+            checkNativeKey(it.type.code, it.code, it.location)
         }
-
-        nativeMouseAdapter = object : NativeMouseAdapter() {
-            override fun nativeMouseClicked(e: NativeMouseEvent) {
-                checkNativeKey("M", e.button, -1)
-            }
-        }
-        GlobalScreen.addNativeKeyListener(nativeKeyAdapter)
-        GlobalScreen.addNativeMouseListener(nativeMouseAdapter)
     }
 
     fun kill() {
-        GlobalScreen.removeNativeKeyListener(nativeKeyAdapter)
-        GlobalScreen.removeNativeMouseListener(nativeMouseAdapter)
+        NativeHookManager.unregister(this)
         SystemTray.getSystemTray().remove(trayIcon)
     }
 
@@ -121,4 +104,6 @@ class Sniper(private val profileID: Int) {
     }
 
     fun alert(message: String, title: String, type: TrayIcon.MessageType) = trayIcon.displayMessage(message, title, type)
+
+    override fun toString() = "SnipSniper Profile ($profileID)"
 }
