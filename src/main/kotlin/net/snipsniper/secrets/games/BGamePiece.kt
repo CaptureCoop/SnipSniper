@@ -86,11 +86,10 @@ class BGamePiece(game: BGame) {
     fun hit() {
         for (y in figure[0].indices) {
             for (x in figure.indices) {
-                if (figure[y][x] != 0) {
-                    val nPosX = posX + x
-                    val nPosY = posY + y
-                    if(!(nPosX < 0 || nPosX >= BGame.BOARD_WIDTH || nPosY < 0 || nPosY >= BGame.BOARD_HEIGHT))
-                        game.board[posX + x][posY + y] = BGameBlock(index)
+                if(figure[y][x] == 0) continue
+                CCVector2Int(posX + x, posY + y).also { v ->
+                    if(!(v.x < 0 || v.x >= BGame.BOARD_WIDTH || v.y < 0 || v.y >= BGame.BOARD_HEIGHT))
+                        game.board[v.x][v.y] = BGameBlock(index)
                 }
             }
         }
@@ -99,12 +98,11 @@ class BGamePiece(game: BGame) {
     private fun checkMoveCollision(dir: Int): Boolean {
         for (y in figure[0].indices) {
             for (x in figure.indices) {
-                val piecePosX = posX + x + dir
-                val piecePosY = posY + y
-                if (figure[y][x] != 0) {
-                    if (piecePosX <= -1) return false
-                    if (piecePosX >= BGame.BOARD_WIDTH) return false
-                    if (game.board[piecePosX][piecePosY] != null) return false
+                if(figure[y][x] == 0) continue
+                CCVector2Int(posX + x + dir, posY + y).also { v ->
+                    if (v.x <= -1) return false
+                    if (v.x >= BGame.BOARD_WIDTH) return false
+                    if (game.board[v.x][v.y] != null) return false
                 }
             }
         }
@@ -112,13 +110,13 @@ class BGamePiece(game: BGame) {
     }
 
     fun move(dir: Int) {
-        if (dir == 1 && moveCooldown == 0) {
-            if (checkMoveCollision(dir)) {
+        if(moveCooldown != 0 || !checkMoveCollision(dir)) return
+        when(dir) {
+            1 -> {
                 posX++
                 moveCooldown = moveCooldownMax
             }
-        } else if (dir == -1 && moveCooldown == 0) {
-            if (checkMoveCollision(dir)) {
+            -1 -> {
                 posX--
                 moveCooldown = moveCooldownMax
             }
