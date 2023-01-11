@@ -44,8 +44,10 @@ class Sniper(private val profileID: Int) {
             tray.add(trayIcon)
         }
         //Register and listen
-        NativeHookManager.register(this).addListener {
-            checkNativeKey(it.type.code, it.code, it.location)
+        if(config.getString(ConfigHelper.PROFILE.hotkey) != "NONE") {
+            NativeHookManager.register(this).addListener {
+                checkNativeKey(it.type.code, it.code, it.location)
+            }
         }
     }
 
