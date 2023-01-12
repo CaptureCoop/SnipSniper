@@ -1,6 +1,5 @@
 package net.snipsniper.utils
 
-import net.snipsniper.ImageManager
 import net.snipsniper.SnipSniper
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
@@ -23,7 +22,7 @@ import javax.swing.JOptionPane
 
 
 object ImageUtils {
-    fun getDefaultIcon(profileID: Int): Image = ImageManager.getImage("systray/icon$profileID.png")
+    fun getDefaultIcon(profileID: Int) = "systray/icon$profileID.png".getImage()
 
     fun ensureAlphaLayer(image: BufferedImage): BufferedImage {
         if(image.type == BufferedImage.TYPE_INT_ARGB) return image
@@ -96,16 +95,16 @@ object ImageUtils {
             return when(it.location) {
                 SSFile.LOCATION.JAR -> {
                     when(icon.endsWith(".gif")) {
-                        true -> ImageManager.getAnimatedImage(it.path)
-                        else -> ImageManager.getImage(it.path)
+                        true -> it.path.getAnimatedImage()
+                        else -> it.path.getImage()
                     }
                 }
-                SSFile.LOCATION.LOCAL -> getImageFromDisk(SnipSniper.imgFolder + "/" + it.path)
+                SSFile.LOCATION.LOCAL -> getImageFromDisk(SnipSniper.imgFolder + File.separator + it.path)
             }
         }
     }
 
-    fun getIconDynamically(config: Config): Image? = getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))
+    fun getIconDynamically(config: Config) = getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))
 
     //https://stackoverflow.com/a/36938923
     //Converted by IntelliJ
@@ -202,12 +201,7 @@ object ImageUtils {
                 return file.absolutePath
             }
         } catch (exception: IOException) {
-            JOptionPane.showMessageDialog(
-                null,
-                CCStringUtils.format("Could not save image to \"%c\"!", file),
-                "Error",
-                JOptionPane.INFORMATION_MESSAGE
-            )
+            JOptionPane.showMessageDialog(null, "Could not save image to \"$file\"!", "Error", JOptionPane.INFORMATION_MESSAGE)
             CCLogger.log("Image could not be saved. Wanted Location: $file", CCLogLevel.WARNING)
             CCLogger.logStacktrace(exception, CCLogLevel.WARNING)
             return null
@@ -215,15 +209,11 @@ object ImageUtils {
         return null
     }
 
-    fun flipImageHorizontally(image: BufferedImage): BufferedImage {
-        return newBufferedImage(image.width, image.height, image.type) {
-            it.drawImage(image, image.width, 0, -image.width, image.height, null)
-        }
+    fun flipImageHorizontally(image: BufferedImage) = newBufferedImage(image.width, image.height, image.type) {
+        it.drawImage(image, image.width, 0, -image.width, image.height, null)
     }
 
-    fun flipImageVertically(image: BufferedImage): BufferedImage {
-        return newBufferedImage(image.width, image.height, image.type) {
-            it.drawImage(image, 0, image.height, image.width, -image.height, null)
-        }
+    fun flipImageVertically(image: BufferedImage) = newBufferedImage(image.width, image.height, image.type) {
+        it.drawImage(image, 0, image.height, image.width, -image.height, null)
     }
 }
