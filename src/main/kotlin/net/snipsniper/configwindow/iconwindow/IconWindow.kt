@@ -4,7 +4,6 @@ import net.snipsniper.ImageManager
 import net.snipsniper.SnipSniper
 import net.snipsniper.utils.*
 import org.capturecoop.ccutils.utils.CCIClosable
-import org.capturecoop.ccutils.utils.CCStringUtils
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
@@ -26,6 +25,7 @@ import javax.swing.filechooser.FileFilter
 
 class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunction): JFrame(), CCIClosable {
     enum class ICON_TYPE {GENERAL, RANDOM, CUSTOM}
+    private val allowedExtensions = listOf(".png", ".gif", ".jpg", ".jpeg")
     private val rows = 4
 
     init {
@@ -135,22 +135,13 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
                 newBtn.maximumSize = sizeDim
                 newBtn.addActionListener {
                     JFileChooser().also { chooser ->
-                        val filter = object : FileFilter() {
-                            override fun accept(pathname: File): Boolean {
-                                if (pathname.isDirectory) return true
-                                return CCStringUtils.endsWith(
-                                    pathname.name.lowercase(),
-                                    ".png",
-                                    ".gif",
-                                    ".jpg",
-                                    ".jpeg"
-                                )
-                            }
-
+                        object : FileFilter() {
+                            override fun accept(pathname: File) = if(pathname.isDirectory) true else allowedExtensions.any { pathname.name.lowercase().endsWith(it) }
                             override fun getDescription() = "Images"
+                        }.also { filter ->
+                            chooser.addChoosableFileFilter(filter)
+                            chooser.fileFilter = filter
                         }
-                        chooser.addChoosableFileFilter(filter)
-                        chooser.fileFilter = filter
                         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                             loadFile(chooser.selectedFile)
                             popuplateButtons(content, type)
