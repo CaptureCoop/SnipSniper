@@ -7,7 +7,6 @@ import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.systray.Sniper
 import net.snipsniper.utils.*
 import org.apache.commons.lang3.SystemUtils
-import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
 import java.awt.*
 import java.awt.event.FocusAdapter
@@ -35,7 +34,7 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
     private val dottedLineDistance: Int = config.getInt(ConfigHelper.PROFILE.dottedOutlineDistance)
 
     private fun loop() {
-        IFunction {
+        SnipSniper.getNewThread {
             val nsPerTick = 1000000000.0 / config.getInt(ConfigHelper.PROFILE.maxFPS)
             var lastTime = System.nanoTime()
             var lastTimer = System.currentTimeMillis()
@@ -58,9 +57,7 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
                 }
                 if (System.currentTimeMillis() - lastTimer >= 1000) lastTimer += 1000
             }
-        }.also {
-            SnipSniper.getNewThread(it).start()
-        }
+        }.start()
     }
 
     private fun specialRepaint() {

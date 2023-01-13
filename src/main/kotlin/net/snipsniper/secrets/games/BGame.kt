@@ -4,7 +4,6 @@ import net.snipsniper.SnipSniper.Companion.getNewThread
 import net.snipsniper.StatsManager
 import net.snipsniper.StatsManager.Companion.incrementCount
 import net.snipsniper.systray.Sniper
-import net.snipsniper.utils.IFunction
 import net.snipsniper.utils.getImage
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
@@ -168,7 +167,7 @@ class BGame(val sniper: Sniper) : JFrame() {
 
     init {
         incrementCount(StatsManager.BGAME_STARTED_AMOUNT)
-        getNewThread(IFunction {  launch() }).start()
+        getNewThread { launch() }.start()
     }
 
     fun input() {

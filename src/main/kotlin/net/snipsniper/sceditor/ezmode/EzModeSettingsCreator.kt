@@ -220,7 +220,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         fontTypeDropdown.addFocusListener(object : FocusAdapter() {
             override fun focusGained(focusEvent: FocusEvent) {
                 super.focusGained(focusEvent)
-                getNewThread(IFunction {
+                getNewThread {
                     try {
                         Thread.sleep(5000)
                     } catch (ex: InterruptedException) {
@@ -228,7 +228,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
                         logStacktrace(ex, CCLogLevel.ERROR)
                     }
                     scEditorWindow.requestFocus()
-                }).start()
+                }.start()
             }
         })
         fontTypeDropdown.addItemListener {

@@ -297,7 +297,7 @@ class SnipSniper {
             }
         }
 
-        fun getNewThread(f: IFunction): Thread = Thread { f.run() }.also { thread -> thread.uncaughtExceptionHandler = uncaughtExceptionHandler }
+        fun getNewThread(f: () -> (Unit)): Thread = Thread { f.invoke() }.also { thread -> thread.uncaughtExceptionHandler = uncaughtExceptionHandler }
 
         fun restart() {
             //TODO: Add for other platform types!
