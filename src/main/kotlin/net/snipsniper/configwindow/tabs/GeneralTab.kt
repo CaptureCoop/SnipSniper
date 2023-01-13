@@ -88,15 +88,25 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 val icon = (dropdown.selectedItem as DropdownItem?)?.icon
                 if (icon != null) iconButton.icon = icon
             }
+            var wnd: IconWindow? = null
             iconButton.addActionListener {
-                configWindow.addCWindow(IconWindow("Custom Profile Icon", configWindow) {
-                    config.set(ConfigHelper.PROFILE.icon, it[0])
-                    //TODO: We have duplicated code here, uuuuugh. I miss having functions in functions :(
-                    var img = ImageUtils.getIconDynamically(config)
-                    if (img == null) img = ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
-                    iconButton.icon = ImageIcon(img.getScaledInstance(16, 16, 0))
-                    cleanDirtyFunction?.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-                })
+                if(wnd != null) {
+                    wnd?.requestFocus()
+                    return@addActionListener
+                }
+
+                IconWindow("Custom Profile Icon", configWindow).also { iWnd ->
+                    iWnd.onSelect = {
+                        config.set(ConfigHelper.PROFILE.icon, it)
+                        var img = ImageUtils.getIconDynamically(config)
+                        if (img == null) img = ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
+                        iconButton.icon = ImageIcon(img.getScaledInstance(16, 16, 0))
+                        cleanDirtyFunction?.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                    }
+                    iWnd.onClose = { wnd = null }
+                    configWindow.addCWindow(iWnd)
+                    wnd = iWnd
+                }
             }
             iconPanel.add(iconButton)
             val iconReset = JButton("config_label_reset".translate())

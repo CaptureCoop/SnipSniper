@@ -7,7 +7,6 @@ import org.capturecoop.ccutils.utils.CCIClosable
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
-import java.awt.Rectangle
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
 import java.awt.dnd.DropTarget
@@ -20,10 +19,12 @@ import javax.imageio.ImageIO
 import javax.swing.*
 import javax.swing.filechooser.FileFilter
 
-class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunction): JFrame(), CCIClosable {
+class IconWindow(title: String, parent: JFrame): JFrame(), CCIClosable {
     private enum class IconType {GENERAL, RANDOM, CUSTOM}
     private val allowedExtensions = listOf(".png", ".gif", ".jpg", ".jpeg")
     private val rows = 4
+    var onSelect: ((String) -> (Unit))? = null
+    var onClose: (() -> (Unit))? = null
 
     init {
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
@@ -80,7 +81,7 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
         list.forEach { file ->
             IconButton(file.getPathWithLocation(), file.location).also { btn ->
                 btn.onSelect =  {
-                    onSelectIcon.run(btn.id)
+                    onSelect?.invoke(btn.id)
                     dispose()
                 }
                 btn.onDelete = { populateButtons(content, type) }
@@ -148,5 +149,8 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
         }
     }
 
-    override fun close() = dispose()
+    override fun close() {
+        onClose?.invoke()
+        dispose()
+    }
 }
