@@ -31,7 +31,6 @@ class ViewerTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             config = Config(configOriginal)
             if (configOriginal.getFilename().contains("editor")) disablePage = true
         } else {
-            println("disabled")
             config = Config("disabled_cfg.cfg", "profile_defaults.cfg")
             disablePage = true
         }

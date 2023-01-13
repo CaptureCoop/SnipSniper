@@ -91,7 +91,7 @@ class Config {
     fun getString(key: String): String = Utils.replaceVars(getRawString(key))
     fun getString(key: Any): String = getString(key.toString())
 
-    fun getInt(key: String): Int = getString(key).toInt()
+    fun getInt(key: String): Int = getString(key).toIntOrNull() ?: getString(key).toDouble().toInt() //Fallback: We want to allow to do getInt() even if its saved as a double
     fun getInt(key: Any): Int = getInt(key.toString())
 
     fun getFloat(key: String): Float = getString(key).toFloat()
