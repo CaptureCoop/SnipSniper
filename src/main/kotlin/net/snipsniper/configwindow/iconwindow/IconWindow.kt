@@ -24,7 +24,7 @@ import javax.swing.*
 import javax.swing.filechooser.FileFilter
 
 class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunction): JFrame(), CCIClosable {
-    enum class ICON_TYPE {GENERAL, RANDOM, CUSTOM}
+    private enum class IconType {GENERAL, RANDOM, CUSTOM}
     private val allowedExtensions = listOf(".png", ".gif", ".jpg", ".jpeg")
     private val rows = 4
 
@@ -35,13 +35,10 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
         this.title = title
         setLocation(parent.location.x + parent.width / 2 - width / 2, parent.location.y + parent.height / 2 - height / 2)
         addWindowListener(object: WindowAdapter() {
-            override fun windowClosing(windowEvent: WindowEvent) {
-                super.windowClosing(windowEvent)
-                close()
-            }
+            override fun windowClosing(windowEvent: WindowEvent) = close()
         })
 
-        //TODO: This listener doesnt work?
+        //TODO: This listener doesn't work?
         addMouseListener(object: MouseAdapter() {
             var listenForExit = false
             override fun mouseEntered(mouseEvent: MouseEvent) = kotlin.run { listenForExit = true }
@@ -54,18 +51,19 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
         isResizable = false
         isVisible = true
         JTabbedPane().also {
-            it.addTab("General", setupPanel(ICON_TYPE.GENERAL))
-            it.addTab("Random", setupPanel(ICON_TYPE.RANDOM))
-            it.addTab("Custom", setupPanel(ICON_TYPE.CUSTOM))
+            fun s(t: String, tt: IconType) = it.addTab(t, setupPanel(tt))
+            s("General", IconType.GENERAL)
+            s("Random", IconType.RANDOM)
+            s("Custom", IconType.CUSTOM)
             add(it)
         }
         pack()
-        setSize(width, 256) //TODO: Why?
+        setSize(width, 256)
     }
 
-    private fun setupPanel(type: ICON_TYPE): JScrollPane {
+    private fun setupPanel(type: IconType): JScrollPane {
         JPanel(GridBagLayout()).also { content ->
-            popuplateButtons(content, type)
+            populateButtons(content, type)
             return JScrollPane(content).also { scrollPane ->
                 scrollPane.horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
                 scrollPane.verticalScrollBarPolicy = JScrollPane.VERTICAL_SCROLLBAR_ALWAYS
@@ -75,19 +73,19 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
         }
     }
 
-    fun popuplateButtons(content: JPanel, type: ICON_TYPE) {
+    private fun populateButtons(content: JPanel, type: IconType) {
         content.removeAll()
         val gbc = GridBagConstraints()
         gbc.fill = GridBagConstraints.BOTH
         gbc.gridx = 0
         val list = ArrayList<SSFile>()
         ImageManager.filenameList.forEach { file ->
-            if (type == ICON_TYPE.GENERAL && file.contains("icons") && !file.contains("icons/random/"))
+            if (type == IconType.GENERAL && file.contains("icons") && !file.contains("icons/random/"))
                 list.add(SSFile(file, SSFile.LOCATION.JAR))
-            if (type == ICON_TYPE.RANDOM && file.contains("icons/random/"))
+            if (type == IconType.RANDOM && file.contains("icons/random/"))
                 list.add(SSFile(file, SSFile.LOCATION.JAR))
         }
-        if (type == ICON_TYPE.CUSTOM) {
+        if (type == IconType.CUSTOM) {
             File(SnipSniper.imgFolder).walk().filter { it.isFile }.forEach { localFile ->
                 list.add(SSFile(localFile.name, SSFile.LOCATION.LOCAL))
             }
@@ -100,7 +98,7 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
                     onSelectIcon.run(btn.id)
                     dispose()
                 }
-                btn.onDelete = { popuplateButtons(content, type) }
+                btn.onDelete = { populateButtons(content, type) }
                 when (file.location) {
                     SSFile.LOCATION.JAR -> {
                         if (file.path.endsWith(".png"))
@@ -108,7 +106,6 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
                         else if (file.path.endsWith(".gif"))
                             btn.icon = file.path.getAnimatedImage().scaled(size, size).toImageIcon()
                     }
-
                     SSFile.LOCATION.LOCAL -> btn.icon = ImageIcon(
                         ImageUtils.getImageFromDisk("${SnipSniper.imgFolder}/${file.path}").scaledSmooth(size, size)
                     )
@@ -118,14 +115,14 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
                 if (gbc.gridx >= rows) gbc.gridx = 0
             }
         }
-        if (type == ICON_TYPE.CUSTOM) {
+        if (type == IconType.CUSTOM) {
             content.dropTarget = object : DropTarget() {
                 override fun drop(evt: DropTargetDropEvent) {
                     evt.acceptDrop(DnDConstants.ACTION_COPY)
                     (evt.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<*>).forEach {
                         it as File
                         loadFile(it)
-                        popuplateButtons(content, type)
+                        populateButtons(content, type)
                     }
                 }
             }
@@ -144,7 +141,7 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
                         }
                         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                             loadFile(chooser.selectedFile)
-                            popuplateButtons(content, type)
+                            populateButtons(content, type)
                         }
                     }
                 }
