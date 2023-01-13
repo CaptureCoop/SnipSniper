@@ -31,20 +31,6 @@ class ConfigContainer {
         map.clear()
     }
 
-    override fun equals(other: Any?): Boolean {
-        if(other !is ConfigContainer) return false
-        var isSame = true
-        list.forEach {
-            if(it.key.isNotEmpty()) {
-                val otherValue = other.get(it.key)
-                if(otherValue != null && otherValue != it.value) {
-                    isSame = false
-                }
-            }
-        }
-        return isSame
-    }
-
     fun loadFromContainer(container: ConfigContainer) {
         clear()
         container.list.forEach {
@@ -55,4 +41,8 @@ class ConfigContainer {
             }
         }
     }
+
+    override fun equals(other: Any?) = if(other !is ConfigContainer) false else list.none { it.key.isNotEmpty() && other.get(it.key) != it.value }
+
+    override fun hashCode() = 31 * list.hashCode() + map.hashCode()
 }
