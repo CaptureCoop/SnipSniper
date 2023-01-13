@@ -258,13 +258,13 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
     }
 
     //Returns function you can run to update the state
-    fun setupSaveButtons(panel: JPanel, tab: ITab, gbc: GridBagConstraints, config: Config, configOriginal: Config?, beforeSave: IFunction?, reloadOtherDropdowns: Boolean): Function {
+    fun setupSaveButtons(panel: JPanel, tab: ITab, gbc: GridBagConstraints, config: Config, configOriginal: Config?, beforeSave: (() -> (Unit))?, reloadOtherDropdowns: Boolean): Function {
         val allowSaving = booleanArrayOf(true)
         val isDirty = booleanArrayOf(false)
         val save = JButton("config_label_save".translate())
         save.addActionListener {
             if (allowSaving[0] && configOriginal != null) {
-                beforeSave?.run()
+                beforeSave?.invoke()
                 configOriginal.loadFromConfig(config)
                 configOriginal.save()
                 SnipSniper.resetProfiles()

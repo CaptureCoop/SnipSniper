@@ -188,7 +188,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             }
             options.add(autostartCheckbox, gbc)
         }
-        val beforeSave = IFunction {
+        val beforeSave: () -> (Unit) = {
             val restartConfig = config.getString(ConfigHelper.MAIN.language) != SnipSniper.config.getString(ConfigHelper.MAIN.language)
             val didThemeChange = config.getString(ConfigHelper.MAIN.theme) != SnipSniper.config.getString(ConfigHelper.MAIN.theme)
             globalSave(config, autostart)
