@@ -170,7 +170,7 @@ class Utils {
             }
         }
 
-        fun getLanguageDropdown(selectedLanguage: String, onSelect: IFunction): JComboBox<DropdownItem> {
+        fun getLanguageDropdown(selectedLanguage: String, onSelect: (String) -> (Unit)): JComboBox<DropdownItem> {
             val langItems = ArrayList<DropdownItem>()
             var selectedItem: DropdownItem? = null
             LangManager.languages.forEach {
@@ -185,7 +185,7 @@ class Utils {
                 it.addItemListener { event ->
                     if(event.stateChange == ItemEvent.SELECTED) {
                         val item = it.selectedItem as DropdownItem
-                        onSelect.run(item.id)
+                        onSelect.invoke(item.id)
                     }
                 }
             }

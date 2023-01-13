@@ -132,7 +132,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         options.add(configWindow.createJLabel("config_label_language".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
         gbc.gridx = 1
         options.add(Utils.getLanguageDropdown(config.getString(ConfigHelper.MAIN.language)) {
-            config.set(ConfigHelper.MAIN.language, it[0])
+            config.set(ConfigHelper.MAIN.language, it)
             saveButtonUpdate!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
         }, gbc)
         val themes = arrayOf("config_label_theme_light".translate(), "config_label_theme_dark".translate())

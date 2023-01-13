@@ -46,9 +46,9 @@ class LangDebugWindow : JFrame() {
         content.add(JLabel("English", JLabel.CENTER), gbc)
         gbc.gridx = 1
         content.add(Utils.getLanguageDropdown(language) {
-            setupLabels(it[0], content)
+            setupLabels(it, content)
             resetScrollPane()
-            lastLanguage = it[0]
+            lastLanguage = it
         }, gbc)
         lastLanguage = "en"
         gbc.gridx = 0

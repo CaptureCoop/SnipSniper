@@ -1,6 +1,5 @@
 package net.snipsniper.systray
 
-import net.snipsniper.utils.IFunction
 import net.snipsniper.utils.getImage
 import net.snipsniper.utils.scaled
 import net.snipsniper.utils.toImageIcon
@@ -11,10 +10,10 @@ import javax.swing.ImageIcon
 import javax.swing.JDialog
 import javax.swing.JMenuItem
 
-class PopupMenuButton(title: String, icon: BufferedImage, popup: JDialog, private var onClick: IFunction?, closeWhenClicked: ArrayList<PopupMenu>?): JMenuItem() {
+class PopupMenuButton(title: String, icon: BufferedImage, popup: JDialog, private var onClick: (() -> (Unit))?, closeWhenClicked: ArrayList<PopupMenu>?): JMenuItem() {
     private var isMenuChild = false
 
-    constructor(title: String, iconPath: String, popup: JDialog, onClick: IFunction?, closeWhenClicked: ArrayList<PopupMenu>?) : this(title, iconPath.getImage(), popup, onClick, closeWhenClicked)
+    constructor(title: String, iconPath: String, popup: JDialog, onClick: (() -> (Unit))?, closeWhenClicked: ArrayList<PopupMenu>?) : this(title, iconPath.getImage(), popup, onClick, closeWhenClicked)
 
     init {
         text = title
@@ -22,7 +21,7 @@ class PopupMenuButton(title: String, icon: BufferedImage, popup: JDialog, privat
         addActionListener {
             popup.isVisible = true
             closeWhenClicked?.forEach { it.isPopupMenuVisible = false }
-            onClick?.run()
+            onClick?.invoke()
         }
         addMouseListener(object: MouseAdapter(){
             override fun mouseEntered(e: MouseEvent?) {
