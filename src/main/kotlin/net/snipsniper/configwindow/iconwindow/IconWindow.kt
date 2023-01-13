@@ -96,11 +96,11 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
         val sizeDim = Dimension(size, size)
         list.forEach { file ->
             IconButton(file.getPathWithLocation(), file.location).also { btn ->
-                btn.onSelect = IFunction {
+                btn.onSelect =  {
                     onSelectIcon.run(btn.id)
                     dispose()
                 }
-                btn.onDelete = IFunction { popuplateButtons(content, type) }
+                btn.onDelete = { popuplateButtons(content, type) }
                 when (file.location) {
                     SSFile.LOCATION.JAR -> {
                         if (file.path.endsWith(".png"))

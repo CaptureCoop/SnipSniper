@@ -6,34 +6,34 @@ import java.awt.Graphics
 import java.awt.Rectangle
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
+import java.io.File
 
 class IconButton(id: String, private val location: SSFile.LOCATION) : IDJButton(id) {
     private var onRedX = false
     private val size = 32
-    lateinit var onSelect: IFunction
-    lateinit var onDelete: IFunction
+    lateinit var onSelect: (IconButton) -> (Unit)
+    lateinit var onDelete: (IconButton) -> (Unit)
 
     init {
         addActionListener {
             if (onRedX && location == SSFile.LOCATION.LOCAL) {
-                FileUtils.delete(SnipSniper.imgFolder + "/" + SSFile(id).path)
-                onDelete.run()
+                File(SnipSniper.imgFolder, SSFile(id).path).delete()
+                onDelete.invoke(this)
             } else {
-                onSelect.run()
+                onSelect.invoke(this)
             }
         }
         addMouseListener(object : MouseAdapter() {
-            override fun mousePressed(e: MouseEvent) {
-                super.mousePressed(e)
-                if(location == SSFile.LOCATION.LOCAL)
-                    onRedX = Rectangle(width - size, 0, size, size).contains(e.point)
+            override fun mousePressed(event: MouseEvent) {
+                if(location != SSFile.LOCATION.LOCAL) return
+                onRedX = Rectangle(width - size, 0, size, size).contains(event.point)
             }
         })
     }
 
     override fun paint(g: Graphics) {
         super.paint(g)
-        if(location == SSFile.LOCATION.LOCAL)
-            g.drawImage("icons/redx.png".getImage(), width - size, 0, size, size, this)
+        if(location != SSFile.LOCATION.LOCAL) return
+        g.drawImage("icons/redx.png".getImage(), width - size, 0, size, size, this)
     }
 }
