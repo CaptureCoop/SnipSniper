@@ -5,7 +5,6 @@ import net.snipsniper.configwindow.StampJPanel
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.sceditor.stamps.*
 import net.snipsniper.utils.*
-import net.snipsniper.utils.Function
 import org.capturecoop.cccolorutils.chooser.gui.CCHSBHueBar
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger.Companion.log
@@ -61,9 +60,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         cPanel.preferredSize = Dimension(width, 40)
         val button = GradientJButton("Color", stampColor!!)
         button.preferredSize = Dimension(width / 2, 30)
-        button.addActionListener {
-            scEditorWindow.openStampColorChooser()
-        }
+        button.addActionListener { scEditorWindow.openStampColorChooser() }
         cPanel.add(button)
         panel.add(cPanel)
         stampColor.addChangeListener { scEditorWindow.repaint() }
@@ -73,23 +70,17 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         val boxMinimum = 1
         val boxMaximum = 400
         panel.add(JLabel("width"))
-        val widthSlider = createEZModeSlider(boxMinimum, boxMaximum, stamp.width, object : Function() {
-            override fun run(vararg args: Int): Boolean {
-                stamp.width = args[0]
-                stampPreviewPanel.repaint()
-                return true
-            }
-        })
+        val widthSlider = createEZModeSlider(boxMinimum, boxMaximum, stamp.width) { v1, _ ->
+            stamp.width = v1
+            stampPreviewPanel.repaint()
+        }
         panel.add(widthSlider)
         panel.add(createJSeperator())
         panel.add(JLabel("height"))
-        val heightSlider = createEZModeSlider(boxMinimum, boxMaximum, stamp.height, object : Function() {
-            override fun run(vararg args: Int): Boolean {
-                stamp.height = args[0]
-                stampPreviewPanel.repaint()
-                return true
-            }
-        })
+        val heightSlider = createEZModeSlider(boxMinimum, boxMaximum, stamp.height) { v1, _ ->
+            stamp.height = v1
+            stampPreviewPanel.repaint()
+        }
         panel.add(heightSlider)
         stamp.addChangeListener {
             if (it === IStampUpdateListener.TYPE.INPUT) {
@@ -107,15 +98,12 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
 
     private fun addBasicCircleSettings(panel: JPanel, stamp: IStamp, addColor: Boolean, width: Int) {
         panel.add(JLabel("size"))
-        val sizeSlider = createEZModeSlider(1, 400, stamp.width, object : Function() {
-            override fun run(vararg args: Int): Boolean {
-                if(args[1] == 0) return true
-                stamp.width = args[0]
-                stamp.height = args[0]
-                stampPreviewPanel.repaint()
-                return true
-            }
-        })
+        val sizeSlider = createEZModeSlider(1, 400, stamp.width) { v1, v2 ->
+            if (v2 == 0) return@createEZModeSlider
+            stamp.width = v1
+            stamp.height = v1
+            stampPreviewPanel.repaint()
+        }
         panel.add(sizeSlider)
         stamp.addChangeListener {
             if (it === IStampUpdateListener.TYPE.INPUT) sizeSlider.value = stamp.width
@@ -125,7 +113,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         addColorSettings(panel, stamp, width)
     }
 
-    private fun createEZModeSlider(min: Int, max: Int, currentValue: Int, onChange: Function): JSlider {
+    private fun createEZModeSlider(min: Int, max: Int, currentValue: Int, onChange: (Int, Int) -> (Unit)): JSlider {
         return JSlider().also { slider ->
             Dimension(scEditorWindow.ezModeWidth, 30).also { dim ->
                 slider.preferredSize = dim
@@ -136,15 +124,12 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
             slider.maximum = max
             slider.value = currentValue
             slider.addChangeListener {
-                onChange.run(slider.value, slider.valueIsAdjusting.toInt())
+                onChange.invoke(slider.value, slider.valueIsAdjusting.toInt())
                 stampPreviewPanel.repaint()
                 scEditorWindow.requestFocus()
             }
             slider.addFocusListener(object : FocusAdapter() {
-                override fun focusGained(e: FocusEvent) {
-                    super.focusGained(e)
-                    scEditorWindow.requestFocus()
-                }
+                override fun focusGained(event: FocusEvent) = scEditorWindow.requestFocus()
             })
         }
     }
@@ -171,12 +156,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         addBasicCircleSettings(panel, stamp, false, width)
         val cStamp = stamp as CircleStamp
         panel.add(JLabel("thickness"))
-        val thicknessSlider = createEZModeSlider(1, 200, cStamp.thickness, object : Function() {
-            override fun run(vararg args: Int): Boolean {
-                cStamp.thickness = args[0]
-                return true
-            }
-        })
+        val thicknessSlider = createEZModeSlider(1, 200, cStamp.thickness) { v1, _ -> cStamp.thickness = v1 }
         panel.add(thicknessSlider)
         panel.add(createJSeperator())
         stamp.addChangeListener {
@@ -192,12 +172,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
     private fun text(panel: JPanel, stamp: IStamp, width: Int) {
         panel.add(JLabel("font size"))
         //Font size = height
-        val sizeSlider = createEZModeSlider(5, 200, stamp.height, object : Function() {
-            override fun run(vararg args: Int): Boolean {
-                stamp.height = args[0]
-                return true
-            }
-        })
+        val sizeSlider = createEZModeSlider(5, 200, stamp.height) { v1, _ -> stamp.height = v1 }
         panel.add(sizeSlider)
         panel.add(createJSeperator())
         val textStamp = stamp as TextStamp
@@ -267,9 +242,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
                     Font.PLAIN -> 0
                     Font.BOLD -> 1
                     Font.ITALIC -> 2
-                    else -> {
-                        throw Exception("Bad font given ${textStamp.fontMode}")
-                    }
+                    else -> { throw Exception("Bad font given ${textStamp.fontMode}") }
                 }
                 textInput.text = textStamp.text
             }
@@ -282,12 +255,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         addWidthHeightSettings(panel, stamp)
         val rStamp = stamp as RectangleStamp
         panel.add(JLabel("thickness"))
-        val thicknessSlider = createEZModeSlider(1, 200, rStamp.thickness, object : Function() {
-            override fun run(vararg args: Int): Boolean {
-                rStamp.thickness = args[0]
-                return true
-            }
-        })
+        val thicknessSlider = createEZModeSlider(1, 200, rStamp.thickness) { v1, _ -> rStamp.thickness = v1 }
         panel.add(thicknessSlider)
         stamp.addChangeListener {
             if (it === IStampUpdateListener.TYPE.INPUT) thicknessSlider.value = rStamp.thickness
