@@ -81,45 +81,38 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             gbc.gridx = 0
             options.add(configWindow.createJLabel("Icon", JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
-            val iconPanel = JPanel(GridLayout(0, 2))
+
             val iconButton = JButton("config_label_seticon".translate())
-            val item = dropdown.selectedItem as DropdownItem?
-            if (item != null) {
-                val icon = (dropdown.selectedItem as DropdownItem?)?.icon
-                if (icon != null) iconButton.icon = icon
+            iconButton.icon = (dropdown.selectedItem as DropdownItem?)?.icon
+
+            fun iconChange(cfgValue: String) {
+                config.set(ConfigHelper.PROFILE.icon, cfgValue)
+                val img = ImageUtils.getIconDynamically(config) ?: ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
+                iconButton.icon = img.scaled(16, 16).toImageIcon()
+                cleanDirtyFunction?.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
+
             var wnd: IconWindow? = null
             iconButton.addActionListener {
                 if(wnd != null) {
                     wnd?.requestFocus()
                     return@addActionListener
                 }
-
                 IconWindow("Custom Profile Icon", configWindow).also { iWnd ->
-                    iWnd.onSelect = {
-                        config.set(ConfigHelper.PROFILE.icon, it)
-                        var img = ImageUtils.getIconDynamically(config)
-                        if (img == null) img = ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
-                        iconButton.icon = ImageIcon(img.getScaledInstance(16, 16, 0))
-                        cleanDirtyFunction?.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-                    }
+                    iWnd.onSelect = { iconChange(it) }
                     iWnd.onClose = { wnd = null }
                     configWindow.addCWindow(iWnd)
                     wnd = iWnd
                 }
             }
-            iconPanel.add(iconButton)
-            val iconReset = JButton("config_label_reset".translate())
-            iconReset.addActionListener {
-                //TODO: Barf, duplicated code
-                config.set(ConfigHelper.PROFILE.icon, "none")
-                var img = ImageUtils.getIconDynamically(config)
-                if (img == null) img = ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
-                iconButton.icon = ImageIcon(img!!.getScaledInstance(16, 16, 0))
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            JPanel(GridLayout(0, 2)).also {
+                it.add(iconButton)
+                JButton("config_label_reset".translate()).also { resetBtn ->
+                    resetBtn.addActionListener { iconChange("none") }
+                    it.add(resetBtn)
+                }
+                options.add(it, gbc)
             }
-            iconPanel.add(iconReset)
-            options.add(iconPanel, gbc)
             gbc.gridx = 2
             options.add(InfoButton(WikiManager.getContent("config/general/icon.json")), gbc)
         }
