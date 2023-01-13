@@ -242,7 +242,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 val saveFormatRenderer = SaveFormatPreviewRenderer(512, 256)
                 val saveFormatPreview = TextPreviewWindow("Save format", config.getString(ConfigHelper.PROFILE.saveFormat), saveFormatRenderer, "icons/folder.png".getImage(), configWindow, "%hour%, %minute%, %second%, %day%, %month%, %year%, %random%")
                 saveFormatRenderer.textPreviewWindow = saveFormatPreview
-                saveFormatPreview.onSave = IFunction {
+                saveFormatPreview.onSave = {
                     var text = saveFormatPreview.text
                     if (text.isEmpty()) {
                         text = SaveFormatPreviewRenderer.DEFAULT_FORMAT
@@ -309,7 +309,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 val preview = TextPreviewWindow("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom), renderer, "icons/folder.png".getImage(), configWindow, "%day% = 1, %month% = 8, %year% = 2021")
                 configWindow.addCWindow(preview)
                 renderer.textPreviewWindow = preview
-                preview.onSave = IFunction {
+                preview.onSave = {
                     var text = preview.text
                     if (text.isEmpty()) text = "/"
                     config.set(ConfigHelper.PROFILE.saveFolderCustom, text)

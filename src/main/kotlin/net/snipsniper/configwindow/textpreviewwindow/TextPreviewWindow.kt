@@ -1,6 +1,5 @@
 package net.snipsniper.configwindow.textpreviewwindow
 
-import net.snipsniper.utils.IFunction
 import net.snipsniper.utils.translate
 import org.capturecoop.ccutils.utils.CCIClosable
 import java.awt.Dimension
@@ -19,7 +18,7 @@ class TextPreviewWindow(wndTitle: String, var text: String, private val renderPa
     private val input = JTextField(text)
     private val saveButton = JButton("config_label_save".translate())
     private val explanationLabel = JLabel("%hour%, %minute%, %second%, %day%, %month%, %year%, %random%")
-    var onSave: IFunction? = null
+    var onSave: (() -> (Unit))? = null
 
     init {
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
@@ -70,7 +69,7 @@ class TextPreviewWindow(wndTitle: String, var text: String, private val renderPa
             gbc.gridy = 3
             gbc.fill = GridBagConstraints.VERTICAL
             saveButton.addActionListener {
-                onSave?.run()
+                onSave?.invoke()
                 dispose()
             }
             content.add(saveButton, gbc)
@@ -79,7 +78,7 @@ class TextPreviewWindow(wndTitle: String, var text: String, private val renderPa
     }
 
     override fun close() {
-        onSave?.run()
+        onSave?.invoke()
         dispose()
     }
 }
