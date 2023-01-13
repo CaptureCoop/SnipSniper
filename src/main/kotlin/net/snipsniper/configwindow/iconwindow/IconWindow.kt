@@ -12,10 +12,7 @@ import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
 import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetDropEvent
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import java.awt.event.WindowAdapter
-import java.awt.event.WindowEvent
+import java.awt.event.*
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -38,17 +35,6 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
             override fun windowClosing(windowEvent: WindowEvent) = close()
         })
 
-        //TODO: This listener doesn't work?
-        addMouseListener(object: MouseAdapter() {
-            var listenForExit = false
-            override fun mouseEntered(mouseEvent: MouseEvent) = kotlin.run { listenForExit = true }
-            override fun mouseExited(mouseEvent: MouseEvent) {
-                if(listenForExit && !Rectangle(0, 0, bounds.width, bounds.height).contains(mouseEvent.point))
-                    dispose()
-            }
-        })
-
-        isResizable = false
         isVisible = true
         JTabbedPane().also {
             fun s(t: String, tt: IconType) = it.addTab(t, setupPanel(tt))
@@ -57,8 +43,7 @@ class IconWindow(title: String, parent: JFrame, private val onSelectIcon: IFunct
             s("Custom", IconType.CUSTOM)
             add(it)
         }
-        pack()
-        setSize(width, 256)
+        setSize(width + 64, 320)
     }
 
     private fun setupPanel(type: IconType): JScrollPane {
