@@ -161,7 +161,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         }
         gbc.gridx = 1
         options.add(debugCheckBox, gbc)
-        var autostart: IFunction? = null
+        var autostart: (() -> (Unit))? = null
         if (SystemUtils.IS_OS_WINDOWS && SnipSniper.platformType === PlatformType.JAR) {
             gbc.gridx = 0
             options.add(configWindow.createJLabel("Start with Windows", JLabel.RIGHT, JLabel.CENTER), gbc)
@@ -175,7 +175,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             autostartCheckbox.isSelected = File(startup, linkMain).exists()
             autostartCheckbox.addActionListener {
                 autostart = if (autostartCheckbox.isSelected) {
-                    IFunction {
+                    {
                         File(startup).mkdirs()
                         val jarFolder = SnipSniper.jarFolder
                         FileUtils.copyFromJar("net/snipsniper/resources/batch/$batchMain", "$jarFolder/$batchMain")
@@ -183,7 +183,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                         Utils.createShellLink(startup + linkMain, jarFolder + batchMain, "$jarFolder/$icoMain")
                     }
                 } else {
-                    IFunction { File(startup, linkMain).deleteRecursively() }
+                    { File(startup, linkMain).deleteRecursively() }
                 }
             }
             options.add(autostartCheckbox, gbc)
@@ -202,10 +202,10 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         add(options)
     }
 
-    private fun globalSave(config: Config, autostart: IFunction?) {
+    private fun globalSave(config: Config, autostart: (() -> (Unit))?) {
         val didThemeChange = config.getString(ConfigHelper.MAIN.theme) != SnipSniper.config.getString(ConfigHelper.MAIN.theme)
         val didDebugChange = config.getBool(ConfigHelper.MAIN.debug) != SnipSniper.config.getBool(ConfigHelper.MAIN.debug)
-        autostart?.run()
+        autostart?.invoke()
         if (didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)) CCLogger.enableDebugConsole(false)
         SnipSniper.config.loadFromConfig(config)
         config.save()

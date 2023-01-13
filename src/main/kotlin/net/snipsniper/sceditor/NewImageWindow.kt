@@ -12,7 +12,7 @@ import javax.swing.*
 
 class NewImageWindow: JFrame(), CCIClosable  {
     lateinit var image: BufferedImage
-    var onSubmit: IFunction? = null
+    var onSubmit: (() -> (Unit))? = null
     private val cWindows = ArrayList<CCIClosable>()
 
     init {
@@ -70,7 +70,7 @@ class NewImageWindow: JFrame(), CCIClosable  {
                         g.paint = color.getGradientPaint(widthInput, heightInput)
                         g.fillRect(0, 0, widthInput, heightInput)
                     }
-                    onSubmit?.run()
+                    onSubmit?.invoke()
                     dispose()
                 }
             }

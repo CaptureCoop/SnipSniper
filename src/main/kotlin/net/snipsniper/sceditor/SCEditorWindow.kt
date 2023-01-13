@@ -385,13 +385,13 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         }
     }
 
-    fun openNewImageWindow() {
+    private fun openNewImageWindow() {
         val window = NewImageWindow()
         cWindows.add(window)
         val posX = location.x + width / 2 - window.width / 2
         val posY = location.y + height / 2 - window.height / 2
         window.setLocation(posX, posY)
-        window.onSubmit = IFunction {
+        window.onSubmit = {
             setImage(window.image, resetHistory = true, isNewImage = true)
             isDirty = true
             repaint()

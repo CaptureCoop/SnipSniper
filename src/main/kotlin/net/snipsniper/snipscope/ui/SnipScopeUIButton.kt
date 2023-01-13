@@ -1,6 +1,5 @@
 package net.snipsniper.snipscope.ui
 
-import net.snipsniper.utils.IFunction
 import org.capturecoop.ccutils.math.CCVector2Int
 import java.awt.Graphics2D
 import java.awt.event.MouseEvent
@@ -8,7 +7,7 @@ import java.awt.image.BufferedImage
 
 //TODO: This class is currently unused, but worked in the past, make sure it works if its used again
 class SnipScopeUIButton(private val icon: BufferedImage, private val iconHovering: BufferedImage, private val iconPressed: BufferedImage) : SnipScopeUIComponent() {
-    private val onPress = ArrayList<IFunction>()
+    private val onPress = ArrayList<(() -> (Unit))>()
     private var isHovering = false
     private var isHeld = false
     private var selected = false
@@ -39,7 +38,7 @@ class SnipScopeUIButton(private val icon: BufferedImage, private val iconHoverin
             isHeld = false
             if (contains(lastPosition.toPoint())) {
                 for (function in onPress) {
-                    function.run()
+                    function.invoke()
                 }
             }
         }
@@ -58,7 +57,7 @@ class SnipScopeUIButton(private val icon: BufferedImage, private val iconHoverin
         selected = bool
     }
 
-    fun addOnPress(function: IFunction) {
+    fun addOnPress(function: () -> (Unit)) {
         onPress.add(function)
     }
 }
