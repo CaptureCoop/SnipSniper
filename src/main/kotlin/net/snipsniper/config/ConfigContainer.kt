@@ -11,12 +11,7 @@ class ConfigContainer {
             list.add(option)
             map[key] = option
         } else {
-            list.forEach {
-                if(it.type == ConfigOption.TYPE.KEY_VALUE && it.key == key) {
-                    it.value = value
-                    return@forEach
-                }
-            }
+            list.filter { it.type == ConfigOption.TYPE.KEY_VALUE && it.key == key }.forEach { it.value = value }
             map.replace(key, option)
         }
     }
