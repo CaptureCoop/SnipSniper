@@ -11,16 +11,16 @@ import java.io.File
 class IconButton(id: String, private val location: SSFile.LOCATION) : IDJButton(id) {
     private var onRedX = false
     private val size = 32
-    lateinit var onSelect: (IconButton) -> (Unit)
-    lateinit var onDelete: (IconButton) -> (Unit)
+    lateinit var onSelect: () -> (Unit)
+    lateinit var onDelete: () -> (Unit)
 
     init {
         addActionListener {
             if (onRedX && location == SSFile.LOCATION.LOCAL) {
                 File(SnipSniper.imgFolder, SSFile(id).path).delete()
-                onDelete.invoke(this)
+                onDelete.invoke()
             } else {
-                onSelect.invoke(this)
+                onSelect.invoke()
             }
         }
         addMouseListener(object : MouseAdapter() {
