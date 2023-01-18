@@ -9,7 +9,6 @@ import net.snipsniper.sceditor.stamps.*
 import net.snipsniper.sceditor.stamps.IStamp
 import net.snipsniper.sceditor.stamps.StampType
 import net.snipsniper.utils.ConfigSaveButtonState
-import net.snipsniper.utils.Function
 import net.snipsniper.utils.InfoButton
 import net.snipsniper.utils.translate
 import java.awt.GridBagConstraints
@@ -83,7 +82,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         val stamp = StampType.getByIndex(0).getIStamp(config, null)
         val row3_stampConfig = JPanel(GridBagLayout())
         val row3_stampPreview = StampJPanel(stamp, ImageManager.getCodePreview(), 10)
-        val onUpdate = arrayOf<Function?>(null)
+        var onUpdate: (() -> (Unit))? = null
         val stampTitles = arrayOfNulls<String>(StampType.values().size)
         for (i in stampTitles.indices) {
             stampTitles[i] = StampType.values()[i].title
@@ -93,7 +92,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             if (e.stateChange == ItemEvent.SELECTED) {
                 val newStamp = StampType.getByIndex(stampDropdown.selectedIndex).getIStamp(config, null)
                 row3_stampPreview.stamp = newStamp
-                setupStampConfigPanel(row3_stampConfig, newStamp, row3_stampPreview, config, onUpdate[0])
+                setupStampConfigPanel(row3_stampConfig, newStamp, row3_stampPreview, config, onUpdate)
                 saveButtonUpdate?.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
         }
@@ -117,10 +116,10 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
 
         //END ELEMENTS
         saveButtonUpdate = configWindow.setupSaveButtons(options, this, gbc, config, configOriginal, null, true)
-        onUpdate[0] = object : Function() {
-            override fun run() = saveButtonUpdate.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+        onUpdate = {
+            saveButtonUpdate.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
         }
-        setupStampConfigPanel(row3_stampConfig, stamp, row3_stampPreview, config, onUpdate[0])
+        setupStampConfigPanel(row3_stampConfig, stamp, row3_stampPreview, config, onUpdate)
         add(options)
         if (disablePage) configWindow.setEnabledAll(options, false, dropdown)
     }
@@ -136,14 +135,14 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         private val config: Config,
         private val constraints: GridBagConstraints,
         private val stampIndex: Int,
-        private val onUpdate: Function?
+        private val onUpdate: (() -> (Unit))?
     ) {
-        private fun setupStampConfigPanelSpinner(configKey: ConfigHelper.PROFILE, min: Double, max: Double, stepSize: Double, previewPanel: StampJPanel, config: Config, stampIndex: Int, onUpdate: Function?): JSpinner {
+        private fun setupStampConfigPanelSpinner(configKey: ConfigHelper.PROFILE, min: Double, max: Double, stepSize: Double, previewPanel: StampJPanel, config: Config, stampIndex: Int, onUpdate: (() -> (Unit))?): JSpinner {
             return JSpinner(SpinnerNumberModel((config.getFloat(configKey).toString() + "").toDouble(), min, max, stepSize)).also { spinner ->
                 spinner.addChangeListener {
                     config.set(configKey, spinner.value.toString())
                     previewPanel.stamp = StampType.getByIndex(stampIndex).getIStamp(config, null)
-                    onUpdate!!.run()
+                    onUpdate!!.invoke()
                 }
             }
         }
@@ -160,7 +159,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         }
     }
 
-    private fun setupStampConfigPanel(panel: JPanel, stamp: IStamp?, previewPanel: StampJPanel, config: Config, onUpdate: Function?) {
+    private fun setupStampConfigPanel(panel: JPanel, stamp: IStamp?, previewPanel: StampJPanel, config: Config, onUpdate: (() -> (Unit))?) {
         panel.removeAll()
         val gbc = GridBagConstraints()
         gbc.fill = GridBagConstraints.BOTH
@@ -171,7 +170,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 gbc.gridx = 1
                 panel.add(configWindow.setupColorButton("Color", config, ConfigHelper.PROFILE.editorStampCubeDefaultColor) {
                     previewPanel.stamp = CubeStamp(config, null)
-                    onUpdate!!.run() }, gbc)
+                    onUpdate!!.invoke() }, gbc)
                 gbc.gridx = 2
                 panel.add(InfoButton(null), gbc)
                 gbc.gridx = 0
@@ -181,7 +180,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 smartPixelCheckBox.isSelected = config.getBool(ConfigHelper.PROFILE.editorStampCubeSmartPixel)
                 smartPixelCheckBox.addActionListener {
                     config.set(ConfigHelper.PROFILE.editorStampCubeSmartPixel, smartPixelCheckBox.isSelected.toString() + "")
-                    onUpdate!!.run()
+                    onUpdate!!.invoke()
                 }
                 panel.add(smartPixelCheckBox, gbc)
                 gbc.gridx = 2
@@ -218,7 +217,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 cbSolidColor.addChangeListener {
                     config.set(ConfigHelper.PROFILE.editorStampCounterSolidColor, cbSolidColor.isSelected.toString() + "")
                     previewPanel.stamp = CounterStamp(config)
-                    onUpdate!!.run()
+                    onUpdate!!.invoke()
                 }
                 gbc.gridx = 1
                 panel.add(cbSolidColor, gbc)
@@ -232,7 +231,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 cbBorder.addChangeListener {
                     config.set(ConfigHelper.PROFILE.editorStampCounterBorderEnabled, cbBorder.isSelected.toString() + "")
                     previewPanel.stamp = CounterStamp(config)
-                    onUpdate!!.run()
+                    onUpdate!!.invoke()
                 }
                 panel.add(cbBorder, gbc)
                 gbc.gridx = 2
