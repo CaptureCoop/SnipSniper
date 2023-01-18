@@ -13,14 +13,10 @@ class EzModeStampTab(private val image: BufferedImage, size: Int, scEditorWindow
     init {
         preferredSize = Dimension(size, size)
         addMouseListener(object: MouseAdapter() {
-            override fun mouseClicked(e: MouseEvent?) {
-                scEditorWindow.setSelectedStamp(stampIndex)
-            }
+            override fun mouseClicked(event: MouseEvent) = scEditorWindow.setSelectedStamp(stampIndex)
         })
         addMouseMotionListener(object: MouseMotionAdapter() {
-            override fun mouseDragged(e: MouseEvent?) {
-                scEditorWindow.setSelectedStamp(stampIndex)
-            }
+            override fun mouseDragged(event: MouseEvent) = scEditorWindow.setSelectedStamp(stampIndex)
         })
     }
 
