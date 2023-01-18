@@ -6,7 +6,6 @@ import net.snipsniper.config.ConfigHelper.PROFILE
 import net.snipsniper.configwindow.tabs.*
 import net.snipsniper.systray.Sniper
 import net.snipsniper.utils.*
-import net.snipsniper.utils.Function
 import org.capturecoop.cccolorutils.CCColor
 import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.cclogger.CCLogger
@@ -258,7 +257,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
     }
 
     //Returns function you can run to update the state
-    fun setupSaveButtons(panel: JPanel, tab: ITab, gbc: GridBagConstraints, config: Config, configOriginal: Config?, beforeSave: (() -> (Unit))?, reloadOtherDropdowns: Boolean): Function {
+    fun setupSaveButtons(panel: JPanel, tab: ITab, gbc: GridBagConstraints, config: Config, configOriginal: Config?, beforeSave: (() -> (Unit))?, reloadOtherDropdowns: Boolean): (ConfigSaveButtonState) -> (Boolean) {
         val allowSaving = booleanArrayOf(true)
         val isDirty = booleanArrayOf(false)
         val save = JButton("config_label_save".translate())
@@ -283,12 +282,12 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
                 if (showDirtyWarning() == JOptionPane.NO_OPTION) return@addActionListener
             close()
         }
-        val setState: Function = object : Function() {
-            override fun run(state: ConfigSaveButtonState): Boolean {
-                if (configOriginal == null) return false
-                when (state) {
+        val setState: ((ConfigSaveButtonState) -> (Boolean)) = {
+            val success = configOriginal != null
+            if(success) {
+                when (it) {
                     ConfigSaveButtonState.UPDATE_CLEAN_STATE -> {
-                        isDirty[0] = !config.settingsEquals(configOriginal)
+                        isDirty[0] = !config.settingsEquals(configOriginal!!)
                         tab.isDirty = isDirty[0]
                     }
 
@@ -297,8 +296,8 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
                 }
                 if (isDirty[0])
                     close.text = "config_label_cancel".translate() else close.text = "config_label_close".translate()
-                return true
             }
+            success
         }
         gbc.insets.top = 20
         gbc.gridx = 0

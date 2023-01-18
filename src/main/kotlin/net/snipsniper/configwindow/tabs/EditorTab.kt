@@ -26,7 +26,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
     override fun setup(configOriginal: Config?) {
         removeAll()
         isDirty = false
-        var saveButtonUpdate: Function? = null
+        var saveButtonUpdate: ((ConfigSaveButtonState) -> (Boolean))? = null
         val config: Config
         var disablePage = false
         if (configOriginal != null) {
@@ -65,7 +65,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             hsvSlider.addChangeListener {
                 hsvPercentage.text = hsvSlider.value.toString() + "%"
                 config.set(ConfigHelper.PROFILE.hsvColorSwitchSpeed, hsvSlider.value.toString() + "")
-                saveButtonUpdate?.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                saveButtonUpdate?.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             hsvSlider.value = config.getInt(ConfigHelper.PROFILE.hsvColorSwitchSpeed)
             gbc.gridx = 1
@@ -94,7 +94,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 val newStamp = StampType.getByIndex(stampDropdown.selectedIndex).getIStamp(config, null)
                 row3_stampPreview.stamp = newStamp
                 setupStampConfigPanel(row3_stampConfig, newStamp, row3_stampPreview, config, onUpdate[0])
-                saveButtonUpdate?.run()
+                saveButtonUpdate?.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
         }
         options.add(stampDropdown, gbc)
@@ -118,7 +118,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         //END ELEMENTS
         saveButtonUpdate = configWindow.setupSaveButtons(options, this, gbc, config, configOriginal, null, true)
         onUpdate[0] = object : Function() {
-            override fun run() = saveButtonUpdate.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            override fun run() = saveButtonUpdate.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
         }
         setupStampConfigPanel(row3_stampConfig, stamp, row3_stampPreview, config, onUpdate[0])
         add(options)

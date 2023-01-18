@@ -6,7 +6,6 @@ import net.snipsniper.config.ConfigHelper
 import net.snipsniper.configwindow.ConfigWindow
 import net.snipsniper.configwindow.UpdateButton
 import net.snipsniper.utils.*
-import net.snipsniper.utils.Function
 import org.apache.commons.lang3.SystemUtils
 import org.capturecoop.cclogger.CCLogLevel
 import org.capturecoop.cclogger.CCLogger
@@ -31,7 +30,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
     override fun setup(configOriginal: Config?) {
         removeAll()
         isDirty = false
-        var saveButtonUpdate: Function? = null
+        var saveButtonUpdate: ((ConfigSaveButtonState) -> (Boolean))? = null
         val options = JPanel(GridBagLayout())
         val gbc = GridBagConstraints()
         gbc.gridx = 0
@@ -60,9 +59,9 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     val fis = FileInputStream(fileChooser.selectedFile)
                     val bis = BufferedInputStream(fis)
                     val zis = ZipInputStream(bis)
-                    var ze: ZipEntry
+                    var ze: ZipEntry?
                     while (zis.nextEntry.also { ze = it } != null) {
-                        val filePath = Paths.get(SnipSniper.mainFolder).resolve(ze.name)
+                        val filePath = Paths.get(SnipSniper.mainFolder).resolve(ze!!.name)
                         FileOutputStream(filePath.toFile()).use { fos ->
                             BufferedOutputStream(fos, buffer.size).use { bos ->
                                 var len: Int
@@ -133,7 +132,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         gbc.gridx = 1
         options.add(Utils.getLanguageDropdown(config.getString(ConfigHelper.MAIN.language)) {
             config.set(ConfigHelper.MAIN.language, it)
-            saveButtonUpdate!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            saveButtonUpdate!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
         }, gbc)
         val themes = arrayOf("config_label_theme_light".translate(), "config_label_theme_dark".translate())
         val themeDropdown = JComboBox<Any>(themes)
@@ -144,7 +143,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     0 -> config.set(ConfigHelper.MAIN.theme, "light")
                     1 -> config.set(ConfigHelper.MAIN.theme, "dark")
                 }
-                saveButtonUpdate!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                saveButtonUpdate!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
         }
         gbc.gridx = 0
@@ -157,7 +156,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         debugCheckBox.isSelected = config.getBool(ConfigHelper.MAIN.debug)
         debugCheckBox.addActionListener {
             config.set(ConfigHelper.MAIN.debug, debugCheckBox.isSelected.toString() + "")
-            saveButtonUpdate!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            saveButtonUpdate!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
         }
         gbc.gridx = 1
         options.add(debugCheckBox, gbc)
@@ -196,7 +195,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 configWindow.close()
                 SnipSniper.openConfigWindow(configWindow.lastSelectedConfig, ConfigWindow.PAGE.GlobalPanel)
             }
-            saveButtonUpdate!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            saveButtonUpdate!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
         }
         saveButtonUpdate = configWindow.setupSaveButtons(options, this, gbc, config, SnipSniper.config, beforeSave, false)
         add(options)

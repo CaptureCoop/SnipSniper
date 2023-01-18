@@ -11,7 +11,6 @@ import net.snipsniper.configwindow.textpreviewwindow.FolderPreviewRenderer
 import net.snipsniper.configwindow.textpreviewwindow.SaveFormatPreviewRenderer
 import net.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow
 import net.snipsniper.utils.*
-import net.snipsniper.utils.Function
 import org.capturecoop.cccolorutils.CCColor
 import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.ccutils.utils.CCStringUtils
@@ -31,7 +30,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         removeAll()
         isDirty = false
         var colorChooser: CCColorChooser? = null
-        var cleanDirtyFunction: Function? = null
+        var cleanDirtyFunction: ((ConfigSaveButtonState) -> (Boolean))? = null
         val config: Config
         var disablePage = false
         if (configOriginal != null) {
@@ -89,7 +88,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 config.set(ConfigHelper.PROFILE.icon, cfgValue)
                 val img = ImageUtils.getIconDynamically(config) ?: ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
                 iconButton.icon = img.scaled(16, 16).toImageIcon()
-                cleanDirtyFunction?.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction?.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
 
             var wnd: IconWindow? = null
@@ -126,7 +125,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             val hotKeyButton = HotKeyButton(config.getString(ConfigHelper.PROFILE.hotkey))
             hotKeyButton.addChangeListener {
                 (if(hotKeyButton.hotkey != -1) hotKeyButton.getHotKeyString() else "NONE").also { newValue -> config.set(ConfigHelper.PROFILE.hotkey, newValue) }
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             hotkeyPanel.add(hotKeyButton)
             val deleteHotKey = JButton("config_label_delete".translate())
@@ -134,7 +133,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 hotKeyButton.text = "config_label_none".translate()
                 hotKeyButton.hotkey = -1
                 config.set(ConfigHelper.PROFILE.hotkey, "NONE")
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             hotkeyPanel.add(deleteHotKey)
             options.add(hotkeyPanel, gbc)
@@ -151,7 +150,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             val tintColorButton = GradientJButton("Color", tintColor)
             tintColor.addChangeListener { e: ChangeEvent ->
                 config.set(ConfigHelper.PROFILE.tintColor, (e.source as CCColor).toSaveString())
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             tintColorButton.addActionListener {
                 val image = when(SnipSniper.config.getString(ConfigHelper.MAIN.theme)) {
@@ -174,7 +173,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             saveToDisk.isSelected = config.getBool(ConfigHelper.PROFILE.saveToDisk)
             saveToDisk.addActionListener {
                 config.set(ConfigHelper.PROFILE.saveToDisk, saveToDisk.isSelected.toString() + "")
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             gbc.gridx = 1
             options.add(saveToDisk, gbc)
@@ -191,7 +190,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             copyToClipboard.isSelected = config.getBool(ConfigHelper.PROFILE.copyToClipboard)
             copyToClipboard.addActionListener {
                 config.set(ConfigHelper.PROFILE.copyToClipboard, copyToClipboard.isSelected.toString() + "")
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             options.add(copyToClipboard, gbc)
             gbc.gridx = 2
@@ -207,14 +206,14 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             val borderSize = JSpinner(SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.borderSize).toDouble(), 0.0, 999.0, 1.0)) //TODO: Extend JSpinner class to notify user of too large number
             borderSize.addChangeListener {
                 config.set(ConfigHelper.PROFILE.borderSize, (borderSize.value as Double).toInt().toString() + "")
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             borderSizePanel.add(borderSize)
             val borderColor = CCColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor))
             val colorBtn = GradientJButton("Color", borderColor)
             borderColor.addChangeListener {
                 config.set(ConfigHelper.PROFILE.borderColor, (it.source as CCColor).toSaveString())
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             colorBtn.addActionListener {
                 if (colorChooser == null || !colorChooser!!.isDisplayable) {
@@ -272,23 +271,23 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     val saveLocationFinal = Utils.replaceVars(saveLocationRaw)
                     val saveLocationCheck = File(saveLocationFinal)
                     if (!saveLocationCheck.exists()) {
-                        cleanDirtyFunction!!.run(ConfigSaveButtonState.NO_SAVE)
+                        cleanDirtyFunction!!.invoke(ConfigSaveButtonState.NO_SAVE)
                         val dialogResult = Utils.showPopup(configWindow, "config_sanitation_directory_notexist".translate() + " Create?", "config_sanitation_error".translate(), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, "icons/folder.png".getImage(), true)
                         if (dialogResult == JOptionPane.YES_OPTION) {
                             val allow = File(saveLocationFinal).mkdirs()
                             if (!allow) {
                                 configWindow.msgError("config_sanitation_failed_createdirectory".translate())
-                                cleanDirtyFunction!!.run(ConfigSaveButtonState.NO_SAVE)
+                                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.NO_SAVE)
                             } else {
                                 config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationRaw)
-                                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
-                                cleanDirtyFunction!!.run(ConfigSaveButtonState.YES_SAVE)
+                                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.YES_SAVE)
                             }
                         } else {
                             if (configOriginal != null) pictureLocation.text = configOriginal.getRawString(ConfigHelper.PROFILE.pictureFolder)
                         }
                     } else {
-                        cleanDirtyFunction!!.run(ConfigSaveButtonState.YES_SAVE)
+                        cleanDirtyFunction!!.invoke(ConfigSaveButtonState.YES_SAVE)
                         config.set(ConfigHelper.PROFILE.pictureFolder, saveLocationRaw)
                     }
                 }
@@ -314,7 +313,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     if (text.isEmpty()) text = "/"
                     config.set(ConfigHelper.PROFILE.saveFolderCustom, text)
                     customSaveButton.text = CCStringUtils.formatDateTimeString(text)
-                    cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                    cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
                 }
             }
             options.add(customSaveButton, gbc)
@@ -331,7 +330,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 JSpinner(SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.snipeDelay).toDouble(), 0.0, 100.0, 1.0))
             snipeDelay.addChangeListener {
                 config.set(ConfigHelper.PROFILE.snipeDelay, (snipeDelay.value as Double).toInt().toString() + "")
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             options.add(snipeDelay, gbc)
             gbc.gridx = 2
@@ -347,7 +346,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             openEditor.isSelected = config.getBool(ConfigHelper.PROFILE.openEditor)
             openEditor.addActionListener {
                 config.set(ConfigHelper.PROFILE.openEditor, openEditor.isSelected.toString() + "")
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             options.add(openEditor, gbc)
             gbc.gridx = 2
@@ -410,14 +409,14 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 }
                 config.set(ConfigHelper.PROFILE.enableSpyglass, enableSpyglass)
                 config.set(ConfigHelper.PROFILE.spyglassMode, spyglassMode)
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             spyglassDropdownHotkey.addItemListener {
                 when (spyglassDropdownHotkey.selectedIndex) {
                     0 -> config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_CONTROL)
                     1 -> config.set(ConfigHelper.PROFILE.spyglassHotkey, KeyEvent.VK_SHIFT)
                 }
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             JPanel(configWindow.getGridLayoutWithMargin(0, 2, 0)).also { spyglassPanel ->
                 spyglassPanel.add(spyglassDropdownEnabled)
@@ -449,7 +448,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     3 -> zoom = 64
                 }
                 config.set(ConfigHelper.PROFILE.spyglassZoom, zoom)
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             options.add(spyglassZoomDropdown, gbc)
             gbc.gridx = 2
@@ -493,7 +492,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                         afterDragDropdownHotkey.setVisible(true)
                     }
                 }
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             afterDragDropdownHotkey.addItemListener {
                 when (afterDragDropdownHotkey.selectedIndex) {
@@ -503,7 +502,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     }
                     1 -> config.set(ConfigHelper.PROFILE.afterDragHotkey, KeyEvent.VK_SHIFT)
                 }
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             val afterDragPanel = JPanel(GridLayout(0, 2))
             afterDragPanel.add(afterDragDropdownMode)
@@ -521,7 +520,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             val afterDragDeadzoneSpinner = JSpinner(SpinnerNumberModel(config.getInt(ConfigHelper.PROFILE.afterDragDeadzone), 1, 50, 1))
             afterDragDeadzoneSpinner.addChangeListener {
                 config.set(ConfigHelper.PROFILE.afterDragDeadzone, afterDragDeadzoneSpinner.value.toString().toInt())
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             options.add(afterDragDeadzoneSpinner, gbc)
             gbc.gridx = 2
@@ -537,7 +536,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             enableOutline.isSelected = config.getBool(ConfigHelper.PROFILE.dottedOutline)
             enableOutline.addActionListener {
                 config.set(ConfigHelper.PROFILE.dottedOutline, enableOutline.isSelected)
-                cleanDirtyFunction!!.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             options.add(enableOutline, gbc)
             gbc.gridx = 2

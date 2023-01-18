@@ -9,3 +9,15 @@ abstract class Function {
     open fun run(vararg args: ConfigSaveButtonState): Boolean = true
     open fun run(state: ConfigSaveButtonState): Boolean = true
 }
+
+
+
+fun baba(action: (String) -> (String)) {
+    println("Action invoked: ${action.invoke("baba")}")
+}
+
+fun main() {
+    baba {
+        return@baba "hello"
+    }
+}

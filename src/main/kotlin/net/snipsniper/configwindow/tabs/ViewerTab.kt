@@ -5,7 +5,6 @@ import net.snipsniper.config.ConfigHelper
 import net.snipsniper.configwindow.ConfigWindow
 import net.snipsniper.configwindow.ConfigWindow.PAGE
 import net.snipsniper.utils.ConfigSaveButtonState
-import net.snipsniper.utils.Function
 import net.snipsniper.utils.InfoButton
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
@@ -24,7 +23,7 @@ class ViewerTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
     override fun setup(configOriginal: Config?) {
         removeAll()
         isDirty = false
-        lateinit var saveButtonUpdate: Function
+        lateinit var saveButtonUpdate: (ConfigSaveButtonState) -> (Boolean)
         val config: Config
         var disablePage = false
         if (configOriginal != null) {
@@ -48,7 +47,7 @@ class ViewerTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             closeViewerOnEditor.isSelected = config.getBool(ConfigHelper.PROFILE.closeViewerOnOpenEditor)
             closeViewerOnEditor.addChangeListener {
                 config.set(ConfigHelper.PROFILE.closeViewerOnOpenEditor, closeViewerOnEditor.isSelected)
-                saveButtonUpdate.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                saveButtonUpdate.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             options.add(closeViewerOnEditor, gbc)
         }
@@ -61,7 +60,7 @@ class ViewerTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             openViewerFullscreen.isSelected = config.getBool(ConfigHelper.PROFILE.openViewerInFullscreen)
             openViewerFullscreen.addChangeListener {
                 config.set(ConfigHelper.PROFILE.openViewerInFullscreen, openViewerFullscreen.isSelected)
-                saveButtonUpdate.run(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                saveButtonUpdate.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             options.add(openViewerFullscreen, gbc)
         }
