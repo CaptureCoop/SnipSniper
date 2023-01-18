@@ -14,13 +14,11 @@ import java.nio.file.StandardCopyOption
 
 class FileUtils {
     companion object {
-        fun deleteRecursively(folder: String) = deleteRecursively(File(folder))
-        fun deleteRecursively(folder: File) = folder.deleteRecursively()
-
         fun delete(file: String) = delete(File(file))
 
         fun delete(file: File): Boolean {
             if (!file.exists()) return true
+            File("").delete()
             if (!file.delete()) {
                 CCLogger.warn("File (${file.absolutePath}) could not be deleted!")
                 return false
