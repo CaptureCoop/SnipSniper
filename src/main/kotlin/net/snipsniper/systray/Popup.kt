@@ -61,6 +61,8 @@ class Popup(private val sniper: Sniper): JDialog() {
             PopupMenu("Debug", "icons/debug.png".getImage()).also { pm ->
                 pm.add(PopupMenuButton("Console", "icons/console.png", this, { CCLogger.enableDebugConsole(true) }, menus))
                 pm.add(PopupMenuButton("Open log folder", "icons/folder.png", this, { FileUtils.openFolder(SnipSniper.logFolder) }, menus))
+                pm.add(PopupMenuButton("Log Build Info", "icons/monitor.png", this, { SnipSniper.buildInfo.log() }, menus))
+                pm.add(PopupMenuButton("Log System Info", "icons/monitor.png", this, { SystemInfo.log() }, menus))
                 pm.add(PopupMenuButton("Language test", "icons/config.png", this, { LangDebugWindow() }, menus))
                 add(pm).also { menus.add(pm) }
             }
