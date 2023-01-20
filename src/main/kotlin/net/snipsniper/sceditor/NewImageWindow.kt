@@ -10,7 +10,7 @@ import java.awt.event.WindowEvent
 import java.awt.image.BufferedImage
 import javax.swing.*
 
-class NewImageWindow: JFrame(), CCIClosable  {
+class NewImageWindow(parent: JFrame? = null): JFrame(), CCIClosable  {
     lateinit var image: BufferedImage
     var onSubmit: (() -> (Unit))? = null
     private val cWindows = ArrayList<CCIClosable>()
@@ -77,6 +77,11 @@ class NewImageWindow: JFrame(), CCIClosable  {
             add(it, gbc)
         }
         pack()
+        if(parent != null) {
+            val posX = parent.location.x + parent.width / 2 - width / 2
+            val posY = parent.location.y + parent.height / 2 - height / 2
+            parent.setLocation(posX, posY)
+        }
         isVisible = true
     }
 
