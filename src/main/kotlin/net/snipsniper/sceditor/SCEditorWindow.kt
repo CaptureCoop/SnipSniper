@@ -239,8 +239,18 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 }
                 JMenuItem("Resize").also {
                     it.icon = sizeImage("icons/resize.png")
-                    it.isEnabled = false
-                    it.toolTipText = devString
+                    var wnd: ResizeWindow? = null
+                    it.addActionListener {
+                        if(wnd != null) {
+                            wnd?.requestFocus()
+                        } else {
+                            wnd = ResizeWindow(image, parent = this)
+                            wnd?.onClose = { wnd = null }
+                            wnd?.onSubmit = {
+                                println("Resized: $image")
+                            }
+                        }
+                    }
                     parent.add(it)
                 }
                 parent.addSeparator()
