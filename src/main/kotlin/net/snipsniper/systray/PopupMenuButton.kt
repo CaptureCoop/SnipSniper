@@ -32,6 +32,6 @@ class PopupMenuButton(title: String, icon: BufferedImage, popup: JDialog, privat
         })
     }
 
-    fun setIsMenuChild(value: Boolean) { isMenuChild = value }
+    fun setIsMenuChild(value: Boolean) = kotlin.run { isMenuChild = value }
     private fun getPopupIcon(image: BufferedImage): ImageIcon = image.scaled(16, 16).toImageIcon()
 }

@@ -1,7 +1,9 @@
 package net.snipsniper.utils
 
+import net.snipsniper.SnipSniper
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
+import org.capturecoop.cclogger.CCLogger
 
 class BuildInfo(config: Config) {
     val version = Version(config.getString(ConfigHelper.BUILDINFO.version))
@@ -15,4 +17,19 @@ class BuildInfo(config: Config) {
     val osArch = config.getString(ConfigHelper.BUILDINFO.osarch)
     val javaVendor = config.getString(ConfigHelper.BUILDINFO.javavendor)
     val javaVersion = config.getString(ConfigHelper.BUILDINFO.javaver)
+
+    fun log() {
+        CCLogger.info("== Build Info ==")
+        CCLogger.info("Type: $releaseType")
+        CCLogger.info("Version: ${SnipSniper.getVersionString()}")
+        CCLogger.info("Build date: $buildDate")
+        CCLogger.info("GitHash: $gitHash")
+        CCLogger.info("GitHash Full: $gitHashFull")
+        CCLogger.info("Branch: $branch")
+        CCLogger.info("OS Name: $osName")
+        CCLogger.info("OS Version: $osVersion")
+        CCLogger.info("OS Arch: $osArch")
+        CCLogger.info("Java Vendor: $javaVendor")
+        CCLogger.info("Java Version: $javaVersion")
+    }
 }

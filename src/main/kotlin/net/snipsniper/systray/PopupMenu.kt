@@ -12,17 +12,12 @@ class PopupMenu(text: String, icon: BufferedImage): JMenu() {
         setText(text)
         setIcon(icon.scaled(16, 16).toImageIcon())
         addMouseListener(object: MouseAdapter() {
-            override fun mouseEntered(e: MouseEvent?) {
-                super.mouseEntered(e)
+            override fun mouseEntered(event: MouseEvent) {
                 isArmed = true
                 isPopupMenuVisible = true
                 popupMenu.setLocation(locationOnScreen.x + width, locationOnScreen.y)
             }
-
-            override fun mouseExited(e: MouseEvent?) {
-                super.mouseExited(e)
-                isArmed = false
-            }
+            override fun mouseExited(event: MouseEvent) = kotlin.run { isArmed = false }
         })
     }
 

@@ -29,14 +29,12 @@ class RectangleCollection {
         bounds.height = max(bounds.height, rectangle.height)
     }
 
-    fun addRectangles(vararg rectangles: Rectangle) {
-        rectangles.forEach { addRectangle(it) }
-    }
+    fun addRectangles(vararg rectangles: Rectangle) = rectangles.forEach { addRectangle(it) }
 
-    fun getX(): Int = bounds.x
-    fun getY(): Int = bounds.y
-    fun getWidth(): Int = bounds.width
-    fun getHeight(): Int = bounds.height
+    val x: Int get() = bounds.x
+    val y: Int get() = bounds.y
+    val width: Int get() = bounds.width
+    val height: Int get() = bounds.height
     fun clear() { bounds = Rectangle(0, 0, 0, 0) }
     fun isEmpty(): Boolean = bounds.isEmpty
     fun getBounds(): Rectangle = Utils.fixRectangle(bounds)

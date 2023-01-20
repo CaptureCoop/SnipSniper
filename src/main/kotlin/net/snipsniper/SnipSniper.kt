@@ -150,35 +150,8 @@ class SnipSniper {
             WikiManager.load(LangManager.getLanguage())
 
             CCLogger.info("Launching SnipSniper Version ${buildInfo.version.digitsToString()} (rev-${buildInfo.gitHash})")
-            buildInfo.run {
-                CCLogger.info("")
-                CCLogger.info("== Build Info ==")
-                CCLogger.info("Type: $releaseType")
-                CCLogger.info("Version: ${getVersionString()}")
-                CCLogger.info("Build date: $buildDate")
-                CCLogger.info("GitHash: $gitHash")
-                CCLogger.info("GitHash Full: $gitHashFull")
-                CCLogger.info("Branch: $branch")
-                CCLogger.info("OS Name: $osName")
-                CCLogger.info("OS Version: $osVersion")
-                CCLogger.info("OS Arch: $osArch")
-                CCLogger.info("Java Vendor: $javaVendor")
-                CCLogger.info("Java Version: $javaVersion")
-                CCLogger.info("")
-            }
-
-            SystemInfo.run {
-                CCLogger.info("== System Info ==")
-                CCLogger.info("OS Name: ${getName()}")
-                CCLogger.info("OS Version: ${getVersion()}")
-                CCLogger.info("OS Arch: ${getArch()}")
-                CCLogger.info("OS Date/Time: ${getTimeAndDate()} (${getTimeZone()})")
-                CCLogger.info("OS Memory: Free(${getFreePhysicalMemory().prettyPrintBytes()}), Total(${getPhysicalMemory().prettyPrintBytes()})")
-                CCLogger.info("Java Vendor: ${getJavaVendor()}")
-                CCLogger.info("Java Version: ${getJavaVersion()}")
-                CCLogger.info("Java Memory: Free(${getFreeJavaMemory().prettyPrintBytes()}), Total Allocated(${getTotalJavaMemory().prettyPrintBytes()}), Max(${getMaxJavaMemory().prettyPrintBytes()})")
-                CCLogger.info("")
-            }
+            buildInfo.log()
+            SystemInfo.log()
 
             if (!SystemUtils.IS_OS_WINDOWS) {
                 CCLogger.warn("=================================================================================")

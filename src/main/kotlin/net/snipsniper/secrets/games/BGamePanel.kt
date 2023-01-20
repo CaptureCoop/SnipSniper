@@ -47,11 +47,11 @@ class BGamePanel(private val game: BGame) : JPanel() {
             }
         }
         drawScoreText(g, offsetX, ts, 0, "Level")
-        drawScoreText(g, offsetX, ts, 1, game.level.toString() + "")
+        drawScoreText(g, offsetX, ts, 1, game.level.toString())
         drawScoreText(g, offsetX, ts, 3, "Score")
-        drawScoreText(g, offsetX, ts, 4, game.score.toString() + "")
+        drawScoreText(g, offsetX, ts, 4, game.score.toString())
         drawScoreText(g, offsetX, ts, 6, "Lines cleared")
-        drawScoreText(g, offsetX, ts, 7, game.linesCleared.toString() + "")
+        drawScoreText(g, offsetX, ts, 7, game.linesCleared.toString())
         val offY = drawScoreText(g, offsetX, ts, 9, "Next piece:")
         val npX = width - (offsetX + BGame.BOARD_WIDTH * ts) + BGame.BOARD_WIDTH * ts
         val npOffsetX = width - npX
@@ -62,25 +62,24 @@ class BGamePanel(private val game: BGame) : JPanel() {
         }
         drawHelpText(g, offsetX, 0, "Block Game", 1.5f)
         drawHelpText(g, offsetX, 2, "Controls:", 1.1f)
-        drawHelpText(g, offsetX, 4, "Q / E = Rotate", 1f)
-        drawHelpText(g, offsetX, 5, "A / D = Move", 1f)
-        drawHelpText(g, offsetX, 6, "S = Faster", 1f)
-        drawHelpText(g, offsetX, 7, "Space = Drop", 1f)
-        drawHelpText(g, offsetX, 8, "Escape = Pause", 1f)
-        drawHelpText(g, offsetX, 9, "R = Restart", 1f)
-        drawHelpText(g, offsetX, 10, "Right Click = Screenshot", 1f)
-        if (game.isGameOver && !isScreenshot) {
+        drawHelpText(g, offsetX, 4, "Q / E = Rotate")
+        drawHelpText(g, offsetX, 5, "A / D = Move")
+        drawHelpText(g, offsetX, 6, "S = Faster")
+        drawHelpText(g, offsetX, 7, "Space = Drop")
+        drawHelpText(g, offsetX, 8, "Escape = Pause")
+        drawHelpText(g, offsetX, 9, "R = Restart")
+        drawHelpText(g, offsetX, 10, "Right Click = Screenshot")
+        if(isScreenshot) return
+
+        fun drawText(text: String) {
             g.color = Color(0, 0, 0, 100)
             g.fillRect(0, 0, width, height)
             g.color = Color.WHITE
-            DrawUtils.drawCenteredString(g, "GAME OVER", Rectangle(0, 0, width, height), Font("Monospaced", Font.BOLD, height / 20))
+            DrawUtils.drawCenteredString(g, text, Rectangle(0, 0, width, height), getFont(height / 20))
         }
-        if (game.isPaused && !isScreenshot) {
-            g.color = Color(0, 0, 0, 100)
-            g.fillRect(0, 0, width, height)
-            g.color = Color.WHITE
-            DrawUtils.drawCenteredString(g, "PAUSED", Rectangle(0, 0, width, height), Font("Monospaced", Font.BOLD, height / 20))
-        }
+
+        if (game.isGameOver) drawText("GAME OVER")
+        else if (game.isPaused) drawText("PAUSED")
     }
 
     override fun paint(g: Graphics) = render(g, false)
@@ -89,14 +88,16 @@ class BGamePanel(private val game: BGame) : JPanel() {
     private fun drawScoreText(g: Graphics?, offsetX: Int, ts: Int, index: Int, text: String?): Int {
         val height = height / 20
         val rect = Rectangle(offsetX + BGame.BOARD_WIDTH * ts, height * index, width - (offsetX + BGame.BOARD_WIDTH * ts), height)
-        DrawUtils.drawCenteredString(g!!, text!!, rect, Font("Monospaced", Font.BOLD, height))
+        DrawUtils.drawCenteredString(g!!, text!!, rect, getFont(height))
         return rect.y + rect.height
     }
 
-    private fun drawHelpText(g: Graphics, offsetX: Int, index: Int, text: String, fontMultiplier: Float) {
+    private fun drawHelpText(g: Graphics, offsetX: Int, index: Int, text: String, fontMultiplier: Float = 1f) {
         val height = ((height / 20f) * fontMultiplier).toInt()
         Rectangle(0, height * index, offsetX, height).also {
-            DrawUtils.drawCenteredString(g, text, it, Font("Monospaced", Font.BOLD, height))
+            DrawUtils.drawCenteredString(g, text, it, getFont(height))
         }
     }
+
+    private fun getFont(size: Int) = Font("Monospaced", Font.BOLD, size)
 }
