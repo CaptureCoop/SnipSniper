@@ -70,8 +70,8 @@ class ResizeWindow(private val image: BufferedImage, parent: JFrame? = null): JF
         pack()
         isVisible = true
         if(parent != null) {
-            val posX = location.x + parent.width / 2 - width / 2
-            val posY = location.y + parent.height / 2 - height / 2
+            val posX = parent.location.x + parent.width / 2 - width / 2
+            val posY = parent.location.y + parent.height / 2 - height / 2
             setLocation(posX, posY)
         }
     }

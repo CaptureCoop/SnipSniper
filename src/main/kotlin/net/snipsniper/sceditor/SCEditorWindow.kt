@@ -244,7 +244,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                         if(wnd != null) {
                             wnd?.requestFocus()
                         } else {
-                            wnd = ResizeWindow(image, parent = this)
+                            wnd = ResizeWindow(image, parent = this).also { cWindows.add(it) }
                             wnd?.onClose = { wnd = null }
                             wnd?.onSubmit = {
                                 println("Resized: $image")
