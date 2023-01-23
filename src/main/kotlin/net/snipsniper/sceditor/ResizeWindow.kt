@@ -17,7 +17,8 @@ class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JF
     init {
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
         layout = GridBagLayout()
-        iconImage = "icons/editor.png".getImage()
+        iconImage = "icons/resize.png".getImage()
+        title = "Resize"
         addWindowListener(object: WindowAdapter() {
             override fun windowClosing(e: WindowEvent) {
                 super.windowClosing(e)
@@ -28,7 +29,7 @@ class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JF
         gbc.insets = Insets(0, 5, 0, 5)
         gbc.gridwidth = 2
         gbc.gridx = 0
-        add(JLabel("New Image", JLabel.CENTER), gbc)
+        add(JLabel("Resize", JLabel.CENTER), gbc)
         gbc.gridwidth = 1
         add(JLabel("Width", JLabel.RIGHT), gbc)
         gbc.gridx = 1
