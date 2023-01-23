@@ -27,18 +27,23 @@ class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JF
         })
         val gbc = GridBagConstraints()
         gbc.insets = Insets(0, 5, 0, 5)
-        gbc.gridwidth = 2
+
+        kotlin.run {
+            gbc.gridwidth = 2
+            gbc.gridx = 0
+            add(JLabel("Resize", JLabel.CENTER), gbc)
+        }
+
         gbc.gridx = 0
-        add(JLabel("Resize", JLabel.CENTER), gbc)
         gbc.gridwidth = 1
         add(JLabel("Width", JLabel.RIGHT), gbc)
         gbc.gridx = 1
-        val widthTextField = JTextField("512")
+        val widthTextField = JTextField(image.width.toString())
         add(widthTextField, gbc)
         gbc.gridx = 0
         add(JLabel("Height", JLabel.RIGHT), gbc)
         gbc.gridx = 1
-        val heightTextField = JTextField("512")
+        val heightTextField = JTextField(image.height.toString())
         add(heightTextField, gbc)
         gbc.gridx = 0
         gbc.gridwidth = 2
@@ -51,6 +56,26 @@ class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JF
             }
             add(it, gbc)
         }
+
+        kotlin.run {
+            gbc.gridwidth = 1
+            JButton("/2").also {
+                it.addActionListener {
+                    widthTextField.text = (widthTextField.text.toInt() / 2).toString()
+                    heightTextField.text = (heightTextField.text.toInt() / 2).toString()
+                }
+                add(it, gbc)
+            }
+            gbc.gridx = 1
+            JButton("*2").also {
+                it.addActionListener {
+                    widthTextField.text = (widthTextField.text.toInt() * 2).toString()
+                    heightTextField.text = (heightTextField.text.toInt() * 2).toString()
+                }
+                add(it, gbc)
+            }
+        }
+        
         gbc.gridwidth = 1
         gbc.gridx = 0
         add(JLabel("Method:"), gbc)
