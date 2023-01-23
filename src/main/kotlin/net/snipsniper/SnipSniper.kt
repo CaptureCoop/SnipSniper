@@ -126,10 +126,9 @@ class SnipSniper {
             if (!cmdline.language.isNullOrEmpty())
                 config.set(ConfigHelper.MAIN.language, cmdline.language ?: throw Exception("Language is set per argument bus is null!"))
 
-            if (cmdline.isDebug) {
-                config.set(ConfigHelper.MAIN.debug, "true")
-                CCLogger.filter = CCLogFilter.DEBUG //Overwrite
-            }
+            //This looks dumb, hmm
+            if (cmdline.isDebug) config.set(ConfigHelper.MAIN.debug, "true")
+            if(config.getBool(ConfigHelper.MAIN.debug)) CCLogger.filter = CCLogFilter.DEBUG //Overwrite
 
             ImageManager.loadResources()
 
