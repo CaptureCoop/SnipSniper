@@ -5,8 +5,7 @@ import org.capturecoop.cccolorutils.CCColor
 import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.ccutils.utils.CCIClosable
 import java.awt.*
-import java.awt.event.WindowAdapter
-import java.awt.event.WindowEvent
+import java.awt.event.*
 import java.awt.image.BufferedImage
 import javax.swing.*
 
@@ -56,6 +55,17 @@ class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JF
         add(JLabel("Width", JLabel.RIGHT), gbc)
         gbc.gridx = 1
         val widthTextField = JTextField(image.width.toString())
+        widthTextField.addKeyListener(object: KeyAdapter(){
+            override fun keyReleased(event: KeyEvent) {
+                when(event.keyCode) {
+                    KeyEvent.VK_ESCAPE, KeyEvent.VK_ENTER -> { FocusManager.getCurrentManager().focusNextComponent() }
+                }
+            }
+        })
+        widthTextField.addFocusListener(object: FocusAdapter() {
+            override fun focusLost(e: FocusEvent?) {
+            }
+        })
         add(widthTextField, gbc)
         gbc.gridx = 0
         add(JLabel("Height", JLabel.RIGHT), gbc)
