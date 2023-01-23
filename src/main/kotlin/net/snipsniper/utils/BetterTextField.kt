@@ -21,7 +21,6 @@ class BetterTextField(_text: String, private val accepted: AcceptedInput = Accep
                 }
             }
         })
-        this.
         addFocusListener(object: FocusAdapter() {
             override fun focusLost(event: FocusEvent) {
                 when(accepted) {
