@@ -54,24 +54,21 @@ class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JF
         gbc.gridwidth = 1
         add(JLabel("Width", JLabel.RIGHT), gbc)
         gbc.gridx = 1
-        val widthTextField = JTextField(image.width.toString())
-        widthTextField.addKeyListener(object: KeyAdapter(){
-            override fun keyReleased(event: KeyEvent) {
-                when(event.keyCode) {
-                    KeyEvent.VK_ESCAPE, KeyEvent.VK_ENTER -> { FocusManager.getCurrentManager().focusNextComponent() }
-                }
-            }
-        })
-        widthTextField.addFocusListener(object: FocusAdapter() {
-            override fun focusLost(e: FocusEvent?) {
-            }
-        })
+        val widthTextField = BetterTextField(image.width.toString(), BetterTextField.AcceptedInput.INT)
         add(widthTextField, gbc)
         gbc.gridx = 0
         add(JLabel("Height", JLabel.RIGHT), gbc)
         gbc.gridx = 1
-        val heightTextField = JTextField(image.height.toString())
+        val heightTextField = BetterTextField(image.height.toString(), BetterTextField.AcceptedInput.INT)
         add(heightTextField, gbc)
+
+        widthTextField.onFocusLost = { new, last ->
+            //TODO: Do the math
+        }
+
+        heightTextField.onFocusLost = { new, last ->
+            //TODO: Do the math
+        }
 
         kotlin.run {
             gbc.gridx = 0
