@@ -396,7 +396,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     }
 
     private fun openNewImageWindow() {
-        val window = NewImageWindow()
+        val window = NewImageWindow(parent = this)
         cWindows.add(window)
         window.onSubmit = {
             setImage(window.image, resetHistory = true, isNewImage = true)

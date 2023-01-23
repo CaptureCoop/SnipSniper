@@ -80,7 +80,7 @@ class NewImageWindow(parent: JFrame? = null): JFrame(), CCIClosable  {
         if(parent != null) {
             val posX = parent.location.x + parent.width / 2 - width / 2
             val posY = parent.location.y + parent.height / 2 - height / 2
-            parent.setLocation(posX, posY)
+            setLocation(posX, posY)
         }
         isVisible = true
     }
