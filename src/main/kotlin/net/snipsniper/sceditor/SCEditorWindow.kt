@@ -248,6 +248,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                             wnd?.onClose = { wnd = null }
                             wnd?.onSubmit = { img ->
                                 setImage(img, resetHistory = false, isNewImage = true)
+                                historyManager.addHistory()
                             }
                         }
                     }
