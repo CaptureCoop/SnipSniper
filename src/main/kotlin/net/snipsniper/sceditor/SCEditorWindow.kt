@@ -446,7 +446,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
 
     fun setImage(newImage: BufferedImage?, resetHistory: Boolean, isNewImage: Boolean) {
         super.image = ImageUtils.ensureAlphaLayer(newImage!!)
-        CCLogger.debug("Setting new Image")
+        CCLogger.debug("setImage(resetHistory = $resetHistory, isNewImage = $isNewImage)")
         isEnableInteraction = !isDefaultImage()
         if (listener != null && resetHistory) {
             historyManager.resetHistory()
