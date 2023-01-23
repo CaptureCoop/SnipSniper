@@ -57,6 +57,7 @@ class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JF
         gbc.gridx = 1
         val dropdown = JComboBox<DropdownItem>().also {
             it.addItem(DropdownItem("Resize", "resize"))
+            it.addItem(DropdownItem("Keep Size", "keep-size"))
             add(it, gbc)
         }
         gbc.gridx = 0
@@ -68,11 +69,11 @@ class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JF
                 if(widthInput == null || heightInput == null) {
                     Utils.showPopup(this, "Bad input! Not a valid number.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, "icons/redx.png".getImage(), true)
                 } else {
-                    when((dropdown.selectedItem as DropdownItem).id) {
-                        "resize" -> {
-                            image = ImageUtils.newBufferedImage(widthInput, heightInput, image.type) { g ->
-                                g.drawImage(image, 0, 0, widthInput, heightInput, null)
-                            }
+                    //Expand options
+                    image = ImageUtils.newBufferedImage(widthInput, heightInput, image.type) { g ->
+                        when((dropdown.selectedItem as DropdownItem).id) {
+                            "resize" -> { g.drawImage(image, 0, 0, widthInput, heightInput, null) }
+                            "keep-size" -> { g.drawImage(image, 0, 0, image.width, image.height, this) }
                         }
                     }
                     onSubmit?.invoke(image)
