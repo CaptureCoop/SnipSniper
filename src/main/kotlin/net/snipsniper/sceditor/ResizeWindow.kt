@@ -34,7 +34,24 @@ class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JF
             add(JLabel("Resize", JLabel.CENTER), gbc)
         }
 
-        gbc.gridx = 0
+        var locked = true
+        kotlin.run {
+            gbc.fill = GridBagConstraints.BOTH
+            gbc.gridwidth = 2
+            JButton().also {
+                fun refresh() {
+                    it.icon = "icons/keepscale-${if(locked) "on" else "off"}.png".getImage().rotateClockwise90().toImageIcon()
+                }
+                it.addActionListener {
+                    locked = !locked
+                    refresh()
+                }
+                refresh()
+                add(it, gbc)
+            }
+            gbc.fill = GridBagConstraints.NONE
+        }
+
         gbc.gridwidth = 1
         add(JLabel("Width", JLabel.RIGHT), gbc)
         gbc.gridx = 1
@@ -45,16 +62,19 @@ class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JF
         gbc.gridx = 1
         val heightTextField = JTextField(image.height.toString())
         add(heightTextField, gbc)
-        gbc.gridx = 0
-        gbc.gridwidth = 2
-        JButton("Use monitor resolution").also {
-            it.addActionListener {
-                GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.displayMode.also { dm ->
-                    widthTextField.text = dm.width.toString()
-                    heightTextField.text = dm.height.toString()
+
+        kotlin.run {
+            gbc.gridx = 0
+            gbc.gridwidth = 2
+            JButton("Use monitor resolution").also {
+                it.addActionListener {
+                    GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.displayMode.also { dm ->
+                        widthTextField.text = dm.width.toString()
+                        heightTextField.text = dm.height.toString()
+                    }
                 }
+                add(it, gbc)
             }
-            add(it, gbc)
         }
 
         kotlin.run {
@@ -75,7 +95,7 @@ class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JF
                 add(it, gbc)
             }
         }
-        
+
         gbc.gridwidth = 1
         gbc.gridx = 0
         add(JLabel("Method:"), gbc)
