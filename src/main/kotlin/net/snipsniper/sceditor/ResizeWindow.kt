@@ -1,9 +1,6 @@
 package net.snipsniper.sceditor
 
-import net.snipsniper.utils.GradientJButton
-import net.snipsniper.utils.ImageUtils
-import net.snipsniper.utils.Utils
-import net.snipsniper.utils.getImage
+import net.snipsniper.utils.*
 import org.capturecoop.cccolorutils.CCColor
 import org.capturecoop.cccolorutils.chooser.CCColorChooser
 import org.capturecoop.ccutils.utils.CCIClosable
@@ -13,7 +10,7 @@ import java.awt.event.WindowEvent
 import java.awt.image.BufferedImage
 import javax.swing.*
 
-class ResizeWindow(private val image: BufferedImage, parent: JFrame? = null): JFrame(), CCIClosable {
+class ResizeWindow(private var image: BufferedImage, parent: JFrame? = null): JFrame(), CCIClosable {
     var onSubmit: ((BufferedImage) -> (Unit))? = null
     var onClose: (() -> (Unit))? = null
 
@@ -53,6 +50,16 @@ class ResizeWindow(private val image: BufferedImage, parent: JFrame? = null): JF
             }
             add(it, gbc)
         }
+        gbc.gridwidth = 1
+        gbc.gridx = 0
+        add(JLabel("Method:"), gbc)
+        gbc.gridx = 1
+        val dropdown = JComboBox<DropdownItem>().also {
+            it.addItem(DropdownItem("Resize", "resize"))
+            add(it, gbc)
+        }
+        gbc.gridx = 0
+        gbc.gridwidth = 2
         JButton("Submit").also {
             it.addActionListener {
                 val widthInput = widthTextField.text.toIntOrNull()
@@ -60,9 +67,15 @@ class ResizeWindow(private val image: BufferedImage, parent: JFrame? = null): JF
                 if(widthInput == null || heightInput == null) {
                     Utils.showPopup(this, "Bad input! Not a valid number.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, "icons/redx.png".getImage(), true)
                 } else {
-                    //TODO: Ok?
+                    when((dropdown.selectedItem as DropdownItem).id) {
+                        "resize" -> {
+                            image = ImageUtils.newBufferedImage(widthInput, heightInput, image.type) { g ->
+                                g.drawImage(image, 0, 0, widthInput, heightInput, null)
+                            }
+                        }
+                    }
                     onSubmit?.invoke(image)
-                    dispose()
+                    close()
                 }
             }
             add(it, gbc)
