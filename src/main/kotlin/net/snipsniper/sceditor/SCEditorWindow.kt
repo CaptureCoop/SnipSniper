@@ -452,11 +452,13 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
             historyManager.resetHistory()
             for (stamp in stamps) stamp.reset()
         }
+
         if (isNewImage) {
             resetZoom()
-            renderer.resetPreview()
             originalImage = image.clone()
         }
+        renderer.resetPreview()
+
         repaint()
     }
 
