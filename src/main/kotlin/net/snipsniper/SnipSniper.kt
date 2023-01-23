@@ -122,9 +122,7 @@ class SnipSniper {
             StatsManager.init()
             StatsManager.incrementCount(StatsManager.STARTED_AMOUNT)
 
-            //TODO: Try not expression
-            if (!cmdline.language.isNullOrEmpty())
-                config.set(ConfigHelper.MAIN.language, cmdline.language ?: throw Exception("Language is set per argument bus is null!"))
+            if (!cmdline.language.isNullOrEmpty()) config.set(ConfigHelper.MAIN.language, cmdline.language ?: throw Exception("Language is set per argument but is null!"))
 
             //This looks dumb, hmm
             if (cmdline.isDebug) config.set(ConfigHelper.MAIN.debug, "true")
@@ -194,7 +192,7 @@ class SnipSniper {
                         CCLogger.logStacktrace(ioException, CCLogLevel.ERROR)
                     }
                 }
-                SCEditorWindow(img, -1, -1, "SnipSniper Editor", editorConfig, false, path, false, true)
+                SCEditorWindow(img, -1, -1, "SnipSniper Editor", config = editorConfig, isLeftToRight = false, saveLocation = path, inClipboard = false, isStandalone = true)
             } else if(cmdline.viewerOnly || launchType == LaunchType.VIEWER) {
                 var file: File? = null
                 if(cmdline.viewerFile != null && cmdline.viewerFile!!.isNotEmpty())
