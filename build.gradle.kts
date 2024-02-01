@@ -22,7 +22,7 @@ version = File("version.txt").readLines()[0]
 //Dirty = Uncommitted changes
 val type = System.getProperty("type") ?: if(!grgit.status().isClean && System.getenv("GITHUB_RUN_NUMBER") == null) "dirty" else "dev"
 val fullVersion = "$version-$type rev-${grgit.head().abbreviatedId}"
-val artifactName = "${project.name} $fullVersion.jar"
+val artifactName = "${project.name}.jar"
 
 val groupMain = "SnipSniper"
 val groupRun = "SnipSniper run"
