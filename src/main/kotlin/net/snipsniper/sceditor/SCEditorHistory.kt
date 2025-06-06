@@ -1,7 +1,7 @@
 package net.snipsniper.sceditor
 
 import net.snipsniper.utils.clone
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.image.BufferedImage
 
 class SCEditorHistory(private val editor: SCEditorWindow) {
@@ -11,14 +11,14 @@ class SCEditorHistory(private val editor: SCEditorWindow) {
         get() = history.size
 
     fun resetHistory() {
-        CCLogger.debug("History -> reset")
+        LegibleLogger.debug("History -> reset")
         history.clear()
         addHistory()
         editor.historyWindow?.refresh()
     }
 
     fun addHistory() {
-        CCLogger.debug("History -> add (${history.size})")
+        LegibleLogger.debug("History -> add (${history.size})")
         history.add(editor.image.clone())
         editor.historyWindow?.refresh()
     }
@@ -31,11 +31,11 @@ class SCEditorHistory(private val editor: SCEditorWindow) {
             val startSize = size
             history.removeAt(size)
             size--
-            CCLogger.debug("History -> undo ($startSize) -> ($size)")
+            LegibleLogger.debug("History -> undo ($startSize) -> ($size)")
             editor.setImage(history[size].clone(), resetHistory = false, isNewImage = false)
             editor.stamps.forEach { it.editorUndo(history.size) }
         } else {
-            CCLogger.debug("History -> undo (Nothing to undo)")
+            LegibleLogger.debug("History -> undo (Nothing to undo)")
         }
         editor.historyWindow?.refresh()
     }

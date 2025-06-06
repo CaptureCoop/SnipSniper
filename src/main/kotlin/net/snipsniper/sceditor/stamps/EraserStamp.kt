@@ -4,8 +4,8 @@ import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.utils.InputContainer
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.*
 import java.awt.event.KeyEvent
 import kotlin.math.hypot
@@ -18,7 +18,7 @@ class EraserStamp(private val scEditorWindow: SCEditorWindow?, private val confi
             size = value
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
         }
-    override var color: CCColor? = null
+    override var color: ComposedColor? = null
     private var speed = 0
     private var pointDistance = 0
     private val changeListeners = ArrayList<IStampUpdateListener?>()
@@ -38,7 +38,7 @@ class EraserStamp(private val scEditorWindow: SCEditorWindow?, private val confi
         }
     }
 
-    override fun render(g: Graphics, input: InputContainer?, position: CCVector2Int?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle {
+    override fun render(g: Graphics, input: InputContainer?, position: Vector2I?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle {
         val newSize = (size.toDouble() * difference[0]).toInt()
         if (scEditorWindow != null && input != null && !input.isKeyPressed(scEditorWindow.movementKey)) {
             val p0 = scEditorWindow.getPointOnImage(input.getMousePathPoint(0))

@@ -3,7 +3,7 @@ package net.snipsniper.configwindow
 import net.snipsniper.ImageManager
 import net.snipsniper.sceditor.stamps.IStamp
 import net.snipsniper.utils.Utils
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -49,7 +49,7 @@ class StampJPanel(stamp: IStamp, private var background: BufferedImage? = null, 
         if(!isEnabled) g2d.color = Utils.getDisabledColor()
         g2d.drawRect(0,0, width - 1, height -1)
 
-        stamp.render(g2d, null, CCVector2Int(width / 2, height / 2), doubleArrayOf(1.0, 1.0).toTypedArray(), false, false, 0)
+        stamp.render(g2d, null, Vector2I(width / 2, height / 2), doubleArrayOf(1.0, 1.0).toTypedArray(), false, false, 0)
 
         if(!isEnabled) g2d.fillRect(0, 0, width, width / 2)
         g2d.dispose()

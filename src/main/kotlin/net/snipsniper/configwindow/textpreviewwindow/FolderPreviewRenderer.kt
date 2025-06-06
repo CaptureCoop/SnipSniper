@@ -1,7 +1,7 @@
 package net.snipsniper.configwindow.textpreviewwindow
 
 import net.snipsniper.utils.getImage
-import org.capturecoop.ccutils.utils.CCStringUtils
+import org.capturecoop.defaultdepot.StringUtils
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Font
@@ -20,7 +20,7 @@ class FolderPreviewRenderer(width: Int, height: Int): JPanel() {
     }
 
     override fun paint(g: Graphics) {
-        val content = CCStringUtils.formatDateTimeString(textPreviewWindow.text.replace("\\\\", "/"))
+        val content = StringUtils.formatDateTimeString(textPreviewWindow.text.replace("\\\\", "/"))
         val partsFinal = ArrayList<String>()
         content.split("/").filter { it.trim().isNotEmpty() }.forEach { partsFinal.add(it) }
 

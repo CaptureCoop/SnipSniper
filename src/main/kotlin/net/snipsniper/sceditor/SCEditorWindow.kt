@@ -10,9 +10,9 @@ import net.snipsniper.sceditor.ezmode.EzModeStampTab
 import net.snipsniper.sceditor.stamps.StampType
 import net.snipsniper.snipscope.SnipScopeWindow
 import net.snipsniper.utils.*
-import org.capturecoop.cccolorutils.chooser.CCColorChooser
-import org.capturecoop.cclogger.CCLogger
-import org.capturecoop.ccutils.utils.CCIClosable
+import org.capturecoop.colorcomposer.chooser.ColorComposer
+import org.capturecoop.defaultdepot.Closable
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.*
 import java.awt.event.*
 import java.awt.image.BufferedImage
@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 import javax.imageio.ImageIO
 import javax.swing.*
 
-class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var initialTitle: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), CCIClosable {
+class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var initialTitle: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), Closable {
     val config: Config
     var saveLocation: String?
     var inClipboard: Boolean
@@ -39,7 +39,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         }
     val qualityHints = Utils.getRenderingHints()
     private var defaultImage: BufferedImage? = null
-    private val cWindows = CopyOnWriteArrayList<CCIClosable>()
+    private val cWindows = CopyOnWriteArrayList<Closable>()
     var isStampVisible = true
     var ezMode: Boolean = config.getBool(ConfigHelper.PROFILE.ezMode)
         set(value) {
@@ -57,7 +57,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     private val ezModeStampSettingsScrollPane: JScrollPane
     private val ezModeStampPanelTabs = JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT)
     private val isStandalone: Boolean
-    private var stampColorChooser: CCColorChooser? = null
+    private var stampColorChooser: ColorComposer? = null
     var historyWindow: SCEditorHistoryWindow? = null
     private var configWindow: ConfigWindow? = null
 
@@ -68,7 +68,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         this.inClipboard = inClipboard
         this.isStandalone = isStandalone
         if (startImage != null) image = ImageUtils.ensureAlphaLayer(startImage)
-        CCLogger.info("Creating new editor window...")
+        LegibleLogger.info("Creating new editor window...")
         StatsManager.incrementCount(StatsManager.EDITOR_STARTED_AMOUNT)
         if (startImage == null) {
             if (config.getBool(ConfigHelper.PROFILE.standaloneStartWithEmpty)) {
@@ -134,7 +134,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
             var borderSize = config.getInt(ConfigHelper.PROFILE.borderSize)
             if (!isLeftToRight) borderSize = -borderSize
             setLocation(x - X_OFFSET + borderSize, y - insets.top + borderSize)
-            CCLogger.info("Setting location to $location")
+            LegibleLogger.info("Setting location to $location")
         }
         refreshTitle()
         setSizeAuto()
@@ -349,7 +349,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         })
         isEnableInteraction = !isDefaultImage()
         requestFocus()
-        CCLogger.info("Started new editor window. ($this)")
+        LegibleLogger.info("Started new editor window. ($this)")
     }
 
     private fun addEZModeStampButton(title: String?, iconName: String?, theme: String?, stampIndex: Int) {
@@ -400,7 +400,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     }
 
     fun save(close: Boolean = false) {
-        CCLogger.info("Saving editor, close=$close")
+        LegibleLogger.info("Saving editor, close=$close")
         if(isDirty) {
             val location = ImageUtils.saveImage(image, config.getString(ConfigHelper.PROFILE.saveFormat), FILENAME_MODIFIER, config)
             location?.replace(File(location).name, "")?.also { loc ->
@@ -414,7 +414,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     }
 
     fun refreshTitle() {
-        CCLogger.debug("Refreshing title")
+        LegibleLogger.debug("Refreshing title")
         var newTitle: String? = initialTitle
 
         //Path
@@ -439,7 +439,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
 
     fun setImage(newImage: BufferedImage?, resetHistory: Boolean, isNewImage: Boolean) {
         super.image = ImageUtils.ensureAlphaLayer(newImage!!)
-        CCLogger.debug("Setting new Image")
+        LegibleLogger.debug("Setting new Image")
         isEnableInteraction = !isDefaultImage()
         if (listener != null && resetHistory) {
             historyManager.resetHistory()
@@ -509,7 +509,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         val stamp = stamps[selectedStamp]
         val title = "${stamp.type.title} color"
         if(stampColorChooser == null && !verifyOnly) {
-            CCColorChooser(stamp.color!!, title, parent = this, useGradient = true, backgroundImage = originalImage).also { chooser ->
+            ColorComposer(stamp.color!!, title, parent = this, useGradient = true, backgroundImage = originalImage).also { chooser ->
                 stampColorChooser = chooser
                 cWindows.add(chooser)
                 chooser.setOnClose {

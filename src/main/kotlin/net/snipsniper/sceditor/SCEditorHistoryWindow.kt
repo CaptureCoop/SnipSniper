@@ -3,8 +3,8 @@ package net.snipsniper.sceditor
 import net.snipsniper.utils.DrawUtils
 import net.snipsniper.utils.Utils
 import net.snipsniper.utils.getImage
-import org.capturecoop.cclogger.CCLogger
-import org.capturecoop.ccutils.utils.CCIClosable
+import org.capturecoop.defaultdepot.Closable
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.*
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
@@ -13,7 +13,7 @@ import java.awt.event.WindowEvent
 import java.awt.image.BufferedImage
 import javax.swing.*
 
-class SCEditorHistoryWindow(private val editor: SCEditorWindow): JFrame(), CCIClosable {
+class SCEditorHistoryWindow(private val editor: SCEditorWindow): JFrame(), Closable {
     private var onClose: ((SCEditorHistoryWindow) -> (Unit))? = null
     private var panel = JPanel()
 
@@ -43,7 +43,7 @@ class SCEditorHistoryWindow(private val editor: SCEditorWindow): JFrame(), CCICl
     }
 
     fun refresh() {
-        CCLogger.debug("refreshing")
+        LegibleLogger.debug("refreshing")
         panel.removeAll()
         var totalHeight = 0
         panel.layout = null

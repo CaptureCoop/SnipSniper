@@ -1,6 +1,6 @@
 package net.snipsniper
 
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogger
 import org.jnativehook.GlobalScreen
 import org.jnativehook.NativeHookException
 import org.jnativehook.keyboard.NativeKeyAdapter
@@ -39,7 +39,7 @@ class NativeHookInstance(private val clazz: Any) {
         }
         GlobalScreen.addNativeKeyListener(keyListener)
         GlobalScreen.addNativeMouseListener(mouseListener)
-        CCLogger.info("$clazz is now listening")
+        LegibleLogger.info("$clazz is now listening")
     }
 
     fun addListener(action: (NativeHookEvent) -> (Unit)) = listeners.add(action)
@@ -47,7 +47,7 @@ class NativeHookInstance(private val clazz: Any) {
     fun unregister() {
         GlobalScreen.removeNativeKeyListener(keyListener)
         GlobalScreen.removeNativeMouseListener(mouseListener)
-        CCLogger.info("$clazz is no longer listening")
+        LegibleLogger.info("$clazz is no longer listening")
     }
 }
 
@@ -58,16 +58,16 @@ object NativeHookManager {
     private fun verifyRegistered() {
         if(GlobalScreen.isNativeHookRegistered()) return
 
-        CCLogger.info("Registering NativeHook")
+        LegibleLogger.info("Registering NativeHook")
         try {
             GlobalScreen.registerNativeHook()
         } catch (ex: NativeHookException) {
-            CCLogger.error("Could not register NativeHook! Message: ${ex.message}")
+            LegibleLogger.error("Could not register NativeHook! Message: ${ex.message}")
         }
     }
 
     fun register(clazz: Any): NativeHookInstance {
-        CCLogger.info("$clazz is trying to register a NativeHookInstance")
+        LegibleLogger.info("$clazz is trying to register a NativeHookInstance")
         verifyRegistered()
         return NativeHookInstance(clazz).also { profiles[clazz] = it }
     }
@@ -75,13 +75,13 @@ object NativeHookManager {
     fun unregister(clazz: Any) {
         profiles.remove(clazz)?.unregister()
         if(profiles.size == 0) {
-            CCLogger.info("All active NativeHookInstances have been killed. Unregistering NativeHook...")
+            LegibleLogger.info("All active NativeHookInstances have been killed. Unregistering NativeHook...")
             GlobalScreen.unregisterNativeHook()
         }
     }
 
     fun exit() {
-        CCLogger.info("Unregistering NativeHook")
+        LegibleLogger.info("Unregistering NativeHook")
         profiles.forEach { (_, instance) ->  instance.unregister() }
         GlobalScreen.unregisterNativeHook()
     }

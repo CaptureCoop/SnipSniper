@@ -1,7 +1,7 @@
 package net.snipsniper.configwindow.textpreviewwindow
 
 import net.snipsniper.utils.translate
-import org.capturecoop.ccutils.utils.CCIClosable
+import org.capturecoop.defaultdepot.Closable
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
@@ -14,7 +14,7 @@ import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 
-class TextPreviewWindow(wndTitle: String, var text: String, private val renderPanel: JPanel, icon: BufferedImage, parent: JFrame, explanation: String): JFrame(), CCIClosable {
+class TextPreviewWindow(wndTitle: String, var text: String, private val renderPanel: JPanel, icon: BufferedImage, parent: JFrame, explanation: String): JFrame(), Closable {
     private val input = JTextField(text)
     private val saveButton = JButton("config_label_save".translate())
     private val explanationLabel = JLabel("%hour%, %minute%, %second%, %day%, %month%, %year%, %random%")

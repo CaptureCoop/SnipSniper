@@ -3,7 +3,7 @@ package net.snipsniper.configwindow.iconwindow
 import net.snipsniper.ImageManager
 import net.snipsniper.SnipSniper
 import net.snipsniper.utils.*
-import org.capturecoop.ccutils.utils.CCIClosable
+import org.capturecoop.defaultdepot.Closable
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
@@ -19,7 +19,7 @@ import javax.imageio.ImageIO
 import javax.swing.*
 import javax.swing.filechooser.FileFilter
 
-class IconWindow(title: String, parent: JFrame): JFrame(), CCIClosable {
+class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
     private enum class IconType {GENERAL, RANDOM, CUSTOM}
     private val allowedExtensions = listOf(".png", ".gif", ".jpg", ".jpeg")
     private val rows = 4

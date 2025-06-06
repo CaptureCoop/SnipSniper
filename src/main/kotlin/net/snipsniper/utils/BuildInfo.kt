@@ -3,7 +3,7 @@ package net.snipsniper.utils
 import net.snipsniper.SnipSniper
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogger
 
 class BuildInfo(config: Config) {
     val version = Version(config.getString(ConfigHelper.BUILDINFO.version))
@@ -19,17 +19,17 @@ class BuildInfo(config: Config) {
     val javaVersion = config.getString(ConfigHelper.BUILDINFO.javaver)
 
     fun log() {
-        CCLogger.info("== Build Info ==")
-        CCLogger.info("Type: $releaseType")
-        CCLogger.info("Version: ${SnipSniper.getVersionString()}")
-        CCLogger.info("Build date: $buildDate")
-        CCLogger.info("GitHash: $gitHash")
-        CCLogger.info("GitHash Full: $gitHashFull")
-        CCLogger.info("Branch: $branch")
-        CCLogger.info("OS Name: $osName")
-        CCLogger.info("OS Version: $osVersion")
-        CCLogger.info("OS Arch: $osArch")
-        CCLogger.info("Java Vendor: $javaVendor")
-        CCLogger.info("Java Version: $javaVersion")
+        LegibleLogger.info("== Build Info ==")
+        LegibleLogger.info("Type: $releaseType")
+        LegibleLogger.info("Version: ${SnipSniper.getVersionString()}")
+        LegibleLogger.info("Build date: $buildDate")
+        LegibleLogger.info("GitHash: $gitHash")
+        LegibleLogger.info("GitHash Full: $gitHashFull")
+        LegibleLogger.info("Branch: $branch")
+        LegibleLogger.info("OS Name: $osName")
+        LegibleLogger.info("OS Version: $osVersion")
+        LegibleLogger.info("OS Arch: $osArch")
+        LegibleLogger.info("Java Vendor: $javaVendor")
+        LegibleLogger.info("Java Version: $javaVersion")
     }
 }

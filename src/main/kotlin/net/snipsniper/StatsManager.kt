@@ -1,6 +1,6 @@
 package net.snipsniper
 
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -24,7 +24,7 @@ class StatsManager {
             try {
                 Class.forName("org.sqlite.JDBC")
             } catch (e: ClassNotFoundException) {
-                CCLogger.warn("StatsManager is disabled for now. This should not be called!")
+                LegibleLogger.warn("StatsManager is disabled for now. This should not be called!")
             }
             try {
                 val connection = connection
@@ -34,7 +34,7 @@ class StatsManager {
                     connection.close()
                 }
             } catch (sqlException: SQLException) {
-                CCLogger.error("Issue setting up StatsManager! Message: ${sqlException.message}")
+                LegibleLogger.error("Issue setting up StatsManager! Message: ${sqlException.message}")
                 enabled = false
             }
         }
@@ -56,7 +56,7 @@ class StatsManager {
                 increment.execute()
                 connection.close()
             } catch (sqlException: SQLException) {
-                CCLogger.error("Error incrementing id: $id! Message: ${sqlException.message}")
+                LegibleLogger.error("Error incrementing id: $id! Message: ${sqlException.message}")
             }
         }
 

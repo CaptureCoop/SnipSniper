@@ -7,7 +7,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 plugins {
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.9.22"
     id("org.ajoberstar.grgit") version "4.1.1" //Used to determine the status of the repo
 }
 
@@ -29,6 +29,7 @@ val groupRun = "SnipSniper run"
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
@@ -40,9 +41,9 @@ dependencies {
     implementation("com.formdev:flatlaf:1.6") //Swing Theme
     implementation("com.erigir:mslinks:0.0.2+5") //Utility for windows shortcuts
 
-    implementation("org.capturecoop:CCUtils:1.9.6") //CaptureCoop Common Utils
-    implementation("org.capturecoop:CCLogger:1.6.6") //CaptureCoop logger
-    implementation("org.capturecoop:CCColorUtils:1.0.7") //CaptureCoop Color utils & Color Chooser
+    implementation("com.github.CaptureCoop:defaultdepot:5a221a7052")
+    implementation("com.github.CaptureCoop:legiblelogger:9b2a7f60af")
+    implementation("com.github.CaptureCoop:colorcomposer:0d0a6ecfdc")
 }
 
 //SnipSniper includes another repository where we store json files with information about SnipSniper

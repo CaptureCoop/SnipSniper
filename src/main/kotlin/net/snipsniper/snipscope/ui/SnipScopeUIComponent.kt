@@ -1,6 +1,6 @@
 package net.snipsniper.snipscope.ui
 
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.Graphics2D
 import java.awt.Point
 import java.awt.Rectangle
@@ -8,8 +8,8 @@ import java.awt.event.MouseEvent
 
 //TODO: This class is currently unused, but worked in the past, make sure it works if its used again
 open class SnipScopeUIComponent {
-    val position = CCVector2Int(0, 0)
-    val size = CCVector2Int(0, 0)
+    val position = Vector2I(0, 0)
+    val size = Vector2I(0, 0)
     var isEnabled = true
 
     open fun render(g: Graphics2D) = isEnabled

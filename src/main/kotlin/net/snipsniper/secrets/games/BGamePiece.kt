@@ -2,7 +2,7 @@ package net.snipsniper.secrets.games
 
 import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.trim
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.image.BufferedImage
 
 class BGamePiece(private val game: BGame) {
@@ -62,7 +62,7 @@ class BGamePiece(private val game: BGame) {
         for (y in figure[0].indices) {
             for (x in figure.indices) {
                 if(figure[y][x] == 0) continue
-                CCVector2Int(posX + x, posY + y).also { v ->
+                Vector2I(posX + x, posY + y).also { v ->
                     if (
                         v.x > -1 && v.x < BGame.BOARD_WIDTH &&
                         v.y > 0 && v.y < BGame.BOARD_HEIGHT - 1 &&
@@ -79,7 +79,7 @@ class BGamePiece(private val game: BGame) {
         for (y in figure[0].indices) {
             for (x in figure.indices) {
                 if(figure[y][x] == 0) continue
-                CCVector2Int(posX + x, posY + y).also { v ->
+                Vector2I(posX + x, posY + y).also { v ->
                     if(!(v.x < 0 || v.x >= BGame.BOARD_WIDTH || v.y < 0 || v.y >= BGame.BOARD_HEIGHT))
                         game.board[v.x][v.y] = BGameBlock(index)
                 }
@@ -91,7 +91,7 @@ class BGamePiece(private val game: BGame) {
         for (y in figure[0].indices) {
             for (x in figure.indices) {
                 if(figure[y][x] == 0) continue
-                CCVector2Int(posX + x + dir, posY + y).also { v ->
+                Vector2I(posX + x + dir, posY + y).also { v ->
                     if (v.x <= -1) return false
                     if (v.x >= BGame.BOARD_WIDTH) return false
                     if (game.board[v.x][v.y] != null) return false
@@ -118,7 +118,7 @@ class BGamePiece(private val game: BGame) {
     private fun checkRotation(newFigure: Array<IntArray>): Boolean {
         for (y in newFigure[0].indices) {
             for (x in newFigure.indices) {
-                CCVector2Int(posX + x, posY + y).also { v ->
+                Vector2I(posX + x, posY + y).also { v ->
                     if (v.x <= -1 || v.x >= BGame.BOARD_WIDTH || v.y <= 0 || v.y >= BGame.BOARD_HEIGHT - 1) {
                         if (newFigure[y][x] == 1) return false
                     }

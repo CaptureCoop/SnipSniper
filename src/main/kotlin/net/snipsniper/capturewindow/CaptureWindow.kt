@@ -7,7 +7,7 @@ import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.systray.Sniper
 import net.snipsniper.utils.*
 import org.apache.commons.lang3.SystemUtils
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.*
 import java.awt.event.FocusAdapter
 import java.awt.event.FocusEvent
@@ -196,8 +196,8 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
             try {
                 Thread.sleep(sniperInstance.config.getInt(ConfigHelper.PROFILE.snipeDelay) * 1000L)
             } catch (e: InterruptedException) {
-                CCLogger.error("There was an error with the delay! Message: ${e.message}")
-                CCLogger.error("More info: ${e.stackTrace.contentToString()}")
+                LegibleLogger.error("There was an error with the delay! Message: ${e.message}")
+                LegibleLogger.error("More info: ${e.stackTrace.contentToString()}")
             }
         }
         screenshot()
@@ -255,13 +255,13 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
         allBounds.clear()
         if (screenshot != null) {
             if (screenshotTinted != null && !hasSaved && screenshotBounds != null || SystemUtils.IS_OS_LINUX) {
-                CCLogger.debug("About to render image: $screenshotTinted")
-                CCLogger.debug("Frame Visible: $isVisible")
+                LegibleLogger.debug("About to render image: $screenshotTinted")
+                LegibleLogger.debug("Frame Visible: $isVisible")
                 globalBuffer.drawImage(screenshotTinted, 0, 0, screenshotBounds!!.width, screenshotBounds!!.height, this)
                 allBounds.addRectangle(screenshotBounds!!)
-                CCLogger.debug("Rendered tinted background. More Info: ")
-                CCLogger.debug("Image rendered: $screenshotTinted")
-                CCLogger.debug("Frame Visible: $isVisible")
+                LegibleLogger.debug("Rendered tinted background. More Info: ")
+                LegibleLogger.debug("Image rendered: $screenshotTinted")
+                LegibleLogger.debug("Frame Visible: $isVisible")
                 hasSaved = true
             }
             val cPoint = listener.getCurrentPoint(PointType.NORMAL)
@@ -341,7 +341,7 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
                 lastRect = allBounds.getBounds()
             }
         } else {
-            CCLogger.warn("WARNING: Screenshot is null when trying to render. Trying again.")
+            LegibleLogger.warn("WARNING: Screenshot is null when trying to render. Trying again.")
             repaint()
         }
         globalBuffer.dispose()

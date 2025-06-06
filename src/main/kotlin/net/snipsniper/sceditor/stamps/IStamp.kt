@@ -1,15 +1,15 @@
 package net.snipsniper.sceditor.stamps
 
 import net.snipsniper.utils.InputContainer
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.Graphics
 import java.awt.Rectangle
 import java.awt.event.KeyEvent
 
 interface IStamp {
     fun update(input: InputContainer?, mouseWheelDirection: Int, keyEvent: KeyEvent?)
-    fun render(g: Graphics, input: InputContainer?, position: CCVector2Int?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle?
+    fun render(g: Graphics, input: InputContainer?, position: Vector2I?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle?
 
     fun editorUndo(historyPoint: Int)
     fun mousePressedEvent(button: Int, pressed: Boolean)
@@ -17,7 +17,7 @@ interface IStamp {
     var width: Int
     var height: Int
     val id: String?
-    var color: CCColor?
+    var color: ComposedColor?
     val type: StampType
     fun addChangeListener(listener: IStampUpdateListener?)
     fun doAlwaysRender(): Boolean

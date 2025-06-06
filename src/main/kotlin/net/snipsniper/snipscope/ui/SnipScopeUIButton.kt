@@ -1,6 +1,6 @@
 package net.snipsniper.snipscope.ui
 
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.Graphics2D
 import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
@@ -11,18 +11,18 @@ class SnipScopeUIButton(private val icon: BufferedImage, private val iconHoverin
     private var isHovering = false
     private var isHeld = false
     private var selected = false
-    private var lastPosition = CCVector2Int()
+    private var lastPosition = Vector2I()
 
     override fun mouseMoved(mouseEvent: MouseEvent): Boolean {
         if (!super.mouseMoved(mouseEvent)) return false
         isHovering = contains(mouseEvent.point)
-        lastPosition = CCVector2Int(mouseEvent.point)
+        lastPosition = Vector2I(mouseEvent.point)
         return true
     }
 
     override fun mouseDragged(mouseEvent: MouseEvent): Boolean {
         if (!super.mouseDragged(mouseEvent)) return false
-        lastPosition = CCVector2Int(mouseEvent.point)
+        lastPosition = Vector2I(mouseEvent.point)
         return true
     }
 

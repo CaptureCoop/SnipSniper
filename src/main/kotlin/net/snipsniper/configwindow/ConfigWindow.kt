@@ -6,17 +6,17 @@ import net.snipsniper.config.ConfigHelper.PROFILE
 import net.snipsniper.configwindow.tabs.*
 import net.snipsniper.systray.Sniper
 import net.snipsniper.utils.*
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.cccolorutils.chooser.CCColorChooser
-import org.capturecoop.cclogger.CCLogger
-import org.capturecoop.ccutils.utils.CCIClosable
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.colorcomposer.chooser.ColorComposer
+import org.capturecoop.defaultdepot.Closable
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.*
 import java.awt.event.*
 import java.io.File
 import javax.swing.*
 import javax.swing.event.ChangeListener
 
-class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
+class ConfigWindow(config: Config?, page: PAGE) : JFrame(), Closable {
     private val listeners = ArrayList<CustomWindowListener>()
     private val configFiles = ArrayList<File>()
     var lastSelectedConfig: Config? = null
@@ -31,10 +31,10 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
     private val tabs = arrayOfNulls<ITab>(4)
     private var activeTabIndex = 0
     private var activeDropdownIndex = 0
-    private val cWindows = ArrayList<CCIClosable>()
+    private val cWindows = ArrayList<Closable>()
 
     init {
-        CCLogger.info("Creating config window")
+        LegibleLogger.info("Creating config window")
         setSize(512, 512)
         title = "config_label_config".translate()
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
@@ -312,18 +312,18 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
     fun getIDFromFilename(name: String): Int {
         val idString = name.replace(Config.DOT_EXTENSION, "").replace("profile", "")
         (idString.toIntOrNull() ?: -1).also { result ->
-            if(result == -1) CCLogger.error("Issue parsing Filename to id: $name")
+            if(result == -1) LegibleLogger.error("Issue parsing Filename to id: $name")
             return result
         }
     }
 
     fun setupColorButton(title: String?, config: Config, configKey: PROFILE?, whenChange: ChangeListener): GradientJButton {
-        val startColorPBR = CCColor.fromSaveString(config.getString(configKey!!))
+        val startColorPBR = ComposedColor.fromSaveString(config.getString(configKey!!))
         val colorButton = GradientJButton(title!!, startColorPBR)
         startColorPBR.addChangeListener { config.set(configKey, startColorPBR.toSaveString()) }
         startColorPBR.addChangeListener(whenChange)
         colorButton.addActionListener {
-            cWindows.add(CCColorChooser(startColorPBR, "Stamp color", this, useGradient = true))
+            cWindows.add(ColorComposer(startColorPBR, "Stamp color", this, useGradient = true))
         }
         return colorButton
     }
@@ -366,7 +366,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), CCIClosable {
         dispose()
     }
 
-    fun addCWindow(cWindow: CCIClosable) {
+    fun addCWindow(cWindow: Closable) {
         cWindows.add(cWindow)
     }
 

@@ -2,8 +2,8 @@ package net.snipsniper.utils
 
 import net.snipsniper.SnipSniper
 import net.snipsniper.config.ConfigHelper
-import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogLevel
+import org.capturecoop.legiblelogger.LegibleLogger
 
 class UpdateUtils {
     companion object {
@@ -33,7 +33,7 @@ class UpdateUtils {
                     Utils.executeProcess(false, "java", "-jar", updaterLocation, "-url", Links.STABLE_INSTALLER, "-gui", "-exec", "SnipSniper_Installer_Win.exe", "-dir", System.getProperty("java.io.tmpdir"))
                     SnipSniper.exit(false)
                 }
-                else -> CCLogger.log("Updating for platform $type not currently supported!", CCLogLevel.WARNING)
+                else -> LegibleLogger.log("Updating for platform $type not currently supported!", LegibleLogLevel.WARNING)
             }
         }
     }

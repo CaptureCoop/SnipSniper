@@ -1,19 +1,19 @@
 package net.snipsniper.sceditor
 
 import net.snipsniper.utils.*
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.cccolorutils.chooser.CCColorChooser
-import org.capturecoop.ccutils.utils.CCIClosable
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.colorcomposer.chooser.ColorComposer
+import org.capturecoop.defaultdepot.Closable
 import java.awt.*
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.awt.image.BufferedImage
 import javax.swing.*
 
-class NewImageWindow: JFrame(), CCIClosable  {
+class NewImageWindow: JFrame(), Closable  {
     lateinit var image: BufferedImage
     var onSubmit: (() -> (Unit))? = null
-    private val cWindows = ArrayList<CCIClosable>()
+    private val cWindows = ArrayList<Closable>()
 
     init {
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
@@ -51,10 +51,10 @@ class NewImageWindow: JFrame(), CCIClosable  {
             }
             add(it, gbc)
         }
-        val color = CCColor(Color.WHITE)
+        val color = ComposedColor(Color.WHITE)
         GradientJButton("Color", color).also {
             it.addActionListener {
-                cWindows.add(CCColorChooser(color, "Color", parent = this, useGradient = true))
+                cWindows.add(ColorComposer(color, "Color", parent = this, useGradient = true))
             }
             add(it, gbc)
         }

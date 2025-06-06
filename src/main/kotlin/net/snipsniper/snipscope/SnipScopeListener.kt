@@ -1,7 +1,7 @@
 package net.snipsniper.snipscope
 
 import net.snipsniper.utils.InputContainer
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.Point
 import java.awt.event.*
 
@@ -65,7 +65,7 @@ open class SnipScopeListener(private val snipScopeWindow: SnipScopeWindow): KeyL
             lastPoint?.let {
                 val x = lastPoint!!.getX() - mouseEvent.point.getX()
                 val y = lastPoint!!.getY() - mouseEvent.point.getY()
-                snipScopeWindow.position += CCVector2Int(x, y)
+                snipScopeWindow.position += Vector2I(x, y)
             }
             lastPoint = mouseEvent.point
             snipScopeWindow.repaint()

@@ -1,7 +1,7 @@
 package net.snipsniper.utils
 
 import com.sun.management.OperatingSystemMXBean
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.lang.management.ManagementFactory
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -31,15 +31,15 @@ class SystemInfo {
         fun getJavaVersion(): String = System.getProperty("java.version")
 
         fun log() {
-            CCLogger.info("== System Info ==")
-            CCLogger.info("OS Name: ${getName()}")
-            CCLogger.info("OS Version: ${getVersion()}")
-            CCLogger.info("OS Arch: ${getArch()}")
-            CCLogger.info("OS Date/Time: ${getTimeAndDate()} (${getTimeZone()})")
-            CCLogger.info("OS Memory: Free(${getFreePhysicalMemory().prettyPrintBytes()}), Total(${getPhysicalMemory().prettyPrintBytes()})")
-            CCLogger.info("Java Vendor: ${getJavaVendor()}")
-            CCLogger.info("Java Version: ${getJavaVersion()}")
-            CCLogger.info("Java Memory: Free(${getFreeJavaMemory().prettyPrintBytes()}), Total Allocated(${getTotalJavaMemory().prettyPrintBytes()}), Max(${getMaxJavaMemory().prettyPrintBytes()})")
+            LegibleLogger.info("== System Info ==")
+            LegibleLogger.info("OS Name: ${getName()}")
+            LegibleLogger.info("OS Version: ${getVersion()}")
+            LegibleLogger.info("OS Arch: ${getArch()}")
+            LegibleLogger.info("OS Date/Time: ${getTimeAndDate()} (${getTimeZone()})")
+            LegibleLogger.info("OS Memory: Free(${getFreePhysicalMemory().prettyPrintBytes()}), Total(${getPhysicalMemory().prettyPrintBytes()})")
+            LegibleLogger.info("Java Vendor: ${getJavaVendor()}")
+            LegibleLogger.info("Java Version: ${getJavaVersion()}")
+            LegibleLogger.info("Java Memory: Free(${getFreeJavaMemory().prettyPrintBytes()}), Total Allocated(${getTotalJavaMemory().prettyPrintBytes()}), Max(${getMaxJavaMemory().prettyPrintBytes()})")
         }
     }
 }

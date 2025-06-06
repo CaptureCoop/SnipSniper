@@ -4,8 +4,8 @@ import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.utils.InputContainer
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.*
 import java.awt.event.KeyEvent
 import kotlin.math.hypot
@@ -21,7 +21,7 @@ class SimpleBrush(private val config: Config, private val scEditorWindow: SCEdit
     private var speed = 0
     private val changeListeners = ArrayList<IStampUpdateListener?>()
     override var height = 0
-    override var color: CCColor? = null
+    override var color: ComposedColor? = null
         set(value) {
             field = value
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
@@ -40,14 +40,14 @@ class SimpleBrush(private val config: Config, private val scEditorWindow: SCEdit
         }
     }
 
-    override fun render(g: Graphics, input: InputContainer?, position: CCVector2Int?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle {
+    override fun render(g: Graphics, input: InputContainer?, position: Vector2I?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle {
         val newSize = (size.toDouble() * difference[0]).toInt()
         g as Graphics2D
         val oldColor: Paint = g.color
         var bounds = g.clipBounds
         if (bounds == null && scEditorWindow != null) bounds =
             Rectangle(0, 0, scEditorWindow.image.width, scEditorWindow.image.height)
-        val paint = CCColor(color!!, 255).getGradientPaint(bounds!!.width, bounds.height)
+        val paint = ComposedColor(color!!, 255).getGradientPaint(bounds!!.width, bounds.height)
         g.paint = paint
         g.fillOval(position!!.x - newSize / 2, position.y - newSize / 2, newSize, newSize)
         if (scEditorWindow != null && input != null && !input.isKeyPressed(scEditorWindow.movementKey)) {
