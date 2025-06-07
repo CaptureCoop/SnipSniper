@@ -32,18 +32,22 @@ repositories {
     maven { url = uri("https://jitpack.io") }
 }
 
-dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("com.1stleg:jnativehook:2.1.0") //Used for global keyboard and mouse events
-    implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("org.apache.commons:commons-text:1.9")
-    implementation("org.json:json:20220320")
-    implementation("com.formdev:flatlaf:1.6") //Swing Theme
-    implementation("com.erigir:mslinks:0.0.2+5") //Utility for windows shortcuts
+fun DependencyHandlerScope.implementation(group: String, name: String) {
+    implementation(group = group, name = name, version = property("version.$name") as String)
+}
 
-    implementation("com.github.CaptureCoop:defaultdepot:5a221a7052")
-    implementation("com.github.CaptureCoop:legiblelogger:9b2a7f60af")
-    implementation("com.github.CaptureCoop:colorcomposer:0d0a6ecfdc")
+dependencies {
+    implementation(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version = "")
+    implementation(group = "com.1stleg", name = "jnativehook") //Used for global keyboard and mouse events
+    implementation(group = "org.apache.commons", name = "commons-lang3")
+    implementation(group = "org.apache.commons", name = "commons-text")
+    implementation(group = "org.json", name = "json")
+    implementation(group = "com.formdev", name = "flatlaf") //Swing Theme
+    implementation(group = "com.erigir", name = "mslinks") //Utility for windows shortcuts
+
+    implementation(group = "com.github.CaptureCoop", name = "defaultdepot")
+    implementation(group = "com.github.CaptureCoop", name = "legiblelogger")
+    implementation(group = "com.github.CaptureCoop", name = "colorcomposer")
 }
 
 //SnipSniper includes another repository where we store json files with information about SnipSniper
