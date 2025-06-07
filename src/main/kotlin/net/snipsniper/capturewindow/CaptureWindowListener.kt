@@ -2,19 +2,19 @@ package net.snipsniper.capturewindow
 
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.PointType
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.Cursor
 import java.awt.MouseInfo
-import java.awt.Point
 import java.awt.event.*
 import javax.swing.SwingUtilities
 
 class CaptureWindowListener(private val wnd: CaptureWindow) : KeyListener, MouseListener, MouseMotionListener {
     private val keys = BooleanArray(4096)
-    private var startPoint: Point? = null //Mouse position given by event *1
-    private var startPointTotal: Point? = null //Mouse position given by MouseInfo.getPointerInfo (Different then the above in some scenarios) *2
-    private var cPoint: Point? = null //See *1
-    private var cPointTotal: Point? = null //See *2
-    private var cPointLive: Point? = null //Live position, cPoint and cPointTotal are only set once dragging mouse. cPointLive is always set
+    private var startPoint: Vector2I? = null //Mouse position given by event *1
+    private var startPointTotal: Vector2I? = null //Mouse position given by MouseInfo.getPointerInfo (Different then the above in some scenarios) *2
+    private var cPoint: Vector2I? = null //See *1
+    private var cPointTotal: Vector2I? = null //See *2
+    private var cPointLive: Vector2I? = null //Live position, cPoint and cPointTotal are only set once dragging mouse. cPointLive is always set
 
     private var startedCapture = false
     private var stoppedCapture = false
@@ -27,29 +27,29 @@ class CaptureWindowListener(private val wnd: CaptureWindow) : KeyListener, Mouse
     //Mouse Motion Listener
     override fun mouseDragged(mouseEvent: MouseEvent) {
         if (!stoppedCapture) {
-            cPoint = mouseEvent.point
+            cPoint = Vector2I(mouseEvent.point)
         } else if (wnd.isAfterDragEnabled) {
             checkMovement(mouseEvent)
         }
-        cPointLive = mouseEvent.point
+        cPointLive = Vector2I(mouseEvent.point)
         if (wnd.config.getBool(ConfigHelper.PROFILE.afterDragContinuesOoBTrim)) trimArea()
     }
 
     override fun mouseMoved(mouseEvent: MouseEvent) {
-        cPointLive = mouseEvent.point
+        cPointLive = Vector2I(mouseEvent.point)
         checkMouse()
     }
 
     //Mouse Listener
-    override fun mouseEntered(mouseEvent: MouseEvent) = kotlin.run { cPointLive = mouseEvent.point }
+    override fun mouseEntered(mouseEvent: MouseEvent) = kotlin.run { cPointLive = Vector2I(mouseEvent.point) }
     override fun mouseExited(mouseEvent: MouseEvent) {}
     override fun mouseClicked(mouseEvent: MouseEvent) {}
     override fun mousePressed(mouseEvent: MouseEvent) {
         if (mouseEvent.button == 1 && !isOnSelection()) {
-            startPoint = mouseEvent.point
-            cPoint = mouseEvent.point
+            startPoint = Vector2I(mouseEvent.point)
+            cPoint = Vector2I(mouseEvent.point)
             stoppedCapture = false
-            startPointTotal = MouseInfo.getPointerInfo().location
+            startPointTotal = Vector2I(MouseInfo.getPointerInfo().location)
             if (isPressed(wnd.afterDragHotkey) && wnd.afterDragMode.equals("hold", true))
                 wnd.isAfterDragHotkeyPressed = true
             startedCapture = true
@@ -68,10 +68,10 @@ class CaptureWindowListener(private val wnd: CaptureWindow) : KeyListener, Mouse
                     cPoint!!.y = rect.height + rect.y
                 }
             }
-            cPointTotal = Point(cPoint!!)
-            SwingUtilities.convertPointToScreen(cPointTotal, wnd)
-            startPointTotal = Point(startPoint!!)
-            SwingUtilities.convertPointToScreen(startPointTotal, wnd)
+            cPointTotal = Vector2I(cPoint!!)
+            SwingUtilities.convertPointToScreen(cPointTotal!!.toPoint(), wnd)
+            startPointTotal = startPoint!!
+            SwingUtilities.convertPointToScreen(startPointTotal!!.toPoint(), wnd)
             stoppedCapture = true
             if (!wnd.config.getBool(ConfigHelper.PROFILE.afterDragContinuesOoBTrim)) trimArea()
             if (!wnd.isAfterDragEnabled) wnd.capture(saveOverride = false, copyOverride = false, editorOverride = false, enforceOverride = false)
@@ -116,7 +116,7 @@ class CaptureWindowListener(private val wnd: CaptureWindow) : KeyListener, Mouse
                 rect.y -= dz
                 rect.width += dz * 2
                 rect.height += dz * 2
-            }.contains(getCurrentPoint(PointType.LIVE)!!)
+            }.contains(getCurrentPoint(PointType.LIVE)!!.toPoint())
         }
     }
     //TODO: Honor escape key
