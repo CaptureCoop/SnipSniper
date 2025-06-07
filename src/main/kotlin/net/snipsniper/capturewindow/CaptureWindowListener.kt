@@ -74,7 +74,7 @@ class CaptureWindowListener(private val wnd: CaptureWindow) : KeyListener, Mouse
             SwingUtilities.convertPointToScreen(startPointTotal, wnd)
             stoppedCapture = true
             if (!wnd.config.getBool(ConfigHelper.PROFILE.afterDragContinuesOoBTrim)) trimArea()
-            if (!wnd.isAfterDragEnabled) wnd.capture(false, false, false, false)
+            if (!wnd.isAfterDragEnabled) wnd.capture(saveOverride = false, copyOverride = false, editorOverride = false, enforceOverride = false)
         }
     }
 
@@ -82,10 +82,10 @@ class CaptureWindowListener(private val wnd: CaptureWindow) : KeyListener, Mouse
     override fun keyPressed(keyEvent: KeyEvent) {
         keys[keyEvent.keyCode] = true
         if (keyEvent.keyCode == KeyEvent.VK_ESCAPE) wnd.sniperInstance.killCaptureWindow()
-        if (isPressed(KeyEvent.VK_ENTER) || isPressed(KeyEvent.VK_SPACE)) wnd.capture(false, false, false, false)
-        if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_S)) wnd.capture(true, false, false, true)
-        if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_C)) wnd.capture(false, true, false, true)
-        if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_E)) wnd.capture(false, false, true, true)
+        if (isPressed(KeyEvent.VK_ENTER) || isPressed(KeyEvent.VK_SPACE)) wnd.capture(saveOverride = false, copyOverride =  false, editorOverride = false, enforceOverride = false)
+        if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_S))   wnd.capture(saveOverride = true,  copyOverride =  false, editorOverride = false, enforceOverride =  true)
+        if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_C))   wnd.capture(saveOverride = false, copyOverride =  true,  editorOverride = false, enforceOverride =  true)
+        if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_E))   wnd.capture(saveOverride = false, copyOverride =  false, editorOverride = true,  enforceOverride =  true)
     }
 
     override fun keyReleased(keyEvent: KeyEvent) = kotlin.run { keys[keyEvent.keyCode] = false }
@@ -162,13 +162,10 @@ class CaptureWindowListener(private val wnd: CaptureWindow) : KeyListener, Mouse
     }
 
     private fun trimArea() {
-        val CUT_MARGIN = 1 //This makes the outline show up when cutting screenshot off outside the bounds
-        if (startPoint!!.x < 0) startPoint!!.x = CUT_MARGIN
-        if (startPoint!!.y < 0) startPoint!!.y = CUT_MARGIN
-        if (cPoint!!.x > wnd.screenshotBounds!!.width) cPoint!!.x =
-            wnd.screenshotBounds!!.width - CUT_MARGIN
-        if (cPoint!!.y > wnd.screenshotBounds!!.height) cPoint!!.y =
-            wnd.screenshotBounds!!.height - CUT_MARGIN
+        if (startPoint!!.x < 0) startPoint!!.x = TRIM_AREA_CUT_MARGIN
+        if (startPoint!!.y < 0) startPoint!!.y = TRIM_AREA_CUT_MARGIN
+        if (cPoint!!.x > wnd.screenshotBounds!!.width) cPoint!!.x = wnd.screenshotBounds!!.width - TRIM_AREA_CUT_MARGIN
+        if (cPoint!!.y > wnd.screenshotBounds!!.height) cPoint!!.y = wnd.screenshotBounds!!.height - TRIM_AREA_CUT_MARGIN
     }
 
     private fun checkMovement(mouseEvent: MouseEvent) {
@@ -188,4 +185,8 @@ class CaptureWindowListener(private val wnd: CaptureWindow) : KeyListener, Mouse
     }
 
     fun startedCapture() = startedCapture
+
+    companion object {
+        const val TRIM_AREA_CUT_MARGIN = 1 //This makes the outline show up when cutting screenshot off outside the bounds
+    }
 }
