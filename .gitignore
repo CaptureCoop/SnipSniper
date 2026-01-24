@@ -8,3 +8,4 @@
 /build/
 /release/*
 SnipSniper.iml
+.kotlin/*
