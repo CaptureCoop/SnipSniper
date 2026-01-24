@@ -26,6 +26,7 @@ fun BufferedImage.flipHorizontally(): BufferedImage = ImageUtils.flipImageHorizo
 fun BufferedImage.flipVertically(): BufferedImage = ImageUtils.flipImageVertically(this)
 
 fun Image.scaled(width: Int, height: Int, hints: Int): Image = this.getScaledInstance(width, height, hints)
+fun Image.scaled(scale: Float): Image = this.scaled((getWidth(null) * scale).toInt(), (getHeight(null) * scale).toInt(), Image.SCALE_DEFAULT)
 fun Image.scaled(width: Int, height: Int): Image = this.scaled(width, height, Image.SCALE_DEFAULT)
 fun Image.scaledFast(width: Int, height: Int): Image = this.scaled(width, height, Image.SCALE_FAST)
 fun Image.scaledSmooth(width: Int, height: Int): Image = this.scaled(width, height, Image.SCALE_SMOOTH)
