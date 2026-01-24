@@ -216,4 +216,6 @@ object ImageUtils {
     fun flipImageVertically(image: BufferedImage) = newBufferedImage(image.width, image.height, image.type) {
         it.drawImage(image, 0, image.height, image.width, -image.height, null)
     }
+
+    fun getScaled16Px(): Int = SnipSniper.calculateEffectiveUIScale(16)
 }

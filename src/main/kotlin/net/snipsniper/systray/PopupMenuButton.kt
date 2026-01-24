@@ -1,5 +1,7 @@
 package net.snipsniper.systray
 
+import net.snipsniper.SnipSniper
+import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.getImage
 import net.snipsniper.utils.scaled
 import net.snipsniper.utils.toImageIcon
@@ -33,5 +35,5 @@ class PopupMenuButton(title: String, icon: BufferedImage, popup: JDialog, privat
     }
 
     fun setIsMenuChild(value: Boolean) = kotlin.run { isMenuChild = value }
-    private fun getPopupIcon(image: BufferedImage): ImageIcon = image.scaled(16, 16).toImageIcon()
+    private fun getPopupIcon(image: BufferedImage): ImageIcon = image.scaled(ImageUtils.getScaled16Px(), ImageUtils.getScaled16Px()).toImageIcon()
 }

@@ -28,7 +28,8 @@ class Sniper(private val profileID: Int) {
         if(SystemTray.isSupported()) {
             val popup = Popup(this)
             val tray = SystemTray.getSystemTray()
-            val image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaledSmooth(16, 16).also { isCustomIcon = true } ?: getTrayIcon(profileID)
+            val trayIconSize = ImageUtils.getScaled16Px()
+            val image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaledSmooth(trayIconSize, trayIconSize).also { isCustomIcon = true } ?: getTrayIcon(profileID)
             image.flush()
             trayIcon = TrayIcon(image, "SnipSniper(${getTitle()})")
             trayIcon.isImageAutoSize = true

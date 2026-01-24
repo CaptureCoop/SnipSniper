@@ -62,7 +62,7 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), Closable {
 
     private fun setup(config: Config?, page: PAGE) {
         val tabPane = JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT)
-        val iconSize = 16
+        val iconSize = ImageUtils.getScaled16Px()
         var index = 0
         activeTabIndex = index
         lastSelectedConfig = config

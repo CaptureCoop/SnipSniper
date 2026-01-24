@@ -1,5 +1,6 @@
 package net.snipsniper.utils
 
+import net.snipsniper.SnipSniper
 import java.awt.*
 import java.awt.event.*
 import java.util.*
@@ -42,7 +43,7 @@ class InfoButton(): JButton() {
         if(!isEnabled) return
         g.color = Color(0, 0, 0, 0)
         g.drawRect(0, 0, width, height)
-        val iconSize = 16
+        val iconSize = ImageUtils.getScaled16Px()
         fun fk(n: Int): Int = n / 2 - iconSize / 2
         g.drawImage("icons/questionmark.png".getImage(iconSize, iconSize), fk(width), fk(height), iconSize, iconSize, this)
     }
