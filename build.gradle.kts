@@ -7,16 +7,16 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 plugins {
-    kotlin("jvm") version "1.9.22"
-    id("org.ajoberstar.grgit") version "4.1.1" //Used to determine the status of the repo
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.grgit)
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+kotlin {
+    jvmToolchain(21)
 }
 
 group = "net.snipsniper"
-version = File("version.txt").readLines()[0]
+version = File("version.txt").readText()
 //The type of release, either stable/release, dev or dirty. Used to determine how to build & passed onto SnipSniper
 //Dev = "Clean build", but not stable
 //Dirty = Uncommitted changes
@@ -32,22 +32,13 @@ repositories {
     maven { url = uri("https://jitpack.io") }
 }
 
-fun DependencyHandlerScope.implementation(group: String, name: String) {
-    implementation(group = group, name = name, version = property("version.$name") as String)
-}
-
 dependencies {
-    implementation(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version = "")
-    implementation(group = "com.1stleg", name = "jnativehook") //Used for global keyboard and mouse events
-    implementation(group = "org.apache.commons", name = "commons-lang3")
-    implementation(group = "org.apache.commons", name = "commons-text")
-    implementation(group = "org.json", name = "json")
-    implementation(group = "com.formdev", name = "flatlaf") //Swing Theme
-    implementation(group = "com.erigir", name = "mslinks") //Utility for windows shortcuts
-
-    implementation(group = "com.github.CaptureCoop", name = "defaultdepot")
-    implementation(group = "com.github.CaptureCoop", name = "legiblelogger")
-    implementation(group = "com.github.CaptureCoop", name = "colorcomposer")
+    implementation(libs.jnativehook)
+    implementation(libs.flatlaf)
+    implementation(libs.json)
+    implementation(libs.mslinks)
+    implementation(libs.bundles.apache.commons)
+    implementation(libs.bundles.capturecoop)
 }
 
 //SnipSniper includes another repository where we store json files with information about SnipSniper
