@@ -128,6 +128,45 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         gbc.gridx = 1
         options.add(UpdateButton(), gbc)
         gbc.gridx = 0
+        options.add(configWindow.createJLabel("UI Scaling", JLabel.RIGHT, JLabel.CENTER), gbc)
+        gbc.gridx = 1
+        options.add(JPanel(GridBagLayout()).also { uiScalingPanel ->
+            val uiScalingGBC = GridBagConstraints()
+            var refreshFunc: (() -> Unit)? = null
+            var saveFunc: (() -> Unit)? = null
+            val uiScalingAutoCheckbox = JCheckBox("Auto", false)
+            uiScalingAutoCheckbox.setHorizontalTextPosition(SwingConstants.LEFT)
+            uiScalingAutoCheckbox.addActionListener {
+                saveFunc?.invoke()
+                refreshFunc?.invoke()
+            }
+            val uiScalingSpinner = JSpinner(SpinnerNumberModel(1.0, 0.1, 10.0, 0.1))
+            uiScalingSpinner.addChangeListener { saveFunc?.invoke() }
+
+            saveFunc = {
+                config.set(ConfigHelper.MAIN.uiScaling, if(uiScalingAutoCheckbox.isSelected) "auto" else uiScalingSpinner.value.toString())
+                saveButtonUpdate?.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+            }
+
+            refreshFunc = {
+                val uiScalingCurrent = config.getString(ConfigHelper.MAIN.uiScaling)
+                uiScalingAutoCheckbox.isSelected = uiScalingCurrent == "auto"
+                if(uiScalingCurrent != "auto") {
+                    uiScalingSpinner.isEnabled = true
+                    uiScalingSpinner.value = uiScalingCurrent.toDouble()
+                } else {
+                    uiScalingSpinner.isEnabled = false
+                    uiScalingSpinner.value = SnipSniper.getSysUIScale().toDouble()
+                }
+            }
+            refreshFunc()
+
+            uiScalingGBC.gridx = 0
+            uiScalingPanel.add(uiScalingAutoCheckbox, uiScalingGBC)
+            uiScalingGBC.gridx = 1
+            uiScalingPanel.add(uiScalingSpinner, uiScalingGBC)
+        }, gbc)
+        gbc.gridx = 0
         options.add(configWindow.createJLabel("config_label_language".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
         gbc.gridx = 1
         options.add(Utils.getLanguageDropdown(config.getString(ConfigHelper.MAIN.language)) {
@@ -190,10 +229,14 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         val beforeSave: () -> (Unit) = {
             val restartConfig = config.getString(ConfigHelper.MAIN.language) != SnipSniper.config.getString(ConfigHelper.MAIN.language)
             val didThemeChange = config.getString(ConfigHelper.MAIN.theme) != SnipSniper.config.getString(ConfigHelper.MAIN.theme)
+            val didUIScaleChange = config.getString(ConfigHelper.MAIN.uiScaling) != SnipSniper.config.getString(ConfigHelper.MAIN.uiScaling)
             globalSave(config, autostart)
             if (restartConfig || didThemeChange) {
                 configWindow.close()
                 SnipSniper.openConfigWindow(configWindow.lastSelectedConfig, ConfigWindow.PAGE.GlobalPanel)
+            }
+            if(didUIScaleChange) {
+                SnipSniper.setUIScale()
             }
             saveButtonUpdate!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
         }

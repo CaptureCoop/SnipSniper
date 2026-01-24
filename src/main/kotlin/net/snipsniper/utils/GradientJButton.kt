@@ -1,5 +1,6 @@
 package net.snipsniper.utils
 
+import net.snipsniper.SnipSniper
 import org.capturecoop.colorcomposer.ComposedColor
 import java.awt.*
 import javax.swing.JButton

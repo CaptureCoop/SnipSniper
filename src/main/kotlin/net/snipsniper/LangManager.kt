@@ -4,6 +4,7 @@ import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.FileUtils
 import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.Utils
+import net.snipsniper.utils.scaled
 import org.capturecoop.legiblelogger.LegibleLogger
 import org.json.JSONObject
 import java.awt.image.BufferedImage
@@ -47,7 +48,7 @@ object LangManager {
         return flagCache[language] ?: ImageUtils.newBufferedImage(16, 16) {
             fun sz(s: Int): Int = FLAG_SIZE / 2 - s / 2
             it.drawImage(flag, sz(flag.width), sz(flag.height), null)
-        }.also { flagCache[language] = it }
+        }.scaled(ImageUtils.getScaled16Px(), ImageUtils.getScaled16Px()).also { flagCache[language] = it }
     }
 
     fun getLanguage(): String = SnipSniper.config.getString(ConfigHelper.MAIN.language)

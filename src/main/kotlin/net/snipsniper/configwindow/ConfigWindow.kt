@@ -62,34 +62,33 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), Closable {
 
     private fun setup(config: Config?, page: PAGE) {
         val tabPane = JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT)
-        val iconSize = 16
         var index = 0
         activeTabIndex = index
         lastSelectedConfig = config
         generalTab = GeneralTab(this)
         generalTab.setup(config)
         tabPane.addTab("SnipSniper", generateScrollPane(generalTab))
-        tabPane.setIconAt(index, "icons/snipsniper.png".getImage().scaled(iconSize, iconSize).toImageIcon())
+        tabPane.setIconAt(index, "icons/snipsniper.png".getImage().scaledEffective16px().toImageIcon())
         tabs[index] = generalTab
         index++
         editorTab = EditorTab(this)
         editorTab.setup(config)
         tabPane.addTab("Editor", generateScrollPane(editorTab))
-        tabPane.setIconAt(index, "icons/editor.png".getImage().scaled(iconSize, iconSize).toImageIcon())
+        tabPane.setIconAt(index, "icons/editor.png".getImage().scaledEffective16px().toImageIcon())
         tabs[index] = editorTab
         if (page == PAGE.EditorPanel) activeTabIndex = index
         index++
         viewerTab = ViewerTab(this)
         viewerTab.setup(config)
         tabPane.addTab("Viewer", generateScrollPane(viewerTab))
-        tabPane.setIconAt(index, "icons/viewer.png".getImage().scaled(iconSize, iconSize).toImageIcon())
+        tabPane.setIconAt(index, "icons/viewer.png".getImage().scaledEffective16px().toImageIcon())
         tabs[index] = viewerTab
         if (page == PAGE.ViewerPanel) activeTabIndex = index
         index++
         globalTab = GlobalTab(this)
         globalTab.setup(config)
         tabPane.addTab("Global", generateScrollPane(globalTab))
-        tabPane.setIconAt(index, "icons/config.png".getImage().scaled(iconSize, iconSize).toImageIcon())
+        tabPane.setIconAt(index, "icons/config.png".getImage().scaledEffective16px().toImageIcon())
         tabs[index] = globalTab
         if (page == PAGE.GlobalPanel) activeTabIndex = index
         tabPane.addChangeListener {

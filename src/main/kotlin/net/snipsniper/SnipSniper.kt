@@ -15,7 +15,10 @@ import org.capturecoop.legiblelogger.LegibleLogFilter
 import org.capturecoop.legiblelogger.LegibleLogLevel
 import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.Desktop
+import java.awt.GraphicsEnvironment
 import java.awt.SystemTray
+import java.awt.Toolkit
+import java.awt.Window
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
@@ -24,6 +27,7 @@ import java.util.*
 import javax.imageio.ImageIO
 import javax.swing.JDialog
 import javax.swing.JFrame
+import javax.swing.SwingUtilities
 import javax.swing.UIManager
 import kotlin.system.exitProcess
 
@@ -145,6 +149,7 @@ class SnipSniper {
 
             JFrame.setDefaultLookAndFeelDecorated(true)
             JDialog.setDefaultLookAndFeelDecorated(true)
+            setUIScale()
 
             LangManager.load()
             WikiManager.load(LangManager.getLanguage())
@@ -287,5 +292,31 @@ class SnipSniper {
         fun isDebug(): Boolean = config.getBool(ConfigHelper.MAIN.debug)
 
         fun getVersionString(): String = "${buildInfo.version.digitsToString()}-${buildInfo.releaseType} rev-${buildInfo.gitHash}"
+
+        fun getSysUIScale(): Float = Toolkit.getDefaultToolkit().screenResolution / 96.toFloat()
+
+        fun calculateEffectiveUIScale(size: Int): Int = (size * getEffectiveUIScale()).toInt()
+
+        fun getEffectiveUIScale(): Float {
+            val scaleValue = config.getString(ConfigHelper.MAIN.uiScaling)
+            return if(scaleValue == "auto") getSysUIScale() else scaleValue.toFloat()
+        }
+
+        fun setUIScale() {
+            val scaleValue = config.getString(ConfigHelper.MAIN.uiScaling).let {
+                if(it == "auto") getSysUIScale() else it.toFloat()
+            }
+            LegibleLogger.info("Setting FlatLaf Scale to $scaleValue")
+            System.setProperty("flatlaf.uiScale", scaleValue.toString())
+            UIManager.setLookAndFeel(UIManager.getLookAndFeel())
+
+            for (w in Window.getWindows()) {
+                SwingUtilities.updateComponentTreeUI(w)
+                w.pack()
+                w.invalidate()
+                w.validate()
+                w.repaint()
+            }
+        }
     }
 }

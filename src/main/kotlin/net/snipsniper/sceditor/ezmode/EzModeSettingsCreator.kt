@@ -1,5 +1,6 @@
 package net.snipsniper.sceditor.ezmode
 
+import net.snipsniper.SnipSniper
 import net.snipsniper.SnipSniper.Companion.getNewThread
 import net.snipsniper.configwindow.StampJPanel
 import net.snipsniper.sceditor.SCEditorWindow
@@ -56,9 +57,9 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
     private fun addColorSettings(panel: JPanel, stamp: IStamp, width: Int) {
         val stampColor = stamp.color
         val cPanel = JPanel(FlowLayout(FlowLayout.CENTER))
-        cPanel.preferredSize = Dimension(width, 40)
+        cPanel.preferredSize = Dimension(width, SnipSniper.calculateEffectiveUIScale(40))
         val button = GradientJButton("Color", stampColor!!)
-        button.preferredSize = Dimension(width / 2, 30)
+        button.preferredSize = Dimension(width / 2, SnipSniper.calculateEffectiveUIScale(30))
         button.addActionListener { scEditorWindow.openStampColorChooser() }
         cPanel.add(button)
         panel.add(cPanel)

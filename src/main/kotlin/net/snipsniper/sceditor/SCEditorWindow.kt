@@ -48,8 +48,8 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
             if(value) updateEzUI()
         }
     private val ezModeSettingsCreator = EzModeSettingsCreator(this)
-    val ezModeWidth = 200
-    val ezModeHeight = 40
+    val ezModeWidth = SnipSniper.calculateEffectiveUIScale(200)
+    val ezModeHeight = SnipSniper.calculateEffectiveUIScale(40)
     private val ezModeStampPanel = JPanel()
     private val ezModeTitlePanel = JPanel()
     private val ezModeTitle = JLabel("Marker")
@@ -142,7 +142,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         //Menu bar
         kotlin.run {
             val topBar = JMenuBar()
-            fun sizeImage(path: String) = path.getImage().scaled(16, 16).toImageIcon()
+            fun sizeImage(path: String) = path.getImage().scaledEffective16px().toImageIcon()
             fun ctrlStroke(keyCode: Int) = KeyStroke.getKeyStroke(keyCode, InputEvent.CTRL_DOWN_MASK)
             fun altStroke(keyCode: Int) = KeyStroke.getKeyStroke(keyCode, InputEvent.ALT_DOWN_MASK)
             val devString = "Disabled menu items are still in development."
@@ -355,7 +355,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     private fun addEZModeStampButton(title: String?, iconName: String?, theme: String?, stampIndex: Int) {
         ezModeStampPanelTabs.addTab(title, null)
         "ui/editor/$theme/$iconName.png".getImage().also { ezIconMarker ->
-            ezModeStampPanelTabs.setTabComponentAt(stampIndex, EzModeStampTab(ezIconMarker, 32, this, stampIndex))
+            ezModeStampPanelTabs.setTabComponentAt(stampIndex, EzModeStampTab(ezIconMarker, SnipSniper.calculateEffectiveUIScale(32), this, stampIndex))
             ezModeStampPanelTabs.setIconAt(stampIndex, ImageIcon(ezIconMarker))
         }
     }
@@ -363,7 +363,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     override fun resizeTrigger() {
         super.resizeTrigger()
         if (ezMode) {
-            val titleMargin = 5
+            val titleMargin = SnipSniper.calculateEffectiveUIScale(10)
             var ezModeWidthToUse = ezModeWidth
             if (ezModeStampSettingsScrollPane.verticalScrollBar.isVisible) ezModeWidthToUse += ezModeStampSettingsScrollPane.verticalScrollBar.width
             ezModeTitlePanel.setBounds(0, 0, ezModeWidthToUse, ezModeHeight)
