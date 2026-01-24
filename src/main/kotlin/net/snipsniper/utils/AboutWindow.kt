@@ -143,11 +143,20 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
             }
 
             add(mainPanel)
-            Toolkit.getDefaultToolkit().screenSize.also {
-                setLocation(it.width / 2 - width / 2, it.height / 2 - height / 2)
-            }
+
+            //This is silly, but it seems to be the only way i can figure out to spawn the window sorta nicely in the middle.
+            centerPosition()
             isVisible = true
             pack()
+            revalidate()
+            pack()
+            centerPosition()
+        }
+    }
+
+    private fun centerPosition() {
+        Toolkit.getDefaultToolkit().screenSize.also {
+            setLocation(it.width / 2 - width / 2, it.height / 2 - height / 2)
         }
     }
 

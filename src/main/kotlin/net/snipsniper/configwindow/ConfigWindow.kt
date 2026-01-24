@@ -35,7 +35,6 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), Closable {
 
     init {
         LegibleLogger.info("Creating config window")
-        setSize(512, 512)
         title = "config_label_config".translate()
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
         iconImage = "icons/config.png".getImage()
@@ -49,8 +48,9 @@ class ConfigWindow(config: Config?, page: PAGE) : JFrame(), Closable {
         refreshConfigFiles()
         setup(config, page)
         isVisible = true
-        Toolkit.getDefaultToolkit().screenSize.let { setLocation(it.width / 2 - width / 2, it.height / 2 - height / 2) }
-        setSize((generalTab.width * 1.25f).toInt(), height)
+        val screenSize = Toolkit.getDefaultToolkit().screenSize
+        size = Dimension(screenSize.width / 2, (screenSize.height / 1.5f).toInt())
+        setLocation(screenSize.width / 2 - width / 2, screenSize.height / 2 - height / 2)
     }
 
     fun refreshConfigFiles() {
