@@ -15,7 +15,10 @@ import java.io.InputStreamReader
 import java.lang.StringBuilder
 import java.nio.charset.StandardCharsets
 import javax.swing.*
+import javax.swing.event.ChangeListener
 import javax.swing.event.HyperlinkEvent
+import javax.swing.text.Caret
+import javax.swing.text.JTextComponent
 
 class AboutWindow(private val sniper: Sniper): JFrame() {
     private lateinit var html: String
@@ -28,12 +31,16 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
         title = "About"
         isResizable = true
         iconImage = "icons/snipsniper.png".getImage()
-        JPanel(GridLayout(1, 0)).also { mainPanel ->
+        //JPanel panel = new JPanel(new BorderLayout());
+        //panel.add(leftComponent, BorderLayout.WEST);  // stays minimal
+        //panel.add(rightComponent, BorderLayout.CENTER); // fills remaining space
+        JPanel(BorderLayout()).also { mainPanel ->
+            val mainGbc = GridBagConstraints()
             val iconPanel = JPanel(GridBagLayout())
             val gbc = GridBagConstraints()
             gbc.gridx = 0
             gbc.gridy = 0
-            val iconSize = 100
+            val iconSize = SnipSniper.calculateEffectiveUIScale(100)
             val icon = "icons/snipsniper.png".getImage().scaledSmooth(iconSize, iconSize).toImageIcon()
             JLabel(icon).also{ iconLabel ->
                 iconLabel.addMouseListener(object: MouseAdapter() {
@@ -73,16 +80,23 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
             gbc.insets = Insets(20, 0, 0, 0)
             JButton("Buy us a coffee").also { buyCoffee ->
                 val coffeeIcon = "icons/coffee.gif".getAnimatedImage()
-                buyCoffee.icon = coffeeIcon.scaled(coffeeIcon.getWidth(null) / 16, coffeeIcon.getHeight(null) / 16).toImageIcon()
+                val scale = (16 / SnipSniper.getEffectiveUIScale()).toInt()
+                buyCoffee.icon = coffeeIcon.scaled(coffeeIcon.getWidth(null) / scale, coffeeIcon.getHeight(null) / scale).toImageIcon()
                 buyCoffee.horizontalTextPosition = SwingConstants.LEFT
                 buyCoffee.isFocusable = false
                 iconPanel.add(buyCoffee, gbc)
             }
-            mainPanel.add(iconPanel, gbc)
+            mainGbc.gridx = 0
+            mainGbc.weightx = 0.0
+            mainGbc.fill = GridBagConstraints.NONE
+            mainPanel.add(JPanel(BorderLayout()).apply {
+                setBorder(BorderFactory.createEmptyBorder(32, 32, 32, 32))
+                add(iconPanel)
+            }, BorderLayout.WEST)
 
             JPanel(GridLayout(2, 0)).also { rightSide ->
                 val splash = "splash.png".getImage()
-                val splashLabel = JLabel(splash.scaled((splash.width / 2.2F).toInt(), (splash.height / 2.2F).toInt()).toImageIcon())
+                val splashLabel = JLabel(splash.scaled((splash.width / 2.2F).toInt(), (splash.height / 2.2F).toInt()).scaled(SnipSniper.getEffectiveUIScale()).toImageIcon())
                 splashLabel.addMouseListener(object: MouseAdapter() {
                     override fun mouseClicked(e: MouseEvent?) {
                         super.mouseClicked(e)
@@ -102,10 +116,9 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
                 rightSide.add(splashLabel)
 
                 JEditorPane("text/html", html).also { about ->
+                    about.caret = DummyCaret()
                     about.isEditable = false
                     about.isOpaque = false
-                    about.selectionColor = Color(0, 0, 0, 0)
-                    about.selectedTextColor = Color.black
                     var secretCount = 0
                     about.addHyperlinkListener { hle ->
                         if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.eventType)) {
@@ -123,7 +136,10 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
                     }
                     rightSide.add(about)
                 }
-                mainPanel.add(rightSide)
+                mainGbc.gridx = 1
+                mainGbc.weightx = 1.0
+                mainGbc.fill = GridBagConstraints.BOTH
+                mainPanel.add(rightSide, BorderLayout.CENTER)
             }
 
             add(mainPanel)
@@ -131,6 +147,7 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
                 setLocation(it.width / 2 - width / 2, it.height / 2 - height / 2)
             }
             isVisible = true
+            pack()
         }
     }
 
@@ -147,8 +164,7 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
         }.toString()
 
         SnipSniper.buildInfo.also { bi ->
-            html = html.replace("%VERSION%", bi.version.digitsToString())
-            html = html.replace("%TYPE%", bi.releaseType.toString())
+            html = html.replace("%VERSION%", bi.version.toString())
             html = html.replace("%BUILDDATE%", bi.buildDate)
             html = html.replace("%HASH%", bi.gitHash)
         }
