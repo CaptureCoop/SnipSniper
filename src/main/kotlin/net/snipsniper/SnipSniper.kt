@@ -154,7 +154,7 @@ class SnipSniper {
             LangManager.load()
             WikiManager.load(LangManager.getLanguage())
 
-            LegibleLogger.info("Launching SnipSniper Version ${buildInfo.version.digitsToString()} (rev-${buildInfo.gitHash})")
+            LegibleLogger.info("Launching SnipSniper Version ${buildInfo.version}")
             buildInfo.log()
             SystemInfo.log()
 
@@ -291,7 +291,7 @@ class SnipSniper {
 
         fun isDebug(): Boolean = config.getBool(ConfigHelper.MAIN.debug)
 
-        fun getVersionString(): String = "${buildInfo.version.digitsToString()}-${buildInfo.releaseType} rev-${buildInfo.gitHash}"
+        fun getVersionString(): String = buildInfo.version.toString()
 
         fun getSysUIScale(): Float = Toolkit.getDefaultToolkit().screenResolution / 96.toFloat()
 

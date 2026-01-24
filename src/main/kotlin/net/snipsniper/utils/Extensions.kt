@@ -8,6 +8,7 @@ import javax.swing.ImageIcon
 
 //Avoid having advanced logic here and put them into fitting Utils packages instead
 
+fun BufferedImage.scaled(scale: Float): BufferedImage = this.scaled((width * scale).toInt(), (height * scale).toInt())
 fun BufferedImage.scaled(width: Int, height: Int, hints: Int): BufferedImage = this.getScaledInstance(width, height, hints).toBufferedImage()
 fun BufferedImage.scaled(width: Int, height: Int): BufferedImage = this.scaled(width, height, Image.SCALE_DEFAULT)
 fun BufferedImage.scaledEffective16px(): BufferedImage = this.scaled(ImageUtils.getScaled16Px())

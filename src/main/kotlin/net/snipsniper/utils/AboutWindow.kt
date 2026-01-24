@@ -33,7 +33,7 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
             val gbc = GridBagConstraints()
             gbc.gridx = 0
             gbc.gridy = 0
-            val iconSize = 100
+            val iconSize = SnipSniper.calculateEffectiveUIScale(100)
             val icon = "icons/snipsniper.png".getImage().scaledSmooth(iconSize, iconSize).toImageIcon()
             JLabel(icon).also{ iconLabel ->
                 iconLabel.addMouseListener(object: MouseAdapter() {
@@ -82,7 +82,7 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
 
             JPanel(GridLayout(2, 0)).also { rightSide ->
                 val splash = "splash.png".getImage()
-                val splashLabel = JLabel(splash.scaled((splash.width / 2.2F).toInt(), (splash.height / 2.2F).toInt()).toImageIcon())
+                val splashLabel = JLabel(splash.scaled((splash.width / 2.2F).toInt(), (splash.height / 2.2F).toInt()).scaled(SnipSniper.getEffectiveUIScale()).toImageIcon())
                 splashLabel.addMouseListener(object: MouseAdapter() {
                     override fun mouseClicked(e: MouseEvent?) {
                         super.mouseClicked(e)
@@ -131,6 +131,7 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
                 setLocation(it.width / 2 - width / 2, it.height / 2 - height / 2)
             }
             isVisible = true
+            pack()
         }
     }
 
@@ -147,8 +148,7 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
         }.toString()
 
         SnipSniper.buildInfo.also { bi ->
-            html = html.replace("%VERSION%", bi.version.digitsToString())
-            html = html.replace("%TYPE%", bi.releaseType.toString())
+            html = html.replace("%VERSION%", bi.version.toString())
             html = html.replace("%BUILDDATE%", bi.buildDate)
             html = html.replace("%HASH%", bi.gitHash)
         }

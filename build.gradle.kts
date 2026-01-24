@@ -102,13 +102,16 @@ tasks.processResources {
         include("net/snipsniper/resources/cfg/buildinfo.cfg")
 
         val buildDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
+        val branch = grgit.branch.current().name
+        val gitHash = grgit.head().abbreviatedId
+        val versionString = "$version-$branch+$gitHash" + if(grgit.status().isClean) "" else ".dirty"
         expand (
             "buildType" to type,
-            "version" to version,
+            "version" to versionString,
             "buildDate" to "$buildDate (${TimeZone.getDefault().id})",
-            "githash" to grgit.head().abbreviatedId,
+            "githash" to gitHash,
             "githashFull" to grgit.head().id,
-            "branch" to grgit.branch.current().name,
+            "branch" to branch,
             "osname" to System.getProperty("os.name"),
             "osversion" to getSystemVersion(),
             "osarch" to System.getProperty("os.arch"),

@@ -1,35 +1,36 @@
 package net.snipsniper.utils
 
-class Version(digits: String) {
-    private val maxDigits = 3
-    private val digits: Array<Int>
+class Version(versionString: String) {
+    val regex = Regex("""(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?:-(?<tag>[0-9A-Za-z.-]+))?(?:\+(?<meta>[0-9A-Za-z.-]+))?""")
+    val major: Int
+    val minor: Int
+    val patch: Int
+    val tag: String
+    val meta: String
 
     init {
-        this.digits = digitsFromString(digits)
+        val match = regex.findAll(versionString).first()
+        major = match.groups["major"]!!.value.toInt()
+        minor = match.groups["minor"]!!.value.toInt()
+        patch = match.groups["patch"]!!.value.toInt()
+        tag = match.groups["tag"]?.value ?: ""
+        meta = match.groups["meta"]?.value ?: ""
     }
 
     fun isNewerThan(other: Version): Boolean {
-        if(equalsDigits(other)) return false
-
-        val od = other.digits
-        return if(digits[0] > od[0]) {
-            true
-        } else if(digits[0] == od[0]) {
-            if(digits[1] > od[1]) true
-            else if(digits[1] == od[1]) {
-                digits[2] > od[2]
-            } else false
-        } else {
-            false
-        }
+        //TODO: testing + comparing other parts of the version string?
+        if(major > other.major) return true
+        if(minor > other.minor) return true
+        if(patch > other.patch) return true
+        return false
     }
 
-    private fun equalsDigits(other: Version): Boolean = digits.contentEquals(other.digits)
+    fun isDirty(): Boolean = meta.split(".").contains("dirty")
 
-    private fun digitsFromString(string: String): Array<Int> {
-        val parts = string.split(".")
-        return Array(maxDigits) { parts[it].toInt() }
+    override fun toString(): String {
+        var result = "$major.$minor.$patch"
+        if(tag.isNotEmpty()) result += "-$tag"
+        if(meta.isNotEmpty()) result += "+$meta"
+        return result
     }
-
-    fun digitsToString(): String = "${digits[0]}.${digits[1]}.${digits[2]}"
 }

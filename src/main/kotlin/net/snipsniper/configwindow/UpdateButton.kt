@@ -69,16 +69,16 @@ class UpdateButton: IDJButton("") {
                         icon = checkmark.toImageIcon()
                     } else if (onlineVersion.isNewerThan(version)) {
                         if (SnipSniper.platformType === PlatformType.STEAM) {
-                            text = "<html><p align='center'>Update available! (${onlineVersion.digitsToString()})</p><p align='center'>Check Steam to update!</p></html>"
+                            text = "<html><p align='center'>Update available! ($onlineVersion)</p><p align='center'>Check Steam to update!</p></html>"
                             id = STATE_IDLE
                         } else {
-                            text = "<html><p align='center'>Update available! (${onlineVersion.digitsToString()})</p></html>"
+                            text = "<html><p align='center'>Update available! ($onlineVersion)</p></html>"
                             id = STATE_DOUPDATE
                         }
                         icon = download.toImageIcon()
                     } else {
                         text = "Error. Check console."
-                        LegibleLogger.error("Issue checking for updates. Our Version: ${version.digitsToString()}, Online version: ${onlineVersion.digitsToString()}")
+                        LegibleLogger.error("Issue checking for updates. Our Version: $version, Online version: $onlineVersion")
                         id = STATE_IDLE
                         icon = null
                     }
