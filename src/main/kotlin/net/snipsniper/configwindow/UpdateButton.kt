@@ -9,9 +9,9 @@ class UpdateButton: IDJButton("") {
     private val STATE_WAITING = "waiting"
     private val STATE_DOUPDATE = "update"
     private val STATE_IDLE = "idle"
-    private val roundArrows = "icons/roundarrows.png".getImage().scaled(16, 16)
-    private val checkmark = "icons/checkmark.png".getImage().scaled(16, 16)
-    private val download = "icons/download.png".getImage().scaled(16, 16)
+    private val roundArrows = "icons/roundarrows.png".getImage().scaledEffective16px()
+    private val checkmark = "icons/checkmark.png".getImage().scaledEffective16px()
+    private val download = "icons/download.png".getImage().scaledEffective16px()
 
     init {
         id = STATE_WAITING

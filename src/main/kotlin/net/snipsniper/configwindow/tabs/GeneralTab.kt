@@ -83,14 +83,13 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
 
             val iconButton = JButton("config_label_seticon".translate())
             iconButton.icon = (dropdown.selectedItem as DropdownItem?)?.icon.let { srcIcon ->
-                val scale = ImageUtils.getScaled16Px()
-                (srcIcon as ImageIcon).image.scaled(scale, scale ).toImageIcon()
+                (srcIcon as ImageIcon).image.toBufferedImage().scaledEffective16px().toImageIcon()
             }
 
             fun iconChange(cfgValue: String) {
                 config.set(ConfigHelper.PROFILE.icon, cfgValue)
                 val img = ImageUtils.getIconDynamically(config) ?: ImageUtils.getDefaultIcon(configWindow.getIDFromFilename(config.getFilename()))
-                iconButton.icon = img.scaled(16, 16).toImageIcon()
+                iconButton.icon = img.toBufferedImage().scaledEffective16px().toImageIcon()
                 cleanDirtyFunction?.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
 

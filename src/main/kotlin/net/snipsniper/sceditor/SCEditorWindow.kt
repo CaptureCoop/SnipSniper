@@ -142,7 +142,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
         //Menu bar
         kotlin.run {
             val topBar = JMenuBar()
-            fun sizeImage(path: String) = path.getImage().scaled(16, 16).toImageIcon()
+            fun sizeImage(path: String) = path.getImage().scaledEffective16px().toImageIcon()
             fun ctrlStroke(keyCode: Int) = KeyStroke.getKeyStroke(keyCode, InputEvent.CTRL_DOWN_MASK)
             fun altStroke(keyCode: Int) = KeyStroke.getKeyStroke(keyCode, InputEvent.ALT_DOWN_MASK)
             val devString = "Disabled menu items are still in development."
