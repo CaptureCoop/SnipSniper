@@ -5,8 +5,8 @@ import net.snipsniper.StatsManager
 import net.snipsniper.StatsManager.Companion.incrementCount
 import net.snipsniper.systray.Sniper
 import net.snipsniper.utils.getImage
-import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogLevel
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.awt.event.*
@@ -111,8 +111,8 @@ class BGame(val sniper: Sniper) : JFrame() {
             try {
                 Thread.sleep(10)
             } catch (e: InterruptedException) {
-                CCLogger.log("Error sleeping thread for BGame!", CCLogLevel.ERROR)
-                CCLogger.logStacktrace(e, CCLogLevel.ERROR)
+                LegibleLogger.log("Error sleeping thread for BGame!", LegibleLogLevel.ERROR)
+                LegibleLogger.logStacktrace(e, LegibleLogLevel.ERROR)
             }
         }
     }

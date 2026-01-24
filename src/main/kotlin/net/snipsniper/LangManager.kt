@@ -4,7 +4,7 @@ import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.FileUtils
 import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.Utils
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogger
 import org.json.JSONObject
 import java.awt.image.BufferedImage
 
@@ -16,7 +16,7 @@ object LangManager {
     val languages = ArrayList<String>()
 
     fun load() {
-        CCLogger.info("Loading language files...")
+        LegibleLogger.info("Loading language files...")
         JSONObject(FileUtils.loadFileFromJar("lang/languages.json")).getJSONArray("languages").also { arr ->
             for (i in 0 until arr.length()) {
                 arr.getString(i).also {
@@ -25,7 +25,7 @@ object LangManager {
                 }
             }
         }
-        CCLogger.info("Done!")
+        LegibleLogger.info("Done!")
     }
 
     fun getJSON(language: String): JSONObject? = langMap[language]
@@ -34,7 +34,7 @@ object LangManager {
         val preferred = langMap[Utils.replaceVars(language)]?.getJSONObject("strings")?.getString(key)
         val default = langMap[DEFAULT_LANGUAGE]?.getJSONObject("strings")?.getString(key)
         return preferred ?: default ?: "LM<$key>".also {
-            CCLogger.error("Could not find key <$key> in language file <$language>")
+            LegibleLogger.error("Could not find key <$key> in language file <$language>")
         }
     }
 

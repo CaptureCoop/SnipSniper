@@ -2,9 +2,9 @@ package net.snipsniper.config
 
 import net.snipsniper.SnipSniper
 import net.snipsniper.utils.Utils
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.legiblelogger.LegibleLogLevel
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.io.*
 
 class Config {
@@ -18,7 +18,7 @@ class Config {
     }
 
     constructor(config: Config) {
-        CCLogger.log("Copying config for <${config.filename}>", CCLogLevel.DEBUG)
+        LegibleLogger.log("Copying config for <${config.filename}>", LegibleLogLevel.DEBUG)
         loadFromConfig(config)
     }
 
@@ -40,22 +40,22 @@ class Config {
     private fun loadFromDisk(filename: String, defaultFile: String, ignoreLocal: Boolean) {
         this.filename = filename
         val idPrefix = "$filename: "
-        CCLogger.log("${idPrefix}Creating config object for <$filename>.", CCLogLevel.DEBUG)
+        LegibleLogger.log("${idPrefix}Creating config object for <$filename>.", LegibleLogLevel.DEBUG)
         val defaultPath = "/net/snipsniper/resources/cfg/$defaultFile"
         if(!ignoreLocal) {
             val filePath = SnipSniper.configFolder + filename
             if(File(filePath).exists()) {
-                CCLogger.log("${idPrefix}Config file found locally! Using that one.", CCLogLevel.DEBUG)
+                LegibleLogger.log("${idPrefix}Config file found locally! Using that one.", LegibleLogLevel.DEBUG)
                 loadFile(filePath, settings, false)
             } else {
-                CCLogger.log("${idPrefix}Config file not found locally! Using default.", CCLogLevel.DEBUG)
+                LegibleLogger.log("${idPrefix}Config file not found locally! Using default.", LegibleLogLevel.DEBUG)
                 loadFile(defaultPath, settings, true)
             }
         } else {
-            CCLogger.log("${idPrefix}ignoreLocal is true. Ignoring local file.", CCLogLevel.DEBUG)
+            LegibleLogger.log("${idPrefix}ignoreLocal is true. Ignoring local file.", LegibleLogLevel.DEBUG)
         }
         loadFile(defaultPath, defaults, true)
-        CCLogger.log(idPrefix + "Done!", CCLogLevel.DEBUG)
+        LegibleLogger.log(idPrefix + "Done!", LegibleLogLevel.DEBUG)
     }
 
     private fun loadFile(filename: String, container: ConfigContainer, inJar: Boolean) {
@@ -84,7 +84,7 @@ class Config {
     private fun getRawString(key: String): String {
         val def = "<NULL> ($key)"
         val result = settings.get(key) ?: defaults.get(key) ?: def
-        if(result == def) CCLogger.log("No value found for <$key> in Config <${SnipSniper.configFolder + filename}>.", CCLogLevel.ERROR)
+        if(result == def) LegibleLogger.log("No value found for <$key> in Config <${SnipSniper.configFolder + filename}>.", LegibleLogLevel.ERROR)
         return result
     }
     fun getRawString(key: Any): String = getRawString(key.toString())
@@ -100,8 +100,8 @@ class Config {
     fun getBool(key: String): Boolean = getString(key).toBoolean()
     fun getBool(key: Any): Boolean = getBool(key.toString())
 
-    fun getColor(key: String): CCColor = CCColor.fromSaveString(getString(key))
-    fun getColor(key: Any): CCColor = getColor(key.toString())
+    fun getColor(key: String): ComposedColor = ComposedColor.fromSaveString(getString(key))
+    fun getColor(key: Any): ComposedColor = getColor(key.toString())
 
     fun set(key: String, value: String) = settings.set(key, value)
     fun set(key: Any, value: String) = set(key.toString(), value)

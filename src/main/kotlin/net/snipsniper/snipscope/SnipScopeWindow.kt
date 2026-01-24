@@ -3,7 +3,7 @@ package net.snipsniper.snipscope
 import net.snipsniper.snipscope.ui.SnipScopeUIComponent
 import net.snipsniper.utils.InputContainer
 import net.snipsniper.utils.Utils.Companion.getScaledDimension
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.Dimension
 import java.awt.Point
 import java.awt.Toolkit
@@ -22,8 +22,8 @@ open class SnipScopeWindow : JFrame() {
                 optimalImageDimension = getScaledDimension(value, renderer!!.size)
         }
     var optimalImageDimension: Dimension? = null
-    var position = CCVector2Int(0, 0)
-    var zoomOffset = CCVector2Int(0, 0)
+    var position = Vector2I(0, 0)
+    var zoomOffset = Vector2I(0, 0)
     private var renderer: SnipScopeRenderer? = null
     var zoom = 1f
     val inputContainer = InputContainer()
@@ -74,7 +74,7 @@ open class SnipScopeWindow : JFrame() {
         val offsetY = dimHeight / 2
         val modX = (offsetX * zoom - offsetX).toInt()
         val modY = (offsetY * zoom - offsetY).toInt()
-        zoomOffset = CCVector2Int(modX, modY)
+        zoomOffset = Vector2I(modX, modY)
         repaint()
     }
 
@@ -86,7 +86,7 @@ open class SnipScopeWindow : JFrame() {
             return arrayOf(width, height)
         }
 
-    fun getPointOnImage(point: Point?): CCVector2Int? {
+    fun getPointOnImage(point: Point?): Vector2I? {
         if (point == null) return null
         val optimalDimension = optimalImageDimension!!
         var imageX = renderer!!.width.toDouble() / 2 - optimalDimension.getWidth() / 2
@@ -98,13 +98,13 @@ open class SnipScopeWindow : JFrame() {
         val difference = differenceFromImage
         val posOnImageX = (point.getX() - imageX) * difference[0]
         val posOnImageY = (point.getY() - imageY) * difference[1]
-        return CCVector2Int(posOnImageX, posOnImageY)
+        return Vector2I(posOnImageX, posOnImageY)
     }
 
     fun resetZoom() {
-        position = CCVector2Int()
+        position = Vector2I()
         zoom = 1f
-        zoomOffset = CCVector2Int()
+        zoomOffset = Vector2I()
     }
 
     open fun resizeTrigger() {

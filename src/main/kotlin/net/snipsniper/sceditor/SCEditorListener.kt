@@ -4,7 +4,7 @@ import net.snipsniper.config.ConfigHelper
 import net.snipsniper.snipscope.SnipScopeListener
 import net.snipsniper.utils.Utils
 import net.snipsniper.utils.toBufferedImage
-import org.capturecoop.cccolorutils.setAlpha
+import org.capturecoop.colorcomposer.setAlpha
 import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D

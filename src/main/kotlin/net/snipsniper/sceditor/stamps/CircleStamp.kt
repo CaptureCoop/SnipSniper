@@ -3,8 +3,8 @@ package net.snipsniper.sceditor.stamps
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.InputContainer
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.BasicStroke
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -35,7 +35,7 @@ class CircleStamp(private val config: Config) : IStamp {
     private var speedWidth = 0
     private var speedHeight = 0
     private var speed = 0
-    override var color: CCColor? = null
+    override var color: ComposedColor? = null
         set(value) {
             field = value
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
@@ -83,7 +83,7 @@ class CircleStamp(private val config: Config) : IStamp {
         }
     }
 
-    override fun render(g: Graphics, input: InputContainer?, position: CCVector2Int?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle {
+    override fun render(g: Graphics, input: InputContainer?, position: Vector2I?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle {
         val drawWidth = (width.toDouble() * difference[0]).toInt()
         val drawHeight = (height.toDouble() * difference[1]).toInt()
         g as Graphics2D

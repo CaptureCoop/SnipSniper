@@ -1,10 +1,10 @@
 package net.snipsniper.utils
 
-import org.capturecoop.cccolorutils.CCColor
+import org.capturecoop.colorcomposer.ComposedColor
 import java.awt.*
 import javax.swing.JButton
 
-class GradientJButton(val title: String, val color: CCColor) : JButton(title) {
+class GradientJButton(val title: String, val color: ComposedColor) : JButton(title) {
     init {
         isContentAreaFilled = false
     }

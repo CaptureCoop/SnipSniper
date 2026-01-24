@@ -3,10 +3,9 @@ package net.snipsniper.sceditor.stamps
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.InputContainer
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.cccolorutils.setAlpha
-import org.capturecoop.cclogger.CCLogger
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.colorcomposer.setAlpha
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.*
 import java.awt.event.KeyEvent
 
@@ -16,7 +15,7 @@ class CounterStamp(private val config: Config) : IStamp {
     private var speedWidth = 0
     private var speedHeight = 0
     private var speed = 0
-    override var color: CCColor? = null
+    override var color: ComposedColor? = null
         set(value) {
             field = value
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
@@ -70,7 +69,7 @@ class CounterStamp(private val config: Config) : IStamp {
         }
     }
 
-    override fun render(g: Graphics, input: InputContainer?, position: CCVector2Int?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle? {
+    override fun render(g: Graphics, input: InputContainer?, position: Vector2I?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle? {
         g as Graphics2D
         var drawnRectangle: Rectangle? = null
         if (isSaveRender && historyPoint != -1) {
@@ -84,7 +83,7 @@ class CounterStamp(private val config: Config) : IStamp {
             val oldFillColor = g.paint
             g.paint = color!!.getGradientPaint(drawWidth, drawHeight, x, y)
             if (solidColor) {
-                CCColor(color!!).also {
+                ComposedColor(color!!).also {
                     it.primaryColor = it.primaryColor.setAlpha(255)
                     if(it.secondaryColor != null) it.secondaryColor = it.secondaryColor!!.setAlpha(255)
                     g.paint = it.getGradientPaint(drawWidth, drawHeight, x, y)

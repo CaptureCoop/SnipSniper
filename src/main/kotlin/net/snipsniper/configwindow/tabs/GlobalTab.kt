@@ -7,8 +7,8 @@ import net.snipsniper.configwindow.ConfigWindow
 import net.snipsniper.configwindow.UpdateButton
 import net.snipsniper.utils.*
 import org.apache.commons.lang3.SystemUtils
-import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogLevel
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import java.awt.Insets
@@ -75,8 +75,8 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     bis.close()
                     zis.close()
                 } catch (ex: IOException) {
-                    CCLogger.error("Could not import zip file!")
-                    CCLogger.logStacktrace(ex, CCLogLevel.ERROR)
+                    LegibleLogger.error("Could not import zip file!")
+                    LegibleLogger.logStacktrace(ex, LegibleLogLevel.ERROR)
                 }
             }
             configWindow.refreshConfigFiles()
@@ -112,8 +112,8 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     }
                     out.close()
                 } catch (ex: IOException) {
-                    CCLogger.error("Could not export zip file!")
-                    CCLogger.logStacktrace(ex, CCLogLevel.ERROR)
+                    LegibleLogger.error("Could not export zip file!")
+                    LegibleLogger.logStacktrace(ex, LegibleLogLevel.ERROR)
                 }
             }
         }
@@ -205,7 +205,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         val didThemeChange = config.getString(ConfigHelper.MAIN.theme) != SnipSniper.config.getString(ConfigHelper.MAIN.theme)
         val didDebugChange = config.getBool(ConfigHelper.MAIN.debug) != SnipSniper.config.getBool(ConfigHelper.MAIN.debug)
         autostart?.invoke()
-        if (didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)) CCLogger.enableDebugConsole(false)
+        if (didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)) LegibleLogger.enableConsole(false)
         SnipSniper.config.loadFromConfig(config)
         config.save()
         if (didThemeChange) SnipSniper.refreshTheme()

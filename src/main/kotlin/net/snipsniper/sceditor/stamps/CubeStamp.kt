@@ -4,9 +4,9 @@ import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.utils.InputContainer
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.cccolorutils.setAlpha
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.colorcomposer.setAlpha
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -19,7 +19,7 @@ class CubeStamp(private val config: Config, private val scEditorWindow: SCEditor
     private var minimumHeight = 0
     private var speedWidth = 0
     private var speedHeight = 0
-    override var color: CCColor? = null
+    override var color: ComposedColor? = null
         set(value) {
             field = value
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
@@ -68,14 +68,14 @@ class CubeStamp(private val config: Config, private val scEditorWindow: SCEditor
         alertChangeListeners(IStampUpdateListener.TYPE.INPUT)
     }
 
-    override fun render(g: Graphics, input: InputContainer?, position: CCVector2Int?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle {
+    override fun render(g: Graphics, input: InputContainer?, position: Vector2I?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle {
         val isSmartPixel = config.getBool(ConfigHelper.PROFILE.editorStampCubeSmartPixel)
         val drawWidth = (width.toDouble() * difference[0]).toInt()
         val drawHeight = (height.toDouble() * difference[1]).toInt()
         g as Graphics2D
         if (isSmartPixel && isSaveRender && !isCensor && scEditorWindow != null) {
-            val pos = CCVector2Int(position!!.x + drawWidth / 2, position.y + drawHeight / 2)
-            val size = CCVector2Int(-drawWidth, -drawHeight)
+            val pos = Vector2I(position!!.x + drawWidth / 2, position.y + drawHeight / 2)
+            val size = Vector2I(-drawWidth, -drawHeight)
             if (color!!.isGradient) {
                 if (smartPixelBuffer == null || width != smartPixelBuffer!!.width || height != smartPixelBuffer!!.height) {
                     smartPixelBuffer = BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR)
@@ -117,7 +117,7 @@ class CubeStamp(private val config: Config, private val scEditorWindow: SCEditor
             val y = position.y - drawHeight / 2
             if (!isCensor) g.paint = color!!.getGradientPaint(drawWidth, drawHeight, x, y) else g.color = Color.BLACK //TODO: Add to config
             if (isSmartPixel && !isCensor) {
-                CCColor(color!!).also {
+                ComposedColor(color!!).also {
                     it.primaryColor = it.primaryColor.setAlpha(150)
                     it.secondaryColor = it.secondaryColor!!.setAlpha(150)
                     g.paint = it.getGradientPaint(drawWidth, drawHeight, x, y)

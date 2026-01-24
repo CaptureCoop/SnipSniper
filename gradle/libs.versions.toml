@@ -1,0 +1,33 @@
+[versions]
+kotlin = "2.3.0"
+apache-commons-text = "1.15.0"
+apache-commons-lang3 = "3.20.0"
+jnativehook = "2.1.0"
+defaultdepot = "5a221a7052"
+legiblelogger = "9b2a7f60af"
+colorcomposer = "0d0a6ecfdc"
+flatlaf = "1.6"
+json = "20220320"
+mslinks = "0.0.2+5"
+grgit = "4.1.1"
+shadow = "8.1.1"
+
+[libraries]
+jnativehook = { group = "com.1stleg", name = "jnativehook", version.ref = "jnativehook" }
+apache-commons-text = { group = "org.apache.commons", name = "commons-text", version.ref = "apache-commons-text" }
+apache-commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "apache-commons-lang3" }
+defaultdepot = { group = "com.github.CaptureCoop", name = "defaultdepot", version.ref = "defaultdepot" }
+legiblelogger = { group = "com.github.CaptureCoop", name = "legiblelogger", version.ref = "legiblelogger" }
+colorcomposer = { group = "com.github.CaptureCoop", name = "colorcomposer", version.ref = "colorcomposer" }
+flatlaf = { group = "com.formdev", name = "flatlaf", version.ref = "flatlaf" }
+json = { group = "org.json", name = "json", version.ref = "json" }
+mslinks = { group = "com.erigir", name = "mslinks", version.ref = "mslinks" }
+
+[bundles]
+apache-commons = [ "apache-commons-text", "apache-commons-lang3" ]
+capturecoop = [ "defaultdepot", "legiblelogger", "colorcomposer" ]
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+grgit = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }

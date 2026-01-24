@@ -10,10 +10,10 @@ import net.snipsniper.scviewer.SCViewerWindow
 import net.snipsniper.systray.Sniper
 import net.snipsniper.utils.*
 import org.apache.commons.lang3.SystemUtils
-import org.capturecoop.cclogger.CCLogFilter
-import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger
-import org.capturecoop.ccutils.utils.CCStringUtils
+import org.capturecoop.defaultdepot.StringUtils
+import org.capturecoop.legiblelogger.LegibleLogFilter
+import org.capturecoop.legiblelogger.LegibleLogLevel
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.Desktop
 import java.awt.SystemTray
 import java.awt.image.BufferedImage
@@ -42,19 +42,19 @@ class SnipSniper {
 
         var jarFolder: String = ""
             private set
-            get() {return CCStringUtils.correctSlashes(field)}
+            get() { return StringUtils.correctSlashes(field) }
         var mainFolder: String = ""
             private set
-            get() {return CCStringUtils.correctSlashes(field)}
+            get() { return StringUtils.correctSlashes(field) }
         var configFolder: String = ""
             private set
-            get() {return CCStringUtils.correctSlashes(field)}
+            get() { return StringUtils.correctSlashes(field) }
         var logFolder: String = ""
             private set
-            get() {return CCStringUtils.correctSlashes(field)}
+            get() { return StringUtils.correctSlashes(field) }
         var imgFolder: String = ""
             private set
-            get() {return CCStringUtils.correctSlashes(field)}
+            get() { return StringUtils.correctSlashes(field) }
 
         private var configWindow: ConfigWindow? = null
         private val profiles = arrayOfNulls<Sniper>(PROFILE_COUNT)
@@ -71,8 +71,8 @@ class SnipSniper {
             System.setProperty("sun.java2d.uiScale.enabled", "false")
             System.setProperty("sun.java2d.uiScale", "1")
 
-            CCLogger.enabled = true
-            CCLogger.paused = true //Allows us setting up things like log file and format before having it log
+            LegibleLogger.enabled = true
+            LegibleLogger.paused = true //Allows us setting up things like log file and format before having it log
 
             NativeHookManager.disableLogger()
 
@@ -100,7 +100,7 @@ class SnipSniper {
 
             if (!isDemo) {
                 if (!FileUtils.mkdirs(configFolder, logFolder, imgFolder)) {
-                    CCLogger.log("Could not create required folders! Exiting...", CCLogLevel.ERROR)
+                    LegibleLogger.log("Could not create required folders! Exiting...", LegibleLogLevel.ERROR)
                     exit(false)
                 }
             }
@@ -108,14 +108,14 @@ class SnipSniper {
             config = Config("main.cfg", "main_defaults.cfg")
 
             val logFileName = LocalDateTime.now().toString().replace(".", "_").replace(":", "_") + ".log"
-            CCLogger.logFormat = config.getString(ConfigHelper.MAIN.logFormat)
-            CCLogger.logFile = File(logFolder, logFileName)
-            CCLogger.gitHubCodePathURL = "https://github.com/CaptureCoop/SnipSniper/tree/${buildInfo.gitHash}/src/main/java/"
-            CCLogger.gitHubCodeClassPath = "net.snipsniper"
-            CCLogger.paused = false
+            LegibleLogger.logFormat = config.getString(ConfigHelper.MAIN.logFormat)
+            LegibleLogger.logFile = File(logFolder, logFileName)
+            LegibleLogger.gitHubCodePathURL = "https://github.com/CaptureCoop/SnipSniper/tree/${buildInfo.gitHash}/src/main/java/"
+            LegibleLogger.gitHubCodeClassPath = "net.snipsniper"
+            LegibleLogger.paused = false
 
             uncaughtExceptionHandler = Thread.UncaughtExceptionHandler { _, throwable ->
-                CCLogger.logStacktrace(throwable, CCLogLevel.ERROR)
+                LegibleLogger.logStacktrace(throwable, LegibleLogLevel.ERROR)
             }
             Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler)
 
@@ -128,7 +128,7 @@ class SnipSniper {
 
             if (cmdline.isDebug) {
                 config.set(ConfigHelper.MAIN.debug, "true")
-                CCLogger.filter = CCLogFilter.DEBUG //Overwrite
+                LegibleLogger.filter = LegibleLogFilter.DEBUG //Overwrite
             }
 
             ImageManager.loadResources()
@@ -149,24 +149,24 @@ class SnipSniper {
             LangManager.load()
             WikiManager.load(LangManager.getLanguage())
 
-            CCLogger.info("Launching SnipSniper Version ${buildInfo.version.digitsToString()} (rev-${buildInfo.gitHash})")
+            LegibleLogger.info("Launching SnipSniper Version ${buildInfo.version.digitsToString()} (rev-${buildInfo.gitHash})")
             buildInfo.log()
             SystemInfo.log()
 
             if (!SystemUtils.IS_OS_WINDOWS) {
-                CCLogger.warn("=================================================================================")
-                CCLogger.warn("= SnipSniper Linux is still in development and may not work properly or at all. =")
-                CCLogger.warn("=                        !!!!! USE WITH CAUTION !!!!                            =")
-                CCLogger.warn("=================================================================================")
+                LegibleLogger.warn("=================================================================================")
+                LegibleLogger.warn("= SnipSniper Linux is still in development and may not work properly or at all. =")
+                LegibleLogger.warn("=                        !!!!! USE WITH CAUTION !!!!                            =")
+                LegibleLogger.warn("=================================================================================")
             }
 
-            CCLogger.debug("========================================")
-            CCLogger.debug("= SnipSniper is running in debug mode! =")
-            CCLogger.debug("========================================")
+            LegibleLogger.debug("========================================")
+            LegibleLogger.debug("= SnipSniper is running in debug mode! =")
+            LegibleLogger.debug("========================================")
 
             config.getString(ConfigHelper.MAIN.language).also {
                 if (!LangManager.languages.contains(it)) {
-                    CCLogger.error("Language <$it> not found. Available languages: ${LangManager.languages}")
+                    LegibleLogger.error("Language <$it> not found. Available languages: ${LangManager.languages}")
                     exit(false)
                 }
             }
@@ -174,10 +174,10 @@ class SnipSniper {
             config.save()
 
             if (isDemo) {
-                CCLogger.warn("============================================================")
-                CCLogger.warn("= SnipSniper is running in DEMO mode                       =")
-                CCLogger.warn("= This means that no files will be created and/or modified =")
-                CCLogger.warn("============================================================")
+                LegibleLogger.warn("============================================================")
+                LegibleLogger.warn("= SnipSniper is running in DEMO mode                       =")
+                LegibleLogger.warn("= This means that no files will be created and/or modified =")
+                LegibleLogger.warn("============================================================")
             }
 
             if (cmdline.editorOnly || launchType == LaunchType.EDITOR) {
@@ -191,8 +191,8 @@ class SnipSniper {
                         path = cmdline.editorFile!!.ifEmpty { args[0] }
                         File(path).also { if(it.exists()) img = ImageIO.read(it) }
                     } catch (ioException: IOException) {
-                        CCLogger.error("Error reading image file for editor, path: $path")
-                        CCLogger.logStacktrace(ioException, CCLogLevel.ERROR)
+                        LegibleLogger.error("Error reading image file for editor, path: $path")
+                        LegibleLogger.logStacktrace(ioException, LegibleLogLevel.ERROR)
                     }
                 }
                 SCEditorWindow(img, -1, -1, "SnipSniper Editor", editorConfig, false, path, false, true)
@@ -214,7 +214,7 @@ class SnipSniper {
         }
 
         fun resetProfiles() {
-            CCLogger.info("Resetting/Starting profiles...")
+            LegibleLogger.info("Resetting/Starting profiles...")
             if(SystemTray.isSupported()) {
                 val tray = SystemTray.getSystemTray()
                 tray.trayIcons.forEach { tray.remove(it) }
@@ -235,9 +235,9 @@ class SnipSniper {
         fun exit(exitForRestart: Boolean) {
             if(config.getBool(ConfigHelper.MAIN.debug)) {
                 if (!exitForRestart && Desktop.isDesktopSupported())
-                    Desktop.getDesktop().open(CCLogger.logFile)
+                    Desktop.getDesktop().open(LegibleLogger.logFile)
             }
-            CCLogger.info("Exit requested. Goodbye!")
+            LegibleLogger.info("Exit requested. Goodbye!")
             NativeHookManager.exit()
             exitProcess(0)
         }
@@ -276,7 +276,7 @@ class SnipSniper {
             //TODO: Add for other platform types!
             when(platformType) {
                 PlatformType.JAR -> Utils.restartApplication(*args)
-                else -> CCLogger.log("Warning: Restart has not been implemented for this platform! ($platformType)", CCLogLevel.WARNING)
+                else -> LegibleLogger.log("Warning: Restart has not been implemented for this platform! ($platformType)", LegibleLogLevel.WARNING)
             }
         }
 

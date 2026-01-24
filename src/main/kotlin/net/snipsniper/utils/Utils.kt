@@ -4,9 +4,9 @@ import com.erigir.mslinks.ShellLink
 import net.snipsniper.LangManager
 import net.snipsniper.SnipSniper
 import org.apache.commons.lang3.SystemUtils
-import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger
-import org.capturecoop.ccutils.utils.CCStringUtils
+import org.capturecoop.defaultdepot.StringUtils
+import org.capturecoop.legiblelogger.LegibleLogLevel
+import org.capturecoop.legiblelogger.LegibleLogger
 import org.json.JSONObject
 import java.awt.*
 import java.awt.event.ItemEvent
@@ -74,7 +74,7 @@ class Utils {
                     reader.lineSequence().forEach { result.append(it) }
                 }
             } catch(e: Exception) {
-                CCLogger.log("Error requesting content from website (${url}): ${e.message}", CCLogLevel.ERROR)
+                LegibleLogger.log("Error requesting content from website (${url}): ${e.message}", LegibleLogLevel.ERROR)
                 return null
             }
             return result.toString()
@@ -133,8 +133,8 @@ class Utils {
 
         //TODO: This should probably have a better name, since this just prepares screenshots no?
         fun constructFilename(format: String, modifier: String): String {
-            var filename = CCStringUtils.formatDateTimeString(format)
-            filename = filename.replace("%random%", CCStringUtils.getRandomString(10, true, true))
+            var filename = StringUtils.formatDateTimeString(format)
+            filename = filename.replace("%random%", StringUtils.getRandomString(length = 10, lowercaseLetters = true, uppercaseLetters = true, useNumbers = true))
             return "${filename}${modifier}.png"
         }
 

@@ -3,8 +3,8 @@ package net.snipsniper.sceditor.stamps
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.InputContainer
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.BasicStroke
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -31,7 +31,7 @@ class RectangleStamp(private val config: Config) : IStamp {
     private var minimumHeight = 0
     private var speedWidth = 0
     private var speedHeight = 0
-    override var color: CCColor? = null
+    override var color: ComposedColor? = null
         set(value) {
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
             field = value
@@ -78,7 +78,7 @@ class RectangleStamp(private val config: Config) : IStamp {
         alertChangeListeners(IStampUpdateListener.TYPE.INPUT)
     }
 
-    override fun render(g: Graphics, input: InputContainer?, position: CCVector2Int?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle {
+    override fun render(g: Graphics, input: InputContainer?, position: Vector2I?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle {
         g as Graphics2D
         val oldStroke = g.stroke
         var strokeThickness = (thickness * difference[0]).toInt()

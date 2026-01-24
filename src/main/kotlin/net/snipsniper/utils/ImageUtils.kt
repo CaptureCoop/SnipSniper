@@ -4,9 +4,9 @@ import net.snipsniper.SnipSniper
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.Utils.Companion.constructFilename
-import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger
-import org.capturecoop.ccutils.utils.CCStringUtils
+import org.capturecoop.defaultdepot.StringUtils
+import org.capturecoop.legiblelogger.LegibleLogLevel
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.*
 import java.awt.datatransfer.DataFlavor
 import java.awt.image.BufferedImage
@@ -33,11 +33,11 @@ object ImageUtils {
         try {
             ImageSelection(image).let {
                 Toolkit.getDefaultToolkit().systemClipboard.setContents(it, null)
-                CCLogger.info("Copied Image to clipboard")
+                LegibleLogger.info("Copied Image to clipboard")
             }
         } catch (exception: Exception) {
-            CCLogger.warn("ImageUtils.copyToClipboard encountered an IOException error while trying to copy the image. Message: ${exception.message}")
-            CCLogger.warn("This is generally harmless, it can be caused by your jvm not supporting jpgs apparently :^)")
+            LegibleLogger.warn("ImageUtils.copyToClipboard encountered an IOException error while trying to copy the image. Message: ${exception.message}")
+            LegibleLogger.warn("This is generally harmless, it can be caused by your jvm not supporting jpgs apparently :^)")
         }
     }
 
@@ -172,14 +172,14 @@ object ImageUtils {
         var savePath = config.getString(ConfigHelper.PROFILE.pictureFolder)
         var pathCustom = config.getString(ConfigHelper.PROFILE.saveFolderCustom)
         if (!pathCustom.startsWith("/")) pathCustom = "/$pathCustom"
-        savePath += CCStringUtils.formatDateTimeString(pathCustom)
+        savePath += StringUtils.formatDateTimeString(pathCustom)
 
         var savePathModifier = ""
 
         if (config.getBool(ConfigHelper.PROFILE.dateFolders)) {
             val currentDate = LocalDate.now()
-            val dayString = CCStringUtils.getDateWithProperZero(currentDate.dayOfMonth)
-            val monthString = CCStringUtils.getDateWithProperZero(currentDate.monthValue)
+            val dayString = StringUtils.getDateWithProperZero(currentDate.dayOfMonth)
+            val monthString = StringUtils.getDateWithProperZero(currentDate.monthValue)
             savePathModifier = "\\" + config.getString(ConfigHelper.PROFILE.dateFoldersFormat)
             savePathModifier = savePathModifier.replace("%day%".toRegex(), dayString)
             savePathModifier = savePathModifier.replace("%month%".toRegex(), monthString)
@@ -191,19 +191,19 @@ object ImageUtils {
         try {
             if (!path.exists()) {
                 if (!path.mkdirs()) {
-                    CCLogger.log("Failed saving, directory missing & could not create it!", CCLogLevel.WARNING)
+                    LegibleLogger.log("Failed saving, directory missing & could not create it!", LegibleLogLevel.WARNING)
                     return null
                 }
             }
             if (file.createNewFile()) {
                 ImageIO.write(finalImg, "png", file)
-                CCLogger.info("Saved image on disk. Location: $file")
+                LegibleLogger.info("Saved image on disk. Location: $file")
                 return file.absolutePath
             }
         } catch (exception: IOException) {
             JOptionPane.showMessageDialog(null, "Could not save image to \"$file\"!", "Error", JOptionPane.INFORMATION_MESSAGE)
-            CCLogger.log("Image could not be saved. Wanted Location: $file", CCLogLevel.WARNING)
-            CCLogger.logStacktrace(exception, CCLogLevel.WARNING)
+            LegibleLogger.log("Image could not be saved. Wanted Location: $file", LegibleLogLevel.WARNING)
+            LegibleLogger.logStacktrace(exception, LegibleLogLevel.WARNING)
             return null
         }
         return null

@@ -7,16 +7,16 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 plugins {
-    kotlin("jvm") version "1.7.10"
-    id("org.ajoberstar.grgit") version "4.1.1" //Used to determine the status of the repo
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.grgit)
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+kotlin {
+    jvmToolchain(21)
 }
 
 group = "net.snipsniper"
-version = File("version.txt").readLines()[0]
+version = File("version.txt").readText()
 //The type of release, either stable/release, dev or dirty. Used to determine how to build & passed onto SnipSniper
 //Dev = "Clean build", but not stable
 //Dirty = Uncommitted changes
@@ -29,20 +29,16 @@ val groupRun = "SnipSniper run"
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("com.1stleg:jnativehook:2.1.0") //Used for global keyboard and mouse events
-    implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("org.apache.commons:commons-text:1.9")
-    implementation("org.json:json:20220320")
-    implementation("com.formdev:flatlaf:1.6") //Swing Theme
-    implementation("com.erigir:mslinks:0.0.2+5") //Utility for windows shortcuts
-
-    implementation("org.capturecoop:CCUtils:1.9.6") //CaptureCoop Common Utils
-    implementation("org.capturecoop:CCLogger:1.6.6") //CaptureCoop logger
-    implementation("org.capturecoop:CCColorUtils:1.0.7") //CaptureCoop Color utils & Color Chooser
+    implementation(libs.jnativehook)
+    implementation(libs.flatlaf)
+    implementation(libs.json)
+    implementation(libs.mslinks)
+    implementation(libs.bundles.apache.commons)
+    implementation(libs.bundles.capturecoop)
 }
 
 //SnipSniper includes another repository where we store json files with information about SnipSniper

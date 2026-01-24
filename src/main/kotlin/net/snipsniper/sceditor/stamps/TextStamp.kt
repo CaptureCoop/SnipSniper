@@ -4,8 +4,8 @@ import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.utils.InputContainer
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -13,7 +13,7 @@ import java.awt.Rectangle
 import java.awt.event.KeyEvent
 
 class TextStamp(private val config: Config, private val scEditorWindow: SCEditorWindow?) : IStamp {
-    override var color: CCColor? = null
+    override var color: ComposedColor? = null
         set(value) {
             field = value
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
@@ -44,8 +44,8 @@ class TextStamp(private val config: Config, private val scEditorWindow: SCEditor
         }
     var state = TextState.IDLE
         private set
-    private var cPosition = CCVector2Int()
-    private var livePosition = CCVector2Int()
+    private var cPosition = Vector2I()
+    private var livePosition = Vector2I()
     private var doSaveNextRender = false
 
     enum class TextState { IDLE, TYPING }
@@ -90,14 +90,14 @@ class TextStamp(private val config: Config, private val scEditorWindow: SCEditor
         alertChangeListeners(IStampUpdateListener.TYPE.INPUT)
     }
 
-    override fun render(g: Graphics, input: InputContainer?, position: CCVector2Int?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle? {
+    override fun render(g: Graphics, input: InputContainer?, position: Vector2I?, difference: Array<Double>, isSaveRender: Boolean, isCensor: Boolean, historyPoint: Int): Rectangle? {
         var inp = input
         if (inp == null) {
             inp = InputContainer()
             inp.setMousePosition(position!!.x, position.y)
         }
         g as Graphics2D
-        livePosition = CCVector2Int(inp.mouseX, inp.mouseY) //Update method only gets called upon keypress
+        livePosition = Vector2I(inp.mouseX, inp.mouseY) //Update method only gets called upon keypress
         if (isSaveRender && !doSaveNextRender) return null
         val textToDraw = getReadableText()
         val drawFontSize = (fontSize.toDouble() * difference[1]).toInt()
@@ -126,7 +126,7 @@ class TextStamp(private val config: Config, private val scEditorWindow: SCEditor
         }
         if (pressed && state == TextState.IDLE) {
             state = TextState.TYPING
-            cPosition = CCVector2Int(livePosition)
+            cPosition = Vector2I(livePosition)
         } else if (pressed && state == TextState.TYPING) {
             doSaveNextRender = true
         }

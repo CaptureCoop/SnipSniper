@@ -3,7 +3,7 @@ package net.snipsniper.configwindow
 import net.snipsniper.SnipSniper
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.*
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogger
 
 class UpdateButton: IDJButton("") {
     private val STATE_WAITING = "waiting"
@@ -78,7 +78,7 @@ class UpdateButton: IDJButton("") {
                         icon = download.toImageIcon()
                     } else {
                         text = "Error. Check console."
-                        CCLogger.error("Issue checking for updates. Our Version: ${version.digitsToString()}, Online version: ${onlineVersion.digitsToString()}")
+                        LegibleLogger.error("Issue checking for updates. Our Version: ${version.digitsToString()}, Online version: ${onlineVersion.digitsToString()}")
                         id = STATE_IDLE
                         icon = null
                     }

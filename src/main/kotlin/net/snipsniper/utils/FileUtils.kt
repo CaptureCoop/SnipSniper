@@ -1,9 +1,9 @@
 package net.snipsniper.utils
 
 import net.snipsniper.SnipSniper
-import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger
-import org.capturecoop.ccutils.utils.CCStringUtils
+import org.capturecoop.defaultdepot.StringUtils
+import org.capturecoop.legiblelogger.LegibleLogLevel
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.Desktop
 import java.io.*
 import java.net.URLDecoder
@@ -20,7 +20,7 @@ class FileUtils {
             if (!file.exists()) return true
             File("").delete()
             if (!file.delete()) {
-                CCLogger.warn("File (${file.absolutePath}) could not be deleted!")
+                LegibleLogger.warn("File (${file.absolutePath}) could not be deleted!")
                 return false
             }
             return true
@@ -31,7 +31,7 @@ class FileUtils {
         fun mkdir(folder: File): Boolean {
             if (folder.exists()) return true
             if (!folder.mkdir()) {
-                CCLogger.warn("Folder (${folder.absolutePath}) could not be created.")
+                LegibleLogger.warn("Folder (${folder.absolutePath}) could not be created.")
                 return false
             }
             return true
@@ -42,7 +42,7 @@ class FileUtils {
         fun mkdirs(folder: File): Boolean {
             if (folder.exists()) return true
             if (!folder.mkdirs()) {
-                CCLogger.warn("Folders ($folder) could not be created.")
+                LegibleLogger.warn("Folders ($folder) could not be created.")
                 return false
             }
             return true
@@ -66,7 +66,7 @@ class FileUtils {
             val result = ArrayList<String>()
             for (file in listFiles(path)) {
                 if (file.isDirectory) result.addAll(getFilesInFolders(file.absolutePath))
-                if (!file.isDirectory) result.add(CCStringUtils.correctSlashes(file.absolutePath))
+                if (!file.isDirectory) result.add(StringUtils.correctSlashes(file.absolutePath))
             }
             return result
         }
@@ -85,8 +85,8 @@ class FileUtils {
             try {
                 Desktop.getDesktop().open(File(path))
             } catch (ioException: IOException) {
-                CCLogger.error("Could not open folder \"$path\"!")
-                CCLogger.logStacktrace(ioException, CCLogLevel.ERROR)
+                LegibleLogger.error("Could not open folder \"$path\"!")
+                LegibleLogger.logStacktrace(ioException, LegibleLogLevel.ERROR)
             }
         }
 
@@ -97,8 +97,8 @@ class FileUtils {
                     it.close()
                 }
             } catch (fileNotFoundException: FileNotFoundException) {
-                CCLogger.error("Could not write to file \"$filename\"!")
-                CCLogger.logStacktrace(fileNotFoundException, CCLogLevel.ERROR)
+                LegibleLogger.error("Could not write to file \"$filename\"!")
+                LegibleLogger.logStacktrace(fileNotFoundException, LegibleLogLevel.ERROR)
             }
         }
 
@@ -120,8 +120,8 @@ class FileUtils {
             try {
                 return File(path).canonicalPath
             } catch (ioException: IOException) {
-                CCLogger.error("Could not get path for \"$path\"!")
-                CCLogger.logStacktrace(ioException, CCLogLevel.ERROR)
+                LegibleLogger.error("Could not get path for \"$path\"!")
+                LegibleLogger.logStacktrace(ioException, LegibleLogLevel.ERROR)
             }
             return null
         }
@@ -136,19 +136,19 @@ class FileUtils {
 
         fun copyFromJar(jarPath: String, path: String): Boolean {
             if (jarPath.startsWith("\\") || jarPath.startsWith("//"))
-                CCLogger.warn("jarPath ($path) is starting with slashes, this generally does not work inside the jar!")
+                LegibleLogger.warn("jarPath ($path) is starting with slashes, this generally does not work inside the jar!")
             if (exists(path))
                 delete(path)
             val inputStream = ClassLoader.getSystemResourceAsStream(jarPath)
             if (inputStream == null) {
-                CCLogger.error("InputStream is null! Copying failed! jarPath: $jarPath, path: $path")
+                LegibleLogger.error("InputStream is null! Copying failed! jarPath: $jarPath, path: $path")
                 return false
             }
             try {
                 Files.copy(inputStream, File(path).canonicalFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
             } catch (ioException: IOException) {
-                CCLogger.error("Issue copying from jar!")
-                CCLogger.logStacktrace(ioException, CCLogLevel.ERROR)
+                LegibleLogger.error("Issue copying from jar!")
+                LegibleLogger.logStacktrace(ioException, LegibleLogLevel.ERROR)
                 return false
             }
             return true
@@ -160,7 +160,7 @@ class FileUtils {
                 val path = "net/snipsniper/resources/$file"
                 val inputStream = ClassLoader.getSystemResourceAsStream(path)
                 if(inputStream == null) {
-                    CCLogger.error("Could not load file $path from jar!")
+                    LegibleLogger.error("Could not load file $path from jar!")
                     return null
                 }
                 val streamReader = InputStreamReader(inputStream, StandardCharsets.UTF_8)
@@ -170,8 +170,8 @@ class FileUtils {
                 }
                 streamReader.close()
             } catch (ioException: IOException) {
-                CCLogger.error("Could not load file: $file")
-                CCLogger.logStacktrace(ioException, CCLogLevel.ERROR)
+                LegibleLogger.error("Could not load file: $file")
+                LegibleLogger.logStacktrace(ioException, LegibleLogLevel.ERROR)
             }
             return content.toString()
         }

@@ -1,7 +1,7 @@
 package net.snipsniper.utils
 
-import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogLevel
+import org.capturecoop.legiblelogger.LegibleLogger
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -11,7 +11,7 @@ class WikiManager {
         private val strings = HashMap<String, JSONObject>()
 
         fun load(language: String) {
-            CCLogger.info("Loading wiki files...")
+            LegibleLogger.info("Loading wiki files...")
             val languagesJSON = FileUtils.loadFileFromJar("wiki/languages.json") ?: throw Exception("languages.json could not be loaded!")
 
             val languages = JSONArray(languagesJSON)
@@ -22,7 +22,7 @@ class WikiManager {
                 }
             }
             finalLoad(languageToLoad)
-            CCLogger.info("Done!")
+            LegibleLogger.info("Done!")
         }
 
         private fun finalLoad(language: String) {
@@ -39,7 +39,7 @@ class WikiManager {
 
         fun getContent(string: String): String {
             return strings[string]?.getString("content") ?: "key <$string> not found".also {
-                CCLogger.log("WikiManager error: $string not found!", CCLogLevel.ERROR)
+                LegibleLogger.log("WikiManager error: $string not found!", LegibleLogLevel.ERROR)
             }
         }
     }

@@ -1,15 +1,13 @@
 package net.snipsniper.systray
 
-import net.snipsniper.ImageManager
 import net.snipsniper.NativeHookManager
 import net.snipsniper.SnipSniper
 import net.snipsniper.capturewindow.CaptureWindow
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.*
-import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger
-import java.awt.Image
+import org.capturecoop.legiblelogger.LegibleLogLevel
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.SystemTray
 import java.awt.TrayIcon
 import java.awt.event.MouseAdapter
@@ -26,7 +24,7 @@ class Sniper(private val profileID: Int) {
     //TODO: Maybe make a function for opening the capture window so that we call isIdle = false at a unified place?
     //TODO: We check twice if iconString or whatever is none, we should not statically check that but maybe check with the defaults?
     init {
-        CCLogger.log("Loading profile $profileID", CCLogLevel.DEBUG)
+        LegibleLogger.log("Loading profile $profileID", LegibleLogLevel.DEBUG)
         if(SystemTray.isSupported()) {
             val popup = Popup(this)
             val tray = SystemTray.getSystemTray()

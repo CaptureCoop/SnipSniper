@@ -11,9 +11,9 @@ import net.snipsniper.configwindow.textpreviewwindow.FolderPreviewRenderer
 import net.snipsniper.configwindow.textpreviewwindow.SaveFormatPreviewRenderer
 import net.snipsniper.configwindow.textpreviewwindow.TextPreviewWindow
 import net.snipsniper.utils.*
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.cccolorutils.chooser.CCColorChooser
-import org.capturecoop.ccutils.utils.CCStringUtils
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.colorcomposer.chooser.ColorComposer
+import org.capturecoop.defaultdepot.StringUtils
 import java.awt.*
 import java.awt.event.*
 import java.io.File
@@ -29,7 +29,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
     override fun setup(configOriginal: Config?) {
         removeAll()
         isDirty = false
-        var colorChooser: CCColorChooser? = null
+        var colorChooser: ColorComposer? = null
         var cleanDirtyFunction: ((ConfigSaveButtonState) -> (Boolean))? = null
         val config: Config
         var disablePage = false
@@ -59,7 +59,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             titleInput.addFocusListener(object : FocusAdapter() {
                 override fun focusLost(e: FocusEvent) {
                     super.focusLost(e)
-                    if (CCStringUtils.removeWhitespace(titleInput.text).isEmpty()) titleInput.text = "none"
+                    if (StringUtils.removeWhitespace(titleInput.text).isEmpty()) titleInput.text = "none"
                     config.set(ConfigHelper.PROFILE.title, titleInput.text)
                 }
             })
@@ -149,7 +149,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             val tintColor = config.getColor(ConfigHelper.PROFILE.tintColor)
             val tintColorButton = GradientJButton("Color", tintColor)
             tintColor.addChangeListener { e: ChangeEvent ->
-                config.set(ConfigHelper.PROFILE.tintColor, (e.source as CCColor).toSaveString())
+                config.set(ConfigHelper.PROFILE.tintColor, (e.source as ComposedColor).toSaveString())
                 cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             tintColorButton.addActionListener {
@@ -158,7 +158,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     "light" ->  "preview/code_light.png".getImage()
                     else -> throw Exception("Bad theme")
                 }
-                configWindow.addCWindow(CCColorChooser(tintColor, "Tint Color", parent = configWindow, useGradient = false, backgroundImage = image))
+                configWindow.addCWindow(ColorComposer(tintColor, "Tint Color", parent = configWindow, useGradient = false, backgroundImage = image))
             }
             options.add(tintColorButton, gbc)
             gbc.gridx = 2
@@ -209,15 +209,15 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             borderSizePanel.add(borderSize)
-            val borderColor = CCColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor))
+            val borderColor = ComposedColor.fromSaveString(config.getString(ConfigHelper.PROFILE.borderColor))
             val colorBtn = GradientJButton("Color", borderColor)
             borderColor.addChangeListener {
-                config.set(ConfigHelper.PROFILE.borderColor, (it.source as CCColor).toSaveString())
+                config.set(ConfigHelper.PROFILE.borderColor, (it.source as ComposedColor).toSaveString())
                 cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
             }
             colorBtn.addActionListener {
                 if (colorChooser == null || !colorChooser!!.isDisplayable) {
-                    colorChooser = CCColorChooser(borderColor, "config_label_bordercolor".translate(), parent = configWindow, useGradient = true)
+                    colorChooser = ColorComposer(borderColor, "config_label_bordercolor".translate(), parent = configWindow, useGradient = true)
                     colorChooser!!.addWindowListener(object : WindowAdapter() {
                         override fun windowClosing(e: WindowEvent) = kotlin.run { colorChooser = null }
                     })
@@ -261,13 +261,13 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             gbc.gridx = 0
             options.add(configWindow.createJLabel("config_label_picturelocation".translate(), JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
-            val pictureLocation = JTextField(CCStringUtils.correctSlashes(config.getRawString(ConfigHelper.PROFILE.pictureFolder)))
+            val pictureLocation = JTextField(StringUtils.correctSlashes(config.getRawString(ConfigHelper.PROFILE.pictureFolder)))
             pictureLocation.preferredSize = Dimension(200, pictureLocation.height)
             pictureLocation.maximumSize = Dimension(200, pictureLocation.height)
             pictureLocation.addFocusListener(object : FocusAdapter() {
                 override fun focusLost(focusEvent: FocusEvent) {
                     val saveLocationRaw = pictureLocation.text
-                    CCStringUtils.correctSlashes(saveLocationRaw)
+                    StringUtils.correctSlashes(saveLocationRaw)
                     val saveLocationFinal = Utils.replaceVars(saveLocationRaw)
                     val saveLocationCheck = File(saveLocationFinal)
                     if (!saveLocationCheck.exists()) {
@@ -302,7 +302,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             gbc.gridx = 0
             options.add(configWindow.createJLabel("Save folder modifier", JLabel.RIGHT, JLabel.CENTER), gbc)
             gbc.gridx = 1
-            val customSaveButton = JButton(CCStringUtils.formatDateTimeString(config.getString(ConfigHelper.PROFILE.saveFolderCustom)))
+            val customSaveButton = JButton(StringUtils.formatDateTimeString(config.getString(ConfigHelper.PROFILE.saveFolderCustom)))
             customSaveButton.addActionListener {
                 val renderer = FolderPreviewRenderer(512, 512)
                 val preview = TextPreviewWindow("Custom save folder modifier", config.getString(ConfigHelper.PROFILE.saveFolderCustom), renderer, "icons/folder.png".getImage(), configWindow, "%day% = 1, %month% = 8, %year% = 2021")
@@ -312,7 +312,7 @@ class GeneralTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     var text = preview.text
                     if (text.isEmpty()) text = "/"
                     config.set(ConfigHelper.PROFILE.saveFolderCustom, text)
-                    customSaveButton.text = CCStringUtils.formatDateTimeString(text)
+                    customSaveButton.text = StringUtils.formatDateTimeString(text)
                     cleanDirtyFunction!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
                 }
             }

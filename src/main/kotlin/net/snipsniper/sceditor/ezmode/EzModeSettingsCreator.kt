@@ -5,10 +5,9 @@ import net.snipsniper.configwindow.StampJPanel
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.sceditor.stamps.*
 import net.snipsniper.utils.*
-import org.capturecoop.cccolorutils.chooser.gui.CCHSBHueBar
-import org.capturecoop.cclogger.CCLogLevel
-import org.capturecoop.cclogger.CCLogger.Companion.log
-import org.capturecoop.cclogger.CCLogger.Companion.logStacktrace
+import org.capturecoop.colorcomposer.chooser.HSBHueBar
+import org.capturecoop.legiblelogger.LegibleLogLevel
+import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.Dimension
 import java.awt.FlowLayout
 import java.awt.Font
@@ -50,7 +49,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
 
     fun lastCorrectHeight(): Int {
         var height = 0
-        lastPanel.components.forEach { if(it !is CCHSBHueBar) height += it.height }
+        lastPanel.components.forEach { if(it !is HSBHueBar) height += it.height }
         return height
     }
 
@@ -199,8 +198,8 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
                     try {
                         Thread.sleep(5000)
                     } catch (ex: InterruptedException) {
-                        log("Error waiting for font type dropdown in ezMode", CCLogLevel.ERROR)
-                        logStacktrace(ex, CCLogLevel.ERROR)
+                        LegibleLogger.log("Error waiting for font type dropdown in ezMode", LegibleLogLevel.ERROR)
+                        LegibleLogger.logStacktrace(ex, LegibleLogLevel.ERROR)
                     }
                     scEditorWindow.requestFocus()
                 }.start()

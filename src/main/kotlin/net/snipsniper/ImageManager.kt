@@ -3,7 +3,7 @@ package net.snipsniper
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.FileUtils
 import net.snipsniper.utils.ImageUtils
-import org.capturecoop.cclogger.CCLogger
+import org.capturecoop.legiblelogger.LegibleLogger
 import org.json.JSONArray
 import java.awt.Color
 import java.awt.Image
@@ -21,12 +21,12 @@ object ImageManager {
     private val missingImg = getMissingImg()
 
     fun loadResources() {
-        CCLogger.info("Loading images...")
+        LegibleLogger.info("Loading images...")
         val list = JSONArray(FileUtils.loadFileFromJar("img.json"))
         val filenameListTemp = ArrayList<String>()
         for(i in 0 until list.length()) {
             val str = list.getString(i)
-            val url = SnipSniper::class.java.getResource("/net/snipsniper/resources/img/$str") ?: CCLogger.warn("Could not load image $str!")
+            val url = SnipSniper::class.java.getResource("/net/snipsniper/resources/img/$str") ?: LegibleLogger.warn("Could not load image $str!")
             if(url !is URL) continue
 
             filenameListTemp.add(str)
@@ -36,11 +36,11 @@ object ImageManager {
             }
         }
         filenameList = filenameListTemp.toTypedArray()
-        CCLogger.info("Done!")
+        LegibleLogger.info("Done!")
     }
 
-    fun getImage(path: String): BufferedImage = images[path] ?: missingImg.also { CCLogger.warn("Could not find image under path $path") }
-    fun getAnimatedImage(path: String): Image = animatedImages[path] ?: missingImg.also { CCLogger.warn("Could not find image under path $path") }
+    fun getImage(path: String): BufferedImage = images[path] ?: missingImg.also { LegibleLogger.warn("Could not find image under path $path") }
+    fun getAnimatedImage(path: String): Image = animatedImages[path] ?: missingImg.also { LegibleLogger.warn("Could not find image under path $path") }
     fun hasImage(path: String): Boolean = animatedImages.containsKey(path) || images.containsKey(path)
 
     fun getCodePreview() = when(SnipSniper.config.getString(ConfigHelper.MAIN.theme)) {
