@@ -363,7 +363,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
     override fun resizeTrigger() {
         super.resizeTrigger()
         if (ezMode) {
-            val titleMargin = 5
+            val titleMargin = SnipSniper.calculateEffectiveUIScale(10)
             var ezModeWidthToUse = ezModeWidth
             if (ezModeStampSettingsScrollPane.verticalScrollBar.isVisible) ezModeWidthToUse += ezModeStampSettingsScrollPane.verticalScrollBar.width
             ezModeTitlePanel.setBounds(0, 0, ezModeWidthToUse, ezModeHeight)
