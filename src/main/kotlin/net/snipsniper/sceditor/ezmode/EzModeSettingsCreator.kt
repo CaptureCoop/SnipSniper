@@ -3,6 +3,7 @@ package net.snipsniper.sceditor.ezmode
 import net.snipsniper.SnipSniper
 import net.snipsniper.SnipSniper.Companion.getNewThread
 import net.snipsniper.configwindow.StampJPanel
+import net.snipsniper.configwindow.iconwindow.IconWindow
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.sceditor.stamps.*
 import net.snipsniper.utils.*
@@ -33,6 +34,8 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
             StampType.TEXT -> text(panel, stamp, width)
             StampType.RECTANGLE -> rectangle(panel, stamp, width)
             StampType.ERASER -> eraser(panel, stamp, width)
+            StampType.STICKER -> sticker(panel, stamp, width)
+
         }
         panel.add(createJSeperator())
         panel.add(JLabel("preview"))
@@ -256,6 +259,20 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         }
         panel.add(textInput)
         addColorSettings(panel, stamp, width)
+    }
+
+    private fun sticker(panel: JPanel, stamp: IStamp, width: Int) {
+        panel.add(JButton("Select Sticker").apply {
+            addActionListener {
+                val iconWindow = IconWindow("Select Stickers", scEditorWindow)
+                iconWindow.onSelect = {
+                    (stamp as StickerStamp).also { stickerStamp ->
+                        stickerStamp.image = ImageUtils.getIconDynamically(it)!!.toBufferedImage()
+                        stickerStamp.reset()
+                    }
+                }
+            }
+        })
     }
 
     private fun rectangle(panel: JPanel, stamp: IStamp, width: Int) {
