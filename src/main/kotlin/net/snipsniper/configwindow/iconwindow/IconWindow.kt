@@ -143,7 +143,7 @@ class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
         if(file.extension == "gif") {
             Files.copy(file.toPath(), File(SnipSniper.imgFolder, file.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
         } else {
-            ImageIO.read(file).scaledSmooth(16, 16).also {
+            ImageIO.read(file).also {
                 ImageIO.write(it, file.extension, File(SnipSniper.imgFolder, file.name))
             }
         }
