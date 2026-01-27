@@ -122,7 +122,7 @@ class TextStamp(private val config: Config, private val scEditorWindow: SCEditor
         g.rotate(angle.toDouble(), position!!.x.toDouble(), position!!.y.toDouble())
         g.paint = color!!.getGradientPaint(width, drawFontSize, position!!.x, position.y)
         lastDrawnWidth = g.fontMetrics.stringWidth(textToDraw)
-        g.drawString(textToDraw, position.x - lastDrawnWidth / 2, position.y)
+        g.drawString(textToDraw, position.x - lastDrawnWidth / 2, (position.y + drawFontSize / 2.0).toInt())
         g.transform = oldTransform
         g.font = oldFont
         g.paint = oldColor
