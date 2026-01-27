@@ -49,13 +49,12 @@ class StickerStamp(private val config: Config, private val scEditorWindow: SCEdi
     ) {
         val isShiftPressed = input!!.isKeyPressed(KeyEvent.VK_SHIFT)
         val isControlPressed = input!!.isKeyPressed(KeyEvent.VK_CONTROL)
-
         //Adapt it to the circle logic im too tired for this right now. Clean all the stamps they are dusty.
         val scaleWidth = isShiftPressed && !isControlPressed
         val scaleHeight = !isShiftPressed && isControlPressed
         val scaleAll = !isShiftPressed && !isControlPressed
 
-        val speedWidth = if(!scaleAll) speedWidth else (speed) * (width / height.toFloat()).toInt()
+        val speedWidth = if(!scaleAll) speedWidth else (speed * (width / height.toFloat())).toInt()
         val speedHeight = if(!scaleAll) speedHeight else (speed)
 
         when(mouseWheelDirection) {
