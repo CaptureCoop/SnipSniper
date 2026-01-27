@@ -299,6 +299,14 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     it.setup("config_label_thickness".translate(), ConfigHelper.PROFILE.editorStampRectangleThickness)
                 }
             }
+            is StickerStamp -> {
+                Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.STICKER.index, constraints = gbc, onUpdate = onUpdate).also {
+                    it.setup("config_label_startheight".translate(), ConfigHelper.PROFILE.editorStampStickerHeight)
+                    it.setup("config_label_generalspeed".translate(), ConfigHelper.PROFILE.editorStampStickerSpeed)
+                    it.setup("config_label_widthspeed".translate(), ConfigHelper.PROFILE.editorStampStickerWidthSpeed)
+                    it.setup("config_label_heightspeed".translate(), ConfigHelper.PROFILE.editorStampStickerHeightSpeed)
+                }
+            }
             else -> {
                 panel.add(configWindow.createJLabel("Coming soon", JLabel.CENTER, JLabel.CENTER))
                 for (i in 0..14) panel.add(JLabel())
