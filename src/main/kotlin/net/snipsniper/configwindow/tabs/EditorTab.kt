@@ -299,6 +299,13 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     it.setup("config_label_thickness".translate(), ConfigHelper.PROFILE.editorStampRectangleThickness)
                 }
             }
+            is EraserStamp -> {
+                Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.ERASER.index, constraints = gbc, onUpdate = onUpdate).also {
+                    it.setup("config_label_linepointdistance".translate(), ConfigHelper.PROFILE.editorStampEraserDistance)
+                    it.setup("config_label_brushsize".translate(), ConfigHelper.PROFILE.editorStampEraserSize)
+                    it.setup("config_label_brushsizespeed".translate(), ConfigHelper.PROFILE.editorStampEraserSizeSpeed)
+                }
+            }
             is StickerStamp -> {
                 Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.STICKER.index, constraints = gbc, onUpdate = onUpdate).also {
                     it.setup("config_label_startheight".translate(), ConfigHelper.PROFILE.editorStampStickerHeight)
