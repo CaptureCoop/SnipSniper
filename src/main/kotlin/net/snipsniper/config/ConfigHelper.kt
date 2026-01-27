@@ -83,6 +83,7 @@ class ConfigHelper {
       editorStampTextDefaultColor,
       editorStampTextDefaultFontSize,
       editorStampTextDefaultSpeed,
+      editorStampTextDefaultRotateSpeed,
       editorStampRectangleDefaultColor,
       editorStampRectangleWidth,
       editorStampRectangleHeight,
