@@ -175,6 +175,12 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         val sizeSlider = createEZModeSlider(5, 200, stamp.height) { v1, _ -> stamp.height = v1 }
         panel.add(sizeSlider)
         panel.add(createJSeperator())
+        panel.add(JLabel("Text Angle"))
+        val angleSliderFactor: Double = 25.0
+        val angleMinMax = (Math.PI * 2 * angleSliderFactor).toInt()
+        val angleSlider = createEZModeSlider(-angleMinMax, angleMinMax, ((stamp as TextStamp).angle * angleSliderFactor).toInt()) { v1, _ -> stamp.angle = (v1 / angleSliderFactor).toFloat() }
+        panel.add(angleSlider)
+        panel.add(createJSeperator())
         val textStamp = stamp as TextStamp
         panel.add(JLabel("font type"))
         val fontTypeDropdown = JComboBox<DropdownItem>()
@@ -245,6 +251,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
                     else -> { throw Exception("Bad font given ${textStamp.fontMode}") }
                 }
                 textInput.text = textStamp.text
+                angleSlider.value = (stamp.angle * angleSliderFactor).toInt()
             }
         }
         panel.add(textInput)

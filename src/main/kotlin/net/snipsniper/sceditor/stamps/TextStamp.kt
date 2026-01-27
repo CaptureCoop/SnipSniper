@@ -30,11 +30,17 @@ class TextStamp(private val config: Config, private val scEditorWindow: SCEditor
         }
     private var fontSize = 0
     private var fontSizeSpeed = 0
+    private var fontSizeRotateSpeed = 0f
     var text: String? = null
         set(value) {
             field = value
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
             scEditorWindow?.repaint()
+        }
+    var angle: Float = 0f
+        set(value) {
+            field = value
+            alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
         }
     private val nonTypeKeys = ArrayList<Int>()
     var fontMode = Font.PLAIN
@@ -66,9 +72,16 @@ class TextStamp(private val config: Config, private val scEditorWindow: SCEditor
     }
 
     override fun update(input: InputContainer?, mouseWheelDirection: Int, keyEvent: KeyEvent?) {
+        val isShiftPressed = input!!.isKeyPressed(KeyEvent.VK_SHIFT)
         when (mouseWheelDirection) {
-            1 -> fontSize -= fontSizeSpeed
-            -1 -> fontSize += fontSizeSpeed
+            1 -> {
+                if(isShiftPressed) angle -= fontSizeRotateSpeed
+                else fontSize -= fontSizeSpeed
+            }
+            -1 -> {
+                if(isShiftPressed) angle += fontSizeRotateSpeed
+                else fontSize += fontSizeSpeed
+            }
         }
         if (input!!.areKeysPressed(KeyEvent.VK_CONTROL, KeyEvent.VK_B)) {
             fontMode++
@@ -105,9 +118,12 @@ class TextStamp(private val config: Config, private val scEditorWindow: SCEditor
         val oldColor = g.paint
         g.font = Font("Arial", fontMode, drawFontSize)
         val width = g.fontMetrics.stringWidth(textToDraw)
+        val oldTransform = g.transform
+        g.rotate(angle.toDouble(), position!!.x.toDouble(), position!!.y.toDouble())
         g.paint = color!!.getGradientPaint(width, drawFontSize, position!!.x, position.y)
         lastDrawnWidth = g.fontMetrics.stringWidth(textToDraw)
         g.drawString(textToDraw, position.x - lastDrawnWidth / 2, position.y)
+        g.transform = oldTransform
         g.font = oldFont
         g.paint = oldColor
         if (isSaveRender) {
@@ -140,6 +156,7 @@ class TextStamp(private val config: Config, private val scEditorWindow: SCEditor
         color = config.getColor(ConfigHelper.PROFILE.editorStampTextDefaultColor)
         fontSize = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultFontSize)
         fontSizeSpeed = config.getInt(ConfigHelper.PROFILE.editorStampTextDefaultSpeed)
+        fontSizeRotateSpeed = config.getFloat(ConfigHelper.PROFILE.editorStampTextDefaultRotateSpeed)
     }
 
     private fun getReadableText() = if (text == null || text!!.isEmpty()) DEFAULT_TEXT else text!!

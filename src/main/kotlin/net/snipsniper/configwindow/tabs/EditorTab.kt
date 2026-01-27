@@ -278,6 +278,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.TEXT.index, constraints = gbc, onUpdate = onUpdate).also {
                     it.setup("config_label_defaultfontsize".translate(), ConfigHelper.PROFILE.editorStampTextDefaultFontSize)
                     it.setup("config_label_fontsizechangespeed".translate(), ConfigHelper.PROFILE.editorStampTextDefaultSpeed)
+                    it.setup(title = "config_label_angle_change_speed".translate(), configKey = ConfigHelper.PROFILE.editorStampTextDefaultRotateSpeed, min = 0.01, max = 5.0)
                 }
                 for (i in 0..5) panel.add(JPanel(), gbc) //Padding
                 //TODO: Draw it in the middle, possibly by giving TextStamp a getTextWidth() function and adding an edgecase to the Stamp Renderer, to move it to the left

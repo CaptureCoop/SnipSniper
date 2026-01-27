@@ -76,6 +76,7 @@
     "config_label_linepointdistance": "Line point distance",
     "config_label_defaultfontsize": "Default font size",
     "config_label_fontsizechangespeed": "Font size change speed",
+    "config_label_angle_change_speed": "Angle change speed",
 
     "config_sanitation_error": "Error",
     "config_sanitation_border_minmax": "Border size must be a number between 0 and 999!",
