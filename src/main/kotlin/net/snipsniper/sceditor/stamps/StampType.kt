@@ -10,7 +10,8 @@ enum class StampType(val title: String, val iconFile: String) {
     RECTANGLE("Rectangle", "rectangle"),
     SIMPLE_BRUSH("Simple Brush", "brush"),
     TEXT("Text", "text_tool"),
-    ERASER("Eraser", "ratzefummel");
+    ERASER("Eraser", "ratzefummel"),
+    STICKER("Sticker", "sticker");
 
     //This way we can rearrange enums without worrying about updating their index manually
     val index: Int
@@ -31,6 +32,7 @@ enum class StampType(val title: String, val iconFile: String) {
         TEXT -> TextStamp(config, scEditorWindow)
         RECTANGLE -> RectangleStamp(config)
         ERASER -> EraserStamp(scEditorWindow, config)
+        STICKER -> StickerStamp(config, scEditorWindow)
     }
 
     companion object {
