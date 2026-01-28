@@ -21,7 +21,7 @@ class CounterStamp(private val config: Config) : IStamp {
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
         }
     private var fontSizeModifier = 0f
-    private var count = 0
+    private var count = 1
     private var solidColor = false
     private val historyPoints = ArrayList<Int>()
     private val changeListeners = ArrayList<IStampUpdateListener?>()
@@ -133,7 +133,7 @@ class CounterStamp(private val config: Config) : IStamp {
     }
 
     override fun reset() {
-        count = 1
+        //count = 1 //TODO: Verify this doesnt cause issues. Done so that the "Defaults" button doesnt reset this
         color = config.getColor(ConfigHelper.PROFILE.editorStampCounterDefaultColor)
         width = config.getInt(ConfigHelper.PROFILE.editorStampCounterWidth)
         height = config.getInt(ConfigHelper.PROFILE.editorStampCounterHeight)
