@@ -32,6 +32,11 @@ class StickerStamp(private val config: Config, private val scEditorWindow: SCEdi
             field = value
             alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
         }
+    var angle: Float = 0f
+        set(value) {
+            field = value
+            alertChangeListeners(IStampUpdateListener.TYPE.SETTER)
+        }
     private var speedWidth = 0
     private var speedHeight = 0
     private var speed = 0
@@ -49,10 +54,12 @@ class StickerStamp(private val config: Config, private val scEditorWindow: SCEdi
     ) {
         val isShiftPressed = input!!.isKeyPressed(KeyEvent.VK_SHIFT)
         val isControlPressed = input!!.isKeyPressed(KeyEvent.VK_CONTROL)
+        val isQPressed = input!!.isKeyPressed(KeyEvent.VK_Q)
+
         //Adapt it to the circle logic im too tired for this right now. Clean all the stamps they are dusty.
-        val scaleWidth = isShiftPressed && !isControlPressed
-        val scaleHeight = !isShiftPressed && isControlPressed
-        val scaleAll = !isShiftPressed && !isControlPressed
+        val scaleWidth = isShiftPressed && !isControlPressed && !isQPressed
+        val scaleHeight = !isShiftPressed && isControlPressed && !isQPressed
+        val scaleAll = !isShiftPressed && !isControlPressed && !isQPressed
 
         val speedWidth = if(!scaleAll) speedWidth else (speed * (width / height.toFloat())).toInt()
         val speedHeight = if(!scaleAll) speedHeight else (speed)
@@ -61,10 +68,12 @@ class StickerStamp(private val config: Config, private val scEditorWindow: SCEdi
             -1 -> {
                 if(scaleAll || scaleWidth) width += speedWidth
                 if(scaleAll || scaleHeight) height += speedHeight
+                if(isQPressed) angle += 0.2f
             }
             1 -> {
                 if(scaleAll || scaleWidth) width -= speedWidth
                 if(scaleAll || scaleHeight) height -= speedHeight
+                if(isQPressed) angle -= 0.2f
             }
         }
         alertChangeListeners(IStampUpdateListener.TYPE.INPUT)
@@ -81,7 +90,10 @@ class StickerStamp(private val config: Config, private val scEditorWindow: SCEdi
     ): Rectangle? {
         g as Graphics2D
         g.setRenderingHints(Utils.getPixelatedRenderingHints())
+        val oldTransform = g.transform
+        g.rotate(angle.toDouble(), position!!.x.toDouble(), position!!.y.toDouble())
         g.drawImage(image, position!!.x - width / 2, position!!.y - height / 2, width, height, null)
+        g.transform = oldTransform
         return Rectangle()
     }
 
