@@ -21,7 +21,16 @@ import java.util.concurrent.CopyOnWriteArrayList
 import javax.imageio.ImageIO
 import javax.swing.*
 
-class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var initialTitle: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), Closable {
+class SCEditorWindow(
+    startImage: BufferedImage?,
+    x: Int, y: Int,
+    private var initialTitle: String,
+    config: Config,
+    isLeftToRight: Boolean,
+    saveLocation: String?,
+    inClipboard: Boolean,
+    isStandalone: Boolean
+) : SnipScopeWindow(), Closable {
     val config: Config
     var saveLocation: String?
     var inClipboard: Boolean
