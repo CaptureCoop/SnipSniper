@@ -6,6 +6,7 @@ import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.scviewer.SCViewerWindow
 import net.snipsniper.utils.*
 import net.snipsniper.utils.debug.LangDebugWindow
+import net.snipsniper.utils.debug.MonitorDebugWindow
 import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.*
 import java.awt.event.FocusAdapter
@@ -60,6 +61,7 @@ class Popup(private val sniper: Sniper): JDialog() {
         if(SnipSniper.isDebug()) {
             PopupMenu("Debug", "icons/debug.png".getImage()).also { pm ->
                 pm.add(PopupMenuButton("Console", "icons/console.png", this, { LegibleLogger.enableConsole(true) }, menus))
+                pm.add(PopupMenuButton(title = MonitorDebugWindow.WINDOW_TITLE, iconPath = "icons/monitor.png", popup = this, onClick = { MonitorDebugWindow() }, closeWhenClicked = menus))
                 pm.add(PopupMenuButton("Open log folder", "icons/folder.png", this, { FileUtils.openFolder(SnipSniper.logFolder) }, menus))
                 pm.add(PopupMenuButton("Log Build Info", "icons/monitor.png", this, { SnipSniper.buildInfo.log() }, menus))
                 pm.add(PopupMenuButton("Log System Info", "icons/monitor.png", this, { SystemInfo.log() }, menus))

@@ -33,9 +33,11 @@ open class SnipScopeRenderer(private val snipScopeWindow: SnipScopeWindow): JPan
         val zoom = snipScopeWindow.zoom
         lastRectangle = Rectangle(x, y, (optimalDimension.width * zoom).toInt(), (optimalDimension.height * zoom).toInt())
         g.drawImage(image, lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height, this)
-        g.setColor(Color.BLACK)
-        //TODO: add config option for outline
-        g.drawRect(lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height)
+
+        if(snipScopeWindow.drawOutline) {
+            g.color = Color.BLACK
+            g.drawRect(lastRectangle.x, lastRectangle.y, lastRectangle.width, lastRectangle.height)
+        }
     }
 
     fun renderUI(g: Graphics2D) {

@@ -223,6 +223,10 @@ class Utils {
             else if(mb > 0)     "$mb MB"
             else                "$kb KB"
         }
-    }
 
+        fun centerWindowLocation(window: JFrame, device: GraphicsDevice = window.graphicsConfiguration.device) {
+            val bounds = device.defaultConfiguration.bounds
+            window.setLocation(bounds.x + (bounds.width / 2) - (window.width / 2), bounds.y + (bounds.height / 2) - (window.height / 2))
+        }
+    }
 }

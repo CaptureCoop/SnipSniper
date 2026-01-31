@@ -72,7 +72,6 @@ class SnipSniper {
         fun start(args: Array<String>) {
             this.args = args
 
-            System.setProperty("sun.java2d.uiScale.enabled", "false")
             System.setProperty("sun.java2d.uiScale", "1")
 
             LegibleLogger.enabled = true
