@@ -67,8 +67,13 @@ class EraserStamp(private val scEditorWindow: SCEditorWindow?, private val confi
             }
         }
         if (!isSaveRender) {
+            //TODO: Make this prettier
             g.color = Color.WHITE
             g.drawOval(position!!.x - newSize / 2, position.y - newSize / 2, newSize, newSize)
+            g.color = Color.BLACK
+            val newSize2 = newSize + 2
+            g.drawOval(position!!.x - newSize2 / 2, position.y - newSize2 / 2, newSize2, newSize2)
+
         }
         return Rectangle(position!!.x - newSize / 2, position.y - newSize / 2, newSize, newSize)
     }

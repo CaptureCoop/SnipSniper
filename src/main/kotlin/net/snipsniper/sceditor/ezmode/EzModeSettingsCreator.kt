@@ -3,6 +3,7 @@ package net.snipsniper.sceditor.ezmode
 import net.snipsniper.SnipSniper
 import net.snipsniper.SnipSniper.Companion.getNewThread
 import net.snipsniper.configwindow.StampJPanel
+import net.snipsniper.configwindow.iconwindow.IconWindow
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.sceditor.stamps.*
 import net.snipsniper.utils.*
@@ -33,9 +34,11 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
             StampType.TEXT -> text(panel, stamp, width)
             StampType.RECTANGLE -> rectangle(panel, stamp, width)
             StampType.ERASER -> eraser(panel, stamp, width)
+            StampType.STICKER -> sticker(panel, stamp, width)
+
         }
         panel.add(createJSeperator())
-        panel.add(JLabel("preview"))
+        panel.add(JLabel("Preview"))
         stampPreviewPanel = StampJPanel(stamp, scEditorWindow.originalImage, 10)
         Dimension(scEditorWindow.ezModeWidth, scEditorWindow.ezModeWidth).also { dim ->
             stampPreviewPanel.preferredSize = dim
@@ -43,6 +46,13 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
             stampPreviewPanel.maximumSize = dim
         }
         panel.add(stampPreviewPanel)
+        panel.add(JButton("Defaults").apply {
+            addActionListener {
+                stamp.reset()
+                stampPreviewPanel.repaint()
+                addSettingsToPanel(panel, stamp, width) //TODO: Analyze if this will or can lead to a stackoverflow
+            }
+        })
         panel.revalidate()
         panel.repaint()
         lastPanel = panel
@@ -256,6 +266,30 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
         }
         panel.add(textInput)
         addColorSettings(panel, stamp, width)
+    }
+
+    private fun sticker(panel: JPanel, stamp: IStamp, width: Int) {
+        panel.add(JButton("Select Sticker").apply {
+            addActionListener {
+                val iconWindow = IconWindow("Select Stickers", scEditorWindow)
+                iconWindow.onSelect = {
+                    (stamp as StickerStamp).also { stickerStamp ->
+                        stickerStamp.image = ImageUtils.getIconDynamically(it)!!.toBufferedImage()
+                        stickerStamp.reset()
+                    }
+                }
+            }
+        })
+        panel.add(createJSeperator())
+        addWidthHeightSettings(panel, stamp)
+        panel.add(JLabel("Sticker Angle"))
+        val angleSliderFactor: Double = 25.0
+        val angleMinMax = (Math.PI * 2 * angleSliderFactor).toInt()
+        val angleSlider = createEZModeSlider(-angleMinMax, angleMinMax, ((stamp as StickerStamp).angle * angleSliderFactor).toInt()) { v1, _ -> stamp.angle = (v1 / angleSliderFactor).toFloat() }
+        panel.add(angleSlider)
+        stamp.addChangeListener {
+            angleSlider.value = (stamp.angle * angleSliderFactor).toInt()
+        }
     }
 
     private fun rectangle(panel: JPanel, stamp: IStamp, width: Int) {

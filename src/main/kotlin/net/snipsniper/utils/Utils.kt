@@ -85,11 +85,16 @@ class Utils {
             return JSONObject(text).getString("sha")
         }
 
-        fun getRenderingHints(): RenderingHints {
-            return RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON).also {
-                it[RenderingHints.KEY_RENDERING] = RenderingHints.VALUE_RENDER_QUALITY
-            }
-        }
+        fun getRenderingHints() = RenderingHints(mapOf(
+            RenderingHints.KEY_ANTIALIASING to RenderingHints.VALUE_ANTIALIAS_ON,
+            RenderingHints.KEY_RENDERING to RenderingHints.VALUE_RENDER_QUALITY,
+        ))
+
+        fun getPixelatedRenderingHints() = RenderingHints(mapOf(
+            RenderingHints.KEY_ANTIALIASING to RenderingHints.VALUE_ANTIALIAS_OFF,
+            RenderingHints.KEY_RENDERING to RenderingHints.VALUE_RENDER_QUALITY,
+            RenderingHints.KEY_INTERPOLATION to RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR,
+        ))
 
         fun getDisabledColor(): Color = Color(128, 128, 128, 100)
 

@@ -95,6 +95,12 @@ class ConfigHelper {
       editorStampEraserDistance,
       editorStampEraserSize,
       editorStampEraserSizeSpeed,
+      editorStampStickerHeight,
+      editorStampStickerWidthMinimum,
+      editorStampStickerHeightMinimum,
+      editorStampStickerSpeed,
+      editorStampStickerWidthSpeed,
+      editorStampStickerHeightSpeed,
    }
    enum class BUILDINFO {
       type,
