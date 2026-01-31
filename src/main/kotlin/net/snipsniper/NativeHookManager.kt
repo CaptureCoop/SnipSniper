@@ -73,8 +73,9 @@ object NativeHookManager {
     }
 
     fun unregister(clazz: Any) {
+        if(!profiles.containsKey(clazz)) return
         profiles.remove(clazz)?.unregister()
-        if(profiles.size == 0) {
+        if(profiles.isEmpty()) {
             LegibleLogger.info("All active NativeHookInstances have been killed. Unregistering NativeHook...")
             GlobalScreen.unregisterNativeHook()
         }
