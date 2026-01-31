@@ -31,6 +31,8 @@ open class SnipScopeWindow : JFrame() {
     var isRequireMovementKeyForZoom = true
     val uiComponents = ArrayList<SnipScopeUIComponent>()
     var isEnableInteraction = true
+    //TODO: add config option for outline
+    var drawOutline: Boolean = true
 
     fun init(startImage: BufferedImage, renderer: SnipScopeRenderer, listener: SnipScopeListener?) {
         this.renderer = renderer
