@@ -45,6 +45,11 @@ object ImageUtils {
         return BufferedImage(width, height, type).also { action.invoke(it.graphics) }
     }
 
+    //TODO: V2 seems like a good api change, but make sure first that this wont cause issues!
+    fun newBufferedImageV2(width: Int, height: Int, type: Int = BufferedImage.TYPE_INT_ARGB, action: BufferedImage.(Graphics) -> Unit): BufferedImage {
+        return BufferedImage(width, height, type).also { action.invoke(it, it.graphics) }
+    }
+
     @Synchronized fun copyImage(source: BufferedImage) = newBufferedImage(source.width, source.height, source.type) {
         it.drawImage(source, 0, 0, source.width, source.height, null)
     }
