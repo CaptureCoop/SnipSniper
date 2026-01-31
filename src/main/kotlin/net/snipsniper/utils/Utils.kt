@@ -139,7 +139,7 @@ class Utils {
         //TODO: This should probably have a better name, since this just prepares screenshots no?
         fun constructFilename(format: String, modifier: String): String {
             var filename = StringUtils.formatDateTimeString(format)
-            filename = filename.replace("%random%", StringUtils.getRandomString(length = 10, lowercaseLetters = true, uppercaseLetters = true, useNumbers = true))
+            filename = filename.replace("%random%", StringUtils.getRandomString(length = 10, lowercaseLetters = true, uppercaseLetters = true, numbers = true))
             return "${filename}${modifier}.png"
         }
 
