@@ -228,5 +228,12 @@ class Utils {
             val bounds = device.defaultConfiguration.bounds
             window.setLocation(bounds.x + (bounds.width / 2) - (window.width / 2), bounds.y + (bounds.height / 2) - (window.height / 2))
         }
+
+        fun centerWindowOnWindow(window: JFrame, parent: JFrame) {
+            window.setLocation(
+                parent.x + (parent.width / 2) - (window.width / 2),
+                parent.y + (parent.height / 2) - (window.height / 2)
+            )
+        }
     }
 }
