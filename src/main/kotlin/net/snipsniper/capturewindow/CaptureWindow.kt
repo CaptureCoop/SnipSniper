@@ -176,6 +176,10 @@ class CaptureWindow(val sniperInstance: Sniper) : JFrame(), WindowListener {
                     posY -= finalImg.height
                     leftToRight = true
                 }
+
+                posX += location.x
+                posY += location.y
+
                 SCEditorWindow(finalImg, posX, posY, "SnipSniper Editor", config, leftToRight, finalLocation, inClipboard, false)
             }
         }
