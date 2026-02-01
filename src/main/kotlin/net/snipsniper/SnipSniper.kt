@@ -15,7 +15,6 @@ import org.capturecoop.legiblelogger.LegibleLogFilter
 import org.capturecoop.legiblelogger.LegibleLogLevel
 import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.Desktop
-import java.awt.GraphicsEnvironment
 import java.awt.SystemTray
 import java.awt.Toolkit
 import java.awt.Window
@@ -135,8 +134,6 @@ class SnipSniper {
             }
 
             ImageManager.loadResources()
-
-            System.setProperty("sun.java2d.uiScale", "1.0")
 
             when (config.getString(ConfigHelper.MAIN.theme)) {
                 "dark" -> UIManager.setLookAndFeel(FlatDarculaLaf())
