@@ -82,7 +82,7 @@ class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
             IconButton(file.getPathWithLocation(), file.location).also { btn ->
                 btn.onSelect =  {
                     onSelect?.invoke(btn.id)
-                    dispose()
+                    close()
                 }
                 btn.onDelete = { populateButtons(content, type) }
                 when (file.location) {
