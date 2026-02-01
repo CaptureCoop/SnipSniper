@@ -21,7 +21,6 @@ import javax.swing.*
 
 class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
     private enum class IconType {GENERAL, RANDOM, CUSTOM}
-    private val allowedExtensions = listOf("png", "gif", "jpg", "jpeg")
     private val rows = 4
     var onSelect: ((String) -> (Unit))? = null
     var onClose: (() -> (Unit))? = null
@@ -121,7 +120,7 @@ class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
                         parent = this@IconWindow,
                         type = SnipFileChooser.SelectionType.FILES_ONLY,
                         multiFileSelection = true,
-                        fileFilters = listOf(SnipFileChooser.Filter("Images", allowedExtensions))
+                        fileFilters = listOf(SnipFileChooser.IMAGE_FILTER)
                     ) ?: return@addActionListener
                     result.forEach(this::loadFile)
                     populateButtons(content, type)
