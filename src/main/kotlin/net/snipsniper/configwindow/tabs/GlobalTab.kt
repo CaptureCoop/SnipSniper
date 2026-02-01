@@ -1,6 +1,8 @@
 package net.snipsniper.configwindow.tabs
 
+import net.snipsniper.SnipUIManager
 import net.snipsniper.SnipSniper
+import net.snipsniper.Theme
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.configwindow.ConfigWindow
@@ -81,7 +83,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
             }
             configWindow.refreshConfigFiles()
             SnipSniper.refreshGlobalConfigFromDisk()
-            SnipSniper.refreshTheme()
+            SnipUIManager.setTheme(Theme.fromConfig(config))
             SnipSniper.resetProfiles()
             configWindow.close()
             SnipSniper.openConfigWindow(null, ConfigWindow.PAGE.GlobalPanel)
@@ -156,7 +158,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     uiScalingSpinner.value = uiScalingCurrent.toDouble()
                 } else {
                     uiScalingSpinner.isEnabled = false
-                    uiScalingSpinner.value = SnipSniper.getSysUIScale().toDouble()
+                    uiScalingSpinner.value = SnipUIManager.getSysUIScale().toDouble()
                 }
             }
             refreshFunc()
@@ -236,7 +238,7 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 SnipSniper.openConfigWindow(configWindow.lastSelectedConfig, ConfigWindow.PAGE.GlobalPanel)
             }
             if(didUIScaleChange) {
-                SnipSniper.setUIScale()
+                SnipUIManager.setUIScale()
             }
             saveButtonUpdate!!.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
         }
@@ -251,6 +253,6 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         if (didDebugChange && !config.getBool(ConfigHelper.MAIN.debug)) LegibleLogger.enableConsole(false)
         SnipSniper.config.loadFromConfig(config)
         config.save()
-        if (didThemeChange) SnipSniper.refreshTheme()
+        if (didThemeChange) SnipUIManager.setTheme(Theme.fromConfig(config))
     }
 }

@@ -1,7 +1,5 @@
 package net.snipsniper
 
-import com.formdev.flatlaf.FlatDarculaLaf
-import com.formdev.flatlaf.FlatIntelliJLaf
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.configwindow.ConfigWindow
@@ -16,18 +14,12 @@ import org.capturecoop.legiblelogger.LegibleLogLevel
 import org.capturecoop.legiblelogger.LegibleLogger
 import java.awt.Desktop
 import java.awt.SystemTray
-import java.awt.Toolkit
-import java.awt.Window
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.util.*
 import javax.imageio.ImageIO
-import javax.swing.JDialog
-import javax.swing.JFrame
-import javax.swing.SwingUtilities
-import javax.swing.UIManager
 import kotlin.system.exitProcess
 
 
@@ -135,17 +127,7 @@ class SnipSniper {
 
             ImageManager.loadResources()
 
-            when (config.getString(ConfigHelper.MAIN.theme)) {
-                "dark" -> UIManager.setLookAndFeel(FlatDarculaLaf())
-                else -> UIManager.setLookAndFeel(FlatIntelliJLaf())
-            }
-            UIManager.put("ScrollBar.showButtons", true)
-            UIManager.put("ScrollBar.width", 16)
-            UIManager.put("TabbedPane.showTabSeparators", true)
-
-            JFrame.setDefaultLookAndFeelDecorated(true)
-            JDialog.setDefaultLookAndFeelDecorated(true)
-            setUIScale()
+            SnipUIManager.init()
 
             LangManager.load()
             WikiManager.load(LangManager.getLanguage())
@@ -264,13 +246,6 @@ class SnipSniper {
 
         fun setProfile(id: Int, sniper: Sniper) { profiles[id] = sniper }
 
-        fun refreshTheme() {
-            when(config.getString(ConfigHelper.MAIN.theme)) {
-                "dark" -> UIManager.setLookAndFeel(FlatDarculaLaf())
-                else -> UIManager.setLookAndFeel(FlatIntelliJLaf())
-            }
-        }
-
         fun getNewThread(f: () -> (Unit)): Thread = Thread { f.invoke() }.also { thread -> thread.uncaughtExceptionHandler = uncaughtExceptionHandler }
 
         fun restart() {
@@ -288,31 +263,5 @@ class SnipSniper {
         fun isDebug(): Boolean = config.getBool(ConfigHelper.MAIN.debug)
 
         fun getVersionString(): String = buildInfo.version.toString()
-
-        fun getSysUIScale(): Float = Toolkit.getDefaultToolkit().screenResolution / 96.toFloat()
-
-        fun calculateEffectiveUIScale(size: Int): Int = (size * getEffectiveUIScale()).toInt()
-
-        fun getEffectiveUIScale(): Float {
-            val scaleValue = config.getString(ConfigHelper.MAIN.uiScaling)
-            return if(scaleValue == "auto") getSysUIScale() else scaleValue.toFloat()
-        }
-
-        fun setUIScale() {
-            val scaleValue = config.getString(ConfigHelper.MAIN.uiScaling).let {
-                if(it == "auto") getSysUIScale() else it.toFloat()
-            }
-            LegibleLogger.info("Setting FlatLaf Scale to $scaleValue")
-            System.setProperty("flatlaf.uiScale", scaleValue.toString())
-            UIManager.setLookAndFeel(UIManager.getLookAndFeel())
-
-            for (w in Window.getWindows()) {
-                SwingUtilities.updateComponentTreeUI(w)
-                w.pack()
-                w.invalidate()
-                w.validate()
-                w.repaint()
-            }
-        }
     }
 }

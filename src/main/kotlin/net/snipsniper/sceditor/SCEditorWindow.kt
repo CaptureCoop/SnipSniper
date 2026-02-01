@@ -1,5 +1,6 @@
 package net.snipsniper.sceditor
 
+import net.snipsniper.SnipUIManager
 import net.snipsniper.SnipSniper
 import net.snipsniper.StatsManager
 import net.snipsniper.config.Config
@@ -57,8 +58,8 @@ class SCEditorWindow(
             if(value) updateEzUI()
         }
     private val ezModeSettingsCreator = EzModeSettingsCreator(this)
-    val ezModeWidth = SnipSniper.calculateEffectiveUIScale(200)
-    val ezModeHeight = SnipSniper.calculateEffectiveUIScale(40)
+    val ezModeWidth = SnipUIManager.calculateEffectiveUIScale(200)
+    val ezModeHeight = SnipUIManager.calculateEffectiveUIScale(40)
     private val ezModeStampPanel = JPanel()
     private val ezModeTitlePanel = JPanel()
     private val ezModeTitle = JLabel("Marker")
@@ -364,7 +365,7 @@ class SCEditorWindow(
     private fun addEZModeStampButton(title: String?, iconName: String?, theme: String?, stampIndex: Int) {
         ezModeStampPanelTabs.addTab(title, null)
         "ui/editor/$theme/$iconName.png".getImage().also { ezIconMarker ->
-            ezModeStampPanelTabs.setTabComponentAt(stampIndex, EzModeStampTab(ezIconMarker, SnipSniper.calculateEffectiveUIScale(32), this, stampIndex))
+            ezModeStampPanelTabs.setTabComponentAt(stampIndex, EzModeStampTab(ezIconMarker, SnipUIManager.calculateEffectiveUIScale(32), this, stampIndex))
             ezModeStampPanelTabs.setIconAt(stampIndex, ImageIcon(ezIconMarker))
         }
     }
@@ -372,7 +373,7 @@ class SCEditorWindow(
     override fun resizeTrigger() {
         super.resizeTrigger()
         if (ezMode) {
-            val titleMargin = SnipSniper.calculateEffectiveUIScale(10)
+            val titleMargin = SnipUIManager.calculateEffectiveUIScale(10)
             var ezModeWidthToUse = ezModeWidth
             if (ezModeStampSettingsScrollPane.verticalScrollBar.isVisible) ezModeWidthToUse += ezModeStampSettingsScrollPane.verticalScrollBar.width
             ezModeTitlePanel.setBounds(0, 0, ezModeWidthToUse, ezModeHeight)

@@ -1,5 +1,6 @@
 package net.snipsniper.utils
 
+import net.snipsniper.SnipUIManager
 import net.snipsniper.SnipSniper
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
@@ -222,5 +223,5 @@ object ImageUtils {
         it.drawImage(image, 0, image.height, image.width, -image.height, null)
     }
 
-    fun getScaled16Px(): Int = SnipSniper.calculateEffectiveUIScale(16)
+    fun getScaled16Px(): Int = SnipUIManager.calculateEffectiveUIScale(16)
 }
