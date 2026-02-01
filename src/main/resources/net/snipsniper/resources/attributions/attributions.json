@@ -1,0 +1,52 @@
+{
+  "thirdparty": [
+    {
+      "name": "JNativeHook",
+      "url": "https://github.com/kwhat/jnativehook",
+      "license": {
+        "short": "GNU Lesser General Public License",
+        "file": "license_jnativehook.txt"
+      }
+    },
+    {
+      "name": "FlatLaf",
+      "url": "https://github.com/JFormDesigner/FlatLaf",
+      "license": {
+        "short": "Apache-2.0 license",
+        "file": "license_flatlaf.txt"
+      }
+    },
+    {
+      "name": "org.json",
+      "url": "https://github.com/stleary/JSON-java",
+      "license": {
+        "short": "Public Domain",
+        "file": "license_orgjson.txt"
+      }
+    },
+    {
+      "name": "mslinks",
+      "url": "https://github.com/DmitriiShamrikov/mslinks",
+      "license": {
+        "short": "WTFPL license",
+        "file": "license_mslinks.txt"
+      }
+    },
+    {
+      "name": "Commons Text",
+      "url": "https://commons.apache.org/proper/commons-text/",
+      "license": {
+        "short": "Apache-2.0 license",
+        "file": "license_commonstext.txt"
+      }
+    },
+    {
+      "name": "Commons Lang",
+      "url": "https://commons.apache.org/proper/commons-lang/",
+      "license": {
+        "short": "Apache-2.0 license",
+        "file": "license_commonslang.txt"
+      }
+    }
+  ]
+}
