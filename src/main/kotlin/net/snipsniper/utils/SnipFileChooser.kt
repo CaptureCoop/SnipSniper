@@ -6,6 +6,8 @@ import java.io.File
 import javax.swing.JFileChooser
 
 object SnipFileChooser {
+    val IMAGE_FILTER = Filter("Images", listOf("png", "gif", "jpg", "jpeg"))
+
     data class Filter(
         val description: String,
         val extensions: List<String>
