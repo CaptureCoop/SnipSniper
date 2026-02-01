@@ -14,6 +14,11 @@ class CommandLineHelper {
     var viewerFile: String? = null
     private var ignoreNextArg = false
 
+    constructor()
+    constructor(args: Array<String>) {
+        handle(args)
+    }
+
     fun handle(args: Array<String>) {
         if(args.isEmpty()) return
         var doExit = false

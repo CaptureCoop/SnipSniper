@@ -73,12 +73,10 @@ class SnipSniper {
             val launchType = Utils.getLaunchType(System.getProperty("launchType"))
             platformType = Utils.getPlatformType(System.getProperty("platformType"))
 
-            Config("buildinfo.cfg", "buildinfo.cfg", true).also {
-                buildInfo = BuildInfo(it)
-            }
+            buildInfo = BuildInfo(Config("buildinfo.cfg", "buildinfo.cfg", true))
 
             //This is done here, not further below so that if we run a command like -version we dont save anything to disk!
-            val cmdline = CommandLineHelper().also { it.handle(args) }
+            val cmdline = CommandLineHelper(args)
 
             //Set folders
             kotlin.run {
