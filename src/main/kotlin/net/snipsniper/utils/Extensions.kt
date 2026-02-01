@@ -4,17 +4,13 @@ import net.snipsniper.ImageManager
 import net.snipsniper.LangManager
 import java.awt.BasicStroke
 import java.awt.Color
-import java.awt.Font
-import java.awt.GradientPaint
-import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.Image
-import java.awt.RenderingHints
-import java.awt.Shape
 import java.awt.font.TextLayout
 import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
 import javax.swing.ImageIcon
+import javax.swing.JFrame
 
 //Avoid having advanced logic here and put them into fitting Utils packages instead
 
@@ -73,4 +69,8 @@ fun Graphics2D.drawOutlineString(
 
     color = textColor;
     fill(outline);
+}
+
+fun JFrame.centerOn(window: JFrame) {
+    Utils.centerWindowOnWindow(this, window)
 }

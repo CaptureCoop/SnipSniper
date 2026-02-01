@@ -94,6 +94,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 row3_stampPreview.stamp = newStamp
                 setupStampConfigPanel(row3_stampConfig, newStamp, row3_stampPreview, config, onUpdate)
                 saveButtonUpdate?.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                revalidate()
             }
         }
         options.add(stampDropdown, gbc)
