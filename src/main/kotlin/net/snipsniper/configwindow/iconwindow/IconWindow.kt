@@ -116,12 +116,7 @@ class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
                 newBtn.minimumSize = sizeDim
                 newBtn.maximumSize = sizeDim
                 newBtn.addActionListener {
-                    val result = SnipFileChooser.openSystemFileChooser(
-                        parent = this@IconWindow,
-                        type = SnipFileChooser.SelectionType.FILES_ONLY,
-                        multiFileSelection = true,
-                        fileFilters = listOf(SnipFileChooser.IMAGE_FILTER)
-                    ) ?: return@addActionListener
+                    val result = SnipFileChooser.openSystemMultipleImages(parent = this@IconWindow) ?: return@addActionListener
                     result.forEach(this::loadFile)
                     populateButtons(content, type)
                 }

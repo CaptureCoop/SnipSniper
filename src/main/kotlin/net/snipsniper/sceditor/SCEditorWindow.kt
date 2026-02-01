@@ -167,12 +167,7 @@ class SCEditorWindow(
                 JMenuItem("Open").also {
                     it.icon = sizeImage("icons/questionmark.png")
                     it.addActionListener {
-                        val file = SnipFileChooser.openSystemFileChooser(
-                            parent = this,
-                            multiFileSelection = false,
-                            type = SnipFileChooser.SelectionType.FILES_ONLY,
-                            fileFilters = listOf(SnipFileChooser.IMAGE_FILTER)
-                        )?.firstOrNull() ?: return@addActionListener
+                        val file = SnipFileChooser.openSystemImage(parent = this) ?: return@addActionListener
                         setImage(ImageIO.read(file), resetHistory = true, isNewImage = true)
                     }
                     parent.add(it)

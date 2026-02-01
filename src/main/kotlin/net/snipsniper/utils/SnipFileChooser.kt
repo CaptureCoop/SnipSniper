@@ -34,6 +34,32 @@ object SnipFileChooser {
         return null
     }
 
+    fun openSystemImage(
+        path: String = File("").absolutePath,
+        parent: Component? = null
+    ): File? {
+        return openSystemFileChooser(
+            path = path,
+            parent = parent,
+            type = SelectionType.FILES_ONLY,
+            multiFileSelection = false,
+            fileFilters = listOf(IMAGE_FILTER)
+        )?.firstOrNull()
+    }
+
+    fun openSystemMultipleImages(
+        path: String = File("").absolutePath,
+        parent: Component? = null,
+    ): Array<File>? {
+        return openSystemFileChooser(
+            path = path,
+            parent = parent,
+            type = SelectionType.FILES_ONLY,
+            multiFileSelection = true,
+            fileFilters = listOf(IMAGE_FILTER)
+        )
+    }
+
     fun openSystemFileChooser(
         path: String = File("").absolutePath,
         multiFileSelection: Boolean = false,

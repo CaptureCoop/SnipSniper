@@ -15,12 +15,7 @@ class SCViewerListener(private val scViewerWindow: SCViewerWindow): SnipScopeLis
     override fun mouseReleased(mouseEvent: MouseEvent) {
         super.mouseReleased(mouseEvent)
         if(scViewerWindow.isDefaultImage()) {
-            val file = SnipFileChooser.openSystemFileChooser(
-                parent = scViewerWindow,
-                multiFileSelection = false,
-                type = SnipFileChooser.SelectionType.FILES_ONLY,
-                fileFilters = listOf(SnipFileChooser.IMAGE_FILTER)
-            )?.firstOrNull() ?: return
+            val file = SnipFileChooser.openSystemImage(parent = scViewerWindow) ?: return
             scViewerWindow.setImage(file)
         }
     }

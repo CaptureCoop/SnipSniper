@@ -72,12 +72,7 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
 
         //TODO: is this ever called?
         if(scEditorWindow.isDefaultImage()) {
-            val file = SnipFileChooser.openSystemFileChooser(
-                parent = scEditorWindow,
-                multiFileSelection = false,
-                type = SnipFileChooser.SelectionType.FILES_ONLY,
-                fileFilters = listOf(SnipFileChooser.IMAGE_FILTER)
-            )?.firstOrNull() ?: return
+            val file = SnipFileChooser.openSystemImage(parent = scEditorWindow) ?: return
             scEditorWindow.setImage(ImageIcon(file.absolutePath).image.toBufferedImage(), resetHistory = true, isNewImage = true)
         }
 
