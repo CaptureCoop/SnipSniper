@@ -3,7 +3,6 @@ package net.snipsniper.utils
 import com.formdev.flatlaf.util.SystemFileChooser
 import java.awt.Component
 import java.io.File
-import javax.swing.JComponent
 import javax.swing.JFileChooser
 
 object SnipFileChooser {
@@ -15,6 +14,22 @@ object SnipFileChooser {
         FILES_ONLY(JFileChooser.FILES_ONLY, SystemFileChooser.FILES_ONLY),
         DIRECTORY_ONLY(JFileChooser.DIRECTORIES_ONLY, SystemFileChooser.DIRECTORIES_ONLY),
         FILES_AND_DIRECTORIES(JFileChooser.FILES_AND_DIRECTORIES, SystemFileChooser.DIRECTORIES_ONLY)
+    }
+
+    fun saveSystemFileChooser(
+        file: File = File(""),
+        parent: Component? = null,
+        fileFilters: List<Filter> = listOf()
+    ): File? {
+        val chooser = SystemFileChooser()
+        chooser.selectedFile = file
+        fileFilters.forEach { filter ->
+            chooser.addChoosableFileFilter(SystemFileChooser.FileNameExtensionFilter(filter.description, *filter.extensions.toTypedArray()))
+        }
+        if (chooser.showSaveDialog(parent) == SystemFileChooser.APPROVE_OPTION) {
+            return chooser.selectedFile
+        }
+        return null
     }
 
     fun openSystemFileChooser(
