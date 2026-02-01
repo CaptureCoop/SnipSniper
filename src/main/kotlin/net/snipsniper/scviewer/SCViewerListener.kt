@@ -1,9 +1,9 @@
 package net.snipsniper.scviewer
 
 import net.snipsniper.snipscope.SnipScopeListener
+import net.snipsniper.utils.SnipFileChooser
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
-import javax.swing.JFileChooser
 
 class SCViewerListener(private val scViewerWindow: SCViewerWindow): SnipScopeListener(scViewerWindow) {
     override fun mousePressed(mouseEvent: MouseEvent) {
@@ -15,10 +15,8 @@ class SCViewerListener(private val scViewerWindow: SCViewerWindow): SnipScopeLis
     override fun mouseReleased(mouseEvent: MouseEvent) {
         super.mouseReleased(mouseEvent)
         if(scViewerWindow.isDefaultImage()) {
-            JFileChooser().also {
-                if(it.showOpenDialog(scViewerWindow) == JFileChooser.APPROVE_OPTION)
-                    scViewerWindow.setImage(it.selectedFile)
-            }
+            val file = SnipFileChooser.openSystemImage(parent = scViewerWindow) ?: return
+            scViewerWindow.setImage(file)
         }
     }
 

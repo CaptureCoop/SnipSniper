@@ -11,17 +11,16 @@ import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
 import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetDropEvent
-import java.awt.event.*
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import javax.imageio.ImageIO
 import javax.swing.*
-import javax.swing.filechooser.FileFilter
 
 class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
     private enum class IconType {GENERAL, RANDOM, CUSTOM}
-    private val allowedExtensions = listOf(".png", ".gif", ".jpg", ".jpeg")
     private val rows = 4
     var onSelect: ((String) -> (Unit))? = null
     var onClose: (() -> (Unit))? = null
@@ -82,7 +81,7 @@ class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
             IconButton(file.getPathWithLocation(), file.location).also { btn ->
                 btn.onSelect =  {
                     onSelect?.invoke(btn.id)
-                    dispose()
+                    close()
                 }
                 btn.onDelete = { populateButtons(content, type) }
                 when (file.location) {
@@ -117,19 +116,9 @@ class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
                 newBtn.minimumSize = sizeDim
                 newBtn.maximumSize = sizeDim
                 newBtn.addActionListener {
-                    JFileChooser().also { chooser ->
-                        object : FileFilter() {
-                            override fun accept(pathname: File) = if(pathname.isDirectory) true else allowedExtensions.any { pathname.name.lowercase().endsWith(it) }
-                            override fun getDescription() = "Images"
-                        }.also { filter ->
-                            chooser.addChoosableFileFilter(filter)
-                            chooser.fileFilter = filter
-                        }
-                        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                            loadFile(chooser.selectedFile)
-                            populateButtons(content, type)
-                        }
-                    }
+                    val result = SnipFileChooser.openSystemMultipleImages(parent = this@IconWindow) ?: return@addActionListener
+                    result.forEach(this::loadFile)
+                    populateButtons(content, type)
                 }
                 content.add(newBtn, gbc)
             }
