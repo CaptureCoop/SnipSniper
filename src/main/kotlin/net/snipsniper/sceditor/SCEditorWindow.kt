@@ -194,7 +194,7 @@ class SCEditorWindow(
                 topBar.add(parent)
             }
             JMenu("Edit").also { parent ->
-                parent.icon = sizeImage("icons/editor.png")
+                parent.icon = sizeImage("icons/edit.png")
                 JMenuItem("Config").also {
                     it.icon = sizeImage("icons/config.png")
                     it.addActionListener { openConfigWindow() }
