@@ -1,11 +1,12 @@
 package net.snipsniper.sceditor.stamps
 
-import net.snipsniper.ImageManager
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.SCEditorWindow
+import net.snipsniper.utils.ImageUtils
 import net.snipsniper.utils.InputContainer
 import net.snipsniper.utils.Utils
+import net.snipsniper.utils.toBufferedImage
 import org.capturecoop.colorcomposer.ComposedColor
 import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.Graphics
@@ -41,7 +42,7 @@ class StickerStamp(private val config: Config, private val scEditorWindow: SCEdi
     private var speedHeight = 0
     private var speed = 0
 
-    var image: BufferedImage = ImageManager.getImage("icons/random/dude.png")
+    var image: BufferedImage = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.editorStampStickerDefaultIcon))!!.toBufferedImage()
 
     init {
         reset()
