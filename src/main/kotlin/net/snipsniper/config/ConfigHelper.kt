@@ -95,6 +95,7 @@ class ConfigHelper {
       editorStampEraserDistance,
       editorStampEraserSize,
       editorStampEraserSizeSpeed,
+      editorStampStickerDefaultIcon,
       editorStampStickerHeight,
       editorStampStickerWidthMinimum,
       editorStampStickerHeightMinimum,
