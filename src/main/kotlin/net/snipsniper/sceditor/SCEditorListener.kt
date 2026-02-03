@@ -2,6 +2,7 @@ package net.snipsniper.sceditor
 
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.snipscope.SnipScopeListener
+import net.snipsniper.utils.SnipFileChooser
 import net.snipsniper.utils.Utils
 import net.snipsniper.utils.toBufferedImage
 import org.capturecoop.colorcomposer.setAlpha
@@ -15,7 +16,6 @@ import java.awt.event.MouseWheelEvent
 import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
-import javax.swing.JFileChooser
 
 class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeListener(scEditorWindow) {
     private val input = scEditorWindow.inputContainer
@@ -44,11 +44,13 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
         if(openSaveAsWindow) {
             openSaveAsWindow = false
             scEditorWindow.inputContainer.resetKeys()
-            JFileChooser().also { chooser ->
-                chooser.selectedFile = File(Utils.constructFilename(scEditorWindow.config.getString(ConfigHelper.PROFILE.saveFormat), SCEditorWindow.FILENAME_MODIFIER))
-                if(chooser.showSaveDialog(chooser) == JFileChooser.APPROVE_OPTION){
-                    if(chooser.selectedFile.createNewFile()) ImageIO.write(scEditorWindow.image, "png", chooser.selectedFile)
-                }
+            val result = SnipFileChooser.saveSystemFileChooser(
+                file = File(Utils.constructFilename(scEditorWindow.config.getString(ConfigHelper.PROFILE.saveFormat), SCEditorWindow.FILENAME_MODIFIER)),
+                fileFilters = listOf(SnipFileChooser.Filter("PNG", listOf("png"))),
+                parent = scEditorWindow,
+            )
+            if(result != null && result.createNewFile()) {
+                ImageIO.write(scEditorWindow.image, "png", result)
             }
         }
     }
@@ -68,11 +70,10 @@ class SCEditorListener(private val scEditorWindow: SCEditorWindow): SnipScopeLis
     override fun mouseReleased(mouseEvent: MouseEvent) {
         super.mouseReleased(mouseEvent)
 
+        //TODO: is this ever called?
         if(scEditorWindow.isDefaultImage()) {
-            JFileChooser().also {
-                if(it.showOpenDialog(scEditorWindow) == JFileChooser.APPROVE_OPTION)
-                    scEditorWindow.setImage(ImageIcon(it.selectedFile.absolutePath).image.toBufferedImage(), resetHistory = true, isNewImage = true)
-            }
+            val file = SnipFileChooser.openSystemImage(parent = scEditorWindow) ?: return
+            scEditorWindow.setImage(ImageIcon(file.absolutePath).image.toBufferedImage(), resetHistory = true, isNewImage = true)
         }
 
         if(!scEditorWindow.isEnableInteraction) return

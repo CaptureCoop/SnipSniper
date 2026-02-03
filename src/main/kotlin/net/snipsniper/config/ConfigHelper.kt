@@ -8,7 +8,8 @@ class ConfigHelper {
       updateChannel,
       colorChooserType,
       logFormat,
-      uiScaling
+      uiScaling,
+      experimentalMode
    }
    enum class PROFILE {
       title,
@@ -95,6 +96,7 @@ class ConfigHelper {
       editorStampEraserDistance,
       editorStampEraserSize,
       editorStampEraserSizeSpeed,
+      editorStampStickerDefaultIcon,
       editorStampStickerHeight,
       editorStampStickerWidthMinimum,
       editorStampStickerHeightMinimum,
