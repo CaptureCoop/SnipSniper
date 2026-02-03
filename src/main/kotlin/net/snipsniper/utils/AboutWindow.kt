@@ -103,16 +103,11 @@ class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
                 splashLabel.addMouseListener(object: MouseAdapter() {
                     override fun mouseClicked(e: MouseEvent?) {
                         super.mouseClicked(e)
-                        if(SnipSniper.platformType == PlatformType.JAR && onC) {
-                            val channel = when(val rt = Utils.getReleaseType(SnipSniper.config.getString(ConfigHelper.MAIN.updateChannel))) {
-                                ReleaseType.STABLE -> ReleaseType.DEV
-                                ReleaseType.DEV -> ReleaseType.STABLE
-                                else -> { throw Exception("AboutWindow: ReleaseType had bad value $rt") }
-                            }
-
-                            SnipSniper.config.set(ConfigHelper.MAIN.updateChannel, channel.toString())
-                            SnipSniper.config.save()
-                            Utils.showPopup(instance, "New update channel: $channel", "Channel unlocked!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, "icons/checkmark.png".getImage(), true)
+                        if(onC) {
+                            val cfgKey = ConfigHelper.MAIN.experimentalMode
+                            val newExperimentalMode = !SnipSniper.config.getBool(cfgKey)
+                            SnipSniper.config.set(cfgKey, newExperimentalMode)
+                            Utils.showPopup(instance, if(newExperimentalMode) "Experimental Mode Activated!" else "Experimental Mode Deactivated!", "Attention!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, "icons/checkmark.png".getImage().scaledEffective16px(), true)
                         }
                     }
                 })

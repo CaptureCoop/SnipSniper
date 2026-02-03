@@ -8,7 +8,8 @@ class ConfigHelper {
       updateChannel,
       colorChooserType,
       logFormat,
-      uiScaling
+      uiScaling,
+      experimentalMode
    }
    enum class PROFILE {
       title,
