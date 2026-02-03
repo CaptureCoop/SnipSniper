@@ -8,6 +8,7 @@ import net.snipsniper.config.ConfigHelper
 import net.snipsniper.utils.*
 import org.capturecoop.legiblelogger.LegibleLogLevel
 import org.capturecoop.legiblelogger.LegibleLogger
+import java.awt.Image
 import java.awt.SystemTray
 import java.awt.TrayIcon
 import java.awt.event.MouseAdapter
@@ -28,10 +29,7 @@ class Sniper(private val profileID: Int) {
         if(SystemTray.isSupported()) {
             val popup = Popup(this)
             val tray = SystemTray.getSystemTray()
-            val trayIconSize = ImageUtils.getScaled16Px()
-            val image = ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaledSmooth(trayIconSize, trayIconSize).also { isCustomIcon = true } ?: getTrayIcon(profileID)
-            image.flush()
-            trayIcon = TrayIcon(image, "SnipSniper(${getTitle()})")
+            trayIcon = TrayIcon(getActualTrayIcon(), "SnipSniper(${getTitle()})")
             trayIcon.isImageAutoSize = true
             trayIcon.addMouseListener(object: MouseAdapter() {
                 fun showPopup(e: MouseEvent) { if(e.isPopupTrigger) popup.showPopup(e.x, e.y) }
@@ -80,7 +78,7 @@ class Sniper(private val profileID: Int) {
 
     private fun openCaptureWindow() {
         if(captureWindow == null && SnipSniper.isIdle) {
-            if(SystemTray.isSupported() && isCustomIcon) trayIcon.image = getTrayIcon(profileID, true)
+            if(SystemTray.isSupported() && isCustomIcon) trayIcon.image = getActualTrayIcon(alt = true)
             captureWindow = CaptureWindow(instance)
             SnipSniper.isIdle = false
         } else {
@@ -90,17 +88,23 @@ class Sniper(private val profileID: Int) {
 
     fun killCaptureWindow() {
         if(captureWindow != null) {
-            if(SystemTray.isSupported() && isCustomIcon) trayIcon.image = getTrayIcon(profileID)
+            if(SystemTray.isSupported() && isCustomIcon) trayIcon.image = getActualTrayIcon()
             SnipSniper.isIdle = true
             captureWindow = null
             System.gc()
         }
     }
 
-    //Note: This does not handle custom images
-    private fun getTrayIcon(profileID: Int, alt: Boolean = false) = if(alt) "systray/alt_icon$profileID.png".getImage() else "systray/icon$profileID.png".getImage()
-
     fun alert(message: String, title: String, type: TrayIcon.MessageType) = trayIcon.displayMessage(message, title, type)
+
+    private fun getActualTrayIcon(alt: Boolean = false): Image = getCustomTrayIcon() ?: getSnSnTrayIcon(profileID = profileID, alt = alt)
+
+    private fun getSnSnTrayIcon(profileID: Int, alt: Boolean = false) = if(alt) "systray/alt_icon$profileID.png".getImage() else "systray/icon$profileID.png".getImage()
+
+    private fun getCustomTrayIcon(): Image? {
+        val trayIconSize = ImageUtils.getScaled16Px()
+        return ImageUtils.getIconDynamically(config.getString(ConfigHelper.PROFILE.icon))?.scaledSmooth(trayIconSize, trayIconSize).also { isCustomIcon = true }
+    }
 
     override fun toString() = "SnipSniper Profile ($profileID)"
 }
