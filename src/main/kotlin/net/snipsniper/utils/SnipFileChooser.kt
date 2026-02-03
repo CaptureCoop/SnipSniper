@@ -6,12 +6,21 @@ import java.io.File
 import javax.swing.JFileChooser
 
 object SnipFileChooser {
-    val IMAGE_FILTER = Filter("Images", listOf("png", "gif", "jpg", "jpeg"))
+    val IMAGE_FILTER = Filter("Images", listOf("png", /*TODO: Re-Enable once working: "gif",*/ "jpg", "jpeg"))
+    val IMAGE_FILTER_NO_GIFS = IMAGE_FILTER.getWithBlacklistedExtensions(listOf("gif"))
 
     data class Filter(
         val description: String,
         val extensions: List<String>
-    )
+    ) {
+        fun getWithBlacklistedExtensions(blacklist: List<String>): Filter {
+            return Filter(
+                description = description,
+                extensions = extensions.filter { !blacklist.contains(it) }
+            )
+        }
+    }
+
     enum class SelectionType(val swingType: Int, val nativeType: Int) {
         FILES_ONLY(JFileChooser.FILES_ONLY, SystemFileChooser.FILES_ONLY),
         DIRECTORY_ONLY(JFileChooser.DIRECTORIES_ONLY, SystemFileChooser.DIRECTORIES_ONLY),
