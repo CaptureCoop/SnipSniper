@@ -271,7 +271,7 @@ class EzModeSettingsCreator(private val scEditorWindow: SCEditorWindow) {
     private fun sticker(panel: JPanel, stamp: IStamp, width: Int) {
         panel.add(JButton("Select Sticker").apply {
             addActionListener {
-                val iconWindow = IconWindow("Select Stickers", scEditorWindow)
+                val iconWindow = IconWindow(title = "Select Stickers", parent = scEditorWindow, fileFilter = SnipFileChooser.IMAGE_FILTER_NO_GIFS)
                 iconWindow.onSelect = {
                     (stamp as StickerStamp).also { stickerStamp ->
                         stickerStamp.image = ImageUtils.getIconDynamically(it)!!.toBufferedImage()

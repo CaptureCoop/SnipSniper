@@ -315,7 +315,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     }
                     refreshButton()
                     iconButton.addActionListener {
-                        val iconWindow = IconWindow("Choose Icon", configWindow)
+                        val iconWindow = IconWindow(title = "Choose Icon", parent = configWindow, fileFilter = SnipFileChooser.IMAGE_FILTER_NO_GIFS)
                         iconWindow.onSelect = { path ->
                             config.set(ConfigHelper.PROFILE.editorStampStickerDefaultIcon, path)
                             previewPanel.stamp = StampType.STICKER.getIStamp(config, null)
