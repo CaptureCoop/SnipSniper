@@ -107,6 +107,7 @@ class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
                             val cfgKey = ConfigHelper.MAIN.experimentalMode
                             val newExperimentalMode = !SnipSniper.config.getBool(cfgKey)
                             SnipSniper.config.set(cfgKey, newExperimentalMode)
+                            SnipSniper.config.save()
                             Utils.showPopup(instance, if(newExperimentalMode) "Experimental Mode Activated!" else "Experimental Mode Deactivated!", "Attention!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, "icons/checkmark.png".getImage().scaledEffective16px(), true)
                         }
                     }
