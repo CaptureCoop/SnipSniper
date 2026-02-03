@@ -122,13 +122,15 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         options.add(importConfigs, gbc)
         gbc.gridx = 1
         options.add(exportButton, gbc)
-        gbc.gridx = 0
-        gbc.insets = Insets(0, 10, 0, 10)
-        val releaseType = Utils.getReleaseType(SnipSniper.config.getString(ConfigHelper.MAIN.updateChannel))
-        val channel = releaseType.toString()
-        options.add(configWindow.createJLabel("<html><p>Current Version: ${SnipSniper.getVersionString()}</p><p>Update Channel: $channel</p></html>", JLabel.CENTER, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        options.add(UpdateButton(), gbc)
+        if(SnipSniper.config.getBool(ConfigHelper.MAIN.experimentalMode)) {
+            gbc.gridx = 0
+            gbc.insets = Insets(0, 10, 0, 10)
+            val releaseType = Utils.getReleaseType(SnipSniper.config.getString(ConfigHelper.MAIN.updateChannel))
+            val channel = releaseType.toString()
+            options.add(configWindow.createJLabel("<html><p>Current Version: ${SnipSniper.getVersionString()}</p><p>Update Channel: $channel</p></html>", JLabel.CENTER, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            options.add(UpdateButton(), gbc)
+        }
         gbc.gridx = 0
         options.add(configWindow.createJLabel("UI Scaling", JLabel.RIGHT, JLabel.CENTER), gbc)
         gbc.gridx = 1
