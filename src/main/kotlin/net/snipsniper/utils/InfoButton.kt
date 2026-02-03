@@ -1,8 +1,10 @@
 package net.snipsniper.utils
 
-import net.snipsniper.SnipSniper
 import java.awt.*
-import java.awt.event.*
+import java.awt.event.KeyAdapter
+import java.awt.event.KeyEvent
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import java.util.*
 import javax.swing.BorderFactory
 import javax.swing.JButton
@@ -14,7 +16,11 @@ class InfoButton(): JButton() {
     private var window: JFrame? = null
 
     constructor(info: String?) : this() {
-        this.info = info ?: "No text provided"
+        if(info == null) {
+            isVisible = false
+            return
+        }
+        this.info = info
         text = "?"
         addMouseListener(object: MouseAdapter() {
             override fun mouseEntered(e: MouseEvent?) {
