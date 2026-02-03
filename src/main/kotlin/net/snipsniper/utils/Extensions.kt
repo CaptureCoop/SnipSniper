@@ -74,3 +74,5 @@ fun Graphics2D.drawOutlineString(
 fun JFrame.centerOn(window: JFrame) {
     Utils.centerWindowOnWindow(this, window)
 }
+
+fun String.getFileExtension(): String = this.split(".").last()
