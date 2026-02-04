@@ -9,27 +9,11 @@
       }
     },
     {
-      "name": "FlatLaf",
-      "url": "https://github.com/JFormDesigner/FlatLaf",
+      "name": "Commons Lang",
+      "url": "https://commons.apache.org/proper/commons-lang/",
       "license": {
         "short": "Apache-2.0 license",
-        "file": "license_flatlaf.txt"
-      }
-    },
-    {
-      "name": "org.json",
-      "url": "https://github.com/stleary/JSON-java",
-      "license": {
-        "short": "Public Domain",
-        "file": "license_orgjson.txt"
-      }
-    },
-    {
-      "name": "mslinks",
-      "url": "https://github.com/DmitriiShamrikov/mslinks",
-      "license": {
-        "short": "WTFPL license",
-        "file": "license_mslinks.txt"
+        "file": "license_commonslang.txt"
       }
     },
     {
@@ -41,11 +25,35 @@
       }
     },
     {
-      "name": "Commons Lang",
-      "url": "https://commons.apache.org/proper/commons-lang/",
+      "name": "org.json",
+      "url": "https://github.com/stleary/JSON-java",
+      "license": {
+        "short": "Public Domain",
+        "file": "license_orgjson.txt"
+      }
+    },
+    {
+      "name": "FlatLaf",
+      "url": "https://github.com/JFormDesigner/FlatLaf",
       "license": {
         "short": "Apache-2.0 license",
-        "file": "license_commonslang.txt"
+        "file": "license_flatlaf.txt"
+      }
+    },
+    {
+      "name": "mslinks",
+      "url": "https://github.com/DmitriiShamrikov/mslinks",
+      "license": {
+        "short": "WTFPL license",
+        "file": "license_mslinks.txt"
+      }
+    },
+    {
+      "name": "Flag Icons",
+      "url": "https://github.com/legacy-icons/famfamfam-flags",
+      "license": {
+        "short": "Multiple Licenses",
+        "file": "license_famfamfam-flags.txt"
       }
     }
   ]
