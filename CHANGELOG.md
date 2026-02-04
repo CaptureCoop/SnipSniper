@@ -3,6 +3,37 @@
 
 # Changelog
 All releases are listed here
+## [3.11.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.11.0) - 04.02.2026 01:19 (Europe/Berlin)
+
+### Smells like new features! (and kotlin)
+
+### Added
+- Text Stamp is now allowed to rotate
+- Sticker Stamp!
+- Experimental Mode
+- Eraser Config Window Settings
+- Defaults button for Editor Window Stamp Settings
+- Monitor Debug Window (Still a bit buggy on certain Configurations)
+- Attribution Window
+
+### Changed
+- Our Libraries are now hosted on Maven Central
+- FlatLaf Update (GUI Library)
+- Removed unnecessary unregister of NativeHookManager
+- Updated Icons
+- Fixed Issue with UI Scaling on Monitor setups with different scaling settings
+- Refixed issue with Editor Positioning
+- Using OS Specific File Choosers
+- Added outline to Eraser in Editor
+- Made Outlint for SnipScopeWindow Optional
+- Fixed issue with Custom Tray Icons not working after taking screenshot
+- AboutWindow: Remove option to switch update channels
+- AboutWindow: Add Attributions and version info
+- Fixed issue with filename random numbers causing issues saving screenshots
+- Complete Port to Kotlin!
+
+### Removed
+- Icon Window hids GIFs for now
 ## [3.10.0](https://github.com/CaptureCoop/SnipSniper/releases/tag/3.10.0) - 02.03.2022 15:30 (Europe/Berlin)
 
 ### EzMode Update!

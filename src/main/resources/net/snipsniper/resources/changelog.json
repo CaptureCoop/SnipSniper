@@ -6,6 +6,40 @@
 	"description": "All releases are listed here",
 	"releases": [
 		{
+			"release_time": "1770164352",
+			"version": "3.11.0",
+			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.11.0",
+			"title": "Smells like new features! (and kotlin)",
+			"added": [
+				"Text Stamp is now allowed to rotate",
+				"Sticker Stamp!",
+				"Experimental Mode",
+				"Eraser Config Window Settings",
+				"Defaults button for Editor Window Stamp Settings",
+				"Monitor Debug Window (Still a bit buggy on certain Configurations)",
+				"Attribution Window"
+			],
+			"changed": [
+				"Our Libraries are now hosted on Maven Central",
+				"FlatLaf Update (GUI Library)",
+				"Removed unnecessary unregister of NativeHookManager",
+				"Updated Icons",
+				"Fixed Issue with UI Scaling on Monitor setups with different scaling settings",
+				"Refixed issue with Editor Positioning",
+				"Using OS Specific File Choosers",
+				"Added outline to Eraser in Editor",
+				"Made Outlint for SnipScopeWindow Optional",
+				"Fixed issue with Custom Tray Icons not working after taking screenshot",
+				"AboutWindow: Remove option to switch update channels",
+				"AboutWindow: Add Attributions and version info",
+				"Fixed issue with filename random numbers causing issues saving screenshots",
+				"Complete Port to Kotlin!"
+			],
+			"removed": [
+				"Icon Window hids GIFs for now"
+			]
+		},
+		{
 			"release_time": "1646231400",
 			"version": "3.10.0",
 			"url": "https://github.com/CaptureCoop/SnipSniper/releases/tag/3.10.0",
