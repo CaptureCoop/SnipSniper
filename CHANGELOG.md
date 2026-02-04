@@ -15,6 +15,7 @@ All releases are listed here
 - Defaults button for Editor Window Stamp Settings
 - Monitor Debug Window (Still a bit buggy on certain Configurations)
 - Attribution Window
+- UI Scaling Option in Settings
 
 ### Changed
 - Our Libraries are now hosted on Maven Central

@@ -17,7 +17,8 @@
 				"Eraser Config Window Settings",
 				"Defaults button for Editor Window Stamp Settings",
 				"Monitor Debug Window (Still a bit buggy on certain Configurations)",
-				"Attribution Window"
+				"Attribution Window",
+				"UI Scaling Option in Settings"
 			],
 			"changed": [
 				"Our Libraries are now hosted on Maven Central",
