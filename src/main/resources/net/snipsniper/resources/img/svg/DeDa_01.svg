@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600">
+<defs>
+  <linearGradient id="fv01" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" style="stop-color:#e6ff33;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#dd8700;stop-opacity:1" />
+  </linearGradient>
+</defs>
+<path d="M0 0 h 1300 v 100 h 100 v 100 h 100 v 100 h 100 v 1000 h -100 v 100 h -100 v 100 h -100 v 100 h -1100 v -800 h -200 v -800 m 700 600 v 200 h -100 v 200 h 400 v -400" fill="black"/>
+<path d="M100 100 h 500 v 200 h -100 v 200 h -100 v 100 h 200 v 200 h -100 v 200 h -100 v 200 h -100 v -500 h -200" fill="url(#fv01)"/>
+<path d="M700 100 h 600 v 100 h 100 v100 h 100 v 1000 h -100 v 100 h -100 v 100 h -1000 v -100 h 100 v -200 h 100 v -200 h 100 v 100 h 400 v -100 h 100 v -400 h -100 v -100 h -400 v -200 h 100 v -200" fill="#e6ff33"/>
+</svg>

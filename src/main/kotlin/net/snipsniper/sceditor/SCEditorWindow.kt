@@ -21,7 +21,16 @@ import java.util.concurrent.CopyOnWriteArrayList
 import javax.imageio.ImageIO
 import javax.swing.*
 
-class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var initialTitle: String, config: Config, isLeftToRight: Boolean, saveLocation: String?, inClipboard: Boolean, isStandalone: Boolean) : SnipScopeWindow(), Closable {
+class SCEditorWindow(
+    startImage: BufferedImage?,
+    x: Int, y: Int,
+    private var initialTitle: String,
+    config: Config,
+    isLeftToRight: Boolean,
+    saveLocation: String?,
+    inClipboard: Boolean,
+    isStandalone: Boolean
+) : SnipScopeWindow(), Closable {
     val config: Config
     var saveLocation: String?
     var inClipboard: Boolean
@@ -158,10 +167,8 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 JMenuItem("Open").also {
                     it.icon = sizeImage("icons/questionmark.png")
                     it.addActionListener {
-                        JFileChooser().also { fc ->
-                            if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-                                setImage(ImageIO.read(fc.selectedFile), resetHistory = true, isNewImage = true)
-                        }
+                        val file = SnipFileChooser.openSystemImage(parent = this) ?: return@addActionListener
+                        setImage(ImageIO.read(file), resetHistory = true, isNewImage = true)
                     }
                     parent.add(it)
                 }
@@ -187,7 +194,7 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 topBar.add(parent)
             }
             JMenu("Edit").also { parent ->
-                parent.icon = sizeImage("icons/editor.png")
+                parent.icon = sizeImage("icons/edit.png")
                 JMenuItem("Config").also {
                     it.icon = sizeImage("icons/config.png")
                     it.addActionListener { openConfigWindow() }
@@ -265,53 +272,55 @@ class SCEditorWindow(startImage: BufferedImage?, x: Int, y: Int, private var ini
                 }
                 topBar.add(parent)
             }
-            JMenu("Experimental").also { parent ->
-                parent.icon = sizeImage("icons/debug.png")
-                JMenuItem("Border test").also {
-                    it.icon = parent.icon
-                    it.addActionListener {
-                        val borderThickness = 10
-                        //Fix to have this work without originalImage. As we will remove/Change this anyway I don't care if this affects anything for now.
-                        ImageUtils.newBufferedImage(image.width + borderThickness, image.height + borderThickness) { g ->
-                            g as Graphics2D
-                            g.setRenderingHints(qualityHints)
-                            for (y1 in 0 until image.height) {
-                                for (x1 in 0 until image.width) {
-                                    if (Color(image.getRGB(x1, y1), true).alpha > 10) {
-                                        g.color = Color.WHITE
-                                        g.fillOval(x1 + borderThickness / 2 - borderThickness / 2, y1 + borderThickness / 2 - borderThickness / 2, borderThickness, borderThickness)
+            if(SnipSniper.config.getBool(ConfigHelper.MAIN.experimentalMode)) {
+                JMenu("Experimental").also { parent ->
+                    parent.icon = sizeImage("icons/debug.png")
+                    JMenuItem("Border test").also {
+                        it.icon = parent.icon
+                        it.addActionListener {
+                            val borderThickness = 10
+                            //Fix to have this work without originalImage. As we will remove/Change this anyway I don't care if this affects anything for now.
+                            ImageUtils.newBufferedImage(image.width + borderThickness, image.height + borderThickness) { g ->
+                                g as Graphics2D
+                                g.setRenderingHints(qualityHints)
+                                for (y1 in 0 until image.height) {
+                                    for (x1 in 0 until image.width) {
+                                        if (Color(image.getRGB(x1, y1), true).alpha > 10) {
+                                            g.color = Color.WHITE
+                                            g.fillOval(x1 + borderThickness / 2 - borderThickness / 2, y1 + borderThickness / 2 - borderThickness / 2, borderThickness, borderThickness)
+                                        }
                                     }
                                 }
+                                g.drawImage(image, borderThickness / 2, borderThickness / 2, image.width, image.height, null)
+                            }.also { img ->
+                                setImage(img, resetHistory = true, isNewImage = true)
                             }
-                            g.drawImage(image, borderThickness / 2, borderThickness / 2, image.width, image.height, null)
-                        }.also { img ->
-                            setImage(img, resetHistory = true, isNewImage = true)
+                            isDirty = true
+                            repaint()
+                            refreshTitle()
                         }
-                        isDirty = true
-                        repaint()
-                        refreshTitle()
+                        parent.add(it)
                     }
-                    parent.add(it)
-                }
-                JMenuItem("Box test").also {
-                    it.icon = parent.icon
-                    it.addActionListener {
-                        val width = 512
-                        val height = 512
-                        val test = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
-                        val g = test.graphics as Graphics2D
-                        g.setRenderingHints(qualityHints)
-                        val optimalDimension = Utils.getScaledDimension(originalImage, Dimension(width, height))
-                        g.drawImage(originalImage, test.width / 2 - optimalDimension.width / 2, test.height / 2 - optimalDimension.height / 2, optimalDimension.width, optimalDimension.height, null)
-                        g.dispose()
-                        setImage(test, resetHistory = true, isNewImage = true)
-                        isDirty = true
-                        repaint()
-                        refreshTitle()
+                    JMenuItem("Box test").also {
+                        it.icon = parent.icon
+                        it.addActionListener {
+                            val width = 512
+                            val height = 512
+                            val test = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+                            val g = test.graphics as Graphics2D
+                            g.setRenderingHints(qualityHints)
+                            val optimalDimension = Utils.getScaledDimension(originalImage, Dimension(width, height))
+                            g.drawImage(originalImage, test.width / 2 - optimalDimension.width / 2, test.height / 2 - optimalDimension.height / 2, optimalDimension.width, optimalDimension.height, null)
+                            g.dispose()
+                            setImage(test, resetHistory = true, isNewImage = true)
+                            isDirty = true
+                            repaint()
+                            refreshTitle()
+                        }
+                        parent.add(it)
                     }
-                    parent.add(it)
+                    topBar.add(parent)
                 }
-                topBar.add(parent)
             }
             jMenuBar = topBar
         }

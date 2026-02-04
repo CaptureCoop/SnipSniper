@@ -2,9 +2,15 @@ package net.snipsniper.utils
 
 import net.snipsniper.ImageManager
 import net.snipsniper.LangManager
+import java.awt.BasicStroke
+import java.awt.Color
+import java.awt.Graphics2D
 import java.awt.Image
+import java.awt.font.TextLayout
+import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
 import javax.swing.ImageIcon
+import javax.swing.JFrame
 
 //Avoid having advanced logic here and put them into fitting Utils packages instead
 
@@ -43,3 +49,30 @@ fun Long.prettyPrintBytes(): String = Utils.prettyPrintBytes(this)
 fun Int.isEven(): Boolean = this % 2 == 0
 
 fun Boolean.toInt() = if(this) 1 else 0
+
+fun Graphics2D.drawOutlineString(
+    text: String,
+    x: Int,
+    y: Int,
+    textColor: Color,
+    outlineColor: Color,
+    outlineThickness: Float,
+) {
+    setRenderingHints(Utils.getRenderingHints())
+
+    val layout = TextLayout(text, font, fontRenderContext)
+    val outline = layout.getOutline(AffineTransform.getTranslateInstance(x.toDouble(), y.toDouble()));
+
+    color = outlineColor;
+    stroke = BasicStroke(outlineThickness)
+    draw(outline);
+
+    color = textColor;
+    fill(outline);
+}
+
+fun JFrame.centerOn(window: JFrame) {
+    Utils.centerWindowOnWindow(this, window)
+}
+
+fun String.getFileExtension(): String = this.split(".").last()

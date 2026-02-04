@@ -5,12 +5,9 @@ import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.configwindow.ConfigWindow
 import net.snipsniper.configwindow.StampJPanel
+import net.snipsniper.configwindow.iconwindow.IconWindow
 import net.snipsniper.sceditor.stamps.*
-import net.snipsniper.sceditor.stamps.IStamp
-import net.snipsniper.sceditor.stamps.StampType
-import net.snipsniper.utils.ConfigSaveButtonState
-import net.snipsniper.utils.InfoButton
-import net.snipsniper.utils.translate
+import net.snipsniper.utils.*
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import java.awt.GridLayout
@@ -94,6 +91,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 row3_stampPreview.stamp = newStamp
                 setupStampConfigPanel(row3_stampConfig, newStamp, row3_stampPreview, config, onUpdate)
                 saveButtonUpdate?.invoke(ConfigSaveButtonState.UPDATE_CLEAN_STATE)
+                revalidate()
             }
         }
         options.add(stampDropdown, gbc)
@@ -278,6 +276,7 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.TEXT.index, constraints = gbc, onUpdate = onUpdate).also {
                     it.setup("config_label_defaultfontsize".translate(), ConfigHelper.PROFILE.editorStampTextDefaultFontSize)
                     it.setup("config_label_fontsizechangespeed".translate(), ConfigHelper.PROFILE.editorStampTextDefaultSpeed)
+                    it.setup(title = "config_label_angle_change_speed".translate(), configKey = ConfigHelper.PROFILE.editorStampTextDefaultRotateSpeed, min = 0.01, max = 5.0)
                 }
                 for (i in 0..5) panel.add(JPanel(), gbc) //Padding
                 //TODO: Draw it in the middle, possibly by giving TextStamp a getTextWidth() function and adding an edgecase to the Stamp Renderer, to move it to the left
@@ -296,6 +295,42 @@ class EditorTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                     it.setup("config_label_widthminimum".translate(), ConfigHelper.PROFILE.editorStampRectangleWidthMinimum)
                     it.setup("config_label_heightminimum".translate(), ConfigHelper.PROFILE.editorStampRectangleHeightMinimum)
                     it.setup("config_label_thickness".translate(), ConfigHelper.PROFILE.editorStampRectangleThickness)
+                }
+            }
+            is EraserStamp -> {
+                Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.ERASER.index, constraints = gbc, onUpdate = onUpdate).also {
+                    it.setup("config_label_linepointdistance".translate(), ConfigHelper.PROFILE.editorStampEraserDistance)
+                    it.setup("config_label_brushsize".translate(), ConfigHelper.PROFILE.editorStampEraserSize)
+                    it.setup("config_label_brushsizespeed".translate(), ConfigHelper.PROFILE.editorStampEraserSizeSpeed)
+                }
+            }
+            is StickerStamp -> {
+                panel.add(configWindow.createJLabel("Default Icon", JLabel.RIGHT, JLabel.CENTER), gbc)
+                gbc.gridx = 1
+                panel.add(JButton("config_label_seticon".translate()).also { iconButton ->
+                    fun refreshButton() {
+                        val iconPath = config.getString(ConfigHelper.PROFILE.editorStampStickerDefaultIcon)
+                        val img = ImageUtils.getIconDynamically(iconPath)!!.toBufferedImage()
+                        iconButton.icon = img.scaledEffective16px().toImageIcon()
+                    }
+                    refreshButton()
+                    iconButton.addActionListener {
+                        val iconWindow = IconWindow(title = "Choose Icon", parent = configWindow, fileFilter = SnipFileChooser.IMAGE_FILTER_NO_GIFS)
+                        iconWindow.onSelect = { path ->
+                            config.set(ConfigHelper.PROFILE.editorStampStickerDefaultIcon, path)
+                            previewPanel.stamp = StampType.STICKER.getIStamp(config, null)
+                            onUpdate!!.invoke()
+                            refreshButton()
+                        }
+                    }
+                }, gbc)
+                gbc.gridx = 2
+                panel.add(InfoButton(null), gbc)
+                Creator(configWindow, panel, previewPanel = previewPanel, config = config, stampIndex = StampType.STICKER.index, constraints = gbc, onUpdate = onUpdate).also {
+                    it.setup("config_label_startheight".translate(), ConfigHelper.PROFILE.editorStampStickerHeight)
+                    it.setup("config_label_generalspeed".translate(), ConfigHelper.PROFILE.editorStampStickerSpeed)
+                    it.setup("config_label_widthspeed".translate(), ConfigHelper.PROFILE.editorStampStickerWidthSpeed)
+                    it.setup("config_label_heightspeed".translate(), ConfigHelper.PROFILE.editorStampStickerHeightSpeed)
                 }
             }
             else -> {

@@ -29,7 +29,6 @@ val groupRun = "SnipSniper run"
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {

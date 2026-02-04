@@ -85,11 +85,16 @@ class Utils {
             return JSONObject(text).getString("sha")
         }
 
-        fun getRenderingHints(): RenderingHints {
-            return RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON).also {
-                it[RenderingHints.KEY_RENDERING] = RenderingHints.VALUE_RENDER_QUALITY
-            }
-        }
+        fun getRenderingHints() = RenderingHints(mapOf(
+            RenderingHints.KEY_ANTIALIASING to RenderingHints.VALUE_ANTIALIAS_ON,
+            RenderingHints.KEY_RENDERING to RenderingHints.VALUE_RENDER_QUALITY,
+        ))
+
+        fun getPixelatedRenderingHints() = RenderingHints(mapOf(
+            RenderingHints.KEY_ANTIALIASING to RenderingHints.VALUE_ANTIALIAS_OFF,
+            RenderingHints.KEY_RENDERING to RenderingHints.VALUE_RENDER_QUALITY,
+            RenderingHints.KEY_INTERPOLATION to RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR,
+        ))
 
         fun getDisabledColor(): Color = Color(128, 128, 128, 100)
 
@@ -134,7 +139,7 @@ class Utils {
         //TODO: This should probably have a better name, since this just prepares screenshots no?
         fun constructFilename(format: String, modifier: String): String {
             var filename = StringUtils.formatDateTimeString(format)
-            filename = filename.replace("%random%", StringUtils.getRandomString(length = 10, lowercaseLetters = true, uppercaseLetters = true, useNumbers = true))
+            filename = filename.replace("%random%", StringUtils.getRandomString(length = 10, lowercaseLetters = true, uppercaseLetters = true, numbers = true))
             return "${filename}${modifier}.png"
         }
 
@@ -218,6 +223,17 @@ class Utils {
             else if(mb > 0)     "$mb MB"
             else                "$kb KB"
         }
-    }
 
+        fun centerWindowLocation(window: JFrame, device: GraphicsDevice = window.graphicsConfiguration.device) {
+            val bounds = device.defaultConfiguration.bounds
+            window.setLocation(bounds.x + (bounds.width / 2) - (window.width / 2), bounds.y + (bounds.height / 2) - (window.height / 2))
+        }
+
+        fun centerWindowOnWindow(window: JFrame, parent: JFrame) {
+            window.setLocation(
+                parent.x + (parent.width / 2) - (window.width / 2),
+                parent.y + (parent.height / 2) - (window.height / 2)
+            )
+        }
+    }
 }

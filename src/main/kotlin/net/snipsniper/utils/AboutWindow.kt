@@ -5,25 +5,25 @@ import net.snipsniper.StatsManager
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.secrets.games.BGame
 import net.snipsniper.systray.Sniper
+import org.capturecoop.defaultdepot.Closable
 import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import java.awt.image.BufferedImage
 import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
-import java.lang.StringBuilder
 import java.nio.charset.StandardCharsets
 import javax.swing.*
-import javax.swing.event.ChangeListener
 import javax.swing.event.HyperlinkEvent
-import javax.swing.text.Caret
-import javax.swing.text.JTextComponent
 
-class AboutWindow(private val sniper: Sniper): JFrame() {
+class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
     private lateinit var html: String
     private var onC = false
     private val instance = this
+    private var attributionsWindow: AttributionsWindow? = null
 
     init {
         loadHTML()
@@ -31,9 +31,12 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
         title = "About"
         isResizable = true
         iconImage = "icons/snipsniper.png".getImage()
-        //JPanel panel = new JPanel(new BorderLayout());
-        //panel.add(leftComponent, BorderLayout.WEST);  // stays minimal
-        //panel.add(rightComponent, BorderLayout.CENTER); // fills remaining space
+        defaultCloseOperation = DO_NOTHING_ON_CLOSE
+        addWindowListener(object: WindowAdapter() {
+            override fun windowClosing(e: WindowEvent?) {
+                close()
+            }
+        })
         JPanel(BorderLayout()).also { mainPanel ->
             val mainGbc = GridBagConstraints()
             val iconPanel = JPanel(GridBagLayout())
@@ -100,16 +103,12 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
                 splashLabel.addMouseListener(object: MouseAdapter() {
                     override fun mouseClicked(e: MouseEvent?) {
                         super.mouseClicked(e)
-                        if(SnipSniper.platformType == PlatformType.JAR && onC) {
-                            val channel = when(val rt = Utils.getReleaseType(SnipSniper.config.getString(ConfigHelper.MAIN.updateChannel))) {
-                                ReleaseType.STABLE -> ReleaseType.DEV
-                                ReleaseType.DEV -> ReleaseType.STABLE
-                                else -> { throw Exception("AboutWindow: ReleaseType had bad value $rt") }
-                            }
-
-                            SnipSniper.config.set(ConfigHelper.MAIN.updateChannel, channel.toString())
+                        if(onC) {
+                            val cfgKey = ConfigHelper.MAIN.experimentalMode
+                            val newExperimentalMode = !SnipSniper.config.getBool(cfgKey)
+                            SnipSniper.config.set(cfgKey, newExperimentalMode)
                             SnipSniper.config.save()
-                            Utils.showPopup(instance, "New update channel: $channel", "Channel unlocked!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, "icons/checkmark.png".getImage(), true)
+                            Utils.showPopup(instance, if(newExperimentalMode) "Experimental Mode Activated!" else "Experimental Mode Deactivated!", "Attention!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, "icons/checkmark.png".getImage().scaledEffective16px(), true)
                         }
                     }
                 })
@@ -122,12 +121,27 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
                     var secretCount = 0
                     about.addHyperlinkListener { hle ->
                         if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.eventType)) {
-                            if(hle.description.equals("secret")) {
-                                if(secretCount >= 10) {
-                                    BGame(sniper)
-                                    secretCount = 0
-                                } else {
-                                    secretCount++
+                            if(hle.description.startsWith("ss:")) {
+                                val key = hle.description.replace("ss:", "")
+                                when(key) {
+                                    "secret" -> {
+                                        if(secretCount >= 10) {
+                                            BGame(sniper)
+                                            secretCount = 0
+                                        } else {
+                                            secretCount++
+                                        }
+                                    }
+                                    "attributions" -> {
+                                        if(attributionsWindow != null) {
+                                            attributionsWindow?.requestFocus()
+                                        } else {
+                                            attributionsWindow = AttributionsWindow(this)
+                                            attributionsWindow!!.onClose.add({
+                                                attributionsWindow = null
+                                            })
+                                        }
+                                    }
                                 }
                             } else {
                                 Links.openLink(hle.url.toString())
@@ -143,11 +157,20 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
             }
 
             add(mainPanel)
-            Toolkit.getDefaultToolkit().screenSize.also {
-                setLocation(it.width / 2 - width / 2, it.height / 2 - height / 2)
-            }
+
+            //This is silly, but it seems to be the only way i can figure out to spawn the window sorta nicely in the middle.
+            centerPosition()
             isVisible = true
             pack()
+            revalidate()
+            pack()
+            centerPosition()
+        }
+    }
+
+    private fun centerPosition() {
+        Toolkit.getDefaultToolkit().screenSize.also {
+            setLocation(it.width / 2 - width / 2, it.height / 2 - height / 2)
         }
     }
 
@@ -182,5 +205,10 @@ class AboutWindow(private val sniper: Sniper): JFrame() {
     private fun resizeImageButRetainSize(image: BufferedImage, oldSize: Int, newSize: Int) = ImageUtils.newBufferedImage(oldSize, oldSize) {
         val difference = (oldSize - newSize) / 2
         it.drawImage(image.scaled(newSize, newSize), difference, difference, null)
+    }
+
+    override fun close() {
+        attributionsWindow?.close()
+        dispose()
     }
 }

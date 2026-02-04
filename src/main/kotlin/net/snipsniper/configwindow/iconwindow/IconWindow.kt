@@ -11,17 +11,16 @@ import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
 import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetDropEvent
-import java.awt.event.*
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import javax.imageio.ImageIO
 import javax.swing.*
-import javax.swing.filechooser.FileFilter
 
-class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
+class IconWindow(title: String, parent: JFrame, private val fileFilter: SnipFileChooser.Filter = SnipFileChooser.IMAGE_FILTER): JFrame(), Closable {
     private enum class IconType {GENERAL, RANDOM, CUSTOM}
-    private val allowedExtensions = listOf(".png", ".gif", ".jpg", ".jpeg")
     private val rows = 4
     var onSelect: ((String) -> (Unit))? = null
     var onClose: (() -> (Unit))? = null
@@ -78,11 +77,11 @@ class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
         }
         val size = rootPane.width / 5
         val sizeDim = Dimension(size, size)
-        list.forEach { file ->
+        list.filter { fileFilter.extensions.contains(it.path.getFileExtension()) }.forEach { file ->
             IconButton(file.getPathWithLocation(), file.location).also { btn ->
                 btn.onSelect =  {
                     onSelect?.invoke(btn.id)
-                    dispose()
+                    close()
                 }
                 btn.onDelete = { populateButtons(content, type) }
                 when (file.location) {
@@ -117,19 +116,14 @@ class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
                 newBtn.minimumSize = sizeDim
                 newBtn.maximumSize = sizeDim
                 newBtn.addActionListener {
-                    JFileChooser().also { chooser ->
-                        object : FileFilter() {
-                            override fun accept(pathname: File) = if(pathname.isDirectory) true else allowedExtensions.any { pathname.name.lowercase().endsWith(it) }
-                            override fun getDescription() = "Images"
-                        }.also { filter ->
-                            chooser.addChoosableFileFilter(filter)
-                            chooser.fileFilter = filter
-                        }
-                        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                            loadFile(chooser.selectedFile)
-                            populateButtons(content, type)
-                        }
-                    }
+                    val result = SnipFileChooser.openSystemFileChooser(
+                        parent = parent,
+                        type = SnipFileChooser.SelectionType.FILES_ONLY,
+                        multiFileSelection = true,
+                        fileFilters = listOf(fileFilter)
+                    ) ?: return@addActionListener
+                    result.forEach(this::loadFile)
+                    populateButtons(content, type)
                 }
                 content.add(newBtn, gbc)
             }
@@ -143,8 +137,12 @@ class IconWindow(title: String, parent: JFrame): JFrame(), Closable {
         if(file.extension == "gif") {
             Files.copy(file.toPath(), File(SnipSniper.imgFolder, file.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
         } else {
-            ImageIO.read(file).scaledSmooth(16, 16).also {
-                ImageIO.write(it, file.extension, File(SnipSniper.imgFolder, file.name))
+            ImageIO.read(file).also {
+                if(it == null) {
+                    Utils.showPopup(this, "Bad File! Supported: ${SnipFileChooser.IMAGE_FILTER.extensions.joinToString(", ")}", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, "icons/redx.png".getImage(), true)
+                } else {
+                    ImageIO.write(it, file.extension, File(SnipSniper.imgFolder, file.name))
+                }
             }
         }
     }

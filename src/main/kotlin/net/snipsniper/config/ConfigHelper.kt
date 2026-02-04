@@ -8,7 +8,8 @@ class ConfigHelper {
       updateChannel,
       colorChooserType,
       logFormat,
-      uiScaling
+      uiScaling,
+      experimentalMode
    }
    enum class PROFILE {
       title,
@@ -83,6 +84,7 @@ class ConfigHelper {
       editorStampTextDefaultColor,
       editorStampTextDefaultFontSize,
       editorStampTextDefaultSpeed,
+      editorStampTextDefaultRotateSpeed,
       editorStampRectangleDefaultColor,
       editorStampRectangleWidth,
       editorStampRectangleHeight,
@@ -94,6 +96,13 @@ class ConfigHelper {
       editorStampEraserDistance,
       editorStampEraserSize,
       editorStampEraserSizeSpeed,
+      editorStampStickerDefaultIcon,
+      editorStampStickerHeight,
+      editorStampStickerWidthMinimum,
+      editorStampStickerHeightMinimum,
+      editorStampStickerSpeed,
+      editorStampStickerWidthSpeed,
+      editorStampStickerHeightSpeed,
    }
    enum class BUILDINFO {
       type,

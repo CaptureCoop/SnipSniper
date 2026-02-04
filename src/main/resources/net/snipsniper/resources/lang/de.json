@@ -76,6 +76,7 @@
     "config_label_linepointdistance": "Linien Punkt Abstand",
     "config_label_defaultfontsize": "Standart Font Größe",
     "config_label_fontsizechangespeed": "Font Größe Geschwindigkeit",
+    "config_label_angle_change_speed": "Winkelveränderungsgeschwindigkeitsrate",
 
     "config_sanitation_error": "Fehler",
     "config_sanitation_border_minmax": "Rand Größe muss eine Zahl zwischen 0 und 999 sein!",

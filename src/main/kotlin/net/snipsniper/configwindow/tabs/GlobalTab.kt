@@ -21,7 +21,6 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 import javax.swing.*
-import javax.swing.filechooser.FileNameExtensionFilter
 
 class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
     override var isDirty = false
@@ -50,13 +49,16 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
                 it.deleteRecursively()
                 it.mkdirs()
             }
-            val fileChooser = JFileChooser()
-            fileChooser.fileFilter = FileNameExtensionFilter("ZIP File", "zip")
-            val option = fileChooser.showOpenDialog(configWindow)
-            if (option == JFileChooser.APPROVE_OPTION) {
+            val chooserResult = SnipFileChooser.openSystemFileChooser(
+                parent = this@GlobalTab,
+                multiFileSelection = false,
+                type = SnipFileChooser.SelectionType.FILES_ONLY,
+                fileFilters = listOf(SnipFileChooser.Filter("ZIP File", listOf("zip")))
+            )
+            if (!chooserResult.isNullOrEmpty()) {
                 try {
                     val buffer = ByteArray(4096)
-                    val fis = FileInputStream(fileChooser.selectedFile)
+                    val fis = FileInputStream(chooserResult.first())
                     val bis = BufferedInputStream(fis)
                     val zis = ZipInputStream(bis)
                     var ze: ZipEntry?
@@ -88,45 +90,47 @@ class GlobalTab(private val configWindow: ConfigWindow) : JPanel(), ITab {
         }
         val exportButton = JButton("Export Configs")
         exportButton.addActionListener {
-            val chooser = JFileChooser()
-            chooser.fileFilter = FileNameExtensionFilter("ZIP File", "zip")
-            chooser.selectedFile = File("configs.zip")
-            val option = chooser.showSaveDialog(configWindow)
-            if (option == JFileChooser.APPROVE_OPTION) {
-                var path = chooser.selectedFile.absolutePath
-                if (!path.endsWith(".zip")) path += ".zip"
-                val zip = File(path)
-                val mainFolder = SnipSniper.mainFolder
-                val files = FileUtils.getFilesInFolders(mainFolder)
-                try {
-                    val out = ZipOutputStream(FileOutputStream(zip))
-                    for (file in files) {
-                        if (!file.contains("logs")) {
-                            var filename = file.replace(mainFolder, "")
-                            if (filename.startsWith("/")) filename = filename.substring(1)
-                            val zipEntry = ZipEntry(filename)
-                            out.putNextEntry(zipEntry)
-                            Files.copy(File(file).toPath(), out)
-                            out.closeEntry()
-                        }
+            val result = SnipFileChooser.saveSystemFileChooser(
+                file = File("configs.zip"),
+                fileFilters = listOf(SnipFileChooser.Filter("ZIP File", listOf("zip"))),
+                parent = this@GlobalTab,
+            ) ?: return@addActionListener
+            //TODO: Check importing and Exporting. Exporting saves the absolute path. Can SnipSniper import this successfully?
+            var path = result.absolutePath
+            if (!path.endsWith(".zip")) path += ".zip"
+            val zip = File(path)
+            val mainFolder = SnipSniper.mainFolder
+            val files = FileUtils.getFilesInFolders(mainFolder)
+            try {
+                val out = ZipOutputStream(FileOutputStream(zip))
+                for (file in files) {
+                    if (!file.contains("logs")) {
+                        var filename = file.replace(mainFolder, "")
+                        if (filename.startsWith("/")) filename = filename.substring(1)
+                        val zipEntry = ZipEntry(filename)
+                        out.putNextEntry(zipEntry)
+                        Files.copy(File(file).toPath(), out)
+                        out.closeEntry()
                     }
-                    out.close()
-                } catch (ex: IOException) {
-                    LegibleLogger.error("Could not export zip file!")
-                    LegibleLogger.logStacktrace(ex, LegibleLogLevel.ERROR)
                 }
+                out.close()
+            } catch (ex: IOException) {
+                LegibleLogger.error("Could not export zip file!")
+                LegibleLogger.logStacktrace(ex, LegibleLogLevel.ERROR)
             }
         }
         options.add(importConfigs, gbc)
         gbc.gridx = 1
         options.add(exportButton, gbc)
-        gbc.gridx = 0
-        gbc.insets = Insets(0, 10, 0, 10)
-        val releaseType = Utils.getReleaseType(SnipSniper.config.getString(ConfigHelper.MAIN.updateChannel))
-        val channel = releaseType.toString()
-        options.add(configWindow.createJLabel("<html><p>Current Version: ${SnipSniper.getVersionString()}</p><p>Update Channel: $channel</p></html>", JLabel.CENTER, JLabel.CENTER), gbc)
-        gbc.gridx = 1
-        options.add(UpdateButton(), gbc)
+        if(SnipSniper.config.getBool(ConfigHelper.MAIN.experimentalMode)) {
+            gbc.gridx = 0
+            gbc.insets = Insets(0, 10, 0, 10)
+            val releaseType = Utils.getReleaseType(SnipSniper.config.getString(ConfigHelper.MAIN.updateChannel))
+            val channel = releaseType.toString()
+            options.add(configWindow.createJLabel("<html><p>Current Version: ${SnipSniper.getVersionString()}</p><p>Update Channel: $channel</p></html>", JLabel.CENTER, JLabel.CENTER), gbc)
+            gbc.gridx = 1
+            options.add(UpdateButton(), gbc)
+        }
         gbc.gridx = 0
         options.add(configWindow.createJLabel("UI Scaling", JLabel.RIGHT, JLabel.CENTER), gbc)
         gbc.gridx = 1
