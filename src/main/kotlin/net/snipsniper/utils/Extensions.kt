@@ -6,10 +6,15 @@ import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Image
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import java.awt.font.TextLayout
 import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
 import javax.swing.ImageIcon
+import javax.swing.JButton
 import javax.swing.JFrame
 
 //Avoid having advanced logic here and put them into fitting Utils packages instead
@@ -73,6 +78,22 @@ fun Graphics2D.drawOutlineString(
 
 fun JFrame.centerOn(window: JFrame) {
     Utils.centerWindowOnWindow(this, window)
+}
+
+fun JButton.onClick(action: (MouseEvent) -> Unit) {
+    addMouseListener(object: MouseAdapter() {
+        override fun mouseClicked(e: MouseEvent) {
+            action(e)
+        }
+    })
+}
+
+fun JFrame.onWindowClosing(action: (WindowEvent) -> Unit) {
+    addWindowListener(object: WindowAdapter() {
+        override fun windowClosing(e: WindowEvent) {
+            action(e)
+        }
+    })
 }
 
 fun String.getFileExtension(): String = this.split(".").last()
