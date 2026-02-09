@@ -19,6 +19,7 @@ import java.time.LocalDate
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 import javax.swing.JOptionPane
+import kotlin.math.min
 
 
 object ImageUtils {
@@ -223,4 +224,20 @@ object ImageUtils {
     }
 
     fun getScaled16Px(): Int = SnipSniper.calculateEffectiveUIScale(16)
+
+    fun centerImageOnNewImage(
+        srcImage: Image,
+        newWidth: Int,
+        newHeight: Int
+    ) = newBufferedImageV2(newWidth, newHeight) { g ->
+        val srcW = srcImage.getWidth(null)
+        val srcH = srcImage.getHeight(null)
+
+        val scale = min(width / srcW.toDouble(), height / srcH.toDouble())
+
+        val drawnWidth = (srcW * scale).toInt()
+        val drawnHeight = (srcH * scale).toInt()
+
+        g.drawImage(srcImage, (width / 2) - (drawnWidth / 2), (height / 2) - (drawnHeight / 2), drawnWidth, drawnHeight, null)
+    }
 }
