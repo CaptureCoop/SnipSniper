@@ -28,4 +28,9 @@ class InputContainer {
         keyCodes.forEach { if(!keys[it]) return false }
         return true
     }
+
+    companion object {
+        const val MOUSE_WHEEL_UP = 1
+        const val MOUSE_WHEEL_DOWN = -1
+    }
 }
