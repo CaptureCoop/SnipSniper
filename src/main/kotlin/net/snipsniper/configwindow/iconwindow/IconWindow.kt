@@ -91,9 +91,10 @@ class IconWindow(title: String, parent: JFrame, private val fileFilter: SnipFile
                         else if (file.path.endsWith(".gif"))
                             btn.icon = file.path.getAnimatedImage().scaled(size, size).toImageIcon()
                     }
-                    SSFile.LOCATION.LOCAL -> btn.icon = ImageIcon(
-                        ImageUtils.getImageFromDisk("${SnipSniper.imgFolder}/${file.path}").scaledSmooth(size, size)
-                    )
+                    SSFile.LOCATION.LOCAL -> {
+                        val image = ImageUtils.getImageFromDisk("${SnipSniper.imgFolder}/${file.path}")
+                        btn.icon = ImageUtils.centerImageOnNewImage(image, size, size).toImageIcon()
+                    }
                 }
                 content.add(btn, gbc)
                 gbc.gridx++
