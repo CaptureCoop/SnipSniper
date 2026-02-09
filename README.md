@@ -61,7 +61,7 @@ SnipSniper uses these libraries in order to function properly:
 
 ### Credits
 
-* Flags - We use images provided by fafmfamfam.com for country flags. [Deprecated]
+* [Flag Icons](https://github.com/legacy-icons/famfamfam-flags) - We use the preserved images from famfamfam.com uploaded to GitHub for country flags.
 
 License
 ---

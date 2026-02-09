@@ -1,3 +1,4 @@
-Icons downloaded from http://www.famfamfam.com/lab/icons/flags/ !
+Original icons from Mark James (mjames@gmail.com) | http://www.famfamfam.com/lab/icons/flags/ [Deprecated]
+Included icons from https://github.com/legacy-icons/famfamfam-flags
 
-Last updated 28.09.2021
+Last updated 04.02.2026
