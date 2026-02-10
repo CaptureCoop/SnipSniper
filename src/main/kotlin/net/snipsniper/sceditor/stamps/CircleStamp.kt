@@ -10,6 +10,7 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.event.KeyEvent
+import kotlin.math.roundToInt
 
 class CircleStamp(private val config: Config) : IStamp {
     override val id = "editorStampCircle"
@@ -50,8 +51,8 @@ class CircleStamp(private val config: Config) : IStamp {
         if (mouseWheelDirection != 0) {
             if (input!!.isKeyPressed(KeyEvent.VK_B)) {
                 when (mouseWheelDirection) {
-                    1 -> thickness--
-                    -1 -> thickness++
+                    InputContainer.MOUSE_WHEEL_UP -> thickness--
+                    InputContainer.MOUSE_WHEEL_DOWN -> thickness++
                 }
                 if (thickness <= 0) thickness = 1
                 alertChangeListeners(IStampUpdateListener.TYPE.INPUT)
@@ -67,16 +68,9 @@ class CircleStamp(private val config: Config) : IStamp {
                 doHeight = false
                 speedToUse = speedWidth
             }
-            when (mouseWheelDirection) {
-                1 -> {
-                    if (doWidth) width -= speedToUse
-                    if (doHeight) height -= speedToUse
-                }
-                -1 -> {
-                    if (doWidth) width += speedToUse
-                    if (doHeight) height += speedToUse
-                }
-            }
+
+            scaleSize(amount = speedToUse, mouseWheelDirection = mouseWheelDirection, scaleWidth = doWidth, scaleHeight = doHeight)
+
             if (width <= minimumWidth) width = minimumWidth
             if (height <= minimumHeight) height = minimumHeight
             alertChangeListeners(IStampUpdateListener.TYPE.INPUT)
