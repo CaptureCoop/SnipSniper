@@ -6,6 +6,7 @@ import org.capturecoop.defaultdepot.math.Vector2I
 import java.awt.Graphics
 import java.awt.Rectangle
 import java.awt.event.KeyEvent
+import kotlin.math.roundToInt
 
 interface IStamp {
     fun update(input: InputContainer?, mouseWheelDirection: Int, keyEvent: KeyEvent?)
@@ -35,4 +36,22 @@ fun interface IStampUpdateListener {
     //In the case of the EzUI the EzModeSettingsCreator can then decide when to do what, which works great for now.
     enum class TYPE { SETTER, INPUT }
     fun updated(type: TYPE?)
+}
+
+//TODO: Is this the right place?
+fun IStamp.scaleSize(amount: Int, mouseWheelDirection: Int, scaleWidth: Boolean, scaleHeight: Boolean) {
+    val speed = when(mouseWheelDirection) {
+        InputContainer.MOUSE_WHEEL_UP -> -amount
+        InputContainer.MOUSE_WHEEL_DOWN -> amount
+        else -> 0
+    }
+    if(scaleWidth && scaleHeight) {
+        val total = width + height
+        val scale = (total + speed).toDouble() / total
+        width = (width * scale).roundToInt()
+        height = (height * scale).roundToInt()
+    } else {
+        if (scaleWidth) width += speed
+        if (scaleHeight) height += speed
+    }
 }
