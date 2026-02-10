@@ -58,24 +58,20 @@ class StickerStamp(private val config: Config, private val scEditorWindow: SCEdi
         val isQPressed = input!!.isKeyPressed(KeyEvent.VK_Q)
 
         //Adapt it to the circle logic im too tired for this right now. Clean all the stamps they are dusty.
-        val scaleWidth = isShiftPressed && !isControlPressed && !isQPressed
-        val scaleHeight = !isShiftPressed && isControlPressed && !isQPressed
         val scaleAll = !isShiftPressed && !isControlPressed && !isQPressed
+        val scaleWidth = (isShiftPressed && !isControlPressed && !isQPressed) || scaleAll
+        val scaleHeight = (!isShiftPressed && isControlPressed && !isQPressed) || scaleAll
 
-        val speedWidth = if(!scaleAll) speedWidth else (speed * (width / height.toFloat())).toInt()
-        val speedHeight = if(!scaleAll) speedHeight else (speed)
+        val speedToUse = if(scaleAll) speed
+                        else if(scaleWidth) speedWidth
+                        else if(scaleHeight) speedHeight
+                        else 0
 
+        scaleSize(amount = speedToUse, mouseWheelDirection = mouseWheelDirection, scaleWidth = scaleWidth, scaleHeight = scaleHeight)
+        
         when(mouseWheelDirection) {
-            -1 -> {
-                if(scaleAll || scaleWidth) width += speedWidth
-                if(scaleAll || scaleHeight) height += speedHeight
-                if(isQPressed) angle += 0.2f
-            }
-            1 -> {
-                if(scaleAll || scaleWidth) width -= speedWidth
-                if(scaleAll || scaleHeight) height -= speedHeight
-                if(isQPressed) angle -= 0.2f
-            }
+            InputContainer.MOUSE_WHEEL_UP -> { if(isQPressed) angle -= 0.2f }
+            InputContainer.MOUSE_WHEEL_DOWN -> { if(isQPressed) angle += 0.2f }
         }
         alertChangeListeners(IStampUpdateListener.TYPE.INPUT)
     }
