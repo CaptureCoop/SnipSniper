@@ -52,17 +52,7 @@ class CounterStamp(private val config: Config) : IStamp {
                 doHeight = false
                 speedToUse = speedWidth
             }
-            when (mouseWheelDirection) {
-                1 -> {
-                    if (doWidth) width -= speedToUse
-                    if (doHeight) height -= speedToUse
-                }
-
-                -1 -> {
-                    if (doWidth) width += speedToUse
-                    if (doHeight) height += speedToUse
-                }
-            }
+            scaleSize(amount = speedToUse, mouseWheelDirection = mouseWheelDirection, scaleWidth = doWidth, scaleHeight = doHeight)
             if (width <= minimumWidth) width = minimumWidth
             if (height <= minimumHeight) height = minimumHeight
             alertChangeListeners(IStampUpdateListener.TYPE.INPUT)
