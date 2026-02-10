@@ -123,7 +123,7 @@ tasks.processResources {
 tasks.withType<Jar> {
     dependsOn(taskRefreshWiki)
     archiveFileName.set(artifactName)
-    if(grgit.branch.current().name == "dev")
+    if(grgit.branch.current().name != "main")
         sourceSets.main.get().resources.srcDir("src/main/resources-dev")
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest { attributes["Main-Class"] = "net.snipsniper.MainKt" }
