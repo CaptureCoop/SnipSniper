@@ -10,7 +10,6 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.event.KeyEvent
-import kotlin.math.roundToInt
 
 class CircleStamp(private val config: Config) : IStamp {
     override val id = "editorStampCircle"
