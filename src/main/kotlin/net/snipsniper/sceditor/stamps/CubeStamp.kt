@@ -77,8 +77,8 @@ class CubeStamp(private val config: Config, private val scEditorWindow: SCEditor
             val pos = Vector2I(position!!.x + drawWidth / 2, position.y + drawHeight / 2)
             val size = Vector2I(-drawWidth, -drawHeight)
             if (color!!.isGradient) {
-                if (smartPixelBuffer == null || width != smartPixelBuffer!!.width || height != smartPixelBuffer!!.height) {
-                    smartPixelBuffer = BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR)
+                if (smartPixelBuffer == null || drawWidth != smartPixelBuffer!!.width || drawHeight != smartPixelBuffer!!.height) {
+                    smartPixelBuffer = BufferedImage(drawWidth, drawHeight, BufferedImage.TYPE_INT_ARGB)
                 }
                 (smartPixelBuffer!!.graphics as Graphics2D).also { buffer ->
                     buffer.color = Color(0, 0, 0, 0)
