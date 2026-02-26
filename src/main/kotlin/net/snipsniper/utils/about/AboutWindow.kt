@@ -1,12 +1,31 @@
-package net.snipsniper.utils
+package net.snipsniper.utils.about
 
 import net.snipsniper.SnipSniper
 import net.snipsniper.StatsManager
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.secrets.games.BGame
 import net.snipsniper.systray.Sniper
+import net.snipsniper.utils.DummyCaret
+import net.snipsniper.utils.ImageUtils
+import net.snipsniper.utils.Links
+import net.snipsniper.utils.Utils
+import net.snipsniper.utils.getAnimatedImage
+import net.snipsniper.utils.getImage
+import net.snipsniper.utils.onClose
+import net.snipsniper.utils.scaled
+import net.snipsniper.utils.scaledEffective16px
+import net.snipsniper.utils.scaledSmooth
+import net.snipsniper.utils.toImageIcon
+import net.snipsniper.utils.translate
 import org.capturecoop.defaultdepot.Closable
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Dimension
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
+import java.awt.GridLayout
+import java.awt.Image
+import java.awt.Insets
+import java.awt.Toolkit
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.WindowAdapter
@@ -16,7 +35,14 @@ import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
-import javax.swing.*
+import javax.swing.BorderFactory
+import javax.swing.JButton
+import javax.swing.JEditorPane
+import javax.swing.JFrame
+import javax.swing.JLabel
+import javax.swing.JOptionPane
+import javax.swing.JPanel
+import javax.swing.SwingConstants
 import javax.swing.event.HyperlinkEvent
 
 class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
@@ -43,7 +69,7 @@ class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
             val gbc = GridBagConstraints()
             gbc.gridx = 0
             gbc.gridy = 0
-            val iconSize = SnipSniper.calculateEffectiveUIScale(100)
+            val iconSize = SnipSniper.Companion.calculateEffectiveUIScale(100)
             val icon = "icons/snipsniper.png".getImage().scaledSmooth(iconSize, iconSize).toImageIcon()
             JLabel(icon).also{ iconLabel ->
                 iconLabel.addMouseListener(object: MouseAdapter() {
@@ -57,7 +83,7 @@ class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
                         else index++
                         onC = index == 3
                         setNewImage(index, iconSize, true)
-                        StatsManager.incrementCount(StatsManager.ABOUT_ICON_CLICKED_AMOUNT)
+                        StatsManager.Companion.incrementCount(StatsManager.Companion.ABOUT_ICON_CLICKED_AMOUNT)
                     }
 
                     override fun mousePressed(mouseEvent: MouseEvent) {
@@ -83,7 +109,7 @@ class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
             gbc.insets = Insets(20, 0, 0, 0)
             JButton("Buy us a coffee").also { buyCoffee ->
                 val coffeeIcon = "icons/coffee.gif".getAnimatedImage()
-                val scale = (16 / SnipSniper.getEffectiveUIScale()).toInt()
+                val scale = (16 / SnipSniper.Companion.getEffectiveUIScale()).toInt()
                 buyCoffee.icon = coffeeIcon.scaled(coffeeIcon.getWidth(null) / scale, coffeeIcon.getHeight(null) / scale).toImageIcon()
                 buyCoffee.horizontalTextPosition = SwingConstants.LEFT
                 buyCoffee.isFocusable = false
@@ -99,16 +125,19 @@ class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
 
             JPanel(GridLayout(2, 0)).also { rightSide ->
                 val splash = "splash.png".getImage()
-                val splashLabel = JLabel(splash.scaled((splash.width / 2.2F).toInt(), (splash.height / 2.2F).toInt()).scaled(SnipSniper.getEffectiveUIScale()).toImageIcon())
+                val splashLabel = JLabel(
+                    splash.scaled((splash.width / 2.2F).toInt(), (splash.height / 2.2F).toInt())
+                        .scaled(SnipSniper.Companion.getEffectiveUIScale()).toImageIcon()
+                )
                 splashLabel.addMouseListener(object: MouseAdapter() {
                     override fun mouseClicked(e: MouseEvent?) {
                         super.mouseClicked(e)
                         if(onC) {
                             val cfgKey = ConfigHelper.MAIN.experimentalMode
-                            val newExperimentalMode = !SnipSniper.config.getBool(cfgKey)
-                            SnipSniper.config.set(cfgKey, newExperimentalMode)
-                            SnipSniper.config.save()
-                            Utils.showPopup(instance, if(newExperimentalMode) "Experimental Mode Activated!" else "Experimental Mode Deactivated!", "Attention!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, "icons/checkmark.png".getImage().scaledEffective16px(), true)
+                            val newExperimentalMode = !SnipSniper.Companion.config.getBool(cfgKey)
+                            SnipSniper.Companion.config.set(cfgKey, newExperimentalMode)
+                            SnipSniper.Companion.config.save()
+                            Utils.Companion.showPopup(instance, if(newExperimentalMode) "Experimental Mode Activated!" else "Experimental Mode Deactivated!", "Attention!", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, "icons/checkmark.png".getImage().scaledEffective16px(), true)
                         }
                     }
                 })
@@ -137,14 +166,12 @@ class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
                                             attributionsWindow?.requestFocus()
                                         } else {
                                             attributionsWindow = AttributionsWindow(this)
-                                            attributionsWindow!!.onClose.add({
-                                                attributionsWindow = null
-                                            })
+                                            attributionsWindow?.onClose { attributionsWindow = null }
                                         }
                                     }
                                 }
                             } else {
-                                Links.openLink(hle.url.toString())
+                                Links.Companion.openLink(hle.url.toString())
                             }
                         }
                     }
@@ -177,7 +204,9 @@ class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
     private fun loadHTML() {
         html = StringBuilder().also { sb ->
             //Streams
-            val inputStream = ClassLoader.getSystemResourceAsStream("net/snipsniper/resources/about.html") ?: throw FileNotFoundException("Could not load about.html inside jar!")
+            val inputStream = ClassLoader.getSystemResourceAsStream("net/snipsniper/resources/about.html") ?: throw FileNotFoundException(
+                "Could not load about.html inside jar!"
+            )
             val streamReader = InputStreamReader(inputStream, StandardCharsets.UTF_8)
             //Read file
             BufferedReader(streamReader).readLines().forEach { sb.append(it) }
@@ -186,7 +215,7 @@ class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
             streamReader.close()
         }.toString()
 
-        SnipSniper.buildInfo.also { bi ->
+        SnipSniper.Companion.buildInfo.also { bi ->
             html = html.replace("%VERSION%", bi.version.toString())
             html = html.replace("%BUILDDATE%", bi.buildDate)
             html = html.replace("%HASH%", bi.gitHash)
@@ -194,7 +223,7 @@ class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
         html = html.replace("%ABOUT_PROGRAMMING%", "about_programming".translate())
         html = html.replace("%ABOUT_CD%", "about_cd".translate())
         html = html.replace("%ABOUT_MATH%", "about_math".translate())
-        val color = when(val theme = SnipSniper.config.getString(ConfigHelper.MAIN.theme)) {
+        val color = when(val theme = SnipSniper.Companion.config.getString(ConfigHelper.MAIN.theme)) {
             "dark" -> "white"
             "light" -> "black"
             else -> { throw Exception("AboutWindow: Bad value for theme: $theme") }
@@ -208,7 +237,7 @@ class AboutWindow(private val sniper: Sniper): JFrame(), Closable {
     }
 
     override fun close() {
-        attributionsWindow?.close()
+        attributionsWindow?.dispose()
         dispose()
     }
 }

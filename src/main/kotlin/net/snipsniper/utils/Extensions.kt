@@ -61,18 +61,14 @@ fun Graphics2D.drawOutlineString(
     setRenderingHints(Utils.getRenderingHints())
 
     val layout = TextLayout(text, font, fontRenderContext)
-    val outline = layout.getOutline(AffineTransform.getTranslateInstance(x.toDouble(), y.toDouble()));
+    val outline = layout.getOutline(AffineTransform.getTranslateInstance(x.toDouble(), y.toDouble()))
 
-    color = outlineColor;
+    color = outlineColor
     stroke = BasicStroke(outlineThickness)
-    draw(outline);
+    draw(outline)
 
-    color = textColor;
-    fill(outline);
-}
-
-fun JFrame.centerOn(window: JFrame) {
-    Utils.centerWindowOnWindow(this, window)
+    color = textColor
+    fill(outline)
 }
 
 fun String.getFileExtension(): String = this.split(".").last()
