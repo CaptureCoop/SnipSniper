@@ -55,6 +55,14 @@
         "short": "Multiple Licenses",
         "file": "license_famfamfam-flags.txt"
       }
+    },
+    {
+      "name": "Atkinson Hyperlegible® Font",
+      "url": "https://www.brailleinstitute.org/freefont/",
+      "license": {
+        "short": "SIL Open Font License, Version 1.1",
+        "file": "license_atkinson_hyperlegible.txt"
+      }
     }
   ]
 }

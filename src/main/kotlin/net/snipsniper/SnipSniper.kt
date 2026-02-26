@@ -307,6 +307,7 @@ class SnipSniper {
             }
             LegibleLogger.info("Setting FlatLaf Scale to $scaleValue")
             System.setProperty("flatlaf.uiScale", scaleValue.toString())
+            UIManager.put("defaultFont", FontLoader.defaultFont.deriveFont(FontLoader.defaultFontSize * scaleValue))
             UIManager.setLookAndFeel(UIManager.getLookAndFeel())
 
             for (w in Window.getWindows()) {

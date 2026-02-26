@@ -3,6 +3,7 @@ package net.snipsniper.sceditor.stamps
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.SCEditorWindow
+import net.snipsniper.utils.FontLoader
 import net.snipsniper.utils.InputContainer
 import org.capturecoop.colorcomposer.ComposedColor
 import org.capturecoop.defaultdepot.math.Vector2I
@@ -116,7 +117,7 @@ class TextStamp(private val config: Config, private val scEditorWindow: SCEditor
         val drawFontSize = (fontSize.toDouble() * difference[1]).toInt()
         val oldFont = g.font
         val oldColor = g.paint
-        g.font = Font("Arial", fontMode, drawFontSize)
+        g.font = FontLoader.defaultFont.deriveFont(fontMode, drawFontSize.toFloat())
         val width = g.fontMetrics.stringWidth(textToDraw)
         val oldTransform = g.transform
         g.rotate(angle.toDouble(), position!!.x.toDouble(), position!!.y.toDouble())
