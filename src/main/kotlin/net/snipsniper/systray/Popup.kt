@@ -5,6 +5,7 @@ import net.snipsniper.config.ConfigHelper
 import net.snipsniper.sceditor.SCEditorWindow
 import net.snipsniper.scviewer.SCViewerWindow
 import net.snipsniper.utils.*
+import net.snipsniper.utils.about.AboutWindow
 import net.snipsniper.utils.debug.LangDebugWindow
 import net.snipsniper.utils.debug.MonitorDebugWindow
 import org.capturecoop.legiblelogger.LegibleLogger
