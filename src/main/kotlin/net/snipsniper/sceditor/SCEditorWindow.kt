@@ -20,6 +20,7 @@ import java.io.File
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.imageio.ImageIO
 import javax.swing.*
+import javax.swing.FocusManager
 
 class SCEditorWindow(
     startImage: BufferedImage?,
@@ -265,7 +266,10 @@ class SCEditorWindow(
                         JMenuItem(stamp.title).also {
                             it.icon = sizeImage("icons/stamp.png")
                             it.accelerator = KeyStroke.getKeyStroke((i + 1).toString())
-                            it.addActionListener { setSelectedStamp(i) }
+                            it.addActionListener {
+                                val focusOwner = FocusManager.getCurrentKeyboardFocusManager().focusOwner
+                                if(focusOwner !is JTextField) setSelectedStamp(i)
+                            }
                             parent.add(it)
                         }
                     }
