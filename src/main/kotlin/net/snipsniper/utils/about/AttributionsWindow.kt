@@ -27,16 +27,13 @@ class AttributionsWindow(
                 val licenseLabel = JTextArea().apply {
                     isVisible = false
                     isEditable = false
+                    lineWrap = true
+                    wrapStyleWord = true
                 }
 
                 fun toggleLicenseLabel() {
                     licenseLabel.text = license.full
                     licenseLabel.isVisible = !licenseLabel.isVisible
-                    val currentSize = this@AttributionsWindow.size
-                    val prefSize = this@AttributionsWindow.preferredSize
-                    if(prefSize.width > currentSize.width) {
-                        this@AttributionsWindow.size = Dimension(prefSize.width, currentSize.height)
-                    }
                 }
 
                 //Open the authors website
