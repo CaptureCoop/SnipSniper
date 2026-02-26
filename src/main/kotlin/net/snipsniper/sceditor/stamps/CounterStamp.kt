@@ -2,6 +2,7 @@ package net.snipsniper.sceditor.stamps
 
 import net.snipsniper.config.Config
 import net.snipsniper.config.ConfigHelper
+import net.snipsniper.utils.FontLoader
 import net.snipsniper.utils.InputContainer
 import org.capturecoop.colorcomposer.ComposedColor
 import org.capturecoop.colorcomposer.setAlpha
@@ -85,7 +86,7 @@ class CounterStamp(private val config: Config) : IStamp {
             var oldColor = g.color
             g.color = Color.BLACK
             val h = (drawHeight / fontSizeModifier).toInt()
-            g.font = Font("TimesRoman", Font.PLAIN, h)
+            g.font = FontLoader.defaultFont.deriveFont(Font.PLAIN, h.toFloat())
             val w = g.fontMetrics.stringWidth("" + count)
             g.drawString("" + count, position.x - w / 2, position.y + h / 3)
             g.color = oldColor
