@@ -63,6 +63,8 @@ SnipSniper uses these libraries in order to function properly:
 
 * [Flag Icons](https://github.com/legacy-icons/famfamfam-flags) - We use the preserved images from famfamfam.com uploaded to GitHub for country flags.
 
+* [Atkinson Hyperlegible® Font](https://www.brailleinstitute.org/freefont/) - Atkinson Hyperlegible, named after the founder of the Braille Institute, has been developed specifically to increase legibility for readers with low vision.
+
 License
 ---
 
